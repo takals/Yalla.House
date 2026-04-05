@@ -1,0 +1,23 @@
+{
+  "model": "claude-sonnet-4-6",
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Glob(**)",
+      "Grep(**)",
+      "Edit(Website/**)",
+      "Write(Website/**)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(find Website *)",
+      "Bash(open *)"
+    ],
+    "ask": [
+      "Bash(*)"
+    ]
+  },
+  "env": {
+    "WEBSITE_ROOT": "Website"
+  }
+}

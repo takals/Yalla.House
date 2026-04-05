@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Yalla.House</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* Extra dashboard-specific styles */
+    .listing-photo {
+      width: 56px;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #FFD400 0%, #FFEA70 50%, #FFD400 100%);
+      box-shadow: 0 2px 8px rgba(255, 212, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      border: 1.5px solid rgba(255, 212, 0, .4);
+    }
+
+    .listing-info .address {
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .listing-info .price {
+      font-size: .8125rem;
+      color: var(--text-secondary);
+    }
+
+    .enquiry-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .doc-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .doc-icon.pdf {
+      background: #FEE2E2;
+    }
+
+    .doc-icon.doc {
+      background: #DBEAFE;
+    }
+
+    .doc-icon.img {
+      background: #FEF9C3;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-header {
+      font-size: .7rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: .5rem 0;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      font-size: .8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition);
+      color: var(--text-primary);
+    }
+
+    .cal-day:hover {
+      background: var(--bg-muted);
+    }
+
+    .cal-day.other-month {
+      color: var(--text-muted);
+    }
+
+    .cal-day.today {
+      background: var(--brand);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .cal-day.has-event {
+      position: relative;
+    }
+
+    .cal-day.has-event::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--brand);
+    }
+
+    .cal-day.today.has-event::after {
+      background: #000;
+    }
+
+    .viewing-slot {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .viewing-time {
+      font-weight: 700;
+      font-size: .875rem;
+      min-width: 50px;
+    }
+
+    .viewing-info .viewing-address {
+      font-size: .875rem;
+      font-weight: 600;
+    }
+
+    .viewing-info .viewing-buyer {
+      font-size: .775rem;
+      color: var(--text-muted);
+    }
+
+    .analytics-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: .85rem;
+    }
+
+    .analytics-bar-label {
+      font-size: .875rem;
+      color: var(--text-secondary);
+      min-width: 100px;
+    }
+
+    .analytics-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg-muted);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .analytics-bar-fill {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 99px;
+    }
+
+    .analytics-bar-value {
+      font-size: .8125rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      min-width: 30px;
+      text-align: right;
+    }
+
+    .settings-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .settings-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .settings-row:last-child {
+      border-bottom: none;
+    }
+
+    .settings-row-info .setting-label {
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    .settings-row-info .setting-desc {
+      font-size: .8rem;
+      color: var(--text-muted);
+    }
+
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--border-dark);
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform var(--transition);
+    }
+
+    .toggle input:checked+.toggle-slider {
+      background: var(--brand);
+    }
+
+    .toggle input:checked+.toggle-slider::before {
+      transform: translateX(18px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-root">
+
+    <!-- ══════════════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════════════ -->
+    <aside class="sidebar" role="navigation" aria-label="App navigation">
+      <div class="sidebar-logo">
+        <a href="../index.html" style="color:var(--brand);text-decoration:none;">Yalla.House</a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label"><span data-i18n="dnav.label.main">Main</span></div>
+        <ul class="sidebar-nav">
+          <li>
+            <button class="sidebar-link active" onclick="showView('dashboard', this)">
+              <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+              <span data-i18n="dnav.dashboard">Dashboard</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('listings', this)">
+              <i data-lucide="home" class="sidebar-icon"></i>
+              <span data-i18n="dash.nav.listings">My Listings</span>
+              <span class="sidebar-badge">2</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('inquiries', this)">
+              <i data-lucide="message-circle" class="sidebar-icon"></i>
+              <span data-i18n="dash.nav.inquiries">Buyer Inquiries</span>
+              <span class="sidebar-badge">5</span>
+            </button>
+          </li>
+          <li>
+            <button onclick="showView('inbox',this)" class="sidebar-link">
+              <i data-lucide="inbox" class="sidebar-icon"></i>
+              <span data-i18n="dnav.inbox">Inbox</span>
+              <span class="badge badge-yellow" style="margin-left:auto;">5</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('analytics', this)">
+              <i data-lucide="bar-chart-2" class="sidebar-icon"></i>
+              <span data-i18n="dash.nav.analytics">Analytics</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label"><span data-i18n="dnav.label.tools">Tools</span></div>
+        <ul class="sidebar-nav">
+          <li>
+            <button class="sidebar-link" onclick="showView('documents', this)">
+              <i data-lucide="folder" class="sidebar-icon"></i>
+              <span data-i18n="dash.nav.documents">Documents</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('calendar', this)">
+              <i data-lucide="calendar" class="sidebar-icon"></i>
+              <span data-i18n="dash.nav.calendar">Calendar</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('settings', this)">
+              <i data-lucide="settings" class="sidebar-icon"></i>
+              <span data-i18n="dnav.settings">Settings</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Strategy</div>
+        <ul class="sidebar-nav">
+          <li>
+            <button class="sidebar-link" onclick="showView('audit', this)">
+              <i data-lucide="clipboard-check" class="sidebar-icon"></i>
+              <span>Property Audit</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('strategy', this)">
+              <i data-lucide="map" class="sidebar-icon"></i>
+              <span>Strategy Planner</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('agents', this)">
+              <i data-lucide="users" class="sidebar-icon"></i>
+              <span>Agent Workspace</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('deal', this)">
+              <i data-lucide="shield-check" class="sidebar-icon"></i>
+              <span>Deal Room</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('reporting', this)">
+              <i data-lucide="trending-up" class="sidebar-icon"></i>
+              <span>Reporting</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">JS</div>
+          <div class="sidebar-user-info">
+            <div class="user-name">John Smith</div>
+            <div class="user-role"><span data-i18n="dash.role">Seller</span> · <span
+                style="color:var(--brand);font-weight:700;">Hybrid</span></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════ -->
+    <div class="app-main">
+      <!-- Topbar -->
+      <div class="app-topbar">
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+        <div class="topbar-actions">
+          <div class="lang-switcher">
+            <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+            <span class="lang-sep">|</span>
+            <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+          </div>
+          <div class="search-input">
+            <i data-lucide="search"
+              style="width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0;"></i>
+            <input type="text" placeholder="Search..." aria-label="Search" />
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="window.location='../list.html'">
+            <span data-i18n="dash.new">+ New Listing</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="app-content">
+        <!-- Canvas -->
+        <div class="app-canvas">
+
+          <!-- ════════════════════════════
+             VIEW: DASHBOARD
+        ════════════════════════════ -->
+          <div id="view-dashboard" class="view active">
+            <!-- Seller Mode Banner -->
+            <div
+              style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:linear-gradient(135deg,#FFFBEB 0%,#FFF8D6 100%);border:1.5px solid rgba(255,212,0,.45);border-radius:var(--radius-lg);margin-bottom:1.5rem;flex-wrap:wrap;">
+              <div
+                style="width:38px;height:38px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div style="flex:1;min-width:180px;">
+                <div style="font-weight:700;font-size:.9375rem;">Current Mode: <span
+                    style="color:#92660A;">Hybrid</span></div>
+                <div style="font-size:.8rem;color:var(--text-secondary);">Yalla.House is your command center — bring in
+                  agents or specialists where you need them.</div>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                <button class="btn btn-ghost btn-sm" style="font-size:.8rem;display:flex;align-items:center;gap:.35rem;"
+                  onclick="showView('strategy',document.querySelector('[onclick*=strategy]'))">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> DIY</button>
+                <button class="btn btn-primary btn-sm" style="font-size:.8rem;cursor:default;display:flex;align-items:center;gap:.35rem;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5"/><circle cx="12" cy="7" r="4"/></svg> Hybrid ✓</button>
+                <button class="btn btn-ghost btn-sm" style="font-size:.8rem;display:flex;align-items:center;gap:.35rem;"
+                  onclick="showView('strategy',document.querySelector('[onclick*=strategy]'))">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Agent-led</button>
+              </div>
+              <button class="btn btn-secondary btn-sm"
+                onclick="showView('strategy',document.querySelector('[onclick*=strategy]'))"
+                style="white-space:nowrap;">Change Route →</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+              <div class="stat-card">
+                <div class="stat-card-label">Active Listings</div>
+                <div class="stat-card-value">2</div>
+                <div class="stat-card-sub">1 receiving offers</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Total Enquiries</div>
+                <div class="stat-card-value">31</div>
+                <div class="stat-card-trend trend-up">↑ 18% this week</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Viewings Booked</div>
+                <div class="stat-card-value">12</div>
+                <div class="stat-card-sub">4 this week</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Offers Received</div>
+                <div class="stat-card-value accent">3</div>
+                <div class="stat-card-trend trend-up">↑ 2 new</div>
+              </div>
+            </div>
+
+            <!-- Upcoming Viewings -->
+            <div class="section-card" style="margin-bottom:1.5rem;">
+              <div class="section-card-header">
+                <div class="section-card-title">Upcoming Viewings</div>
+                <button
+                  onclick="showView('calendar',document.querySelector('.sidebar-link[onclick*=&quot;calendar&quot;]'))"
+                  class="btn btn-secondary btn-sm">Open Calendar</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <div
+                  style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border-light);">
+                  <div
+                    style="width:44px;height:44px;border-radius:var(--radius);background:var(--brand-solid-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="calendar-check"
+                      style="width:18px;height:18px;stroke:#7A5F00;fill:none;stroke-width:2;"></i>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;font-size:.9rem;">14 Elmwood Close, N12</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">Today · 14:00 – 14:45 · Sarah B.</div>
+                  </div>
+                  <span class="badge badge-yellow">Today</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border-light);">
+                  <div
+                    style="width:44px;height:44px;border-radius:var(--radius);background:var(--brand-solid-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="calendar-check"
+                      style="width:18px;height:18px;stroke:#7A5F00;fill:none;stroke-width:2;"></i>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;font-size:.9rem;">7 Maple Street, N10</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">Tomorrow · 10:30 – 11:15 · James R.</div>
+                  </div>
+                  <span class="badge badge-blue">Tomorrow</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;">
+                  <div
+                    style="width:44px;height:44px;border-radius:var(--radius);background:var(--brand-solid-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="calendar-check"
+                      style="width:18px;height:18px;stroke:#7A5F00;fill:none;stroke-width:2;"></i>
+                  </div>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;font-size:.9rem;">22 Park Lane, N4</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">Mon 24 Feb · 15:00 – 15:45 · Priya M.
+                    </div>
+                  </div>
+                  <span class="badge" style="background:var(--bg-muted);color:var(--text-secondary);">Mon</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Latest Messages -->
+            <div class="section-card" style="margin-bottom:1.5rem;">
+              <div class="section-card-header">
+                <div class="section-card-title">Latest Messages</div>
+                <button onclick="showView('inbox',document.querySelector('.sidebar-link[onclick*=&quot;inbox&quot;]'))"
+                  class="btn btn-secondary btn-sm">Open Inbox</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.25rem;">
+                <div
+                  style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;background:var(--brand-light);border-radius:var(--radius-sm);cursor:pointer;">
+                  <div class="enquiry-avatar">SB</div>
+                  <div style="flex:1;min-width:0;">
+                    <div
+                      style="font-weight:600;font-size:.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                      Sarah B. — Is the garden south-facing?</div>
+                    <div style="font-size:.75rem;color:var(--text-secondary);">14 Elmwood Close · 25 min ago</div>
+                  </div>
+                  <span class="badge badge-yellow">New</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;background:var(--brand-light);border-radius:var(--radius-sm);cursor:pointer;">
+                  <div class="enquiry-avatar">JR</div>
+                  <div style="flex:1;min-width:0;">
+                    <div
+                      style="font-weight:600;font-size:.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                      James R. — Can we book a second viewing?</div>
+                    <div style="font-size:.75rem;color:var(--text-secondary);">7 Maple Street · 2 hours ago</div>
+                  </div>
+                  <span class="badge badge-yellow">New</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-radius:var(--radius-sm);cursor:pointer;">
+                  <div class="enquiry-avatar">PM</div>
+                  <div style="flex:1;min-width:0;">
+                    <div
+                      style="font-weight:600;font-size:.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                      Priya M. — Thank you for the tour yesterday!</div>
+                    <div style="font-size:.75rem;color:var(--text-secondary);">22 Park Lane · Yesterday</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- My Listings -->
+            <div style="margin-bottom:1.5rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                <h3 style="font-size:1rem;font-weight:700;">My Listings</h3>
+                <button class="btn btn-ghost btn-sm"
+                  onclick="showView('listings', document.querySelector('[onclick*=listings]'))">View all</button>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Property</th>
+                      <th>Status</th>
+                      <th>Price</th>
+                      <th>Enquiries</th>
+                      <th>Viewings</th>
+                      <th>Offers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div style="display:flex;align-items:center;gap:.75rem;">
+                          <div class="listing-photo" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
+                          <div class="listing-info">
+                            <div class="address">14 Maple Street, London E3</div>
+                            <div class="price">3 bed · 2 bath · Leasehold</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="badge badge-green">Active</span></td>
+                      <td style="font-weight:700;">£385,000</td>
+                      <td>24</td>
+                      <td>9</td>
+                      <td><span style="font-weight:700;color:var(--brand);">3 offers</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div style="display:flex;align-items:center;gap:.75rem;">
+                          <div class="listing-photo" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><path d="M9 21v-7h6v7"/></svg></div>
+                          <div class="listing-info">
+                            <div class="address">7 Oak Close, Manchester M14</div>
+                            <div class="price">2 bed · 1 bath · Freehold</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="badge badge-yellow">Under Offer</span></td>
+                      <td style="font-weight:700;">£225,000</td>
+                      <td>7</td>
+                      <td>3</td>
+                      <td>1 offer</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Recent Inquiries -->
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                <h3 style="font-size:1rem;font-weight:700;">Recent Inquiries</h3>
+                <button class="btn btn-ghost btn-sm"
+                  onclick="showView('inquiries', document.querySelector('[onclick*=inquiries]'))">View all</button>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Buyer</th>
+                      <th>Property</th>
+                      <th>Type</th>
+                      <th>Received</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <div style="display:flex;align-items:center;gap:.7rem;">
+                          <div class="enquiry-avatar">AR</div>
+                          <div>
+                            <div style="font-weight:700;font-size:.875rem;">Alice Rubin</div>
+                            <div style="font-size:.775rem;color:var(--text-muted);">Verified buyer</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="font-size:.875rem;">14 Maple St.</td>
+                      <td><span class="badge badge-blue">Viewing Request</span></td>
+                      <td style="font-size:.875rem;color:var(--text-secondary);">2 hours ago</td>
+                      <td><span class="badge badge-yellow">Pending</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div style="display:flex;align-items:center;gap:.7rem;">
+                          <div class="enquiry-avatar">TK</div>
+                          <div>
+                            <div style="font-weight:700;font-size:.875rem;">Tom Khalid</div>
+                            <div style="font-size:.775rem;color:var(--text-muted);">AIP verified</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="font-size:.875rem;">14 Maple St.</td>
+                      <td><span class="badge badge-green">Offer — £375,000</span></td>
+                      <td style="font-size:.875rem;color:var(--text-secondary);">Yesterday</td>
+                      <td><span class="badge badge-gray">Under Review</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <div style="display:flex;align-items:center;gap:.7rem;">
+                          <div class="enquiry-avatar">SM</div>
+                          <div>
+                            <div style="font-weight:700;font-size:.875rem;">Sofia M.</div>
+                            <div style="font-size:.775rem;color:var(--text-muted);">New buyer</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style="font-size:.875rem;">7 Oak Close</td>
+                      <td><span class="badge badge-blue">General Enquiry</span></td>
+                      <td style="font-size:.875rem;color:var(--text-secondary);">3 days ago</td>
+                      <td><span class="badge badge-green">Replied</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: LISTINGS
+        ════════════════════════════ -->
+          <div id="view-listings" class="view">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+              <div>
+                <h2 style="font-size:1.25rem;font-weight:800;">My Listings</h2>
+                <p style="font-size:.875rem;color:var(--text-secondary);">Manage your active property listings</p>
+              </div>
+              <a href="../list.html" class="btn btn-primary">+ Add Listing</a>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+              <!-- Listing Card 1 -->
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;">
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+                  <div
+                    style="width:128px;height:88px;border-radius:var(--radius-lg);background:linear-gradient(140deg,#FFD400 0%,#FFEA70 55%,#E6C200 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(255,212,0,.35),inset 0 1px 0 rgba(255,255,255,.45);border:1.5px solid rgba(255,212,0,.35);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
+                  <div style="flex:1;min-width:200px;">
+                    <div
+                      style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                      <div>
+                        <h3 style="font-size:1.0625rem;font-weight:700;margin-bottom:.2rem;">14 Maple Street, Bow,
+                          London E3 2SA</h3>
+                        <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:.75rem;">3 bedrooms · 2
+                          bathrooms · Leasehold · 875 sq ft</p>
+                      </div>
+                      <span class="badge badge-green" style="white-space:nowrap;">Active</span>
+                    </div>
+                    <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Asking Price</div>
+                        <div style="font-size:1.25rem;font-weight:800;">£385,000</div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Enquiries</div>
+                        <div style="font-size:1.25rem;font-weight:800;">24</div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Viewings</div>
+                        <div style="font-size:1.25rem;font-weight:800;">9</div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Offers</div>
+                        <div style="font-size:1.25rem;font-weight:800;color:var(--brand);">3</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;">
+                    <button class="btn btn-secondary btn-sm">Edit Listing</button>
+                    <button class="btn btn-ghost btn-sm">View Offers</button>
+                  </div>
+                </div>
+                <div
+                  style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;gap:.75rem;flex-wrap:wrap;">
+                  <span class="chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Photos uploaded</span>
+                  <span class="chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3H3m18 6H3m18 6H3m18 6H3"/><line x1="6" y1="3" x2="6" y2="21"/></svg> Floorplan</span>
+                  <span class="chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> 360° Tour live</span>
+                  <span class="chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> For Sale board</span>
+                  <span class="chip" style="display:inline-flex;align-items:center;gap:.35rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Rightmove + Zoopla</span>
+                </div>
+              </div>
+
+              <!-- Listing Card 2 -->
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;">
+                <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+                  <div
+                    style="width:128px;height:88px;border-radius:var(--radius-lg);background:linear-gradient(140deg,#DBEAFE 0%,#BAD8FD 55%,#93C5FD 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(59,130,246,.18),inset 0 1px 0 rgba(255,255,255,.55);border:1.5px solid rgba(59,130,246,.2);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="1"/><path d="M3 10l9-7 9 7"/><path d="M9 21v-7h6v7"/></svg></div>
+                  <div style="flex:1;min-width:200px;">
+                    <div
+                      style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                      <div>
+                        <h3 style="font-size:1.0625rem;font-weight:700;margin-bottom:.2rem;">7 Oak Close, Didsbury,
+                          Manchester M14 6FT</h3>
+                        <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:.75rem;">2 bedrooms · 1
+                          bathroom · Freehold · 640 sq ft</p>
+                      </div>
+                      <span class="badge badge-yellow" style="white-space:nowrap;">Under Offer</span>
+                    </div>
+                    <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Asking Price</div>
+                        <div style="font-size:1.25rem;font-weight:800;">£225,000</div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Enquiries</div>
+                        <div style="font-size:1.25rem;font-weight:800;">7</div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Viewings</div>
+                        <div style="font-size:1.25rem;font-weight:800;">3</div>
+                      </div>
+                      <div>
+                        <div
+                          style="font-size:.75rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;">
+                          Offers</div>
+                        <div style="font-size:1.25rem;font-weight:800;">1</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;">
+                    <button class="btn btn-secondary btn-sm">Edit Listing</button>
+                    <button class="btn btn-ghost btn-sm">View Offer</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: INQUIRIES
+        ════════════════════════════ -->
+          <div id="view-inquiries" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Buyer Inquiries</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">All enquiries, viewing requests, and offers in
+                one place</p>
+            </div>
+            <div style="display:flex;gap:.65rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+              <button class="btn btn-primary btn-sm">All (8)</button>
+              <button class="btn btn-secondary btn-sm">Viewing Requests (3)</button>
+              <button class="btn btn-secondary btn-sm">Offers (3)</button>
+              <button class="btn btn-secondary btn-sm">Enquiries (2)</button>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Buyer</th>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Details</th>
+                    <th>Received</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:.7rem;">
+                        <div class="enquiry-avatar">TK</div>
+                        <div>
+                          <div style="font-weight:700;font-size:.875rem;">Tom Khalid</div>
+                          <div style="font-size:.775rem;color:var(--text-muted);">AIP verified · Cash buyer</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="font-size:.875rem;">14 Maple St.</td>
+                    <td><span class="badge badge-green">Offer</span></td>
+                    <td style="font-weight:700;">£375,000</td>
+                    <td style="font-size:.875rem;color:var(--text-secondary);">Yesterday, 14:22</td>
+                    <td><span class="badge badge-gray">Under Review</span></td>
+                    <td><button class="btn btn-primary btn-sm">Review Offer</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:.7rem;">
+                        <div class="enquiry-avatar">AR</div>
+                        <div>
+                          <div style="font-weight:700;font-size:.875rem;">Alice Rubin</div>
+                          <div style="font-size:.775rem;color:var(--text-muted);">Verified buyer</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="font-size:.875rem;">14 Maple St.</td>
+                    <td><span class="badge badge-blue">Viewing Request</span></td>
+                    <td style="font-size:.875rem;">Sat 25 Feb · 10:00</td>
+                    <td style="font-size:.875rem;color:var(--text-secondary);">2 hours ago</td>
+                    <td><span class="badge badge-yellow">Pending</span></td>
+                    <td>
+                      <div style="display:flex;gap:.4rem;">
+                        <button class="btn btn-primary btn-sm">Confirm</button>
+                        <button class="btn btn-secondary btn-sm">Decline</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:.7rem;">
+                        <div class="enquiry-avatar">MN</div>
+                        <div>
+                          <div style="font-weight:700;font-size:.875rem;">Marcus N.</div>
+                          <div style="font-size:.775rem;color:var(--text-muted);">Mortgage in principle</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="font-size:.875rem;">14 Maple St.</td>
+                    <td><span class="badge badge-green">Offer</span></td>
+                    <td style="font-weight:700;">£380,000</td>
+                    <td style="font-size:.875rem;color:var(--text-secondary);">3 days ago</td>
+                    <td><span class="badge badge-gray">Under Review</span></td>
+                    <td><button class="btn btn-primary btn-sm">Review Offer</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:.7rem;">
+                        <div class="enquiry-avatar">PW</div>
+                        <div>
+                          <div style="font-weight:700;font-size:.875rem;">Priya W.</div>
+                          <div style="font-size:.775rem;color:var(--text-muted);">New buyer</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="font-size:.875rem;">14 Maple St.</td>
+                    <td><span class="badge badge-blue">Viewing Request</span></td>
+                    <td style="font-size:.875rem;">Sun 26 Feb · 14:30</td>
+                    <td style="font-size:.875rem;color:var(--text-secondary);">4 days ago</td>
+                    <td><span class="badge badge-green">Confirmed</span></td>
+                    <td><button class="btn btn-ghost btn-sm">View Details</button></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div style="display:flex;align-items:center;gap:.7rem;">
+                        <div class="enquiry-avatar">SM</div>
+                        <div>
+                          <div style="font-weight:700;font-size:.875rem;">Sofia M.</div>
+                          <div style="font-size:.775rem;color:var(--text-muted);">New buyer</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="font-size:.875rem;">7 Oak Close</td>
+                    <td><span class="badge badge-gray">Enquiry</span></td>
+                    <td style="font-size:.875rem;color:var(--text-secondary);">Is parking included?</td>
+                    <td style="font-size:.875rem;color:var(--text-secondary);">3 days ago</td>
+                    <td><span class="badge badge-green">Replied</span></td>
+                    <td><button class="btn btn-ghost btn-sm">View Thread</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: ANALYTICS
+        ════════════════════════════ -->
+          <div id="view-analytics" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Analytics</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Performance across your listings — last 30 days
+              </p>
+            </div>
+            <div class="stats-row" style="margin-bottom:2rem;">
+              <div class="stat-card">
+                <div class="stat-card-label">Total Views</div>
+                <div class="stat-card-value">1,284</div>
+                <div class="stat-card-trend trend-up">↑ 34% vs last month</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Enquiry Rate</div>
+                <div class="stat-card-value">2.4%</div>
+                <div class="stat-card-trend trend-up">↑ 0.8pp</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Avg. Response Time</div>
+                <div class="stat-card-value">1.4h</div>
+                <div class="stat-card-sub">Target: under 2h</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Viewing Conversion</div>
+                <div class="stat-card-value">38%</div>
+                <div class="stat-card-trend trend-up">↑ +12%</div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;flex-wrap:wrap;">
+              <div class="table-wrap" style="padding:1.5rem;">
+                <h4 style="font-size:.9rem;font-weight:700;margin-bottom:1.25rem;">Traffic Source Breakdown</h4>
+                <div class="analytics-bar-row">
+                  <div class="analytics-bar-label">Rightmove</div>
+                  <div class="analytics-bar-track">
+                    <div class="analytics-bar-fill" style="width:72%"></div>
+                  </div>
+                  <div class="analytics-bar-value">72%</div>
+                </div>
+                <div class="analytics-bar-row">
+                  <div class="analytics-bar-label">Zoopla</div>
+                  <div class="analytics-bar-track">
+                    <div class="analytics-bar-fill" style="width:18%"></div>
+                  </div>
+                  <div class="analytics-bar-value">18%</div>
+                </div>
+                <div class="analytics-bar-row">
+                  <div class="analytics-bar-label">OnTheMarket</div>
+                  <div class="analytics-bar-track">
+                    <div class="analytics-bar-fill" style="width:6%"></div>
+                  </div>
+                  <div class="analytics-bar-value">6%</div>
+                </div>
+                <div class="analytics-bar-row">
+                  <div class="analytics-bar-label">Direct / Other</div>
+                  <div class="analytics-bar-track">
+                    <div class="analytics-bar-fill" style="width:4%"></div>
+                  </div>
+                  <div class="analytics-bar-value">4%</div>
+                </div>
+              </div>
+
+              <div class="table-wrap" style="padding:1.5rem;">
+                <h4 style="font-size:.9rem;font-weight:700;margin-bottom:1.25rem;">Weekly Enquiry Trend</h4>
+                <div style="display:flex;align-items:flex-end;gap:.5rem;height:120px;">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+                    <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                      <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;opacity:.6;height:40%;">
+                      </div>
+                    </div>
+                    <span style="font-size:.7rem;color:var(--text-muted);">W1</span>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+                    <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                      <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;opacity:.7;height:60%;">
+                      </div>
+                    </div>
+                    <span style="font-size:.7rem;color:var(--text-muted);">W2</span>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+                    <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                      <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;opacity:.8;height:50%;">
+                      </div>
+                    </div>
+                    <span style="font-size:.7rem;color:var(--text-muted);">W3</span>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+                    <div style="flex:1;width:100%;display:flex;align-items:flex-end;">
+                      <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;height:100%;"></div>
+                    </div>
+                    <span style="font-size:.7rem;color:var(--text-muted);">W4</span>
+                  </div>
+                </div>
+                <div
+                  style="display:flex;justify-content:space-between;margin-top:1rem;font-size:.8125rem;color:var(--text-secondary);">
+                  <span>3 enquiries</span>
+                  <span>5 enquiries</span>
+                  <span>4 enquiries</span>
+                  <span>8 enquiries</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: DOCUMENTS
+        ════════════════════════════ -->
+          <div id="view-documents" class="view">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+              <div>
+                <h2 style="font-size:1.25rem;font-weight:800;">Documents</h2>
+                <p style="font-size:.875rem;color:var(--text-secondary);">All sale-related documents in one secure place
+                </p>
+              </div>
+              <button class="btn btn-primary">Upload Document</button>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:.65rem;">
+              <!-- Doc rows -->
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div class="doc-icon pdf" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Energy Performance Certificate (EPC)</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">14 Maple Street · PDF · 1.2 MB · Uploaded 12 Feb
+                    2025</div>
+                </div>
+                <span class="badge badge-green">Valid</span>
+                <button class="btn btn-ghost btn-sm">Download</button>
+              </div>
+
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div class="doc-icon doc" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Property Information Form (TA6)</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">14 Maple Street · DOCX · 840 KB · Uploaded 14
+                    Feb 2025</div>
+                </div>
+                <span class="badge badge-yellow">Review Required</span>
+                <button class="btn btn-ghost btn-sm">Download</button>
+              </div>
+
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div class="doc-icon img" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#92400E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3H3m18 6H3m18 6H3m18 6H3"/><line x1="6" y1="3" x2="6" y2="21"/></svg></div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Floorplan — 14 Maple Street</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">14 Maple Street · PNG · 2.1 MB · Uploaded 10 Feb
+                    2025</div>
+                </div>
+                <span class="badge badge-green">Published</span>
+                <button class="btn btn-ghost btn-sm">Download</button>
+              </div>
+
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div class="doc-icon pdf" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Leasehold Information Pack</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">14 Maple Street · PDF · 3.4 MB · Uploaded 15 Feb
+                    2025</div>
+                </div>
+                <span class="badge badge-green">Complete</span>
+                <button class="btn btn-ghost btn-sm">Download</button>
+              </div>
+
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);opacity:.7;">
+                <div class="doc-icon pdf" style="display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Draft Contract (from Solicitor)</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">7 Oak Close · PDF · Awaiting upload</div>
+                </div>
+                <span class="badge badge-gray">Pending</span>
+                <button class="btn btn-primary btn-sm">Upload</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: CALENDAR
+        ════════════════════════════ -->
+          <div id="view-calendar" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Viewing Calendar</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Set your availability. Buyers self-book
+                confirmed slots.</p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;">
+              <!-- Calendar -->
+              <div>
+                <div
+                  style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+                    <h4 style="font-weight:700;">February 2026</h4>
+                    <div style="display:flex;gap:.5rem;">
+                      <button class="btn btn-ghost btn-sm">← Prev</button>
+                      <button class="btn btn-ghost btn-sm">Next →</button>
+                    </div>
+                  </div>
+                  <div class="calendar-grid">
+                    <div class="cal-header">Mon</div>
+                    <div class="cal-header">Tue</div>
+                    <div class="cal-header">Wed</div>
+                    <div class="cal-header">Thu</div>
+                    <div class="cal-header">Fri</div>
+                    <div class="cal-header">Sat</div>
+                    <div class="cal-header">Sun</div>
+                    <!-- Week 1 -->
+                    <div class="cal-day other-month">27</div>
+                    <div class="cal-day other-month">28</div>
+                    <div class="cal-day other-month">29</div>
+                    <div class="cal-day other-month">30</div>
+                    <div class="cal-day other-month">31</div>
+                    <div class="cal-day">1</div>
+                    <div class="cal-day">2</div>
+                    <!-- Week 2 -->
+                    <div class="cal-day">3</div>
+                    <div class="cal-day">4</div>
+                    <div class="cal-day">5</div>
+                    <div class="cal-day">6</div>
+                    <div class="cal-day">7</div>
+                    <div class="cal-day has-event">8</div>
+                    <div class="cal-day">9</div>
+                    <!-- Week 3 -->
+                    <div class="cal-day">10</div>
+                    <div class="cal-day">11</div>
+                    <div class="cal-day">12</div>
+                    <div class="cal-day">13</div>
+                    <div class="cal-day">14</div>
+                    <div class="cal-day has-event">15</div>
+                    <div class="cal-day">16</div>
+                    <!-- Week 4 -->
+                    <div class="cal-day">17</div>
+                    <div class="cal-day">18</div>
+                    <div class="cal-day">19</div>
+                    <div class="cal-day">20</div>
+                    <div class="cal-day">21</div>
+                    <div class="cal-day today has-event">22</div>
+                    <div class="cal-day">23</div>
+                    <!-- Week 5 -->
+                    <div class="cal-day">24</div>
+                    <div class="cal-day has-event">25</div>
+                    <div class="cal-day has-event">26</div>
+                    <div class="cal-day">27</div>
+                    <div class="cal-day">28</div>
+                    <div class="cal-day other-month">1</div>
+                    <div class="cal-day other-month">2</div>
+                  </div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;">+ Add Availability
+                  Slot</button>
+              </div>
+
+              <!-- Upcoming Viewings -->
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;">
+                <h4 style="font-weight:700;margin-bottom:1.25rem;">Upcoming Viewings</h4>
+                <div style="display:flex;flex-direction:column;gap:.75rem;">
+                  <div class="viewing-slot">
+                    <div
+                      style="width:8px;height:8px;border-radius:50%;background:var(--brand);flex-shrink:0;margin-top:.25rem;">
+                    </div>
+                    <div>
+                      <div class="viewing-time">Today · 15:00</div>
+                      <div class="viewing-info">
+                        <div class="viewing-address">14 Maple Street</div>
+                        <div class="viewing-buyer">Alice Rubin · Viewing</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-green" style="margin-left:auto;">Confirmed</span>
+                  </div>
+                  <div class="viewing-slot">
+                    <div
+                      style="width:8px;height:8px;border-radius:50%;background:var(--brand);flex-shrink:0;margin-top:.25rem;">
+                    </div>
+                    <div>
+                      <div class="viewing-time">Sat · 10:00</div>
+                      <div class="viewing-info">
+                        <div class="viewing-address">14 Maple Street</div>
+                        <div class="viewing-buyer">Tom Khalid · 2nd Viewing</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-yellow" style="margin-left:auto;">Pending</span>
+                  </div>
+                  <div class="viewing-slot">
+                    <div
+                      style="width:8px;height:8px;border-radius:50%;background:var(--border-dark);flex-shrink:0;margin-top:.25rem;">
+                    </div>
+                    <div>
+                      <div class="viewing-time">Sun · 14:30</div>
+                      <div class="viewing-info">
+                        <div class="viewing-address">14 Maple Street</div>
+                        <div class="viewing-buyer">Priya W. · Viewing</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-green" style="margin-left:auto;">Confirmed</span>
+                  </div>
+                  <div class="viewing-slot">
+                    <div
+                      style="width:8px;height:8px;border-radius:50%;background:var(--border-dark);flex-shrink:0;margin-top:.25rem;">
+                    </div>
+                    <div>
+                      <div class="viewing-time">26 Feb · 11:00</div>
+                      <div class="viewing-info">
+                        <div class="viewing-address">14 Maple Street</div>
+                        <div class="viewing-buyer">Marcus N. · 2nd Viewing</div>
+                      </div>
+                    </div>
+                    <span class="badge badge-green" style="margin-left:auto;">Confirmed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: SETTINGS
+        ════════════════════════════ -->
+          <div id="view-settings" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Settings</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Manage your account preferences and
+                notifications</p>
+            </div>
+            <div style="max-width:680px;">
+
+              <div class="settings-section">
+                <h3>Account Details</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" value="John" />
+                  </div>
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" value="Smith" />
+                  </div>
+                  <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" value="john@example.com" />
+                  </div>
+                  <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" value="+44 7700 900000" />
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm">Save Changes</button>
+              </div>
+
+              <div class="settings-section">
+                <h3>Notifications</h3>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">New Enquiry</div>
+                    <div class="setting-desc">Get notified when a buyer sends an enquiry</div>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">Viewing Request</div>
+                    <div class="setting-desc">Get notified when a buyer requests a viewing</div>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">New Offer</div>
+                    <div class="setting-desc">Immediate notification when an offer is submitted</div>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">Weekly Progress Report</div>
+                    <div class="setting-desc">Automated weekly summary every Monday morning</div>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">WhatsApp Notifications</div>
+                    <div class="setting-desc">Receive key alerts via WhatsApp</div>
+                  </div>
+                  <label class="toggle">
+                    <input type="checkbox" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-section">
+                <h3>Privacy &amp; Security</h3>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">Two-Factor Authentication</div>
+                    <div class="setting-desc">Add an extra layer of security to your account</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm">Enable 2FA</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">Change Password</div>
+                    <div class="setting-desc">Update your account password</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm">Change</button>
+                </div>
+                <div class="settings-row">
+                  <div class="settings-row-info">
+                    <div class="setting-label">Download My Data</div>
+                    <div class="setting-desc">Export all data associated with your account (GDPR)</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm">Request Export</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: INBOX
+        ════════════════════════════ -->
+          <div id="view-inbox" class="view">
+            <div class="view-header">
+              <h1 class="view-title">Inbox</h1>
+              <p class="view-subtitle">Messages from Home-Hunters about your listings.</p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:280px 1fr;gap:1.5rem;height:600px;">
+              <!-- Thread list -->
+              <div class="section-card" style="padding:0;overflow-y:auto;">
+                <div
+                  style="padding:.75rem 1rem;border-bottom:1px solid var(--border-light);font-size:.8125rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">
+                  Messages (5)</div>
+                <div style="display:flex;flex-direction:column;gap:0;">
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:var(--brand-light);border-bottom:1px solid var(--border-light);cursor:pointer;">
+                    <div class="enquiry-avatar">SB</div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:700;font-size:.875rem;">Sarah B.</div>
+                      <div
+                        style="font-size:.75rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        Is the garden south-facing?</div>
+                    </div>
+                    <div style="font-size:.7rem;color:var(--text-muted);">25m</div>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:var(--brand-light);border-bottom:1px solid var(--border-light);cursor:pointer;">
+                    <div class="enquiry-avatar">JR</div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:700;font-size:.875rem;">James R.</div>
+                      <div
+                        style="font-size:.75rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        Can we book a second viewing?</div>
+                    </div>
+                    <div style="font-size:.7rem;color:var(--text-muted);">2h</div>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-bottom:1px solid var(--border-light);cursor:pointer;">
+                    <div class="enquiry-avatar">PM</div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:600;font-size:.875rem;">Priya M.</div>
+                      <div
+                        style="font-size:.75rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        Thank you for the tour yesterday!</div>
+                    </div>
+                    <div style="font-size:.7rem;color:var(--text-muted);">1d</div>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-bottom:1px solid var(--border-light);cursor:pointer;">
+                    <div class="enquiry-avatar">AL</div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:600;font-size:.875rem;">Ahmed L.</div>
+                      <div
+                        style="font-size:.75rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        What's the monthly service charge?</div>
+                    </div>
+                    <div style="font-size:.7rem;color:var(--text-muted);">2d</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;cursor:pointer;">
+                    <div class="enquiry-avatar">KW</div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:600;font-size:.875rem;">Karen W.</div>
+                      <div
+                        style="font-size:.75rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        Offer submitted — please review</div>
+                    </div>
+                    <div style="font-size:.7rem;color:var(--text-muted);">3d</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Active thread -->
+              <div class="section-card" style="display:flex;flex-direction:column;padding:0;overflow:hidden;">
+                <div
+                  style="padding:.85rem 1.25rem;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:.75rem;">
+                  <div class="enquiry-avatar">SB</div>
+                  <div>
+                    <div style="font-weight:700;font-size:.9rem;">Sarah B.</div>
+                    <div style="font-size:.75rem;color:var(--text-secondary);">14 Elmwood Close, N12</div>
+                  </div>
+                  <div style="margin-left:auto;display:flex;gap:.5rem;">
+                    <button class="btn btn-secondary btn-sm"
+                      onclick="showView('calendar',document.querySelector('.sidebar-link[onclick*=&quot;calendar&quot;]'))">Open
+                      Calendar</button>
+                    <button class="btn btn-primary btn-sm">Book Viewing</button>
+                  </div>
+                </div>
+                <div style="flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;"
+                  id="inbox-thread">
+                  <div>
+                    <div
+                      style="max-width:75%;padding:.75rem 1rem;border-radius:var(--radius-lg);font-size:.875rem;line-height:1.5;background:var(--surface);border:1px solid var(--border);align-self:flex-start;">
+                      Hi, I'm really interested in the property. Is the garden south-facing? Also, would you consider
+                      early completion?</div>
+                    <div style="font-size:.7rem;color:var(--text-muted);margin-top:.3rem;">Sarah B. · 25 min ago</div>
+                  </div>
+                </div>
+                <div style="padding:.75rem 1rem;border-top:1px solid var(--border);">
+                  <div
+                    style="display:flex;gap:.75rem;align-items:flex-end;padding:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                    <textarea id="inbox-reply" placeholder="Reply to Sarah…" rows="1"
+                      style="flex:1;border:none;resize:none;font-family:var(--font);font-size:.875rem;background:transparent;color:var(--text-primary);min-height:40px;max-height:120px;outline:none;"></textarea>
+                    <button class="btn btn-primary btn-sm" id="inbox-send-btn">Send</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- ════════════════════════════
+             VIEW: PROPERTY AUDIT
+        ════════════════════════════ -->
+          <div id="view-audit" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Property Audit</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Your readiness score before going to market. Fix
+                the gaps — sell faster and for more.</p>
+            </div>
+
+            <!-- Score card -->
+            <div
+              style="display:flex;align-items:center;gap:2rem;padding:1.5rem;background:linear-gradient(135deg,#FFFBEB,#FFF8D6);border:1.5px solid rgba(255,212,0,.4);border-radius:var(--radius-lg);margin-bottom:1.5rem;flex-wrap:wrap;">
+              <div style="text-align:center;flex-shrink:0;">
+                <div style="font-size:3rem;font-weight:900;line-height:1;color:#92660A;">72<span
+                    style="font-size:1.5rem;">%</span></div>
+                <div style="font-size:.8rem;font-weight:700;color:var(--text-secondary);margin-top:.25rem;">Readiness
+                  Score</div>
+              </div>
+              <div style="flex:1;min-width:220px;">
+                <div style="font-weight:700;margin-bottom:.35rem;">Good progress — 2 items need attention</div>
+                <div style="font-size:.875rem;color:var(--text-secondary);">Complete the checklist below to improve your
+                  score and maximise buyer confidence before going live.</div>
+              </div>
+              <button class="btn btn-primary">Boost My Score</button>
+            </div>
+
+            <!-- Checklist -->
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+              <!-- Row -->
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div
+                  style="width:32px;height:32px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0;">
+                  ✓</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Professional Photos</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">12 high-quality images uploaded</div>
+                </div>
+                <span class="badge badge-green">Complete</span>
+              </div>
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div
+                  style="width:32px;height:32px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0;">
+                  ✓</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Pricing</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Asking price set at €385,000 — within 3% of
+                    market comp</div>
+                </div>
+                <span class="badge badge-green">Good</span>
+              </div>
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1.5px solid #FDE68A;border-radius:var(--radius-lg);">
+                <div
+                  style="width:32px;height:32px;border-radius:50%;background:#FEF9C3;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0;">
+                  !</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Legal Documents</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">TA6 form requires review before exchange</div>
+                </div>
+                <button class="btn btn-primary btn-sm">Review Now</button>
+              </div>
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div
+                  style="width:32px;height:32px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0;">
+                  ✓</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">EPC Certificate</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Rating C — valid until March 2035</div>
+                </div>
+                <span class="badge badge-green">Valid</span>
+              </div>
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1.5px solid #FDE68A;border-radius:var(--radius-lg);">
+                <div
+                  style="width:32px;height:32px;border-radius:50%;background:#FEF9C3;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0;">
+                  !</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Listing Description Quality</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Current description is 120 words — recommended
+                    minimum is 200 for top portal placement</div>
+                </div>
+                <button class="btn btn-secondary btn-sm">Improve</button>
+              </div>
+              <div
+                style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                <div
+                  style="width:32px;height:32px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:.875rem;flex-shrink:0;">
+                  ✓</div>
+                <div style="flex:1;">
+                  <div style="font-weight:700;font-size:.9rem;">Timeline Readiness</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Target completion: Summer 2026 — realistic given
+                    current pipeline</div>
+                </div>
+                <span class="badge badge-green">On Track</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: STRATEGY PLANNER
+        ════════════════════════════ -->
+          <div id="view-strategy" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Strategy Planner</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Choose how you want to sell. Switch anytime —
+                your data stays with you.</p>
+            </div>
+
+            <div
+              style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem;">
+              <!-- DIY Card -->
+              <div
+                style="background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;cursor:pointer;transition:border-color .2s;"
+                onmouseover="this.style.borderColor='var(--brand)'" onmouseout="this.style.borderColor='var(--border)'">
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+                  <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:var(--bg-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--brand);">
+                      Mode 1</div>
+                    <div style="font-weight:800;font-size:1.1rem;">DIY</div>
+                  </div>
+                </div>
+                <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1rem;">Full control. No
+                  commission. You run viewings, manage enquiries, and negotiate your own offers.</p>
+                <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.25rem;">
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:var(--brand);">✓</span> Best
+                    for fee-sensitive sellers</div>
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:var(--brand);">✓</span> Flat
+                    fee from €199</div>
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:var(--brand);">✓</span> Full
+                    dashboard — zero commission</div>
+                </div>
+                <button class="btn btn-secondary" style="width:100%;">Switch to DIY</button>
+              </div>
+              <!-- Hybrid Card (Current) -->
+              <div
+                style="background:linear-gradient(135deg,#FFFBEB,#FFF8D6);border:2px solid var(--brand);border-radius:var(--radius-lg);padding:1.5rem;position:relative;">
+                <div
+                  style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--brand);color:#000;font-size:.7rem;font-weight:700;padding:.2rem .75rem;border-radius:99px;white-space:nowrap;">
+                  Current Route</div>
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+                  <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:var(--brand-solid-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#92660A" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5"/><circle cx="12" cy="7" r="4"/></svg></div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#92660A;">
+                      Mode 2</div>
+                    <div style="font-weight:800;font-size:1.1rem;">Hybrid</div>
+                  </div>
+                </div>
+                <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1rem;">Yalla.House is your hub.
+                  Bring in a photographer, agent, or solicitor exactly where you need support.</p>
+                <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.25rem;">
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:#92660A;">✓</span> Sweet spot
+                    for most sellers</div>
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:#92660A;">✓</span> Book
+                    specialists à la carte</div>
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:#92660A;">✓</span> Full
+                    pipeline visibility</div>
+                </div>
+                <button class="btn btn-primary" style="width:100%;cursor:default;">✓ Active</button>
+              </div>
+              <!-- Agent-led Card -->
+              <div
+                style="background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;cursor:pointer;transition:border-color .2s;"
+                onmouseover="this.style.borderColor='#0EA5E9'" onmouseout="this.style.borderColor='var(--border)'">
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+                  <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:#E0F2FE;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0369A1" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#0EA5E9;">
+                      Mode 3</div>
+                    <div style="font-weight:800;font-size:1.1rem;">Agent-led, Transparent</div>
+                  </div>
+                </div>
+                <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1rem;">Appoint an agent — but see
+                  everything they do. Viewing logs, response times, offer pipeline. No black box.</p>
+                <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.25rem;">
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:#0EA5E9;">✓</span> Negotiate
+                    fees with real data</div>
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:#0EA5E9;">✓</span> Track agent
+                    performance</div>
+                  <div style="font-size:.8rem;display:flex;gap:.5rem;"><span style="color:#0EA5E9;">✓</span> Switch
+                    agents anytime</div>
+                </div>
+                <button class="btn btn-secondary" style="width:100%;"
+                  onclick="showView('agents',document.querySelector('[onclick*=agents]'))">Invite an Agent →</button>
+              </div>
+            </div>
+
+            <!-- Recommended next steps for Hybrid -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Recommended Next Steps — Hybrid Mode</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.75rem;">
+                <div
+                  style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border-light);">
+                  <div
+                    style="width:28px;height:28px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;">
+                    1</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;font-size:.875rem;">Book a professional photographer</div>
+                    <div style="font-size:.8rem;color:var(--text-muted);">Listings with pro photos get 32% more
+                      enquiries on IS24</div>
+                  </div>
+                  <button class="btn btn-primary btn-sm">Book</button>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border-light);">
+                  <div
+                    style="width:28px;height:28px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;">
+                    2</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;font-size:.875rem;">Improve your listing description</div>
+                    <div style="font-size:.8rem;color:var(--text-muted);">Currently 120 words — aim for 200+ with key
+                      highlights</div>
+                  </div>
+                  <button class="btn btn-secondary btn-sm">Edit</button>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;padding:.75rem 0;">
+                  <div
+                    style="width:28px;height:28px;border-radius:50%;background:var(--bg-muted);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;color:var(--text-muted);">
+                    3</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:600;font-size:.875rem;">Invite a negotiation specialist</div>
+                    <div style="font-size:.8rem;color:var(--text-muted);">Optional — with 3 offers in play, professional
+                      negotiation may secure an extra €5–15k</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm">Learn More</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: AGENT WORKSPACE
+        ════════════════════════════ -->
+          <div id="view-agents" class="view">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+              <div>
+                <h2 style="font-size:1.25rem;font-weight:800;">Agent Workspace</h2>
+                <p style="font-size:.875rem;color:var(--text-secondary);">Invite, compare, and track agents — you stay
+                  in control</p>
+              </div>
+              <button class="btn btn-primary">+ Invite Agent</button>
+            </div>
+
+            <!-- Invited agent card -->
+            <div
+              style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;">
+              <div style="display:flex;align-items:flex-start;gap:1.25rem;flex-wrap:wrap;">
+                <div
+                  style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#DBEAFE,#93C5FD);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;flex-shrink:0;">
+                  MK</div>
+                <div style="flex:1;min-width:200px;">
+                  <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.35rem;">
+                    <div style="font-weight:800;font-size:1rem;">Michael König</div>
+                    <span class="badge badge-green">Active</span>
+                  </div>
+                  <div style="font-size:.875rem;color:var(--text-secondary);margin-bottom:.75rem;">Engel &amp; Völkers
+                    Munich · Joined 3 weeks ago</div>
+                  <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+                    <div>
+                      <div
+                        style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                        Agreed Fee</div>
+                      <div style="font-weight:700;">2.38% incl. VAT</div>
+                    </div>
+                    <div>
+                      <div
+                        style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                        Tie-in</div>
+                      <div style="font-weight:700;">8 weeks</div>
+                    </div>
+                    <div>
+                      <div
+                        style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                        Avg. Response</div>
+                      <div style="font-weight:700;color:#16A34A;">1.2h</div>
+                    </div>
+                    <div>
+                      <div
+                        style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                        Viewings</div>
+                      <div style="font-weight:700;">4 conducted</div>
+                    </div>
+                    <div>
+                      <div
+                        style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                        Feedback quality</div>
+                      <div style="font-weight:700;">4.5 / 5</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;">
+                  <button class="btn btn-secondary btn-sm">View Performance</button>
+                  <button class="btn btn-ghost btn-sm" style="color:#DC2626;">Remove Access</button>
+                </div>
+              </div>
+              <!-- Performance bar -->
+              <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+                <div style="font-size:.8125rem;font-weight:700;margin-bottom:.75rem;color:var(--text-secondary);">
+                  Week-by-week activity</div>
+                <div style="display:flex;align-items:flex-end;gap:.5rem;height:60px;">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;">
+                    <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;height:40%;"></div><span
+                      style="font-size:.65rem;color:var(--text-muted);">W1</span>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;">
+                    <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;height:70%;"></div><span
+                      style="font-size:.65rem;color:var(--text-muted);">W2</span>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;">
+                    <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;height:100%;"></div><span
+                      style="font-size:.65rem;color:var(--text-muted);">W3</span>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.3rem;">
+                    <div style="width:100%;background:var(--brand);border-radius:4px 4px 0 0;height:60%;"></div><span
+                      style="font-size:.65rem;color:var(--text-muted);">W4</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Invite prompt -->
+            <div
+              style="background:var(--bg-soft);border:1.5px dashed var(--border-dark);border-radius:var(--radius-lg);padding:2rem;text-align:center;">
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-muted);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+              <div style="font-weight:700;margin-bottom:.35rem;">Invite a second agent</div>
+              <div style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1.25rem;">Compare performance
+                side-by-side. Switch or remove at any time — no obligation.</div>
+              <button class="btn btn-primary">Invite Agent by Email</button>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: DEAL ROOM
+        ════════════════════════════ -->
+          <div id="view-deal" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Deal Room</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Milestones, documents, and legal handoff —
+                everything to get to completion</p>
+            </div>
+
+            <!-- Milestone timeline -->
+            <div class="section-card" style="margin-bottom:1.5rem;">
+              <div class="section-card-header">
+                <div class="section-card-title">Sale Milestones</div>
+              </div>
+              <div style="position:relative;padding-left:2rem;">
+                <div style="position:absolute;left:.75rem;top:0;bottom:0;width:2px;background:var(--border);"></div>
+                <!-- Step -->
+                <div style="position:relative;margin-bottom:1.5rem;">
+                  <div
+                    style="position:absolute;left:-1.625rem;top:.15rem;width:16px;height:16px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand);">
+                  </div>
+                  <div style="font-weight:700;font-size:.9rem;">Property Listed</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Live on IS24 &amp; Immowelt · 1 Feb 2026</div>
+                </div>
+                <div style="position:relative;margin-bottom:1.5rem;">
+                  <div
+                    style="position:absolute;left:-1.625rem;top:.15rem;width:16px;height:16px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand);">
+                  </div>
+                  <div style="font-weight:700;font-size:.9rem;">Viewings Active</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">9 viewings completed · ongoing</div>
+                </div>
+                <div style="position:relative;margin-bottom:1.5rem;">
+                  <div
+                    style="position:absolute;left:-1.625rem;top:.15rem;width:16px;height:16px;border-radius:50%;background:var(--brand);border:2px solid #fff;box-shadow:0 0 0 2px var(--brand);">
+                  </div>
+                  <div style="font-weight:700;font-size:.9rem;">Offers Received</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">3 offers — highest at €380,000 · under review
+                  </div>
+                </div>
+                <div style="position:relative;margin-bottom:1.5rem;">
+                  <div
+                    style="position:absolute;left:-1.625rem;top:.15rem;width:16px;height:16px;border-radius:50%;background:var(--bg-muted);border:2px solid var(--border);">
+                  </div>
+                  <div style="font-weight:600;font-size:.9rem;color:var(--text-muted);">Under Offer</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Accept an offer to unlock this stage</div>
+                </div>
+                <div style="position:relative;margin-bottom:1.5rem;">
+                  <div
+                    style="position:absolute;left:-1.625rem;top:.15rem;width:16px;height:16px;border-radius:50%;background:var(--bg-muted);border:2px solid var(--border);">
+                  </div>
+                  <div style="font-weight:600;font-size:.9rem;color:var(--text-muted);">Exchange of Contracts</div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Solicitor needed — we can refer one</div>
+                </div>
+                <div style="position:relative;">
+                  <div
+                    style="position:absolute;left:-1.625rem;top:.15rem;width:16px;height:16px;border-radius:50%;background:var(--bg-muted);border:2px solid var(--border);">
+                  </div>
+                  <div style="font-weight:600;font-size:.9rem;color:var(--text-muted);">Completion
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:.25rem;"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                  </div>
+                  <div style="font-size:.8rem;color:var(--text-muted);">Keys handed over &amp; funds transferred</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Documents + Solicitor -->
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;flex-wrap:wrap;">
+              <div class="section-card">
+                <div class="section-card-header">
+                  <div class="section-card-title">Key Documents</div><button
+                    class="btn btn-primary btn-sm">Upload</button>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:.65rem;">
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--bg-soft);border-radius:var(--radius);">
+                    <span style="font-size:1.1rem;">📄</span>
+                    <div style="flex:1;">
+                      <div style="font-weight:600;font-size:.875rem;">EPC Certificate</div>
+                      <div style="font-size:.75rem;color:var(--text-muted);">Valid · expires 2035</div>
+                    </div><span class="badge badge-green">✓</span>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--bg-soft);border-radius:var(--radius);">
+                     <span style="width:28px;height:28px;background:#DBEAFE;border-radius:var(--radius-sm);display:inline-flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg></span>
+                    <div style="flex:1;">
+                      <div style="font-weight:600;font-size:.875rem;">TA6 Property Form</div>
+                      <div style="font-size:.75rem;color:var(--text-muted);">Review needed</div>
+                    </div><span class="badge badge-yellow">Review</span>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--bg-soft);border-radius:var(--radius);">
+                    <span style="font-size:1.1rem;">📄</span>
+                    <div style="flex:1;">
+                      <div style="font-weight:600;font-size:.875rem;">Draft Contract</div>
+                      <div style="font-size:.75rem;color:var(--text-muted);">Awaiting solicitor</div>
+                    </div><span class="badge badge-gray">Pending</span>
+                  </div>
+                </div>
+              </div>
+              <div class="section-card">
+                <div class="section-card-header">
+                  <div class="section-card-title">Solicitor</div>
+                </div>
+                <div style="text-align:center;padding:1rem 0;">
+                  <div style="width:48px;height:48px;border-radius:50%;background:var(--bg-muted);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                  <div style="font-weight:700;margin-bottom:.35rem;">No solicitor linked yet</div>
+                  <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem;">We can refer a
+                    conveyancer who specialises in German property law.</div>
+                  <button class="btn btn-primary btn-sm" style="width:100%;">Get a Solicitor Referral</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: REPORTING
+        ════════════════════════════ -->
+          <div id="view-reporting" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Reporting</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Weekly summary, buyer funnel, and agent
+                performance — at a glance</p>
+            </div>
+
+            <!-- Weekly summary -->
+            <div
+              style="background:linear-gradient(135deg,#FFFBEB,#FFF8D6);border:1.5px solid rgba(255,212,0,.4);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem;">
+              <div
+                style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+                <div style="font-weight:800;font-size:1rem;">Weekly Summary — Week of 3 Mar 2026</div>
+                <button class="btn btn-secondary btn-sm">Export PDF</button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1rem;">
+                <div
+                  style="text-align:center;background:rgba(255,255,255,.6);border-radius:var(--radius);padding:.75rem;">
+                  <div style="font-size:1.75rem;font-weight:900;line-height:1;">8</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);margin-top:.2rem;">Enquiries</div>
+                </div>
+                <div
+                  style="text-align:center;background:rgba(255,255,255,.6);border-radius:var(--radius);padding:.75rem;">
+                  <div style="font-size:1.75rem;font-weight:900;line-height:1;">4</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);margin-top:.2rem;">Viewings</div>
+                </div>
+                <div
+                  style="text-align:center;background:rgba(255,255,255,.6);border-radius:var(--radius);padding:.75rem;">
+                  <div style="font-size:1.75rem;font-weight:900;line-height:1;color:var(--brand);">2</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);margin-top:.2rem;">New Offers</div>
+                </div>
+                <div
+                  style="text-align:center;background:rgba(255,255,255,.6);border-radius:var(--radius);padding:.75rem;">
+                  <div style="font-size:1.75rem;font-weight:900;line-height:1;">1.4h</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);margin-top:.2rem;">Avg Response</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+              <!-- Buyer funnel -->
+              <div class="section-card">
+                <div class="section-card-header">
+                  <div class="section-card-title">Buyer Interest Funnel</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:.75rem;">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:.3rem;"><span
+                        style="color:var(--text-secondary);">Portal Views</span><span
+                        style="font-weight:700;">1,284</span></div>
+                    <div style="height:8px;background:var(--bg-muted);border-radius:99px;">
+                      <div style="height:100%;width:100%;background:var(--brand);border-radius:99px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:.3rem;"><span
+                        style="color:var(--text-secondary);">Enquiries</span><span style="font-weight:700;">31</span>
+                    </div>
+                    <div style="height:8px;background:var(--bg-muted);border-radius:99px;">
+                      <div style="height:100%;width:2.4%;background:var(--brand);border-radius:99px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:.3rem;"><span
+                        style="color:var(--text-secondary);">Viewings</span><span style="font-weight:700;">12</span>
+                    </div>
+                    <div style="height:8px;background:var(--bg-muted);border-radius:99px;">
+                      <div style="height:100%;width:0.93%;background:var(--brand);border-radius:99px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:.3rem;"><span
+                        style="color:var(--text-secondary);">Offers</span><span
+                        style="font-weight:700;color:var(--brand);">3</span></div>
+                    <div style="height:8px;background:var(--bg-muted);border-radius:99px;">
+                      <div style="height:100%;width:0.23%;background:var(--brand);border-radius:99px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Suggestions -->
+              <div class="section-card">
+                <div class="section-card-header">
+                  <div class="section-card-title">Suggested Actions</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:.75rem;">
+                  <div
+                    style="display:flex;gap:.75rem;align-items:flex-start;padding:.75rem;background:var(--bg-soft);border-radius:var(--radius);">
+                    <span style="font-size:1rem;flex-shrink:0;">💡</span>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem;">Respond to 2 enquiries</div>
+                      <div style="font-size:.78rem;color:var(--text-muted);">Sarah B. and Ahmed L. are awaiting replies
+                        — fast response = more viewings</div>
+                    </div>
+                  </div>
+                  <div
+                    style="display:flex;gap:.75rem;align-items:flex-start;padding:.75rem;background:var(--bg-soft);border-radius:var(--radius);">
+                    <span style="font-size:1rem;flex-shrink:0;">📈</span>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem;">3 offers ready to review</div>
+                      <div style="font-size:.78rem;color:var(--text-muted);">Highest is €380,000 — consider requesting
+                        best-and-final offers this week</div>
+                    </div>
+                  </div>
+                  <div
+                    style="display:flex;gap:.75rem;align-items:flex-start;padding:.75rem;background:var(--bg-soft);border-radius:var(--radius);">
+                    <span style="font-size:1rem;flex-shrink:0;">📝</span>
+                    <div>
+                      <div style="font-weight:600;font-size:.875rem;">Improve listing description</div>
+                      <div style="font-size:.78rem;color:var(--text-muted);">Short descriptions reduce portal ranking —
+                        80 more words could lift clicks by ~15%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agent performance -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Agent Performance — Michael König</div><button
+                  class="btn btn-ghost btn-sm"
+                  onclick="showView('agents',document.querySelector('[onclick*=agents]'))">Full Workspace →</button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;">
+                <div style="padding:.875rem;background:var(--bg-soft);border-radius:var(--radius);text-align:center;">
+                  <div style="font-size:1.375rem;font-weight:800;color:#16A34A;">1.2h</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);">Avg. Response Time</div>
+                </div>
+                <div style="padding:.875rem;background:var(--bg-soft);border-radius:var(--radius);text-align:center;">
+                  <div style="font-size:1.375rem;font-weight:800;">4</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);">Viewings Conducted</div>
+                </div>
+                <div style="padding:.875rem;background:var(--bg-soft);border-radius:var(--radius);text-align:center;">
+                  <div style="font-size:1.375rem;font-weight:800;">4.5★</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);">Feedback Quality</div>
+                </div>
+                <div style="padding:.875rem;background:var(--bg-soft);border-radius:var(--radius);text-align:center;">
+                  <div style="font-size:1.375rem;font-weight:800;">2.38%</div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);">Agreed Fee (incl. VAT)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /app-canvas -->
+
+        <!-- ════════════════════════════
+           RIGHT RAIL (Dashboard + Calendar only)
+      ════════════════════════════ -->
+        <aside class="app-rail" id="app-rail">
+
+          <div class="rail-widget">
+            <h4>Today's Agenda</h4>
+            <div class="agenda-items">
+              <div class="agenda-item">
+                <div class="agenda-time">15:00</div>
+                <div class="agenda-dot"></div>
+                <div>
+                  <div class="agenda-text">Viewing · Alice Rubin</div>
+                  <div class="agenda-sub">14 Maple Street</div>
+                </div>
+              </div>
+              <div class="agenda-item">
+                <div class="agenda-time">17:00</div>
+                <div class="agenda-dot" style="background:var(--border-dark);"></div>
+                <div>
+                  <div class="agenda-text">Review Offers</div>
+                  <div class="agenda-sub">3 offers pending review</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="rail-widget">
+            <h4>Weekly Update</h4>
+            <div
+              style="background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;">
+              <div style="font-size:.8125rem;font-weight:700;color:var(--text-muted);margin-bottom:.5rem;">Week of 17
+                Feb</div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <div style="display:flex;justify-content:space-between;font-size:.875rem;">
+                  <span style="color:var(--text-secondary);">Enquiries</span>
+                  <span style="font-weight:700;">8</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.875rem;">
+                  <span style="color:var(--text-secondary);">Viewings</span>
+                  <span style="font-weight:700;">4</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:.875rem;">
+                  <span style="color:var(--text-secondary);">New Offers</span>
+                  <span style="font-weight:700;color:var(--brand);">2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="rail-widget">
+            <h4>Quick Links</h4>
+            <div class="quick-links">
+              <button class="quick-link-btn"
+                onclick="showView('listings', document.querySelector('[onclick*=listings]'))">
+                <i data-lucide="home" class="quick-link-icon"></i> My Listings
+              </button>
+              <button class="quick-link-btn"
+                onclick="showView('inquiries', document.querySelector('[onclick*=inquiries]'))">
+                <i data-lucide="message-circle" class="quick-link-icon"></i> New Inquiries (5)
+              </button>
+              <button class="quick-link-btn"
+                onclick="showView('calendar', document.querySelector('[onclick*=calendar]'))">
+                <i data-lucide="calendar" class="quick-link-icon"></i> Viewing Calendar
+              </button>
+              <button class="quick-link-btn" onclick="window.location='../list.html'">
+                <i data-lucide="plus" class="quick-link-icon"></i> Add a Listing
+              </button>
+            </div>
+          </div>
+
+        </aside>
+      </div><!-- /app-content -->
+    </div><!-- /app-main -->
+
+  </div><!-- /app-root -->
+
+  <script src="../app.js"></script>
+  <script src="../lang.js"></script>
+</body>
+
+</html>

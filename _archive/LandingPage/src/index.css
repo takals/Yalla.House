@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Global Reset ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #F2F0E9;
+  color: #1A1A1A;
+  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── Global Noise Overlay ─────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ─── Typography Utilities ──────────────────────────── */
+.font-drama { font-family: 'Cormorant Garamond', Georgia, serif; }
+.font-mono-custom { font-family: 'IBM Plex Mono', monospace; }
+
+/* ─── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #2E4036; }
+::-webkit-scrollbar-thumb { background: #CC5833; border-radius: 4px; }
+
+/* ─── Magnetic Button ───────────────────────────────── */
+.btn-magnetic {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateZ(0);
+  will-change: transform;
+}
+.btn-magnetic:hover { transform: scale(1.03) translateZ(0); }
+.btn-magnetic:active { transform: scale(0.97) translateZ(0); }
+
+.btn-magnetic .btn-slide {
+  position: absolute;
+  inset: 0;
+  transform: translateY(101%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+}
+.btn-magnetic:hover .btn-slide { transform: translateY(0); }
+.btn-magnetic span:not(.btn-slide) { position: relative; z-index: 1; }
+
+/* ─── Feature Cards ───────────────────────────────── */
+.feature-card {
+  border-radius: 2rem;
+  background: #F2F0E9;
+  border: 1px solid rgba(46, 64, 54, 0.15);
+  box-shadow:
+    0 4px 6px -1px rgba(0,0,0,0.04),
+    0 20px 40px -10px rgba(46, 64, 54, 0.1);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 12px -2px rgba(0,0,0,0.06),
+    0 30px 60px -15px rgba(46, 64, 54, 0.18);
+}
+
+/* ─── Shuffler Cards ────────────────────────────────── */
+.shuffler-card {
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid rgba(46, 64, 54, 0.12);
+  padding: 1rem 1.25rem;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.4s ease,
+              box-shadow 0.4s ease;
+  will-change: transform, opacity;
+  position: absolute;
+  width: 100%;
+}
+
+/* ─── Typewriter cursor ──────────────────────────────── */
+.cursor-blink {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #CC5833;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+/* ─── Sticky Protocol ───────────────────────────────── */
+.protocol-card {
+  border-radius: 2.5rem;
+  will-change: transform, filter, opacity;
+  position: sticky;
+  top: 2rem;
+}
+
+/* ─── Nav Link hover ─────────────────────────────────── */
+.nav-link-line {
+  position: relative;
+}
+.nav-link-line::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: currentColor;
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.nav-link-line:hover::after { width: 100%; }
+.nav-link-line:hover { transform: translateY(-1px); transition: transform 0.2s ease; }
+
+/* ─── GSAP fade targets initial state ──────────────── */
+.gsap-fade { opacity: 0; }
+
+/* ─── Custom selection ──────────────────────────────── */
+::selection { background: #CC5833; color: #F2F0E9; }

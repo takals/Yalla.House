@@ -1,0 +1,306 @@
+ You’re right to change that yellow. In **SaaS + real estate**, color carries meaning: **trust, stability, money, clarity**. The current yellow reads more like a **promo/discount color**, not a platform people trust with a €400k sale.
+
+Below are **strong palettes that fit your positioning (tech + property + control).**
+
+---
+
+# 1. My Top Recommendation
+
+## Burnt Orange + Charcoal + White
+
+This keeps your idea of **orange (energy/action)** but makes it look **serious and premium**.
+
+**Palette**
+
+Primary
+
+* Burnt orange: `#E4572E`
+
+Dark UI
+
+* Charcoal: `#1F2933`
+
+Background
+
+* Off white: `#F8FAFC`
+
+Secondary
+
+* Slate grey: `#64748B`
+
+Accent success
+
+* Green: `#22C55E`
+
+Example:
+
+```
+Buttons: Burnt Orange
+Hover: Darker Orange (#C2411C)
+
+Dashboard background: White
+Cards: Light Grey (#F1F5F9)
+
+Text: Charcoal
+```
+
+**Why it works**
+
+* Orange = action / modern startup
+* Charcoal = trust
+* White = clean SaaS
+
+Think **HubSpot meets Linear**.
+
+---
+
+# 2. Deep Blue + Warm Orange (Very Trustworthy)
+
+Blue is the **classic SaaS trust color**.
+
+**Palette**
+
+Primary
+
+* Deep blue: `#1E3A8A`
+
+Accent
+
+* Orange: `#F97316`
+
+Background
+
+* White: `#FFFFFF`
+
+Secondary
+
+* Soft blue: `#E0E7FF`
+
+Neutral
+
+* Grey: `#6B7280`
+
+Example use
+
+```
+Navbar: deep blue
+Buttons: orange
+Dashboard cards: white
+Highlights: soft blue
+```
+
+Why this works
+
+* Blue = trust / finance / property portals
+* Orange = action
+
+Used by companies like:
+
+* Stripe
+* Revolut
+* Zoopla
+
+---
+
+# 3. Forest Green + Sand (Real Estate Feel)
+
+This palette feels **property + stability**.
+
+**Palette**
+
+Primary
+
+* Forest green: `#166534`
+
+Accent
+
+* Warm sand: `#F59E0B`
+
+Background
+
+* Ivory: `#FFFBEB`
+
+Neutral
+
+* Slate: `#475569`
+
+Why it works
+
+* Green = wealth / investment / homes
+* Sand = warmth / human
+
+Feels like **property meets finance platform**.
+
+---
+
+# 4. Modern SaaS Minimal (Very Startup)
+
+If you want **modern tech vibes**.
+
+Primary
+
+* Electric orange: `#FF6A00`
+
+Background
+
+* Very light grey: `#F5F5F5`
+
+Dark
+
+* Graphite: `#111827`
+
+Secondary
+
+* Steel: `#6B7280`
+
+Example
+
+```
+Primary button: orange
+Hover: darker orange
+Cards: white
+Background: light grey
+```
+
+Very **clean product feel**.
+
+---
+
+# 5. Trust + Wealth Combo (Luxury feel)
+
+If targeting higher-end sellers.
+
+Primary
+
+* Navy: `#0F172A`
+
+Accent
+
+* Gold orange: `#F59E0B`
+
+Background
+
+* Soft white: `#FAFAFA`
+
+Neutral
+
+* Grey: `#64748B`
+
+Feels more **premium / notary / legal / property**.
+
+---
+
+# What I Would Choose for Yalla.House
+
+Honestly this:
+
+### Burnt Orange + Charcoal
+
+```
+Primary: #E4572E
+Dark: #1F2933
+Background: #F8FAFC
+Secondary: #64748B
+Success: #22C55E
+```
+
+Use orange sparingly:
+
+* buttons
+* highlights
+* icons
+* progress bars
+
+NOT large backgrounds.
+
+---
+
+# Example UI Structure
+
+Navbar
+
+```
+Background: white
+Text: charcoal
+CTA button: orange
+```
+
+Hero card
+
+```
+White background
+Shadow
+Orange CTA
+Grey text
+```
+
+Dashboard preview
+
+```
+Card background: white
+Border: light grey
+Accent icons: orange
+Numbers: charcoal
+```
+
+Success states
+
+```
+Green
+```
+
+---
+
+# One Important Rule
+
+For SaaS:
+
+**Color ratio**
+
+```
+70% neutral (white/grey)
+20% dark (text/navigation)
+10% brand color (orange)
+```
+
+If orange dominates, it looks **cheap or like a sale banner**.
+
+---
+
+# Extra Trick for Property Platforms
+
+Use **colored numbers**.
+
+Example:
+
+```
+Enquiries: 12  (orange)
+Viewings: 6    (blue)
+Offers: 2      (green)
+```
+
+That gives the dashboard life.
+
+---
+
+# One More Idea (Very Strong)
+
+Use **orange gradient**.
+
+Example
+
+```
+#FF7A18 → #FF4D00
+```
+
+Buttons look much better.
+
+---
+
+If you want, I can also show you:
+
+* **the exact color system (UI kit)**
+* **CSS variables for the whole site**
+* **a Stripe-level SaaS design palette**
+
+that would make **Yalla.House look like a $50M startup UI** rather than an MVP.

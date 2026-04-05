@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yalla.House — Your Property. Your Rules.</title>
+  <meta name="description"
+    content="Start here before you sell or rent. Plan it, launch it, manage it — DIY, hybrid, or agent-led. One dashboard. Full control." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">Yalla.House</a>
+      <nav class="site-nav">
+        <a href="services.html" class="nav-link" data-i18n="nav.services">Services &amp; Pricing</a>
+        <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
+      </nav>
+      <div class="nav-right">
+        <div class="lang-switcher">
+          <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+          <span class="lang-sep">|</span>
+          <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <button class="btn btn-secondary btn-sm" onclick="toggleUserMenu()" id="userMenuTrigger" aria-haspopup="true"
+            aria-expanded="false" data-i18n="nav.signin">Sign In
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4l3.5 3.5L9 4"/></svg>
+          </button>
+          <div class="user-menu-dropdown" id="userMenuDropdown" role="menu">
+            <div class="user-menu-label" data-i18n="menu.label">Sign in as</div>
+            <a href="dashboards/dashboard.html" class="user-menu-option" role="menuitem">
+              <div class="user-menu-option-icon" style="background:#FFF8D6;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+              </div>
+              <div class="user-menu-option-body">
+                <div class="user-menu-option-name" data-i18n="menu.owner.name">Owner</div>
+                <div class="user-menu-option-desc" data-i18n="menu.owner.desc">Listings, viewings &amp; offers</div>
+              </div>
+            </a>
+            <a href="dashboards/buyer.html" class="user-menu-option" role="menuitem">
+              <div class="user-menu-option-icon" style="background:#EDF4FF;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </div>
+              <div class="user-menu-option-body">
+                <div class="user-menu-option-name" data-i18n="menu.hunter.name">Home Hunter</div>
+                <div class="user-menu-option-desc" data-i18n="menu.hunter.desc">Browse &amp; book viewings</div>
+              </div>
+            </a>
+            <a href="dashboards/admin.html" class="user-menu-option" role="menuitem">
+              <div class="user-menu-option-icon" style="background:#F0FDF4;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              </div>
+              <div class="user-menu-option-body">
+                <div class="user-menu-option-name" data-i18n="menu.admin.name">Admin</div>
+                <div class="user-menu-option-desc" data-i18n="menu.admin.desc">Platform management</div>
+              </div>
+            </a>
+            <a href="dashboards/agent.html" class="user-menu-option" role="menuitem">
+              <div class="user-menu-option-icon" style="background:#FFF7ED;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2410C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              </div>
+              <div class="user-menu-option-body">
+                <div class="user-menu-option-name" data-i18n="menu.agent.name">Field Agent</div>
+                <div class="user-menu-option-desc" data-i18n="menu.agent.desc">Jobs &amp; on-site reports</div>
+              </div>
+            </a>
+            <div class="user-menu-divider"></div>
+            <button class="user-menu-action" onclick="showToast('Settings — coming soon','info')">Settings</button>
+            <button class="user-menu-action user-menu-signout" onclick="showToast('You have been signed out','info')">
+              Sign Out</button>
+          </div>
+        </div>
+        <a href="list.html" class="btn btn-primary btn-sm" data-i18n="nav.list">List Your Place</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="section" style="padding-top:5rem;padding-bottom:3rem;">
+      <div class="section-inner">
+        <div class="home-hero fade-up" style="padding:0;border:none;">
+
+          <div class="home-hero-left">
+            <div class="hero-badge">
+              <span class="hero-badge-dot"></span>
+              <span data-i18n="hero.badge">The smarter way to sell in Germany</span>
+            </div>
+            <h1 class="home-hero-h1" data-i18n="hero.h1">Sell or rent smarter —<br />with or <span
+                class="accent">without</span> an agent.</h1>
+            <p class="hero-os-line">The operating system for property transactions</p>
+            <p class="home-hero-p" data-i18n="hero.p">Start here before you list anything. Plan, launch, and manage your property —
+              DIY, hybrid, or agent-led. One place. Full control.</p>
+            <div class="hero-social-proof">
+              <div class="proof-item" data-i18n="hero.proof1"><strong>400+</strong> sellers across Germany</div>
+              <div class="proof-sep"></div>
+              <div class="proof-item" data-i18n="hero.proof2">Listed on <strong>IS24 &amp; Immowelt</strong></div>
+              <div class="proof-sep"></div>
+              <div class="proof-item" data-i18n="hero.proof3"><strong>5★</strong> seller satisfaction</div>
+            </div>
+          </div>
+
+          <div class="home-hero-right">
+            <div class="login-panel">
+              <div class="login-panel-header">
+                <span class="login-panel-title" data-i18n="login.title">Sign in to your dashboard</span>
+              </div>
+              <div class="login-roles">
+                <a href="dashboards/dashboard.html" class="login-role">
+                  <div class="login-role-icon" style="background:#FFF8D6;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+                  </div>
+                  <div>
+                    <div class="login-role-name" data-i18n="login.owner.name">Owner</div>
+                    <div class="login-role-desc" data-i18n="login.owner.desc">Manage listings, viewings &amp; offers</div>
+                  </div>
+                </a>
+                <a href="dashboards/buyer.html" class="login-role">
+                  <div class="login-role-icon" style="background:#EDF4FF;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  </div>
+                  <div>
+                    <div class="login-role-name" data-i18n="login.hunter.name">Home Hunter</div>
+                    <div class="login-role-desc" data-i18n="login.hunter.desc">Browse properties &amp; book viewings</div>
+                  </div>
+                </a>
+                <a href="dashboards/admin.html" class="login-role">
+                  <div class="login-role-icon" style="background:#F0FDF4;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                  </div>
+                  <div>
+                    <div class="login-role-name" data-i18n="login.admin.name">Admin</div>
+                    <div class="login-role-desc" data-i18n="login.admin.desc">Platform management &amp; oversight</div>
+                  </div>
+                </a>
+                <a href="dashboards/agent.html" class="login-role">
+                  <div class="login-role-icon" style="background:#FFF7ED;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C2410C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                  </div>
+                  <div>
+                    <div class="login-role-name" data-i18n="login.agent.name">Field Agent</div>
+                    <div class="login-role-desc" data-i18n="login.agent.desc">Jobs, viewings &amp; on-site reports</div>
+                  </div>
+                </a>
+              </div>
+              <div class="login-bottom">
+                <button class="login-bottom-link" onclick="showToast('Settings — coming soon','info')">Settings</button>
+                <button class="login-bottom-link" onclick="showToast('You have been signed out','info')"
+                  style="color:#DC2626;">Sign Out</button>
+                <a href="dashboards/dashboard.html" class="login-bottom-link" data-i18n="login.new">New? Start your
+                  property audit →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTALS STRIP — DE portals -->
+    <div class="portals-strip">
+      <div class="portals-inner">
+        <span class="portals-label" data-i18n="portals.label">Listed on</span>
+        <div class="portals-divider"></div>
+        <div class="portals-logos">
+          <span class="portal-logo">ImmobilienScout24</span>
+          <span class="portal-logo">Immowelt</span>
+          <span class="portal-logo">ImmoNet</span>
+          <span class="portal-logo">Kleinanzeigen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS STRIP -->
+    <div class="stat-strip">
+      <div class="stat-strip-inner">
+        <div class="stat-item">
+          <div class="stat-value"><span class="accent" data-i18n="stat1.value">€0</span></div>
+          <div class="stat-label" data-i18n="stat1.label">Commission — you keep 100% of your sale price</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" data-i18n="stat2.value">48h</div>
+          <div class="stat-label" data-i18n="stat2.label">Average time to go live on IS24 &amp; Immowelt</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" data-i18n="stat3.value">69%</div>
+          <div class="stat-label" data-i18n="stat3.label">Of sellers want weekly automated progress updates</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" data-i18n="stat4.value">€8k+</div>
+          <div class="stat-label" data-i18n="stat4.label">Average saving vs traditional agent on a €400k sale</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div class="section-tag" data-i18n="hiw.tag">How it works</div>
+          <h2 data-i18n="hiw.h2">Your complete seller journey — in one place</h2>
+          <p data-i18n="hiw.p">Start with Yalla.House before you do anything else. We guide you through every step —
+            however you choose to sell.</p>
+        </div>
+        <div class="steps">
+          <div class="step fade-up fade-up-1">
+            <div class="step-number">1</div>
+            <h4 data-i18n="step1.h4">Property Audit</h4>
+            <p data-i18n="step1.p">Answer a few questions. Get your readiness score — photos, pricing, legal docs, EPC —
+              and a recommended selling route.</p>
+          </div>
+          <div class="step fade-up fade-up-2">
+            <div class="step-number">2</div>
+            <h4 data-i18n="step2.h4">Choose Your Route</h4>
+            <p data-i18n="step2.p">DIY, Hybrid, or Agent-led. Yalla.House adapts to your choice. Switch anytime without
+              starting over.</p>
+          </div>
+          <div class="step fade-up fade-up-3">
+            <div class="step-number">3</div>
+            <h4 data-i18n="step3.h4">Go Live on Portals</h4>
+            <p data-i18n="step3.p">Your listing goes live on IS24, Immowelt, and more in 48h. Status syncs automatically
+              — no ghost listings.</p>
+          </div>
+          <div class="step fade-up">
+            <div class="step-number">4</div>
+            <h4 data-i18n="step4.h4">Command Center</h4>
+            <p data-i18n="step4.p">Enquiries, viewings, offers, messages — all in one dashboard. No more WhatsApp chaos
+              or email hunting.</p>
+          </div>
+          <div class="step fade-up">
+            <div class="step-number">5</div>
+            <h4 data-i18n="step5.h4">Monitor Performance</h4>
+            <p data-i18n="step5.p">Weekly updates, buyer funnel data, agent response times. See exactly what's happening
+              and when to act.</p>
+          </div>
+          <div class="step fade-up">
+            <div class="step-number">6</div>
+            <h4 data-i18n="step6.h4">Close the Deal</h4>
+            <p data-i18n="step6.p">Documents, milestones, legal handoff — everything you need to reach notary and
+              completion, organised.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THREE AUDIENCES -->
+    <section class="section section-alt">
+      <div class="section-inner">
+        <div class="section-header center">
+          <div class="section-tag">Who it's for</div>
+          <h2>One platform. Three kinds of users.</h2>
+          <p>Yalla.House works for owners, buyers, and agents — each with their own dashboard and workflow.</p>
+        </div>
+        <div class="audience-grid">
+          <!-- Owner -->
+          <div class="audience-card featured fade-up">
+            <div class="audience-card-label">Primary audience</div>
+            <div style="display:flex;align-items:center;gap:.875rem;">
+              <div class="audience-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+              </div>
+              <h3>Owner / Landlord</h3>
+            </div>
+            <p>Sell or rent your property. No agent required. No commission taken. Keep every euro of your price.</p>
+            <ul class="audience-feature-list">
+              <li>Property dashboard from day one — free</li>
+              <li>Enquiry inbox, viewing calendar, offer log</li>
+              <li>Publish to IS24, Immowelt &amp; more</li>
+              <li>Add services à la carte — photography, legal, more</li>
+              <li>Optional agent collaboration, transparent mode</li>
+            </ul>
+            <a href="list.html" class="btn btn-primary" style="justify-content:center;">List Your Place — Free to Start</a>
+          </div>
+          <!-- Home Hunter -->
+          <div class="audience-card fade-up fade-up-1">
+            <div class="audience-card-label">Always free</div>
+            <div style="display:flex;align-items:center;gap:.875rem;">
+              <div class="audience-card-icon" style="background:#EDF4FF;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </div>
+              <h3>Home Hunter</h3>
+            </div>
+            <p>Browse listings, book viewings directly, and track your offers — no agents filtering your enquiries.</p>
+            <ul class="audience-feature-list">
+              <li>Browse &amp; save listings</li>
+              <li>Self-schedule viewings instantly</li>
+              <li>Submit &amp; track offers in real time</li>
+              <li>Status notifications — no chasing</li>
+              <li>Buyer passport &amp; premium tools <span class="badge-coming-soon">Coming soon</span></li>
+            </ul>
+            <a href="dashboards/buyer.html" class="btn btn-outline" style="justify-content:center;">View Home Hunter Dashboard</a>
+          </div>
+          <!-- Agent -->
+          <div class="audience-card fade-up fade-up-2">
+            <div class="audience-card-label">Professional workspace</div>
+            <div style="display:flex;align-items:center;gap:.875rem;">
+              <div class="audience-card-icon" style="background:#FFF7ED;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C2410C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <h3>Agent / Professional</h3>
+            </div>
+            <p>A modern workspace for agents who collaborate with owners transparently — without the old commission model.</p>
+            <ul class="audience-feature-list">
+              <li>Managed listing dashboard</li>
+              <li>Enquiry &amp; viewing coordination</li>
+              <li>Owner collaboration mode</li>
+              <li>Portal distribution controls</li>
+              <li>Full agent workspace <span class="badge-coming-soon">Coming soon</span></li>
+            </ul>
+            <a href="dashboards/agent.html" class="btn btn-outline" style="justify-content:center;">View Agent Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-header center">
+          <div class="section-tag" data-i18n="svc.tag">Services</div>
+          <h2 data-i18n="svc.h2">Everything you need to sell</h2>
+          <p data-i18n="svc.p">Pick exactly what you need. No bundles forced on you.</p>
+        </div>
+        <div class="card-grid card-grid-3">
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h2M9 12h2M9 15h2M13 9h2M13 12h2M13 15h2"/></svg>
+            </div>
+            <h3 data-i18n="svc1.h3">Professional Photography</h3>
+            <p data-i18n="svc1.p">Stunning listing photos shot by local professionals. Hero image rules included for
+              maximum portal CTR.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+            </div>
+            <h3 data-i18n="svc2.h3">360&deg; Virtual Tour</h3>
+            <p data-i18n="svc2.p">Interactive 3D scan so buyers can explore your home before booking — fewer wasted
+              viewings.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3z" rx="1"/><path d="M8 12h8M12 8v8"/></svg>
+            </div>
+            <h3 data-i18n="svc3.h3">Floorplan Creation</h3>
+            <p data-i18n="svc3.p">Accurate, publication-ready floorplans. Required by IS24 for premium placement.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+            </div>
+            <h3 data-i18n="svc4.h3">Legal Support</h3>
+            <p data-i18n="svc4.p">Notary referrals, document checks, and guidance at every legal milestone.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 data-i18n="svc5.h3">For Sale Board</h3>
+            <p data-i18n="svc5.p">Branded yard sign delivered and installed. Still the #1 local lead generator.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            </div>
+            <h3 data-i18n="svc6.h3">Weekly Progress Reports</h3>
+            <p data-i18n="svc6.p">Auto-generated seller update every 7 days — enquiries, viewings, feedback, and next
+              steps.</p>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:2rem;">
+          <a href="services.html" class="btn btn-primary btn-lg" data-i18n="svc.cta">See All Services &amp; Pricing</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLARITY INDEX -->
+    <section class="section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div class="section-tag" data-i18n="clarity.tag">Yalla Clarity Index</div>
+          <h2 data-i18n="clarity.h2">What sellers &amp; buyers really experience</h2>
+          <p data-i18n="clarity.p">Survey of 400 German home movers — the pain points Yalla.House eliminates.</p>
+        </div>
+        <div class="card-grid card-grid-4">
+          <div class="card">
+            <div
+              style="font-size:2rem;font-weight:800;color:var(--brand);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;">
+              67%</div>
+            <p data-i18n="clarity1.p">of buyers say slow or no reply is their #1 frustration</p>
+          </div>
+          <div class="card">
+            <div
+              style="font-size:2rem;font-weight:800;color:var(--brand);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;">
+              58%</div>
+            <p data-i18n="clarity2.p">hit "ghost status" — homes listed as available that were already reserved</p>
+          </div>
+          <div class="card">
+            <div
+              style="font-size:2rem;font-weight:800;color:var(--brand);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;">
+              55%</div>
+            <p data-i18n="clarity3.p">of sellers felt "in the dark" about what was happening week to week</p>
+          </div>
+          <div class="card">
+            <div
+              style="font-size:2rem;font-weight:800;color:var(--brand);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;">
+              30–60<span style="font-size:1rem;font-weight:600;color:var(--text-secondary);letter-spacing:0;"
+                data-i18n="clarity4.suffix">min</span></div>
+            <p data-i18n="clarity4.p">per vendor per week saved with automated weekly updates</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section section-alt">
+      <div class="section-inner">
+        <div class="section-header center">
+          <div class="section-tag" data-i18n="test.tag">What people say</div>
+          <h2 data-i18n="test.h2">The experience speaks for itself</h2>
+        </div>
+        <div class="testimonial-grid">
+          <div class="testimonial">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-quote" data-i18n="test1.q">If I could just pick a slot that actually exists, I'd view
+              twice as many homes. Yalla finally made that possible.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">JM</div>
+              <div class="testimonial-meta">
+                <div class="name" data-i18n="test1.name">Jamie M.</div>
+                <div class="role" data-i18n="test1.role">Home Hunter, 32 — Berlin</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-quote" data-i18n="test2.q">Send me a weekly snapshot so I don't have to chase. That's
+              all I want. Yalla does this automatically — game changer.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">SH</div>
+              <div class="testimonial-meta">
+                <div class="name" data-i18n="test2.name">Sarah H.</div>
+                <div class="role" data-i18n="test2.role">Owner, 48 — Munich</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="testimonial-quote" data-i18n="test3.q">I saved over €12,000 in agent fees. The portal listings
+              were live in 48 hours and the dashboard is brilliant.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">RP</div>
+              <div class="testimonial-meta">
+                <div class="name" data-i18n="test3.name">Ravi P.</div>
+                <div class="role" data-i18n="test3.role">Owner, 41 — Frankfurt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BAND -->
+    <div class="cta-band">
+      <div class="cta-band-inner">
+        <h2 data-i18n="cta.h2">Start with Yalla.House before you sell or rent.</h2>
+        <p data-i18n="cta.p">Plan it, launch it, manage it — with or without an agent. Join hundreds of German sellers
+          who've taken control of their property.</p>
+        <a href="dashboards/dashboard.html" class="btn btn-primary btn-lg" data-i18n="cta.btn">Start Your Free Property
+          Audit →</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Yalla.House</div>
+          <div class="footer-tagline">The operating system for property transactions.</div>
+          <div class="footer-meta" data-i18n="footer.meta">Yalla.House GmbH<br />Registered in Germany.</div>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.col1.h4">Policies</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-i18n="footer.privacy">Privacy Policy</a></li>
+            <li><a href="#" data-i18n="footer.terms">Terms of Service</a></li>
+            <li><a href="#" data-i18n="footer.cookie">Cookie Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.col2.h4">Legal &amp; Compliance</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-i18n="footer.gdpr">GDPR &amp; Safety</a></li>
+            <li><a href="#" data-i18n="footer.security">Security &amp; Data Protection</a></li>
+            <li><a href="#" data-i18n="footer.imprint">Imprint</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.col3.h4">Contact</h4>
+          <ul class="footer-links">
+            <li><a href="mailto:support@yalla.house?subject=Support Request - Yalla.House">Support</a></li>
+            <li><a href="https://wa.me/447000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer.copyright">© 2025 Yalla.House GmbH. All rights reserved.</p>
+        <p data-i18n="footer.portals">Listed on ImmobilienScout24 &bull; Immowelt &bull; ImmoNet</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="lang.js"></script>
+  <script>
+    'use strict';
+    /* ── Scroll-reveal ── */
+    (function() {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.fade-up').forEach(function(el) { io.observe(el); });
+    })();
+    function toggleUserMenu() {
+      var d = document.getElementById('userMenuDropdown');
+      var t = document.getElementById('userMenuTrigger');
+      var open = d.classList.toggle('open');
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    document.addEventListener('click', function (e) {
+      var menu = document.getElementById('userMenu');
+      if (menu && !menu.contains(e.target)) {
+        document.getElementById('userMenuDropdown').classList.remove('open');
+        document.getElementById('userMenuTrigger').setAttribute('aria-expanded', 'false');
+      }
+    });
+    function showToast(msg, type) {
+      type = type || 'success';
+      var t = document.createElement('div');
+      t.className = 'toast toast-' + type;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { t.classList.add('show'); });
+      });
+      setTimeout(function () {
+        t.classList.remove('show');
+        setTimeout(function () { t.remove(); }, 350);
+      }, 2600);
+    }
+  </script>
+</body>
+
+</html>

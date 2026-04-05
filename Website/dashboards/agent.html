@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Street Team — Yalla.House</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* ── Agent-specific overrides ── */
+    .job-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      cursor: pointer;
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .job-card:hover { box-shadow: var(--shadow-md); border-color: var(--border-dark); }
+    .job-card-type {
+      width: 44px; height: 44px; border-radius: var(--radius);
+      background: var(--brand-light); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: #7A5F00;
+    }
+    .job-card-type svg { width: 20px; height: 20px; }
+    .job-card-body { flex: 1; min-width: 0; }
+    .job-card-title { font-weight: 600; font-size: .9375rem; margin-bottom: .2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .job-card-meta { font-size: .8125rem; color: var(--text-secondary); display: flex; gap: .75rem; flex-wrap: wrap; }
+    .job-card-actions { display: flex; gap: .5rem; flex-shrink: 0; }
+    .badge-type {
+      font-size: .6875rem; font-weight: 700; padding: .25rem .6rem;
+      border-radius: 99px; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .badge-photo { background: #EFF6FF; color: #1D4ED8; }
+    .badge-board { background: #F0FDF4; color: #166534; }
+    .badge-viewing { background: #FFF7ED; color: #9A3412; }
+    .badge-survey { background: #FAF5FF; color: #6B21A8; }
+    .badge-urgent { background: #FEF2F2; color: #991B1B; }
+    .sched-day { margin-bottom: 1.75rem; }
+    .sched-day-label {
+      font-size: .8125rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: .75rem; padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .sched-slot {
+      display: flex; gap: 1rem; align-items: flex-start;
+      padding: .85rem 0; border-bottom: 1px solid var(--border-light);
+    }
+    .sched-slot:last-child { border-bottom: none; }
+    .sched-time {
+      width: 56px; flex-shrink: 0; font-size: .8125rem;
+      font-weight: 600; color: var(--text-secondary); padding-top: .1rem;
+    }
+    .sched-info { flex: 1; }
+    .sched-title { font-weight: 600; font-size: .9rem; margin-bottom: .2rem; }
+    .sched-detail { font-size: .8rem; color: var(--text-secondary); }
+    .prop-row {
+      display: flex; align-items: center; gap: 1rem; padding: .85rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .prop-row:last-child { border-bottom: none; }
+    .prop-thumb {
+      width: 48px; height: 36px; border-radius: var(--radius-sm);
+      background: var(--bg-muted); flex-shrink: 0; display: flex;
+      align-items: center; justify-content: center; font-size: .7rem;
+      color: var(--text-muted);
+    }
+    .prop-info { flex: 1; min-width: 0; }
+    .prop-addr { font-weight: 600; font-size: .875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prop-ref { font-size: .75rem; color: var(--text-muted); }
+    .report-form { display: flex; flex-direction: column; gap: 1.25rem; max-width: 600px; }
+    .report-form label { font-size: .875rem; font-weight: 600; display: block; margin-bottom: .35rem; }
+    .report-form textarea {
+      width: 100%; padding: .75rem 1rem; border: 1px solid var(--border);
+      border-radius: var(--radius); font-family: var(--font); font-size: .875rem;
+      color: var(--text-primary); background: var(--surface); resize: vertical;
+      min-height: 100px; transition: border-color var(--transition);
+    }
+    .report-form textarea:focus { outline: none; border-color: var(--brand); }
+    .checklist { display: flex; flex-direction: column; gap: .5rem; }
+    .check-item {
+      display: flex; align-items: center; gap: .75rem; padding: .65rem 1rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .check-item:hover { background: var(--bg-soft); }
+    .check-item input[type=checkbox] { accent-color: var(--brand); width: 15px; height: 15px; flex-shrink: 0; }
+    .check-item span { font-size: .875rem; }
+    .msg-thread { display: flex; flex-direction: column; gap: .75rem; }
+    .msg-bubble {
+      max-width: 75%; padding: .75rem 1rem;
+      border-radius: var(--radius-lg); font-size: .875rem; line-height: 1.5;
+    }
+    .msg-bubble.inbound {
+      background: var(--surface); border: 1px solid var(--border); align-self: flex-start;
+    }
+    .msg-bubble.outbound {
+      background: var(--brand); color: #000; align-self: flex-end;
+    }
+    .msg-meta { font-size: .7rem; color: var(--text-muted); margin-top: .3rem; }
+    .msg-composer {
+      display: flex; gap: .75rem; align-items: flex-end;
+      padding: .75rem; background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); margin-top: 1rem;
+    }
+    .msg-composer textarea {
+      flex: 1; border: none; resize: none; font-family: var(--font);
+      font-size: .875rem; background: transparent; color: var(--text-primary);
+      min-height: 40px; max-height: 120px; outline: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-root">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" role="navigation" aria-label="Street Team navigation">
+    <div class="sidebar-logo">
+      <a href="../index.html" style="color:var(--brand);text-decoration:none;">Yalla.House</a>
+      <span style="font-size:.65rem;font-weight:700;background:var(--brand);color:#000;padding:.15rem .4rem;border-radius:4px;margin-left:.4rem;letter-spacing:.04em;">STREET</span>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Overview</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('dashboard',this)" class="sidebar-link active">
+            <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+            <span data-i18n="dnav.dashboard">Dashboard</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('schedule',this)" class="sidebar-link">
+            <i data-lucide="calendar" class="sidebar-icon"></i>
+            My Schedule
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Jobs</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('jobs',this)" class="sidebar-link">
+            <i data-lucide="briefcase" class="sidebar-icon"></i>
+            <span data-i18n="agent.nav.jobs">My Jobs</span>
+            <span class="badge badge-yellow" style="margin-left:auto;">5</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('properties',this)" class="sidebar-link">
+            <i data-lucide="map-pin" class="sidebar-icon"></i>
+            Assigned Properties
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('reports',this)" class="sidebar-link">
+            <i data-lucide="file-check" class="sidebar-icon"></i>
+            Job Reports
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Communication</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('inbox',this)" class="sidebar-link">
+            <i data-lucide="inbox" class="sidebar-icon"></i>
+            <span data-i18n="dnav.inbox">Inbox</span>
+            <span class="badge badge-red" style="margin-left:auto;">2</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Account</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('settings',this)" class="sidebar-link">
+            <i data-lucide="settings" class="sidebar-icon"></i>
+            <span data-i18n="dnav.settings">Settings</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="user-avatar">MK</div>
+        <div class="user-info">
+          <div class="user-name">Marcus K.</div>
+          <div class="user-role"><span data-i18n="agent.role">Street Team</span> — London</div>
+        </div>
+      </div>
+      <a href="../index.html" class="sidebar-signout">
+        <i data-lucide="log-out" class="sidebar-icon"></i>
+        Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="app-main">
+
+    <div class="app-topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <div class="lang-switcher">
+          <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+          <span class="lang-sep">|</span>
+          <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+        </div>
+        <div class="topbar-search">
+          <i data-lucide="search" style="width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0;"></i>
+          <input type="search" placeholder="Search jobs or properties…" />
+        </div>
+        <button class="btn btn-primary btn-sm">
+          <i data-lucide="check-square" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;margin-right:.35rem;"></i>
+          Mark Complete
+        </button>
+      </div>
+    </div>
+
+    <div class="app-content">
+      <div class="app-canvas">
+
+        <!-- ══ VIEW: DASHBOARD ══ -->
+        <div id="view-dashboard" class="view active">
+          <div class="view-header">
+            <h1 class="view-title">Good morning, Marcus</h1>
+            <p class="view-subtitle">You have <strong>3 jobs today</strong> and 2 pending reports.</p>
+          </div>
+
+          <!-- Today's summary -->
+          <div class="stats-row" style="margin-bottom:2rem;">
+            <div class="stat-card">
+              <div class="stat-card-label">Today's Jobs</div>
+              <div class="stat-card-value">3</div>
+              <div class="stat-card-sub">Scheduled for today</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">This Week</div>
+              <div class="stat-card-value">11</div>
+              <div class="stat-card-sub">Total jobs assigned</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Completed</div>
+              <div class="stat-card-value">47</div>
+              <div class="stat-card-sub">Jobs this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Completion Rate</div>
+              <div class="stat-card-value">98%</div>
+              <div class="stat-card-sub">On-time job completion</div>
+            </div>
+          </div>
+
+          <div class="section-card" style="margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem;">
+            <div style="width:44px;height:44px;border-radius:var(--radius);background:var(--brand-solid-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <i data-lucide="map-pin" style="width:20px;height:20px;stroke:#7A5F00;fill:none;stroke-width:2;"></i>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;">Service Area</div>
+              <div style="font-weight:700;font-size:.9375rem;">North &amp; Central London</div>
+              <div style="font-size:.8125rem;color:var(--text-secondary);">N1 · N4 · N7 · N10 · N12 · N14 · SE4 · WC1</div>
+            </div>
+            <div style="display:flex;gap:.5rem;">
+              <span class="badge badge-green">Available</span>
+              <button onclick="showView('settings',document.querySelector('.sidebar-link[onclick*=\'settings\']'))" class="btn btn-secondary btn-sm">Edit</button>
+            </div>
+          </div>
+
+          <!-- Today's jobs -->
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Today's Jobs</div>
+              <button onclick="showView('jobs',null)" class="btn btn-secondary btn-sm">View All Jobs</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="camera"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Photography — 14 Elmwood Close, N12</div>
+                  <div class="job-card-meta">
+                    <span>09:30 – 11:00</span>
+                    <span>·</span>
+                    <span>Owner: James L.</span>
+                    <span>·</span>
+                    <span class="badge-type badge-photo">Photography</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Directions</button>
+                  <button class="btn btn-primary btn-sm">Start Job</button>
+                </div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="flag"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Board Install — 7 Maple Street, N10</div>
+                  <div class="job-card-meta">
+                    <span>13:00 – 14:00</span>
+                    <span>·</span>
+                    <span>Owner: Priya R.</span>
+                    <span>·</span>
+                    <span class="badge-type badge-board">Board</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Directions</button>
+                  <button class="btn btn-primary btn-sm">Start Job</button>
+                </div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="eye"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Accompanied Viewing — 22 Park Lane, N4</div>
+                  <div class="job-card-meta">
+                    <span>16:00 – 17:00</span>
+                    <span>·</span>
+                    <span>Buyer: Sarah B.</span>
+                    <span>·</span>
+                    <span class="badge-type badge-viewing">Viewing</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Directions</button>
+                  <button class="btn btn-primary btn-sm">Start Job</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Pending reports -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Pending Reports</div>
+              <button onclick="showView('reports',null)" class="btn btn-secondary btn-sm">Submit Reports</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <div class="prop-row">
+                <div class="prop-thumb">IMG</div>
+                <div class="prop-info">
+                  <div class="prop-addr">8 Birchwood Ave, N8 — Photography Completed</div>
+                  <div class="prop-ref">Yesterday · Report overdue</div>
+                </div>
+                <span class="badge badge-red">Overdue</span>
+                <button onclick="showView('reports',null)" class="btn btn-primary btn-sm" style="margin-left:.5rem;">Submit</button>
+              </div>
+              <div class="prop-row">
+                <div class="prop-thumb">BD</div>
+                <div class="prop-info">
+                  <div class="prop-addr">33 Station Road, N14 — Board Installed</div>
+                  <div class="prop-ref">Yesterday · Awaiting confirmation photos</div>
+                </div>
+                <span class="badge badge-yellow">Pending</span>
+                <button onclick="showView('reports',null)" class="btn btn-secondary btn-sm" style="margin-left:.5rem;">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: SCHEDULE ══ -->
+        <div id="view-schedule" class="view">
+          <div class="view-header">
+            <h1 class="view-title">My Schedule</h1>
+            <p class="view-subtitle">Upcoming jobs across the next 7 days.</p>
+          </div>
+
+          <div class="section-card">
+            <div class="sched-day">
+              <div class="sched-day-label">Today — Saturday 22 Feb</div>
+              <div class="sched-slot">
+                <div class="sched-time">09:30</div>
+                <div class="sched-info">
+                  <div class="sched-title">Photography — 14 Elmwood Close, N12</div>
+                  <div class="sched-detail">Owner: James L. · Est. 90 min · <span class="badge-type badge-photo">Photography</span></div>
+                </div>
+                <button class="btn btn-primary btn-sm">Start</button>
+              </div>
+              <div class="sched-slot">
+                <div class="sched-time">13:00</div>
+                <div class="sched-info">
+                  <div class="sched-title">Board Install — 7 Maple Street, N10</div>
+                  <div class="sched-detail">Owner: Priya R. · Est. 60 min · <span class="badge-type badge-board">Board</span></div>
+                </div>
+                <button class="btn btn-primary btn-sm">Start</button>
+              </div>
+              <div class="sched-slot">
+                <div class="sched-time">16:00</div>
+                <div class="sched-info">
+                  <div class="sched-title">Accompanied Viewing — 22 Park Lane, N4</div>
+                  <div class="sched-detail">Buyer: Sarah B. · Est. 60 min · <span class="badge-type badge-viewing">Viewing</span></div>
+                </div>
+                <button class="btn btn-primary btn-sm">Start</button>
+              </div>
+            </div>
+
+            <div class="sched-day">
+              <div class="sched-day-label">Monday 24 Feb</div>
+              <div class="sched-slot">
+                <div class="sched-time">10:00</div>
+                <div class="sched-info">
+                  <div class="sched-title">Photography &amp; Floorplan — 9 Ferndale Road, N7</div>
+                  <div class="sched-detail">Owner: Ali H. · Est. 2h · <span class="badge-type badge-photo">Photography</span></div>
+                </div>
+                <button class="btn btn-secondary btn-sm">Details</button>
+              </div>
+              <div class="sched-slot">
+                <div class="sched-time">14:30</div>
+                <div class="sched-info">
+                  <div class="sched-title">EPC Survey — 55 Olive Grove, SE4</div>
+                  <div class="sched-detail">Owner: Claire M. · Est. 45 min · <span class="badge-type badge-survey">Survey</span></div>
+                </div>
+                <button class="btn btn-secondary btn-sm">Details</button>
+              </div>
+            </div>
+
+            <div class="sched-day">
+              <div class="sched-day-label">Tuesday 25 Feb</div>
+              <div class="sched-slot">
+                <div class="sched-time">09:00</div>
+                <div class="sched-info">
+                  <div class="sched-title">3× Accompanied Viewings — 18 Brook Ave, N6</div>
+                  <div class="sched-detail">Back-to-back slots · <span class="badge-type badge-viewing">Viewing</span></div>
+                </div>
+                <button class="btn btn-secondary btn-sm">Details</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: MY JOBS ══ -->
+        <div id="view-jobs" class="view">
+          <div class="view-header">
+            <h1 class="view-title">My Jobs</h1>
+            <p class="view-subtitle">All assigned jobs — open, in progress, and awaiting report.</p>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Active Jobs (5)</div>
+              <div style="display:flex;gap:.5rem;">
+                <select class="filter-select">
+                  <option>All types</option>
+                  <option>Photography</option>
+                  <option>Board Install</option>
+                  <option>Viewing</option>
+                  <option>Survey</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:.75rem;">
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="camera"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Photography — 14 Elmwood Close, N12</div>
+                  <div class="job-card-meta">
+                    <span>Today 09:30</span><span>·</span><span>James L.</span>
+                    <span class="badge-type badge-photo">Photography</span>
+                    <span class="badge badge-yellow">Today</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Details</button>
+                  <button class="btn btn-primary btn-sm">Start</button>
+                </div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="flag"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Board Install — 7 Maple Street, N10</div>
+                  <div class="job-card-meta">
+                    <span>Today 13:00</span><span>·</span><span>Priya R.</span>
+                    <span class="badge-type badge-board">Board</span>
+                    <span class="badge badge-yellow">Today</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Details</button>
+                  <button class="btn btn-primary btn-sm">Start</button>
+                </div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="eye"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Accompanied Viewing — 22 Park Lane, N4</div>
+                  <div class="job-card-meta">
+                    <span>Today 16:00</span><span>·</span><span>Buyer: Sarah B.</span>
+                    <span class="badge-type badge-viewing">Viewing</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Details</button>
+                  <button class="btn btn-primary btn-sm">Start</button>
+                </div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="camera"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">Photography &amp; Floorplan — 9 Ferndale Road, N7</div>
+                  <div class="job-card-meta">
+                    <span>Mon 24 Feb, 10:00</span><span>·</span><span>Ali H.</span>
+                    <span class="badge-type badge-photo">Photography</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Details</button>
+                </div>
+              </div>
+
+              <div class="job-card">
+                <div class="job-card-type"><i data-lucide="clipboard-list"></i></div>
+                <div class="job-card-body">
+                  <div class="job-card-title">EPC Survey — 55 Olive Grove, SE4</div>
+                  <div class="job-card-meta">
+                    <span>Mon 24 Feb, 14:30</span><span>·</span><span>Claire M.</span>
+                    <span class="badge-type badge-survey">Survey</span>
+                  </div>
+                </div>
+                <div class="job-card-actions">
+                  <button class="btn btn-secondary btn-sm">Details</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: ASSIGNED PROPERTIES ══ -->
+        <div id="view-properties" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Assigned Properties</h1>
+            <p class="view-subtitle">Properties you are currently assigned to service.</p>
+          </div>
+
+          <div class="section-card">
+            <div style="display:flex;flex-direction:column;gap:.25rem;">
+
+              <div class="prop-row">
+                <div class="prop-thumb">N12</div>
+                <div class="prop-info">
+                  <div class="prop-addr">14 Elmwood Close, London N12 8AJ</div>
+                  <div class="prop-ref">YH-00142 · Photography due today · Owner: James L.</div>
+                </div>
+                <span class="badge badge-yellow">Active</span>
+                <button class="btn btn-secondary btn-sm" style="margin-left:.5rem;">View</button>
+              </div>
+
+              <div class="prop-row">
+                <div class="prop-thumb">N10</div>
+                <div class="prop-info">
+                  <div class="prop-addr">7 Maple Street, London N10 3RB</div>
+                  <div class="prop-ref">YH-00138 · Board install today · Owner: Priya R.</div>
+                </div>
+                <span class="badge badge-yellow">Active</span>
+                <button class="btn btn-secondary btn-sm" style="margin-left:.5rem;">View</button>
+              </div>
+
+              <div class="prop-row">
+                <div class="prop-thumb">N4</div>
+                <div class="prop-info">
+                  <div class="prop-addr">22 Park Lane, London N4 1DE</div>
+                  <div class="prop-ref">YH-00135 · Viewing today 16:00 · Owner: Thomas W.</div>
+                </div>
+                <span class="badge badge-green">Live</span>
+                <button class="btn btn-secondary btn-sm" style="margin-left:.5rem;">View</button>
+              </div>
+
+              <div class="prop-row">
+                <div class="prop-thumb">N7</div>
+                <div class="prop-info">
+                  <div class="prop-addr">9 Ferndale Road, London N7 5QZ</div>
+                  <div class="prop-ref">YH-00151 · Photography Mon 24 Feb · Owner: Ali H.</div>
+                </div>
+                <span class="badge" style="background:var(--bg-muted);color:var(--text-secondary);">Pending</span>
+                <button class="btn btn-secondary btn-sm" style="margin-left:.5rem;">View</button>
+              </div>
+
+              <div class="prop-row">
+                <div class="prop-thumb">SE4</div>
+                <div class="prop-info">
+                  <div class="prop-addr">55 Olive Grove, London SE4 2JT</div>
+                  <div class="prop-ref">YH-00149 · EPC survey Mon 24 Feb · Owner: Claire M.</div>
+                </div>
+                <span class="badge" style="background:var(--bg-muted);color:var(--text-secondary);">Pending</span>
+                <button class="btn btn-secondary btn-sm" style="margin-left:.5rem;">View</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: JOB REPORTS ══ -->
+        <div id="view-reports" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Job Reports</h1>
+            <p class="view-subtitle">Submit a completion report after each job.</p>
+          </div>
+
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Overdue Reports (2)</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <div class="prop-row">
+                <div class="prop-thumb">N8</div>
+                <div class="prop-info">
+                  <div class="prop-addr">8 Birchwood Ave, N8 — Photography</div>
+                  <div class="prop-ref">Completed yesterday · Report not submitted</div>
+                </div>
+                <span class="badge badge-red">Overdue</span>
+              </div>
+              <div class="prop-row">
+                <div class="prop-thumb">N14</div>
+                <div class="prop-info">
+                  <div class="prop-addr">33 Station Road, N14 — Board Install</div>
+                  <div class="prop-ref">Completed yesterday · Photos not uploaded</div>
+                </div>
+                <span class="badge badge-red">Overdue</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Submit Report</div>
+            </div>
+            <div class="report-form">
+              <div>
+                <label>Job / Property</label>
+                <select class="filter-select" style="width:100%;">
+                  <option>8 Birchwood Ave, N8 — Photography (Overdue)</option>
+                  <option>33 Station Road, N14 — Board Install (Overdue)</option>
+                </select>
+              </div>
+              <div>
+                <label>Completion Checklist</label>
+                <div class="checklist">
+                  <label class="check-item"><input type="checkbox" /> <span>Job completed at property</span></label>
+                  <label class="check-item"><input type="checkbox" /> <span>Photos / deliverables uploaded</span></label>
+                  <label class="check-item"><input type="checkbox" /> <span>Owner confirmed access &amp; sign-off</span></label>
+                  <label class="check-item"><input type="checkbox" /> <span>Equipment / materials collected (if applicable)</span></label>
+                </div>
+              </div>
+              <div>
+                <label>Notes (optional)</label>
+                <textarea placeholder="Any issues, access notes, or follow-up needed…"></textarea>
+              </div>
+              <div>
+                <button class="btn btn-primary">Submit Report</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: INBOX ══ -->
+        <div id="view-inbox" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Inbox</h1>
+            <p class="view-subtitle">Messages from owners, buyers, and the Yalla team.</p>
+          </div>
+
+          <div class="section-card">
+            <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem;">
+              <div class="prop-row" style="cursor:pointer;background:var(--brand-light);border-radius:var(--radius-sm);padding:.65rem .75rem;">
+                <div class="prop-thumb" style="background:var(--brand);color:#000;font-weight:700;">YH</div>
+                <div class="prop-info">
+                  <div class="prop-addr">Yalla Admin — Job 14 Elmwood brief</div>
+                  <div class="prop-ref">2 hours ago · Unread</div>
+                </div>
+                <span class="badge badge-yellow">New</span>
+              </div>
+              <div class="prop-row" style="cursor:pointer;background:var(--brand-light);border-radius:var(--radius-sm);padding:.65rem .75rem;">
+                <div class="prop-thumb" style="background:var(--bg-muted);color:var(--text-muted);">JL</div>
+                <div class="prop-info">
+                  <div class="prop-addr">James L. (Owner) — Access instructions</div>
+                  <div class="prop-ref">3 hours ago · Unread</div>
+                </div>
+                <span class="badge badge-yellow">New</span>
+              </div>
+              <div class="prop-row" style="cursor:pointer;padding:.65rem .75rem;">
+                <div class="prop-thumb" style="background:var(--bg-muted);color:var(--text-muted);">PR</div>
+                <div class="prop-info">
+                  <div class="prop-addr">Priya R. (Owner) — Board install confirmation</div>
+                  <div class="prop-ref">Yesterday</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid var(--border);padding-top:1.25rem;">
+              <div style="font-size:.8125rem;font-weight:600;color:var(--text-secondary);margin-bottom:.75rem;">Yalla Admin — Job 14 Elmwood brief</div>
+              <div class="msg-thread">
+                <div>
+                  <div class="msg-bubble inbound">Hi Marcus — please note the owner at 14 Elmwood Close wants the hero shot from the front garden. The side gate code is 4481. Let us know if you have any issues.</div>
+                  <div class="msg-meta">Yalla Admin · 2 hours ago</div>
+                </div>
+                <div style="align-self:flex-end;text-align:right;">
+                  <div class="msg-bubble outbound">Got it, thanks! I'll make sure to capture the front garden first.</div>
+                  <div class="msg-meta" style="text-align:right;">You · 1 hour ago</div>
+                </div>
+              </div>
+              <div class="msg-composer">
+                <textarea placeholder="Type a message…" rows="1"></textarea>
+                <button class="btn btn-primary btn-sm">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: SETTINGS ══ -->
+        <div id="view-settings" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Settings</h1>
+            <p class="view-subtitle">Manage your Street Team profile and notification preferences.</p>
+          </div>
+
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Profile</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:600px;">
+              <div class="form-group"><label>First Name</label><input type="text" value="Marcus" /></div>
+              <div class="form-group"><label>Last Name</label><input type="text" value="K." /></div>
+              <div class="form-group"><label>Email</label><input type="email" value="marcus.k@yalla.house" /></div>
+              <div class="form-group"><label>Phone</label><input type="tel" value="+44 7700 000000" /></div>
+              <div class="form-group"><label>Service Area</label><input type="text" value="North &amp; Central London" /></div>
+              <div class="form-group"><label>Job Types</label><input type="text" value="Photography, Board, Viewings" /></div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:1rem;">Save Changes</button>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Notifications</div>
+            </div>
+            <div class="checklist" style="max-width:500px;">
+              <label class="check-item"><input type="checkbox" checked /> <span>New job assigned</span></label>
+              <label class="check-item"><input type="checkbox" checked /> <span>Job reminder (2h before)</span></label>
+              <label class="check-item"><input type="checkbox" checked /> <span>Report overdue alert</span></label>
+              <label class="check-item"><input type="checkbox" /> <span>Weekly schedule digest</span></label>
+              <label class="check-item"><input type="checkbox" /> <span>New message in inbox</span></label>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /app-canvas -->
+    </div><!-- /app-content -->
+  </div><!-- /app-main -->
+
+</div><!-- /app-root -->
+
+<script>
+'use strict';
+
+function showView(viewId, triggerEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('view-' + viewId);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (triggerEl) triggerEl.classList.add('active');
+
+  const titles = {
+    dashboard:  'Dashboard',
+    schedule:   'My Schedule',
+    jobs:       'My Jobs',
+    properties: 'Assigned Properties',
+    reports:    'Job Reports',
+    inbox:      'Inbox',
+    settings:   'Settings',
+  };
+  const titleEl = document.getElementById('topbar-title');
+  if (titleEl && titles[viewId]) titleEl.textContent = titles[viewId];
+
+  const canvas = document.querySelector('.app-canvas');
+  if (canvas) canvas.scrollTop = 0;
+
+  history.replaceState(null, '', '#' + viewId);
+}
+
+/* ── Toast ── */
+function showToast(msg, type) {
+  type = type || 'success';
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){requestAnimationFrame(function(){ t.classList.add('show'); });});
+  setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 350); }, 2600);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  const hash = window.location.hash.replace('#', '');
+  const valid = ['dashboard','schedule','jobs','properties','reports','inbox','settings'];
+  const start = valid.includes(hash) ? hash : 'dashboard';
+  const triggerEl = document.querySelector('.sidebar-link[onclick*="' + start + '"]');
+  showView(start, triggerEl);
+
+  /* Button interactions */
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, a.btn');
+    if (!btn) return;
+    var txt = btn.textContent.trim();
+    if (txt === 'Start Job' || txt === 'Start') { showToast('Job started — timer running'); }
+    else if (txt === 'Mark Complete' || txt.includes('Mark Complete')) { showToast('Job marked complete — owner notified'); }
+    else if (txt === 'Submit Report' || txt === 'Submit' || txt === 'Submit Reports') { showToast('Report submitted successfully'); }
+    else if (txt === 'Save Changes') { showToast('Profile saved'); }
+    else if (txt === 'Directions') { showToast('Opening maps app…', 'info'); }
+    else if (txt === 'Details') { showToast('Loading job details…', 'info'); }
+    else if (txt === 'View' || txt === 'View All Jobs') { showView('jobs', document.querySelector('.sidebar-link[onclick*="jobs"]')); }
+    else if (txt === 'Send') {
+      var comp = btn.closest('.msg-composer');
+      if (comp) {
+        var ta = comp.querySelector('textarea');
+        if (ta && ta.value.trim()) {
+          var thread = document.querySelector('#view-inbox .msg-thread');
+          if (thread) {
+            var now = new Date();
+            var ts = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+            thread.insertAdjacentHTML('beforeend',
+              '<div style="align-self:flex-end;text-align:right;">' +
+              '<div class="msg-bubble outbound">' + ta.value.replace(/</g,'&lt;') + '</div>' +
+              '<div class="msg-meta" style="text-align:right;">You &middot; ' + ts + '</div></div>');
+            thread.scrollTop = thread.scrollHeight;
+          }
+          ta.value = '';
+          showToast('Message sent');
+        }
+      }
+    }
+  });
+});
+</script>
+<script src="../lang.js"></script>
+</body>
+</html>

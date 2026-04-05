@@ -1,0 +1,27 @@
+﻿Phase,Step,Owner / Tool,Input,Output,Automation,Time Estimate (hrs),Status
+Setup & Onboarding,Seller signs up / login,Framer / Memberstack,"Email, password",User record in Airtable,Auth sync,0.1,☐
+Setup & Onboarding,Connect billing (Stripe),Seller / Framer,Payment details,Active subscription,Make webhook,0.2,☐
+Setup & Onboarding,Set profile preferences,Seller / Framer,Notification & display settings,Updated user record,Manual,0.2,☐
+Listing Creation,Add property details,Seller / Framer form,"Title, price, address",Record in Airtable (Properties),Make sync,0.3,☐
+Listing Creation,Upload photos,Seller / Framer upload,Images,CDN URLs stored in Airtable,Cloudinary,0.3,☐
+Listing Creation,Upload EPC and floorplan,Seller / Framer upload,PDFs,Airtable Documents entry,Cloudinary,0.2,☐
+Listing Creation,Add property description,Seller / Framer,Text input,Published property details,Manual,0.1,☐
+Listing Creation,Publish listing,Make → Framer,Approved property,Live public page /p/<slug>,Framer CMS sync,0.1,☐
+Lead Capture,Buyer views listing,Public Website,Listing URL,Page visit (tracked),Plausible,0.1,☐
+Lead Capture,Buyer submits inquiry,Framer Form / Twilio,"Name, phone, message",Airtable Inquiry record,Make webhook,0.1,☐
+Lead Capture,Notify seller,Make + Twilio,Inquiry data,SMS + Email alert,Twilio + Postmark,0.1,☐
+Viewings,Buyer books viewing slot,Framer Booking Page,Preferred date/time,Airtable Viewing record,Make,0.2,☐
+Viewings,Sync with Google Calendar,Make,Viewing record,Calendar event created,Google Calendar API,0.1,☐
+Viewings,Send confirmations,Make + Twilio,Booking info,SMS + Email confirmations,Twilio / Postmark,0.1,☐
+Offers & Negotiation,Buyer submits offer,Framer Buyer Form,"Amount, terms",Offer record in Airtable,Make webhook,0.2,☐
+Offers & Negotiation,Seller reviews offer,Seller / Framer,Offer data,Decision recorded,Manual,0.2,☐
+Offers & Negotiation,Notify buyer of decision,Make + Twilio,Offer status,SMS + Email sent,Twilio / Postmark,0.1,☐
+Offers & Negotiation,Mark listing STC,Framer CMS,Accepted offer,Public page updated,Make sync,0.1,☐
+Conveyancing,Start conveyancing case,Seller + Buyer Solicitors,Accepted offer,Solicitor engagement,Manual,1.0,☐
+Conveyancing,Upload ID & proof of funds,Buyer / Seller,"Docs (PDF, JPG)",Airtable / Secure folder,Manual,0.3,☐
+Conveyancing,Draft & send contract,DocuSign / PandaDoc,Offer terms,Signed contract PDF,E-sign webhook,0.5,☐
+Conveyancing,Notify both parties,Make + Postmark,Signed contract,Email confirmation,Automated,0.1,☐
+Completion,Funds transferred,Solicitor / Buyer,Final payment,Property ownership transfer,Manual,1.0,☐
+Completion,Update listing = Completed,Make → Airtable,Completion trigger,Archived property record,Automated,0.1,☐
+Completion,Send completion email,Make + Postmark,Completion data,Email sent,Automated,0.1,☐
+Completion,Collect feedback,Make + Form,Seller feedback,Plausible + Airtable update,Automated,0.2,☐

@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "listYourPlace": "List Your Place",
+    "services": "Services & Pricing",
+    "about": "About",
+    "login": "Sign In",
+    "dashboard": "Dashboard",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "headline": "Sell without an agent.",
+    "subline": "Your home. Your terms. Yalla.",
+    "cta": "List for free"
+  },
+  "listing": {
+    "status": {
+      "draft": "Draft",
+      "preview": "Preview",
+      "active": "Active",
+      "paused": "Paused",
+      "under_offer": "Under Offer",
+      "sold": "Sold",
+      "let": "Let",
+      "archived": "Archived"
+    },
+    "intent": {
+      "sale": "For Sale",
+      "rent": "To Rent",
+      "both": "Sale & Rent"
+    },
+    "fields": {
+      "size": "Living Space",
+      "rooms": "Rooms",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "floor": "Floor",
+      "constructionYear": "Year Built",
+      "energyClass": "Energy Class",
+      "nebenkosten": "Additional Costs",
+      "kaution": "Deposit"
+    }
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "emailPlaceholder": "your@email.com",
+    "sendMagicLink": "Send Magic Link",
+    "checkEmail": "Check your email",
+    "magicLinkSent": "We sent you a link. No password needed.",
+    "selectRole": "How will you use Yalla.House?",
+    "roles": {
+      "owner": "Owner — I want to sell or rent",
+      "hunter": "Home Hunter — I'm looking to buy or rent",
+      "agent": "Agent — I work in property",
+      "admin": "Admin"
+    }
+  },
+  "dashboard": {
+    "owner": {
+      "title": "My Properties",
+      "newListing": "New Listing",
+      "overview": "Overview",
+      "listings": "Listings",
+      "inquiries": "Inquiries",
+      "stats": {
+        "activeListings": "Active Listings",
+        "receivingOffers": "{count} receiving offers",
+        "totalEnquiries": "Total Enquiries",
+        "thisWeek": "this week",
+        "viewingsBooked": "Viewings Booked",
+        "offersReceived": "Offers Received",
+        "new": "new"
+      },
+      "upcomingViewings": "Upcoming Viewings",
+      "openCalendar": "Open Calendar",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "noUpcomingViewings": "No upcoming viewings",
+      "latestMessages": "Latest Messages",
+      "openInbox": "Open Inbox",
+      "noMessages": "No new messages",
+      "myListings": "My Listings",
+      "viewAll": "View All",
+      "property": "Property",
+      "status": "Status",
+      "price": "Price",
+      "noListings": "No listings yet.",
+      "createFirst": "Create your first listing",
+      "paymentSuccess": "Payment successful! Your listing is now being published.",
+      "choosePlan": "Choose Plan",
+      "editListing": "Edit"
+    }
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "serverError": "Server error",
+    "unauthorized": "Unauthorised"
+  },
+  "services": {
+    "heroTitle": "Pay only for what you need. Keep the rest.",
+    "heroSubtitle": "Start free. Modular services when you need them. No commission — ever. Prices vary by market and are always shown before payment.",
+    "addonsTag": "Add-on Services",
+    "addonsTitle": "Optimize your listing with professional extras",
+    "addonsSubtitle": "Available à la carte or as part of a package.",
+    "addons": [
+      {
+        "icon": "📷",
+        "title": "Professional Photography",
+        "description": "Local photographers, available at short notice, edited HD images within 24 hours.",
+        "price": "€149"
+      },
+      {
+        "icon": "🏠",
+        "title": "360° Virtual Tour",
+        "description": "Interactive 3D scan. Buyers explore your home before viewing.",
+        "price": "€199"
+      },
+      {
+        "icon": "📐",
+        "title": "Floor Plan Creation",
+        "description": "Accurate, publication-ready floor plans. Required by IS24 for premium placement.",
+        "price": "€79"
+      },
+      {
+        "icon": "📋",
+        "title": "Legal Support",
+        "description": "Notary referral, contract review and guidance at every milestone.",
+        "price": "from €299"
+      },
+      {
+        "icon": "🪧",
+        "title": "For Sale Sign",
+        "description": "Branded sign delivered and installed. The #1 local lead generator.",
+        "price": "€49"
+      },
+      {
+        "icon": "📊",
+        "title": "Portal Advertising",
+        "description": "IS24, Immowelt, ImmoNet. Automatic status synchronisation.",
+        "price": "Included",
+        "badge": "In all plans"
+      },
+      {
+        "icon": "🤝",
+        "title": "Personal Support",
+        "description": "Dedicated Yalla adviser. Manages inquiries, negotiates, guides the sale.",
+        "price": "€499"
+      },
+      {
+        "icon": "📈",
+        "title": "Weekly Reports",
+        "description": "Auto-generated updates every 7 days.",
+        "price": "Included",
+        "badge": "In all plans"
+      },
+      {
+        "icon": "📅",
+        "title": "Viewing Calendar",
+        "description": "Live availability, buyers book themselves. 40% fewer no-shows.",
+        "price": "Included",
+        "badge": "In all plans"
+      }
+    ],
+    "pricingTag": "Plans",
+    "pricingTitle": "Simple pricing for every seller",
+    "pricingSubtitle": "Choose the plan that suits you.",
+    "plans": {
+      "basis": {
+        "name": "Basis",
+        "price": "€199",
+        "period": "one-time",
+        "features": [
+          "IS24 & Immowelt listing",
+          "Owner dashboard",
+          "Viewing calendar & self-booking",
+          "Inquiry inbox",
+          "Weekly reports",
+          "Offer log & document storage"
+        ],
+        "cta": "Get Started"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "€499",
+        "period": "one-time",
+        "badge": "Most Popular",
+        "features": [
+          "Everything in Basis",
+          "Professional photography",
+          "Floor plan creation",
+          "For sale sign (delivered)",
+          "Enhanced portal placement",
+          "Energy certificate booking",
+          "Priority support (2h SLA)"
+        ],
+        "cta": "Get Started"
+      },
+      "komplett": {
+        "name": "Complete",
+        "price": "€899",
+        "period": "one-time",
+        "features": [
+          "Everything in Professional",
+          "360° Virtual tour",
+          "Dedicated Yalla adviser",
+          "Legal support & notary referral",
+          "Negotiation support",
+          "Closing checklist & handover",
+          "Priority support (1h SLA)"
+        ],
+        "cta": "Get Started"
+      }
+    },
+    "comparisonTag": "Yalla vs. Traditional",
+    "comparisonTitle": "The numbers speak for themselves",
+    "comparisonSubtitle": "On a €400,000 property, traditional German agents charge 3–6% commission.",
+    "comparison": {
+      "traditional": "Traditional Agent",
+      "traditionalPrice": "€16,000+",
+      "traditionalNote": "Average commission at 4%",
+      "yalla": "Yalla.House",
+      "yallaPrice": "€199–€899",
+      "yallaNote": "Complete service at fixed price",
+      "savings": "You Save",
+      "savingsPrice": "€15,100+",
+      "savingsNote": "Goes straight to your pocket"
+    },
+    "ctaBandTitle": "Create your listing now — start free",
+    "ctaBandSubtitle": "Create your listing in minutes. Choose your plan when you're ready.",
+    "ctaBandCta": "List your property",
+    "addToListing": "Add to listing"
+  }
+}

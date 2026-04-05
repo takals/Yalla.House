@@ -1,0 +1,4 @@
+viewing_id,property_id,buyer_id,type,date,time,status
+v1,prop_001,buyer_amira,In-person,2025-11-05,16:30,Awaiting confirm
+v2,prop_001,buyer_leo,Virtual,2025-11-06,12:00,Confirmed
+v3,prop_001,buyer_jade,In-person,2025-11-07,18:00,Proposed

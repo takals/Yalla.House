@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>List Your Place — Yalla.House</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: var(--bg-soft); }
+    .wizard-root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .wizard-topbar {
+      height: var(--header-h);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1.5rem;
+    }
+    .wizard-topbar-brand { font-weight: 800; font-size: 1.1rem; color: var(--brand); }
+    .wizard-topbar-title { font-size: .9375rem; color: var(--text-secondary); }
+    .wizard-topbar-back { margin-left: auto; }
+    .wizard-body {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+    .wizard-container { width: 100%; max-width: 680px; }
+    .step-indicators {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 2.5rem;
+    }
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      flex: 1;
+    }
+    .step-indicator:last-child { flex: initial; }
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--bg);
+      flex-shrink: 0;
+      transition: border-color var(--transition), background var(--transition), color var(--transition);
+    }
+    .step-dot.active { border-color: var(--brand); background: var(--brand); color: #000; }
+    .step-dot.done { border-color: #16A34A; background: #16A34A; color: #fff; }
+    .step-label-txt { font-size: .8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+    .step-label-txt.active { color: var(--text-primary); }
+    .step-connector { flex: 1; height: 2px; background: var(--border); margin: 0 .5rem; }
+    .step-connector.done { background: var(--brand); }
+    .plan-select-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .plan-option {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+      position: relative;
+    }
+    .plan-option.selected { border-color: var(--brand); background: var(--brand-light); }
+    .plan-option-name { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: .35rem; }
+    .plan-option-price { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; margin-bottom: .35rem; }
+    .plan-option-desc { font-size: .8rem; color: var(--text-secondary); margin-bottom: 1rem; }
+    .plan-option-features { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+    .plan-option-features li { font-size: .78rem; color: var(--text-secondary); display: flex; align-items: center; gap: .4rem; }
+    .plan-option-features li::before { content: '✓'; color: #16A34A; font-weight: 700; }
+    .plan-option input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .9rem;
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-row .label { color: var(--text-secondary); }
+    .review-row .value { font-weight: 600; }
+    .success-state { text-align: center; padding: 3rem 1.5rem; }
+    .success-icon { font-size: 3.5rem; margin-bottom: 1.25rem; }
+    .success-state h2 { font-size: 1.75rem; font-weight: 800; margin-bottom: .75rem; }
+    .success-state p { color: var(--text-secondary); margin-bottom: 2rem; }
+    @media (max-width: 600px) {
+      .plan-select-grid { grid-template-columns: 1fr; }
+      .step-label-txt { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wizard-root">
+  <!-- Topbar -->
+  <div class="wizard-topbar">
+    <a href="index.html" class="wizard-topbar-brand">Yalla.House</a>
+    <span class="wizard-topbar-title" data-i18n="nav.list">List Your Place</span>
+    <div class="lang-switcher" style="margin-left:auto;margin-right:.75rem;">
+      <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+      <span class="lang-sep">|</span>
+      <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+    </div>
+    <a href="index.html" class="btn btn-ghost btn-sm">✕ Exit</a>
+  </div>
+
+  <div class="wizard-body">
+    <div class="wizard-container">
+
+      <!-- Step Indicators -->
+      <div class="step-indicators" id="step-indicators">
+        <div class="step-indicator">
+          <div class="step-dot active" id="dot-1">1</div>
+          <span class="step-label-txt active" id="lbl-1">Basics</span>
+        </div>
+        <div class="step-connector" id="con-1"></div>
+        <div class="step-indicator">
+          <div class="step-dot" id="dot-2">2</div>
+          <span class="step-label-txt" id="lbl-2">Details</span>
+        </div>
+        <div class="step-connector" id="con-2"></div>
+        <div class="step-indicator">
+          <div class="step-dot" id="dot-3">3</div>
+          <span class="step-label-txt" id="lbl-3">Plan</span>
+        </div>
+        <div class="step-connector" id="con-3"></div>
+        <div class="step-indicator">
+          <div class="step-dot" id="dot-4">4</div>
+          <span class="step-label-txt" id="lbl-4">Review</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div style="margin-bottom:.75rem;display:flex;justify-content:space-between;" id="progress-label">
+        <span style="font-size:.8125rem;color:var(--text-muted);">Step <span id="current-step-num">1</span> of 4</span>
+        <span style="font-size:.8125rem;color:var(--text-muted);" id="progress-pct">25%</span>
+      </div>
+      <div class="progress-bar" style="margin-bottom:2rem;">
+        <div class="progress-fill" id="progress-fill" style="width:25%;"></div>
+      </div>
+
+      <!-- Form Panel -->
+      <div class="form-panel">
+
+        <!-- ── STEP 1: Basics ── -->
+        <div class="form-step active" id="step-1">
+          <h3>Property basics</h3>
+          <div class="form-group">
+            <label>Property Address *</label>
+            <input type="text" placeholder="e.g. 14 Maple Street, London E3 2SA" id="f-address" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Property Type *</label>
+              <select id="f-type">
+                <option value="">Select type</option>
+                <option>Detached House</option>
+                <option>Semi-Detached House</option>
+                <option>Terraced House</option>
+                <option>Flat / Apartment</option>
+                <option>Bungalow</option>
+                <option>Studio</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tenure *</label>
+              <select id="f-tenure">
+                <option value="">Select tenure</option>
+                <option>Freehold</option>
+                <option>Leasehold</option>
+                <option>Share of Freehold</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bedrooms *</label>
+              <select id="f-beds">
+                <option value="">Select</option>
+                <option>Studio</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Bathrooms *</label>
+              <select id="f-baths">
+                <option value="">Select</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3+</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Asking Price *</label>
+            <input type="text" placeholder="e.g. £350,000" id="f-price" />
+            <div class="form-hint">Enter your guide price — you can update this at any time.</div>
+          </div>
+          <div class="form-nav">
+            <span></span>
+            <button class="btn btn-primary" onclick="goStep(2)">Next: Property Details →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 2: Details ── -->
+        <div class="form-step" id="step-2">
+          <h3>Property details</h3>
+          <div class="form-group">
+            <label>Property Description *</label>
+            <textarea rows="4" placeholder="Describe your property — key features, location highlights, recent improvements..." id="f-desc"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Floor Area (sq ft)</label>
+              <input type="number" placeholder="e.g. 850" id="f-sqft" />
+            </div>
+            <div class="form-group">
+              <label>EPC Rating</label>
+              <select id="f-epc">
+                <option value="">Select rating</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+                <option>D</option>
+                <option>E</option>
+                <option>F</option>
+                <option>G</option>
+                <option>Not yet obtained</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Key Features</label>
+            <textarea rows="2" placeholder="e.g. Garden, parking, open-plan kitchen, period features, recently renovated..." id="f-features"></textarea>
+            <div class="form-hint">Comma-separated. These appear as bullet points on your listing.</div>
+          </div>
+          <div class="form-group">
+            <label>Seller's Situation</label>
+            <select id="f-situation">
+              <option value="">Select situation</option>
+              <option>No onward chain</option>
+              <option>Buying simultaneously</option>
+              <option>Renting after sale</option>
+              <option>Flexible</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Completion Timeframe</label>
+            <select id="f-timeframe">
+              <option value="">Select</option>
+              <option>ASAP</option>
+              <option>1–3 months</option>
+              <option>3–6 months</option>
+              <option>6+ months</option>
+              <option>Flexible</option>
+            </select>
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
+            <button class="btn btn-primary" onclick="goStep(3)">Next: Choose Plan →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 3: Plan ── -->
+        <div class="form-step" id="step-3">
+          <h3>Choose your plan</h3>
+          <p style="font-size:.9rem;color:var(--text-secondary);margin-bottom:1.5rem;">
+            Flat fee — no commission. Pick what you need or upgrade anytime.
+          </p>
+          <div class="plan-select-grid" id="plan-grid">
+            <label class="plan-option" onclick="selectPlan(this, 'Starter', '£199')">
+              <input type="radio" name="plan" value="starter" />
+              <div class="plan-option-name">Starter</div>
+              <div class="plan-option-price">£199</div>
+              <div class="plan-option-desc">Get listed and sell yourself</div>
+              <ul class="plan-option-features">
+                <li>Rightmove &amp; Zoopla listing</li>
+                <li>Seller dashboard</li>
+                <li>Viewing calendar</li>
+                <li>Offer management</li>
+                <li>Weekly reports</li>
+              </ul>
+            </label>
+            <label class="plan-option selected" onclick="selectPlan(this, 'Professional', '£499')">
+              <input type="radio" name="plan" value="professional" checked />
+              <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--brand);color:#000;font-size:.65rem;font-weight:700;padding:.2rem .65rem;border-radius:99px;white-space:nowrap;">Most popular</div>
+              <div class="plan-option-name">Professional</div>
+              <div class="plan-option-price">£499</div>
+              <div class="plan-option-desc">Professional media &amp; presence</div>
+              <ul class="plan-option-features">
+                <li>Everything in Starter</li>
+                <li>Professional photography</li>
+                <li>Floorplan creation</li>
+                <li>For Sale board</li>
+                <li>Enhanced portal listing</li>
+              </ul>
+            </label>
+            <label class="plan-option" onclick="selectPlan(this, 'Complete', '£899')">
+              <input type="radio" name="plan" value="complete" />
+              <div class="plan-option-name">Complete</div>
+              <div class="plan-option-price">£899</div>
+              <div class="plan-option-desc">Full service, start to finish</div>
+              <ul class="plan-option-features">
+                <li>Everything in Professional</li>
+                <li>360° Virtual Tour</li>
+                <li>Dedicated advisor</li>
+                <li>Legal support</li>
+                <li>Negotiation assistance</li>
+              </ul>
+            </label>
+          </div>
+          <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-soft);border-radius:var(--radius);border:1px solid var(--border);font-size:.875rem;color:var(--text-secondary);">
+            💡 Not sure? You can start with Starter and upgrade at any time from your dashboard.
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
+            <button class="btn btn-primary" onclick="goStep(4)">Next: Review →</button>
+          </div>
+        </div>
+
+        <!-- ── STEP 4: Review ── -->
+        <div class="form-step" id="step-4">
+          <h3>Review &amp; confirm</h3>
+          <p style="font-size:.9rem;color:var(--text-secondary);margin-bottom:1.5rem;">Check your details before we create your listing.</p>
+          <div id="review-details">
+            <div class="review-row">
+              <span class="label">Address</span>
+              <span class="value" id="rv-address">—</span>
+            </div>
+            <div class="review-row">
+              <span class="label">Property Type</span>
+              <span class="value" id="rv-type">—</span>
+            </div>
+            <div class="review-row">
+              <span class="label">Tenure</span>
+              <span class="value" id="rv-tenure">—</span>
+            </div>
+            <div class="review-row">
+              <span class="label">Bedrooms / Bathrooms</span>
+              <span class="value" id="rv-beds">—</span>
+            </div>
+            <div class="review-row">
+              <span class="label">Asking Price</span>
+              <span class="value" id="rv-price" style="color:var(--brand);font-size:1.1rem;">—</span>
+            </div>
+            <div class="review-row">
+              <span class="label">Selected Plan</span>
+              <span class="value" id="rv-plan">Professional — £499</span>
+            </div>
+          </div>
+
+          <div style="margin-top:1.5rem;padding:1.25rem;border:1.5px solid var(--brand);border-radius:var(--radius-lg);background:var(--brand-light);">
+            <div style="font-weight:700;margin-bottom:.3rem;">Payment Summary</div>
+            <div style="display:flex;justify-content:space-between;font-size:.9rem;margin-bottom:.25rem;">
+              <span id="pay-plan-label">Professional Plan</span>
+              <span id="pay-plan-price">£499</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.9rem;color:var(--text-secondary);">
+              <span>VAT (20%)</span>
+              <span id="pay-vat">£99.80</span>
+            </div>
+            <hr style="margin:.75rem 0;border-color:var(--brand);opacity:.3;" />
+            <div style="display:flex;justify-content:space-between;font-weight:800;font-size:1rem;">
+              <span>Total</span>
+              <span id="pay-total">£598.80</span>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:1.25rem;">
+            <label style="display:flex;gap:.75rem;cursor:pointer;align-items:flex-start;">
+              <input type="checkbox" id="agree-terms" style="width:16px;height:16px;margin-top:.15rem;flex-shrink:0;" />
+              <span style="font-size:.875rem;color:var(--text-secondary);">
+                I agree to the <a href="#" style="color:var(--text-primary);text-decoration:underline;">Terms of Service</a>,
+                <a href="#" style="color:var(--text-primary);text-decoration:underline;">Privacy Policy</a>,
+                and confirm this is my property or I have authority to list it.
+              </span>
+            </label>
+          </div>
+
+          <div class="form-nav">
+            <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
+            <button class="btn btn-primary btn-lg" onclick="submitListing()">Create My Listing →</button>
+          </div>
+        </div>
+
+        <!-- ── SUCCESS STATE ── -->
+        <div class="form-step" id="step-success">
+          <div class="success-state">
+            <div class="success-icon">🎉</div>
+            <h2>Your listing is being set up!</h2>
+            <p>
+              We've received your details and are processing your listing.<br />
+              You'll be live on Rightmove and Zoopla within <strong>48 hours</strong>.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:.75rem;max-width:360px;margin:0 auto;">
+              <a href="dashboards/dashboard.html" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;">
+                Go to My Dashboard
+              </a>
+              <a href="index.html" class="btn btn-outline" style="width:100%;justify-content:center;">
+                Back to Home
+              </a>
+            </div>
+            <p style="margin-top:1.5rem;font-size:.875rem;color:var(--text-muted);">
+              Questions? <a href="mailto:support@yalla.house" style="color:var(--text-primary);text-decoration:underline;">support@yalla.house</a>
+            </p>
+          </div>
+        </div>
+
+      </div><!-- /form-panel -->
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 4;
+  const planPrices = { 'Starter': 199, 'Professional': 499, 'Complete': 899 };
+  let selectedPlan = { name: 'Professional', price: '£499' };
+
+  function goStep(step) {
+    // Hide current
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    // Show new
+    document.getElementById('step-' + step).classList.add('active');
+    // Update indicators
+    updateIndicators(step);
+    // Populate review if step 4
+    if (step === 4) populateReview();
+    currentStep = step;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateIndicators(activeStep) {
+    const pct = Math.round((activeStep / totalSteps) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('current-step-num').textContent = activeStep;
+    for (let i = 1; i <= totalSteps; i++) {
+      const dot = document.getElementById('dot-' + i);
+      const lbl = document.getElementById('lbl-' + i);
+      dot.className = 'step-dot';
+      if (lbl) lbl.className = 'step-label-txt';
+      if (i < activeStep) { dot.classList.add('done'); dot.textContent = '✓'; }
+      else if (i === activeStep) {
+        dot.classList.add('active');
+        dot.textContent = i;
+        if (lbl) lbl.classList.add('active');
+      } else { dot.textContent = i; }
+      // Connectors
+      if (i < totalSteps) {
+        const con = document.getElementById('con-' + i);
+        if (con) con.className = 'step-connector' + (i < activeStep ? ' done' : '');
+      }
+    }
+  }
+
+  function selectPlan(el, name, price) {
+    document.querySelectorAll('.plan-option').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPlan = { name, price };
+    // Update payment summary
+    const baseNum = planPrices[name] || 499;
+    const vat = (baseNum * 0.2).toFixed(2);
+    const total = (baseNum * 1.2).toFixed(2);
+    document.getElementById('rv-plan').textContent = name + ' — ' + price;
+    document.getElementById('pay-plan-label').textContent = name + ' Plan';
+    document.getElementById('pay-plan-price').textContent = price;
+    document.getElementById('pay-vat').textContent = '£' + vat;
+    document.getElementById('pay-total').textContent = '£' + total;
+  }
+
+  function populateReview() {
+    const addr = document.getElementById('f-address').value || 'Not entered';
+    const type = document.getElementById('f-type').value || '—';
+    const tenure = document.getElementById('f-tenure').value || '—';
+    const beds = document.getElementById('f-beds').value || '—';
+    const baths = document.getElementById('f-baths').value || '—';
+    const price = document.getElementById('f-price').value || '—';
+    document.getElementById('rv-address').textContent = addr;
+    document.getElementById('rv-type').textContent = type;
+    document.getElementById('rv-tenure').textContent = tenure;
+    document.getElementById('rv-beds').textContent = beds + ' bed / ' + baths + ' bath';
+    document.getElementById('rv-price').textContent = price;
+    document.getElementById('rv-plan').textContent = selectedPlan.name + ' — ' + selectedPlan.price;
+    // Recalculate VAT
+    const planName = selectedPlan.name;
+    const baseNum = planPrices[planName] || 499;
+    const vat = (baseNum * 0.2).toFixed(2);
+    const total = (baseNum * 1.2).toFixed(2);
+    document.getElementById('pay-plan-label').textContent = planName + ' Plan';
+    document.getElementById('pay-plan-price').textContent = selectedPlan.price;
+    document.getElementById('pay-vat').textContent = '£' + vat;
+    document.getElementById('pay-total').textContent = '£' + total;
+  }
+
+  function submitListing() {
+    const agreed = document.getElementById('agree-terms').checked;
+    if (!agreed) {
+      alert('Please agree to the Terms of Service to continue.');
+      return;
+    }
+    // Hide all steps, show success
+    for (let i = 1; i <= totalSteps; i++) {
+      document.getElementById('step-' + i).classList.remove('active');
+    }
+    document.getElementById('step-success').classList.add('active');
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-pct').textContent = '100%';
+    document.getElementById('step-indicators').style.display = 'none';
+    document.getElementById('progress-label').style.display = 'none';
+    document.querySelector('.progress-bar').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+<script src="lang.js"></script>
+</body>
+</html>

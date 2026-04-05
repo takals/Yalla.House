@@ -1,0 +1,8 @@
+message_id,thread_id,sender_role,body,sent_at
+m1,t1,buyer,Hi! We're very interested — is Saturday possible?,2025-11-03T07:31:11.952299
+m2,t1,seller,"Yes, does 4:30pm suit?",2025-11-03T08:01:11.952299
+m3,t1,buyer,We’re available after 3pm — does 4:30 work?,2025-11-04T09:31:11.952299
+m4,t2,buyer,How long is the remaining lease?,2025-11-02T06:31:11.952299
+m5,t2,seller,112 years remaining.,2025-11-02T07:16:11.952299
+m6,t3,buyer,We’re local and can view today.,2025-11-01T05:31:11.952299
+m7,t3,seller,Today is tricky — how about tomorrow 6pm?,2025-11-01T06:21:11.952299

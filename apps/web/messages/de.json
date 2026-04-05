@@ -1,0 +1,232 @@
+{
+  "nav": {
+    "listYourPlace": "Immobilie inserieren",
+    "services": "Leistungen & Preise",
+    "about": "Über uns",
+    "login": "Anmelden",
+    "dashboard": "Dashboard",
+    "signOut": "Abmelden"
+  },
+  "hero": {
+    "headline": "Verkaufen ohne Makler.",
+    "subline": "Ihr Haus. Ihre Bedingungen. Yalla.",
+    "cta": "Jetzt kostenlos inserieren"
+  },
+  "listing": {
+    "status": {
+      "draft": "Entwurf",
+      "preview": "Vorschau",
+      "active": "Aktiv",
+      "paused": "Pausiert",
+      "under_offer": "Angebot liegt vor",
+      "sold": "Verkauft",
+      "let": "Vermietet",
+      "archived": "Archiviert"
+    },
+    "intent": {
+      "sale": "Zum Verkauf",
+      "rent": "Zur Miete",
+      "both": "Verkauf & Miete"
+    },
+    "fields": {
+      "size": "Wohnfläche",
+      "rooms": "Zimmer",
+      "bedrooms": "Schlafzimmer",
+      "bathrooms": "Badezimmer",
+      "floor": "Etage",
+      "constructionYear": "Baujahr",
+      "energyClass": "Energieklasse",
+      "nebenkosten": "Nebenkosten",
+      "kaution": "Kaution"
+    }
+  },
+  "auth": {
+    "loginTitle": "Willkommen zurück",
+    "emailPlaceholder": "ihre@email.de",
+    "sendMagicLink": "Magic Link senden",
+    "checkEmail": "Bitte prüfen Sie Ihre E-Mails",
+    "magicLinkSent": "Wir haben Ihnen einen Link geschickt. Kein Passwort notwendig.",
+    "selectRole": "Wie nutzen Sie Yalla.House?",
+    "roles": {
+      "owner": "Eigentümer — Ich möchte verkaufen oder vermieten",
+      "hunter": "Suchender — Ich suche eine Immobilie",
+      "agent": "Makler — Ich vermittle Immobilien",
+      "admin": "Admin"
+    }
+  },
+  "dashboard": {
+    "owner": {
+      "title": "Meine Immobilien",
+      "newListing": "Neues Inserat",
+      "overview": "Übersicht",
+      "listings": "Inserate",
+      "inquiries": "Anfragen",
+      "stats": {
+        "activeListings": "Aktive Inserate",
+        "receivingOffers": "{count} mit Angeboten",
+        "totalEnquiries": "Anfragen gesamt",
+        "thisWeek": "diese Woche",
+        "viewingsBooked": "Besichtigungen",
+        "offersReceived": "Angebote erhalten",
+        "new": "neu"
+      },
+      "upcomingViewings": "Nächste Besichtigungen",
+      "openCalendar": "Kalender öffnen",
+      "today": "Heute",
+      "tomorrow": "Morgen",
+      "noUpcomingViewings": "Keine anstehenden Besichtigungen",
+      "latestMessages": "Neueste Nachrichten",
+      "openInbox": "Posteingang öffnen",
+      "noMessages": "Keine neuen Nachrichten",
+      "myListings": "Meine Inserate",
+      "viewAll": "Alle anzeigen",
+      "property": "Immobilie",
+      "status": "Status",
+      "price": "Preis",
+      "noListings": "Noch keine Inserate.",
+      "createFirst": "Erstes Inserat erstellen",
+      "paymentSuccess": "Zahlung erfolgreich! Ihr Inserat wird jetzt veröffentlicht.",
+      "choosePlan": "Tarif wählen",
+      "editListing": "Bearbeiten"
+    }
+  },
+  "errors": {
+    "notFound": "Seite nicht gefunden",
+    "serverError": "Serverfehler",
+    "unauthorized": "Nicht autorisiert"
+  },
+  "services": {
+    "heroTitle": "Zahlen Sie nur, was Sie brauchen. Den Rest behalten Sie.",
+    "heroSubtitle": "Kostenlos starten. Modulare Services, wenn Sie sie brauchen. Keine Provision — niemals. Preise variieren je nach Markt und werden immer vor der Zahlung angezeigt.",
+    "addonsTag": "Zusatzleistungen",
+    "addonsTitle": "Optimieren Sie Ihr Inserat mit professionellen Extras",
+    "addonsSubtitle": "Verfügbar à la carte oder als Teil eines Pakets.",
+    "addons": [
+      {
+        "icon": "📷",
+        "title": "Professionelle Fotografie",
+        "description": "Lokale Fotografen, kurzfristig verfügbar, bearbeitete HD-Bilder innerhalb von 24h.",
+        "price": "€149"
+      },
+      {
+        "icon": "🏠",
+        "title": "360° Virtuelle Tour",
+        "description": "Interaktiver 3D-Scan. Käufer erkunden Ihr Zuhause vor der Besichtigung.",
+        "price": "€199"
+      },
+      {
+        "icon": "📐",
+        "title": "Grundriss-Erstellung",
+        "description": "Genaue, veröffentlichungsreife Grundrisse. Von IS24 für Premium-Platzierung gefordert.",
+        "price": "€79"
+      },
+      {
+        "icon": "📋",
+        "title": "Rechtliche Unterstützung",
+        "description": "Notar-Vermittlung, Vertragsprüfung und Begleitung an jedem Meilenstein.",
+        "price": "ab €299"
+      },
+      {
+        "icon": "🪧",
+        "title": "Verkaufsschild",
+        "description": "Marken-Schild geliefert und aufgestellt. Der #1 lokale Lead-Generator.",
+        "price": "€49"
+      },
+      {
+        "icon": "📊",
+        "title": "Portal-Werbung",
+        "description": "IS24, Immowelt, ImmoNet. Automatische Status-Synchronisation.",
+        "price": "Inklusive",
+        "badge": "In allen Tarifen enthalten"
+      },
+      {
+        "icon": "🤝",
+        "title": "Persönliche Betreuung",
+        "description": "Dedizierter Yalla-Berater. Bearbeitet Anfragen, verhandelt, begleitet den Verkauf.",
+        "price": "€499"
+      },
+      {
+        "icon": "📈",
+        "title": "Wöchentliche Berichte",
+        "description": "Automatisch generierte Updates alle 7 Tage.",
+        "price": "Inklusive",
+        "badge": "In allen Tarifen enthalten"
+      },
+      {
+        "icon": "📅",
+        "title": "Besichtigungskalender",
+        "description": "Live-Verfügbarkeit, Käufer buchen selbst. 40% weniger No-Shows.",
+        "price": "Inklusive",
+        "badge": "In allen Tarifen enthalten"
+      }
+    ],
+    "pricingTag": "Tarife",
+    "pricingTitle": "Einfache Preise für jeden Verkäufer",
+    "pricingSubtitle": "Wählen Sie den Tarif, der zu Ihnen passt.",
+    "plans": {
+      "basis": {
+        "name": "Basis",
+        "price": "€199",
+        "period": "einmalig",
+        "features": [
+          "IS24 & Immowelt Inserat",
+          "Eigentümer-Dashboard",
+          "Besichtigungskalender & Selbstbuchung",
+          "Anfragen-Posteingang",
+          "Wöchentliche Berichte",
+          "Angebots-Protokoll & Dokumentenspeicher"
+        ],
+        "cta": "Loslegen"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "€499",
+        "period": "einmalig",
+        "badge": "Beliebteste Wahl",
+        "features": [
+          "Alles aus Basis",
+          "Professionelle Fotografie",
+          "Grundriss-Erstellung",
+          "Verkaufsschild (geliefert)",
+          "Erweiterte Portal-Platzierung",
+          "Energieausweis-Buchung",
+          "Prioritäts-Support (2h SLA)"
+        ],
+        "cta": "Loslegen"
+      },
+      "komplett": {
+        "name": "Komplett",
+        "price": "€899",
+        "period": "einmalig",
+        "features": [
+          "Alles aus Professional",
+          "360° Virtuelle Tour",
+          "Dedizierter Yalla-Berater",
+          "Rechtliche Unterstützung & Notar-Vermittlung",
+          "Verhandlungsbegleitung",
+          "Abschluss-Checkliste & Übergabe",
+          "Prioritäts-Support (1h SLA)"
+        ],
+        "cta": "Loslegen"
+      }
+    },
+    "comparisonTag": "Yalla vs. Makler",
+    "comparisonTitle": "Die Zahlen sprechen für sich",
+    "comparisonSubtitle": "Bei einer €400.000-Immobilie berechnen traditionelle Makler in Deutschland 3–6% Provision.",
+    "comparison": {
+      "traditional": "Traditioneller Makler",
+      "traditionalPrice": "€16.000+",
+      "traditionalNote": "Durchschnittliche Provision bei 4%",
+      "yalla": "Yalla.House",
+      "yallaPrice": "€199–€899",
+      "yallaNote": "Kompletter Service zum Festpreis",
+      "savings": "Sie sparen",
+      "savingsPrice": "€15.100+",
+      "savingsNote": "Geht direkt in Ihre Tasche"
+    },
+    "ctaBandTitle": "Jetzt Inserat erstellen — kostenlos starten",
+    "ctaBandSubtitle": "Erstellen Sie Ihr Inserat in Minuten. Wählen Sie Ihren Tarif, wenn Sie bereit sind.",
+    "ctaBandCta": "Immobilie inserieren",
+    "addToListing": "Zum Inserat hinzufügen"
+  }
+}

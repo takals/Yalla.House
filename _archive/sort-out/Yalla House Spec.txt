@@ -1,0 +1,809 @@
+Here’s a “high-end” project spec with global ambition.
+
+Yalla.House / Master Project Spec (v1)
+ 
+Goal for today: A clear, ambitious, but buildable blueprint for the Yalla.House Platform:
+a global, multi-country real-estate workspace that:
+	•	lets owners list once and publish everywhere,
+	•	lets home-hunters manage their search in one place,
+	•	integrates with major property platforms as an aggregator,
+	•	and includes a referral engine where normal people earn fees for bringing users onto the platform.
+
+1. Vision & Positioning
+ 
+1.1 Vision
+Build the default workspace for property transactions worldwide.
+	•	Owners list once → Yalla.House structures the data → pushes to:
+	◦	major portals (Rightmove, Zoopla, Immowelt, ImmobilienScout24, Idealista, etc. over time),
+	◦	direct channels (public Yalla.House pages, QR codes, WhatsApp, email).
+	•	Home-hunters manage:
+	◦	saved places,
+	◦	bookings,
+	◦	messages,
+	◦	offers/applications,
+	◦	surveys/inspections
+	•	“Street team” & normal users can earn fees by bringing owners & home-hunters into the system.
+Position:
+Infrastructure, not a traditional estate agent.
+We reduce admin and friction for everyone, not compete for commission.
+ 
+1.2 Core Principles
+	1.	List once, reuse everywhere
+	◦	Single structured listing → multiple channels.
+	◦	Internal “placeId” is stable; slugs/links can change.
+	2.	Booking-first & conversation-light
+	◦	Public property pages are calendar-led, not brochure led.
+	◦	No dead ends; always a way to book or request a viewing.
+	3.	Agents are real, NoAgent is glue
+	◦	We don’t replace real agents; we centralise information, surface serious leads, and cut admin.
+	◦	Agents can optionally use the platform; they’re never forced.
+	4.	Global from day 1
+	◦	Multi-country aware:
+	▪	currencies,
+	▪	units (sqm/ft²),
+	▪	tax/tenure fields,
+	▪	portals & practices per country.
+	5.	Referral-first go-to-market
+	◦	Any person can earn small but real fees by:
+	▪	getting owners to create listings,
+	▪	getting home-hunters to sign up and actually use the platform.
+
+2. Core Roles & Workspaces (Phase 1)
+We focus on four primary roles, all of which must be structurally supported (data model + UI):
+	1.	Owner (seller or landlord)
+	◦	Manages:
+	▪	Owner Workspace
+	▪	O1 Dashboard
+	▪	O2 My Listings
+	▪	O3 Inquiries & Offers
+	▪	O4 Calendar
+	▪	O5 Public Property Page (Preview)
+	◦	Job: create & manage listings, viewings, offers/applications.
+	2.	Home-Hunter (buyer or renter)
+	◦	Manages:
+	▪	H1 Dashboard
+	▪	H2 Inbox
+	▪	H3 My Bookings
+	▪	H4 Saved Places
+	▪	H5 Offers & Applications
+	▪	H6 Survey Hub (Phase 2+)
+	◦	Job: search, save, book, negotiate, and keep sanity.
+	3.	Admin (Yalla.House)
+	◦	Admin workspace:
+	▪	A1 Dashboard (platform health)
+	▪	A2 Listings (global overview)
+	▪	A3 Users (owners, home-hunters, partners)
+	▪	A4 Integrations
+	▪	A8 Billing
+	▪	A9 Analytics
+	◦	Job: operate system, manage integrations, monitor costs, manage abuse.
+	4.	Street Team / Referrers / Partners (Phase 1.5+)
+	◦	People who:
+	▪	bring owners to the platform,
+	▪	bring home-hunters,
+	▪	possibly provide services (photos, floorplans, viewings, translation).
+	◦	They see:
+	▪	Partner / Referrer dashboard (high-level: # of referred users, earnings, status of payouts).
+For Claude: treat Street Team as a user type with its own table & dashboard, not just a tag.
+
+3. High-Level Product Flows
+3.1 Owner Flow (sale or rent)
+	1.	Public → Landing (P1)
+	◦	Sees Owner workspace preview (read-only sidebar + fake data).
+	◦	Primary CTA: Create your workspace.
+	2.	Auth → Owner Onboarding
+	◦	Email login (or magic link).
+	◦	Confirm they are an owner wanting to list.
+	3.	O2 — Listing Wizard (Steps 1–5 + Publish Plan)
+	◦	Step 1: Basics (address, property type, intent: for sale / to rent).
+	▪	Saving Step 1 creates listing in draft with permanent internal placeId.
+	◦	Step 2: Price (amount, label, shared ownership fields).
+	◦	Step 3: Details (beds, baths, size, description, key features, optional country-specific fields).
+	◦	Step 4: Media & docs (min. photos, floorplan optional, EPC optional).
+	◦	Step 5: Checklist + Preview (O5).
+	◦	+1: Publish Plan (pricing & portals).
+	4.	O5 — Public Property Page (Owner Preview)
+	◦	Owner sees exactly what home-hunters see.
+	◦	Booking-first:
+	▪	availability preview,
+	▪	full calendar,
+	▪	Request Viewing fallback if no slots.
+	5.	Publish
+	◦	Choose plan (free/paid).
+	◦	Integrations triggered:
+	▪	portal feeds (where possible),
+	▪	QR link,
+	▪	public URL ready for sharing.
+	6.	Operate
+	◦	O1 Dashboard → monitor funnel:
+	▪	views → inquiries → bookings → offers → accepted.
+	◦	O3 Inquiries & Offers:
+	▪	unified messaging.
+	◦	O4 Calendar:
+	▪	manage availability,
+	▪	confirm/cancel bookings,
+	▪	sync to Google Calendar (one-way).
+
+3.2 Home-Hunter Flow
+	1.	Public → Projected from a property link
+	◦	Lands on Public Property Page (P6/O5).
+	◦	Wants to:
+	▪	arrange viewing,
+	▪	message owner,
+	▪	save property.
+	2.	HH Gate
+	◦	Light signup:
+	▪	email or phone,
+	▪	basic profile (name, budget, timeline, target area).
+	◦	Optional: indicate willingness to receive help from real agents (not required, but tracked).
+	3.	Booking + Inbox
+	◦	H3 My Bookings:
+	▪	clear statuses:
+	▪	Pending confirmation vs Confirmed vs Cancelled vs Completed.
+	◦	H2 Inbox:
+	▪	messages from owners,
+	▪	viewing confirmations,
+	▪	agent replies (routed via NoAgent, not direct).
+	4.	Offers & Applications
+	◦	H5:
+	▪	send offers (sale) or applications (rent),
+	▪	track status: Submitted / Under Review / Accepted / Declined.
+	5.	Later: Surveys/Reports
+	◦	H6:
+	▪	upload & trade surveys,
+	▪	buy from other users,
+	▪	attach to properties.
+
+3.3 Admin Flow (operator)
+	1.	A1 Dashboard
+	◦	KPIs:
+	▪	active listings (sale vs rent),
+	▪	active owners,
+	▪	active home-hunters,
+	▪	active countries,
+	▪	conversion funnel.
+	2.	A2 Listings
+	◦	Moderation, flags, manual status changes.
+	3.	A4 Integrations
+	◦	Multi-country integration table:
+	▪	WhatsApp, SMS, email,
+	▪	portals per country,
+	▪	payments (Stripe),
+	▪	infra (hosting, logging),
+	▪	running costs, status.
+	4.	A8 Billing
+	◦	Track revenue streams from:
+	▪	listing plans,
+	▪	services,
+	▪	referral payouts (costs).
+
+4. Integrations & Aggregator Strategy (Global Scale)
+The “world domination” part relies heavily on integrations & automation.
+4.1 Integration Categories
+	1.	Messaging
+	◦	WhatsApp API (Twilio or similar),
+	◦	transactional email (Resend/SendGrid),
+	◦	optional SMS.
+	2.	Payments
+	◦	Stripe:
+	▪	one-off payments (listing packages),
+	▪	recurring (subscriptions),
+	▪	support multiple currencies.
+	3.	Calendars
+	◦	Phase 1:
+	▪	one-way ICS or Google Calendar sync.
+	◦	Phase 2:
+	▪	Outlook, Apple, two-way options.
+	4.	Portals / Major Platforms
+	◦	Per country integration rows:
+	▪	UK: Rightmove, Zoopla, OnTheMarket.
+	▪	DE: Immowelt, ImmobilienScout24.
+	▪	ES, FR, etc. later.
+	◦	Initially:
+	▪	manual or semi-manual feed through a feed aggregator (partner or MIT-licensed tools).
+	◦	Long-term:
+	▪	direct API where possible.
+	5.	Analytics & Attribution
+	◦	GA4, Meta Pixel, basic event tracking.
+	◦	Referral tracking (see below).
+
+4.2 Aggregator Logic (Concept)
+Claude: you should turn this into a technical architecture and task list.
+	•	Internal Listings table is the source of truth:
+	◦	fully normalised, country-aware.
+	•	Each portal has a mapping layer:
+	◦	required fields,
+	◦	optional fields,
+	◦	transformations (e.g. sqm → ft², Freehold → OWNERSHIP_FREEHOLD).
+	•	Feed logic:
+	◦	Phase 1: nightly/periodic exports (e.g. XML/JSON/CSV) to feed partners.
+	◦	Phase 2+: webhooks/API-based near-real-time updates.
+	•	Per-country integration config:
+	◦	which portals active,
+	◦	credentials,
+	◦	price per listing,
+	◦	rules (e.g. minimum photo count, EPC requirement).
+
+4.3 Global Scalability Considerations
+Claude should design:
+	•	CountryConfig data structure:
+	◦	currency,
+	◦	default units,
+	◦	local tax/tenure fields,
+	◦	default language,
+	◦	active portals,
+	◦	legal requirements for listing (e.g. EPC before marketing).
+	•	Multi-language:
+	◦	Start with English, but ensure text is key-based and translatable.
+	•	Time zones:
+	◦	viewings & bookings must store timestamps with timezone.
+
+5. Referral & Street Team Engine (GTM)
+We want a growth engine where normal people can earn fees:
+	•	bringing Owners (listing creators),
+	•	bringing Home-Hunters,
+	•	possibly bringing agents & partners later.
+5.1 Basic Referral Model (Phase 1)
+	•	Each referrer gets a referral code / link:
+	◦	e.g. yalla.house/?ref=abc123.
+	•	On signup:
+	◦	referrer_id stored against new user’s profile (Owner, HH, or both).
+	•	Rewards (examples):
+	◦	Flat fee when:
+	▪	Owner completes listing (reaches Step 5 + preview).
+	▪	Home-hunter verifies and completes a first booking.
+	•	Payouts:
+	◦	aggregated monthly (through Stripe Connect or manual transfer).
+ 
+5.2 Street Team / Door-to-Door Use Case
+This aligns with your “Street Team” concept.
+	•	Street team member visits households or talks to people:
+	◦	uses a simple referral app (mobile friendly web) to:
+	▪	capture owner details,
+	▪	trigger an email or WhatsApp to the owner with a magic link.
+	◦	That magic link carries the street team referrer id.
+	•	When the owner completes listing → referrer gets credit.
+
+5.3 Referral Tracking Requirements
+Claude should design tables such as:
+	•	referrers
+	◦	id, name (or alias), type (street team, regular user), country, payout method.
+	•	referrals
+	◦	id, referrer_id, referred_user_id, type (owner, hh, agent), created_at.
+	•	referral_events
+	◦	id, referral_id, milestone (LISTING_COMPLETED, FIRST_BOOKING, PAID_PLAN), status, value, payout_status.
+ 
+Important constraint:
+	•	No pyramid schemes, no multi-level logic.
+Just simple 1-level referrer → referred user.
+
+6. Trust, Legal & Compliance
+ 
+We must bake in trust and compliance, not bolt it on.
+ 
+Key points Claude should consider:
+	•	No spam policy
+	◦	Agents cannot spam owners/HHs via platform.
+	◦	Owner/HH must always initiate or explicitly consent.
+	•	GDPR & data minimisation
+	◦	Collect only what’s necessary for:
+	▪	bookings,
+	▪	offers,
+	▪	integrations.
+	◦	Data processing agreements with key providers (Stripe, Twilio, etc.).
+	•	NoAgent doesn’t act as “agent of record”
+	◦	We are a tech platform; local legal disclaimers per country.
+	•	Clear distinction:
+	◦	“real agents” vs “NoAgent platform”.
+	◦	Keep copy clear so users don’t get confused.
+
+7. What I Want Claude To Do With This Spec
+ 
+You can literally paste this section to Claude as instructions.
+ 
+Claude, based on the spec above, please:
+ 
+	1.	Refine the high-level architecture
+	◦	Propose a stack (frontend, backend, databases) that:
+	▪	works well with Framer/Airtable or an equivalent setup,
+	▪	scales across multiple countries,
+	▪	supports integrations & feeds.
+	◦	Give a diagram or structured outline:
+	▪	Clients,
+	▪	Core services,
+	▪	Integrations layer,
+	▪	Data stores.
+	2.	Design the initial data model
+	◦	Tables/entities (e.g. users, owners, home_hunters, listings, viewings, inquiries, offers, referrers, referrals, integrations, country_config).
+	◦	Key fields:
+	▪	especially for multi-country & aggregator mapping.
+	◦	Relationships and keys:
+	▪	placeId, userId, countryId, referrerId.
+	3.	Map the main flows to APIs
+	◦	For each major flow:
+	▪	Owner listing wizard,
+	▪	Home-hunter booking,
+	▪	Admin integrations,
+	▪	Referral tracking,
+	◦	propose REST/GraphQL endpoints and payload shapes.
+	4.	Outline the integrations roadmap
+	◦	Phase 1 vs Phase 2:
+	▪	which portals first,
+	▪	which messaging integrations first,
+	▪	how to mock them in development.
+	5.	Define referral logic in more detail
+	◦	Edge cases:
+	▪	multiple referrers,
+	▪	fraud,
+	▪	self-referrals,
+	▪	“street team” vs “normal user”.
+	◦	Payout triggers and constraints.
+	6.	Highlight risks & trade-offs
+	◦	Technical,
+	◦	Legal,
+	◦	Product (e.g. dependency on portals, spam risk from agents, etc.).
+	7.	Propose a phased implementation plan
+	◦	Phase 1: single country (e.g. DE or UK) + basic referrals.
+	◦	Phase 1.5: additional portal feeds and partner services.
+	◦	Phase 2: multi-country expansion, advanced surveys, agent dashboards.
+
+8. Versioning
+ 
+Call this:
+ 
+Yalla.House / NoAgent — Master Project Spec v1.0 (Architecture & Global Strategy)
+ 
+Every time you and Claude update it, bump the version: v1.1, v1.2, etc.
+
+FREEZE: Notion location
+→ 2. Developer Hub / System Architecture / Yalla.House — Master Project Spec (v1.0)
+Excellent. Below is the fully consolidated and upgraded Master Project Spec v1.2, now:
+	•	✅ Real Agent added as a full first-class user (not optional / not phase-based)
+	•	✅ All roles structurally equal in planning
+	•	✅ No more “Phase 1 vs Phase 2” role limitations (architecture supports everything)
+	•	✅ Claude Instructions updated accordingly
+	•	✅ Clear expected outcome defined
+ 
+This is a clean executive-level + technical-level blueprint.
+ 
+You can paste this directly into Claude.
+
+Yalla.House / NoAgent
+ 
+Master Project Spec v1.2
+ 
+(Global Architecture, Agent-Integrated, Referral-Native Infrastructure)
+
+Goal
+ 
+Design a globally scalable real estate infrastructure platform that:
+	•	Lets Owners list once and distribute everywhere.
+	•	Lets Home-Hunters manage search, bookings, offers and communication in one place.
+	•	Includes Real Agents as full platform users with operational tools.
+	•	Integrates with major property portals as an automated aggregator.
+	•	Includes a referral engine where normal people earn fees.
+	•	Scales across countries with configurable legal, currency and portal logic.
+ 
+This is infrastructure, not a traditional estate agency.
+
+1. Vision & Positioning
+ 
+1.1 Vision
+ 
+Build the default operating system for property transactions worldwide.
+ 
+Owners list once → Yalla.House structures and distributes.
+ 
+Home-Hunters organise everything in one workspace.
+ 
+Agents use Yalla.House to manage serious leads and structured listings.
+ 
+Referrers drive growth through incentive-based onboarding.
+
+1.2 Strategic Position
+ 
+Yalla.House is:
+	•	A structured listing engine
+	•	A booking-first public property system
+	•	A distribution & feed aggregator
+	•	A lead routing and communication hub
+	•	A referral-powered growth layer
+	•	An agent multiplier system
+ 
+It is not:
+	•	A commission-based brokerage
+	•	A traditional portal
+	•	A CRM clone
+
+2. Core Roles & Workspaces (All First-Class)
+ 
+All roles must be fully supported in:
+	•	Data model
+	•	Permissions
+	•	API
+	•	UI
+	•	Integrations
+
+2.1 Owner
+ 
+Workspace
+	•	O1 Dashboard
+	•	O2 Listings (Wizard + Inventory)
+	•	O3 Inquiries & Offers
+	•	O4 Calendar
+	•	O5 Public Property Page (Preview)
+ 
+Capabilities
+	•	Create structured listings
+	•	Manage availability
+	•	Publish to portals
+	•	Review offers/applications
+	•	Use service partners
+	•	Connect to agents
+	•	View analytics
+	•	Track referrals
+
+2.2 Home-Hunter
+ 
+Workspace
+	•	H1 Dashboard
+	•	H2 Inbox
+	•	H3 My Bookings
+	•	H4 Saved Properties
+	•	H5 Offers & Applications
+	•	H6 Survey Hub
+ 
+Capabilities
+	•	Search properties
+	•	Book viewings
+	•	Send offers/applications
+	•	Manage conversations
+	•	Request agent assistance
+	•	Track transaction progress
+
+2.3 Real Agent (Full Platform User)
+ 
+Real Agents are not passive participants.
+ 
+They are a first-class user type with:
+	•	Dedicated data entity
+	•	Dedicated permissions
+	•	Dedicated dashboard
+	•	Optional paid toolset
+
+Agent Workspace
+ 
+Must include:
+ 
+1. Agent Dashboard
+	•	Active leads
+	•	Listings associated
+	•	Funnel (request → viewing → offer → closed)
+	•	Area performance
+	•	Referral performance
+ 
+2. Agent Inbox
+	•	Unified conversations
+	•	Structured Home-Hunter profiles
+	•	Associated listing context
+	•	Reply via platform relay (no direct email exposure unless allowed)
+ 
+3. Coverage & Filters
+	•	Areas served
+	•	Property types
+	•	Price bands
+	•	Sale / Rent focus
+	•	Language
+ 
+4. Listing Interaction
+	•	Associate with owner listings
+	•	Suggest edits
+	•	Offer portal distribution services
+	•	Claim leads (where permitted)
+ 
+5. Agent Reputation Layer (Future)
+	•	Response time
+	•	Engagement score
+	•	Completion metrics
+
+Agent Use Case Value
+ 
+Agents gain:
+	•	Structured inbound demand
+	•	Less admin chasing
+	•	Clear booking funnel
+	•	Cross-country opportunity visibility
+	•	Reduced duplicated portal data entry (via feed integration later)
+ 
+Revenue model possibilities:
+	•	Subscription tools
+	•	Lead access tiers
+	•	Distribution services
+	•	Service partner upsells
+ 
+Never:
+	•	Commission on transaction
+
+2.4 Service Partners
+	•	Photographers
+	•	Surveyors
+	•	EPC assessors
+	•	Floor planners
+	•	Cleaners / movers
+ 
+They:
+	•	Receive jobs via listing add-ons
+	•	Have profile and coverage
+	•	Can receive referral credit
+
+2.5 Street Team / Referrers
+ 
+They:
+	•	Bring owners
+	•	Bring home-hunters
+	•	Bring agents
+	•	Earn milestone-based rewards
+ 
+Have:
+	•	Referral dashboard
+	•	Earnings tracking
+	•	Payout history
+ 
+Single-level only.
+
+2.6 Admin
+ 
+Admin controls:
+	•	Listings moderation
+	•	Integrations
+	•	Billing
+	•	Referral payouts
+	•	Country configuration
+	•	Portal mapping
+	•	Fraud monitoring
+
+3. Product Architecture Overview
+ 
+This platform consists of five core systems:
+	1.	Identity & Role Engine
+	2.	Listing & Distribution Engine
+	3.	Booking & Messaging Engine
+	4.	Integration & Aggregator Layer
+	5.	Referral & Incentive Engine
+ 
+All must be modular.
+
+4. Aggregator & Portal Strategy
+ 
+Listings are the single source of truth.
+ 
+Each portal requires:
+	•	Field mapping layer
+	•	Validation rules
+	•	Transformation logic
+	•	Credential storage
+	•	Status sync
+ 
+System must support:
+	•	XML/JSON feed export
+	•	API push
+	•	Webhook ingestion
+	•	Per-country activation
+
+5. Global Scalability Requirements
+ 
+Claude must design for:
+	•	Multi-country
+	•	Multi-currency
+	•	Multi-language (key-based)
+	•	Timezone-aware bookings
+	•	Per-country legal fields
+	•	Per-country portal rules
+	•	Per-country pricing models
+ 
+Create CountryConfig entity including:
+	•	Currency
+	•	Units
+	•	Tenure models
+	•	Legal flags
+	•	Portal availability
+	•	Required fields
+
+6. Referral & Incentive Engine
+ 
+Every user may have:
+	•	referrer_id
+	•	referral_origin_type
+ 
+Tables required:
+	•	referrers
+	•	referrals
+	•	referral_events
+	•	payout_records
+ 
+Milestones:
+	•	Listing completed
+	•	First booking
+	•	Paid listing plan
+	•	Agent activated
+ 
+Constraints:
+	•	No multi-level
+	•	No circular credit
+	•	Anti-fraud logic required
+
+7. Messaging & Communication Layer
+ 
+All interactions must exist in-system:
+	•	Viewings
+	•	Offers
+	•	Applications
+	•	Agent routing
+ 
+Integrations:
+	•	WhatsApp API
+	•	Transactional email
+	•	SMS (optional)
+	•	ICS / Google sync
+	•	Stripe for payments
+
+8. Monetisation Architecture
+ 
+Revenue streams:
+	•	Owner listing plans
+	•	Portal distribution add-ons
+	•	Service commissions
+	•	Agent subscriptions
+	•	Lead routing services
+	•	Referral-based growth incentives
+ 
+No percentage of transaction.
+
+9. Technical Expectations for Claude
+ 
+Claude must now deliver the following outcome.
+
+CLAUDE INSTRUCTIONS
+ 
+Claude, based on this Master Project Spec v1.2, deliver:
+
+1. Propose Scalable Architecture
+ 
+Design:
+	•	Frontend stack
+	•	Backend architecture
+	•	Database structure
+	•	Integration layer
+	•	Message queue / async layer
+	•	Feed export system
+ 
+Must:
+	•	Work with Framer/Airtable OR propose superior scalable alternative
+	•	Support multi-country scaling
+	•	Be modular
+ 
+Deliver:
+	•	Structured system diagram (textual)
+	•	Component breakdown
+	•	Scaling considerations
+
+2. Design Data Model
+ 
+Define entities including:
+	•	users
+	•	owners
+	•	home_hunters
+	•	agents
+	•	listings
+	•	listing_media
+	•	viewings
+	•	bookings
+	•	inquiries
+	•	offers
+	•	applications
+	•	messages
+	•	referrers
+	•	referrals
+	•	referral_events
+	•	payouts
+	•	service_partners
+	•	country_config
+	•	portal_config
+	•	portal_mappings
+	•	integrations
+	•	billing_records
+ 
+Include:
+	•	Key fields
+	•	Relationships
+	•	Indexing considerations
+	•	Multi-country strategy
+	•	Permission rules
+
+3. Map APIs
+ 
+For each major flow:
+	•	Owner listing wizard
+	•	Booking flow
+	•	Offer submission
+	•	Agent lead routing
+	•	Referral tracking
+	•	Portal feed export
+	•	Billing flow
+ 
+Define:
+	•	Endpoints
+	•	Payload structure
+	•	Authentication model
+	•	Role access control
+
+4. Outline Integration Layer
+ 
+Detail:
+	•	Portal mapping abstraction
+	•	Messaging abstraction
+	•	Payment abstraction
+	•	Calendar abstraction
+	•	Analytics abstraction
+ 
+Include:
+	•	Failover logic
+	•	Retry mechanisms
+	•	Cost monitoring
+
+5. Model Referral Edge Cases
+ 
+Consider:
+	•	Multiple referrers
+	•	Self-referrals
+	•	Device-based fraud
+	•	Fake listings
+	•	Agent self-routing
+	•	Territory conflicts
+ 
+Provide mitigation strategies.
+
+6. Identify Risks
+ 
+Technical:
+	•	Portal dependency
+	•	Feed rejection
+	•	Scaling bottlenecks
+ 
+Legal:
+	•	Agent misrepresentation
+	•	Data privacy violations
+	•	Country compliance
+ 
+Product:
+	•	Agent spam risk
+	•	Referral abuse
+	•	Owner churn
+
+7. Create Phased Roadmap
+ 
+Not role-based phases — architecture supports all roles.
+ 
+Instead:
+	•	Country expansion phases
+	•	Integration expansion phases
+	•	Monetisation phases
+	•	Operational automation phases
+ 
+Provide realistic milestone timeline.
+
+Expected Outcome
+ 
+Claude should return:
+	•	Clear system architecture
+	•	Complete entity relationship model
+	•	API blueprint
+	•	Integration abstraction plan
+	•	Risk assessment
+	•	12–18 month roadmap
+	•	Prioritised implementation sequence
+ 
+This becomes:
+ 
+Yalla.House — Technical Blueprint v1.0
+ 

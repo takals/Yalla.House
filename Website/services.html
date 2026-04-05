@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services &amp; Pricing — Yalla.House</title>
+  <meta name="description" content="Professional property services at transparent flat fees. No commission. Photography, floorplans, portal listings, legal support and more." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">Yalla.House</a>
+    <nav class="site-nav">
+      <a href="services.html" class="nav-link active" data-i18n="nav.services">Services &amp; Pricing</a>
+      <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switcher">
+        <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+        <span class="lang-sep">|</span>
+        <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+      </div>
+      <div class="user-menu" id="userMenu">
+        <button class="btn btn-secondary btn-sm" onclick="toggleUserMenu()" id="userMenuTrigger" aria-haspopup="true" aria-expanded="false" data-i18n="nav.signin">Sign In
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4l3.5 3.5L9 4"/></svg>
+          </button>
+        <div class="user-menu-dropdown" id="userMenuDropdown" role="menu">
+          <div class="user-menu-label" data-i18n="menu.label">Sign in as</div>
+          <a href="dashboards/dashboard.html" class="user-menu-option" role="menuitem">
+            <div class="user-menu-option-icon" style="background:#FFF8D6;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A5F00" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+              </div>
+            <div class="user-menu-option-body">
+              <div class="user-menu-option-name" data-i18n="menu.owner.name">Owner</div>
+              <div class="user-menu-option-desc" data-i18n="menu.owner.desc">Listings, viewings &amp; offers</div>
+            </div>
+          </a>
+          <a href="dashboards/buyer.html" class="user-menu-option" role="menuitem">
+            <div class="user-menu-option-icon" style="background:#EDF4FF;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E40AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </div>
+            <div class="user-menu-option-body">
+              <div class="user-menu-option-name" data-i18n="menu.hunter.name">Home Hunter</div>
+              <div class="user-menu-option-desc" data-i18n="menu.hunter.desc">Browse &amp; book viewings</div>
+            </div>
+          </a>
+          <a href="dashboards/admin.html" class="user-menu-option" role="menuitem">
+            <div class="user-menu-option-icon" style="background:#F0FDF4;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#166534" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              </div>
+            <div class="user-menu-option-body">
+              <div class="user-menu-option-name" data-i18n="menu.admin.name">Admin</div>
+              <div class="user-menu-option-desc" data-i18n="menu.admin.desc">Platform management</div>
+            </div>
+          </a>
+          <a href="dashboards/agent.html" class="user-menu-option" role="menuitem">
+            <div class="user-menu-option-icon" style="background:#FFF7ED;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2410C" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              </div>
+            <div class="user-menu-option-body">
+              <div class="user-menu-option-name" data-i18n="menu.agent.name">Field Agent</div>
+              <div class="user-menu-option-desc" data-i18n="menu.agent.desc">Jobs &amp; on-site reports</div>
+            </div>
+          </a>
+          <div class="user-menu-divider"></div>
+          <button class="user-menu-action" onclick="showToast('Settings — coming soon','info')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em;margin-right:.35em;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</button>
+          <button class="user-menu-action user-menu-signout" onclick="showToast('You have been signed out','info')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-.15em;margin-right:.35em;"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</button>
+        </div>
+      </div>
+      <a href="list.html" class="btn btn-primary btn-sm" data-i18n="nav.list">List Your Place</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- PAGE HERO -->
+  <section class="section" style="padding-bottom:0;">
+    <div class="section-inner">
+      <div class="section-header center">
+        <div class="section-tag">Services &amp; Pricing</div>
+        <h2>Pay for what you need. Keep the rest.</h2>
+        <p>Free to start. Modular services when you need them. No commission, ever. Prices vary by market &mdash; always shown before you pay.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES GRID -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 style="font-size:1.5rem;" data-i18n="sp.addons.h2">Add-on Services</h2>
+        <p data-i18n="sp.addons.p">Enhance your listing with professional add-ons — available à la carte or as part of a package.</p>
+      </div>
+      <div class="card-grid card-grid-3">
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <h3 data-i18n="sp.s1.h3">Professional Photography</h3>
+          <p data-i18n="sp.s1.p">Local professional photographers, same-week availability, edited high-res images delivered within 24 hours. Hero image rules included.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s1.price">€149</span>
+            <a href="list.html" class="btn btn-primary btn-sm" data-i18n="sp.btn.add">Add to Listing</a>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></div>
+          <h3 data-i18n="sp.s2.h3">360° Virtual Tour</h3>
+          <p data-i18n="sp.s2.p">Matterport-style 3D scan of your property. Buyers explore every room before booking — fewer wasted viewings, higher-quality leads.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s2.price">€199</span>
+            <a href="list.html" class="btn btn-primary btn-sm" data-i18n="sp.btn.add">Add to Listing</a>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <h3 data-i18n="sp.s3.h3">Floorplan Creation</h3>
+          <p data-i18n="sp.s3.p">Accurate publication-ready floorplans measured on-site. Required by IS24 for premium placement — buyers spend 52% longer on listings with floorplans.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s3.price">€79</span>
+            <a href="list.html" class="btn btn-primary btn-sm" data-i18n="sp.btn.add">Add to Listing</a>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+          <h3 data-i18n="sp.s4.h3">Legal Support</h3>
+          <p data-i18n="sp.s4.p">Notary referrals, contract review guidance, and step-by-step document checklists at each legal milestone — from sale agreement to completion.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s4.price">from €299</span>
+            <a href="list.html" class="btn btn-primary btn-sm" data-i18n="sp.btn.add">Add to Listing</a>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="13" rx="2"/><path d="M12 16v5M8 21h8"/></svg></div>
+          <h3 data-i18n="sp.s5.h3">For Sale Board</h3>
+          <p data-i18n="sp.s5.p">Branded Yalla.House yard sign delivered and installed by a local partner. Still the #1 local lead generator — don't underestimate foot traffic.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s5.price">€49</span>
+            <a href="list.html" class="btn btn-primary btn-sm" data-i18n="sp.btn.add">Add to Listing</a>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+          <h3 data-i18n="sp.s6.h3">Portal Advertising</h3>
+          <p data-i18n="sp.s6.p">Full listings on ImmobilienScout24, Immowelt, and ImmoNet. Automatic status sync, enhanced listing upgrades, and Yalla dashboard integration included.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s6.price">included</span>
+            <span class="badge badge-green" data-i18n="sp.badge.incl">Included in all plans</span>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <h3 data-i18n="sp.s7.h3">Hands-On Support</h3>
+          <p data-i18n="sp.s7.p">Dedicated Yalla advisor to handle buyer queries, negotiate on your behalf, and guide you through the sale. Human help when you need it.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s7.price">€499</span>
+            <a href="list.html" class="btn btn-primary btn-sm" data-i18n="sp.btn.add">Add to Listing</a>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+          <h3 data-i18n="sp.s8.h3">Weekly Progress Reports</h3>
+          <p data-i18n="sp.s8.p">Auto-generated seller update every 7 days: enquiries, viewings, feedback, offer status, and next steps — zero chasing required.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s8.price">included</span>
+            <span class="badge badge-green" data-i18n="sp.badge.incl">Included in all plans</span>
+          </div>
+        </div>
+
+        <div class="card fade-up">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand-deep)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <h3 data-i18n="sp.s9.h3">Viewing Calendar</h3>
+          <p data-i18n="sp.s9.p">Set live availability slots. Buyers self-book, confirm with one tap. Reduce viewing no-shows by up to 40%. Integrated with your dashboard.</p>
+          <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:1.25rem;font-weight:800;" data-i18n="sp.s9.price">included</span>
+            <span class="badge badge-green" data-i18n="sp.badge.incl">Included in all plans</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING — ROLE TABS -->
+  <section class="section section-alt">
+    <div class="section-inner">
+      <div class="section-header center" style="margin-bottom:2rem;">
+        <div class="section-tag">Pricing</div>
+        <h2>Simple pricing for every user type</h2>
+        <p>Select your role to see what applies to you.</p>
+        <div class="tab-toggle" id="pricingTabs" style="margin-top:1.5rem;">
+          <button class="tab-btn active" onclick="switchTab('owner')" id="tab-owner">Owner / Landlord</button>
+          <button class="tab-btn" onclick="switchTab('hunter')" id="tab-hunter">Home Hunter</button>
+          <button class="tab-btn" onclick="switchTab('agent')" id="tab-agent">Agent / Professional</button>
+        </div>
+      </div>
+
+      <!-- OWNER TAB -->
+      <div class="tab-panel active" id="panel-owner">
+        <div class="pricing-grid">
+          <!-- Starter -->
+          <div class="pricing-card">
+            <div class="pricing-name">Starter</div>
+            <div class="pricing-price">&euro;199 <span>one-time</span></div>
+            <div class="pricing-desc">Everything you need to get listed and manage your sale yourself.</div>
+            <ul class="pricing-features">
+              <li>IS24 &amp; Immowelt listing</li>
+              <li>Owner dashboard</li>
+              <li>Viewing calendar &amp; self-booking</li>
+              <li>Enquiry inbox</li>
+              <li>Weekly progress reports</li>
+              <li>Offer log &amp; document storage</li>
+            </ul>
+            <a href="list.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+          <!-- Professional (featured) -->
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Most popular</div>
+            <div class="pricing-name">Professional</div>
+            <div class="pricing-price">&euro;499 <span>one-time</span></div>
+            <div class="pricing-desc">Professional media and portal presence to maximise your result.</div>
+            <ul class="pricing-features">
+              <li>Everything in Starter</li>
+              <li>Professional photography</li>
+              <li>Floorplan creation</li>
+              <li>For Sale board (delivered)</li>
+              <li>Enhanced portal listing</li>
+              <li>EPC booking assistance</li>
+              <li>Priority support (2h SLA)</li>
+            </ul>
+            <a href="list.html" class="btn btn-primary" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+          <!-- Complete -->
+          <div class="pricing-card">
+            <div class="pricing-name">Complete</div>
+            <div class="pricing-price">&euro;899 <span>one-time</span></div>
+            <div class="pricing-desc">Full service &mdash; everything handled, from media to legal close.</div>
+            <ul class="pricing-features">
+              <li>Everything in Professional</li>
+              <li>360&deg; Virtual Tour</li>
+              <li>Dedicated Yalla advisor</li>
+              <li>Legal support &amp; notary referral</li>
+              <li>Negotiation assistance</li>
+              <li>Completion checklist &amp; sign-off</li>
+              <li>Priority support (1h SLA)</li>
+            </ul>
+            <a href="list.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+        </div>
+
+        <!-- Feature comparison table -->
+        <div style="margin-top:3rem;">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.25rem;text-align:center;color:var(--text-secondary);">What&rsquo;s included in each plan</h3>
+          <div style="overflow-x:auto;">
+            <table class="feature-table">
+              <thead>
+                <tr>
+                  <th style="width:44%;">Feature</th>
+                  <th>Starter</th>
+                  <th class="col-featured">Professional</th>
+                  <th>Complete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Owner dashboard</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Portal listing (IS24 &amp; Immowelt)</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Viewing calendar &amp; self-booking</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Enquiry inbox</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Weekly progress reports</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Offer log &amp; document storage</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Professional photography</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Floorplan creation</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>For Sale board</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Enhanced portal listing</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>360&deg; Virtual Tour</td><td><span class="dash">&mdash;</span></td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Dedicated Yalla advisor</td><td><span class="dash">&mdash;</span></td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Legal support &amp; notary referral</td><td><span class="dash">&mdash;</span></td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:2rem;">
+          <p style="color:var(--text-secondary);font-size:.9375rem;">Not sure which plan?
+            <a href="mailto:support@yalla.house" style="color:var(--text-primary);font-weight:600;text-decoration:underline;text-underline-offset:3px;">Talk to us</a> &mdash; we&rsquo;ll recommend the right fit.
+          </p>
+        </div>
+      </div>
+
+      <!-- HOME HUNTER TAB -->
+      <div class="tab-panel" id="panel-hunter">
+        <div style="max-width:680px;margin:0 auto;">
+          <div class="pricing-card" style="max-width:100%;">
+            <div class="pricing-name">Home Hunter</div>
+            <div class="pricing-price">&euro;0 <span>always free</span></div>
+            <div class="pricing-desc">Browse, save, book viewings, and track offers. No commission, no agent filtering your enquiries.</div>
+            <ul class="pricing-features">
+              <li>Browse all listings</li>
+              <li>Save favourites</li>
+              <li>Self-schedule viewings instantly</li>
+              <li>Send enquiries directly to owners</li>
+              <li>Submit &amp; track offers in real time</li>
+              <li>Status notifications &mdash; no chasing required</li>
+            </ul>
+            <a href="dashboards/buyer.html" class="btn btn-primary" style="width:100%;justify-content:center;">Open Home Hunter Dashboard</a>
+          </div>
+          <div style="margin-top:1.75rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+            <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+              <h3 style="font-size:.9375rem;font-weight:700;">Coming soon &mdash; Premium Home Hunter tools</h3>
+              <span class="badge-coming-soon">Coming soon</span>
+            </div>
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.5rem;">
+              <li style="font-size:.875rem;color:var(--text-secondary);">&#8250; Verified buyer passport (proof of funds, ID)</li>
+              <li style="font-size:.875rem;color:var(--text-secondary);">&#8250; Priority viewing booking</li>
+              <li style="font-size:.875rem;color:var(--text-secondary);">&#8250; Mortgage, legal &amp; survey partner access</li>
+              <li style="font-size:.875rem;color:var(--text-secondary);">&#8250; Advanced search alerts &amp; market data</li>
+            </ul>
+            <p style="font-size:.8rem;color:var(--text-muted);margin-top:1rem;">Premium tools will be optional. Free access stays free, always.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENT TAB -->
+      <div class="tab-panel" id="panel-agent">
+        <div style="max-width:680px;margin:0 auto;">
+          <div class="pricing-card" style="max-width:100%;">
+            <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+              <div class="pricing-name" style="margin:0;">Agent Workspace</div>
+              <span class="badge-coming-soon">Coming soon</span>
+            </div>
+            <div class="pricing-price">Monthly subscription <span>TBD by market</span></div>
+            <div class="pricing-desc">A modern workspace for agents who want to collaborate with owners transparently &mdash; without the old commission model.</div>
+            <ul class="pricing-features">
+              <li>Managed listing dashboard</li>
+              <li>Enquiry &amp; lead handling</li>
+              <li>Viewing coordination</li>
+              <li>Owner collaboration mode &mdash; they see everything you do</li>
+              <li>Portal distribution controls</li>
+              <li>Analytics &amp; performance reporting</li>
+              <li>Team workspaces (higher tier)</li>
+            </ul>
+            <a href="mailto:support@yalla.house?subject=Agent Workspace &mdash; Yalla.House" class="btn btn-primary" style="width:100%;justify-content:center;">Contact Us About Agent Access</a>
+          </div>
+          <p style="text-align:center;font-size:.8rem;color:var(--text-muted);margin-top:1.25rem;">Agent workspace pricing varies by market. We&rsquo;ll discuss the right model for your region.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMPARISON STATS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header center">
+        <div class="section-tag" data-i18n="sp.vs.tag">Yalla vs Traditional Agent</div>
+        <h2 data-i18n="sp.vs.h2">The numbers don't lie</h2>
+        <p data-i18n="sp.vs.p">On a €400,000 property, traditional German agents typically charge 3–6% commission.</p>
+      </div>
+      <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr));max-width:800px;margin:0 auto;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:.875rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;" data-i18n="sp.vs.agent">Traditional Agent</div>
+          <div style="font-size:2.25rem;font-weight:800;color:#DC2626;" data-i18n="sp.vs.agent.v">€16,000+</div>
+          <p style="margin-top:.5rem;" data-i18n="sp.vs.agent.p">Average commission on a €400k sale at 4%</p>
+        </div>
+        <div class="card" style="text-align:center;border-color:var(--brand);background:var(--brand-light);">
+          <div style="font-size:.875rem;font-weight:700;color:#7A5F00;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;" data-i18n="sp.vs.yalla">Yalla.House</div>
+          <div style="font-size:2.25rem;font-weight:800;color:var(--text-primary);" data-i18n="sp.vs.yalla.v">€199–€899</div>
+          <p style="margin-top:.5rem;" data-i18n="sp.vs.yalla.p">Complete service at a flat fee — you save €15,000+</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:.875rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;" data-i18n="sp.vs.save">You save</div>
+          <div style="font-size:2.25rem;font-weight:800;color:#166534;" data-i18n="sp.vs.save.v">€15,100+</div>
+          <p style="margin-top:.5rem;" data-i18n="sp.vs.save.p">Goes straight back into your pocket — or your next purchase</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band">
+    <div class="cta-band-inner">
+      <h2 data-i18n="sp.cta.h2">Start listing — free to create your account</h2>
+      <p data-i18n="sp.cta.p">Set up your property in minutes. Choose your plan when you're ready to go live.</p>
+      <a href="list.html" class="btn btn-primary btn-lg" data-i18n="sp.cta.btn">List Your Place</a>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Yalla.House</div>
+        <div class="footer-tagline">The operating system for property transactions.</div>
+        <div class="footer-meta" data-i18n="footer.meta">Yalla.House GmbH<br />Registered in Germany.</div>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.col1.h4">Policies</h4>
+        <ul class="footer-links">
+          <li><a href="#" data-i18n="footer.privacy">Privacy Policy</a></li>
+          <li><a href="#" data-i18n="footer.terms">Terms of Service</a></li>
+          <li><a href="#" data-i18n="footer.cookie">Cookie Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.col2.h4">Legal &amp; Compliance</h4>
+        <ul class="footer-links">
+          <li><a href="#" data-i18n="footer.gdpr">GDPR &amp; Safety</a></li>
+          <li><a href="#" data-i18n="footer.security">Security &amp; Data Protection</a></li>
+          <li><a href="#" data-i18n="footer.imprint">Imprint</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer.col3.h4">Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:support@yalla.house?subject=Support Request - Yalla.House">Support</a></li>
+          <li><a href="https://wa.me/447000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer.copyright">© 2025 Yalla.House GmbH. All rights reserved.</p>
+      <p data-i18n="footer.portals">Listed on ImmobilienScout24 &bull; Immowelt &bull; ImmoNet</p>
+    </div>
+  </div>
+</footer>
+
+<script src="lang.js"></script>
+<script>
+'use strict';
+/* ── Scroll-reveal ── */
+(function() {
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(function(el) { io.observe(el); });
+})();
+function switchTab(role) {
+  var roles = ['owner', 'hunter', 'agent'];
+  roles.forEach(function(r) {
+    document.getElementById('panel-' + r).classList.toggle('active', r === role);
+    document.getElementById('tab-' + r).classList.toggle('active', r === role);
+  });
+}
+function toggleUserMenu() {
+  var d = document.getElementById('userMenuDropdown');
+  var t = document.getElementById('userMenuTrigger');
+  var open = d.classList.toggle('open');
+  t.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+document.addEventListener('click', function(e) {
+  var menu = document.getElementById('userMenu');
+  if (menu && !menu.contains(e.target)) {
+    document.getElementById('userMenuDropdown').classList.remove('open');
+    document.getElementById('userMenuTrigger').setAttribute('aria-expanded', 'false');
+  }
+});
+function showToast(msg, type) {
+  type = type || 'success';
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { t.classList.add('show'); });
+  });
+  setTimeout(function() {
+    t.classList.remove('show');
+    setTimeout(function() { t.remove(); }, 350);
+  }, 2600);
+}
+</script>
+</body>
+</html>

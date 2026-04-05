@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Referrer — Yalla.House</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* ── Referrer-specific styles ── */
+
+    /* Referral link card */
+    .ref-link-box {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: .75rem 1rem;
+    }
+    .ref-link-url {
+      flex: 1;
+      font-size: .9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* QR placeholder */
+    .qr-placeholder {
+      width: 120px;
+      height: 120px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      color: var(--text-muted);
+      font-size: .75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .qr-placeholder svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    /* Milestone progress bar */
+    .milestone-progress-bar {
+      height: 8px;
+      background: var(--bg-muted);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: .6rem 0;
+    }
+    .milestone-progress-fill {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 99px;
+      transition: width .4s ease;
+    }
+
+    /* Milestone steps list */
+    .milestone-steps {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      margin-top: .75rem;
+    }
+    .milestone-step {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .875rem;
+    }
+    .milestone-step-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .65rem;
+      font-weight: 700;
+    }
+    .milestone-step-dot.achieved {
+      background: #D1FAE5;
+      color: #059669;
+    }
+    .milestone-step-dot.in-progress {
+      background: var(--brand-solid-bg);
+      color: #7A5F00;
+      border: 2px solid var(--brand);
+    }
+    .milestone-step-dot.locked {
+      background: var(--bg-muted);
+      color: var(--text-muted);
+    }
+    .milestone-step-label {
+      flex: 1;
+      color: var(--text-secondary);
+    }
+    .milestone-step-label.achieved {
+      color: var(--text-primary);
+    }
+    .milestone-step-label.in-progress {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .milestone-step-reward {
+      font-size: .8125rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .milestone-step-reward.achieved {
+      color: #059669;
+    }
+
+    /* Mini referral table */
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .ref-table th {
+      text-align: left;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      padding: .5rem .75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ref-table td {
+      padding: .75rem .75rem;
+      font-size: .875rem;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+    .ref-table tr:last-child td {
+      border-bottom: none;
+    }
+    .ref-table tbody tr:hover td {
+      background: var(--bg-soft);
+    }
+
+    /* Avatar initials in table */
+    .ref-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--brand-light2);
+      color: #7A5F00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .6875rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .ref-avatar-cell {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+
+    /* Filter tabs */
+    .filter-tabs {
+      display: flex;
+      gap: .25rem;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: .2rem;
+    }
+    .filter-tab {
+      padding: .35rem .9rem;
+      font-size: .8125rem;
+      font-weight: 600;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+    .filter-tab.active {
+      background: var(--surface);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-sm);
+    }
+    .filter-tab:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    /* Payout history table */
+    .payout-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .75rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: .875rem;
+    }
+    .payout-row:last-child {
+      border-bottom: none;
+    }
+    .payout-date {
+      width: 110px;
+      flex-shrink: 0;
+      color: var(--text-secondary);
+    }
+    .payout-amount {
+      width: 70px;
+      flex-shrink: 0;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .payout-method {
+      flex: 1;
+      color: var(--text-secondary);
+    }
+
+    /* Milestone card (full view) */
+    .milestone-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      transition: box-shadow var(--transition), border-color var(--transition);
+      will-change: transform;
+    }
+    .milestone-card:hover {
+      box-shadow: var(--shadow);
+      border-color: var(--border);
+    }
+    .milestone-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .milestone-card-icon.achieved {
+      background: #D1FAE5;
+      color: #059669;
+    }
+    .milestone-card-icon.in-progress {
+      background: var(--brand-solid-bg);
+      color: #7A5F00;
+      border: 2px solid var(--brand);
+    }
+    .milestone-card-icon.locked {
+      background: var(--bg-muted);
+      color: var(--text-muted);
+    }
+    .milestone-card-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+    .milestone-card-body {
+      flex: 1;
+    }
+    .milestone-card-title {
+      font-size: .9375rem;
+      font-weight: 700;
+      margin-bottom: .25rem;
+    }
+    .milestone-card-desc {
+      font-size: .8125rem;
+      color: var(--text-secondary);
+    }
+    .milestone-card-reward {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+    .milestone-card-reward.achieved {
+      color: #059669;
+    }
+    .milestone-card-reward.locked {
+      color: var(--text-muted);
+    }
+
+    /* Phase 2 teaser card */
+    .phase2-card {
+      background: var(--bg-soft);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      opacity: .65;
+    }
+    .phase2-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius);
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-muted);
+    }
+    .phase2-card-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+    .phase2-badge {
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      background: var(--bg-muted);
+      color: var(--text-muted);
+      padding: .2rem .5rem;
+      border-radius: 99px;
+      margin-left: .5rem;
+    }
+
+    /* Lead form */
+    .lead-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.125rem;
+      max-width: 560px;
+    }
+    .lead-form label {
+      font-size: .875rem;
+      font-weight: 600;
+      display: block;
+      margin-bottom: .35rem;
+      color: var(--text-primary);
+    }
+    .lead-form input,
+    .lead-form textarea,
+    .lead-form select {
+      width: 100%;
+      padding: .7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .875rem;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--surface);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .lead-form input:focus,
+    .lead-form textarea:focus,
+    .lead-form select:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-light);
+    }
+    .lead-form textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+    .lead-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* Resource cards */
+    .resource-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      cursor: pointer;
+      transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
+      will-change: transform;
+    }
+    .resource-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--border);
+      transform: translateY(-2px);
+    }
+    .resource-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      background: var(--brand-solid-bg);
+      border: 1px solid rgba(255,212,0,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #7A5F00;
+    }
+    .resource-card-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+    .resource-card-title {
+      font-size: .9375rem;
+      font-weight: 700;
+      margin-bottom: .3rem;
+    }
+    .resource-card-desc {
+      font-size: .8125rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Settings form */
+    .settings-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      max-width: 580px;
+    }
+    .settings-form .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .settings-form label {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .settings-form input,
+    .settings-form select {
+      width: 100%;
+      padding: .7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: .875rem;
+      font-family: inherit;
+      color: var(--text-primary);
+      background: var(--surface);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .settings-form input:focus,
+    .settings-form select:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--brand-light);
+    }
+    .settings-form input[disabled] {
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+    .settings-form .span-2 {
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-root">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" role="navigation" aria-label="Referrer navigation">
+    <div class="sidebar-logo">
+      <a href="../index.html" style="color:var(--brand);text-decoration:none;">Yalla.House</a>
+      <span style="font-size:.65rem;font-weight:700;background:var(--brand);color:#000;padding:.15rem .45rem;border-radius:4px;margin-left:.4rem;letter-spacing:.04em;">REFERRER</span>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Overview</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('dashboard', this)" class="sidebar-link active">
+            <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+            <span data-i18n="dnav.dashboard">Dashboard</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('referrals', this)" class="sidebar-link">
+            <i data-lucide="users" class="sidebar-icon"></i>
+            <span data-i18n="ref.nav.referrals">My Referrals</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Earnings</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('payouts', this)" class="sidebar-link">
+            <i data-lucide="banknote" class="sidebar-icon"></i>
+            <span data-i18n="ref.nav.payouts">Payouts</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('milestones', this)" class="sidebar-link">
+            <i data-lucide="trophy" class="sidebar-icon"></i>
+            Milestones
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Tools</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('submit', this)" class="sidebar-link">
+            <i data-lucide="send" class="sidebar-icon"></i>
+            Submit Lead
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('resources', this)" class="sidebar-link">
+            <i data-lucide="book-open" class="sidebar-icon"></i>
+            Resources
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Account</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('settings', this)" class="sidebar-link">
+            <i data-lucide="settings" class="sidebar-icon"></i>
+            <span data-i18n="dnav.settings">Settings</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="user-avatar">AC</div>
+        <div class="user-info">
+          <div class="user-name">Alex C.</div>
+          <div class="user-role"><span data-i18n="ref.role">Referrer</span> — London</div>
+        </div>
+      </div>
+      <a href="../index.html" class="sidebar-signout">
+        <i data-lucide="log-out" class="sidebar-icon"></i>
+        Sign Out
+      </a>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="app-main">
+
+    <div class="app-topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <div class="lang-switcher">
+          <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+          <span class="lang-sep">|</span>
+          <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="showView('submit', document.querySelector('.sidebar-link[onclick*=\'submit\']'))">
+          <i data-lucide="send" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;margin-right:.35rem;"></i>
+          Submit Lead
+        </button>
+        <button class="btn btn-primary btn-sm" id="copy-link-btn" onclick="copyReferralLink()">
+          <i data-lucide="link" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;margin-right:.35rem;"></i>
+          Copy Link
+        </button>
+      </div>
+    </div>
+
+    <div class="app-content">
+      <div class="app-canvas">
+
+        <!-- ══ VIEW: DASHBOARD ══ -->
+        <div id="view-dashboard" class="view active">
+          <div class="view-header">
+            <h1 class="view-title">Good morning, Alex</h1>
+            <p class="view-subtitle">You have <strong>3 referrals pending</strong> and are 3 away from your next milestone bonus.</p>
+          </div>
+
+          <!-- Stats row -->
+          <div class="stats-row" style="margin-bottom:2rem;">
+            <div class="stat-card">
+              <div class="stat-card-label">Total Referred</div>
+              <div class="stat-card-value">12</div>
+              <div class="stat-card-sub">All time</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">This Month</div>
+              <div class="stat-card-value">3</div>
+              <div class="stat-card-sub">New sign-ups</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Pending Payouts</div>
+              <div class="stat-card-value">£75</div>
+              <div class="stat-card-sub">Next payout 1 Mar</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Total Earned</div>
+              <div class="stat-card-value">£340</div>
+              <div class="stat-card-sub">Since joining</div>
+            </div>
+          </div>
+
+          <!-- Referral link + QR -->
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Your Referral Link</div>
+            </div>
+            <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
+              <div style="flex:1;min-width:260px;">
+                <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:.75rem;">Share your unique link. You earn a bonus every time someone signs up and lists their property.</p>
+                <div class="ref-link-box">
+                  <span class="ref-link-url" id="ref-url">yalla.house/r/alexc</span>
+                  <button class="btn btn-primary btn-sm" onclick="copyReferralLink()">Copy Link</button>
+                </div>
+                <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem;">Referral code: <strong>ALEXC</strong></p>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:.6rem;">
+                <div class="qr-placeholder">
+                  <i data-lucide="qr-code"></i>
+                  QR Code
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('QR code downloaded', 'success')">Download QR</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Milestone progress -->
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Milestone Progress</div>
+              <button onclick="showView('milestones', document.querySelector('.sidebar-link[onclick*=\'milestones\']'))" class="btn btn-secondary btn-sm">View All</button>
+            </div>
+            <div style="margin-bottom:.25rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-size:.875rem;font-weight:600;">Next milestone: 15 referrals &rarr; £50 bonus</span>
+                <span style="font-size:.875rem;font-weight:700;color:var(--text-secondary);">12 / 15</span>
+              </div>
+              <div class="milestone-progress-bar">
+                <div class="milestone-progress-fill" style="width:80%;"></div>
+              </div>
+              <p style="font-size:.8rem;color:var(--text-secondary);">3 more referrals to unlock your next bonus</p>
+            </div>
+            <div class="milestone-steps">
+              <div class="milestone-step">
+                <div class="milestone-step-dot achieved">&#10003;</div>
+                <span class="milestone-step-label achieved">5 referrals</span>
+                <span class="milestone-step-reward achieved">£20 &#10003;</span>
+              </div>
+              <div class="milestone-step">
+                <div class="milestone-step-dot achieved">&#10003;</div>
+                <span class="milestone-step-label achieved">10 referrals</span>
+                <span class="milestone-step-reward achieved">£50 &#10003;</span>
+              </div>
+              <div class="milestone-step">
+                <div class="milestone-step-dot in-progress">&#9654;</div>
+                <span class="milestone-step-label in-progress">15 referrals — in progress</span>
+                <span class="milestone-step-reward" style="color:#7A5F00;">£50</span>
+              </div>
+              <div class="milestone-step">
+                <div class="milestone-step-dot locked">&#128274;</div>
+                <span class="milestone-step-label">25 referrals — locked</span>
+                <span class="milestone-step-reward locked">£100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent referrals mini-table -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Recent Referrals</div>
+              <button onclick="showView('referrals', document.querySelector('.sidebar-link[onclick*=\'referrals\']'))" class="btn btn-secondary btn-sm">View All</button>
+            </div>
+            <table class="ref-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Date Joined</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="ref-avatar-cell">
+                      <div class="ref-avatar">SH</div>
+                      Sarah H.
+                    </div>
+                  </td>
+                  <td style="color:var(--text-secondary);">12 Feb 2026</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="ref-avatar-cell">
+                      <div class="ref-avatar">TM</div>
+                      Tom M.
+                    </div>
+                  </td>
+                  <td style="color:var(--text-secondary);">3 Feb 2026</td>
+                  <td><span class="badge badge-yellow">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="ref-avatar-cell">
+                      <div class="ref-avatar">RP</div>
+                      Rania P.
+                    </div>
+                  </td>
+                  <td style="color:var(--text-secondary);">28 Jan 2026</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: MY REFERRALS ══ -->
+        <div id="view-referrals" class="view">
+          <div class="view-header">
+            <h1 class="view-title">My Referrals</h1>
+            <p class="view-subtitle">All 12 people you have referred to Yalla.House.</p>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">All Referrals (12)</div>
+              <div class="filter-tabs" id="referral-tabs">
+                <button class="filter-tab active" onclick="filterReferrals('all', this)">All</button>
+                <button class="filter-tab" onclick="filterReferrals('active', this)">Active</button>
+                <button class="filter-tab" onclick="filterReferrals('pending', this)">Pending</button>
+                <button class="filter-tab" onclick="filterReferrals('converted', this)">Converted</button>
+              </div>
+            </div>
+
+            <table class="ref-table" id="referrals-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Date Referred</th>
+                  <th>Status</th>
+                  <th>Payout</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-status="active">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">SH</div>Sarah H.</div></td>
+                  <td style="color:var(--text-secondary);">sarah.h***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">12 Feb 2026</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="pending">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">TM</div>Tom M.</div></td>
+                  <td style="color:var(--text-secondary);">t.morr***@outlook.com</td>
+                  <td style="color:var(--text-secondary);">3 Feb 2026</td>
+                  <td><span class="badge badge-yellow">Pending</span></td>
+                  <td><span class="badge" style="background:var(--bg-muted);color:var(--text-secondary);">Awaiting</span></td>
+                </tr>
+                <tr data-status="active">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">RP</div>Rania P.</div></td>
+                  <td style="color:var(--text-secondary);">rania.p***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">28 Jan 2026</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="converted">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">JK</div>James K.</div></td>
+                  <td style="color:var(--text-secondary);">j.k***@hotmail.com</td>
+                  <td style="color:var(--text-secondary);">15 Jan 2026</td>
+                  <td><span class="badge badge-blue">Converted</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="active">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">NA</div>Nadia A.</div></td>
+                  <td style="color:var(--text-secondary);">nadia.a***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">9 Jan 2026</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="pending">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">BW</div>Ben W.</div></td>
+                  <td style="color:var(--text-secondary);">ben.w***@icloud.com</td>
+                  <td style="color:var(--text-secondary);">2 Jan 2026</td>
+                  <td><span class="badge badge-yellow">Pending</span></td>
+                  <td><span class="badge" style="background:var(--bg-muted);color:var(--text-secondary);">Awaiting</span></td>
+                </tr>
+                <tr data-status="converted">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">LD</div>Laura D.</div></td>
+                  <td style="color:var(--text-secondary);">l.dav***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">18 Dec 2025</td>
+                  <td><span class="badge badge-blue">Converted</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="active">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">PO</div>Phil O.</div></td>
+                  <td style="color:var(--text-secondary);">phil.o***@yahoo.com</td>
+                  <td style="color:var(--text-secondary);">10 Dec 2025</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="pending">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">KF</div>Kate F.</div></td>
+                  <td style="color:var(--text-secondary);">k.f***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">1 Dec 2025</td>
+                  <td><span class="badge badge-yellow">Pending</span></td>
+                  <td><span class="badge" style="background:var(--bg-muted);color:var(--text-secondary);">Awaiting</span></td>
+                </tr>
+                <tr data-status="converted">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">MR</div>Maya R.</div></td>
+                  <td style="color:var(--text-secondary);">m.rosh***@outlook.com</td>
+                  <td style="color:var(--text-secondary);">20 Nov 2025</td>
+                  <td><span class="badge badge-blue">Converted</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="active">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">DG</div>Dan G.</div></td>
+                  <td style="color:var(--text-secondary);">d.g***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">5 Nov 2025</td>
+                  <td><span class="badge badge-green">Active</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+                <tr data-status="converted">
+                  <td><div class="ref-avatar-cell"><div class="ref-avatar">AY</div>Amir Y.</div></td>
+                  <td style="color:var(--text-secondary);">amir.y***@gmail.com</td>
+                  <td style="color:var(--text-secondary);">1 Oct 2025</td>
+                  <td><span class="badge badge-blue">Converted</span></td>
+                  <td><span class="badge badge-green">Paid £20</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: PAYOUTS ══ -->
+        <div id="view-payouts" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Payouts</h1>
+            <p class="view-subtitle">Track your earnings, pending payouts, and payout history.</p>
+          </div>
+
+          <!-- Summary cards -->
+          <div class="stats-row" style="margin-bottom:2rem;">
+            <div class="stat-card">
+              <div class="stat-card-label">Total Earned</div>
+              <div class="stat-card-value">£340</div>
+              <div class="stat-card-sub">Since joining</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Pending</div>
+              <div class="stat-card-value">£75</div>
+              <div class="stat-card-sub">Awaiting release</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Next Payout Date</div>
+              <div class="stat-card-value" style="font-size:1.25rem;">1 Mar</div>
+              <div class="stat-card-sub">Bank transfer</div>
+            </div>
+          </div>
+
+          <!-- Pending payouts -->
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Pending (£75)</div>
+              <span class="badge badge-yellow">Processing 1 Mar</span>
+            </div>
+            <div>
+              <div class="payout-row">
+                <div class="payout-date">Feb 2026</div>
+                <div class="payout-amount">£75</div>
+                <div class="payout-method">3 new referrals &times; £25 each</div>
+                <span class="badge badge-yellow">Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payout history -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Payout History</div>
+            </div>
+            <div>
+              <div class="payout-row">
+                <div class="payout-date">1 Feb 2026</div>
+                <div class="payout-amount">£50</div>
+                <div class="payout-method">Milestone bonus — 10 referrals &middot; Bank Transfer</div>
+                <span class="badge badge-green">Paid</span>
+              </div>
+              <div class="payout-row">
+                <div class="payout-date">1 Jan 2026</div>
+                <div class="payout-amount">£100</div>
+                <div class="payout-method">5 referrals &times; £20 each &middot; Bank Transfer</div>
+                <span class="badge badge-green">Paid</span>
+              </div>
+              <div class="payout-row">
+                <div class="payout-date">1 Dec 2025</div>
+                <div class="payout-amount">£80</div>
+                <div class="payout-method">4 referrals &times; £20 each &middot; Bank Transfer</div>
+                <span class="badge badge-green">Paid</span>
+              </div>
+              <div class="payout-row">
+                <div class="payout-date">1 Nov 2025</div>
+                <div class="payout-amount">£60</div>
+                <div class="payout-method">3 referrals &times; £20 each &middot; Bank Transfer</div>
+                <span class="badge badge-green">Paid</span>
+              </div>
+              <div class="payout-row">
+                <div class="payout-date">1 Oct 2025</div>
+                <div class="payout-amount">£50</div>
+                <div class="payout-method">Milestone bonus — 5 referrals &middot; Bank Transfer</div>
+                <span class="badge badge-green">Paid</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: MILESTONES ══ -->
+        <div id="view-milestones" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Milestones</h1>
+            <p class="view-subtitle">Reach referral milestones to unlock bonus payouts. You are currently at 12 referrals.</p>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:2rem;">
+
+            <div class="milestone-card">
+              <div class="milestone-card-icon achieved">
+                <i data-lucide="check-circle"></i>
+              </div>
+              <div class="milestone-card-body">
+                <div class="milestone-card-title">5 Referrals</div>
+                <div class="milestone-card-desc">Achieved on 1 Oct 2025 &middot; Paid out</div>
+              </div>
+              <div>
+                <div class="milestone-card-reward achieved">£20</div>
+                <span class="badge badge-green" style="font-size:.7rem;">Achieved</span>
+              </div>
+            </div>
+
+            <div class="milestone-card">
+              <div class="milestone-card-icon achieved">
+                <i data-lucide="check-circle"></i>
+              </div>
+              <div class="milestone-card-body">
+                <div class="milestone-card-title">10 Referrals</div>
+                <div class="milestone-card-desc">Achieved on 1 Feb 2026 &middot; Paid out</div>
+              </div>
+              <div>
+                <div class="milestone-card-reward achieved">£50</div>
+                <span class="badge badge-green" style="font-size:.7rem;">Achieved</span>
+              </div>
+            </div>
+
+            <div class="milestone-card" style="border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-light);">
+              <div class="milestone-card-icon in-progress">
+                <i data-lucide="target"></i>
+              </div>
+              <div class="milestone-card-body">
+                <div class="milestone-card-title">15 Referrals</div>
+                <div class="milestone-card-desc">In progress &middot; 12 / 15 &mdash; 3 more to go</div>
+                <div class="milestone-progress-bar" style="margin-top:.5rem;max-width:240px;">
+                  <div class="milestone-progress-fill" style="width:80%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="milestone-card-reward">£50</div>
+                <span class="badge badge-yellow" style="font-size:.7rem;">In Progress</span>
+              </div>
+            </div>
+
+            <div class="milestone-card" style="opacity:.6;">
+              <div class="milestone-card-icon locked">
+                <i data-lucide="lock"></i>
+              </div>
+              <div class="milestone-card-body">
+                <div class="milestone-card-title">25 Referrals</div>
+                <div class="milestone-card-desc">Locked &middot; Reach 25 total referrals to unlock</div>
+              </div>
+              <div>
+                <div class="milestone-card-reward locked">£100</div>
+                <span class="badge" style="background:var(--bg-muted);color:var(--text-muted);font-size:.7rem;">Locked</span>
+              </div>
+            </div>
+
+            <div class="milestone-card" style="opacity:.6;">
+              <div class="milestone-card-icon locked">
+                <i data-lucide="lock"></i>
+              </div>
+              <div class="milestone-card-body">
+                <div class="milestone-card-title">50 Referrals</div>
+                <div class="milestone-card-desc">Locked &middot; Reach 50 total referrals to unlock</div>
+              </div>
+              <div>
+                <div class="milestone-card-reward locked">£250</div>
+                <span class="badge" style="background:var(--bg-muted);color:var(--text-muted);font-size:.7rem;">Locked</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Phase 2 teaser -->
+          <div class="phase2-card">
+            <div class="phase2-card-icon">
+              <i data-lucide="layers"></i>
+            </div>
+            <div>
+              <div style="font-size:.9375rem;font-weight:700;display:flex;align-items:center;gap:.5rem;">
+                Tier System
+                <span class="phase2-badge">Phase 2</span>
+              </div>
+              <div style="font-size:.8125rem;color:var(--text-secondary);margin-top:.2rem;">
+                Platinum, Gold, and Silver tiers with higher per-referral rates and exclusive bonuses — coming soon.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: SUBMIT LEAD ══ -->
+        <div id="view-submit" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Submit a Lead</h1>
+            <p class="view-subtitle">Know someone who wants to sell or rent? Submit their details and we will follow up within 24 hours.</p>
+          </div>
+
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Lead Details</div>
+            </div>
+            <form class="lead-form" id="lead-form" onsubmit="return false;">
+              <div class="form-row">
+                <div>
+                  <label for="lead-name">Full Name <span style="color:#991B1B;">*</span></label>
+                  <input type="text" id="lead-name" placeholder="e.g. Jane Smith" autocomplete="off" />
+                </div>
+                <div>
+                  <label for="lead-phone">Phone Number <span style="color:#991B1B;">*</span></label>
+                  <input type="tel" id="lead-phone" placeholder="+44 7700 000000" />
+                </div>
+              </div>
+              <div>
+                <label for="lead-email">Email Address <span style="color:#991B1B;">*</span></label>
+                <input type="email" id="lead-email" placeholder="jane@example.com" />
+              </div>
+              <div>
+                <label for="lead-address">Property Address <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                <input type="text" id="lead-address" placeholder="e.g. 14 Elm Street, London N1 2AB" />
+              </div>
+              <div>
+                <label for="lead-notes">Notes <span style="color:var(--text-muted);font-weight:400;">(optional)</span></label>
+                <textarea id="lead-notes" placeholder="Any context about the lead — e.g. timeline, reason for selling, type of property…"></textarea>
+              </div>
+              <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+                <button type="button" class="btn btn-primary" onclick="submitLead()">Submit Lead</button>
+                <button type="reset" class="btn btn-secondary" onclick="showToast('Form cleared', 'info')">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Phase 2 teaser -->
+          <div class="phase2-card" style="margin-top:1.25rem;">
+            <div class="phase2-card-icon">
+              <i data-lucide="shield-alert"></i>
+            </div>
+            <div>
+              <div style="font-size:.9375rem;font-weight:700;display:flex;align-items:center;gap:.5rem;">
+                Fraud Signals
+                <span class="phase2-badge">Phase 2</span>
+              </div>
+              <div style="font-size:.8125rem;color:var(--text-secondary);margin-top:.2rem;">
+                Automatic duplicate detection and lead quality scoring to protect your commissions — coming soon.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: RESOURCES ══ -->
+        <div id="view-resources" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Resources</h1>
+            <p class="view-subtitle">Everything you need to refer confidently and grow your network.</p>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem;">
+
+            <div class="resource-card" onclick="showToast('Opening referral guide…', 'info')">
+              <div class="resource-card-icon">
+                <i data-lucide="info"></i>
+              </div>
+              <div>
+                <div class="resource-card-title">How Referrals Work</div>
+                <div class="resource-card-desc">Step-by-step guide explaining how your link works, when you get paid, and what counts as a qualifying referral.</div>
+              </div>
+            </div>
+
+            <div class="resource-card" onclick="showToast('Flyer downloaded', 'success')">
+              <div class="resource-card-icon">
+                <i data-lucide="file-text"></i>
+              </div>
+              <div>
+                <div class="resource-card-title">Download Flyer</div>
+                <div class="resource-card-desc">A printable A5 flyer you can hand out. Includes QR code and your personal referral link.</div>
+              </div>
+            </div>
+
+            <div class="resource-card" onclick="showToast('Opening WhatsApp share…', 'info')">
+              <div class="resource-card-icon">
+                <i data-lucide="message-circle"></i>
+              </div>
+              <div>
+                <div class="resource-card-title">Share on WhatsApp</div>
+                <div class="resource-card-desc">Send a pre-written WhatsApp message with your referral link to your contacts in one tap.</div>
+              </div>
+            </div>
+
+            <div class="resource-card" onclick="showToast('Copied to clipboard', 'success')">
+              <div class="resource-card-icon">
+                <i data-lucide="copy"></i>
+              </div>
+              <div>
+                <div class="resource-card-title">Copy Message Template</div>
+                <div class="resource-card-desc">A short, friendly message you can paste into text, email, or social media to introduce Yalla.House.</div>
+              </div>
+            </div>
+
+            <div class="resource-card" onclick="showToast('Opening FAQ…', 'info')">
+              <div class="resource-card-icon">
+                <i data-lucide="help-circle"></i>
+              </div>
+              <div>
+                <div class="resource-card-title">Referrer FAQ</div>
+                <div class="resource-card-desc">Answers to the most common questions about payments, eligibility, and the referral programme.</div>
+              </div>
+            </div>
+
+            <div class="resource-card" onclick="showToast('Opening email template…', 'info')">
+              <div class="resource-card-icon">
+                <i data-lucide="mail"></i>
+              </div>
+              <div>
+                <div class="resource-card-title">Email Template</div>
+                <div class="resource-card-desc">A polished email you can send to friends, colleagues, or landlords to introduce Yalla.House.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Phase 2 teasers -->
+          <div style="display:flex;flex-direction:column;gap:.75rem;">
+            <div class="phase2-card">
+              <div class="phase2-card-icon">
+                <i data-lucide="zap"></i>
+              </div>
+              <div>
+                <div style="font-size:.9375rem;font-weight:700;display:flex;align-items:center;gap:.5rem;">
+                  Payout Automation
+                  <span class="phase2-badge">Phase 2</span>
+                </div>
+                <div style="font-size:.8125rem;color:var(--text-secondary);margin-top:.2rem;">
+                  Instant payouts via Stripe Connect the moment a referral converts — no waiting for the monthly cycle.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ VIEW: SETTINGS ══ -->
+        <div id="view-settings" class="view">
+          <div class="view-header">
+            <h1 class="view-title">Settings</h1>
+            <p class="view-subtitle">Manage your profile, bank details, and payout preferences.</p>
+          </div>
+
+          <!-- Profile -->
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Profile</div>
+            </div>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" value="Alex" />
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" value="C." />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" value="alex.c@yalla.house" />
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" value="+44 7800 000000" />
+              </div>
+            </div>
+            <button class="btn btn-primary" style="margin-top:1.25rem;" onclick="showToast('Profile saved')">Save Changes</button>
+          </div>
+
+          <!-- Bank details -->
+          <div class="section-card" style="margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Bank Details</div>
+              <span class="badge badge-yellow">Verified</span>
+            </div>
+            <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1rem;">Your payout is sent by bank transfer on the 1st of each month. Update your details below if they change.</p>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>Sort Code</label>
+                <input type="text" value="**-**-**" disabled />
+              </div>
+              <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" value="****4712" disabled />
+              </div>
+              <div class="form-group span-2">
+                <label>Account Holder Name</label>
+                <input type="text" value="Alex C." />
+              </div>
+            </div>
+            <div style="display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap;">
+              <button class="btn btn-primary" onclick="showToast('Bank details updated — verification required', 'info')">Update Bank Details</button>
+              <button class="btn btn-secondary" onclick="showToast('Support team contacted', 'info')">Contact Support</button>
+            </div>
+          </div>
+
+          <!-- Payment method -->
+          <div class="section-card">
+            <div class="section-card-header">
+              <div class="section-card-title">Payment Method</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.5rem;max-width:400px;">
+              <label style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:var(--brand-light);border:1px solid var(--brand);border-radius:var(--radius);cursor:pointer;font-size:.875rem;font-weight:600;">
+                <input type="radio" name="pay-method" checked style="accent-color:var(--brand);width:15px;height:15px;" />
+                Bank Transfer
+                <span class="badge badge-green" style="margin-left:auto;">Selected</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:.875rem;color:var(--text-muted);opacity:.5;" onclick="showToast('PayPal payouts coming soon', 'info')">
+                <input type="radio" name="pay-method" disabled style="width:15px;height:15px;" />
+                PayPal
+                <span class="phase2-badge" style="margin-left:auto;">Soon</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:.875rem;color:var(--text-muted);opacity:.5;" onclick="showToast('Instant payouts coming in Phase 2', 'info')">
+                <input type="radio" name="pay-method" disabled style="width:15px;height:15px;" />
+                Instant Payout (Stripe)
+                <span class="phase2-badge" style="margin-left:auto;">Phase 2</span>
+              </label>
+            </div>
+            <button class="btn btn-primary" style="margin-top:1.25rem;" onclick="showToast('Payment preferences saved')">Save Preferences</button>
+          </div>
+        </div>
+
+      </div><!-- /app-canvas -->
+    </div><!-- /app-content -->
+  </div><!-- /app-main -->
+
+</div><!-- /app-root -->
+
+<script>
+'use strict';
+
+/* ── Navigation ── */
+function showView(viewId, triggerEl) {
+  var views = document.querySelectorAll('.view');
+  for (var i = 0; i < views.length; i++) {
+    views[i].classList.remove('active');
+  }
+  var target = document.getElementById('view-' + viewId);
+  if (target) target.classList.add('active');
+
+  var links = document.querySelectorAll('.sidebar-link');
+  for (var j = 0; j < links.length; j++) {
+    links[j].classList.remove('active');
+  }
+  if (triggerEl) triggerEl.classList.add('active');
+
+  var titles = {
+    'dashboard':  'Dashboard',
+    'referrals':  'My Referrals',
+    'payouts':    'Payouts',
+    'milestones': 'Milestones',
+    'submit':     'Submit Lead',
+    'resources':  'Resources',
+    'settings':   'Settings'
+  };
+  var titleEl = document.getElementById('topbar-title');
+  if (titleEl && titles[viewId]) titleEl.textContent = titles[viewId];
+
+  var canvas = document.querySelector('.app-canvas');
+  if (canvas) canvas.scrollTop = 0;
+
+  history.replaceState(null, '', '#' + viewId);
+}
+
+/* ── Toast ── */
+function showToast(msg, type) {
+  type = type || 'success';
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      t.classList.add('show');
+    });
+  });
+  setTimeout(function () {
+    t.classList.remove('show');
+    setTimeout(function () { t.remove(); }, 350);
+  }, 2600);
+}
+
+/* ── Copy referral link ── */
+function copyReferralLink() {
+  var url = document.getElementById('ref-url');
+  var text = url ? url.textContent : 'yalla.house/r/alexc';
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function () {
+      showToast('Referral link copied to clipboard');
+    });
+  } else {
+    showToast('Referral link copied to clipboard');
+  }
+}
+
+/* ── Submit lead ── */
+function submitLead() {
+  var name = document.getElementById('lead-name');
+  var phone = document.getElementById('lead-phone');
+  var email = document.getElementById('lead-email');
+  if (!name || !name.value.trim()) {
+    showToast('Please enter the lead\'s name', 'error');
+    return;
+  }
+  if (!phone || !phone.value.trim()) {
+    showToast('Please enter a phone number', 'error');
+    return;
+  }
+  if (!email || !email.value.trim()) {
+    showToast('Please enter an email address', 'error');
+    return;
+  }
+  showToast('Lead submitted — we\'ll follow up within 24h');
+  var form = document.getElementById('lead-form');
+  if (form) form.reset();
+}
+
+/* ── Referral filter tabs ── */
+function filterReferrals(status, triggerEl) {
+  var tabs = document.querySelectorAll('#referral-tabs .filter-tab');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].classList.remove('active');
+  }
+  if (triggerEl) triggerEl.classList.add('active');
+
+  var rows = document.querySelectorAll('#referrals-table tbody tr');
+  for (var j = 0; j < rows.length; j++) {
+    var row = rows[j];
+    if (status === 'all') {
+      row.style.display = '';
+    } else {
+      if (row.getAttribute('data-status') === status) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    }
+  }
+}
+
+/* ── DOMContentLoaded ── */
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  /* Hash-based navigation */
+  var hash = window.location.hash.replace('#', '');
+  var valid = ['dashboard', 'referrals', 'payouts', 'milestones', 'submit', 'resources', 'settings'];
+  var start = 'dashboard';
+  for (var i = 0; i < valid.length; i++) {
+    if (valid[i] === hash) { start = hash; break; }
+  }
+  var triggerEl = document.querySelector('.sidebar-link[onclick*="\'' + start + '\'"]');
+  showView(start, triggerEl);
+
+  /* Event delegation for remaining buttons */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('button, a.btn');
+    if (!btn) return;
+    var txt = btn.textContent.trim().replace(/\s+/g, ' ');
+
+    if (txt === 'View Earnings') {
+      showView('payouts', document.querySelector('.sidebar-link[onclick*="payouts"]'));
+    }
+  });
+});
+</script>
+<script src="../lang.js"></script>
+</body>
+</html>

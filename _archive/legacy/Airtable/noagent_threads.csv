@@ -1,0 +1,4 @@
+thread_id,property_id,buyer_id,source,channel,subject,starred,unread,tags,updated_at
+t1,prop_001,buyer_amira,Rightmove,Email,Viewing request for Saturday,True,True,"hot,chain-free",2025-11-04T09:31:11.952299
+t2,prop_001,buyer_leo,Zoopla,SMS,Question about lease length,False,False,question,2025-11-02T09:31:11.952299
+t3,prop_001,buyer_jade,Direct,WhatsApp,Cash buyer — can we view today?,False,False,"cash,priority",2025-11-01T09:31:11.952299

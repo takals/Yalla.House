@@ -1,0 +1,2618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Hunter — Yalla.House</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+  <style>
+    .property-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .property-card:hover {
+      border-color: var(--border-dark);
+      box-shadow: var(--shadow);
+    }
+
+    .property-card-photo {
+      height: 160px;
+      background: linear-gradient(135deg, #FFD400 0%, #FFE566 60%, #FFF8CC 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+    }
+
+    .property-card-photo.photo-blue {
+      background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+    }
+
+    .property-card-photo.photo-green {
+      background: linear-gradient(135deg, #DCFCE7, #BBF7D0);
+    }
+
+    .property-card-heart {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
+
+    .property-card-heart svg {
+      width: 14px;
+      height: 14px;
+      stroke: #ef4444;
+      fill: #ef4444;
+    }
+
+    .property-card-body {
+      padding: 1rem;
+    }
+
+    .property-card-price {
+      font-size: 1.125rem;
+      font-weight: 800;
+      letter-spacing: -.025em;
+      margin-bottom: .25rem;
+    }
+
+    .property-card-addr {
+      font-size: .8125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: .25rem;
+    }
+
+    .property-card-meta {
+      font-size: .775rem;
+      color: var(--text-secondary);
+    }
+
+    .property-card-footer {
+      padding: .75rem 1rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+    }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .875rem 0;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: .4rem .875rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: .8125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--surface);
+      cursor: pointer;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .filter-select:focus {
+      border-color: var(--brand);
+    }
+
+    .inbox-split {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      height: calc(100vh - 60px - 2rem);
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .inbox-list {
+      border-right: 1px solid var(--border-light);
+      overflow-y: auto;
+    }
+
+    .inbox-item {
+      padding: .875rem 1rem;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .inbox-item:hover {
+      background: var(--bg-soft);
+    }
+
+    .inbox-item.active {
+      background: var(--brand-light);
+      border-left: 3px solid var(--brand);
+    }
+
+    .inbox-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .25rem;
+    }
+
+    .inbox-item-name {
+      font-size: .875rem;
+      font-weight: 700;
+    }
+
+    .inbox-item-time {
+      font-size: .7rem;
+      color: var(--text-muted);
+    }
+
+    .inbox-item-preview {
+      font-size: .8rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .inbox-thread {
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+
+    .inbox-thread-header {
+      padding-bottom: .875rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .thread-msg {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+
+    .thread-msg.outgoing {
+      flex-direction: row-reverse;
+    }
+
+    .thread-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #000;
+      font-size: .625rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .thread-avatar.seller {
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+    }
+
+    .thread-bubble {
+      max-width: 65%;
+      padding: .7rem .9rem;
+      border-radius: var(--radius);
+      font-size: .875rem;
+      line-height: 1.55;
+    }
+
+    .thread-bubble.incoming {
+      background: var(--bg-soft);
+      border: 1px solid var(--border-light);
+      color: var(--text-primary);
+    }
+
+    .thread-bubble.outgoing {
+      background: var(--brand);
+      color: #000;
+    }
+
+    .thread-time {
+      font-size: .7rem;
+      color: var(--text-muted);
+      margin-top: .25rem;
+      text-align: right;
+    }
+
+    .thread-time.incoming {
+      text-align: left;
+    }
+
+    .inbox-composer {
+      padding: .875rem 1.25rem;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      gap: .75rem;
+      align-items: flex-end;
+    }
+
+    .inbox-composer textarea {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: .6rem .875rem;
+      font-size: .875rem;
+      resize: none;
+      min-height: 60px;
+      outline: none;
+      background: var(--bg);
+      transition: border-color var(--transition);
+    }
+
+    .inbox-composer textarea:focus {
+      border-color: var(--brand);
+    }
+
+    .kanban-col {
+      background: var(--bg-soft);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      min-height: 200px;
+    }
+
+    .kanban-col-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .875rem;
+    }
+
+    .kanban-col-title {
+      font-size: .8125rem;
+      font-weight: 700;
+    }
+
+    .kanban-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: .875rem;
+      margin-bottom: .65rem;
+      transition: box-shadow var(--transition);
+    }
+
+    .kanban-card:hover {
+      box-shadow: var(--shadow);
+    }
+
+    .offer-progress {
+      height: 6px;
+      background: var(--bg-muted);
+      border-radius: 99px;
+      overflow: hidden;
+      margin: .5rem 0;
+    }
+
+    .offer-progress-fill {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 99px;
+    }
+
+    /* ── Home Passport ── */
+    .tag-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: .8125rem;
+      font-weight: 600;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition), color var(--transition);
+      will-change: transform;
+    }
+
+    .tag:hover {
+      border-color: var(--brand);
+      color: var(--text-primary);
+    }
+
+    .tag.tag--active {
+      background: var(--brand-solid-bg);
+      border-color: var(--brand);
+      color: var(--text-primary);
+    }
+
+    .brief-preview {
+      background: var(--bg-soft);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      font-size: .875rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+
+    .brief-preview strong {
+      color: var(--text-primary);
+    }
+
+    .brief-section {
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 24px;
+    }
+
+    .brief-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .brief-section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .brief-intent-toggle {
+      display: inline-flex;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .brief-intent-toggle button {
+      padding: 5px 18px;
+      font-size: .8125rem;
+      font-weight: 700;
+      border: none;
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .brief-intent-toggle button.active {
+      background: var(--brand);
+      color: #000;
+    }
+
+    /* ── Agent Inbox + Match Feed ── */
+    .alias-card {
+      background: var(--bg-soft);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .alias-address {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -.015em;
+      color: var(--text-primary);
+    }
+
+    .source-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .875rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+    }
+
+    .source-row + .source-row { margin-top: .5rem; }
+
+    .feed-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--border-light);
+      margin-bottom: 1.25rem;
+    }
+
+    .feed-tab {
+      padding: .6rem 1.25rem;
+      font-size: .875rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color var(--transition);
+    }
+
+    .feed-tab.active { color: var(--text-primary); border-bottom-color: var(--brand); }
+    .feed-tab:hover { color: var(--text-primary); }
+
+    .match-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      will-change: transform;
+    }
+
+    .match-card:hover { border-color: var(--border-dark); box-shadow: var(--shadow); }
+    .match-card + .match-card { margin-top: .75rem; }
+
+    .match-score {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: .6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    .match-score.high { background: #DCFCE7; color: #166534; border: 2px solid #BBF7D0; }
+    .match-score.mid  { background: var(--brand-solid-bg); color: #7A5F00; border: 2px solid var(--brand); }
+    .match-score.low  { background: var(--bg-muted); color: var(--text-secondary); border: 2px solid var(--border); }
+    .match-score-pct  { font-size: 1rem; font-weight: 900; line-height: 1; }
+
+    .criteria-row { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .5rem; }
+
+    .criteria-chip {
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: .7rem;
+      font-weight: 700;
+    }
+
+    .criteria-chip.pass { background: #DCFCE7; color: #166534; }
+    .criteria-chip.fail { background: #FEE2E2; color: #991B1B; }
+
+    /* ── Agent Manager ── */
+    .agent-search-bar {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 1.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.5rem;
+    }
+
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      will-change: transform;
+    }
+
+    .agent-card:hover {
+      border-color: var(--border-dark);
+      box-shadow: var(--shadow);
+    }
+
+    .agent-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius);
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .agent-meta {
+      font-size: .775rem;
+      color: var(--text-secondary);
+      margin-top: .2rem;
+    }
+
+    /* ── Brief redesign ── */
+    .brief-hero-pill {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--brand-solid-bg); color: #7A5F00; border: 1px solid var(--brand);
+      border-radius: 100px; padding: .25rem .875rem;
+      font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 1rem;
+    }
+    .brief-benefits { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem .75rem; margin-top: 1rem; }
+    .brief-benefit { display: flex; align-items: flex-start; gap: .4rem; font-size: .8125rem; }
+    .brief-benefit-check { color: #166534; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+    .brief-how-row {
+      background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .brief-how-step { display: flex; gap: .75rem; flex: 1; min-width: 180px; }
+    .brief-step-circle {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; font-weight: 900; flex-shrink: 0;
+    }
+    .brief-2col { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .brief-form-col { flex: 1; min-width: 0; }
+    .brief-preview-col { width: 260px; flex-shrink: 0; position: sticky; top: 72px; }
+    .brief-panel {
+      background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .brief-panel-label {
+      font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+      color: var(--text-muted); margin-bottom: .875rem;
+    }
+    .brief-preview-row { display: flex; gap: .5rem; margin-bottom: .35rem; font-size: .8rem; }
+    .brief-preview-key { color: var(--text-muted); width: 70px; flex-shrink: 0; }
+    .brief-preview-val { font-weight: 700; }
+    .brief-shared-with { margin-top: .875rem; padding-top: .875rem; border-top: 1px solid var(--border-light); }
+    .brief-shared-item { font-size: .775rem; color: var(--text-secondary); margin-bottom: .25rem; }
+    .brief-shared-check { color: #166534; margin-right: .3rem; }
+    .brief-automation-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .6rem; font-size: .8rem; }
+    .brief-sample-listing { margin-bottom: .625rem; font-size: .8rem; }
+    .brief-sample-price { font-weight: 800; }
+    .brief-sample-spec { color: var(--text-muted); font-size: .75rem; margin-top: .1rem; }
+
+    /* Passport Card */
+    .passport-card {
+      background: linear-gradient(135deg, #0F1117 0%, #1C1F2E 100%);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: .75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .passport-card::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255,212,0,.08);
+    }
+    .passport-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .passport-card-wordmark {
+      font-size: .625rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--brand);
+    }
+    .passport-verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #4ADE80;
+      background: rgba(74,222,128,.12);
+      border: 1px solid rgba(74,222,128,.25);
+      border-radius: 100px;
+      padding: 2px 8px;
+    }
+    .passport-unverified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: rgba(255,255,255,.4);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 100px;
+      padding: 2px 8px;
+    }
+    .passport-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: .75rem;
+      letter-spacing: -.015em;
+    }
+    .passport-row {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: .45rem;
+      font-size: .75rem;
+      align-items: baseline;
+    }
+    .passport-row-key {
+      color: rgba(255,255,255,.38);
+      width: 55px;
+      flex-shrink: 0;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .passport-row-val {
+      color: rgba(255,255,255,.87);
+      font-weight: 700;
+    }
+    .passport-finance-chip {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: .65rem;
+      font-weight: 700;
+    }
+    .passport-finance-chip.cash { background: rgba(255,212,0,.2); color: var(--brand); }
+    .passport-finance-chip.approved { background: rgba(74,222,128,.15); color: #4ADE80; }
+    .passport-finance-chip.pending { background: rgba(251,191,36,.15); color: #FBBF24; }
+    .passport-finance-chip.none { background: rgba(255,255,255,.07); color: rgba(255,255,255,.38); }
+    .passport-sharing-note {
+      font-size: .75rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: .625rem;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      margin-bottom: .75rem;
+    }
+
+    @media (max-width: 700px) {
+      .brief-2col { flex-direction: column; }
+      .brief-preview-col { width: 100%; position: static; }
+      .brief-benefits { grid-template-columns: 1fr; }
+    }
+
+    /* ── Privacy Controls ── */
+    .privacy-row {
+      display: flex; align-items: center; gap: 1rem; padding: .875rem 1rem;
+      background: var(--surface); border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+    }
+    .privacy-row + .privacy-row { margin-top: .5rem; }
+
+    .privacy-toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; padding: .875rem 0; border-bottom: 1px solid var(--border-light);
+      margin-bottom: .875rem;
+    }
+
+    .toggle-switch {
+      position: relative; width: 40px; height: 22px; flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0; background: var(--bg-muted);
+      border-radius: 100px; cursor: pointer;
+      transition: background var(--transition);
+    }
+    .toggle-track::before {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      left: 3px; top: 3px; background: white; border-radius: 50%;
+      transition: transform var(--transition);
+    }
+    .toggle-switch input:checked + .toggle-track { background: var(--brand); }
+    .toggle-switch input:checked + .toggle-track::before { transform: translateX(18px); }
+
+    .consent-event {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6rem 0; border-bottom: 1px solid var(--border-light);
+      font-size: .8125rem;
+    }
+    .consent-event:last-child { border-bottom: none; }
+    .consent-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .consent-dot.share { background: #166534; }
+    .consent-dot.disconnect { background: var(--text-muted); }
+    .consent-dot.delete { background: #991B1B; }
+
+    .danger-zone {
+      background: #FEF2F2; border: 1px solid #FECACA;
+      border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-root">
+
+    <!-- ══════════════════════════════════════════════
+       SIDEBAR — Home Hunter
+  ══════════════════════════════════════════════ -->
+    <aside class="sidebar" role="navigation" aria-label="Home Hunter navigation">
+      <div class="sidebar-logo">
+        <a href="../index.html" style="color:var(--brand);text-decoration:none;">Yalla.House</a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">My Space</div>
+        <ul class="sidebar-nav">
+          <li>
+            <button class="sidebar-link active" onclick="showView('dashboard', this)">
+              <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+              <span data-i18n="dnav.dashboard">Dashboard</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('passport', this)">
+              <i data-lucide="shield-check" class="sidebar-icon"></i>
+              Home Passport
+              <span style="background:var(--brand);color:#000;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:auto;line-height:1.4;">New</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('agents', this)">
+              <i data-lucide="users" class="sidebar-icon"></i>
+              Agent Manager
+              <span class="sidebar-badge">3</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('search', this)">
+              <i data-lucide="search" class="sidebar-icon"></i>
+              <span data-i18n="buyer.nav.search">Search Properties</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('saved', this)">
+              <i data-lucide="heart" class="sidebar-icon"></i>
+              <span data-i18n="buyer.nav.saved">Saved Homes</span>
+              <span class="sidebar-badge">4</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('offers', this)">
+              <i data-lucide="file-text" class="sidebar-icon"></i>
+              <span data-i18n="buyer.nav.offers">Offers &amp; Applications</span>
+              <span class="sidebar-badge">2</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('surveys', this)">
+              <i data-lucide="clipboard" class="sidebar-icon"></i>
+              Surveys Marketplace
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Communication</div>
+        <ul class="sidebar-nav">
+          <li>
+            <button class="sidebar-link" onclick="showView('inbox', this)">
+              <i data-lucide="inbox" class="sidebar-icon"></i>
+              <span data-i18n="dnav.inbox">Inbox</span>
+              <span class="sidebar-badge">3</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('agentinbox', this)">
+              <i data-lucide="mail-open" class="sidebar-icon"></i>
+              Agent Inbox
+              <span class="sidebar-badge" style="background:var(--brand);color:#000;">7</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" onclick="showView('booking', this)">
+              <i data-lucide="calendar-check" class="sidebar-icon"></i>
+              <span data-i18n="buyer.nav.viewings">Book a Viewing</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Account</div>
+        <ul class="sidebar-nav">
+          <li>
+            <button class="sidebar-link" onclick="showView('settings', this)">
+              <i data-lucide="settings" class="sidebar-icon"></i>
+              <span data-i18n="dnav.settings">Settings</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-spacer"></div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">SB</div>
+          <div class="sidebar-user-info">
+            <div class="user-name">Sarah Bell</div>
+            <div class="user-role"><span data-i18n="buyer.role">Home Hunter</span></div>
+          </div>
+        </div>
+        <div style="margin-top:.5rem;">
+          <a href="../index.html" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;gap:.4rem;">
+            <i data-lucide="log-out" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;"></i>
+            Sign Out
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════════════════════════════════════════════
+       MAIN AREA
+  ══════════════════════════════════════════════ -->
+    <div class="app-main">
+      <div class="app-topbar">
+        <div class="topbar-title" id="topbar-title">My Dashboard</div>
+        <div class="topbar-actions">
+          <div class="lang-switcher">
+            <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+            <span class="lang-sep">|</span>
+            <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+          </div>
+          <div class="search-input">
+            <i data-lucide="search"
+              style="width:14px;height:14px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0;"></i>
+            <input type="text" placeholder="Search properties..." aria-label="Search" />
+          </div>
+          <button class="btn btn-primary btn-sm"
+            onclick="showView('search', document.querySelector('[onclick*=search]'))">
+            Find Properties
+          </button>
+        </div>
+      </div>
+
+      <div class="app-content">
+        <div class="app-canvas">
+
+          <!-- ════════════════════════════
+             VIEW: DASHBOARD
+        ════════════════════════════ -->
+          <div id="view-dashboard" class="view active">
+            <div class="stats-row">
+              <div class="stat-card">
+                <div class="stat-card-label">Saved Homes</div>
+                <div class="stat-card-value">4</div>
+                <div class="stat-card-sub">2 with price changes</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Viewings Booked</div>
+                <div class="stat-card-value">3</div>
+                <div class="stat-card-sub">Next: Sat 25 Feb</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Offers Submitted</div>
+                <div class="stat-card-value accent">2</div>
+                <div class="stat-card-sub">1 under review</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">Unread Messages</div>
+                <div class="stat-card-value">3</div>
+                <div class="stat-card-trend trend-up">↑ 2 new today</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card-label">New Matches</div>
+                <div class="stat-card-value accent">7</div>
+                <div class="stat-card-sub">From 3 agent feeds</div>
+              </div>
+            </div>
+
+            <div class="section-card" style="margin-bottom:1.5rem;">
+              <div class="section-card-header">
+                <div style="display:flex;align-items:center;gap:.75rem;">
+                  <div style="width:36px;height:36px;border-radius:var(--radius);background:var(--brand-solid-bg);border:1px solid rgba(255,212,0,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="target" style="width:16px;height:16px;stroke:var(--text-primary);fill:none;stroke-width:2;"></i>
+                  </div>
+                  <div>
+                    <div class="section-card-title">Home Passport</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);margin-top:.1rem;">East London, North London · 2 beds · ≤ £525k · Mortgage in principle · 3–6 months</div>
+                  <div style="font-size:.775rem;color:var(--text-muted);margin-top:.35rem;">3 agents with access · <button onclick="showView('agents', document.querySelector('.sidebar-link[onclick*=\'agents\']'))" style="background:none;border:none;font-size:.775rem;font-weight:700;color:var(--text-primary);cursor:pointer;padding:0;text-decoration:underline;">Manage agents →</button></div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem;">
+                  <span class="badge badge-green">Complete</span>
+                  <button onclick="showView('brief', document.querySelector('.sidebar-link[onclick*=\'brief\']'))" class="btn btn-secondary btn-sm">Edit Brief →</button>
+                </div>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;">
+                <span style="padding:3px 10px;background:var(--bg-soft);border:1px solid var(--border);border-radius:100px;font-size:.775rem;font-weight:600;color:var(--text-secondary);">Balcony</span>
+                <span style="padding:3px 10px;background:var(--bg-soft);border:1px solid var(--border);border-radius:100px;font-size:.775rem;font-weight:600;color:var(--text-secondary);">Near station</span>
+                <span style="padding:3px 10px;background:var(--bg-soft);border:1px solid var(--border);border-radius:100px;font-size:.775rem;font-weight:600;color:var(--text-secondary);">Garden</span>
+                <span style="padding:3px 10px;background:#FEE2E2;border:1px solid #FECACA;border-radius:100px;font-size:.775rem;font-weight:600;color:#991B1B;">No auctions</span>
+                <span style="padding:3px 10px;background:#FEE2E2;border:1px solid #FECACA;border-radius:100px;font-size:.775rem;font-weight:600;color:#991B1B;">No retirement homes</span>
+              </div>
+            </div>
+
+            <!-- Upcoming Viewings -->
+            <div style="margin-bottom:1.5rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                <h3 style="font-size:1rem;font-weight:700;">Upcoming Viewings</h3>
+                <button class="btn btn-ghost btn-sm"
+                  onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Manage</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.65rem;">
+                <div
+                  style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                  <div
+                    style="width:42px;height:42px;border-radius:var(--radius);background:var(--brand-solid-bg);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span
+                      style="font-size:.6rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">SAT</span>
+                    <span style="font-size:1rem;font-weight:800;line-height:1;">25</span>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="font-size:.9rem;font-weight:700;">14 Maple Street, London E3</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">10:00 · 3 bed · £385,000</div>
+                  </div>
+                  <span class="badge badge-green">Confirmed</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+                  <div
+                    style="width:42px;height:42px;border-radius:var(--radius);background:var(--bg-muted);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span
+                      style="font-size:.6rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">SUN</span>
+                    <span style="font-size:1rem;font-weight:800;line-height:1;">26</span>
+                  </div>
+                  <div style="flex:1;">
+                    <div style="font-size:.9rem;font-weight:700;">7 Oak Close, Manchester M14</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">14:30 · 2 bed · £225,000</div>
+                  </div>
+                  <span class="badge badge-yellow">Pending</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div>
+              <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Recent Activity</h3>
+              <div style="display:flex;flex-direction:column;gap:.5rem;">
+                <div
+                  style="display:flex;align-items:center;gap:.875rem;padding:.75rem;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);">
+                  <div
+                    style="width:32px;height:32px;border-radius:50%;background:#DBEAFE;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="message-circle"
+                      style="width:14px;height:14px;stroke:#1E40AF;fill:none;stroke-width:2;"></i></div>
+                  <div style="flex:1;">
+                    <div style="font-size:.875rem;font-weight:600;">Owner replied to your enquiry</div>
+                    <div style="font-size:.775rem;color:var(--text-muted);">14 Maple Street · 1 hour ago</div>
+                  </div>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:.875rem;padding:.75rem;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);">
+                  <div
+                    style="width:32px;height:32px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="check-circle"
+                      style="width:14px;height:14px;stroke:#166534;fill:none;stroke-width:2;"></i></div>
+                  <div style="flex:1;">
+                    <div style="font-size:.875rem;font-weight:600;">Viewing confirmed for Sat 25 Feb</div>
+                    <div style="font-size:.775rem;color:var(--text-muted);">14 Maple Street · Yesterday</div>
+                  </div>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:.875rem;padding:.75rem;background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius);">
+                  <div
+                    style="width:32px;height:32px;border-radius:50%;background:var(--brand-solid-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i data-lucide="trending-down"
+                      style="width:14px;height:14px;stroke:#7A5F00;fill:none;stroke-width:2;"></i></div>
+                  <div style="flex:1;">
+                    <div style="font-size:.875rem;font-weight:600;">Price reduced: 7 Oak Close — now £225,000</div>
+                    <div style="font-size:.775rem;color:var(--text-muted);">Saved property · 2 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: AGENT MANAGER
+        ════════════════════════════ -->
+          <div id="view-agents" class="view">
+
+            <!-- Header -->
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+              <div>
+                <h2 style="font-size:1.25rem;font-weight:800;">Agent Manager</h2>
+                <p style="font-size:.875rem;color:var(--text-secondary);">Find local agents, share your brief, track who's active.</p>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;">
+                <span style="padding:4px 12px;background:var(--bg-soft);border:1px solid var(--border);border-radius:100px;font-size:.775rem;font-weight:700;color:var(--text-secondary);">3 Connected</span>
+                <span style="padding:4px 12px;background:#DCFCE7;border:1px solid #BBF7D0;border-radius:100px;font-size:.775rem;font-weight:700;color:#166534;">1 Active</span>
+                <span style="padding:4px 12px;background:var(--brand-solid-bg);border:1px solid var(--brand);border-radius:100px;font-size:.775rem;font-weight:700;color:#7A5F00;">1 Invited</span>
+                <span style="padding:4px 12px;background:var(--bg-muted);border:1px solid var(--border);border-radius:100px;font-size:.775rem;font-weight:700;color:var(--text-secondary);">1 Ignored</span>
+              </div>
+            </div>
+
+            <!-- Search panel -->
+            <div class="agent-search-bar">
+              <div style="font-size:.8125rem;font-weight:600;color:var(--text-secondary);white-space:nowrap;">Find agents in your target area</div>
+              <input type="text" placeholder="Enter postcode, e.g. E1, N1, SE15" style="flex:1;min-width:180px;padding:.45rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.875rem;outline:none;background:var(--bg);transition:border-color var(--transition);" onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border)'" />
+              <select class="filter-select">
+                <option>Within 1 mile</option>
+                <option selected>Within 3 miles</option>
+                <option>Within 5 miles</option>
+              </select>
+              <button class="btn btn-primary btn-sm">Find Agents</button>
+            </div>
+
+            <!-- Nearby agents (search results) -->
+            <div style="margin-bottom:2rem;">
+              <div class="brief-section-label" style="margin-bottom:12px;">Nearby Agents</div>
+              <div style="display:flex;flex-direction:column;gap:.75rem;">
+
+                <div class="agent-card">
+                  <div class="agent-avatar">PH</div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                      <div>
+                        <div style="font-size:.9375rem;font-weight:700;">Premier Homes</div>
+                        <div class="agent-meta">Bethnal Green branch · East London, E1–E3 · 020 7123 4567</div>
+                      </div>
+                      <span class="badge badge-gray">Not connected</span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;margin-top:.875rem;">
+                      <button class="btn btn-primary btn-sm">Add to My List</button>
+                      <button class="btn btn-ghost btn-sm">View Profile</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="agent-card">
+                  <div class="agent-avatar">LP</div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                      <div>
+                        <div style="font-size:.9375rem;font-weight:700;">Lonsdale &amp; Partners</div>
+                        <div class="agent-meta">Hackney branch · Hackney, E8–E9 · 020 7234 5678</div>
+                      </div>
+                      <span class="badge badge-gray">Not connected</span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;margin-top:.875rem;">
+                      <button class="btn btn-primary btn-sm">Add to My List</button>
+                      <button class="btn btn-ghost btn-sm">View Profile</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="agent-card">
+                  <div class="agent-avatar">UN</div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                      <div>
+                        <div style="font-size:.9375rem;font-weight:700;">Urban Nest</div>
+                        <div class="agent-meta">Bow branch · Bow, E3–E14 · 020 7345 6789</div>
+                      </div>
+                      <span class="badge badge-gray">Not connected</span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;margin-top:.875rem;">
+                      <button class="btn btn-primary btn-sm">Add to My List</button>
+                      <button class="btn btn-ghost btn-sm">View Profile</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- My Agents -->
+            <div style="margin-bottom:1.5rem;">
+              <div class="brief-section-label" style="margin-bottom:12px;">My Agents (3)</div>
+              <div style="display:flex;flex-direction:column;gap:.75rem;">
+
+                <!-- Active -->
+                <div class="agent-card">
+                  <div class="agent-avatar" style="background:var(--brand-solid-bg);border-color:rgba(255,212,0,.4);">GP</div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                      <div>
+                        <div style="font-size:.9375rem;font-weight:700;">Greenfield Properties</div>
+                        <div class="agent-meta">Islington branch · North London, N1–N7 · Last contact: 2 days ago</div>
+                      </div>
+                      <span class="badge badge-green">Active</span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;margin-top:.875rem;">
+                      <button class="btn btn-primary btn-sm">Send Brief</button>
+                      <button class="btn btn-ghost btn-sm">Pause</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Invited -->
+                <div class="agent-card">
+                  <div class="agent-avatar">EE</div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                      <div>
+                        <div style="font-size:.9375rem;font-weight:700;">East End Estates</div>
+                        <div class="agent-meta">Whitechapel branch · East London, E1–E6 · Brief sent: 5 days ago</div>
+                      </div>
+                      <span class="badge badge-yellow">Invited</span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;margin-top:.875rem;">
+                      <button class="btn btn-secondary btn-sm">Resend Brief</button>
+                      <button class="btn btn-ghost btn-sm">Ignore</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ignored -->
+                <div class="agent-card" style="opacity:.75;">
+                  <div class="agent-avatar">NC</div>
+                  <div style="flex:1;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+                      <div>
+                        <div style="font-size:.9375rem;font-weight:700;">Northfield &amp; Co</div>
+                        <div class="agent-meta">Camden branch · North London, NW1–NW5 · Added: 2 weeks ago</div>
+                      </div>
+                      <span class="badge badge-gray">Ignored</span>
+                    </div>
+                    <div style="display:flex;gap:.5rem;margin-top:.875rem;">
+                      <button class="btn btn-ghost btn-sm">Reconnect</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Privacy note -->
+            <div style="padding:.875rem 1rem;background:var(--bg-soft);border:1px solid var(--border-light);border-radius:var(--radius);font-size:.8125rem;color:var(--text-secondary);">
+              Agents you connect with will receive your Home Passport and contact details. You control who sees your data.
+              <button onclick="showView('settings', document.querySelector('.sidebar-link[onclick*=\'settings\']'))" style="background:none;border:none;color:var(--text-primary);font-size:.8125rem;font-weight:700;cursor:pointer;text-decoration:underline;padding:0;margin-left:.25rem;">Manage privacy →</button>
+            </div>
+
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: SEARCH
+        ════════════════════════════ -->
+          <div id="view-search" class="view">
+            <div style="margin-bottom:1.25rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Search Properties</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Find your next home — no agent between you and
+                the seller</p>
+            </div>
+            <div class="filter-bar">
+              <select class="filter-select">
+                <option>All Locations</option>
+                <option>London</option>
+                <option>Manchester</option>
+                <option>Birmingham</option>
+                <option>Leeds</option>
+              </select>
+              <select class="filter-select">
+                <option>Any Price</option>
+                <option>Up to £200k</option>
+                <option>£200k–£350k</option>
+                <option>£350k–£500k</option>
+                <option>£500k+</option>
+              </select>
+              <select class="filter-select">
+                <option>Any Beds</option>
+                <option>1 bed</option>
+                <option>2 beds</option>
+                <option>3 beds</option>
+                <option>4+ beds</option>
+              </select>
+              <select class="filter-select">
+                <option>Any Type</option>
+                <option>Flat</option>
+                <option>Terraced</option>
+                <option>Semi-detached</option>
+                <option>Detached</option>
+              </select>
+              <button class="btn btn-primary btn-sm">Search</button>
+              <button class="btn btn-ghost btn-sm">Clear filters</button>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
+              <!-- Property 1 -->
+              <div class="property-card">
+                <div class="property-card-photo">🏡
+                  <div class="property-card-heart"><svg viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg></div>
+                </div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£385,000</div>
+                  <div class="property-card-addr">14 Maple Street, Bow, London E3</div>
+                  <div class="property-card-meta">3 bed · 2 bath · 875 sq ft · Leasehold</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+              <!-- Property 2 -->
+              <div class="property-card">
+                <div class="property-card-photo photo-blue">🏘️
+                  <div class="property-card-heart"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+                      stroke-width="2">
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg></div>
+                </div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£225,000</div>
+                  <div class="property-card-addr">7 Oak Close, Didsbury, Manchester M14</div>
+                  <div class="property-card-meta">2 bed · 1 bath · 640 sq ft · Freehold</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-yellow">Under Offer</span>
+                  <button class="btn btn-secondary btn-sm">View Details</button>
+                </div>
+              </div>
+              <!-- Property 3 -->
+              <div class="property-card">
+                <div class="property-card-photo photo-green">🏠
+                  <div class="property-card-heart"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+                      stroke-width="2">
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg></div>
+                </div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£450,000</div>
+                  <div class="property-card-addr">22 Birchwood Drive, Bristol BS6</div>
+                  <div class="property-card-meta">4 bed · 2 bath · 1,120 sq ft · Freehold</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+              <!-- Property 4 -->
+              <div class="property-card">
+                <div class="property-card-photo">🏢
+                  <div class="property-card-heart"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+                      stroke-width="2">
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg></div>
+                </div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£189,000</div>
+                  <div class="property-card-addr">Flat 3, Park Lane, Leeds LS1</div>
+                  <div class="property-card-meta">1 bed · 1 bath · 480 sq ft · Leasehold</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+              <!-- Property 5 -->
+              <div class="property-card">
+                <div class="property-card-photo photo-blue">🏡
+                  <div class="property-card-heart"><svg viewBox="0 0 24 24" fill="none" stroke="#ef4444"
+                      stroke-width="2">
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg></div>
+                </div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£320,000</div>
+                  <div class="property-card-addr">8 Rosewood Crescent, Birmingham B15</div>
+                  <div class="property-card-meta">3 bed · 1 bath · 750 sq ft · Semi-detached</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+              <!-- Property 6 -->
+              <div class="property-card">
+                <div class="property-card-photo photo-green">🏘️</div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£275,000</div>
+                  <div class="property-card-addr">15 Riverside Walk, Sheffield S1</div>
+                  <div class="property-card-meta">2 bed · 2 bath · 710 sq ft · Leasehold</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: SAVED
+        ════════════════════════════ -->
+          <div id="view-saved" class="view">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+              <div>
+                <h2 style="font-size:1.25rem;font-weight:800;">Saved Homes</h2>
+                <p style="font-size:.875rem;color:var(--text-secondary);">Properties you've saved to revisit or track
+                </p>
+              </div>
+              <button class="btn btn-ghost btn-sm"
+                onclick="showView('search', document.querySelector('[onclick*=search]'))">Browse more →</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
+              <div class="property-card">
+                <div class="property-card-photo">🏡</div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£385,000</div>
+                  <div class="property-card-addr">14 Maple Street, London E3</div>
+                  <div class="property-card-meta">3 bed · 2 bath · Saved 3 days ago</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+              <div class="property-card">
+                <div class="property-card-photo photo-blue">🏘️</div>
+                <div class="property-card-body">
+                  <div class="property-card-price" style="display:flex;align-items:center;gap:.5rem;">£225,000 <span
+                      class="badge badge-green" style="font-size:.6rem;">↓ Price drop</span></div>
+                  <div class="property-card-addr">7 Oak Close, Manchester M14</div>
+                  <div class="property-card-meta">2 bed · 1 bath · Saved 1 week ago</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-yellow">Under Offer</span>
+                  <button class="btn btn-secondary btn-sm">View Details</button>
+                </div>
+              </div>
+              <div class="property-card">
+                <div class="property-card-photo photo-green">🏠</div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£450,000</div>
+                  <div class="property-card-addr">22 Birchwood Drive, Bristol BS6</div>
+                  <div class="property-card-meta">4 bed · 2 bath · Saved 5 days ago</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+              <div class="property-card">
+                <div class="property-card-photo">🏢</div>
+                <div class="property-card-body">
+                  <div class="property-card-price">£189,000</div>
+                  <div class="property-card-addr">Flat 3, Park Lane, Leeds LS1</div>
+                  <div class="property-card-meta">1 bed · 1 bath · Saved 2 days ago</div>
+                </div>
+                <div class="property-card-footer">
+                  <span class="badge badge-green">Active</span>
+                  <button class="btn btn-primary btn-sm"
+                    onclick="showView('booking', document.querySelector('[onclick*=booking]'))">Book Viewing</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: OFFERS
+        ════════════════════════════ -->
+          <div id="view-offers" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Offers &amp; Applications</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Track and manage all your submitted offers</p>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+              <!-- Offer 1 -->
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;">
+                <div
+                  style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+                  <div>
+                    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.25rem;">14 Maple Street, London E3</h3>
+                    <p style="font-size:.8125rem;color:var(--text-secondary);">3 bed · 2 bath · Leasehold</p>
+                  </div>
+                  <span class="badge badge-yellow">Under Review</span>
+                </div>
+                <div
+                  style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;margin-bottom:1.25rem;">
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Your Offer</div>
+                    <div style="font-size:1.375rem;font-weight:800;color:var(--brand);">£375,000</div>
+                  </div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Asking Price</div>
+                    <div style="font-size:1.375rem;font-weight:800;">£385,000</div>
+                  </div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Submitted</div>
+                    <div style="font-size:.875rem;font-weight:600;margin-top:.25rem;">Yesterday, 14:22</div>
+                  </div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Mortgage AIP</div>
+                    <div style="font-size:.875rem;font-weight:600;margin-top:.25rem;"><span
+                        class="badge badge-green">Uploaded</span></div>
+                  </div>
+                </div>
+                <div
+                  style="background:var(--bg-soft);border:1px solid var(--border-light);border-radius:var(--radius);padding:.875rem;margin-bottom:1rem;">
+                  <div
+                    style="font-size:.75rem;font-weight:700;color:var(--text-muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em;">
+                    Application Progress</div>
+                  <div class="offer-progress">
+                    <div class="offer-progress-fill" style="width:60%;"></div>
+                  </div>
+                  <div
+                    style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-secondary);margin-top:.25rem;">
+                    <span>Offer Submitted</span><span>Owner Review</span><span>Accepted</span><span>Exchange</span>
+                  </div>
+                </div>
+                <div style="display:flex;gap:.65rem;flex-wrap:wrap;">
+                  <button class="btn btn-ghost btn-sm"
+                    onclick="showView('inbox', document.querySelector('[onclick*=inbox]'))">Message Owner</button>
+                  <button class="btn btn-secondary btn-sm">Upload Documents</button>
+                </div>
+              </div>
+
+              <!-- Offer 2 -->
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;opacity:.85;">
+                <div
+                  style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+                  <div>
+                    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.25rem;">7 Oak Close, Manchester M14</h3>
+                    <p style="font-size:.8125rem;color:var(--text-secondary);">2 bed · 1 bath · Freehold</p>
+                  </div>
+                  <span class="badge badge-gray">Outbid</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;">
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Your Offer</div>
+                    <div
+                      style="font-size:1.375rem;font-weight:800;text-decoration:line-through;color:var(--text-muted);">
+                      £210,000</div>
+                  </div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Accepted Offer</div>
+                    <div style="font-size:1.375rem;font-weight:800;">£220,000</div>
+                  </div>
+                  <div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);">
+                      Submitted</div>
+                    <div style="font-size:.875rem;font-weight:600;margin-top:.25rem;">14 Feb 2026</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: SURVEYS
+        ════════════════════════════ -->
+          <div id="view-surveys" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Surveys Marketplace</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Access independent survey reports before
+                committing to an offer</p>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
+              <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+                  <span class="badge badge-green">Available</span>
+                  <span style="font-size:1rem;font-weight:800;color:var(--brand);">£49</span>
+                </div>
+                <h3>HomeBuyer Report</h3>
+                <p style="margin:.35rem 0 .75rem;">14 Maple Street, London E3 — RICS Level 2 Survey, completed Feb 2026.
+                </p>
+                <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Unlock Report</button>
+              </div>
+              <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+                  <span class="badge badge-green">Available</span>
+                  <span style="font-size:1rem;font-weight:800;color:var(--brand);">£29</span>
+                </div>
+                <h3>Valuation Report</h3>
+                <p style="margin:.35rem 0 .75rem;">14 Maple Street, London E3 — Independent market valuation, Jan 2026.
+                </p>
+                <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;">Unlock Report</button>
+              </div>
+              <div class="card" style="opacity:.7;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+                  <span class="badge badge-gray">Unavailable</span>
+                  <span style="font-size:.875rem;color:var(--text-muted);">—</span>
+                </div>
+                <h3>Full Structural Survey</h3>
+                <p style="margin:.35rem 0 .75rem;">7 Oak Close, Manchester M14 — No survey uploaded yet by owner.</p>
+                <button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;" disabled>Request
+                  Survey</button>
+              </div>
+              <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+                  <span class="badge badge-blue">Purchased</span>
+                  <span style="font-size:.875rem;color:var(--text-muted);">£49</span>
+                </div>
+                <h3>HomeBuyer Report</h3>
+                <p style="margin:.35rem 0 .75rem;">7 Oak Close, Manchester M14 — RICS Level 2, Jan 2026. Already
+                  unlocked.</p>
+                <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;">Download PDF</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: INBOX
+        ════════════════════════════ -->
+          <div id="view-inbox" class="view">
+            <div style="margin-bottom:1rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Inbox</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Messages with property owners</p>
+            </div>
+            <div class="inbox-split">
+              <!-- Thread list -->
+              <div class="inbox-list">
+                <div style="padding:.75rem 1rem;border-bottom:1px solid var(--border-light);background:var(--bg-soft);">
+                  <div class="search-input" style="min-width:auto;">
+                    <i data-lucide="search"
+                      style="width:12px;height:12px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0;"></i>
+                    <input type="text" placeholder="Search messages..." style="font-size:.8rem;" />
+                  </div>
+                </div>
+                <div class="inbox-item active">
+                  <div class="inbox-item-header">
+                    <span class="inbox-item-name">John S. — 14 Maple St.</span>
+                    <span class="inbox-item-time">1h ago</span>
+                  </div>
+                  <div class="inbox-item-preview">Yes, the parking space is included in the lease...</div>
+                </div>
+                <div class="inbox-item">
+                  <div class="inbox-item-header">
+                    <span class="inbox-item-name">Mark T. — 22 Birchwood Dr.</span>
+                    <span class="inbox-item-time">Yesterday</span>
+                  </div>
+                  <div class="inbox-item-preview">Happy to do a second viewing on Sunday if...</div>
+                </div>
+                <div class="inbox-item">
+                  <div class="inbox-item-header">
+                    <span class="inbox-item-name">Linda K. — Flat 3 Park Lane</span>
+                    <span class="inbox-item-time">3 days</span>
+                  </div>
+                  <div class="inbox-item-preview">The service charge is £1,200/year and covers...</div>
+                </div>
+              </div>
+              <!-- Thread view -->
+              <div style="display:flex;flex-direction:column;height:100%;">
+                <div
+                  style="padding:1rem 1.25rem;border-bottom:1px solid var(--border-light);background:var(--bg-soft);">
+                  <div style="font-size:.9375rem;font-weight:700;">John Smith — Owner</div>
+                  <div style="font-size:.8rem;color:var(--text-secondary);">14 Maple Street, London E3 · Listed at
+                    £385,000</div>
+                </div>
+                <div class="inbox-thread" style="flex:1;overflow-y:auto;">
+                  <div class="thread-msg">
+                    <div class="thread-avatar seller">JS</div>
+                    <div>
+                      <div class="thread-bubble incoming">Hi Sarah, thanks for your interest in 14 Maple Street. Happy
+                        to answer any questions before your viewing.</div>
+                      <div class="thread-time incoming">Fri 20 Feb · 09:14</div>
+                    </div>
+                  </div>
+                  <div class="thread-msg outgoing">
+                    <div class="thread-avatar">SB</div>
+                    <div>
+                      <div class="thread-bubble outgoing">Thanks John! Quick question — is the parking space included in
+                        the lease, or is it an additional cost?</div>
+                      <div class="thread-time">Fri 20 Feb · 10:02</div>
+                    </div>
+                  </div>
+                  <div class="thread-msg">
+                    <div class="thread-avatar seller">JS</div>
+                    <div>
+                      <div class="thread-bubble incoming">Yes, the parking space is included in the lease with no extra
+                        charge. It's a designated spot — Space 7 in the underground car park.</div>
+                      <div class="thread-time incoming">Sat 21 Feb · 08:35</div>
+                    </div>
+                  </div>
+                  <div class="thread-msg outgoing">
+                    <div class="thread-avatar">SB</div>
+                    <div>
+                      <div class="thread-bubble outgoing">That's brilliant, thank you! Looking forward to the viewing on
+                        Saturday.</div>
+                      <div class="thread-time">Today · 09:18</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="inbox-composer">
+                  <textarea placeholder="Write a message..." rows="2"></textarea>
+                  <button class="btn btn-primary btn-sm">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: BOOK A VIEWING
+        ════════════════════════════ -->
+          <div id="view-booking" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Book a Viewing</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Select a property and choose an available slot
+              </p>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;">
+              <div>
+                <div
+                  style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;">
+                  <label style="font-size:.8125rem;font-weight:600;display:block;margin-bottom:.5rem;">Select
+                    Property</label>
+                  <select class="filter-select" style="width:100%;padding:.6rem .875rem;">
+                    <option>14 Maple Street, London E3 — £385,000</option>
+                    <option>22 Birchwood Drive, Bristol BS6 — £450,000</option>
+                    <option>Flat 3, Park Lane, Leeds LS1 — £189,000</option>
+                  </select>
+                </div>
+                <div
+                  style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+                    <h4 style="font-weight:700;">February 2026</h4>
+                    <div style="display:flex;gap:.5rem;">
+                      <button class="btn btn-ghost btn-sm">← Prev</button>
+                      <button class="btn btn-ghost btn-sm">Next →</button>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Mon</div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Tue</div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Wed</div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Thu</div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Fri</div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Sat</div>
+                    <div
+                      style="font-size:.7rem;font-weight:700;text-align:center;color:var(--text-muted);text-transform:uppercase;padding:.5rem 0;">
+                      Sun</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;color:var(--text-muted);">
+                      27</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;color:var(--text-muted);">
+                      28</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;color:var(--text-muted);">
+                      29</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;color:var(--text-muted);">
+                      30</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;color:var(--text-muted);">
+                      31</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;transition:background .15s;">
+                      1</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;transition:background .15s;">
+                      2</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;background:var(--brand-light);color:var(--text-primary);">
+                      22</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;">
+                      23</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;">
+                      24</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:700;background:var(--brand);color:#000;cursor:pointer;">
+                      25</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:700;background:var(--brand);color:#000;cursor:pointer;">
+                      26</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;">
+                      27</div>
+                    <div
+                      style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.8125rem;font-weight:500;cursor:pointer;">
+                      28</div>
+                  </div>
+                  <div style="margin-top:.75rem;display:flex;gap:1rem;font-size:.75rem;color:var(--text-secondary);">
+                    <span style="display:flex;align-items:center;gap:.35rem;"><span
+                        style="width:10px;height:10px;border-radius:50%;background:var(--brand);display:inline-block;"></span>Slots
+                      available</span>
+                    <span style="display:flex;align-items:center;gap:.35rem;"><span
+                        style="width:10px;height:10px;border-radius:50%;background:var(--brand-light);border:1px solid var(--brand);display:inline-block;"></span>Today</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Slot selector -->
+              <div
+                style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;">
+                <h4 style="font-weight:700;margin-bottom:1rem;">Sat 25 Feb — Available Slots</h4>
+                <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem;">
+                  <label
+                    style="display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:1.5px solid var(--brand);border-radius:var(--radius);background:var(--brand-light);cursor:pointer;">
+                    <input type="radio" name="slot" checked style="accent-color:var(--brand);" />
+                    <span style="font-size:.875rem;font-weight:600;">10:00 – 10:30</span>
+                  </label>
+                  <label
+                    style="display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;">
+                    <input type="radio" name="slot" style="accent-color:var(--brand);" />
+                    <span style="font-size:.875rem;font-weight:600;">11:00 – 11:30</span>
+                  </label>
+                  <label
+                    style="display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;">
+                    <input type="radio" name="slot" style="accent-color:var(--brand);" />
+                    <span style="font-size:.875rem;font-weight:600;">14:00 – 14:30</span>
+                  </label>
+                  <label
+                    style="display:flex;align-items:center;gap:.75rem;padding:.65rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;opacity:.5;"
+                    title="Already booked">
+                    <input type="radio" name="slot" disabled style="accent-color:var(--brand);" />
+                    <span style="font-size:.875rem;font-weight:600;">15:00 – 15:30</span>
+                    <span class="badge badge-gray" style="margin-left:auto;font-size:.6rem;">Booked</span>
+                  </label>
+                </div>
+                <div class="form-group" style="margin-bottom:.75rem;">
+                  <label>Your Name</label>
+                  <input type="text" value="Sarah Bell" />
+                </div>
+                <div class="form-group" style="margin-bottom:.875rem;">
+                  <label>Email Address</label>
+                  <input type="email" value="sarah@example.com" />
+                </div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;">Confirm Booking</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: AGENT INBOX
+        ════════════════════════════ -->
+          <div id="view-agentinbox" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Agent Inbox</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Properties extracted from agent newsletters — filtered against your brief.</p>
+            </div>
+
+            <!-- Alias card -->
+            <div class="alias-card">
+              <div style="display:flex;align-items:center;gap:.75rem;">
+                <i data-lucide="lock" style="width:18px;height:18px;color:var(--text-secondary);flex-shrink:0;"></i>
+                <div>
+                  <div style="font-size:.75rem;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.2rem;">Your Yalla.House inbox address</div>
+                  <div class="alias-address">sarah.bell@yalla.house</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0;">
+                <span class="badge badge-green">Active</span>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Inbox address copied to clipboard','info')">Copy Address</button>
+              </div>
+            </div>
+
+            <!-- Connected sources -->
+            <div class="section-card" style="margin-bottom:1.5rem;">
+              <div class="section-card-header">
+                <div class="section-card-title">Connected Sources (3)</div>
+              </div>
+              <div style="padding:0 1.25rem 1.25rem;">
+                <div class="source-row">
+                  <i data-lucide="mail" style="width:16px;height:16px;color:var(--text-secondary);flex-shrink:0;"></i>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:.9rem;">Greenfield Properties Newsletter</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">greenfield@yalla.house &middot; Last email: 2h ago &middot; 12 listings received</div>
+                  </div>
+                  <span class="badge badge-green" style="flex-shrink:0;">Active</span>
+                  <button class="btn btn-ghost btn-sm">Mute</button>
+                </div>
+                <div class="source-row">
+                  <i data-lucide="mail" style="width:16px;height:16px;color:var(--text-secondary);flex-shrink:0;"></i>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:.9rem;">East End Estates Weekly</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">eastend@yalla.house &middot; Last email: Yesterday &middot; 8 listings received</div>
+                  </div>
+                  <span class="badge badge-green" style="flex-shrink:0;">Active</span>
+                  <button class="btn btn-ghost btn-sm">Mute</button>
+                </div>
+                <div class="source-row">
+                  <i data-lucide="mail" style="width:16px;height:16px;color:var(--text-secondary);flex-shrink:0;"></i>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:.9rem;">Prime Central Alerts</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);">prime@yalla.house &middot; Last email: 4 days ago &middot; 3 listings received</div>
+                  </div>
+                  <span class="badge badge-yellow" style="flex-shrink:0;">Muted</span>
+                  <button class="btn btn-ghost btn-sm">Unmute</button>
+                  <button class="btn btn-ghost btn-sm">Unsubscribe</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Property feed -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Property Feed</div>
+              </div>
+              <div style="padding:0 1.25rem 1.25rem;">
+
+                <!-- Feed tabs -->
+                <div class="feed-tabs">
+                  <button class="feed-tab active"
+                    onclick="document.getElementById('feed-best').style.display='';document.getElementById('feed-possible').style.display='none';document.getElementById('feed-archived').style.display='none';document.querySelectorAll('.feed-tab').forEach(function(t){t.classList.remove('active')});this.classList.add('active')">
+                    Best matches (7)
+                  </button>
+                  <button class="feed-tab"
+                    onclick="document.getElementById('feed-best').style.display='none';document.getElementById('feed-possible').style.display='';document.getElementById('feed-archived').style.display='none';document.querySelectorAll('.feed-tab').forEach(function(t){t.classList.remove('active')});this.classList.add('active')">
+                    Possible (3)
+                  </button>
+                  <button class="feed-tab"
+                    onclick="document.getElementById('feed-best').style.display='none';document.getElementById('feed-possible').style.display='none';document.getElementById('feed-archived').style.display='';document.querySelectorAll('.feed-tab').forEach(function(t){t.classList.remove('active')});this.classList.add('active')">
+                    Archived (40)
+                  </button>
+                </div>
+
+                <!-- Best matches panel -->
+                <div id="feed-best">
+                  <!-- Card 1 — 94% -->
+                  <div class="match-card">
+                    <div class="match-score high">
+                      <span class="match-score-pct">94%</span>
+                      <span>match</span>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:800;font-size:.9375rem;">32 Fielding Road, Bow, E3</div>
+                      <div style="font-size:.875rem;color:var(--text-secondary);margin-top:.2rem;">£490,000 &middot; 2 bed &middot; 1 bath &middot; Leasehold &middot; Balcony &middot; 8 min to Bow Road</div>
+                      <div style="margin-top:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                        <span class="badge badge-blue">Greenfield Properties</span>
+                        <span style="font-size:.75rem;color:var(--text-muted);">Received: 2h ago</span>
+                      </div>
+                      <div class="criteria-row">
+                        <span class="criteria-chip pass">Budget</span>
+                        <span class="criteria-chip pass">Location</span>
+                        <span class="criteria-chip pass">2 beds</span>
+                        <span class="criteria-chip pass">Balcony</span>
+                        <span class="criteria-chip pass">Near station</span>
+                      </div>
+                      <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary btn-sm">Save</button>
+                        <button class="btn btn-secondary btn-sm">Book Viewing</button>
+                        <button class="btn btn-ghost btn-sm">Dismiss</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Card 2 — 87% -->
+                  <div class="match-card">
+                    <div class="match-score high">
+                      <span class="match-score-pct">87%</span>
+                      <span>match</span>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:800;font-size:.9375rem;">Flat 12, Vibe Building, Hackney E8</div>
+                      <div style="font-size:.875rem;color:var(--text-secondary);margin-top:.2rem;">£515,000 &middot; 3 bed &middot; 2 bath &middot; Leasehold &middot; Roof terrace</div>
+                      <div style="margin-top:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                        <span class="badge badge-blue">East End Estates</span>
+                        <span style="font-size:.75rem;color:var(--text-muted);">Received: Yesterday</span>
+                      </div>
+                      <div class="criteria-row">
+                        <span class="criteria-chip pass">Budget</span>
+                        <span class="criteria-chip pass">Location</span>
+                        <span class="criteria-chip pass">3 beds</span>
+                        <span class="criteria-chip pass">Near station</span>
+                        <span class="criteria-chip fail">No balcony (roof terrace)</span>
+                      </div>
+                      <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary btn-sm">Save</button>
+                        <button class="btn btn-secondary btn-sm">Book Viewing</button>
+                        <button class="btn btn-ghost btn-sm">Dismiss</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Card 3 — 81% -->
+                  <div class="match-card">
+                    <div class="match-score high">
+                      <span class="match-score-pct">81%</span>
+                      <span>match</span>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:800;font-size:.9375rem;">14 Cardigan Street, Islington N1</div>
+                      <div style="font-size:.875rem;color:var(--text-secondary);margin-top:.2rem;">£498,000 &middot; 2 bed &middot; 1 bath &middot; Freehold &middot; Garden</div>
+                      <div style="margin-top:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                        <span class="badge badge-blue">Greenfield Properties</span>
+                        <span style="font-size:.75rem;color:var(--text-muted);">Received: 2h ago</span>
+                      </div>
+                      <div class="criteria-row">
+                        <span class="criteria-chip pass">Budget</span>
+                        <span class="criteria-chip pass">Location</span>
+                        <span class="criteria-chip pass">2 beds</span>
+                        <span class="criteria-chip pass">Garden</span>
+                        <span class="criteria-chip fail">No station within 10 min</span>
+                      </div>
+                      <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary btn-sm">Save</button>
+                        <button class="btn btn-secondary btn-sm">Book Viewing</button>
+                        <button class="btn btn-ghost btn-sm">Dismiss</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /feed-best -->
+
+                <!-- Possible matches panel -->
+                <div id="feed-possible" style="display:none;">
+                  <!-- Card 1 — 61% -->
+                  <div class="match-card">
+                    <div class="match-score mid">
+                      <span class="match-score-pct">61%</span>
+                      <span>match</span>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:800;font-size:.9375rem;">8 Acton Lane, Chiswick W4</div>
+                      <div style="font-size:.875rem;color:var(--text-secondary);margin-top:.2rem;">£512,000 &middot; 2 bed &middot; 1 bath &middot; Leasehold</div>
+                      <div style="margin-top:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                        <span class="badge badge-blue">Prime Central Alerts</span>
+                      </div>
+                      <div class="criteria-row">
+                        <span class="criteria-chip pass">Budget</span>
+                        <span class="criteria-chip fail">Location (West London)</span>
+                        <span class="criteria-chip pass">2 beds</span>
+                        <span class="criteria-chip fail">No balcony</span>
+                        <span class="criteria-chip fail">No nearby station</span>
+                      </div>
+                      <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary btn-sm">Save</button>
+                        <button class="btn btn-ghost btn-sm">Dismiss</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Card 2 — 55% -->
+                  <div class="match-card">
+                    <div class="match-score mid">
+                      <span class="match-score-pct">55%</span>
+                      <span>match</span>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-weight:800;font-size:.9375rem;">Studio, Royal Wharf, E16</div>
+                      <div style="font-size:.875rem;color:var(--text-secondary);margin-top:.2rem;">£385,000 &middot; Studio &middot; 1 bath</div>
+                      <div style="margin-top:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+                        <span class="badge badge-blue">East End Estates</span>
+                      </div>
+                      <div class="criteria-row">
+                        <span class="criteria-chip pass">Budget</span>
+                        <span class="criteria-chip pass">Location</span>
+                        <span class="criteria-chip fail">Studio (min 2 beds)</span>
+                        <span class="criteria-chip fail">No balcony</span>
+                        <span class="criteria-chip pass">Near station</span>
+                      </div>
+                      <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+                        <button class="btn btn-primary btn-sm">Save</button>
+                        <button class="btn btn-ghost btn-sm">Dismiss</button>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /feed-possible -->
+
+                <!-- Archived panel -->
+                <div id="feed-archived" style="display:none;">
+                  <div style="padding:2rem 0;text-align:center;">
+                    <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:1rem;">40 properties were filtered out. They didn't match your brief closely enough to surface here.</p>
+                    <button class="btn btn-ghost btn-sm">Review archive</button>
+                  </div>
+                </div><!-- /feed-archived -->
+
+              </div>
+            </div>
+          </div><!-- /view-agentinbox -->
+
+          <!-- ════════════════════════════
+             VIEW: BUYER BRIEF
+        ════════════════════════════ -->
+          <div id="view-passport" class="view">
+
+            <!-- Hero -->
+            <div style="margin-bottom:1.5rem;">
+              <div class="brief-hero-pill">&#128737; Your Verified Buyer Identity</div>
+              <h2 style="font-size:1.375rem;font-weight:800;margin-bottom:.35rem;">Create Your Home Passport</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);max-width:560px;">Set it once. Agents request access &mdash; you stay in control.</p>
+              <div class="brief-benefits">
+                <div class="brief-benefit"><span class="brief-benefit-check">&#10003;</span> A portable buyer profile you own and control</div>
+                <div class="brief-benefit"><span class="brief-benefit-check">&#10003;</span> Agents request access &mdash; you decide who sees it</div>
+                <div class="brief-benefit"><span class="brief-benefit-check">&#10003;</span> Verified finance status builds agent trust instantly</div>
+                <div class="brief-benefit"><span class="brief-benefit-check">&#10003;</span> Filter newsletters &mdash; only strong matches reach you</div>
+                <div class="brief-benefit"><span class="brief-benefit-check">&#10003;</span> Surface off-market opportunities before portals do</div>
+              </div>
+            </div>
+
+            <!-- How it works -->
+            <div class="brief-how-row">
+              <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);width:100%;margin-bottom:.25rem;">How Your Home Passport Works</div>
+              <div class="brief-how-step">
+                <div class="brief-step-circle">1</div>
+                <div>
+                  <div style="font-weight:700;font-size:.875rem;margin-bottom:.2rem;">Tell us what you want</div>
+                  <div style="font-size:.775rem;color:var(--text-secondary);">Set location, budget, type, must-haves and dealbreakers.</div>
+                </div>
+              </div>
+              <div class="brief-how-step">
+                <div class="brief-step-circle">2</div>
+                <div>
+                  <div style="font-weight:700;font-size:.875rem;margin-bottom:.2rem;">Agents request access</div>
+                  <div style="font-size:.775rem;color:var(--text-secondary);">Agents see your Passport and request to connect &mdash; you approve.</div>
+                </div>
+              </div>
+              <div class="brief-how-step">
+                <div class="brief-step-circle">3</div>
+                <div>
+                  <div style="font-weight:700;font-size:.875rem;margin-bottom:.2rem;">Only matches reach you</div>
+                  <div style="font-size:.775rem;color:var(--text-secondary);">Everything irrelevant is filtered out. Strong opportunities only.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2-col layout -->
+            <div class="brief-2col">
+
+              <!-- LEFT: Step-by-step form -->
+              <div class="brief-form-col">
+              <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:1.75rem;">
+
+                <!-- Step 1: Location -->
+                <div class="brief-section">
+                  <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+                    <div class="brief-step-circle">1</div>
+                    <div class="brief-section-label" style="margin-bottom:0;">Location — where do you want to buy or rent?</div>
+                  </div>
+                  <input type="text" placeholder="e.g. East London, N1–N22" style="width:100%;padding:.5rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.875rem;outline:none;background:var(--bg);transition:border-color var(--transition);" onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border)'" />
+                  <div class="tag-group">
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">East London</button>
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">North London</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">South East London</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Zone 2</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Zone 3</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">West London</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">South West London</button>
+                  </div>
+                </div>
+
+                <!-- Step 2: Budget -->
+                <div class="brief-section">
+                  <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+                    <div class="brief-step-circle">2</div>
+                    <div class="brief-section-label" style="margin-bottom:0;">Budget</div>
+                  </div>
+                  <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+                    <input type="text" placeholder="No min" style="width:140px;padding:.5rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.875rem;outline:none;background:var(--bg);transition:border-color var(--transition);" onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border)'" />
+                    <span style="font-size:.875rem;color:var(--text-muted);">to</span>
+                    <input type="text" value="£525,000" style="width:140px;padding:.5rem .875rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.875rem;outline:none;background:var(--bg);transition:border-color var(--transition);" onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='var(--border)'" />
+                  </div>
+                  <div class="brief-intent-toggle" style="margin-top:10px;">
+                    <button class="active" onclick="this.classList.add('active');this.nextElementSibling.classList.remove('active')">Buy</button>
+                    <button onclick="this.classList.add('active');this.previousElementSibling.classList.remove('active')">Rent</button>
+                  </div>
+                </div>
+
+                <!-- Step 3: Property type + bedrooms -->
+                <div class="brief-section">
+                  <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+                    <div class="brief-step-circle">3</div>
+                    <div class="brief-section-label" style="margin-bottom:0;">Property type</div>
+                  </div>
+                  <div class="tag-group">
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">Flat</button>
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">Terraced</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Semi-detached</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Detached</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">New build</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Period</button>
+                  </div>
+                  <div class="brief-section-label" style="margin-top:16px;">Bedrooms</div>
+                  <div class="tag-group">
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Studio</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">1 bed</button>
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">2 beds</button>
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">3 beds</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">4+ beds</button>
+                  </div>
+                </div>
+
+                <!-- Step 4: Must-haves + dealbreakers -->
+                <div class="brief-section">
+                  <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+                    <div class="brief-step-circle">4</div>
+                    <div class="brief-section-label" style="margin-bottom:0;">Preferences</div>
+                  </div>
+                  <div class="brief-section-label">Must-haves</div>
+                  <div class="tag-group">
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">Balcony</button>
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')">Near station</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Garden</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Parking</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">EV charging</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Period features</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Open plan</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Guest WC</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Storage</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">Quiet street</button>
+                  </div>
+                </div>
+
+                <!-- Dealbreakers (part of Step 4) -->
+                <div class="brief-section">
+                  <div class="brief-section-label">Dealbreakers</div>
+                  <div class="tag-group">
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')" style="border-color:#FECACA;background:#FEF2F2;color:#991B1B;">No auctions</button>
+                    <button class="tag tag--active" onclick="this.classList.toggle('tag--active')" style="border-color:#FECACA;background:#FEF2F2;color:#991B1B;">No retirement homes</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">No ground floor</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">No top floor without lift</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">No shared ownership</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">No ex-social</button>
+                    <button class="tag" onclick="this.classList.toggle('tag--active')">No estate agency only</button>
+                  </div>
+                </div>
+
+                <!-- Step 5: Timing -->
+                <div class="brief-section">
+                  <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;">
+                    <div class="brief-step-circle">5</div>
+                    <div class="brief-section-label" style="margin-bottom:0;">Timing</div>
+                  </div>
+                  <div class="brief-section-label">Finance status</div>
+                  <select class="filter-select" style="min-width:260px;">
+                    <option>Cash buyer</option>
+                    <option selected>Mortgage in principle</option>
+                    <option>Mortgage applied</option>
+                    <option>Mortgage offer received</option>
+                    <option>Not yet started</option>
+                  </select>
+                </div>
+
+                <div class="brief-section">
+                  <div class="brief-section-label">Timeline</div>
+                  <select class="filter-select" style="min-width:260px;">
+                    <option>ASAP (ready to move)</option>
+                    <option>1–3 months</option>
+                    <option selected>3–6 months</option>
+                    <option>6–12 months</option>
+                    <option>Flexible</option>
+                  </select>
+                </div>
+
+                <!-- Activate button -->
+                <div style="margin-top:1.5rem;">
+                  <button class="btn btn-primary" style="width:100%;padding:.875rem;font-size:1rem;border-radius:var(--radius-lg);">Save My Home Passport &rarr;</button>
+                </div>
+
+              </div>
+              </div><!-- /brief-form-col -->
+
+              <!-- RIGHT: Passport Card + automations + sample listings -->
+              <div class="brief-preview-col">
+
+                <!-- Passport Card -->
+                <div class="passport-card">
+                  <div class="passport-card-header">
+                    <div class="passport-card-wordmark">&#127968; Home Passport</div>
+                    <div class="passport-verified-badge">&#10003; Verified</div>
+                  </div>
+                  <div class="passport-name">Sarah Bell</div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Intent</div>
+                    <div class="passport-row-val">Buy</div>
+                  </div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Budget</div>
+                    <div class="passport-row-val">up to £525,000</div>
+                  </div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Areas</div>
+                    <div class="passport-row-val">East London &middot; North London</div>
+                  </div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Type</div>
+                    <div class="passport-row-val">Flat &middot; Terraced</div>
+                  </div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Beds</div>
+                    <div class="passport-row-val">2+</div>
+                  </div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Finance</div>
+                    <div class="passport-row-val"><span class="passport-finance-chip approved">&#10003; Mortgage in principle</span></div>
+                  </div>
+                  <div class="passport-row">
+                    <div class="passport-row-key">Timeline</div>
+                    <div class="passport-row-val">3&ndash;6 months</div>
+                  </div>
+                </div>
+
+                <!-- Sharing controls -->
+                <div class="passport-sharing-note">
+                  <div style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.3rem;">Agents with access: <strong style="color:var(--text-primary);">3</strong></div>
+                  <div style="font-size:.68rem;color:var(--text-muted);">Agents request access &middot; You approve</div>
+                </div>
+
+                <!-- Automation toggles -->
+                <div class="brief-panel">
+                  <div class="brief-panel-label">Automation Settings</div>
+                  <label class="brief-automation-row"><input type="checkbox" checked style="accent-color:var(--brand);width:14px;height:14px;" /> Match properties from portals</label>
+                  <label class="brief-automation-row"><input type="checkbox" checked style="accent-color:var(--brand);width:14px;height:14px;" /> Connect me with local agents</label>
+                  <label class="brief-automation-row"><input type="checkbox" checked style="accent-color:var(--brand);width:14px;height:14px;" /> Subscribe to agent newsletters</label>
+                  <label class="brief-automation-row"><input type="checkbox" checked style="accent-color:var(--brand);width:14px;height:14px;" /> Filter listings automatically</label>
+                  <label class="brief-automation-row"><input type="checkbox" checked style="accent-color:var(--brand);width:14px;height:14px;" /> Notify me when strong matches appear</label>
+                </div>
+
+                <!-- Sample listings -->
+                <div class="brief-panel">
+                  <div class="brief-panel-label">Listings we would show you</div>
+                  <div class="brief-sample-listing">
+                    <div><span class="brief-sample-price">£495k</span> &middot; Bow, E3</div>
+                    <div class="brief-sample-spec">2 bed &middot; Balcony &middot; 7 min to station</div>
+                  </div>
+                  <div class="brief-sample-listing">
+                    <div><span class="brief-sample-price">£505k</span> &middot; Hackney, E8</div>
+                    <div class="brief-sample-spec">3 bed &middot; Garden &middot; Near tube</div>
+                  </div>
+                  <div class="brief-sample-listing">
+                    <div><span class="brief-sample-price">£475k</span> &middot; Bethnal Green, E2</div>
+                    <div class="brief-sample-spec">2 bed &middot; Period flat &middot; Zone 2</div>
+                  </div>
+                  <div style="font-size:.7rem;color:var(--text-muted);margin-top:.5rem;font-style:italic;">Real listings once your Passport is active.</div>
+                </div>
+
+              </div><!-- /brief-preview-col -->
+
+            </div><!-- /brief-2col -->
+          </div>
+
+          <!-- ════════════════════════════
+             VIEW: SETTINGS
+        ════════════════════════════ -->
+          <div id="view-settings" class="view">
+            <div style="margin-bottom:1.5rem;">
+              <h2 style="font-size:1.25rem;font-weight:800;">Account Settings</h2>
+              <p style="font-size:.875rem;color:var(--text-secondary);">Manage your Home Hunter profile and preferences
+              </p>
+            </div>
+            <div style="max-width:620px;display:flex;flex-direction:column;gap:2rem;">
+              <div
+                style="background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:1.5rem;">
+                <h3
+                  style="font-size:.9375rem;font-weight:700;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);">
+                  Profile</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                  <div class="form-group"><label>First Name</label><input type="text" value="Sarah" /></div>
+                  <div class="form-group"><label>Last Name</label><input type="text" value="Bell" /></div>
+                  <div class="form-group"><label>Email Address</label><input type="email" value="sarah@example.com" />
+                  </div>
+                  <div class="form-group"><label>Phone</label><input type="tel" value="+44 7700 900123" /></div>
+                </div>
+                <button class="btn btn-primary btn-sm">Save Changes</button>
+              </div>
+              <div
+                style="background:var(--bg-soft);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+                <div style="font-size:.875rem;color:var(--text-secondary);">
+                  Manage your search criteria, must-haves, and dealbreakers in
+                  <strong style="color:var(--text-primary);">Home Passport</strong>.
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showView('passport', document.querySelector('.sidebar-link[onclick*=\'passport\']'))">Open Home Passport →</button>
+              </div>
+
+              <!-- Privacy Controls -->
+              <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);padding:1.5rem;">
+                <h3 style="font-size:.9375rem;font-weight:700;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);">Privacy Controls</h3>
+
+                <!-- Master toggle -->
+                <div class="privacy-toggle-row">
+                  <div>
+                    <div style="font-weight:700;font-size:.9rem;">Pause all data sharing</div>
+                    <div style="font-size:.8rem;color:var(--text-secondary);margin-top:.2rem;">Temporarily stop sharing your brief and contact details with all connected agents.</div>
+                  </div>
+                  <label class="toggle-switch" title="Pause all data sharing">
+                    <input type="checkbox" onchange="showToast(this.checked ? 'Data sharing paused — agents won\'t receive updates' : 'Data sharing resumed', this.checked ? 'info' : 'success')" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+
+                <!-- Per-agent data controls -->
+                <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary);margin-bottom:.75rem;">Connected agents</div>
+                <div class="privacy-row">
+                  <i data-lucide="building-2" style="width:16px;height:16px;color:var(--text-secondary);flex-shrink:0;"></i>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:.875rem;">Greenfield Properties</div>
+                    <div style="font-size:.775rem;color:var(--text-secondary);">Sharing: Brief + contact details</div>
+                  </div>
+                  <span class="badge badge-green" style="flex-shrink:0;">Active</span>
+                  <button class="btn btn-ghost btn-sm">Pause sharing</button>
+                  <button class="btn btn-ghost btn-sm">Disconnect</button>
+                </div>
+                <div class="privacy-row">
+                  <i data-lucide="building-2" style="width:16px;height:16px;color:var(--text-secondary);flex-shrink:0;"></i>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:.875rem;">East End Estates</div>
+                    <div style="font-size:.775rem;color:var(--text-secondary);">Sharing: Brief only</div>
+                  </div>
+                  <span class="badge badge-yellow" style="flex-shrink:0;">Invited</span>
+                  <button class="btn btn-ghost btn-sm">Pause sharing</button>
+                  <button class="btn btn-ghost btn-sm">Disconnect</button>
+                </div>
+                <div class="privacy-row">
+                  <i data-lucide="building-2" style="width:16px;height:16px;color:var(--text-secondary);flex-shrink:0;"></i>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font-weight:700;font-size:.875rem;">Northfield &amp; Co</div>
+                    <div style="font-size:.775rem;color:var(--text-secondary);">Sharing: None (ignored)</div>
+                  </div>
+                  <span class="badge badge-gray" style="flex-shrink:0;">Ignored</span>
+                  <button class="btn btn-ghost btn-sm">Delete my data</button>
+                </div>
+
+                <!-- Consent log -->
+                <div style="margin-top:1.25rem;">
+                  <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary);margin-bottom:.75rem;">Consent log</div>
+                  <div class="consent-event">
+                    <span class="consent-dot share"></span>
+                    <div style="flex:1;">Brief shared with <strong>Greenfield Properties</strong></div>
+                    <span style="color:var(--text-muted);flex-shrink:0;">2h ago</span>
+                  </div>
+                  <div class="consent-event">
+                    <span class="consent-dot share"></span>
+                    <div style="flex:1;">Brief shared with <strong>East End Estates</strong></div>
+                    <span style="color:var(--text-muted);flex-shrink:0;">3 days ago</span>
+                  </div>
+                  <div class="consent-event">
+                    <span class="consent-dot disconnect"></span>
+                    <div style="flex:1;"><strong>Northfield &amp; Co</strong> disconnected</div>
+                    <span style="color:var(--text-muted);flex-shrink:0;">5 days ago</span>
+                  </div>
+                  <div style="margin-top:.75rem;">
+                    <button class="btn btn-ghost btn-sm">Download consent log</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Danger zone -->
+              <div class="danger-zone">
+                <h3 style="font-size:.875rem;font-weight:700;color:#991B1B;margin-bottom:.5rem;">Danger zone</h3>
+                <p style="font-size:.8125rem;color:#B91C1C;margin-bottom:1rem;">Permanently delete your HomeHunter profile and all associated data, including your brief, connected agents, and consent history. This cannot be undone.</p>
+                <button class="btn btn-sm" style="background:none;border:1.5px solid #FECACA;color:#991B1B;border-radius:var(--radius-sm);padding:.4rem .875rem;font-size:.8125rem;font-weight:700;cursor:pointer;">Delete all my data</button>
+              </div>
+
+            </div>
+          </div>
+
+        </div><!-- /app-canvas -->
+      </div><!-- /app-content -->
+    </div><!-- /app-main -->
+
+  </div><!-- /app-root -->
+
+  <script>
+    'use strict';
+
+    function showView(viewId, triggerEl) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById('view-' + viewId);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.sidebar-link').forEach(link => link.classList.remove('active'));
+      if (triggerEl) triggerEl.classList.add('active');
+
+      const titles = {
+        dashboard: 'My Dashboard',
+        passport: 'Home Passport',
+        agents: 'Agent Manager',
+        search: 'Search Properties',
+        saved: 'Saved Homes',
+        offers: 'Offers & Applications',
+        surveys: 'Surveys Marketplace',
+        inbox: 'Inbox',
+        agentinbox: 'Agent Inbox',
+        booking: 'Book a Viewing',
+        settings: 'Account Settings',
+      };
+      const titleEl = document.getElementById('topbar-title');
+      if (titleEl && titles[viewId]) titleEl.textContent = titles[viewId];
+
+      const canvas = document.querySelector('.app-canvas');
+      if (canvas) canvas.scrollTop = 0;
+      history.replaceState(null, '', '#' + viewId);
+    }
+
+    /* ── Toast ── */
+    function showToast(msg, type) {
+      type = type || 'success';
+      var t = document.createElement('div');
+      t.className = 'toast toast-' + type;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      requestAnimationFrame(function(){requestAnimationFrame(function(){ t.classList.add('show'); });});
+      setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 350); }, 2600);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      const hash = window.location.hash.replace('#', '');
+      const validViews = ['dashboard', 'passport', 'agents', 'search', 'saved', 'offers', 'surveys', 'inbox', 'agentinbox', 'booking', 'settings'];
+      const startView = validViews.includes(hash) ? hash : 'dashboard';
+      const triggerEl = document.querySelector('.sidebar-link[onclick*="' + startView + '"]');
+      showView(startView, triggerEl);
+
+      /* Button interactions */
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('button, a.btn');
+        if (!btn) return;
+        var txt = btn.textContent.trim().replace(/\s+/g, ' ');
+        if (txt === 'Book Viewing' || txt.includes('Book a Viewing')) {
+          showToast('Viewing request sent to owner');
+        } else if (txt === 'Confirm Booking') {
+          showToast('Viewing booked — check your inbox for confirmation');
+        } else if (txt === 'Save Changes' || txt === 'Save Preferences') {
+          showToast('Settings saved');
+        } else if (txt === 'Upload Documents') {
+          showToast('Document upload panel would open here', 'info');
+        } else if (txt === 'Unlock Survey' || txt.includes('Unlock')) {
+          showToast('Survey unlocked — available in your account');
+        } else if (txt === 'Find Properties' || txt === 'Search') {
+          showView('search', document.querySelector('.sidebar-link[onclick*="search"]'));
+        } else if (txt === 'Browse more →' || txt === 'Browse more') {
+          showView('search', document.querySelector('.sidebar-link[onclick*="search"]'));
+        } else if (txt === 'Message Owner') {
+          showView('inbox', document.querySelector('.sidebar-link[onclick*="inbox"]'));
+        } else if (txt === 'View Details') {
+          showToast('Loading property details…', 'info');
+        } else if (txt === 'Manage') {
+          showView('offers', document.querySelector('.sidebar-link[onclick*="offers"]'));
+        } else if (txt === 'Clear filters') {
+          showToast('Filters cleared');
+        } else if (txt === 'Request Survey') {
+          showToast('Survey request submitted — we\'ll be in touch');
+        } else if (txt === 'Download PDF') {
+          showToast('PDF download started');
+        } else if (txt === 'Find Agents') {
+          showToast('Finding agents in your area…', 'info');
+        } else if (txt === 'Add to My List') {
+          showToast('Agent added to your list — brief will be sent shortly');
+        } else if (txt === 'View Profile') {
+          showToast('Agent profile would open here', 'info');
+        } else if (txt === 'Send Brief' || txt === 'Resend Brief') {
+          showToast('Buyer brief sent to agent');
+        } else if (txt === 'Pause') {
+          showToast('Agent paused — they won\'t receive updates', 'info');
+        } else if (txt === 'Ignore') {
+          showToast('Agent ignored — removed from active list');
+        } else if (txt === 'Reconnect') {
+          showToast('Reconnect request sent to agent');
+        } else if (txt === 'Manage agents →') {
+          showView('agents', document.querySelector('.sidebar-link[onclick*="agents"]'));
+        } else if (txt === 'Save My Home Passport →' || txt === 'Save Brief') {
+          showToast('Home Passport saved — agents can now request access');
+        } else if (txt === 'Copy Brief') {
+          showToast('Passport link copied to clipboard', 'info');
+        } else if (txt === 'Edit Brief →' || txt === 'Edit Brief') {
+          showView('passport', document.querySelector('.sidebar-link[onclick*="passport"]'));
+        } else if (txt === 'Open Home Passport →') {
+          showView('passport', document.querySelector('.sidebar-link[onclick*="passport"]'));
+        } else if (txt === 'Copy Address') {
+          showToast('Inbox address copied to clipboard', 'info');
+        } else if (txt === 'Mute') {
+          showToast('Source muted — no more emails from this agent', 'info');
+        } else if (txt === 'Unmute') {
+          showToast('Source unmuted — emails will resume');
+        } else if (txt === 'Unsubscribe') {
+          showToast('Unsubscribe request sent to agent');
+        } else if (txt === 'Save') {
+          showToast('Property saved to your list');
+        } else if (txt === 'Dismiss') {
+          showToast('Property dismissed — moved to archive');
+        } else if (txt === 'Review archive') {
+          showToast('Archive would open here', 'info');
+        } else if (txt === 'Pause sharing') {
+          showToast('Data sharing paused for this agent', 'info');
+        } else if (txt === 'Disconnect') {
+          showToast('Agent disconnected — they can no longer see your brief');
+        } else if (txt === 'Delete my data') {
+          showToast('Data deletion request submitted', 'info');
+        } else if (txt === 'Download consent log') {
+          showToast('Consent log download started', 'info');
+        } else if (txt === 'Delete all my data') {
+          showToast('Please contact support to confirm full data deletion', 'error');
+        } else if (txt === '← Prev' || txt === 'Next →') {
+          showToast('Page navigation', 'info');
+        } else if (txt === 'Send') {
+          var comp = btn.closest('.inbox-composer');
+          if (comp) {
+            var ta = comp.querySelector('textarea');
+            if (ta && ta.value.trim()) {
+              var thread = document.querySelector('#view-inbox .inbox-thread');
+              if (thread) {
+                var now = new Date();
+                var ts = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+                thread.insertAdjacentHTML('beforeend',
+                  '<div class="thread-msg outgoing">' +
+                  '<div class="thread-avatar">SB</div>' +
+                  '<div><div class="thread-bubble outgoing">' + ta.value.replace(/</g,'&lt;') + '</div>' +
+                  '<div class="thread-time">Today &middot; ' + ts + '</div></div></div>');
+                thread.scrollTop = thread.scrollHeight;
+              }
+              ta.value = '';
+              showToast('Message sent');
+            }
+          }
+        }
+      });
+    });
+  </script>
+<script src="../lang.js"></script>
+</body>
+
+</html>

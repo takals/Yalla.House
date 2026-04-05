@@ -1,0 +1,4 @@
+task_id,property_id,title,due_date,done
+tsk1,prop_001,Upload EPC certificate,2025-11-05,False
+tsk2,prop_001,Add floorplan PDF,2025-11-06,True
+tsk3,prop_001,Confirm Saturday viewing slots,2025-11-04,False

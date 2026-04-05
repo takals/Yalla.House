@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Partner Agent — Yalla.House</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* ── Partner-specific styles ── */
+
+    /* Verification banner */
+    .verify-banner {
+      background: var(--brand-solid-bg);
+      border: 1px solid rgba(255,212,0,.4);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .verify-banner-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      background: rgba(255,212,0,.22);
+      border: 1px solid rgba(255,212,0,.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #7A5F00;
+    }
+    .verify-banner-icon svg { width: 20px; height: 20px; }
+    .verify-banner-body { flex: 1; }
+    .verify-banner-title {
+      font-size: .9375rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: .2rem;
+    }
+    .verify-banner-desc {
+      font-size: .8125rem;
+      color: #7A5F00;
+      line-height: 1.5;
+    }
+
+    /* Request rows */
+    .request-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .9rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .request-row:last-child { border-bottom: none; }
+    .request-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .request-body { flex: 1; min-width: 0; }
+    .request-address {
+      font-weight: 600;
+      font-size: .9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: .15rem;
+    }
+    .request-meta {
+      font-size: .8rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .request-date {
+      font-size: .75rem;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+    .request-actions { display: flex; gap: .5rem; flex-shrink: 0; }
+
+    /* Request type badges */
+    .badge-type {
+      font-size: .6875rem;
+      font-weight: 700;
+      padding: .25rem .6rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .badge-valuation  { background: #EFF6FF; color: #1D4ED8; }
+    .badge-fullsvc    { background: #F0FDF4; color: #166534; }
+    .badge-advice     { background: #FAF5FF; color: #6B21A8; }
+    .unread-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand);
+      flex-shrink: 0;
+    }
+
+    /* Profile snapshot card */
+    .profile-snap {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .profile-snap-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand) 0%, #FFEA70 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #000;
+      flex-shrink: 0;
+    }
+    .profile-snap-info { flex: 1; min-width: 0; }
+    .profile-snap-name {
+      font-weight: 700;
+      font-size: .9375rem;
+      margin-bottom: .2rem;
+    }
+    .profile-snap-sub {
+      font-size: .8125rem;
+      color: var(--text-secondary);
+      margin-bottom: .5rem;
+    }
+    .profile-snap-portals {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    .portal-badge {
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      letter-spacing: .02em;
+    }
+
+    /* Requests view — split layout */
+    .requests-split {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .requests-panel {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .requests-panel-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+      font-size: .875rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .requests-list { padding: 0 1.25rem; }
+    .req-list-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+    .req-list-item:last-child { border-bottom: none; }
+    .req-list-item:hover { opacity: .8; }
+    .req-list-item.active { background: var(--brand-light); border-radius: var(--radius); margin: 0 -.5rem; padding-left: .5rem; padding-right: .5rem; }
+    .req-list-body { flex: 1; min-width: 0; }
+    .req-list-address { font-weight: 600; font-size: .875rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .req-list-owner { font-size: .75rem; color: var(--text-secondary); margin-top: .1rem; }
+
+    /* Thread panel */
+    .thread-panel {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+    }
+    .thread-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .thread-title { font-weight: 700; font-size: .9375rem; margin-bottom: .2rem; }
+    .thread-sub { font-size: .8rem; color: var(--text-secondary); }
+    .thread-body { padding: 1.25rem; flex: 1; }
+    .msg-thread { display: flex; flex-direction: column; gap: .75rem; }
+    .msg-bubble {
+      max-width: 78%;
+      padding: .75rem 1rem;
+      border-radius: var(--radius-lg);
+      font-size: .875rem;
+      line-height: 1.5;
+    }
+    .msg-bubble.inbound {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      align-self: flex-start;
+    }
+    .msg-bubble.outbound {
+      background: var(--brand);
+      color: #000;
+      align-self: flex-end;
+    }
+    .msg-meta { font-size: .7rem; color: var(--text-muted); margin-top: .3rem; }
+    .msg-composer {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-end;
+      padding: .75rem;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin: 0 1.25rem 1.25rem;
+    }
+    .msg-composer textarea {
+      flex: 1;
+      border: none;
+      resize: none;
+      font-family: var(--font);
+      font-size: .875rem;
+      background: transparent;
+      color: var(--text-primary);
+      min-height: 42px;
+      max-height: 120px;
+      outline: none;
+    }
+
+    /* Profile form */
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      max-width: 580px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: .35rem; }
+    .form-group label {
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: .65rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: .9rem;
+      color: var(--text-primary);
+      background: var(--surface);
+      transition: border-color var(--transition);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--brand);
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .portal-toggle-row {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .portal-toggle {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--surface);
+      transition: border-color var(--transition), background var(--transition), color var(--transition);
+      will-change: transform;
+      user-select: none;
+    }
+    .portal-toggle.active {
+      border-color: var(--brand);
+      background: var(--brand-solid-bg);
+      color: var(--text-primary);
+    }
+    .portal-toggle:hover { border-color: var(--border-dark); }
+    .portal-toggle input { display: none; }
+
+    /* Coverage chips */
+    .area-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+    .area-chip {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .35rem .7rem .35rem .85rem;
+      background: var(--brand-solid-bg);
+      border: 1px solid rgba(255,212,0,.35);
+      border-radius: 99px;
+      font-size: .8125rem;
+      font-weight: 600;
+      color: #7A5F00;
+      cursor: default;
+    }
+    .area-chip-remove {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255,212,0,.3);
+      border: none;
+      cursor: pointer;
+      color: #7A5F00;
+      font-size: .7rem;
+      line-height: 1;
+      padding: 0;
+      transition: background var(--transition);
+    }
+    .area-chip-remove:hover { background: rgba(255,212,0,.6); }
+    .add-area-row {
+      display: flex;
+      gap: .75rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .add-area-row input {
+      padding: .6rem .9rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: .875rem;
+      color: var(--text-primary);
+      background: var(--surface);
+      width: 160px;
+      transition: border-color var(--transition);
+    }
+    .add-area-row input:focus { outline: none; border-color: var(--brand); }
+    .map-placeholder {
+      width: 100%;
+      height: 200px;
+      background: var(--bg-muted);
+      border: 1px dashed var(--border-dark);
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .map-placeholder svg { width: 28px; height: 28px; }
+    .map-placeholder-label {
+      font-size: .8125rem;
+      font-weight: 600;
+    }
+
+    /* Verification timeline */
+    .doc-list { display: flex; flex-direction: column; gap: 0; }
+    .doc-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .doc-row:last-child { border-bottom: none; }
+    .doc-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius);
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .doc-icon svg { width: 18px; height: 18px; }
+    .doc-body { flex: 1; }
+    .doc-name { font-size: .875rem; font-weight: 600; }
+    .doc-sub { font-size: .75rem; color: var(--text-secondary); margin-top: .1rem; }
+
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin: 1.5rem 0;
+    }
+    .timeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+    .timeline-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      position: relative;
+    }
+    .timeline-dot svg { width: 14px; height: 14px; color: var(--text-muted); }
+    .timeline-dot.done {
+      background: #DCFCE7;
+      border-color: #16A34A;
+      color: #16A34A;
+    }
+    .timeline-dot.done svg { color: #16A34A; }
+    .timeline-dot.active {
+      background: var(--brand-solid-bg);
+      border-color: var(--brand);
+      color: #7A5F00;
+    }
+    .timeline-dot.active svg { color: #7A5F00; }
+    .timeline-label {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: .5rem;
+    }
+    .timeline-label.done { color: #16A34A; }
+    .timeline-label.active { color: #7A5F00; }
+    .timeline-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      margin-top: 15px;
+    }
+    .timeline-connector.done { background: #16A34A; }
+
+    /* Phase 2 greyed card */
+    .phase2-card {
+      background: var(--bg-soft);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: .6;
+    }
+    .phase2-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .phase2-icon svg { width: 20px; height: 20px; color: var(--text-muted); }
+    .phase2-label { font-size: .875rem; font-weight: 700; color: var(--text-secondary); margin-bottom: .15rem; }
+    .phase2-desc { font-size: .8rem; color: var(--text-muted); }
+    .phase2-tag {
+      margin-left: auto;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      background: var(--bg-muted);
+      color: var(--text-muted);
+      padding: .2rem .55rem;
+      border-radius: 99px;
+      flex-shrink: 0;
+    }
+
+    /* Greyed sidebar items (Phase 2) */
+    .sidebar-link.disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Settings notification checkboxes */
+    .notif-list { display: flex; flex-direction: column; gap: .6rem; }
+    .notif-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .7rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .notif-item:hover { background: var(--bg-soft); }
+    .notif-item input[type="checkbox"] {
+      accent-color: var(--brand);
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+    .notif-item span { font-size: .875rem; }
+
+    /* Stat cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card-inner {
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+    }
+    .stat-card-label {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .6rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .stat-card-label svg { width: 14px; height: 14px; }
+    .stat-card-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -.04em;
+      line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .stat-card-sub {
+      font-size: .75rem;
+      color: var(--text-muted);
+    }
+    .stat-card-value.brand { color: var(--brand); }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+      z-index: 9999;
+    }
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .85rem 1.25rem;
+      background: var(--text-primary);
+      color: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      font-size: .875rem;
+      font-weight: 500;
+      min-width: 260px;
+      max-width: 380px;
+      animation: toastIn .2s ease;
+    }
+    .toast.success { background: #0f172a; }
+    .toast.error   { background: #991B1B; }
+    .toast.info    { background: #1E40AF; }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-root">
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" role="navigation" aria-label="Partner navigation">
+    <div class="sidebar-logo">
+      <a href="../index.html" style="color:var(--brand);text-decoration:none;">Yalla.House</a>
+      <span style="font-size:.65rem;font-weight:700;background:var(--brand);color:#000;padding:.15rem .45rem;border-radius:4px;margin-left:.4rem;letter-spacing:.04em;">PARTNER</span>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Overview</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('dashboard',this)" class="sidebar-link active">
+            <i data-lucide="layout-dashboard" class="sidebar-icon"></i>
+            <span data-i18n="dnav.dashboard">Dashboard</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('requests',this)" class="sidebar-link">
+            <i data-lucide="inbox" class="sidebar-icon"></i>
+            <span data-i18n="partner.nav.requests">Requests</span>
+            <span class="sidebar-badge">3</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Profile</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('profile',this)" class="sidebar-link">
+            <i data-lucide="user" class="sidebar-icon"></i>
+            My Profile
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('coverage',this)" class="sidebar-link">
+            <i data-lucide="map" class="sidebar-icon"></i>
+            Coverage Areas
+          </button>
+        </li>
+        <li>
+          <button onclick="showView('verification',this)" class="sidebar-link">
+            <i data-lucide="shield-check" class="sidebar-icon"></i>
+            Verification
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Performance</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button class="sidebar-link disabled" onclick="showToast('Rankings are available once you reach Verified Partner status.','info')">
+            <i data-lucide="trophy" class="sidebar-icon"></i>
+            Rankings
+            <span class="phase2-tag" style="margin-left:auto;pointer-events:none;">Phase 2</span>
+          </button>
+        </li>
+        <li>
+          <button class="sidebar-link disabled" onclick="showToast('SLA Reports unlock after verification.','info')">
+            <i data-lucide="bar-chart-2" class="sidebar-icon"></i>
+            SLA Reports
+            <span class="phase2-tag" style="margin-left:auto;pointer-events:none;">Phase 2</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Account</div>
+      <ul class="sidebar-nav">
+        <li>
+          <button onclick="showView('settings',this)" class="sidebar-link">
+            <i data-lucide="settings" class="sidebar-icon"></i>
+            <span data-i18n="dnav.settings">Settings</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar">RT</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">Rachel T.</div>
+        <div class="sidebar-user-role"><span data-i18n="partner.role">Partner Agent</span> — London</div>
+      </div>
+      <button class="sidebar-user-logout" onclick="showToast('You have been signed out.','info')" title="Sign Out">
+        <i data-lucide="log-out" style="width:15px;height:15px;"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="app-main">
+
+    <!-- Topbar -->
+    <header class="app-topbar">
+      <div class="app-topbar-left">
+        <div class="app-topbar-title" id="topbar-title">Dashboard</div>
+      </div>
+      <div class="app-topbar-right">
+        <div class="lang-switcher">
+          <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+          <span class="lang-sep">|</span>
+          <button id="lang-btn-de" class="lang-btn" onclick="setLang('de')">DE</button>
+        </div>
+        <span style="font-size:.8125rem;color:var(--text-secondary);margin-right:.75rem;">
+          <span class="badge badge-yellow" style="font-size:.7rem;font-weight:700;">Awaiting Verification</span>
+        </span>
+        <button class="btn btn-sm btn-outline" onclick="showView('verification',document.querySelector('[onclick*=verification]'))">
+          View status
+        </button>
+      </div>
+    </header>
+
+    <!-- Canvas -->
+    <div class="app-content">
+      <main class="app-canvas">
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- VIEW: DASHBOARD                            -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="view-dashboard" class="view">
+
+          <div class="page-heading" style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin:0 0 .25rem;">Good morning, Rachel</h1>
+            <p style="font-size:.9rem;color:var(--text-secondary);margin:0;">Here's what's new in your Partner inbox.</p>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="stats-grid">
+            <div class="stat-card-inner">
+              <div class="stat-card-label">
+                <i data-lucide="mail" style="width:14px;height:14px;"></i>
+                New Requests
+              </div>
+              <div class="stat-card-value brand">3</div>
+              <div class="stat-card-sub">Since last login</div>
+            </div>
+            <div class="stat-card-inner">
+              <div class="stat-card-label">
+                <i data-lucide="reply" style="width:14px;height:14px;"></i>
+                Replied
+              </div>
+              <div class="stat-card-value">8</div>
+              <div class="stat-card-sub">All time</div>
+            </div>
+            <div class="stat-card-inner">
+              <div class="stat-card-label">
+                <i data-lucide="users" style="width:14px;height:14px;"></i>
+                Active Clients
+              </div>
+              <div class="stat-card-value">2</div>
+              <div class="stat-card-sub">In progress</div>
+            </div>
+            <div class="stat-card-inner">
+              <div class="stat-card-label">
+                <i data-lucide="zap" style="width:14px;height:14px;"></i>
+                Response Rate
+              </div>
+              <div class="stat-card-value">92<span style="font-size:1.1rem;font-weight:600;">%</span></div>
+              <div class="stat-card-sub">Last 30 days</div>
+            </div>
+          </div>
+
+          <!-- Verification banner -->
+          <div class="verify-banner">
+            <div class="verify-banner-icon">
+              <i data-lucide="shield" style="width:20px;height:20px;"></i>
+            </div>
+            <div class="verify-banner-body">
+              <div class="verify-banner-title">Your account is awaiting verification</div>
+              <div class="verify-banner-desc">Our team will review your credentials within 2 business days. You can still receive and reply to requests while we verify your profile.</div>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="showView('verification',document.querySelector('[onclick*=verification]'))">Check status</button>
+          </div>
+
+          <!-- Two-column: Profile snapshot + Recent requests -->
+          <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:1.5rem;align-items:start;">
+
+            <!-- Profile snapshot -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Profile Snapshot</div>
+                <button class="btn btn-sm btn-ghost" onclick="showView('profile',document.querySelector('[onclick*=profile]'))">Edit Profile</button>
+              </div>
+              <div style="padding:0 1.25rem 1.25rem;">
+                <div class="profile-snap" style="border:none;padding:0;gap:1rem;margin-bottom:1rem;">
+                  <div class="profile-snap-avatar">RT</div>
+                  <div class="profile-snap-info">
+                    <div class="profile-snap-name">Rachel T.</div>
+                    <div class="profile-snap-sub">Taylor &amp; Co. · North London</div>
+                    <div class="profile-snap-portals">
+                      <span class="portal-badge">Rightmove</span>
+                      <span class="portal-badge">Zoopla</span>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:.6rem;">
+                  <div style="display:flex;justify-content:space-between;font-size:.8125rem;">
+                    <span style="color:var(--text-secondary);">Coverage</span>
+                    <span style="font-weight:600;">North London</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:.8125rem;">
+                    <span style="color:var(--text-secondary);">Experience</span>
+                    <span style="font-weight:600;">8 years</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:.8125rem;">
+                    <span style="color:var(--text-secondary);">Languages</span>
+                    <span style="font-weight:600;">English, Arabic</span>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:.8125rem;">
+                    <span style="color:var(--text-secondary);">Status</span>
+                    <span class="badge badge-yellow" style="font-size:.7rem;font-weight:700;">Awaiting Verification</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent requests -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Recent Requests</div>
+                <button class="btn btn-sm btn-ghost" onclick="showView('requests',document.querySelector('[onclick*=requests]'))">View all</button>
+              </div>
+              <div style="padding:0 1.25rem 1rem;">
+                <div class="request-row">
+                  <div class="unread-dot"></div>
+                  <div class="request-avatar">SM</div>
+                  <div class="request-body">
+                    <div class="request-address">14 Highbury Crescent, N5</div>
+                    <div class="request-meta">
+                      Sarah M. &nbsp;&middot;&nbsp;
+                      <span class="badge-type badge-fullsvc">Full Service</span>
+                    </div>
+                  </div>
+                  <div class="request-date">Today</div>
+                  <div class="request-actions">
+                    <button class="btn btn-sm btn-primary" onclick="showToast('Opening request from Sarah M.','info')">Reply</button>
+                  </div>
+                </div>
+                <div class="request-row">
+                  <div class="unread-dot"></div>
+                  <div class="request-avatar">JK</div>
+                  <div class="request-body">
+                    <div class="request-address">7 Tufnell Park Road, N7</div>
+                    <div class="request-meta">
+                      James K. &nbsp;&middot;&nbsp;
+                      <span class="badge-type badge-valuation">Valuation</span>
+                    </div>
+                  </div>
+                  <div class="request-date">Yesterday</div>
+                  <div class="request-actions">
+                    <button class="btn btn-sm btn-primary" onclick="showToast('Opening request from James K.','info')">Reply</button>
+                  </div>
+                </div>
+                <div class="request-row">
+                  <div class="unread-dot"></div>
+                  <div class="request-avatar">PL</div>
+                  <div class="request-body">
+                    <div class="request-address">22 Junction Road, N19</div>
+                    <div class="request-meta">
+                      Priya L. &nbsp;&middot;&nbsp;
+                      <span class="badge-type badge-advice">Advice</span>
+                    </div>
+                  </div>
+                  <div class="request-date">2 days ago</div>
+                  <div class="request-actions">
+                    <button class="btn btn-sm btn-primary" onclick="showToast('Opening request from Priya L.','info')">Reply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- VIEW: REQUESTS                             -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="view-requests" class="view" style="display:none;">
+
+          <div class="page-heading" style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin:0 0 .25rem;">Requests</h1>
+            <p style="font-size:.9rem;color:var(--text-secondary);margin:0;">Inbox from NoAgent owners seeking professional help.</p>
+          </div>
+
+          <div class="requests-split">
+
+            <!-- Request list panel -->
+            <div class="requests-panel">
+              <div class="requests-panel-header">
+                All Requests
+                <span class="badge badge-yellow" style="font-size:.7rem;font-weight:700;">3 new</span>
+              </div>
+              <div class="requests-list">
+                <div class="req-list-item active" onclick="showToast('Thread loaded.','info')">
+                  <div class="unread-dot"></div>
+                  <div class="request-avatar" style="width:32px;height:32px;font-size:.7rem;">SM</div>
+                  <div class="req-list-body">
+                    <div class="req-list-address">14 Highbury Crescent, N5</div>
+                    <div class="req-list-owner">Sarah M. &middot; <span class="badge-type badge-fullsvc" style="font-size:.62rem;padding:.15rem .45rem;">Full Service</span></div>
+                  </div>
+                </div>
+                <div class="req-list-item" onclick="showToast('Thread from James K. loaded.','info')">
+                  <div class="unread-dot"></div>
+                  <div class="request-avatar" style="width:32px;height:32px;font-size:.7rem;">JK</div>
+                  <div class="req-list-body">
+                    <div class="req-list-address">7 Tufnell Park Road, N7</div>
+                    <div class="req-list-owner">James K. &middot; <span class="badge-type badge-valuation" style="font-size:.62rem;padding:.15rem .45rem;">Valuation</span></div>
+                  </div>
+                </div>
+                <div class="req-list-item" onclick="showToast('Thread from Priya L. loaded.','info')">
+                  <div class="unread-dot"></div>
+                  <div class="request-avatar" style="width:32px;height:32px;font-size:.7rem;">PL</div>
+                  <div class="req-list-body">
+                    <div class="req-list-address">22 Junction Road, N19</div>
+                    <div class="req-list-owner">Priya L. &middot; <span class="badge-type badge-advice" style="font-size:.62rem;padding:.15rem .45rem;">Advice</span></div>
+                  </div>
+                </div>
+                <div class="req-list-item" onclick="showToast('Thread from Tom W. loaded.','info')">
+                  <div class="request-avatar" style="width:32px;height:32px;font-size:.7rem;">TW</div>
+                  <div class="req-list-body">
+                    <div class="req-list-address">55 Holloway Road, N7</div>
+                    <div class="req-list-owner">Tom W. &middot; <span class="badge-type badge-valuation" style="font-size:.62rem;padding:.15rem .45rem;">Valuation</span></div>
+                  </div>
+                </div>
+                <div class="req-list-item" onclick="showToast('Thread from Clara B. loaded.','info')">
+                  <div class="request-avatar" style="width:32px;height:32px;font-size:.7rem;">CB</div>
+                  <div class="req-list-body">
+                    <div class="req-list-address">3 Calabria Road, N5</div>
+                    <div class="req-list-owner">Clara B. &middot; <span class="badge-type badge-fullsvc" style="font-size:.62rem;padding:.15rem .45rem;">Full Service</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Active thread panel -->
+            <div class="thread-panel">
+              <div class="thread-header">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div>
+                    <div class="thread-title">14 Highbury Crescent, N5</div>
+                    <div class="thread-sub">Sarah M. &nbsp;&middot;&nbsp; <span class="badge-type badge-fullsvc" style="font-size:.65rem;padding:.18rem .5rem;">Full Service</span> &nbsp;&middot;&nbsp; Received today</div>
+                  </div>
+                  <span class="badge badge-yellow" style="font-size:.7rem;font-weight:700;">Unread</span>
+                </div>
+              </div>
+              <div class="thread-body">
+                <div class="msg-thread">
+                  <div>
+                    <div class="msg-bubble inbound">
+                      Hi Rachel, I found your profile on Yalla.House. I have a 2-bed flat in Highbury and I'm thinking about selling. I started the NoAgent route but I'm feeling a bit overwhelmed with the process — especially the valuation and negotiations side. Would you be open to a quick call to discuss what full-service support might look like?
+                    </div>
+                    <div class="msg-meta" style="padding-left:.5rem;">Sarah M. &nbsp;&middot;&nbsp; Today at 09:14</div>
+                  </div>
+                  <div style="align-self:flex-end;">
+                    <div class="msg-bubble outbound">
+                      Hi Sarah! Thanks for reaching out. I'd be happy to have a quick call. I know the valuation step can feel tricky without an agent. I cover Highbury and surrounding areas and I've done a lot of similar flats in N5. Are you free Thursday afternoon?
+                    </div>
+                    <div class="msg-meta" style="padding-right:.5rem;text-align:right;">You &nbsp;&middot;&nbsp; Today at 10:02</div>
+                  </div>
+                  <div>
+                    <div class="msg-bubble inbound">
+                      Thursday works great! Say 3 pm? Also — just to understand: would you charge a full commission or is there a flat-fee option through Yalla?
+                    </div>
+                    <div class="msg-meta" style="padding-left:.5rem;">Sarah M. &nbsp;&middot;&nbsp; Today at 10:28</div>
+                  </div>
+                </div>
+              </div>
+              <div class="msg-composer">
+                <textarea id="reply-composer" placeholder="Write your reply to Sarah…" rows="2"></textarea>
+                <button class="btn btn-sm btn-primary" onclick="sendReply()">Send</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- VIEW: MY PROFILE                           -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="view-profile" class="view" style="display:none;">
+
+          <div class="page-heading" style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin:0 0 .25rem;">My Profile</h1>
+            <p style="font-size:.9rem;color:var(--text-secondary);margin:0;">This is what Yalla.House owners see when they view your agent card.</p>
+          </div>
+
+          <div class="section-card" style="max-width:680px;">
+            <div class="section-card-header">
+              <div class="section-card-title">Agent Details</div>
+            </div>
+            <div style="padding:0 1.5rem 1.5rem;">
+              <div class="profile-form">
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="prof-fname">First Name</label>
+                    <input type="text" id="prof-fname" value="Rachel" />
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-lname">Last Name</label>
+                    <input type="text" id="prof-lname" value="Taylor" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="prof-agency">Agency Name</label>
+                  <input type="text" id="prof-agency" value="Taylor &amp; Co." />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="prof-email">Email</label>
+                    <input type="email" id="prof-email" value="rachel@taylorandco.co.uk" />
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-phone">Phone</label>
+                    <input type="tel" id="prof-phone" value="+44 7700 900123" />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="prof-years">Years Experience</label>
+                    <input type="number" id="prof-years" value="8" min="0" />
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-langs">Languages</label>
+                    <input type="text" id="prof-langs" value="English, Arabic" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="prof-bio">Bio</label>
+                  <textarea id="prof-bio" rows="4">I'm a North London specialist with 8 years of experience in residential sales. I help Yalla.House owners navigate the parts they find tricky — from valuations to negotiations — without taking over the whole process. Transparent, efficient, and no surprises on fees.</textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>Portal Presence</label>
+                  <div class="portal-toggle-row">
+                    <label class="portal-toggle active" id="toggle-rm">
+                      <input type="checkbox" checked onchange="togglePortal('toggle-rm',this)" />
+                      Rightmove
+                    </label>
+                    <label class="portal-toggle active" id="toggle-zo">
+                      <input type="checkbox" checked onchange="togglePortal('toggle-zo',this)" />
+                      Zoopla
+                    </label>
+                    <label class="portal-toggle" id="toggle-oa">
+                      <input type="checkbox" onchange="togglePortal('toggle-oa',this)" />
+                      OnTheMarket
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <button class="btn btn-primary" onclick="showToast('Profile saved successfully.','success')">Save Changes</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- VIEW: COVERAGE AREAS                       -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="view-coverage" class="view" style="display:none;">
+
+          <div class="page-heading" style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin:0 0 .25rem;">Coverage Areas</h1>
+            <p style="font-size:.9rem;color:var(--text-secondary);margin:0;">Set the postcode districts you cover. Owners in these areas will see your profile first.</p>
+          </div>
+
+          <div class="section-card" style="max-width:620px;">
+            <div class="section-card-header">
+              <div class="section-card-title">Your Districts</div>
+            </div>
+            <div style="padding:0 1.5rem 1.5rem;">
+
+              <div class="area-chips" id="area-chips">
+                <div class="area-chip">N1 <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button></div>
+                <div class="area-chip">N4 <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button></div>
+                <div class="area-chip">N7 <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button></div>
+                <div class="area-chip">NW3 <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button></div>
+                <div class="area-chip">NW5 <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button></div>
+                <div class="area-chip">WC1 <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button></div>
+              </div>
+
+              <div class="add-area-row">
+                <input type="text" id="new-area-input" placeholder="e.g. EC1" maxlength="6" />
+                <button class="btn btn-sm btn-secondary" onclick="addArea()">Add area</button>
+              </div>
+
+              <div class="map-placeholder">
+                <i data-lucide="map-pin" style="width:28px;height:28px;color:var(--text-muted);"></i>
+                <div class="map-placeholder-label">Interactive map — Phase 2</div>
+                <div style="font-size:.75rem;color:var(--text-muted);">Visual district coverage will appear here</div>
+              </div>
+
+              <button class="btn btn-primary" onclick="showToast('Coverage areas saved.','success')">Save Coverage</button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- VIEW: VERIFICATION                         -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="view-verification" class="view" style="display:none;">
+
+          <div class="page-heading" style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin:0 0 .25rem;">Verification</h1>
+            <p style="font-size:.9rem;color:var(--text-secondary);margin:0;">Become a Verified Partner to unlock full access and ranking signals.</p>
+          </div>
+
+          <!-- Status card -->
+          <div class="section-card" style="max-width:620px;margin-bottom:1.5rem;">
+            <div class="section-card-header">
+              <div class="section-card-title">Current Status</div>
+              <span class="badge badge-yellow" style="font-size:.7rem;font-weight:700;">Awaiting Verification</span>
+            </div>
+            <div style="padding:0 1.5rem 1.5rem;">
+
+              <!-- Timeline -->
+              <div class="timeline">
+                <div class="timeline-step">
+                  <div class="timeline-dot done">
+                    <i data-lucide="check" style="width:14px;height:14px;"></i>
+                  </div>
+                  <div class="timeline-label done">Submitted</div>
+                </div>
+                <div class="timeline-connector done"></div>
+                <div class="timeline-step">
+                  <div class="timeline-dot active">
+                    <i data-lucide="loader" style="width:14px;height:14px;"></i>
+                  </div>
+                  <div class="timeline-label active">Under Review</div>
+                </div>
+                <div class="timeline-connector"></div>
+                <div class="timeline-step">
+                  <div class="timeline-dot">
+                    <i data-lucide="shield-check" style="width:14px;height:14px;"></i>
+                  </div>
+                  <div class="timeline-label">Verified</div>
+                </div>
+              </div>
+
+              <p style="font-size:.875rem;color:var(--text-secondary);margin:0 0 1.25rem;">Your documents are under review by the Yalla.House compliance team. Typical turnaround is 2 business days. You will receive an email once verification is complete.</p>
+
+              <!-- Documents list -->
+              <div style="font-size:.875rem;font-weight:700;margin-bottom:.75rem;">Submitted Documents</div>
+              <div class="doc-list">
+                <div class="doc-row">
+                  <div class="doc-icon" style="background:#DCFCE7;">
+                    <i data-lucide="id-card" style="width:18px;height:18px;color:#16A34A;"></i>
+                  </div>
+                  <div class="doc-body">
+                    <div class="doc-name">Government-issued ID</div>
+                    <div class="doc-sub">Submitted 28 Feb 2026</div>
+                  </div>
+                  <span class="badge badge-green" style="font-size:.7rem;font-weight:700;">Verified</span>
+                </div>
+                <div class="doc-row">
+                  <div class="doc-icon" style="background:#DCFCE7;">
+                    <i data-lucide="file-text" style="width:18px;height:18px;color:#16A34A;"></i>
+                  </div>
+                  <div class="doc-body">
+                    <div class="doc-name">FCA Registration</div>
+                    <div class="doc-sub">Submitted 28 Feb 2026</div>
+                  </div>
+                  <span class="badge badge-green" style="font-size:.7rem;font-weight:700;">Verified</span>
+                </div>
+                <div class="doc-row">
+                  <div class="doc-icon" style="background:var(--brand-solid-bg);">
+                    <i data-lucide="building-2" style="width:18px;height:18px;color:#7A5F00;"></i>
+                  </div>
+                  <div class="doc-body">
+                    <div class="doc-name">Agency Letter</div>
+                    <div class="doc-sub">Submitted 28 Feb 2026</div>
+                  </div>
+                  <span class="badge badge-yellow" style="font-size:.7rem;font-weight:700;">Pending</span>
+                </div>
+              </div>
+
+              <div style="margin-top:1.25rem;">
+                <button class="btn btn-secondary" onclick="showToast('Support team has been notified. We will be in touch within 1 business day.','success')">Contact support</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Phase 2 teaser -->
+          <div class="section-card" style="max-width:620px;">
+            <div class="section-card-header">
+              <div class="section-card-title">What's next</div>
+            </div>
+            <div style="padding:0 1.5rem 1.5rem;display:flex;flex-direction:column;gap:.75rem;">
+              <div class="phase2-card">
+                <div class="phase2-icon">
+                  <i data-lucide="badge-check" style="width:20px;height:20px;"></i>
+                </div>
+                <div>
+                  <div class="phase2-label">Verified Partner Badge</div>
+                  <div class="phase2-desc">Your profile will show a gold verified badge visible to all Yalla.House owners.</div>
+                </div>
+                <div class="phase2-tag">Phase 2</div>
+              </div>
+              <div class="phase2-card">
+                <div class="phase2-icon">
+                  <i data-lucide="trophy" style="width:20px;height:20px;"></i>
+                </div>
+                <div>
+                  <div class="phase2-label">Rankings & Signals</div>
+                  <div class="phase2-desc">Verified partners appear higher in owner matching results based on SLA and response rate.</div>
+                </div>
+                <div class="phase2-tag">Phase 2</div>
+              </div>
+              <div class="phase2-card">
+                <div class="phase2-icon">
+                  <i data-lucide="bar-chart-2" style="width:20px;height:20px;"></i>
+                </div>
+                <div>
+                  <div class="phase2-label">SLA Performance Reports</div>
+                  <div class="phase2-desc">Weekly reports showing your response time, close rate, and client satisfaction scores.</div>
+                </div>
+                <div class="phase2-tag">Phase 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- VIEW: SETTINGS                             -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="view-settings" class="view" style="display:none;">
+
+          <div class="page-heading" style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.5rem;font-weight:800;letter-spacing:-.025em;margin:0 0 .25rem;">Settings</h1>
+            <p style="font-size:.9rem;color:var(--text-secondary);margin:0;">Manage your account and notification preferences.</p>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:1.5rem;max-width:580px;">
+
+            <!-- Account details -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Account Details</div>
+              </div>
+              <div style="padding:0 1.5rem 1.5rem;">
+                <div class="profile-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="set-fname">First Name</label>
+                      <input type="text" id="set-fname" value="Rachel" />
+                    </div>
+                    <div class="form-group">
+                      <label for="set-lname">Last Name</label>
+                      <input type="text" id="set-lname" value="Taylor" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="set-email">Email</label>
+                    <input type="email" id="set-email" value="rachel@taylorandco.co.uk" />
+                  </div>
+                  <div class="form-group">
+                    <label for="set-phone">Phone</label>
+                    <input type="tel" id="set-phone" value="+44 7700 900123" />
+                  </div>
+                  <div>
+                    <button class="btn btn-primary" onclick="showToast('Account details saved.','success')">Save Changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notification preferences -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title">Notification Preferences</div>
+              </div>
+              <div style="padding:0 1.5rem 1.5rem;">
+                <div class="notif-list">
+                  <label class="notif-item">
+                    <input type="checkbox" checked />
+                    <span>New request received</span>
+                  </label>
+                  <label class="notif-item">
+                    <input type="checkbox" checked />
+                    <span>Owner replies to your message</span>
+                  </label>
+                  <label class="notif-item">
+                    <input type="checkbox" checked />
+                    <span>Verification status update</span>
+                  </label>
+                  <label class="notif-item">
+                    <input type="checkbox" />
+                    <span>Weekly performance digest</span>
+                  </label>
+                  <label class="notif-item">
+                    <input type="checkbox" />
+                    <span>Promotional emails from Yalla.House</span>
+                  </label>
+                </div>
+                <div style="margin-top:1rem;">
+                  <button class="btn btn-primary" onclick="showToast('Notification preferences saved.','success')">Save Preferences</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Danger zone -->
+            <div class="section-card">
+              <div class="section-card-header">
+                <div class="section-card-title" style="color:#991B1B;">Danger Zone</div>
+              </div>
+              <div style="padding:0 1.5rem 1.5rem;">
+                <p style="font-size:.875rem;color:var(--text-secondary);margin:0 0 1rem;">Deactivating your account will remove your profile from Yalla.House owner matching. This action can be reversed by contacting support.</p>
+                <button class="btn btn-outline" style="border-color:#FCA5A5;color:#991B1B;" onclick="showToast('Please contact support@yalla.house to deactivate your account.','error')">Deactivate Account</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+  /* ── showToast ── */
+  function showToast(msg, type) {
+    type = type || 'success';
+    var container = document.getElementById('toast-container');
+    var el = document.createElement('div');
+    el.className = 'toast ' + type;
+    var icons = { success: '&#10003;', error: '&#9888;', info: '&#8505;' };
+    el.innerHTML = '<span style="font-size:1rem;flex-shrink:0;">' + (icons[type] || icons.success) + '</span><span>' + msg + '</span>';
+    container.appendChild(el);
+    setTimeout(function() {
+      el.style.opacity = '0';
+      el.style.transition = 'opacity .25s ease';
+      setTimeout(function() { el.remove(); }, 260);
+    }, 3200);
+  }
+
+  /* ── showView ── */
+  function showView(viewId, triggerEl) {
+    var views = document.querySelectorAll('.view');
+    for (var i = 0; i < views.length; i++) {
+      views[i].style.display = 'none';
+    }
+    var target = document.getElementById('view-' + viewId);
+    if (target) { target.style.display = 'block'; }
+
+    var links = document.querySelectorAll('.sidebar-link');
+    for (var j = 0; j < links.length; j++) {
+      links[j].classList.remove('active');
+    }
+    if (triggerEl) { triggerEl.classList.add('active'); }
+
+    var titles = {
+      dashboard: 'Dashboard',
+      requests: 'Requests',
+      profile: 'My Profile',
+      coverage: 'Coverage Areas',
+      verification: 'Verification',
+      settings: 'Settings'
+    };
+    var titleEl = document.getElementById('topbar-title');
+    if (titleEl && titles[viewId]) { titleEl.textContent = titles[viewId]; }
+
+    lucide.createIcons();
+  }
+
+  /* ── sendReply ── */
+  function sendReply() {
+    var composer = document.getElementById('reply-composer');
+    var val = composer ? composer.value.trim() : '';
+    if (!val) {
+      showToast('Please write a message before sending.', 'error');
+      return;
+    }
+    composer.value = '';
+    showToast('Reply sent — owner will be notified.', 'success');
+  }
+
+  /* ── removeChip ── */
+  function removeChip(btn) {
+    var chip = btn.closest('.area-chip');
+    if (chip) { chip.remove(); }
+  }
+
+  /* ── addArea ── */
+  function addArea() {
+    var input = document.getElementById('new-area-input');
+    var val = input ? input.value.trim().toUpperCase() : '';
+    if (!val) {
+      showToast('Enter a postcode district first.', 'error');
+      return;
+    }
+    var container = document.getElementById('area-chips');
+    var chip = document.createElement('div');
+    chip.className = 'area-chip';
+    chip.innerHTML = val + ' <button class="area-chip-remove" onclick="removeChip(this)">&#x2715;</button>';
+    container.appendChild(chip);
+    input.value = '';
+    showToast('Area ' + val + ' added.', 'success');
+  }
+
+  /* ── togglePortal ── */
+  function togglePortal(labelId, checkbox) {
+    var label = document.getElementById(labelId);
+    if (label) {
+      if (checkbox.checked) {
+        label.classList.add('active');
+      } else {
+        label.classList.remove('active');
+      }
+    }
+  }
+
+  /* ── Event delegation ── */
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('button, a');
+    if (!btn) { return; }
+    var txt = btn.textContent.trim().replace(/\s+/g, ' ');
+
+    if (txt === 'View all') { /* handled via inline onclick */ }
+  });
+
+  /* ── Init ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+  });
+</script>
+<script src="../lang.js"></script>
+
+</body>
+</html>

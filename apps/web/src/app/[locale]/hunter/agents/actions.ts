@@ -1,0 +1,62 @@
+'use server'
+
+import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
+
+type ActionResult = { success: true } | { error: string }
+
+export async function updateAssignmentStatusAction(
+  assignmentId: string,
+  status: 'active' | 'paused' | 'invited' | 'ignored' | 'disconnected'
+): Promise<ActionResult> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Nicht autorisiert' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from('agent_hunter_assignments') as any)
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', assignmentId)
+    .eq('hunter_id', user.id)
+
+  if (error) return { error: 'Fehler beim Aktualisieren.' }
+
+  if (status === 'disconnected') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: assignment } = await (supabase.from('agent_hunter_assignments') as any)
+      .select('agent_id')
+      .eq('id', assignmentId)
+      .single()
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('hunter_consent_log') as any)
+      .insert({ hunter_id: user.id, agent_id: assignment?.agent_id ?? null, event_type: 'agent_disconnected' })
+  }
+
+  revalidatePath('/hunter/agents')
+  return { success: true }
+}
+
+export async function sendBriefAction(agentId: string): Promise<ActionResult> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Nicht autorisiert' }
+
+  // Upsert assignment
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from('agent_hunter_assignments') as any)
+    .upsert(
+      { hunter_id: user.id, agent_id: agentId, status: 'invited', initiated_by: 'hunter', updated_at: new Date().toISOString() },
+      { onConflict: 'hunter_id,agent_id' }
+    )
+
+  if (error) return { error: 'Fehler beim Senden des Briefs.' }
+
+  // Log consent event
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (supabase.from('hunter_consent_log') as any)
+    .insert({ hunter_id: user.id, agent_id: agentId, event_type: 'brief_shared' })
+
+  revalidatePath('/hunter/agents')
+  return { success: true }
+}
