@@ -32,3 +32,10 @@ pnpm-debug.log*
 
 # Turbo cache
 .turbo/
+
+# Temp files
+_tmp_*
+fix-git-push.sh
+
+# Claude global (local-only)
+CLAUDE_global.md
