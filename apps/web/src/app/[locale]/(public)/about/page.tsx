@@ -3,14 +3,28 @@ import Link from 'next/link'
 export default function AboutPage() {
   return (
     <main className="bg-[#FAFAFA]">
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.8s ease-out both; }
+        .fade-up-d1 { animation: fadeUp 0.8s ease-out 0.1s both; }
+        .fade-up-d2 { animation: fadeUp 0.8s ease-out 0.2s both; }
+        .fade-up-d3 { animation: fadeUp 0.8s ease-out 0.3s both; }
+        .fade-up-d4 { animation: fadeUp 0.8s ease-out 0.4s both; }
+        .fade-up-d5 { animation: fadeUp 0.8s ease-out 0.5s both; }
+        .fade-up-d6 { animation: fadeUp 0.8s ease-out 0.6s both; }
+      `}</style>
+
       {/* HERO SECTION */}
-      <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+      <section className="bg-[#FAFAFA] py-32 md:py-44 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-[clamp(3rem,7vw,5.5rem)] font-extrabold tracking-tighter text-[#0F1117] mb-6">
+          <h1 className="fade-up text-[clamp(3rem,7vw,5.5rem)] font-extrabold tracking-tighter text-[#0F1117] mb-6">
             Immobilienverkauf, der fair,{' '}
             <span className="text-[#FFD400]">klar</span> und Ihrer ist.
           </h1>
-          <p className="text-lg md:text-xl text-[#656565] max-w-3xl mx-auto leading-relaxed">
+          <p className="fade-up-d1 text-xl md:text-2xl font-light text-[#656565] max-w-3xl mx-auto leading-relaxed">
             Yalla.House wurde auf einem einzigen Gedanken gebaut: Eigentümer verdienen bessere Werkzeuge und faire Bedingungen. Keine versteckten Gebühren. Keine Geheimnisse. Nur dein Haus, deine Bedingungen, dein Erfolg.
           </p>
         </div>
@@ -21,8 +35,8 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
             {/* Stat 1 */}
-            <div className="text-center">
-              <div className="text-5xl md:text-6xl font-extrabold text-[#FFD400] mb-3">
+            <div className="fade-up-d1 text-center">
+              <div className="text-6xl md:text-7xl font-extrabold text-[#FFD400] mb-3">
                 €0
               </div>
               <p className="text-sm text-[#656565] font-medium leading-relaxed">
@@ -31,7 +45,7 @@ export default function AboutPage() {
             </div>
 
             {/* Stat 2 */}
-            <div className="text-center">
+            <div className="fade-up-d2 text-center">
               <div className="text-5xl md:text-6xl font-extrabold text-[#0F1117] mb-3">
                 48h
               </div>
@@ -41,7 +55,7 @@ export default function AboutPage() {
             </div>
 
             {/* Stat 3 */}
-            <div className="text-center">
+            <div className="fade-up-d3 text-center">
               <div className="text-5xl md:text-6xl font-extrabold text-[#0F1117] mb-3">
                 69%
               </div>
@@ -51,7 +65,7 @@ export default function AboutPage() {
             </div>
 
             {/* Stat 4 */}
-            <div className="text-center">
+            <div className="fade-up-d4 text-center">
               <div className="text-5xl md:text-6xl font-extrabold text-[#0F1117] mb-3">
                 €8k+
               </div>
@@ -67,7 +81,7 @@ export default function AboutPage() {
       <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
               Warum wir das gebaut haben
             </span>
           </div>
@@ -86,7 +100,7 @@ export default function AboutPage() {
             {/* Right Cards */}
             <div className="space-y-4">
               {/* Card 1 */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <h3 className="text-lg font-bold text-[#0F1117] mb-3">Transparenz</h3>
                 <p className="text-sm md:text-base text-[#656565] leading-relaxed">
                   Keine versteckten Gebühren. Keine Überraschungen. Alles offen einsehbar.
@@ -94,7 +108,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card 2 */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <h3 className="text-lg font-bold text-[#0F1117] mb-3">Kontrolle</h3>
                 <p className="text-sm md:text-base text-[#656565] leading-relaxed">
                   Sie bestimmen den Preis, die Zeitplanung und die Bedingungen — wir geben Ihnen die Werkzeuge dafür.
@@ -102,7 +116,7 @@ export default function AboutPage() {
               </div>
 
               {/* Card 3 */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                 <h3 className="text-lg font-bold text-[#0F1117] mb-3">Technologie</h3>
                 <p className="text-sm md:text-base text-[#656565] leading-relaxed">
                   Automatisierte Updates, sofortige Portal-Veröffentlichung und ein Dashboard, das für Sie arbeitet.
@@ -117,7 +131,7 @@ export default function AboutPage() {
       <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
               Wie es funktioniert
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
@@ -214,7 +228,7 @@ export default function AboutPage() {
       <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
               Drei Wege zu verkaufen
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
@@ -224,7 +238,7 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {/* Solo Mode */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="h-2 bg-[#FFD400]"></div>
               <div className="p-8">
                 <div className="text-4xl mb-4">🏠</div>
@@ -254,7 +268,7 @@ export default function AboutPage() {
             </div>
 
             {/* Hybrid Mode */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="h-2 bg-[#6366F1]"></div>
               <div className="p-8">
                 <div className="text-4xl mb-4">🤝</div>
@@ -284,7 +298,7 @@ export default function AboutPage() {
             </div>
 
             {/* Vollservice Mode */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="h-2 bg-[#10B981]"></div>
               <div className="p-8">
                 <div className="text-4xl mb-4">🏢</div>
@@ -320,7 +334,7 @@ export default function AboutPage() {
       <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
               Was uns unterscheidet
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
@@ -330,7 +344,7 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             {/* Value 1 */}
-            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="text-4xl mb-4">🏷️</div>
               <h3 className="text-lg font-bold text-[#0F1117] mb-3">Keine Provision</h3>
               <p className="text-sm text-[#656565] leading-relaxed">
@@ -339,7 +353,7 @@ export default function AboutPage() {
             </div>
 
             {/* Value 2 */}
-            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="text-4xl mb-4">📡</div>
               <h3 className="text-lg font-bold text-[#0F1117] mb-3">Echte Portal-Reichweite</h3>
               <p className="text-sm text-[#656565] leading-relaxed">
@@ -348,8 +362,8 @@ export default function AboutPage() {
             </div>
 
             {/* Value 3 */}
-            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
-              <div className="text-4xl mb-4">🌊</div>
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className="text-4xl mb-4">📊</div>
               <h3 className="text-lg font-bold text-[#0F1117] mb-3">Automatisierte Updates</h3>
               <p className="text-sm text-[#656565] leading-relaxed">
                 Wöchentliche Berichte, Aktivitäten-Tracking und Marktdaten direkt in dein Dashboard — ohne dich zu nerven, ohne zu viel.
@@ -357,7 +371,7 @@ export default function AboutPage() {
             </div>
 
             {/* Value 4 */}
-            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="text-4xl mb-4">🔒</div>
               <h3 className="text-lg font-bold text-[#0F1117] mb-3">Keine Vertragsbindung</h3>
               <p className="text-sm text-[#656565] leading-relaxed">
@@ -366,7 +380,7 @@ export default function AboutPage() {
             </div>
 
             {/* Value 5 */}
-            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="text-4xl mb-4">🧑‍💼</div>
               <h3 className="text-lg font-bold text-[#0F1117] mb-3">Experten auf Abruf</h3>
               <p className="text-sm text-[#656565] leading-relaxed">
@@ -375,7 +389,7 @@ export default function AboutPage() {
             </div>
 
             {/* Value 6 */}
-            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
               <div className="text-4xl mb-4">📱</div>
               <h3 className="text-lg font-bold text-[#0F1117] mb-3">Dashboard-first</h3>
               <p className="text-sm text-[#656565] leading-relaxed">
@@ -390,7 +404,7 @@ export default function AboutPage() {
       <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
               Services
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
@@ -400,37 +414,37 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {/* Service 1 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center">
               <div className="text-5xl mb-4">🏠</div>
               <h3 className="text-lg font-bold text-[#0F1117]">Inserats-Erstellung</h3>
             </div>
 
             {/* Service 2 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center">
               <div className="text-5xl mb-4">📸</div>
               <h3 className="text-lg font-bold text-[#0F1117]">Professionelle Fotos</h3>
             </div>
 
             {/* Service 3 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center">
               <div className="text-5xl mb-4">📄</div>
               <h3 className="text-lg font-bold text-[#0F1117]">Dokumente & Compliance</h3>
             </div>
 
             {/* Service 4 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center">
               <div className="text-5xl mb-4">📊</div>
               <h3 className="text-lg font-bold text-[#0F1117]">Marktpreis-Analyse</h3>
             </div>
 
             {/* Service 5 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center">
               <div className="text-5xl mb-4">👁️</div>
               <h3 className="text-lg font-bold text-[#0F1117]">Besichtigungsmanagement</h3>
             </div>
 
             {/* Service 6 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center">
               <div className="text-5xl mb-4">📋</div>
               <h3 className="text-lg font-bold text-[#0F1117]">Angebotsmanagement</h3>
             </div>
@@ -442,7 +456,7 @@ export default function AboutPage() {
       <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
               Unsere Standards
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
@@ -512,31 +526,16 @@ export default function AboutPage() {
             </div>
 
             {/* Standard 5 */}
-            <div className="flex gap-6 pb-8 border-b border-[#E2E4EB]">
+            <div className="flex gap-6">
               <div className="flex-shrink-0">
                 <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
                   5
                 </div>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Echte Daten, keine leeren Versprechen</h3>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Datenschutz ernst gemeint</h3>
                 <p className="text-base text-[#656565]">
-                  Jede Zahl, die wir zitieren — Durchschnittspreis, durchschnittliche Verkaufszeit, Provisionsersparnis — ist belegbar und von uns transparent gemacht.
-                </p>
-              </div>
-            </div>
-
-            {/* Standard 6 */}
-            <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
-                  6
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Menschliche Hilfe, wenn du sie brauchst</h3>
-                <p className="text-base text-[#656565]">
-                  Technologie zuerst, aber immer ein Mensch da, wenn du ihn brauchst. Keine Warteschlangen, keine KI-Runaround.
+                  Deine Daten gehören dir. Wir verkaufen sie nicht, wir teilen sie nicht, und wir verwenden sie nur für deinen Verkauf.
                 </p>
               </div>
             </div>
@@ -546,45 +545,67 @@ export default function AboutPage() {
 
       {/* TESTIMONIALS */}
       <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
-              Was andere sagen
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Erfahrungen
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
-              Die Erfahrung spricht für sich
+              Was unsere Verkäufer sagen
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
             {/* Testimonial 1 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
-              <div className="flex gap-1 mb-4">
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-              </div>
-              <p className="text-base text-[#0F1117] leading-relaxed mb-6">
-                "Yalla.House hat mir Tausende von Euro gespart und mein Haus in weniger als 6 Wochen verkauft. Das Dashboard ist fantastisch, und das Team wusste immer, was zu tun war. Ich hätte mein Geld nicht besser investieren können."
+            <div className="bg-white rounded-2xl p-10 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="text-5xl text-[#FFD400] font-serif leading-none block mb-2">“</span>
+              <p className="text-base text-[#0F1117] mb-6 leading-relaxed">
+                Ich <span className="font-bold">wüsste nicht, wo ich anfangen sollte</span>. Yalla.House hat mir eine klare Route gegeben — von der Analyse bis zum Abschluss. Die Automatisierung hat mir Wochen gespart.
               </p>
-              <p className="text-sm font-semibold text-[#0F1117]">— M.K., Berlin</p>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full text-[#0F1117] font-bold text-sm shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                  M
+
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-[#0F1117]">Maria K.</p>
+                  <p className="text-xs text-[#656565]">Munich, Eigentumswohnung</p>
+                </div>
+              </div>
             </div>
 
             {/* Testimonial 2 */}
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
-              <div className="flex gap-1 mb-4">
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-                <span className="text-[#F59E0B]">★</span>
-              </div>
-              <p className="text-base text-[#0F1117] leading-relaxed mb-6">
-                "Ich war skeptisch, ein Immobilien-Startup mit meinem Haus zu vertrauen. Aber Yalla.House war transparent, effizient und respektvoll von Anfang an. Keine versteckten Gebühren, kein Quetschspiel. Nur ehrliche Hilfe."
+            <div className="bg-white rounded-2xl p-10 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="text-5xl text-[#FFD400] font-serif leading-none block mb-2">“</span>
+              <p className="text-base text-[#0F1117] mb-6 leading-relaxed">
+                Das Dashboard ist einfach legit. Ich <span className="font-bold">sehe alles auf einen Blick</span> — Anfragen, Besichtigungen, Marktdaten. Und kein Makler, der mir ständig am Telefon hängt.
               </p>
-              <p className="text-sm font-semibold text-[#0F1117]">— S.L., München</p>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full text-[#0F1117] font-bold text-sm shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                  T
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-[#0F1117]">Thomas B.</p>
+                  <p className="text-xs text-[#656565]">Berlin, Einfamilienhaus</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-white rounded-2xl p-10 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <span className="text-5xl text-[#FFD400] font-serif leading-none block mb-2">“</span>
+              <p className="text-base text-[#0F1117] mb-6 leading-relaxed">
+                <span className="font-bold">0% Provision</span> — das allein hat mich zu Yalla.House gebracht. Dass der ganze Prozess auch noch so glstt lief, war das I-Tüpfelchen.
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full text-[#0F1117] font-bold text-sm shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                  S
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-[#0F1117]">Sabine W.</p>
+                  <p className="text-xs text-[#656565]">Hamburg, Doppelhaushälfte</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -592,87 +613,75 @@ export default function AboutPage() {
 
       {/* TEAM */}
       <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-12 text-center">
-            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
-              Das Team
+            <span className="inline-block text-xs font-bold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Unser Team
             </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
-              Gebaut von Menschen, die selbst genug von Maklern hatten.
+              Die Menschen hinter Yalla
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-4 gap-8 md:gap-12">
             {/* Team Member 1 */}
             <div className="text-center">
-              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
-                TA
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold text-[#0F1117] mx-auto mb-4 shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                T
               </div>
-              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Tarek Al-Saleh</h3>
-              <p className="text-sm text-[#656565]">Gründer & CEO</p>
-              <p className="text-xs text-[#999999] mt-2">Strategie & Vision</p>
+              <h3 className="text-base font-bold text-[#0F1117] mb-1">Tarek</h3>
+              <p className="text-sm text-[#656565]">Führung & Vision</p>
             </div>
 
-            {/* Team Member 2 */}
             <div className="text-center">
-              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
-                DV
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold text-[#0F1117] mx-auto mb-4 shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                J
               </div>
-              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Daisy Voelker</h3>
-              <p className="text-sm text-[#656565]">Leitung Entwicklung</p>
-              <p className="text-xs text-[#999999] mt-2">Plattform & Integrationen</p>
+              <h3 className="text-base font-bold text-[#0F1117] mb-1">Jonas</h3>
+              <p className="text-sm text-[#656565]">Produkt & technische Leitung</p>
             </div>
 
-            {/* Team Member 3 */}
             <div className="text-center">
-              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
-                LM
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold text-[#0F1117] mx-auto mb-4 shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                L
               </div>
-              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Laura Müller</h3>
-              <p className="text-sm text-[#656565]">Rechtsberatung</p>
-              <p className="text-xs text-[#999999] mt-2">Notar & Compliance</p>
+              <h3 className="text-base font-bold text-[#0F1117] mb-1">Leonie</h3>
+              <p className="text-sm text-[#656565]">Operations & Kunden</p>
             </div>
 
-            {/* Team Member 4 */}
             <div className="text-center">
-              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
-                JR
+              <div className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold text-[#0F1117] mx-auto mb-4 shadow-md" style={{ background: 'linear-gradient(135deg, #FFD400 0%, #F5C800 100%)' }}>
+                D
               </div>
-              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Jan Richter</h3>
-              <p className="text-sm text-[#656565]">Operations</p>
-              <p className="text-xs text-[#999999] mt-2">Kundenerfolg & Support</p>
+              <h3 className="text-base font-bold text-[#0F1117] mb-1">Deniz</h3>
+              <p className="text-sm text-[#656565]">Street Team & Markt</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA BAND */}
-      <section className="relative bg-[#0F1117] py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Radial gradient glow pseudo-element */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10"
-               style={{
-                 background: 'radial-gradient(circle, #FFD400 0%, transparent 70%)'
-               }}>
-          </div>
+      {/* DARK CTA BAND */}
+      <section className="relative overflow-hidden bg-[#0F1117] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        {/* Radial glow */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[1000px] h-[1000px] rounded-full opacity-15" style={{ background: 'radial-gradient(circle, #FFD400, transparent 70%)' }} />
         </div>
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
+        <div className="relative max-w-5xl mx-auto text-center">
           <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-white mb-6">
-            Bereit, die Kontrolle über Ihren Verkauf zu übernehmen?
+            Dein Haus. Deine Bedingungen.
           </h2>
-          <p className="text-lg text-white/60 mb-12 max-w-2xl mx-auto">
-            Starten Sie noch heute mit Yalla.House. Kein Makler. Keine Provisionen. Nur Sie und Ihre Immobilie.
+          <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto mb-10">
+            Starte jetzt mit der kostenlosen Immobilien-Analyse und erfahre, was dein Haus wert ist.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/list">
-              <button className="px-8 py-4 bg-[#FFD400] text-[#0F1117] font-bold rounded-full hover:bg-[#E6C200] transition-all duration-300 will-change-transform hover:shadow-lg">
-                Immobilie inserieren →
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/../services">
+              <button className="px-8 py-4 rounded-full bg-[#FFD400] text-[#0F1117] font-bold hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(255,212,0,0.4)] transition-all duration-300 will-change-transform">
+                Kostenlose Analyse starten
               </button>
             </Link>
-            <Link href="/services">
-              <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300 will-change-transform">
+            <Link href="/../services">
+              <button className="px-8 py-4 rounded-full border border-white/20 text-white font-medium hover-bg-white/10 transition-all duration-300 will-change-transform">
                 Services & Preise
               </button>
             </Link>
