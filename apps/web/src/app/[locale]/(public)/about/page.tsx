@@ -2,329 +2,683 @@ import Link from 'next/link'
 
 export default function AboutPage() {
   return (
-    <main className="bg-[#EDEEF2]">
-
-      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-6">
+    <main className="bg-[#FAFAFA]">
+      {/* HERO SECTION */}
+      <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto text-center">
+          <h1 className="text-[clamp(3rem,7vw,5.5rem)] font-extrabold tracking-tighter text-[#0F1117] mb-6">
             Immobilienverkauf, der fair,{' '}
             <span className="text-[#FFD400]">klar</span> und Ihrer ist.
           </h1>
-          <p className="text-lg text-[#656565] leading-relaxed max-w-2xl mx-auto">
-            Yalla.House wurde auf einem einfachen Prinzip gebaut: Der Verkauf Ihres Hauses sollte nicht Tausende Euro an Provision kosten. Wir haben das alte Modell abgeschafft — und durch Transparenz, Technologie und wirklich hilfreiche Tools ersetzt.
+          <p className="text-lg md:text-xl text-[#656565] max-w-3xl mx-auto leading-relaxed">
+            Yalla.House wurde auf einem einzigen Gedanken gebaut: Eigentümer verdienen bessere Werkzeuge und faire Bedingungen. Keine versteckten Gebühren. Keine Geheimnisse. Nur dein Haus, deine Bedingungen, dein Erfolg.
           </p>
         </div>
       </section>
 
-      {/* ── STATS STRIP ─────────────────────────────────────────────────────── */}
-      <div className="py-10 px-4 bg-white border-y border-[#E2E4EB]">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { val: '€0', label: 'Provision — du behältst 100% deines Verkaufspreises', accent: true },
-            { val: '48h', label: 'Ø Zeit bis zur Veröffentlichung auf IS24 &amp; Immowelt', accent: false },
-            { val: '69%', label: 'der Verkäufer wollen wöchentliche automatisierte Updates', accent: false },
-            { val: '€8k+', label: 'Ø Ersparnis ggü. traditionellem Makler bei €400k-Verkauf', accent: false },
-          ].map((s, i) => (
-            <div key={i} className="bg-[#EDEEF2] rounded-2xl border border-[#E2E4EB] p-5">
-              <div className={`text-3xl font-extrabold tracking-tight mb-1.5 ${s.accent ? 'text-[#FFD400]' : 'text-[#0F1117]'}`}>{s.val}</div>
-              <div className="text-sm text-[#656565] leading-snug" dangerouslySetInnerHTML={{ __html: s.label }} />
+      {/* STATS STRIP */}
+      <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+            {/* Stat 1 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-extrabold text-[#FFD400] mb-3">
+                €0
+              </div>
+              <p className="text-sm text-[#656565] font-medium leading-relaxed">
+                Provision — du behältst 100% deines Verkaufspreises
+              </p>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── WHY SECTION ──────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
-          <div>
-            <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-3">Warum wir das gebaut haben</div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-6">
-              Provisionen sind das Relikt einer Zeit, in der Verkäufer keine andere Wahl hatten
-            </h2>
-            <p className="text-[#656565] leading-relaxed mb-4">
-              Traditionelle Immobilienmakler verlangen 3–6 % Provision — das sind bei einem Haus für €400.000 bis zu €24.000. Dafür bekommst du: unregelmäßige Updates, keine Echtzeitdaten und kaum Kontrolle über den Prozess.
-            </p>
-            <p className="text-[#656565] leading-relaxed">
-              Wir glauben, dass Eigentümer bessere Werkzeuge verdienen. Yalla.House gibt dir ein vollständiges Dashboard, automatische Portal-Veröffentlichung und professionelle Services — zum Festpreis. Kein Prozentsatz. Keine Überraschungen.
-            </p>
-          </div>
-          <div className="space-y-4">
-            {[
-              'Ich habe erst nach 3 Wochen erfahren, dass mein Inserat online war.',
-              'Mein Makler hat mir nie gesagt, wie viele Besichtigungen stattfanden.',
-              'Ich habe €18.000 Provision bezahlt und trotzdem alles selbst koordiniert.',
-              'Es gab keine Daten — nur "Vertrauen Sie mir".',
-            ].map((pain, i) => (
-              <div key={i} className="bg-[#FEE2E2] border border-[#FECACA] rounded-2xl p-4">
-                <p className="text-sm font-semibold text-[#991B1B]">{pain}</p>
+            {/* Stat 2 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-extrabold text-[#0F1117] mb-3">
+                48h
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS ────────────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-3">Wie es funktioniert</div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-3">Deine komplette Verkäuferreise — an einem Ort</h2>
-            <p className="text-[#656565] max-w-xl">Starte mit Yalla.House, bevor du sonst irgendetwas tust. Wir begleiten dich durch jeden Schritt — egal wie du verkaufen möchtest.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              { n: 1, h: 'Immobilien-Analyse', p: 'Beantworte ein paar Fragen. Erhalte deinen Bereitschafts-Score — Fotos, Preisgestaltung, Rechtsdokumente, Energieausweis — und eine empfohlene Verkaufsroute.' },
-              { n: 2, h: 'Route wählen', p: 'DIY, Hybrid oder Maklergeführt. Yalla.House passt sich deiner Wahl an. Wechsle jederzeit, ohne von vorne anzufangen.' },
-              { n: 3, h: 'Auf Portalen live gehen', p: 'Dein Inserat geht in 48h auf IS24, Immowelt und mehr live. Status synchronisiert automatisch — keine Geister-Inserate.' },
-              { n: 4, h: 'Kommandozentrale', p: 'Anfragen, Besichtigungen, Angebote, Nachrichten — alles in einem Dashboard. Kein WhatsApp-Chaos mehr.' },
-              { n: 5, h: 'Performance überwachen', p: 'Wöchentliche Updates, Käufer-Funnel-Daten, Makler-Reaktionszeiten. Sieh genau, was passiert und wann du handeln solltest.' },
-              { n: 6, h: 'Deal abschließen', p: 'Dokumente, Meilensteine, rechtliche Übergabe — alles, was du bis zum Notar und Abschluss brauchst.' },
-            ].map(s => (
-              <div key={s.n} className="bg-[#EDEEF2] rounded-2xl border border-[#E2E4EB] p-6 hover:-translate-y-1 transition-transform duration-200">
-                <div className="w-9 h-9 rounded-xl bg-[#FFD400] flex items-center justify-center text-[#0F1117] font-extrabold text-sm mb-4">{s.n}</div>
-                <h3 className="font-bold text-[#0F1117] mb-2">{s.h}</h3>
-                <p className="text-sm text-[#656565] leading-relaxed">{s.p}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── THREE WAYS TO SELL ──────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#656565] mb-3">Drei Wege zu verkaufen</div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-3">Du wählst. Wir passen uns an.</h2>
-            <p className="text-[#656565] max-w-xl mx-auto">Yalla.House unterstützt jeden Verkäufer, egal welchen Weg er geht. Ändere deinen Ansatz jederzeit — deine Daten bleiben bei dir.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl border border-[#E2E4EB] border-t-4 border-t-[#FFD400] p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-xl bg-[#FFF8D6] flex items-center justify-center text-xl">🏠</div>
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-[#FFD400]">Modus 1</div>
-                  <h3 className="font-bold text-[#0F1117]">DIY</h3>
-                </div>
-              </div>
-              <p className="text-sm text-[#656565] mb-4 leading-relaxed">Volle Kontrolle. Keine Provision. Du führst Besichtigungen durch, verwaltest Anfragen und verhandelst Angebote — Yalla.House kümmert sich um die Verwaltung.</p>
-              <ul className="space-y-1.5 text-sm">
-                {['Pauschalgebühr ab €199', 'Du managst Besichtigungen', 'Maximale Gebührenersparnis'].map(f => (
-                  <li key={f} className="flex gap-2"><span className="text-[#FFD400] font-bold">✓</span>{f}</li>
-                ))}
-              </ul>
+              <p className="text-sm text-[#656565] font-medium leading-relaxed">
+                Ø Zeit bis zur Veröffentlichung auf IS24 & Immowelt
+              </p>
             </div>
-            <div className="bg-white rounded-2xl border border-[#E2E4EB] border-t-4 border-t-[#6366F1] p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-xl bg-[#EEF2FF] flex items-center justify-center text-xl">🤝</div>
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-[#6366F1]">Modus 2</div>
-                  <h3 className="font-bold text-[#0F1117]">Hybrid</h3>
-                </div>
+
+            {/* Stat 3 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-extrabold text-[#0F1117] mb-3">
+                69%
               </div>
-              <p className="text-sm text-[#656565] mb-4 leading-relaxed">Yalla.House ist deine Kommandozentrale. Hole einen Fotografen, Makler oder Anwalt genau dann dazu, wenn du Unterstützung brauchst.</p>
-              <ul className="space-y-1.5 text-sm">
-                {['Dein Dashboard, deine Regeln', 'Services à la carte buchen', 'Idealer Mittelweg für die meisten'].map(f => (
-                  <li key={f} className="flex gap-2"><span className="text-[#6366F1] font-bold">✓</span>{f}</li>
-                ))}
-              </ul>
+              <p className="text-sm text-[#656565] font-medium leading-relaxed">
+                der Verkäufer wollen wöchentliche automatisierte Updates
+              </p>
             </div>
-            <div className="bg-white rounded-2xl border border-[#E2E4EB] border-t-4 border-t-[#0EA5E9] p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-11 h-11 rounded-xl bg-[#E0F2FE] flex items-center justify-center text-xl">👁</div>
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-[#0EA5E9]">Modus 3</div>
-                  <h3 className="font-bold text-[#0F1117]">Maklergeführt, transparent</h3>
-                </div>
+
+            {/* Stat 4 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-extrabold text-[#0F1117] mb-3">
+                €8k+
               </div>
-              <p className="text-sm text-[#656565] mb-4 leading-relaxed">Beauftrage einen Makler — aber sieh alles, was er tut. Besichtigungsprotokolle, Reaktionszeiten, Angebotspipeline. Du behältst die Kontrolle.</p>
-              <ul className="space-y-1.5 text-sm">
-                {['Keine Black Box mehr', 'Gebühren mit Daten verhandeln', 'Jederzeit Makler wechseln'].map(f => (
-                  <li key={f} className="flex gap-2"><span className="text-[#0EA5E9] font-bold">✓</span>{f}</li>
-                ))}
-              </ul>
+              <p className="text-sm text-[#656565] font-medium leading-relaxed">
+                Ø Ersparnis ggü. traditionellem Makler bei €400k-Verkauf
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── VALUES SECTION ──────────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#656565] mb-3">Was uns unterscheidet</div>
+      {/* WHY SECTION */}
+      <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Warum wir das gebaut haben
+            </span>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+            {/* Left Text */}
+            <div>
+              <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-6 leading-tight">
+                Provisionen sind das Relikt einer Zeit, in der Verkäufer keine andere Wahl hatten.
+              </h2>
+              <p className="text-base md:text-lg text-[#656565] leading-relaxed">
+                Die Branche hat sich gegen Verkäufer verschworen — intransparente Gebühren, lange Vertragsbindungen und ein System, das den Makler belohnt, nicht den Eigentümer. Wir haben uns gefragt: Was würde ein Verkäufer selbst bauen wollen? Das ist Yalla.House.
+              </p>
+            </div>
+
+            {/* Right Cards */}
+            <div className="space-y-4">
+              {/* Card 1 */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+                <h3 className="text-lg font-bold text-[#0F1117] mb-3">Transparenz</h3>
+                <p className="text-sm md:text-base text-[#656565] leading-relaxed">
+                  Keine versteckten Gebühren. Keine Überraschungen. Alles offen einsehbar.
+                </p>
+              </div>
+
+              {/* Card 2 */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+                <h3 className="text-lg font-bold text-[#0F1117] mb-3">Kontrolle</h3>
+                <p className="text-sm md:text-base text-[#656565] leading-relaxed">
+                  Sie bestimmen den Preis, die Zeitplanung und die Bedingungen — wir geben Ihnen die Werkzeuge dafür.
+                </p>
+              </div>
+
+              {/* Card 3 */}
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300">
+                <h3 className="text-lg font-bold text-[#0F1117] mb-3">Technologie</h3>
+                <p className="text-sm md:text-base text-[#656565] leading-relaxed">
+                  Automatisierte Updates, sofortige Portal-Veröffentlichung und ein Dashboard, das für Sie arbeitet.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Wie es funktioniert
+            </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
-              Gebaut auf Klarheit, nicht auf Provision
+              Deine komplette Verkäuferreise — an einem Ort
             </h2>
-            <p className="text-[#656565] max-w-2xl mx-auto">
-              Jedes Feature beantwortet dieselbe Frage: Macht es das Leben von Verkäufern oder Käufern messbar besser?
+            <p className="text-base md:text-lg text-[#656565] max-w-2xl mx-auto">
+              Starte mit Yalla.House, bevor du sonst irgendetwas tust...
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { emoji: '💰', title: 'Festpreise, immer', desc: 'Kein Prozentsatz. Keine gestaffelten Provisionen. Sie zahlen einmal und behalten jeden Euro Ihres Verkaufspreises.' },
-              { emoji: '📊', title: 'Wöchentliche Updates, automatisch', desc: 'Jeder Verkäufer erhält ein automatisches wöchentliches Update: Anfragen, Besichtigungen, Feedback, nächste Schritte.' },
-              { emoji: '📅', title: 'Live-Besichtigungsbuchung', desc: 'Sie legen fest, wann Sie verfügbar sind. Käufer buchen bestätigte Slots — kein E-Mail-Pingpong.' },
-              { emoji: '📋', title: 'Transparentes Angebotsmanagement', desc: 'Jedes Angebot wird mit Zeitstempel, Käuferstatus und Finanzierungsnachweis protokolliert.' },
-              { emoji: '🔄', title: 'Echtzeit-Portal-Sync', desc: 'Statusänderungen werden automatisch auf IS24, Immowelt und ImmoNet aktualisiert — keine Geister-Inserate.' },
-              { emoji: '🔒', title: 'Sicher & DSGVO-konform', desc: 'Alle Daten werden EU-DSGVO-konform verarbeitet. Regulierte Zahlungspartner. KYC/KYB-Verifizierung.' },
-            ].map((value, i) => (
-              <div key={i} className="bg-[#EDEEF2] rounded-2xl border border-[#E2E4EB] p-6 hover:-translate-y-1 transition-transform duration-200">
-                <div className="text-3xl mb-4">{value.emoji}</div>
-                <h3 className="font-bold text-[#0F1117] mb-2">{value.title}</h3>
-                <p className="text-sm text-[#656565] leading-relaxed">{value.desc}</p>
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            {/* Step 1 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FFD400] text-[#0F1117] font-extrabold text-xl flex items-center justify-center">
+                  1
+                </div>
               </div>
-            ))}
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Immobilien-Analyse</h3>
+              <p className="text-sm text-[#656565]">
+                Dein Haus wird analysiert, um dir einen Readiness-Score und erste Empfehlungen zu geben.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FFD400] text-[#0F1117] font-extrabold text-xl flex items-center justify-center">
+                  2
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Route wählen</h3>
+              <p className="text-sm text-[#656565]">
+                Entscheide dich für Solo, Hybrid oder Vollservice – je nachdem, wie viel Unterstützung du brauchst.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FFD400] text-[#0F1117] font-extrabold text-xl flex items-center justify-center">
+                  3
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Angebot erstellen</h3>
+              <p className="text-sm text-[#656565]">
+                Fotos hochladen, Preis setzen und mit unserem KI-gestützten Assistent eine ansprechende Beschreibung verfassen.
+              </p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FFD400] text-[#0F1117] font-extrabold text-xl flex items-center justify-center">
+                  4
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Auf Portalen live</h3>
+              <p className="text-sm text-[#656565]">
+                Dein Inserat wird innerhalb von 48 Stunden auf IS24 und Immowelt veröffentlicht — automatisch.
+              </p>
+            </div>
+
+            {/* Step 5 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FFD400] text-[#0F1117] font-extrabold text-xl flex items-center justify-center">
+                  5
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Anfragen verwalten</h3>
+              <p className="text-sm text-[#656565]">
+                Alle Anfragen, Besichtigungen und Angebote laufen zentral über dein Dashboard — keine E-Mail-Verwirrtheit.
+              </p>
+            </div>
+
+            {/* Step 6 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 rounded-full bg-[#FFD400] text-[#0F1117] font-extrabold text-xl flex items-center justify-center">
+                  6
+                </div>
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Abschluss</h3>
+              <p className="text-sm text-[#656565]">
+                Vertrag, Notar, Übergabe – wir haben Experten in unserem Netzwerk, um alles zu unterstützen.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── SERVICES ────────────────────────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-3">Services</div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-3">Alles, was du zum Verkaufen brauchst</h2>
-            <p className="text-[#656565]">Wähle genau das, was du brauchst. Keine aufgezwungenen Pakete.</p>
+      {/* THREE WAYS TO SELL */}
+      <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Drei Wege zu verkaufen
+            </span>
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+              Du wählst. Wir passen uns an.
+            </h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              { icon: '📷', h: 'Professionelle Fotografie', p: 'Beeindruckende Fotos von lokalen Profis. Hero-Image-Regeln für maximale Portal-CTR inklusive.' },
-              { icon: '🏠', h: '360° Virtuelle Tour', p: 'Interaktiver 3D-Scan — Käufer erkunden dein Zuhause vor der Besichtigung. Weniger verschwendete Termine.' },
-              { icon: '📐', h: 'Grundriss-Erstellung', p: 'Genaue, veröffentlichungsreife Grundrisse. Von IS24 für Premium-Platzierung gefordert.' },
-              { icon: '📋', h: 'Rechtliche Unterstützung', p: 'Notar-Vermittlung, Dokumentenprüfung und Begleitung an jedem rechtlichen Meilenstein.' },
-              { icon: '🧧', h: 'Verkaufsschild', p: 'Marken-Schild geliefert und aufgestellt. Noch immer der #1 lokale Lead-Generator.' },
-              { icon: '📊', h: 'Wöchentliche Fortschrittsberichte', p: 'Automatisch generiertes Verkäufer-Update alle 7 Tage — Anfragen, Besichtigungen, Feedback, nächste Schritte.' },
-            ].map(s => (
-              <div key={s.h} className="bg-white rounded-2xl border border-[#E2E4EB] p-6 hover:-translate-y-1 transition-transform duration-200">
-                <div className="w-11 h-11 rounded-xl bg-[#FFFBE0] flex items-center justify-center text-xl mb-4">{s.icon}</div>
-                <h3 className="font-bold text-[#0F1117] mb-2">{s.h}</h3>
-                <p className="text-sm text-[#656565] leading-relaxed">{s.p}</p>
+
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            {/* Solo Mode */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="h-2 bg-[#FFD400]"></div>
+              <div className="p-8">
+                <div className="text-4xl mb-4">🏠</div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-4">Solo</h3>
+                <p className="text-sm text-[#656565] mb-6">
+                  Du machst es selbst — wir geben dir die Werkzeuge und den Support.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Automatisierte Portal-Veröffentlichung</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Anfrage-Management Dashboard</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Wöchentliche Marktberichte</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Email & Chat Support</span>
+                  </li>
+                </ul>
               </div>
-            ))}
+            </div>
+
+            {/* Hybrid Mode */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="h-2 bg-[#6366F1]"></div>
+              <div className="p-8">
+                <div className="text-4xl mb-4">🤝</div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-4">Hybrid</h3>
+                <p className="text-sm text-[#656565] mb-6">
+                  Du behältst die Kontrolle — wir handle die schwierigen Parts.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Alles aus Solo, plus:</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Professionelle Fotos & Video</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Vertragsentwürfe & Rechtsprüfung</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Telefonischer Kundenservice</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Vollservice Mode */}
+            <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+              <div className="h-2 bg-[#10B981]"></div>
+              <div className="p-8">
+                <div className="text-4xl mb-4">🏢</div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-4">Vollservice</h3>
+                <p className="text-sm text-[#656565] mb-6">
+                  Sagen Sie uns, wann fertig ist — wir machen den ganzen Job.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Alles aus Hybrid, plus:</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Dedicated Account Manager</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>Notariatstermine arrangieren</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-[#656565]">
+                    <span className="text-[#10B981] font-bold mt-0.5">✓</span>
+                    <span>End-to-End-Unterstützung</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── CODE OF CLARITY ──────────────────────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-3">Unsere Standards</div>
+      {/* VALUES / WHAT SETS US APART */}
+      <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Was uns unterscheidet
+            </span>
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+              Gebaut auf Klarheit, nicht auf Provisionen
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            {/* Value 1 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="text-4xl mb-4">🏷️</div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-3">Keine Provision</h3>
+              <p className="text-sm text-[#656565] leading-relaxed">
+                0% Provision — du zahlst nur eine transparente Festgebühr, abhängig von der Route, die du wählst. Alles hängt von dir ab, nicht vom Makler.
+              </p>
+            </div>
+
+            {/* Value 2 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="text-4xl mb-4">📡</div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-3">Echte Portal-Reichweite</h3>
+              <p className="text-sm text-[#656565] leading-relaxed">
+                Dein Inserat erscheint auf IS24 und Immowelt — nicht auf irgendwelchen "Portalen", sondern da, wo Käufer wirklich suchen.
+              </p>
+            </div>
+
+            {/* Value 3 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="text-4xl mb-4">🌊</div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-3">Automatisierte Updates</h3>
+              <p className="text-sm text-[#656565] leading-relaxed">
+                Wöchentliche Berichte, Aktivitäten-Tracking und Marktdaten direkt in dein Dashboard — ohne dich zu nerven, ohne zu viel.
+              </p>
+            </div>
+
+            {/* Value 4 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="text-4xl mb-4">🔒</div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-3">Keine Vertragsbindung</h3>
+              <p className="text-sm text-[#656565] leading-relaxed">
+                Kein Exklusivvertrag mit uns. Du kannst jederzeit deine Angebote selbst veröffentlichen oder wechseln — völlige Freiheit.
+              </p>
+            </div>
+
+            {/* Value 5 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="text-4xl mb-4">🧑‍💼</div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-3">Experten auf Abruf</h3>
+              <p className="text-sm text-[#656565] leading-relaxed">
+                Fotografen, Makler, Anwälte — unser Netzwerk ist für dich da, wenn du sie brauchst. Kein verpflichtender Vertrag, nur gute Handwerk.
+              </p>
+            </div>
+
+            {/* Value 6 */}
+            <div className="bg-[#FAFAFA] rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="text-4xl mb-4">📱</div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-3">Dashboard-first</h3>
+              <p className="text-sm text-[#656565] leading-relaxed">
+                Alles an einem Ort — keine Dutzend verschiedener Systeme, keine Verwirrtheit. Ein Dashboard, das für dich arbeitet.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES */}
+      <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Services
+            </span>
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+              Alles, was du zum Verkaufen brauchst
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            {/* Service 1 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+              <div className="text-5xl mb-4">🏠</div>
+              <h3 className="text-lg font-bold text-[#0F1117]">Inserats-Erstellung</h3>
+            </div>
+
+            {/* Service 2 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+              <div className="text-5xl mb-4">📸</div>
+              <h3 className="text-lg font-bold text-[#0F1117]">Professionelle Fotos</h3>
+            </div>
+
+            {/* Service 3 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+              <div className="text-5xl mb-4">📄</div>
+              <h3 className="text-lg font-bold text-[#0F1117]">Dokumente & Compliance</h3>
+            </div>
+
+            {/* Service 4 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+              <div className="text-5xl mb-4">📊</div>
+              <h3 className="text-lg font-bold text-[#0F1117]">Marktpreis-Analyse</h3>
+            </div>
+
+            {/* Service 5 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+              <div className="text-5xl mb-4">👁️</div>
+              <h3 className="text-lg font-bold text-[#0F1117]">Besichtigungsmanagement</h3>
+            </div>
+
+            {/* Service 6 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 text-center">
+              <div className="text-5xl mb-4">📋</div>
+              <h3 className="text-lg font-bold text-[#0F1117]">Angebotsmanagement</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CODE OF CLARITY */}
+      <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Unsere Standards
+            </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
               Der Yalla-Klarheits-Kodex
             </h2>
-            <p className="text-[#656565]">
-              Jedes Inserat auf Yalla.House unterliegt diesen Verpflichtungen — messbar, automatisch, ohne Ausnahmen.
-            </p>
           </div>
 
-          <div className="space-y-5">
-            {[
-              { num: 1, title: 'Erste-Antwort-SLA', desc: 'Alle Anfragen werden innerhalb von 2 Geschäftsstunden bestätigt. Automatisch in der Plattform gemessen.' },
-              { num: 2, title: 'Genauer Status', desc: 'Reserviert/Verkauft-Status wird innerhalb von 4 Stunden aktualisiert — auf allen Portalen synchronisiert.' },
-              { num: 3, title: 'Besichtigungs-Klarheit', desc: 'Live-Besichtigungsslots oder drei konkrete Zeitvorschläge innerhalb von 24 Stunden.' },
-              { num: 4, title: 'Angebots-Transparenz', desc: 'Jedes Angebot wird mit Finanzierungsnachweis und Bestätigungszeitstempel protokolliert.' },
-              { num: 5, title: 'Wöchentliches Verkäufer-Update', desc: 'Automatisch alle 7 Tage gesendet: Anfragen, Besichtigungen, Feedback, nächste Schritte.' },
-            ].map((item) => (
-              <div key={item.num} className="flex gap-6 items-start bg-[#EDEEF2] rounded-2xl border border-[#E2E4EB] p-6">
-                <div className="w-10 h-10 rounded-full bg-[#FFD400] flex items-center justify-center text-[#0F1117] font-extrabold flex-shrink-0">
-                  {item.num}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-[#0F1117] mb-2">{item.title}</h3>
-                  <p className="text-sm text-[#656565] leading-relaxed">{item.desc}</p>
+          <div className="space-y-8">
+            {/* Standard 1 */}
+            <div className="flex gap-6 pb-8 border-b border-[#E2E4EB]">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
+                  1
                 </div>
               </div>
-            ))}
+              <div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Dein Preis, deine Entscheidung</h3>
+                <p className="text-base text-[#656565]">
+                  Wir beraten, aber du entscheidest. Kein Makler darf dir sagen, dass dein Preis zu hoch ist — das ist deine Wahl.
+                </p>
+              </div>
+            </div>
+
+            {/* Standard 2 */}
+            <div className="flex gap-6 pb-8 border-b border-[#E2E4EB]">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
+                  2
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Gebühren offen & im Voraus</h3>
+                <p className="text-base text-[#656565]">
+                  Keine Überraschungen. Du weißt genau, was Yalla.House kostet, bevor du dich anmeldest — nicht danach.
+                </p>
+              </div>
+            </div>
+
+            {/* Standard 3 */}
+            <div className="flex gap-6 pb-8 border-b border-[#E2E4EB]">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
+                  3
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Verkäufer-Vorrang</h3>
+                <p className="text-base text-[#656565]">
+                  Unsere Plattform arbeitet für dich, nicht gegen dich. Jede Funktion, jede Gebühr, jede Entscheidung ist vom Verkäufer weg gedacht.
+                </p>
+              </div>
+            </div>
+
+            {/* Standard 4 */}
+            <div className="flex gap-6 pb-8 border-b border-[#E2E4EB]">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
+                  4
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Keine Lock-in-Verträge</h3>
+                <p className="text-base text-[#656565]">
+                  Jederzeit kündbar. Wenn Yalla.House nicht für dich funktioniert, gehen wir auseinander — keine Strafen, kein Drama.
+                </p>
+              </div>
+            </div>
+
+            {/* Standard 5 */}
+            <div className="flex gap-6 pb-8 border-b border-[#E2E4EB]">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
+                  5
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Echte Daten, keine leeren Versprechen</h3>
+                <p className="text-base text-[#656565]">
+                  Jede Zahl, die wir zitieren — Durchschnittspreis, durchschnittliche Verkaufszeit, Provisionsersparnis — ist belegbar und von uns transparent gemacht.
+                </p>
+              </div>
+            </div>
+
+            {/* Standard 6 */}
+            <div className="flex gap-6">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-[#FFD400] text-[#0F1117] font-bold">
+                  6
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0F1117] mb-2">Menschliche Hilfe, wenn du sie brauchst</h3>
+                <p className="text-base text-[#656565]">
+                  Technologie zuerst, aber immer ein Mensch da, wenn du ihn brauchst. Keine Warteschlangen, keine KI-Runaround.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ───────────────────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-3">Was andere sagen</div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117]">Die Erfahrung spricht für sich</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { q: 'Wenn ich einfach einen Termin buchen könnte, der wirklich existiert, würde ich doppelt so viele Häuser besichtigen. Yalla hat das endlich möglich gemacht.', name: 'Jamie M.', role: 'Home Hunter, 32 — Berlin', init: 'JM' },
-              { q: 'Schick mir jeden Sonntag einen Snapshot, damit ich nicht hinterher rennen muss. Genau das will ich. Yalla macht das automatisch — Game Changer.', name: 'Sarah H.', role: 'Verkäuferin, 48 — München', init: 'SH' },
-              { q: 'Ich habe über €12.000 an Maklerggebühren gespart. Die Portal-Inserate waren in 48 Stunden live und das Dashboard ist brillant.', name: 'Ravi P.', role: 'Verkäufer, 41 — Frankfurt', init: 'RP' },
-            ].map(t => (
-              <div key={t.init} className="bg-white rounded-2xl border border-[#E2E4EB] p-6 hover:-translate-y-1 transition-transform duration-200 relative">
-                <div className="text-[#F59E0B] text-base tracking-widest mb-3">★★★★★</div>
-                <p className="text-sm text-[#333] leading-relaxed mb-5 italic">&ldquo;{t.q}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#FFFBE0] border border-[#FFD400] flex items-center justify-center text-xs font-bold text-[#7A5F00]">{t.init}</div>
-                  <div>
-                    <div className="font-semibold text-sm text-[#0F1117]">{t.name}</div>
-                    <div className="text-xs text-[#999]">{t.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TEAM SECTION ───────────────────────────────────────────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#656565] mb-3">Das Team</div>
+      {/* TESTIMONIALS */}
+      <section className="bg-[#FAFAFA] py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Was andere sagen
+            </span>
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
-              Gebaut von Menschen, die selbst Immobilien verkauft haben
+              Die Erfahrung spricht für sich
             </h2>
-            <p className="text-[#656565] max-w-xl mx-auto">
-              Wir kennen die Frustrationen aus erster Hand.
-            </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { initials: 'YH', role: 'Gründer', specialty: 'Immobilien & Strategie' },
-              { initials: 'PT', role: 'Produktleitung', specialty: 'UX & Plattform-Design' },
-              { initials: 'DV', role: 'Leitung Entwicklung', specialty: 'Plattform & Integrationen' },
-              { initials: 'LM', role: 'Rechtsberatung', specialty: 'Notar & Compliance' },
-            ].map((member, i) => (
-              <div key={i} className="bg-[#EDEEF2] rounded-2xl border border-[#E2E4EB] p-6 text-center">
-                <div className="w-16 h-16 rounded-full bg-[#FFD400] flex items-center justify-center text-[#0F1117] font-extrabold text-xl mx-auto mb-4">
-                  {member.initials}
-                </div>
-                <div className="font-bold text-[#0F1117] mb-1">{member.role}</div>
-                <div className="text-sm text-[#656565]">{member.specialty}</div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="flex gap-1 mb-4">
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
               </div>
-            ))}
+              <p className="text-base text-[#0F1117] leading-relaxed mb-6">
+                "Yalla.House hat mir Tausende von Euro gespart und mein Haus in weniger als 6 Wochen verkauft. Das Dashboard ist fantastisch, und das Team wusste immer, was zu tun war. Ich hätte mein Geld nicht besser investieren können."
+              </p>
+              <p className="text-sm font-semibold text-[#0F1117]">— M.K., Berlin</p>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-lg transition-all duration-300">
+              <div className="flex gap-1 mb-4">
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+                <span className="text-[#F59E0B]">★</span>
+              </div>
+              <p className="text-base text-[#0F1117] leading-relaxed mb-6">
+                "Ich war skeptisch, ein Immobilien-Startup mit meinem Haus zu vertrauen. Aber Yalla.House war transparent, effizient und respektvoll von Anfang an. Keine versteckten Gebühren, kein Quetschspiel. Nur ehrliche Hilfe."
+              </p>
+              <p className="text-sm font-semibold text-[#0F1117]">— S.L., München</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── CTA BAND ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────── */}
-      <div className="bg-[#0d0d0d] relative overflow-hidden py-16 px-4">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 50%, rgba(255,212,0,0.13) 0%, transparent 70%)' }} />
-        <div className="relative max-w-2xl mx-auto text-center">
-          <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-white mb-4">
+      {/* TEAM */}
+      <section className="bg-white py-24 md:py-32 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="mb-12 text-center">
+            <span className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] mb-6">
+              Das Team
+            </span>
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+              Gebaut von Menschen, die selbst genug von Maklern hatten.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Team Member 1 */}
+            <div className="text-center">
+              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
+                TA
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Tarek Al-Saleh</h3>
+              <p className="text-sm text-[#656565]">Gründer & CEO</p>
+              <p className="text-xs text-[#999999] mt-2">Strategie & Vision</p>
+            </div>
+
+            {/* Team Member 2 */}
+            <div className="text-center">
+              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
+                DV
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Daisy Voelker</h3>
+              <p className="text-sm text-[#656565]">Leitung Entwicklung</p>
+              <p className="text-xs text-[#999999] mt-2">Plattform & Integrationen</p>
+            </div>
+
+            {/* Team Member 3 */}
+            <div className="text-center">
+              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
+                LM
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Laura Müller</h3>
+              <p className="text-sm text-[#656565]">Rechtsberatung</p>
+              <p className="text-xs text-[#999999] mt-2">Notar & Compliance</p>
+            </div>
+
+            {/* Team Member 4 */}
+            <div className="text-center">
+              <div className="w-24 h-24 rounded-full bg-[#FFD400] flex items-center justify-center mx-auto mb-4 font-extrabold text-2xl text-[#0F1117]">
+                JR
+              </div>
+              <h3 className="text-lg font-bold text-[#0F1117] mb-2">Jan Richter</h3>
+              <p className="text-sm text-[#656565]">Operations</p>
+              <p className="text-xs text-[#999999] mt-2">Kundenerfolg & Support</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA BAND */}
+      <section className="relative bg-[#0F1117] py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Radial gradient glow pseudo-element */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10"
+               style={{
+                 background: 'radial-gradient(circle, #FFD400 0%, transparent 70%)'
+               }}>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-white mb-6">
             Bereit, die Kontrolle über Ihren Verkauf zu übernehmen?
           </h2>
-          <p className="text-[rgba(255,255,255,0.62)] mb-8 leading-relaxed">
-            Schließen Sie sich den Verkäufern an, die bereits Tausende gespart haben. Ihre Immobilie. Ihre Bedingungen. Ihr Preis.
+          <p className="text-lg text-white/60 mb-12 max-w-2xl mx-auto">
+            Starten Sie noch heute mit Yalla.House. Kein Makler. Keine Provisionen. Nur Sie und Ihre Immobilie.
           </p>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/owner/new" className="inline-flex items-center justify-center bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold px-8 py-4 rounded-xl transition-colors text-base">
-              Immobilie inserieren →
+            <Link href="/list">
+              <button className="px-8 py-4 bg-[#FFD400] text-[#0F1117] font-bold rounded-full hover:bg-[#E6C200] transition-all duration-300 will-change-transform hover:shadow-lg">
+                Immobilie inserieren →
+              </button>
             </Link>
-            <Link href="/services" className="inline-flex items-center justify-center bg-transparent hover:bg-white/10 text-white font-bold px-8 py-4 rounded-xl transition-colors text-base border border-white/30 hover:border-white/50">
-              Services &amp; Preise
+            <Link href="/services">
+              <button className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300 will-change-transform">
+                Services & Preise
+              </button>
             </Link>
           </div>
         </div>
-      </div>
-
+      </section>
     </main>
   )
 }
