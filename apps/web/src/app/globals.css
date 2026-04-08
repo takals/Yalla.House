@@ -19,10 +19,19 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
     @apply bg-bg font-sans text-[#0F1117];
+    line-height: 1.5;
+    font-feature-settings: "kern", "liga", "ss01";
+  }
+
+  /* Headlines inherit display tracking from tailwind.config fontSize tuples.
+     This keeps the Apple-style hierarchy consistent across all public pages. */
+  h1, h2, h3 {
+    text-wrap: balance;
   }
 }
 

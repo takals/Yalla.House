@@ -5,13 +5,13 @@ export default function HomePage() {
     <main className="bg-white min-h-[calc(100vh-64px)]">
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="pt-20 pb-10 px-4">
+      <section className="pt-section-top pb-10 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-[clamp(2.5rem,6vw,4.25rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.08] mb-5">
+          <h1 className="text-display text-[#0F1117] mb-5">
             Dein Immobilien-<br />
-            <span className="text-[#FFD400]">Dashboard.</span>
+            <span className="text-brand">Dashboard.</span>
           </h1>
-          <p className="text-lg text-[#656565] leading-relaxed max-w-xl mx-auto">
+          <p className="text-lede text-[#656565] max-w-xl mx-auto">
             Plane, starte und manage deinen Immobilienverkauf — alles an einem Ort. Wähle deine Rolle und leg los.
           </p>
         </div>
