@@ -16,12 +16,12 @@ export default async function ServicesPage() {
     <main className="bg-[#EDEEF2]">
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 px-4">
+      <section className="pt-section-top pb-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-5">
+          <h1 className="text-display text-[#0F1117] mb-5">
             {t('heroTitle')}
           </h1>
-          <p className="text-lg text-[#656565] leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lede text-[#656565] max-w-2xl mx-auto">
             {t('heroSubtitle')}
           </p>
         </div>
@@ -34,10 +34,10 @@ export default async function ServicesPage() {
             <div className="inline-flex items-center gap-2 bg-white border border-[#E2E4EB] rounded-full px-3.5 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-[#999]">
               {t('addonsTag')}
             </div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-3">
+            <h2 className="text-title-2 text-[#0F1117] mb-3">
               {t('addonsTitle')}
             </h2>
-            <p className="text-lg text-[#656565] leading-relaxed">
+            <p className="text-lede text-[#656565]">
               {t('addonsSubtitle')}
             </p>
           </div>
@@ -80,10 +80,10 @@ export default async function ServicesPage() {
             <div className="inline-flex items-center gap-2 bg-[#EDEEF2] border border-[#E2E4EB] rounded-full px-3.5 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-[#999]">
               {t('pricingTag')}
             </div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-3">
+            <h2 className="text-title-2 text-[#0F1117] mb-3">
               {t('pricingTitle')}
             </h2>
-            <p className="text-lg text-[#656565] leading-relaxed">
+            <p className="text-lede text-[#656565]">
               {t('pricingSubtitle')}
             </p>
           </div>
@@ -196,10 +196,10 @@ export default async function ServicesPage() {
             <div className="inline-flex items-center gap-2 bg-white border border-[#E2E4EB] rounded-full px-3.5 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-[#999]">
               {t('comparisonTag')}
             </div>
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-3">
+            <h2 className="text-title-2 text-[#0F1117] mb-3">
               {t('comparisonTitle')}
             </h2>
-            <p className="text-lg text-[#656565] leading-relaxed">
+            <p className="text-lede text-[#656565]">
               {t('comparisonSubtitle')}
             </p>
           </div>
@@ -255,10 +255,10 @@ export default async function ServicesPage() {
           backgroundImage: 'radial-gradient(circle at center, #FFD400 0%, transparent 70%)',
         }}></div>
         <div className="max-w-6xl mx-auto relative z-10 text-center">
-          <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-white mb-4">
+          <h2 className="text-title-2 text-white mb-4">
             {t('ctaBandTitle')}
           </h2>
-          <p className="text-lg text-[rgba(255,255,255,.62)] leading-relaxed max-w-2xl mx-auto mb-8">
+          <p className="text-lede text-[rgba(255,255,255,.62)] max-w-2xl mx-auto mb-8">
             {t('ctaBandSubtitle')}
           </p>
           <Link

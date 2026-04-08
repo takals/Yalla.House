@@ -17,11 +17,11 @@ export default function AboutPage() {
       {/* HERO */}
       <section className="bg-white pt-40 pb-28 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="fade-up text-[clamp(2.75rem,6.5vw,5rem)] font-extrabold tracking-[-0.04em] text-[#1d1d1f] leading-[1.05]">
+          <h1 className="fade-up text-display text-[#1d1d1f]">
             Dein Haus.{' '}
-            <span className="text-[#FFD400]">Deine Regeln.</span>
+            <span className="text-brand">Deine Regeln.</span>
           </h1>
-          <p className="fade-up-d1 mt-6 text-xl md:text-2xl text-[#86868b] font-normal max-w-2xl mx-auto leading-relaxed">
+          <p className="fade-up-d1 mt-6 text-lede text-[#86868b] font-normal max-w-2xl mx-auto">
             Yalla.House gibt Eigentümern die Werkzeuge, die Makler für sich behalten. Null Provision. Volle Kontrolle. Alles transparent.
           </p>
         </div>
@@ -32,19 +32,19 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             <div className="fade-up text-center">
-              <div className="text-5xl md:text-6xl font-extrabold tracking-tight text-[#1d1d1f]">€0</div>
+              <div className="text-5xl md:text-6xl font-extrabold tabular-nums tracking-display text-[#1d1d1f]">€0</div>
               <p className="mt-2 text-sm text-[#86868b]">Provision</p>
             </div>
             <div className="fade-up-d1 text-center">
-              <div className="text-5xl md:text-6xl font-extrabold tracking-tight text-[#1d1d1f]">48h</div>
+              <div className="text-5xl md:text-6xl font-extrabold tabular-nums tracking-display text-[#1d1d1f]">48h</div>
               <p className="mt-2 text-sm text-[#86868b]">Bis live auf IS24</p>
             </div>
             <div className="fade-up-d2 text-center">
-              <div className="text-5xl md:text-6xl font-extrabold tracking-tight text-[#1d1d1f]">100%</div>
+              <div className="text-5xl md:text-6xl font-extrabold tabular-nums tracking-display text-[#1d1d1f]">100%</div>
               <p className="mt-2 text-sm text-[#86868b]">Dein Verkaufspreis</p>
             </div>
             <div className="fade-up-d3 text-center">
-              <div className="text-5xl md:text-6xl font-extrabold tracking-tight text-[#1d1d1f]">€8k+</div>
+              <div className="text-5xl md:text-6xl font-extrabold tabular-nums tracking-display text-[#1d1d1f]">€8k+</div>
               <p className="mt-2 text-sm text-[#86868b]">Ø Ersparnis</p>
             </div>
           </div>
@@ -55,10 +55,10 @@ export default function AboutPage() {
       <section className="bg-white py-32 px-6">
         <div className="max-w-3xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#86868b] mb-6">Unsere Mission</p>
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.03em] text-[#1d1d1f] leading-tight">
+          <h2 className="text-title-1 text-[#1d1d1f] leading-tight">
             Provisionen sind das Relikt einer Zeit, in der Verkäufer keine andere Wahl hatten.
           </h2>
-          <p className="mt-8 text-lg text-[#86868b] leading-relaxed">
+          <p className="mt-8 text-lede text-[#86868b]">
             Intransparente Gebühren, lange Vertragsbindungen und ein System, das den Makler belohnt — nicht den Eigentümer. Wir haben uns gefragt: Was würde ein Verkäufer selbst bauen? Das ist Yalla.House.
           </p>
         </div>
@@ -94,7 +94,7 @@ export default function AboutPage() {
       <section className="bg-white py-32 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#86868b] mb-6 text-center">So funktioniert es</p>
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.03em] text-[#1d1d1f] leading-tight text-center mb-16">
+          <h2 className="text-title-1 text-[#1d1d1f] leading-tight text-center mb-16">
             Drei Schritte. Null Kompromisse.
           </h2>
 
@@ -128,7 +128,7 @@ export default function AboutPage() {
       <section className="bg-[#f5f5f7] py-28 px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#86868b] mb-6 text-center">Drei Wege</p>
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.03em] text-[#1d1d1f] leading-tight text-center mb-16">
+          <h2 className="text-title-1 text-[#1d1d1f] leading-tight text-center mb-16">
             Du wählst. Wir passen uns an.
           </h2>
 
@@ -182,7 +182,7 @@ export default function AboutPage() {
       <section className="bg-white py-32 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#86868b] mb-6 text-center">Erfahrungen</p>
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.03em] text-[#1d1d1f] leading-tight text-center mb-16">
+          <h2 className="text-title-1 text-[#1d1d1f] leading-tight text-center mb-16">
             Was unsere Verkäufer sagen.
           </h2>
 
@@ -209,7 +209,7 @@ export default function AboutPage() {
       <section className="bg-[#f5f5f7] py-28 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#86868b] mb-6">Das Team</p>
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.03em] text-[#1d1d1f] leading-tight mb-16">
+          <h2 className="text-title-1 text-[#1d1d1f] leading-tight mb-16">
             Gebaut von Menschen, die genug von Maklern hatten.
           </h2>
 
@@ -244,10 +244,10 @@ export default function AboutPage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #FFD400 0%, transparent 70%)' }} />
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
-          <h2 className="text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold tracking-[-0.03em] text-white leading-tight mb-6">
+          <h2 className="text-title-1 text-white leading-tight mb-6">
             Bereit, die Kontrolle zu übernehmen?
           </h2>
-          <p className="text-lg text-white/50 mb-10 max-w-xl mx-auto">
+          <p className="text-lede text-white/50 mb-10 max-w-xl mx-auto">
             Kein Makler. Keine Provisionen. Nur du und deine Immobilie.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
