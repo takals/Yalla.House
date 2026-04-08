@@ -11,14 +11,11 @@ const intlMiddleware = createIntlMiddleware({
   localePrefix: 'as-needed',  // /de/dashboard → /dashboard in DE, /en/dashboard in EN
 })
 
-// Routes that require authentication
-const protectedPaths = [
-  '/dashboard',
-  '/owner',
-  '/hunter',
-  '/agent',
-  '/admin',
-]
+// Routes that require authentication.
+// TEMPORARILY EMPTY — dashboards are open during the public preview phase so
+// visitors can explore each role without creating an account. Re-add paths
+// here (e.g. '/admin') when we're ready to gate them again.
+const protectedPaths: string[] = []
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
