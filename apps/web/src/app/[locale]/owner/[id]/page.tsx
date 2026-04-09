@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { redirect } from 'next/navigation'
 import { ListingEditForm } from './edit-form'
 import type { PortalRow, PortalStatusRow } from './portals'
@@ -11,8 +12,7 @@ export default async function EditListingPage({ params }: Props) {
   const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect(`/auth/login?next=/owner/${id}`)
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const { data: listing } = await (supabase as any)
     .from('listings')
@@ -25,7 +25,7 @@ export default async function EditListingPage({ params }: Props) {
       listing_media(id, url, thumb_url, is_primary, sort_order, type)
     `)
     .eq('id', id)
-    .eq('owner_id', user.id)
+    .eq('owner_id', userId)
     .single()
 
   if (!listing) redirect('/owner')

@@ -5,6 +5,8 @@ export async function SiteHeader() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Preview phase: dashboards are open. Default the CTA to the owner dashboard
+  // unless a real signed-in user clearly looks like a hunter.
   let accountHref = '/owner'
   if (user) {
     const { count } = await supabase
@@ -43,21 +45,12 @@ export async function SiteHeader() {
           >
             Über uns
           </Link>
-          {user ? (
-            <Link
-              href={accountHref}
-              className="text-sm font-bold text-[#0F1117] bg-brand hover:bg-brand-hover px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
-            >
-              Mein Konto
-            </Link>
-          ) : (
-            <Link
-              href="/auth/login"
-              className="text-sm font-bold text-[#0F1117] bg-brand hover:bg-brand-hover px-3 py-1.5 rounded-lg transition-colors"
-            >
-              Anmelden
-            </Link>
-          )}
+          <Link
+            href={accountHref}
+            className="text-sm font-bold text-[#0F1117] bg-brand hover:bg-brand-hover px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+          >
+            {user ? 'Mein Konto' : 'Dashboards ansehen'}
+          </Link>
         </nav>
       </div>
     </header>

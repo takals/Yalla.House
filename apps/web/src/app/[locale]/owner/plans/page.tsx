@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import { CheckoutButton } from './checkout-button'
 
 interface Props {
@@ -9,9 +8,7 @@ interface Props {
 export default async function PlansPage({ searchParams }: Props) {
   const { listing_id } = await searchParams
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect(`/auth/login?next=/owner/plans${listing_id ? `?listing_id=${listing_id}` : ''}`)
+  // Preview phase: no auth gate. Plans page is publicly browsable.
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: plans } = await (supabase.from('subscription_plans') as any)

@@ -1,24 +1,23 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { PassportForm } from './passport-form'
 
 export default async function PassportPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/hunter/passport')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const [profileResult, userResult] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_profiles') as any)
       .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline, brief_updated_at')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .maybeSingle(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name')
-      .eq('id', user.id)
+      .eq('id', userId)
       .maybeSingle(),
   ])
 

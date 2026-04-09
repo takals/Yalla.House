@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { CalendarCheck, MessageCircle, Home, TrendingUp, type LucideIcon } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
@@ -17,14 +17,13 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const { billing } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/owner')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch listings first to get IDs for related queries
   const { data: listingsData } = await supabase
     .from('listings')
     .select('*')
-    .eq('owner_id', user.id)
+    .eq('owner_id', userId)
     .order('created_at', { ascending: false })
     .limit(50)
 
@@ -66,7 +65,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
     supabase
       .from('billing_records')
       .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('status', 'paid'),
   ])
 

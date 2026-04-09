@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 
 interface RawAssignment {
@@ -23,14 +23,13 @@ interface RawAssignment {
 export default async function AgentPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/agent')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const [profileResult, assignmentsResult] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_profiles') as any)
       .select('agency_name, license_number, coverage_areas, property_types, verified_at, subscription_tier')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .maybeSingle(),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,7 +39,7 @@ export default async function AgentPage() {
         hunter_user:users!hunter_id(full_name, email),
         hunter_profile:hunter_profiles!hunter_id(intent, budget_min, budget_max, target_areas, property_types, finance_status, brief_updated_at)
       `)
-      .eq('agent_id', user.id)
+      .eq('agent_id', userId)
       .neq('status', 'disconnected')
       .order('created_at', { ascending: false }),
   ])
@@ -48,7 +47,7 @@ export default async function AgentPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userResult = await (supabase.from('users') as any)
     .select('full_name, email')
-    .eq('id', user.id)
+    .eq('id', userId)
     .maybeSingle()
 
   const agentProfile = profileResult.data

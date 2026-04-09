@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
@@ -10,13 +10,12 @@ type Listing = Database['public']['Tables']['listings']['Row']
 export default async function OwnerListingsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/owner/listings')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const { data: listingsData } = await supabase
     .from('listings')
     .select('*')
-    .eq('owner_id', user.id)
+    .eq('owner_id', userId)
     .order('created_at', { ascending: false })
 
   const allListings: Listing[] = listingsData ?? []

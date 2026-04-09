@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { ViewingCard } from './viewing-card'
 
@@ -19,8 +19,7 @@ interface ViewingWithListing {
 export default async function HunterPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/hunter')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const [
     profileResult,
@@ -33,13 +32,13 @@ export default async function HunterPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name, email')
-      .eq('id', user.id)
+      .eq('id', userId)
       .maybeSingle(),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_profiles') as any)
       .select('intent, timeline, brief_updated_at')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .maybeSingle(),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,26 +47,26 @@ export default async function HunterPage() {
         id, status, hunter_notes, created_at,
         listing:listings!listing_id(title_de, city, postcode, place_id)
       `)
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .order('created_at', { ascending: false })
       .limit(50),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('offers') as any)
       .select('id', { count: 'exact', head: true })
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .in('status', ['submitted', 'under_review']),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_hunter_assignments') as any)
       .select('id', { count: 'exact', head: true })
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .eq('status', 'active'),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('property_matches') as any)
       .select('id', { count: 'exact', head: true })
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .eq('status', 'new'),
   ])
 
