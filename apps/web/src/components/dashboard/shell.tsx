@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
-  LogOut,
+  LogOut, Search,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -132,6 +132,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
 export const hunterNav: NavItem[] = [
   { href: '/hunter',          label: 'Dashboard',        icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/hunter/search',   label: 'Suche',            icon: <Search size={15} /> },
   { href: '/hunter/passport', label: 'Home Passport',    icon: <ShieldCheck size={15} /> },
   { href: '/hunter/agents',   label: 'Makler-Manager',   icon: <Handshake size={15} /> },
   { href: '/hunter/inbox',    label: 'Posteingang',       icon: <Inbox size={15} /> },
@@ -152,7 +153,13 @@ export const ownerNav: NavItem[] = [
   { href: '/owner',          label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
   { href: '/owner/listings', label: 'Meine Inserate',    icon: <Home size={15} /> },
   { href: '/owner/viewings', label: 'Besichtigungen',    icon: <Calendar size={15} /> },
+  { href: '/owner/agents',   label: 'Meine Makler',      icon: <Handshake size={15} /> },
   { href: '/owner/new',      label: 'Neues Inserat',     icon: <Plus size={15} /> },
   { href: '/owner/plans',    label: 'Pläne & Billing',   icon: <Star size={15} /> },
   { href: '/owner/settings', label: 'Einstellungen',     icon: <Settings size={15} /> },
+]
+
+export const partnerNav: NavItem[] = [
+  { href: '/partner',          label: 'Dashboard', icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/partner/requests', label: 'Anfragen',  icon: <Inbox size={15} /> },
 ]
