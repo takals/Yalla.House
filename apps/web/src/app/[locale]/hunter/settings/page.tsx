@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { SettingsClient } from './settings-client'
 
 interface RawAssignment {
@@ -19,14 +19,13 @@ interface RawConsentEvent {
 export default async function SettingsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/hunter/settings')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const [profileResult, assignmentsResult, consentResult] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name, email, phone')
-      .eq('id', user.id)
+      .eq('id', userId)
       .single(),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,19 +35,19 @@ export default async function SettingsPage() {
         agent_profile:agent_profiles!agent_id(agency_name),
         agent_user:users!agent_id(full_name)
       `)
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .neq('status', 'disconnected')
       .order('created_at', { ascending: false }),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_consent_log') as any)
       .select('id, event_type, created_at, agent:users!agent_id(full_name)')
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .order('created_at', { ascending: false })
       .limit(5),
   ])
 
-  const profile = profileResult.data ?? { full_name: null, email: user.email ?? '', phone: null }
+  const profile = profileResult.data ?? { full_name: null, email: user?.email ?? '', phone: null }
 
   const assignments = (assignmentsResult.data ?? []).map((a: RawAssignment) => ({
     id: a.id,

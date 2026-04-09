@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { HunterPassportCard } from './hunter-passport-card'
 
 interface RawAssignment {
@@ -25,8 +25,7 @@ interface RawAssignment {
 export default async function AgentHuntersPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/agent/hunters')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: raw } = await (supabase.from('agent_hunter_assignments') as any)
@@ -38,7 +37,7 @@ export default async function AgentHuntersPage() {
         min_bedrooms, must_haves, finance_status, timeline, brief_updated_at
       )
     `)
-    .eq('agent_id', user.id)
+    .eq('agent_id', userId)
     .eq('status', 'active')
     .order('connected_at', { ascending: false })
 

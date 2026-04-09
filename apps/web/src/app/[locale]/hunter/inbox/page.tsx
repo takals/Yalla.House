@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { MatchFeed } from './match-feed'
 
@@ -30,11 +30,10 @@ interface RawMatch {
 export default async function InboxPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/hunter/inbox')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Derive alias from email prefix
-  const aliasEmail = user.email
+  const aliasEmail = user?.email
     ? `${user.email.split('@')[0]}@yalla.house`
     : 'ihr-name@yalla.house'
 
@@ -42,7 +41,7 @@ export default async function InboxPage() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_inbox_sources') as any)
       .select('id, source_name, alias_email, status, last_received_at, listings_count')
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .order('created_at', { ascending: false }),
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,7 +51,7 @@ export default async function InboxPage() {
         match_score, match_breakdown, status, received_at,
         source:agent_inbox_sources!source_id(source_name)
       `)
-      .eq('hunter_id', user.id)
+      .eq('hunter_id', userId)
       .in('status', ['new', 'saved'])
       .order('match_score', { ascending: false })
       .limit(100),

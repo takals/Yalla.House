@@ -1,10 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 export default async function OwnerSettingsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -19,13 +18,13 @@ export default async function OwnerSettingsPage() {
         <div className="flex items-center justify-between py-3 border-b border-[#F0F0F0]">
           <div>
             <div className="text-sm font-semibold text-[#0F1117]">E-Mail-Adresse</div>
-            <div className="text-sm text-[#999]">{user.email}</div>
+            <div className="text-sm text-[#999]">{user?.email ?? 'preview@yalla.house'}</div>
           </div>
         </div>
         <div className="flex items-center justify-between py-3">
           <div>
             <div className="text-sm font-semibold text-[#0F1117]">Konto-ID</div>
-            <div className="text-xs text-[#999] font-mono">{user.id}</div>
+            <div className="text-xs text-[#999] font-mono">{userId}</div>
           </div>
         </div>
       </div>

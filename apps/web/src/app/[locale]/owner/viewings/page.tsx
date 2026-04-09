@@ -1,19 +1,18 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { ViewingList, type ViewingRow } from './viewing-list'
 
 export default async function ViewingsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/owner/viewings')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Step 1: get all listing IDs for this owner
   const { data: myListings } = await (supabase as any)
     .from('listings')
     .select('id, title_de, place_id')
-    .eq('owner_id', user.id)
+    .eq('owner_id', userId)
 
   const listingIds = myListings?.map((l: any) => l.id) ?? []
 

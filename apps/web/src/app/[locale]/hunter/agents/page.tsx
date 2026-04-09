@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { AgentCard } from './agent-card'
 
@@ -16,8 +16,7 @@ interface Assignment {
 export default async function AgentsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) redirect('/auth/login?next=/hunter/agents')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch assignments with agent profile + user name
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +26,7 @@ export default async function AgentsPage() {
       agent_profile:agent_profiles!agent_id(agency_name),
       agent_user:users!agent_id(full_name)
     `)
-    .eq('hunter_id', user.id)
+    .eq('hunter_id', userId)
     .neq('status', 'disconnected')
     .order('created_at', { ascending: false })
 

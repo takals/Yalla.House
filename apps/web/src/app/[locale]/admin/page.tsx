@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { createServiceClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 const STATUS_LABELS: Record<string, string> = {
@@ -32,13 +32,13 @@ export default async function AdminPage() {
   // Auth check
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login?next=/admin')
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Admin role check
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: roleRow } = await (supabase.from('user_roles') as any)
     .select('role')
-    .eq('user_id', user.id)
+    .eq('user_id', userId)
     .eq('role', 'admin')
     .eq('is_active', true)
     .maybeSingle()
