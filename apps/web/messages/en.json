@@ -126,137 +126,55 @@
     "unauthorized": "Unauthorised"
   },
   "services": {
-    "heroTitle": "Pay only for what you need. Keep the rest.",
-    "heroSubtitle": "Start free. Modular services when you need them. No commission — ever. Prices vary by market and are always shown before payment.",
-    "addonsTag": "Add-on Services",
-    "addonsTitle": "Optimize your listing with professional extras",
-    "addonsSubtitle": "Available à la carte or as part of a package.",
-    "addons": [
-      {
-        "icon": "📷",
-        "title": "Professional Photography",
-        "description": "Local photographers, available at short notice, edited HD images within 24 hours.",
-        "price": "€149"
-      },
-      {
-        "icon": "🏠",
-        "title": "360° Virtual Tour",
-        "description": "Interactive 3D scan. Buyers explore your home before viewing.",
-        "price": "€199"
-      },
-      {
-        "icon": "📐",
-        "title": "Floor Plan Creation",
-        "description": "Accurate, publication-ready floor plans. Required by IS24 for premium placement.",
-        "price": "€79"
-      },
-      {
-        "icon": "📋",
-        "title": "Legal Support",
-        "description": "Notary referral, contract review and guidance at every milestone.",
-        "price": "from €299"
-      },
-      {
-        "icon": "🪧",
-        "title": "For Sale Sign",
-        "description": "Branded sign delivered and installed. The #1 local lead generator.",
-        "price": "€49"
-      },
-      {
-        "icon": "📊",
-        "title": "Portal Advertising",
-        "description": "IS24, Immowelt, ImmoNet. Automatic status synchronisation.",
-        "price": "Included",
-        "badge": "In all plans"
-      },
-      {
-        "icon": "🤝",
-        "title": "Personal Support",
-        "description": "Dedicated Yalla adviser. Manages inquiries, negotiates, guides the sale.",
-        "price": "€499"
-      },
-      {
-        "icon": "📈",
-        "title": "Weekly Reports",
-        "description": "Auto-generated updates every 7 days.",
-        "price": "Included",
-        "badge": "In all plans"
-      },
-      {
-        "icon": "📅",
-        "title": "Viewing Calendar",
-        "description": "Live availability, buyers book themselves. 40% fewer no-shows.",
-        "price": "Included",
-        "badge": "In all plans"
-      }
-    ],
-    "pricingTag": "Plans",
-    "pricingTitle": "Simple pricing for every seller",
-    "pricingSubtitle": "Choose the plan that suits you.",
-    "plans": {
-      "basis": {
-        "name": "Basis",
-        "price": "€199",
-        "period": "one-time",
-        "features": [
-          "IS24 & Immowelt listing",
-          "Owner dashboard",
-          "Viewing calendar & self-booking",
-          "Inquiry inbox",
-          "Weekly reports",
-          "Offer log & document storage"
-        ],
-        "cta": "Get Started"
-      },
-      "professional": {
-        "name": "Professional",
-        "price": "€499",
-        "period": "one-time",
-        "badge": "Most Popular",
-        "features": [
-          "Everything in Basis",
-          "Professional photography",
-          "Floor plan creation",
-          "For sale sign (delivered)",
-          "Enhanced portal placement",
-          "Energy certificate booking",
-          "Priority support (2h SLA)"
-        ],
-        "cta": "Get Started"
-      },
-      "komplett": {
-        "name": "Complete",
-        "price": "€899",
-        "period": "one-time",
-        "features": [
-          "Everything in Professional",
-          "360° Virtual tour",
-          "Dedicated Yalla adviser",
-          "Legal support & notary referral",
-          "Negotiation support",
-          "Closing checklist & handover",
-          "Priority support (1h SLA)"
-        ],
-        "cta": "Get Started"
-      }
-    },
-    "comparisonTag": "Yalla vs. Traditional",
-    "comparisonTitle": "The numbers speak for themselves",
-    "comparisonSubtitle": "On a €400,000 property, traditional German agents charge 3–6% commission.",
-    "comparison": {
-      "traditional": "Traditional Agent",
-      "traditionalPrice": "€16,000+",
-      "traditionalNote": "Average commission at 4%",
-      "yalla": "Yalla.House",
-      "yallaPrice": "€199–€899",
-      "yallaNote": "Complete service at fixed price",
-      "savings": "You Save",
-      "savingsPrice": "€15,100+",
-      "savingsNote": "Goes straight to your pocket"
-    },
-    "ctaBandTitle": "Create your listing now — start free",
-    "ctaBandSubtitle": "Create your listing in minutes. Choose your plan when you're ready.",
-    "ctaBandCta": "List your property",
-    "addToListing": "Add to listing"
+    "heroTag": "Services & Pricing",
+    "heroTitle": "Everything you need to sell smarter",
+    "heroSubtitle": "A free dashboard to understand your property. Optional tools to market it. Competing agents to sell it. No commission — ever.",
+    "dashboardTitle": "Your free owner dashboard",
+    "dashboardSubtitle": "Sign up in 2 minutes. Get instant market intelligence. No card required.",
+    "dashboardFreeForever": "Free forever — no catches",
+    "dashboardFeature1": "Comparable sales data and automated valuation for your postcode",
+    "dashboardFeature2": "Track viewings, offers, and buyer feedback in one place",
+    "dashboardFeature3": "Send your Owner Brief to competing agents with one click",
+    "dashboardFeature4": "Your data stays yours — export or delete anytime",
+    "dashboardCta": "Create your free dashboard",
+    "briefTitle": "How the Agent Brief works",
+    "briefSubtitle": "You describe what you need. Agents compete to win your instruction. You choose the best proposal.",
+    "briefStep1Title": "Create your brief",
+    "briefStep1Body": "Tell us about your property, your timeline, and what matters most — fee, marketing, local knowledge, or speed.",
+    "briefStep2Title": "Agents respond",
+    "briefStep2Body": "Verified local agents receive your brief and submit competing proposals with their fee, strategy, and track record.",
+    "briefStep3Title": "Compare & choose",
+    "briefStep3Body": "Review proposals side by side in your dashboard. Pick the agent that fits — or keep going on your own.",
+    "addonsTag": "Optional Extras",
+    "addonsTitle": "Professional tools, when you need them",
+    "addonsSubtitle": "Use these whether you instruct an agent or sell privately. Pay only for what you need.",
+    "addon1Title": "Professional Photography",
+    "addon1Desc": "Local photographers, edited HD images within 24 hours. Buyers engage 3× more with professional shots.",
+    "addon1Price": "from £149",
+    "addon2Title": "360° Virtual Tour",
+    "addon2Desc": "Interactive 3D walkthrough. Buyers explore your home before booking a viewing.",
+    "addon2Price": "from £199",
+    "addon3Title": "Floor Plan & EPC",
+    "addon3Desc": "Publication-ready floor plans and Energy Performance Certificate — required for Rightmove listings.",
+    "addon3Price": "from £99",
+    "addon4Title": "Premium Portal Boost",
+    "addon4Desc": "Featured placement on Rightmove and Zoopla. Up to 4× more views than standard listings.",
+    "addon4Price": "from £79/wk",
+    "addonsNote": "Prices shown are starting prices and may vary by location. All prices are confirmed before payment.",
+    "comparisonTitle": "Traditional agents vs. Yalla",
+    "compTraditional": "Traditional estate agent",
+    "compTrad1": "1–3% commission on your sale price",
+    "compTrad2": "Locked into one agent's marketing plan",
+    "compTrad3": "Limited visibility into viewings and feedback",
+    "compTrad4": "Agent controls the process and the data",
+    "compYalla": "With Yalla.House",
+    "compYalla1": "Free dashboard — no commission, no listing fee",
+    "compYalla2": "Multiple agents compete with real proposals",
+    "compYalla3": "Every viewing, offer, and message tracked in your dashboard",
+    "compYalla4": "You own the process and your data — always",
+    "ctaTitle": "Ready to take control?",
+    "ctaSubtitle": "Create your free dashboard in 2 minutes. See your market data. Send your brief when you're ready.",
+    "ctaCta": "Get started free",
+    "ctaAgentLink": "I'm an agent — join the network"
   }
 }

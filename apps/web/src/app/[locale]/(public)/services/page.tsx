@@ -1,272 +1,277 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-
-interface Addon {
-  icon: string
-  title: string
-  description: string
-  price: string
-  badge?: string
-}
+import {
+  LayoutDashboard, Send, BarChart3, Shield,
+  Camera, ScanLine, FileText, Megaphone,
+  CheckCircle2, ArrowRight,
+} from 'lucide-react'
 
 export default async function ServicesPage() {
   const t = await getTranslations('services')
 
   return (
-    <main className="bg-[#EDEEF2]">
+    <main className="bg-page-dark min-h-screen">
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="pt-section-top pb-16 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-display text-[#0F1117] mb-5">
+      <section className="pt-32 pb-20 px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 mb-6 text-xs font-semibold uppercase tracking-widest text-text-on-dark-muted">
+            {t('heroTag')}
+          </div>
+          <h1 className="text-display text-white mb-6">
             {t('heroTitle')}
           </h1>
-          <p className="text-lede text-[#656565] max-w-2xl mx-auto">
+          <p className="text-lede text-text-on-dark-secondary max-w-2xl mx-auto">
             {t('heroSubtitle')}
           </p>
         </div>
       </section>
 
-      {/* ── ADD-ON SERVICES GRID ───────────────────────────────────────────── */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <div className="inline-flex items-center gap-2 bg-white border border-[#E2E4EB] rounded-full px-3.5 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-[#999]">
-              {t('addonsTag')}
-            </div>
-            <h2 className="text-title-2 text-[#0F1117] mb-3">
-              {t('addonsTitle')}
+      {/* ── FREE DASHBOARD ───────────────────────────────────────────────────── */}
+      <section className="pb-24 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-title-1 text-white mb-3">
+              {t('dashboardTitle')}
             </h2>
-            <p className="text-lede text-[#656565]">
-              {t('addonsSubtitle')}
+            <p className="text-text-on-dark-secondary max-w-xl mx-auto">
+              {t('dashboardSubtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {(t.raw('addons') as Addon[]).map((addon: Addon, i: number) => (
-              <div key={i} className="bg-white rounded-2xl border border-[#E2E4EB] shadow-[0_2px_8px_rgba(0,0,0,.08),0_1px_3px_rgba(0,0,0,.05)] hover:shadow-[0_6px_20px_rgba(0,0,0,.09),0_2px_6px_rgba(0,0,0,.05)] hover:translate-y-[-3px] transition-all p-6">
-                <div className="text-4xl mb-4">{addon.icon}</div>
-                <h3 className="font-bold text-[#0F1117] mb-2 text-base">
-                  {addon.title}
-                </h3>
-                <p className="text-sm text-[#656565] leading-snug mb-4">
-                  {addon.description}
-                </p>
-                <div className="flex items-baseline justify-between">
-                  <span className="font-bold text-[#FFD400] text-lg">
-                    {addon.price}
+
+          <div className="bg-surface-dark rounded-card-dark border border-white/[0.04] p-8 md:p-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="text-3xl font-extrabold text-brand">£0</div>
+              <div className="text-sm text-text-on-dark-muted">{t('dashboardFreeForever')}</div>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                { icon: <BarChart3 size={18} />, text: t('dashboardFeature1') },
+                { icon: <LayoutDashboard size={18} />, text: t('dashboardFeature2') },
+                { icon: <Send size={18} />, text: t('dashboardFeature3') },
+                { icon: <Shield size={18} />, text: t('dashboardFeature4') },
+              ].map((feat) => (
+                <div key={feat.text} className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand flex-shrink-0 mt-0.5">
+                    {feat.icon}
+                  </div>
+                  <span className="text-sm text-text-on-dark-secondary leading-relaxed">
+                    {feat.text}
                   </span>
-                  {addon.badge && (
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#FFF8D6] text-[#7A5F00]">
-                      {addon.badge}
-                    </span>
-                  )}
                 </div>
-                <Link
-                  href="#"
-                  className="block mt-4 text-sm font-semibold text-[#FFD400] hover:text-[#E6C200] transition-colors"
-                >
-                  {t('addToListing')} →
-                </Link>
+              ))}
+            </div>
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-6 py-3 rounded-lg transition-[background-color] duration-300 text-sm mt-8"
+            >
+              {t('dashboardCta')} →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── AGENT BRIEF FLOW ─────────────────────────────────────────────────── */}
+      <section className="pb-24 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-title-1 text-white mb-3">
+              {t('briefTitle')}
+            </h2>
+            <p className="text-text-on-dark-secondary max-w-xl mx-auto">
+              {t('briefSubtitle')}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                step: '01',
+                icon: <FileText size={24} />,
+                title: t('briefStep1Title'),
+                body: t('briefStep1Body'),
+              },
+              {
+                step: '02',
+                icon: <Send size={24} />,
+                title: t('briefStep2Title'),
+                body: t('briefStep2Body'),
+              },
+              {
+                step: '03',
+                icon: <CheckCircle2 size={24} />,
+                title: t('briefStep3Title'),
+                body: t('briefStep3Body'),
+              },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className="bg-surface-dark rounded-card-dark p-6 group hover:bg-card-dark transition-[background-color] duration-300"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-bold text-text-on-dark-muted uppercase tracking-widest">
+                    Step {item.step}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-text-on-dark-secondary leading-relaxed">{item.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── PRICING CARDS ───────────────────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-white border-y border-[#E2E4EB]">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <div className="inline-flex items-center gap-2 bg-[#EDEEF2] border border-[#E2E4EB] rounded-full px-3.5 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-[#999]">
-              {t('pricingTag')}
+      {/* ── PREMIUM ADD-ONS ──────────────────────────────────────────────────── */}
+      <section className="pb-24 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-text-on-dark-muted">
+              {t('addonsTag')}
             </div>
-            <h2 className="text-title-2 text-[#0F1117] mb-3">
-              {t('pricingTitle')}
+            <h2 className="text-title-1 text-white mb-3">
+              {t('addonsTitle')}
             </h2>
-            <p className="text-lede text-[#656565]">
-              {t('pricingSubtitle')}
+            <p className="text-text-on-dark-secondary max-w-xl mx-auto">
+              {t('addonsSubtitle')}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Basis */}
-            <div className="bg-white rounded-[20px] border border-[#E2E4EB] shadow-[0_2px_8px_rgba(0,0,0,.08),0_1px_3px_rgba(0,0,0,.05)] hover:shadow-[0_6px_20px_rgba(0,0,0,.09),0_2px_6px_rgba(0,0,0,.05)] hover:translate-y-[-3px] transition-all p-8">
-              <h3 className="font-bold text-xl text-[#0F1117] mb-2">
-                {t('plans.basis.name')}
-              </h3>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold text-[#0F1117]">
-                  {t('plans.basis.price')}
-                </span>
-                <span className="text-sm text-[#656565] ml-2">
-                  {t('plans.basis.period')}
-                </span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {(t.raw('plans.basis.features') as string[]).map((feature: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-[#656565]">
-                    <div className="w-5 h-5 rounded-full bg-[#D1FAE5] flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-[#059669] font-bold text-xs">✓</span>
-                    </div>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/owner/plans"
-                className="block w-full text-center bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold text-sm py-3 rounded-xl transition-colors"
-              >
-                {t('plans.basis.cta')} →
-              </Link>
-            </div>
 
-            {/* Professional — Featured */}
-            <div className="bg-white rounded-[20px] border-2 border-[#FFD400] shadow-[0_6px_20px_rgba(0,0,0,.09),0_2px_6px_rgba(0,0,0,.05)] hover:shadow-[0_12px_40px_rgba(0,0,0,.11),0_4px_12px_rgba(0,0,0,.06)] hover:translate-y-[-3px] transition-all p-8 relative lg:scale-105 lg:translate-y-[-1rem]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span className="bg-[#FFF8D6] text-[#7A5F00] text-xs font-bold px-3 py-1 rounded-full">
-                  {t('plans.professional.badge')}
-                </span>
-              </div>
-              <h3 className="font-bold text-xl text-[#0F1117] mb-2 pt-4">
-                {t('plans.professional.name')}
-              </h3>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold text-[#0F1117]">
-                  {t('plans.professional.price')}
-                </span>
-                <span className="text-sm text-[#656565] ml-2">
-                  {t('plans.professional.period')}
-                </span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {(t.raw('plans.professional.features') as string[]).map((feature: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-[#656565]">
-                    <div className="w-5 h-5 rounded-full bg-[#D1FAE5] flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-[#059669] font-bold text-xs">✓</span>
-                    </div>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/owner/plans"
-                className="block w-full text-center bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold text-sm py-3 rounded-xl transition-colors"
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              {
+                icon: <Camera size={20} />,
+                title: t('addon1Title'),
+                desc: t('addon1Desc'),
+                price: t('addon1Price'),
+              },
+              {
+                icon: <ScanLine size={20} />,
+                title: t('addon2Title'),
+                desc: t('addon2Desc'),
+                price: t('addon2Price'),
+              },
+              {
+                icon: <FileText size={20} />,
+                title: t('addon3Title'),
+                desc: t('addon3Desc'),
+                price: t('addon3Price'),
+              },
+              {
+                icon: <Megaphone size={20} />,
+                title: t('addon4Title'),
+                desc: t('addon4Desc'),
+                price: t('addon4Price'),
+              },
+            ].map((addon) => (
+              <div
+                key={addon.title}
+                className="bg-surface-dark rounded-card-dark p-6 border border-white/[0.04] hover:border-brand/20 transition-[border-color] duration-300"
               >
-                {t('plans.professional.cta')} →
-              </Link>
-            </div>
-
-            {/* Komplett */}
-            <div className="bg-white rounded-[20px] border border-[#E2E4EB] shadow-[0_2px_8px_rgba(0,0,0,.08),0_1px_3px_rgba(0,0,0,.05)] hover:shadow-[0_6px_20px_rgba(0,0,0,.09),0_2px_6px_rgba(0,0,0,.05)] hover:translate-y-[-3px] transition-all p-8">
-              <h3 className="font-bold text-xl text-[#0F1117] mb-2">
-                {t('plans.komplett.name')}
-              </h3>
-              <div className="mb-6">
-                <span className="text-4xl font-extrabold text-[#0F1117]">
-                  {t('plans.komplett.price')}
-                </span>
-                <span className="text-sm text-[#656565] ml-2">
-                  {t('plans.komplett.period')}
-                </span>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {(t.raw('plans.komplett.features') as string[]).map((feature: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-[#656565]">
-                    <div className="w-5 h-5 rounded-full bg-[#D1FAE5] flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-[#059669] font-bold text-xs">✓</span>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand flex-shrink-0">
+                    {addon.icon}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-baseline justify-between mb-1">
+                      <h3 className="text-base font-bold text-white">{addon.title}</h3>
+                      <span className="text-sm font-bold text-brand ml-3 whitespace-nowrap">{addon.price}</span>
                     </div>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href="/owner/plans"
-                className="block w-full text-center bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold text-sm py-3 rounded-xl transition-colors"
-              >
-                {t('plans.komplett.cta')} →
-              </Link>
-            </div>
+                    <p className="text-sm text-text-on-dark-secondary leading-relaxed">{addon.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+
+          <p className="text-sm text-text-on-dark-muted text-center mt-8">
+            {t('addonsNote')}
+          </p>
         </div>
       </section>
 
-      {/* ── COMPARISON STATS ───────────────────────────────────────────────── */}
-      <section className="py-16 px-4 bg-[#EDEEF2]">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-10">
-            <div className="inline-flex items-center gap-2 bg-white border border-[#E2E4EB] rounded-full px-3.5 py-1.5 mb-4 text-xs font-semibold uppercase tracking-widest text-[#999]">
-              {t('comparisonTag')}
-            </div>
-            <h2 className="text-title-2 text-[#0F1117] mb-3">
-              {t('comparisonTitle')}
-            </h2>
-            <p className="text-lede text-[#656565]">
-              {t('comparisonSubtitle')}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* ── COMPARISON ────────────────────────────────────────────────────────── */}
+      <section className="pb-24 px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-title-1 text-white text-center mb-12">
+            {t('comparisonTitle')}
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Traditional */}
-            <div className="bg-white rounded-2xl border border-[#E2E4EB] shadow-[0_2px_8px_rgba(0,0,0,.08),0_1px_3px_rgba(0,0,0,.05)] p-6">
-              <div className="text-sm font-semibold text-[#656565] mb-3">
-                {t('comparison.traditional')}
+            <div className="bg-surface-dark rounded-card-dark p-6 border border-white/[0.04]">
+              <div className="text-sm font-semibold text-text-on-dark-muted mb-3 uppercase tracking-wider">
+                {t('compTraditional')}
               </div>
-              <div className="text-3xl font-extrabold text-[#DC2626] mb-2">
-                {t('comparison.traditionalPrice')}
-              </div>
-              <div className="text-sm text-[#999]">
-                {t('comparison.traditionalNote')}
-              </div>
+              <ul className="space-y-3">
+                {[
+                  t('compTrad1'),
+                  t('compTrad2'),
+                  t('compTrad3'),
+                  t('compTrad4'),
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-text-on-dark-secondary">
+                    <span className="text-red-400 mt-0.5">✕</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Yalla */}
-            <div className="bg-white rounded-2xl border-2 border-[#FFD400] shadow-[0_6px_20px_rgba(0,0,0,.09),0_2px_6px_rgba(0,0,0,.05)] p-6 relative">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FFF8D6] px-3 py-1 rounded-full">
-                <span className="text-xs font-bold text-[#7A5F00]">Yalla.House</span>
+            <div className="bg-surface-dark rounded-card-dark p-6 border border-brand/30">
+              <div className="text-sm font-semibold text-brand mb-3 uppercase tracking-wider">
+                {t('compYalla')}
               </div>
-              <div className="text-sm font-semibold text-[#656565] mb-3 pt-2">
-                {t('comparison.yalla')}
-              </div>
-              <div className="text-3xl font-extrabold text-[#FFD400] mb-2">
-                {t('comparison.yallaPrice')}
-              </div>
-              <div className="text-sm text-[#999]">
-                {t('comparison.yallaNote')}
-              </div>
-            </div>
-
-            {/* Savings */}
-            <div className="bg-white rounded-2xl border border-[#E2E4EB] shadow-[0_2px_8px_rgba(0,0,0,.08),0_1px_3px_rgba(0,0,0,.05)] p-6">
-              <div className="text-sm font-semibold text-[#656565] mb-3">
-                {t('comparison.savings')}
-              </div>
-              <div className="text-3xl font-extrabold text-[#16A34A] mb-2">
-                {t('comparison.savingsPrice')}
-              </div>
-              <div className="text-sm text-[#999]">
-                {t('comparison.savingsNote')}
-              </div>
+              <ul className="space-y-3">
+                {[
+                  t('compYalla1'),
+                  t('compYalla2'),
+                  t('compYalla3'),
+                  t('compYalla4'),
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-text-on-dark-secondary">
+                    <span className="text-brand mt-0.5">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── CTA BAND ────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-4 bg-[#0d0d0d] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
-          backgroundImage: 'radial-gradient(circle at center, #FFD400 0%, transparent 70%)',
-        }}></div>
-        <div className="max-w-6xl mx-auto relative z-10 text-center">
-          <h2 className="text-title-2 text-white mb-4">
-            {t('ctaBandTitle')}
+      {/* ── CTA BAND ─────────────────────────────────────────────────────────── */}
+      <section className="relative py-20 px-4 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212, 118, 78, 0.08), transparent)',
+          }}
+        />
+        <div className="relative max-w-2xl mx-auto text-center">
+          <h2 className="text-title-1 text-white mb-4">
+            {t('ctaTitle')}
           </h2>
-          <p className="text-lede text-[rgba(255,255,255,.62)] max-w-2xl mx-auto mb-8">
-            {t('ctaBandSubtitle')}
+          <p className="text-lede text-text-on-dark-secondary mb-8">
+            {t('ctaSubtitle')}
           </p>
-          <Link
-            href="/owner/new"
-            className="inline-block bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold text-base px-8 py-3.5 rounded-xl transition-colors"
-          >
-            {t('ctaBandCta')} →
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/auth/login"
+              className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
+              style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
+            >
+              {t('ctaCta')} →
+            </Link>
+            <Link
+              href="/agent"
+              className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
+            >
+              {t('ctaAgentLink')} →
+            </Link>
+          </div>
         </div>
       </section>
 

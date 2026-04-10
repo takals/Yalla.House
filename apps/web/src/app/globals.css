@@ -22,6 +22,10 @@
     text-rendering: optimizeLegibility;
   }
 
+  html {
+    background-color: #161616;
+  }
+
   body {
     @apply font-sans text-[#0F1117];
     line-height: 1.5;

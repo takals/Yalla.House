@@ -126,137 +126,55 @@
     "unauthorized": "Nicht autorisiert"
   },
   "services": {
-    "heroTitle": "Zahlen Sie nur, was Sie brauchen. Den Rest behalten Sie.",
-    "heroSubtitle": "Kostenlos starten. Modulare Services, wenn Sie sie brauchen. Keine Provision — niemals. Preise variieren je nach Markt und werden immer vor der Zahlung angezeigt.",
-    "addonsTag": "Zusatzleistungen",
-    "addonsTitle": "Optimieren Sie Ihr Inserat mit professionellen Extras",
-    "addonsSubtitle": "Verfügbar à la carte oder als Teil eines Pakets.",
-    "addons": [
-      {
-        "icon": "📷",
-        "title": "Professionelle Fotografie",
-        "description": "Lokale Fotografen, kurzfristig verfügbar, bearbeitete HD-Bilder innerhalb von 24h.",
-        "price": "€149"
-      },
-      {
-        "icon": "🏠",
-        "title": "360° Virtuelle Tour",
-        "description": "Interaktiver 3D-Scan. Käufer erkunden Ihr Zuhause vor der Besichtigung.",
-        "price": "€199"
-      },
-      {
-        "icon": "📐",
-        "title": "Grundriss-Erstellung",
-        "description": "Genaue, veröffentlichungsreife Grundrisse. Von IS24 für Premium-Platzierung gefordert.",
-        "price": "€79"
-      },
-      {
-        "icon": "📋",
-        "title": "Rechtliche Unterstützung",
-        "description": "Notar-Vermittlung, Vertragsprüfung und Begleitung an jedem Meilenstein.",
-        "price": "ab €299"
-      },
-      {
-        "icon": "🪧",
-        "title": "Verkaufsschild",
-        "description": "Marken-Schild geliefert und aufgestellt. Der #1 lokale Lead-Generator.",
-        "price": "€49"
-      },
-      {
-        "icon": "📊",
-        "title": "Portal-Werbung",
-        "description": "IS24, Immowelt, ImmoNet. Automatische Status-Synchronisation.",
-        "price": "Inklusive",
-        "badge": "In allen Tarifen enthalten"
-      },
-      {
-        "icon": "🤝",
-        "title": "Persönliche Betreuung",
-        "description": "Dedizierter Yalla-Berater. Bearbeitet Anfragen, verhandelt, begleitet den Verkauf.",
-        "price": "€499"
-      },
-      {
-        "icon": "📈",
-        "title": "Wöchentliche Berichte",
-        "description": "Automatisch generierte Updates alle 7 Tage.",
-        "price": "Inklusive",
-        "badge": "In allen Tarifen enthalten"
-      },
-      {
-        "icon": "📅",
-        "title": "Besichtigungskalender",
-        "description": "Live-Verfügbarkeit, Käufer buchen selbst. 40% weniger No-Shows.",
-        "price": "Inklusive",
-        "badge": "In allen Tarifen enthalten"
-      }
-    ],
-    "pricingTag": "Tarife",
-    "pricingTitle": "Einfache Preise für jeden Verkäufer",
-    "pricingSubtitle": "Wählen Sie den Tarif, der zu Ihnen passt.",
-    "plans": {
-      "basis": {
-        "name": "Basis",
-        "price": "€199",
-        "period": "einmalig",
-        "features": [
-          "IS24 & Immowelt Inserat",
-          "Eigentümer-Dashboard",
-          "Besichtigungskalender & Selbstbuchung",
-          "Anfragen-Posteingang",
-          "Wöchentliche Berichte",
-          "Angebots-Protokoll & Dokumentenspeicher"
-        ],
-        "cta": "Loslegen"
-      },
-      "professional": {
-        "name": "Professional",
-        "price": "€499",
-        "period": "einmalig",
-        "badge": "Beliebteste Wahl",
-        "features": [
-          "Alles aus Basis",
-          "Professionelle Fotografie",
-          "Grundriss-Erstellung",
-          "Verkaufsschild (geliefert)",
-          "Erweiterte Portal-Platzierung",
-          "Energieausweis-Buchung",
-          "Prioritäts-Support (2h SLA)"
-        ],
-        "cta": "Loslegen"
-      },
-      "komplett": {
-        "name": "Komplett",
-        "price": "€899",
-        "period": "einmalig",
-        "features": [
-          "Alles aus Professional",
-          "360° Virtuelle Tour",
-          "Dedizierter Yalla-Berater",
-          "Rechtliche Unterstützung & Notar-Vermittlung",
-          "Verhandlungsbegleitung",
-          "Abschluss-Checkliste & Übergabe",
-          "Prioritäts-Support (1h SLA)"
-        ],
-        "cta": "Loslegen"
-      }
-    },
-    "comparisonTag": "Yalla vs. Makler",
-    "comparisonTitle": "Die Zahlen sprechen für sich",
-    "comparisonSubtitle": "Bei einer €400.000-Immobilie berechnen traditionelle Makler in Deutschland 3–6% Provision.",
-    "comparison": {
-      "traditional": "Traditioneller Makler",
-      "traditionalPrice": "€16.000+",
-      "traditionalNote": "Durchschnittliche Provision bei 4%",
-      "yalla": "Yalla.House",
-      "yallaPrice": "€199–€899",
-      "yallaNote": "Kompletter Service zum Festpreis",
-      "savings": "Sie sparen",
-      "savingsPrice": "€15.100+",
-      "savingsNote": "Geht direkt in Ihre Tasche"
-    },
-    "ctaBandTitle": "Jetzt Inserat erstellen — kostenlos starten",
-    "ctaBandSubtitle": "Erstellen Sie Ihr Inserat in Minuten. Wählen Sie Ihren Tarif, wenn Sie bereit sind.",
-    "ctaBandCta": "Immobilie inserieren",
-    "addToListing": "Zum Inserat hinzufügen"
+    "heroTag": "Leistungen & Preise",
+    "heroTitle": "Alles, was Sie für einen smarten Verkauf brauchen",
+    "heroSubtitle": "Ein kostenloses Dashboard für Ihre Immobilie. Optionale Tools fürs Marketing. Konkurrierende Makler für den Verkauf. Keine Provision — niemals.",
+    "dashboardTitle": "Ihr kostenloses Eigentümer-Dashboard",
+    "dashboardSubtitle": "In 2 Minuten registrieren. Sofort Marktdaten erhalten. Keine Kreditkarte nötig.",
+    "dashboardFreeForever": "Für immer kostenlos — ohne Haken",
+    "dashboardFeature1": "Vergleichbare Verkäufe und automatische Bewertung für Ihre Postleitzahl",
+    "dashboardFeature2": "Besichtigungen, Angebote und Käuferfeedback an einem Ort verfolgen",
+    "dashboardFeature3": "Senden Sie Ihren Eigentümer-Brief mit einem Klick an konkurrierende Makler",
+    "dashboardFeature4": "Ihre Daten gehören Ihnen — jederzeit exportieren oder löschen",
+    "dashboardCta": "Kostenloses Dashboard erstellen",
+    "briefTitle": "So funktioniert der Makler-Brief",
+    "briefSubtitle": "Sie beschreiben, was Sie brauchen. Makler konkurrieren um Ihren Auftrag. Sie wählen das beste Angebot.",
+    "briefStep1Title": "Brief erstellen",
+    "briefStep1Body": "Erzählen Sie uns von Ihrer Immobilie, Ihrem Zeitplan und was Ihnen am wichtigsten ist — Gebühr, Marketing, lokale Kenntnis oder Geschwindigkeit.",
+    "briefStep2Title": "Makler antworten",
+    "briefStep2Body": "Verifizierte lokale Makler erhalten Ihren Brief und reichen konkurrierende Angebote mit Gebühr, Strategie und Erfolgsbilanz ein.",
+    "briefStep3Title": "Vergleichen & wählen",
+    "briefStep3Body": "Vergleichen Sie Angebote Seite an Seite in Ihrem Dashboard. Wählen Sie den passenden Makler — oder machen Sie allein weiter.",
+    "addonsTag": "Optionale Extras",
+    "addonsTitle": "Professionelle Tools, wenn Sie sie brauchen",
+    "addonsSubtitle": "Nutzen Sie diese mit oder ohne Makler. Bezahlen Sie nur, was Sie brauchen.",
+    "addon1Title": "Professionelle Fotografie",
+    "addon1Desc": "Lokale Fotografen, bearbeitete HD-Bilder innerhalb von 24 Stunden. Käufer reagieren 3× stärker auf professionelle Fotos.",
+    "addon1Price": "ab £149",
+    "addon2Title": "360°-Virtueller Rundgang",
+    "addon2Desc": "Interaktiver 3D-Rundgang. Käufer erkunden Ihr Zuhause vor der Besichtigung.",
+    "addon2Price": "ab £199",
+    "addon3Title": "Grundriss & EPC",
+    "addon3Desc": "Druckfertige Grundrisse und Energieausweis — erforderlich für Rightmove-Inserate.",
+    "addon3Price": "ab £99",
+    "addon4Title": "Premium Portal Boost",
+    "addon4Desc": "Hervorgehobene Platzierung auf Rightmove und Zoopla. Bis zu 4× mehr Aufrufe als Standardinserate.",
+    "addon4Price": "ab £79/Wo.",
+    "addonsNote": "Gezeigte Preise sind Startpreise und können je nach Standort variieren. Alle Preise werden vor der Zahlung bestätigt.",
+    "comparisonTitle": "Traditionelle Makler vs. Yalla",
+    "compTraditional": "Traditioneller Immobilienmakler",
+    "compTrad1": "1–3% Provision auf Ihren Verkaufspreis",
+    "compTrad2": "An den Marketingplan eines Maklers gebunden",
+    "compTrad3": "Begrenzte Sicht auf Besichtigungen und Feedback",
+    "compTrad4": "Der Makler kontrolliert den Prozess und die Daten",
+    "compYalla": "Mit Yalla.House",
+    "compYalla1": "Kostenloses Dashboard — keine Provision, keine Insertionsgebühr",
+    "compYalla2": "Mehrere Makler konkurrieren mit echten Angeboten",
+    "compYalla3": "Jede Besichtigung, jedes Angebot und jede Nachricht in Ihrem Dashboard",
+    "compYalla4": "Sie besitzen den Prozess und Ihre Daten — immer",
+    "ctaTitle": "Bereit, die Kontrolle zu übernehmen?",
+    "ctaSubtitle": "Erstellen Sie Ihr kostenloses Dashboard in 2 Minuten. Sehen Sie Ihre Marktdaten. Senden Sie Ihren Brief, wenn Sie bereit sind.",
+    "ctaCta": "Kostenlos starten",
+    "ctaAgentLink": "Ich bin Makler — dem Netzwerk beitreten"
   }
 }
