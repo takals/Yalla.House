@@ -10,12 +10,24 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#FFD400',
-          hover:   '#E6C200',
-          dark:    '#B89B00',
+          DEFAULT: '#D4764E',
+          hover:   '#BF6840',
+          dark:    '#A85A36',
+          light:   'rgba(212, 118, 78, 0.12)',
+          light2:  'rgba(212, 118, 78, 0.18)',
+          'solid-bg': '#FFF5EE',
+          'badge-text': '#8B4513',
         },
         surface: '#FFFFFF',
         bg:      '#EDEEF2',
+        // Dashfolio-inspired dark theme (public pages)
+        'page-dark':    '#161616',
+        'surface-dark': '#1C1C1C',
+        'card-dark':    '#2B2B2B',
+        'card-dark-hover': '#333333',
+        'text-on-dark':           '#FFFFFF',
+        'text-on-dark-secondary': '#888888',
+        'text-on-dark-muted':     '#7C7F82',
       },
       fontFamily: {
         sans: [
@@ -50,6 +62,14 @@ export default {
       },
       borderRadius: {
         card: '16px',
+        'card-dark': '6px',
+        pill: '500px',
+      },
+      boxShadow: {
+        'dark-card': 'rgba(0,0,0,0.035) 0px 0.3px 0.3px -0.75px, rgba(0,0,0,0.04) 0px 1.14px 1.14px -1.5px, rgba(0,0,0,0.043) 0px 5px 5px -2.25px',
+      },
+      backdropBlur: {
+        header: '12px',
       },
     },
   },

@@ -8,7 +8,7 @@ export default function ImpressumPage() {
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-4">
+          <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Impressum
           </div>
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
@@ -119,7 +119,7 @@ export default function ImpressumPage() {
                 Yalla.House ist bereit, an Streitschlichtungsverfahren teilzunehmen. Die Europäische Union hat eine Online-Plattform für die außergerichtliche Beilegung von Verbraucherbeschwerden eingerichtet:
               </p>
               <p>
-                <strong>EU-Streitschlichtungsplattform:</strong> <a href="https://ec.europa.eu/consumers/odr/main/" target="_blank" rel="noopener noreferrer" className="text-[#FFD400] hover:text-[#E6C200] font-semibold">https://ec.europa.eu/consumers/odr/main/</a>
+                <strong>EU-Streitschlichtungsplattform:</strong> <a href="https://ec.europa.eu/consumers/odr/main/" target="_blank" rel="noopener noreferrer" className="text-brand hover:text-brand-hover font-semibold">https://ec.europa.eu/consumers/odr/main/</a>
               </p>
               <p>
                 Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. Unseren freiwilligen Streitschlichtungsmechanismus finden Sie unter support@yalla.house.
@@ -186,13 +186,13 @@ export default function ImpressumPage() {
               <div className="space-y-2">
                 <Link
                   href="/datenschutz"
-                  className="block text-[#FFD400] hover:text-[#E6C200] font-semibold"
+                  className="block text-brand hover:text-brand-hover font-semibold"
                 >
                   → Datenschutzrichtlinie (Datenschutz)
                 </Link>
                 <Link
                   href="/cookies"
-                  className="block text-[#FFD400] hover:text-[#E6C200] font-semibold"
+                  className="block text-brand hover:text-brand-hover font-semibold"
                 >
                   → Cookie-Richtlinie
                 </Link>
@@ -231,7 +231,7 @@ export default function ImpressumPage() {
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#FFD400] font-semibold hover:text-[#E6C200] transition-colors"
+            className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors"
           >
             ← Zurück zur Startseite
           </Link>

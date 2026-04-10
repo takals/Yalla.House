@@ -10,7 +10,7 @@ function emailWrapper(content: string): string {
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#EDEEF2;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
   <div style="max-width:560px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);">
-    <div style="background:#FFD400;padding:20px 32px;">
+    <div style="background:#D4764E;padding:20px 32px;">
       <span style="font-size:20px;font-weight:800;color:#0F1117;letter-spacing:-.02em;">Yalla.House</span>
     </div>
     <div style="padding:32px;">
@@ -27,7 +27,7 @@ function emailWrapper(content: string): string {
 }
 
 function ctaButton(label: string, href: string): string {
-  return `<a href="${href}" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#FFD400;color:#0F1117;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label}</a>`
+  return `<a href="${href}" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label}</a>`
 }
 
 // ── Email 1: New viewing request → owner ─────────────────────────────────────
