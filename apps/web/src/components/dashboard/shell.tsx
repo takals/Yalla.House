@@ -50,10 +50,10 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         {/* Logo */}
         <div className="h-[60px] flex items-center px-5 flex-shrink-0">
           <Link href="/" className="font-extrabold text-[1.05rem] tracking-tight text-white">
-            Yalla<span className="text-[#FFD400]">.</span>House
+            Yalla<span className="text-[#D4764E]">.</span>House
           </Link>
           {section === 'admin' && (
-            <span className="ml-2 text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#FFD400] rounded-sm text-[#0F1117]">
+            <span className="ml-2 text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#D4764E] rounded-sm text-[#0F1117]">
               Admin
             </span>
           )}
@@ -70,11 +70,11 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1), color 0.15s cubic-bezier(0.16,1,0.3,1)' }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-[0.875rem] font-semibold mb-0.5 ${
                   active
-                    ? 'bg-[rgba(255,212,0,0.12)] text-[#FFD400]'
+                    ? 'bg-[rgba(212,118,78,0.12)] text-[#D4764E]'
                     : 'text-white/40 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                <span className={`flex-shrink-0 ${active ? 'text-[#FFD400]' : 'text-white/30'}`}>
+                <span className={`flex-shrink-0 ${active ? 'text-[#D4764E]' : 'text-white/30'}`}>
                   {item.icon}
                 </span>
                 {item.label}
