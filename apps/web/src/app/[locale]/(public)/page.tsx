@@ -5,6 +5,7 @@ import HeroHeadline from '@/components/hero-headline'
 
 export default async function HomePage() {
   const t = await getTranslations('hero')
+  const stats = await getTranslations('stats')
   const how = await getTranslations('howItWorks')
   const paths = await getTranslations('paths')
   const cta = await getTranslations('ctaBand')
@@ -46,10 +47,10 @@ export default async function HomePage() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: '£5,000+', label: 'Average agent commission on a Redbridge property' },
-              { value: '69%', label: 'of owners want weekly updates but don\'t get them' },
-              { value: '£0', label: 'Cost of your Yalla owner dashboard — always free' },
-              { value: '2 min', label: 'to create your dashboard and see your market data' },
+              { value: stats('stat1Value'), label: stats('stat1Label') },
+              { value: stats('stat2Value'), label: stats('stat2Label') },
+              { value: stats('stat3Value'), label: stats('stat3Label') },
+              { value: stats('stat4Value'), label: stats('stat4Label') },
             ].map((stat) => (
               <div
                 key={stat.label}

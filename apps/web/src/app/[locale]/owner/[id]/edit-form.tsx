@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { updateListingAction, changeStatusAction, type EditPayload } from './actions'
+import { updateListingAction, changeStatusAction, sendBriefAction, type EditPayload } from './actions'
 import { PhotoManager, type PhotoRow } from './photos'
 import { PortalSection, type PortalRow, type PortalStatusRow } from './portals'
 
@@ -187,6 +187,8 @@ export function ListingEditForm({
   const [currentStatus, setCurrentStatus] = useState(listing.status)
   const [statusError, setStatusError] = useState('')
   const [isChangingStatus, setIsChangingStatus] = useState(false)
+  const [isSendingBrief, setIsSendingBrief] = useState(false)
+  const [briefResult, setBriefResult] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
   function set(key: keyof EditPayload, value: string) {
     setForm(f => ({ ...f, [key]: value }))
@@ -244,6 +246,18 @@ export function ListingEditForm({
       setStatusError(result.error)
     } else {
       setCurrentStatus(newStatus)
+    }
+  }
+
+  async function handleSendBrief() {
+    setIsSendingBrief(true)
+    setBriefResult(null)
+    const result = await sendBriefAction(listing.id)
+    setIsSendingBrief(false)
+    if ('error' in result) {
+      setBriefResult({ type: 'error', message: result.error })
+    } else {
+      setBriefResult({ type: 'success', message: `Brief an ${result.agentCount} Makler gesendet!` })
     }
   }
 
@@ -666,6 +680,47 @@ export function ListingEditForm({
           initialStatuses={portalStatuses}
         />
       </Section>
+
+      {/* Section 7: Send Brief to Agents */}
+      {(currentStatus === 'active' || currentStatus === 'draft') && (
+        <Section title="Brief an Makler senden">
+          <p className="text-sm text-[#5E6278] leading-relaxed">
+            Senden Sie Ihren Eigentümer-Brief an lokale Makler in Ihrer Gegend.
+            Die Makler erhalten eine Zusammenfassung Ihrer Immobilie und können
+            mit einem Vorschlag antworten. Ihre Kontaktdaten bleiben geschützt.
+          </p>
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={handleSendBrief}
+              disabled={isSendingBrief}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold rounded-lg transition-colors disabled:opacity-50"
+            >
+              {isSendingBrief ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Wird gesendet …
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                  </svg>
+                  Brief senden
+                </>
+              )}
+            </button>
+            {briefResult && (
+              <p className={`text-sm font-medium ${briefResult.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                {briefResult.message}
+              </p>
+            )}
+          </div>
+        </Section>
+      )}
 
       {/* Save bar */}
       <div className="flex items-center justify-between gap-4 pt-2">

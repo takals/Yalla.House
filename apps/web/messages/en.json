@@ -16,6 +16,16 @@
     "cta": "Create your free dashboard",
     "ctaHunter": "I'm looking to buy"
   },
+  "stats": {
+    "stat1Value": "£5,000+",
+    "stat1Label": "Average agent commission on a Redbridge property",
+    "stat2Value": "69%",
+    "stat2Label": "of owners want weekly updates but don't get them",
+    "stat3Value": "£0",
+    "stat3Label": "Cost of your Yalla owner dashboard — always free",
+    "stat4Value": "2 min",
+    "stat4Label": "to create your dashboard and see your market data"
+  },
   "howItWorks": {
     "title": "How it works",
     "step1Title": "Create your dashboard",

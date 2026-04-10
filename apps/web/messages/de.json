@@ -16,6 +16,16 @@
     "cta": "Kostenloses Dashboard erstellen",
     "ctaHunter": "Ich suche eine Immobilie"
   },
+  "stats": {
+    "stat1Value": "5.000 €+",
+    "stat1Label": "Durchschnittliche Maklerprovision auf eine Immobilie in Redbridge",
+    "stat2Value": "69 %",
+    "stat2Label": "der Eigentümer wünschen wöchentliche Updates — erhalten sie aber nicht",
+    "stat3Value": "0 €",
+    "stat3Label": "Kosten Ihres Yalla-Dashboards — immer kostenlos",
+    "stat4Value": "2 Min.",
+    "stat4Label": "bis Ihr Dashboard steht und Sie Ihre Marktdaten sehen"
+  },
   "howItWorks": {
     "title": "So funktioniert's",
     "step1Title": "Dashboard erstellen",

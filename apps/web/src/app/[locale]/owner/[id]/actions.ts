@@ -257,6 +257,82 @@ export async function changeStatusAction(
   return { success: true }
 }
 
+// ── Send Brief to Agents ──────────────────────────────────────────────────────
+
+export async function sendBriefAction(
+  listingId: string
+): Promise<{ success: true; agentCount: number } | { error: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Nicht autorisiert' }
+
+  // Fetch listing with ownership check
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('id, owner_id, intent, property_type, city, postcode, bedrooms, sale_price, rent_price')
+    .eq('id', listingId)
+    .eq('owner_id', user.id)
+    .single()
+
+  if (!listing) return { error: 'Inserat nicht gefunden' }
+
+  // Fetch all agent profiles with coverage areas
+  const { data: agents } = await (supabase as any)
+    .from('agent_profiles')
+    .select('user_id, agency_name, coverage_areas, users!inner(email)')
+    .not('coverage_areas', 'is', null)
+
+  if (!agents || agents.length === 0) {
+    return { error: 'Keine Makler in Ihrer Gegend gefunden.' }
+  }
+
+  // Filter agents whose coverage_areas overlap with listing postcode
+  const listingPostcode = listing.postcode ?? ''
+  type AgentRow = {
+    user_id: string
+    agency_name: string | null
+    coverage_areas: Array<{ postcode_prefixes?: string[] }> | null
+    users: { email: string }
+  }
+
+  const matchedAgents = (agents as AgentRow[]).filter((agent) => {
+    const areas = agent.coverage_areas ?? []
+    const prefixes = areas.flatMap((a) => a.postcode_prefixes ?? [])
+    if (prefixes.length === 0) return true // No restriction = covers everywhere
+    return prefixes.some((prefix) => listingPostcode.startsWith(prefix))
+  })
+
+  if (matchedAgents.length === 0) {
+    return { error: 'Keine Makler in Ihrer Gegend gefunden.' }
+  }
+
+  // Send emails via Resend
+  const { sendOwnerBriefEmail } = await import('@/lib/resend')
+
+  let sentCount = 0
+  for (const agent of matchedAgents) {
+    try {
+      await sendOwnerBriefEmail({
+        agentEmail: agent.users.email,
+        agentName: agent.agency_name,
+        listingId: listing.id,
+        propertyType: listing.property_type,
+        intent: listing.intent,
+        city: listing.city,
+        postcode: listing.postcode,
+        bedrooms: listing.bedrooms,
+        salePrice: listing.sale_price,
+        rentPrice: listing.rent_price,
+      })
+      sentCount++
+    } catch (err) {
+      console.error(`Failed to email agent ${agent.user_id}:`, err)
+    }
+  }
+
+  return { success: true, agentCount: sentCount }
+}
+
 // ── Portal actions ─────────────────────────────────────────────────────────────
 
 export async function submitToPortalAction(

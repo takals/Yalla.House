@@ -146,7 +146,7 @@ export default async function BriefLandingPage({ params }: Props) {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href={`/auth?role=agent&redirect=/agent/briefs`}
+              href={`/auth/login?next=/agent/briefs`}
               className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
               style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
             >
