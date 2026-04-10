@@ -30,6 +30,82 @@ function ctaButton(label: string, href: string): string {
   return `<a href="${href}" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label}</a>`
 }
 
+// ── Owner Brief → agent (invitation to respond) ──────────────────────────────
+
+export async function sendOwnerBriefEmail(opts: {
+  agentEmail: string
+  agentName: string | null
+  listingId: string
+  propertyType: string
+  intent: string
+  city: string
+  postcode: string
+  bedrooms: number | null
+  salePrice: number | null
+  rentPrice: number | null
+}): Promise<void> {
+  const greeting = opts.agentName ? `Hi ${opts.agentName.split(' ')[0]},` : 'Hi,'
+
+  const isSale = opts.intent === 'sale' || opts.intent === 'both'
+  const priceValue = isSale
+    ? opts.salePrice
+      ? `£${(opts.salePrice / 100).toLocaleString('en-GB')}`
+      : 'Price on application'
+    : opts.rentPrice
+      ? `£${(opts.rentPrice / 100).toLocaleString('en-GB')} pcm`
+      : 'Rent on application'
+
+  const intentLabel = opts.intent === 'both'
+    ? 'Sale & Rental'
+    : isSale ? 'For Sale' : 'To Rent'
+
+  const bedroomsRow = opts.bedrooms != null
+    ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Bedrooms</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.bedrooms}</td></tr>`
+    : ''
+
+  const typeLabels: Record<string, string> = {
+    house: 'House', flat: 'Flat', apartment: 'Apartment',
+    villa: 'Villa', commercial: 'Commercial', land: 'Land', other: 'Property',
+  }
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
+    <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
+      A property owner in <strong style="color:#0F1117;">${opts.city || opts.postcode}</strong> has sent you an Owner Brief via Yalla.House. They're looking for competing proposals from local agents.
+    </p>
+
+    <div style="background:#F5F5FA;border-radius:10px;padding:20px;margin-bottom:24px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Area</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.city}${opts.postcode ? `, ${opts.postcode}` : ''}</td></tr>
+        <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Type</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${typeLabels[opts.propertyType] ?? 'Property'}</td></tr>
+        <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">${intentLabel}</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${priceValue}</td></tr>
+        ${bedroomsRow}
+      </table>
+    </div>
+
+    <p style="margin:0 0 4px;font-size:15px;color:#5E6278;">
+      Sign in to your Yalla agent dashboard to view the full brief and submit your proposal. The owner will compare responses side by side.
+    </p>
+
+    ${ctaButton('View Brief & Respond', `${BASE_URL}/brief/${opts.listingId}`)}
+
+    <p style="margin-top:24px;font-size:13px;color:#999;">
+      You're receiving this because you're listed as an agent in ${opts.city || opts.postcode}. Owner contact details are not shared until you're instructed.
+    </p>
+  `)
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: opts.agentEmail,
+      subject: `New Owner Brief — ${typeLabels[opts.propertyType] ?? 'Property'} in ${opts.city || opts.postcode}`,
+      html,
+    })
+  } catch (err) {
+    console.error('sendOwnerBriefEmail failed:', err)
+  }
+}
+
 // ── Email 1: New viewing request → owner ─────────────────────────────────────
 
 export async function sendNewViewingRequestEmail(opts: {

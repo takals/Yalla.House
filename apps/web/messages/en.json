@@ -9,6 +9,9 @@
   },
   "hero": {
     "headline": "Your property sale, under your control.",
+    "headlinePrefix": "Your property ",
+    "headlineWords": "sale,rental",
+    "headlineSuffix": ", under your control.",
     "subline": "Free owner dashboard. Market data. Comparable sales. Then send your brief to competing agents — and choose the best deal.",
     "cta": "Create your free dashboard",
     "ctaHunter": "I'm looking to buy"

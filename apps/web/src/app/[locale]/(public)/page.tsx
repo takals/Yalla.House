@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { LayoutDashboard, Send, BarChart3, Home, Search, Handshake } from 'lucide-react'
+import HeroHeadline from '@/components/hero-headline'
 
 export default async function HomePage() {
   const t = await getTranslations('hero')
@@ -14,9 +15,11 @@ export default async function HomePage() {
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-display text-white mb-6">
-            {t('headline')}
-          </h1>
+          <HeroHeadline
+            prefix={t('headlinePrefix')}
+            words={t('headlineWords').split(',')}
+            suffix={t('headlineSuffix')}
+          />
           <p className="text-lede text-text-on-dark-secondary max-w-2xl mx-auto mb-10">
             {t('subline')}
           </p>

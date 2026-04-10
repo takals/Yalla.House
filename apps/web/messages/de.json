@@ -9,6 +9,9 @@
   },
   "hero": {
     "headline": "Ihr Immobilienverkauf, unter Ihrer Kontrolle.",
+    "headlinePrefix": "Ihr ",
+    "headlineWords": "Immobilienverkauf,Vermietung",
+    "headlineSuffix": ", unter Ihrer Kontrolle.",
     "subline": "Kostenloses Eigentümer-Dashboard. Marktdaten. Vergleichbare Verkäufe. Dann senden Sie Ihr Brief an konkurrierende Makler — und wählen Sie das beste Angebot.",
     "cta": "Kostenloses Dashboard erstellen",
     "ctaHunter": "Ich suche eine Immobilie"
