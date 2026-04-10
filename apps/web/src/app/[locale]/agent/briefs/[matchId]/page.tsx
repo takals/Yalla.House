@@ -49,7 +49,7 @@ export default async function RespondToBriefPage({
       {/* Brief summary */}
       <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB] mb-6">
         <div className="flex items-center gap-2 mb-4">
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] border border-[#FFD400]/30">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-brand-solid-bg text-brand-badge-text border border-brand/30">
             Match {match.match_score}%
           </span>
           <span className="text-xs text-[#5E6278] capitalize">{search.intent}</span>

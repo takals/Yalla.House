@@ -26,7 +26,7 @@ export default async function PassportPage() {
 
         {/* Hero */}
         <div className="mb-10">
-          <div className="inline-flex items-center gap-2 bg-[#FFFBE0] text-[#7A5F00] text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide border border-[#FFD400]">
+          <div className="inline-flex items-center gap-2 bg-brand-solid-bg text-brand-badge-text text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide border border-brand">
             🛂 Your Verified Buyer Identity
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight mb-3">

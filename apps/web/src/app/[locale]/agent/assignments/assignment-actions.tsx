@@ -56,7 +56,7 @@ export default function AssignmentActions({
       <button
         onClick={() => handleAction('accept')}
         disabled={loading}
-        className="flex-1 px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] disabled:opacity-50 transition"
+        className="flex-1 px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover disabled:opacity-50 transition"
       >
         {loading && actionType === 'accept' ? 'Accepting...' : 'Accept'}
       </button>

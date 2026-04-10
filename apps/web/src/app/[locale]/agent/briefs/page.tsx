@@ -43,7 +43,7 @@ export default async function AgentBriefsPage() {
           <p className="text-xs text-[#5E6278]">Total briefs</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
-          <p className="text-2xl font-bold text-[#FFD400]">{pending.length}</p>
+          <p className="text-2xl font-bold text-brand">{pending.length}</p>
           <p className="text-xs text-[#5E6278]">Awaiting reply</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
@@ -56,7 +56,7 @@ export default async function AgentBriefsPage() {
       {pending.length > 0 && (
         <div className="mb-8">
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#FFD400]" />
+            <span className="w-2 h-2 rounded-full bg-brand" />
             Awaiting Your Reply ({pending.length})
           </h2>
           <div className="space-y-3">
@@ -78,10 +78,10 @@ export default async function AgentBriefsPage() {
                 notes: string | null
               }
             }) => (
-              <div key={m.id} className="bg-surface rounded-xl border-2 border-[#FFD400]/40 p-5">
+              <div key={m.id} className="bg-surface rounded-xl border-2 border-brand/40 p-5">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] border border-[#FFD400]/30">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-brand-solid-bg text-brand-badge-text border border-brand/30">
                       Match {m.match_score}%
                     </span>
                     <span className="text-xs text-[#5E6278] capitalize">{m.search.intent}</span>
@@ -126,7 +126,7 @@ export default async function AgentBriefsPage() {
 
                 <Link
                   href={`/agent/briefs/${m.id}`}
-                  className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+                  className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
                 >
                   Reply to Brief →
                 </Link>

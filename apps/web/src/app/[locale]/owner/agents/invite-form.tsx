@@ -88,7 +88,7 @@ export function InviteAgentForm({ listings }: Props) {
           value={listingId}
           onChange={e => setListingId(e.target.value)}
           disabled={isPending}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(255,212,0,.12)] disabled:opacity-50"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
         >
           <option value="">Choose a listing...</option>
           {listings.map(listing => (
@@ -111,7 +111,7 @@ export function InviteAgentForm({ listings }: Props) {
           onChange={e => setAgentEmail(e.target.value)}
           disabled={isPending}
           placeholder="agent@example.com"
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(255,212,0,.12)] disabled:opacity-50"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
         />
       </div>
 
@@ -165,7 +165,7 @@ export function InviteAgentForm({ listings }: Props) {
           disabled={isPending}
           placeholder="Any additional instructions or context for the agent..."
           rows={4}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(255,212,0,.12)] disabled:opacity-50 resize-none"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50 resize-none"
         />
       </div>
 
@@ -173,7 +173,7 @@ export function InviteAgentForm({ listings }: Props) {
       <button
         type="submit"
         disabled={isPending || !listingId || !agentEmail}
-        className="w-full bg-brand hover:bg-[#E6C200] text-[#0F1117] font-bold px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed will-change-transform"
+        className="w-full bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed will-change-transform"
       >
         {isPending ? 'Sending invitation...' : 'Send Invitation'}
       </button>

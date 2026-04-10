@@ -71,7 +71,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-[#FFD400] text-[#0F1117]'
+          ? 'bg-brand border-brand text-[#0F1117]'
           : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
       }`}
     >
@@ -93,7 +93,7 @@ function StepHeader({ n, title }: { n: string; title: string }) {
 
 function FinanceBadge({ status }: { status: string }) {
   const styles: Record<string, { cls: string; label: string; icon: string }> = {
-    cash:              { cls: 'bg-[#FFFBE0] text-[#7A5F00]',    label: 'Cash buyer',             icon: '💰' },
+    cash:              { cls: 'bg-brand-solid-bg text-brand-badge-text',    label: 'Cash buyer',             icon: '💰' },
     mortgage_approved: { cls: 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]', label: 'Mortgage in principle', icon: '✓' },
     mortgage_pending:  { cls: 'bg-[rgba(251,191,36,0.15)] text-[#FBBF24]', label: 'Mortgage in progress',  icon: '⏳' },
     not_specified:     { cls: 'bg-[rgba(255,255,255,0.07)] text-[rgba(255,255,255,0.4)]', label: 'Finance not specified', icon: '—' },
@@ -203,7 +203,7 @@ export function PassportForm({ profile, userName }: Props) {
                   type="button"
                   onClick={() => setIntent(v)}
                   className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                    intent === v ? 'bg-brand border-[#FFD400] text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                    intent === v ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
                   }`}
                 >
                   {v === 'buy' ? 'Buy' : 'Rent'}

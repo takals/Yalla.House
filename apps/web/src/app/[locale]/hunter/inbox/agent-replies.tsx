@@ -70,7 +70,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
 
   return (
     <div className={`bg-surface rounded-xl border p-4 transition ${
-      expanded ? 'border-[#FFD400] shadow-md' : 'border-[#E2E4EB]'
+      expanded ? 'border-brand shadow-md' : 'border-[#E2E4EB]'
     }`}>
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
         <div className="flex items-center gap-2">
           <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
             score >= 70 ? 'bg-[#DCFCE7] text-[#166534]'
-            : score >= 30 ? 'bg-[#FFFBE0] text-[#7A5F00]'
+            : score >= 30 ? 'bg-brand-solid-bg text-brand-badge-text'
             : 'bg-[#FEE2E2] text-[#991B1B]'
           }`}>
             {score}%
@@ -178,7 +178,7 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
           { label: 'Active searches', value: stats.totalSearches, color: 'text-[#0F1117]' },
           { label: 'Agents contacted', value: stats.agentsContacted, color: 'text-[#1E40AF]' },
           { label: 'Replies received', value: stats.repliesReceived, color: 'text-[#166534]' },
-          { label: 'Top matches', value: stats.topMatchCount, color: 'text-[#FFD400]' },
+          { label: 'Top matches', value: stats.topMatchCount, color: 'text-brand' },
         ].map(s => (
           <div key={s.label} className="bg-surface rounded-lg p-3 border border-[#E2E4EB] text-center">
             <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>

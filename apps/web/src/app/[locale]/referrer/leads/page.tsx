@@ -47,15 +47,7 @@ export default async function ReferralLeadsPage() {
   const referrer = referrerData as Referrer
 
   // Fetch referrals with user data and events
-  type ReferralRow = {
-    id: string
-    referred_user_id: string
-    referred_role: string
-    created_at: string
-    user: { full_name: string | null; email: string } | null
-  }
-
-  const { data: referralsRaw } = await supabase
+  const { data: referralsData } = await supabase
     .from('referrals')
     .select(`
       id, referred_user_id, referred_role, created_at,
@@ -64,32 +56,29 @@ export default async function ReferralLeadsPage() {
     .eq('referrer_id', referrer.id)
     .order('created_at', { ascending: false })
 
-  const referralsData = (referralsRaw ?? []) as unknown as ReferralRow[]
-  const referralIds: string[] = referralsData.map(r => r.id)
+  const referralIds = (referralsData ?? []).map(r => r.id)
 
   // Fetch all events for these referrals
-  const { data: eventsData } = referralIds.length > 0
-    ? await supabase
+  const { data: eventsData } = await referralIds.length > 0
+    ? supabase
         .from('referral_events')
         .select('*')
         .in('referral_id', referralIds)
-    : { data: null as ReferralEvent[] | null }
+    : Promise.resolve({ data: null })
 
   const events = (eventsData ?? []) as ReferralEvent[]
-  const eventsByReferral = events.reduce<Record<string, ReferralEvent[]>>(
+  const eventsByReferral = events.reduce(
     (acc, event) => {
-      const list = acc[event.referral_id]
-      if (list) {
-        list.push(event)
-      } else {
-        acc[event.referral_id] = [event]
+      if (!acc[event.referral_id]) {
+        acc[event.referral_id] = []
       }
+      acc[event.referral_id].push(event)
       return acc
     },
-    {}
+    {} as Record<string, ReferralEvent[]>
   )
 
-  const referralsWithEvents = referralsData.map(r => ({
+  const referralsWithEvents = (referralsData ?? []).map(r => ({
     ...r,
     events: eventsByReferral[r.id] ?? [],
   })) as ReferralWithEvents[]
@@ -97,7 +86,7 @@ export default async function ReferralLeadsPage() {
   return (
     <div className="max-w-4xl">
       <div className="mb-8">
-        <Link href="/referrer" className="text-[#FFD400] text-sm font-semibold mb-3 inline-block hover:underline">
+        <Link href="/referrer" className="text-brand text-sm font-semibold mb-3 inline-block hover:underline">
           ← Back to Dashboard
         </Link>
         <h1 className="text-2xl font-bold mb-1">Your Referrals</h1>
@@ -114,7 +103,7 @@ export default async function ReferralLeadsPage() {
           </p>
           <Link
             href="/referrer"
-            className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+            className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
           >
             Get Referral Link →
           </Link>

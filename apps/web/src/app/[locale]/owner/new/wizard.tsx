@@ -132,7 +132,7 @@ function Step1({
               onClick={() => set('property_type', value)}
               className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-colors text-center ${
                 form.property_type === value
-                  ? 'border-brand bg-[#FFFBE0]'
+                  ? 'border-brand bg-brand-solid-bg'
                   : 'border-[#E4E6EF] hover:border-brand/50'
               }`}
             >
@@ -158,7 +158,7 @@ function Step1({
               onClick={() => set('intent', value)}
               className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-colors ${
                 form.intent === value
-                  ? 'border-brand bg-[#FFFBE0] text-[#0F1117]'
+                  ? 'border-brand bg-brand-solid-bg text-[#0F1117]'
                   : 'border-[#E4E6EF] text-[#5E6278] hover:border-brand/50'
               }`}
             >

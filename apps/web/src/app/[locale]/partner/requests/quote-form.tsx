@@ -63,13 +63,13 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+        className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
       >
         Submit Quote →
       </button>
 
       {isOpen && (
-        <div className="mt-4 p-4 bg-[#FFFBE0] rounded-lg border border-[#FFD400]/30">
+        <div className="mt-4 p-4 bg-brand-solid-bg rounded-lg border border-brand/30">
           <form onSubmit={handleSubmit} className="space-y-3">
             {/* Amount Input */}
             <div>
@@ -84,7 +84,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 disabled={isLoading}
-                className="w-full px-3 py-2 text-sm border border-[#D8DBE5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD400] bg-white text-black"
+                className="w-full px-3 py-2 text-sm border border-[#D8DBE5] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-white text-black"
               />
             </div>
 
@@ -99,7 +99,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={isLoading}
                 rows={3}
-                className="w-full px-3 py-2 text-sm border border-[#D8DBE5] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD400] bg-white text-black resize-none"
+                className="w-full px-3 py-2 text-sm border border-[#D8DBE5] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand bg-white text-black resize-none"
               />
             </div>
 
@@ -122,7 +122,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
               <button
                 type="submit"
                 disabled={isLoading || !amount}
-                className="flex-1 px-3 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-3 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Submitting...' : 'Submit Quote'}
               </button>

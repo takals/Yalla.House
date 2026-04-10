@@ -100,21 +100,21 @@ export default function AboutPage() {
 
           <div className="space-y-16">
             <div className="flex gap-8 items-start">
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-[#FFD400] flex items-center justify-center text-[#1d1d1f] font-extrabold text-xl">1</div>
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-brand flex items-center justify-center text-[#1d1d1f] font-extrabold text-xl">1</div>
               <div>
                 <h3 className="text-xl font-bold text-[#1d1d1f] mb-2">Inserat erstellen</h3>
                 <p className="text-base text-[#86868b] leading-relaxed">Fotos hochladen, Preis setzen, Beschreibung mit KI-Unterstützung verfassen. Dein Inserat ist in Minuten fertig.</p>
               </div>
             </div>
             <div className="flex gap-8 items-start">
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-[#FFD400] flex items-center justify-center text-[#1d1d1f] font-extrabold text-xl">2</div>
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-brand flex items-center justify-center text-[#1d1d1f] font-extrabold text-xl">2</div>
               <div>
                 <h3 className="text-xl font-bold text-[#1d1d1f] mb-2">Auf Portalen live</h3>
                 <p className="text-base text-[#86868b] leading-relaxed">Innerhalb von 48 Stunden erscheint dein Inserat auf IS24 und Immowelt — automatisch, ohne Umwege.</p>
               </div>
             </div>
             <div className="flex gap-8 items-start">
-              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-[#FFD400] flex items-center justify-center text-[#1d1d1f] font-extrabold text-xl">3</div>
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-brand flex items-center justify-center text-[#1d1d1f] font-extrabold text-xl">3</div>
               <div>
                 <h3 className="text-xl font-bold text-[#1d1d1f] mb-2">Verkauf abschließen</h3>
                 <p className="text-base text-[#86868b] leading-relaxed">Anfragen verwalten, Besichtigungen planen, Angebote verhandeln — alles über dein Dashboard.</p>
@@ -134,7 +134,7 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white rounded-3xl overflow-hidden transition-transform duration-300 hover:-translate-y-1">
-              <div className="h-1.5 bg-[#FFD400]" />
+              <div className="h-1.5 bg-brand" />
               <div className="p-10">
                 <h3 className="text-xl font-bold text-[#1d1d1f] mb-3">Solo</h3>
                 <p className="text-sm text-[#86868b] leading-relaxed mb-6">Du machst es selbst — wir geben dir die Werkzeuge.</p>
@@ -215,22 +215,22 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             <div>
-              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #FFD400, #F5C800)' }}>TA</div>
+              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #D4764E, #BF6840)' }}>TA</div>
               <p className="font-semibold text-[#1d1d1f]">Tarek Al-Saleh</p>
               <p className="text-sm text-[#86868b]">Gründer & CEO</p>
             </div>
             <div>
-              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #FFD400, #F5C800)' }}>DV</div>
+              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #D4764E, #BF6840)' }}>DV</div>
               <p className="font-semibold text-[#1d1d1f]">Daisy Voelker</p>
               <p className="text-sm text-[#86868b]">Entwicklung</p>
             </div>
             <div>
-              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #FFD400, #F5C800)' }}>LM</div>
+              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #D4764E, #BF6840)' }}>LM</div>
               <p className="font-semibold text-[#1d1d1f]">Laura Müller</p>
               <p className="text-sm text-[#86868b]">Rechtsberatung</p>
             </div>
             <div>
-              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #FFD400, #F5C800)' }}>JR</div>
+              <div className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center font-bold text-lg text-[#1d1d1f]" style={{ background: 'linear-gradient(135deg, #D4764E, #BF6840)' }}>JR</div>
               <p className="font-semibold text-[#1d1d1f]">Jan Richter</p>
               <p className="text-sm text-[#86868b]">Operations</p>
             </div>
@@ -241,7 +241,7 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="relative bg-[#1d1d1f] py-32 px-6 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #FFD400 0%, transparent 70%)' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4764E 0%, transparent 70%)' }} />
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="text-title-1 text-white leading-tight mb-6">
@@ -252,7 +252,7 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/list">
-              <button className="px-8 py-4 bg-[#FFD400] text-[#1d1d1f] font-semibold rounded-full hover:bg-[#E6C200] transition-all duration-300">
+              <button className="px-8 py-4 bg-brand text-[#1d1d1f] font-semibold rounded-full hover:bg-brand-hover transition-all duration-300">
                 Jetzt inserieren
               </button>
             </Link>

@@ -36,7 +36,7 @@ export default async function SearchProfilePage() {
 
       {/* Hero */}
       <div className="mb-10">
-        <div className="inline-flex items-center gap-2 bg-[#FFFBE0] text-[#7A5F00] text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide border border-[#FFD400]">
+        <div className="inline-flex items-center gap-2 bg-brand-solid-bg text-brand-badge-text text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide border border-brand">
           🔍 Search + Agent Matching
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight mb-3">
@@ -105,7 +105,7 @@ export default async function SearchProfilePage() {
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
                       s.status === 'active' ? 'bg-[#DCFCE7] text-[#166534]'
-                      : s.status === 'paused' ? 'bg-[#FFFBE0] text-[#7A5F00]'
+                      : s.status === 'paused' ? 'bg-brand-solid-bg text-brand-badge-text'
                       : 'bg-[#F3F4F6] text-[#6B7280]'
                     }`}>{s.status}</span>
                     <span className="text-xs text-[#5E6278] capitalize">{s.intent}</span>
@@ -138,20 +138,16 @@ export default async function SearchProfilePage() {
       )}
 
       {/* New search form */}
-      {profile ? (
-        <SearchForm
-          defaults={{
-            intent: profile.intent ?? 'buy',
-            areas: (profile.target_areas ?? []) as { name?: string; postcode?: string }[],
-            budget_min: profile.budget_min ?? null,
-            budget_max: profile.budget_max ?? null,
-            property_types: (profile.property_types ?? []) as string[],
-            timeline: profile.timeline ?? 'flexible',
-          }}
-        />
-      ) : (
-        <SearchForm />
-      )}
+      <SearchForm
+        defaults={profile ? {
+          intent: profile.intent ?? 'buy',
+          areas: profile.target_areas ?? [],
+          budget_min: profile.budget_min,
+          budget_max: profile.budget_max,
+          property_types: profile.property_types ?? [],
+          timeline: profile.timeline ?? 'flexible',
+        } : undefined}
+      />
 
     </div>
   )

@@ -66,7 +66,7 @@ export default async function AgentPage() {
     ignored: 'Ignoriert',
   }
   const STATUS_STYLE: Record<string, string> = {
-    invited: 'bg-[#FFFBE0] text-[#7A5F00] border-[#FFD400]',
+    invited: 'bg-brand-solid-bg text-brand-badge-text border-brand',
     active: 'bg-[#DCFCE7] text-[#166534] border-[#BBF7D0]',
     paused: 'bg-[#F1F5F9] text-[#64748B] border-[#CBD5E1]',
     ignored: 'bg-[#F1F5F9] text-[#94A3B8] border-[#E2E8F0]',
@@ -105,10 +105,10 @@ export default async function AgentPage() {
 
         {/* Profile setup nudge */}
         {!agentProfile?.agency_name && (
-          <div className="mb-6 bg-[#FFFBE0] border border-[#FFD400] rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
+          <div className="mb-6 bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
             <div>
               <p className="font-semibold text-sm">Profil einrichten</p>
-              <p className="text-xs text-[#7A5F00] mt-0.5">Trag deinen Agenturname und deine Tätigkeitsgebiete ein, damit Käufer dich finden können.</p>
+              <p className="text-xs text-brand-badge-text mt-0.5">Trag deinen Agenturname und deine Tätigkeitsgebiete ein, damit Käufer dich finden können.</p>
             </div>
             <Link
               href="/agent/profile"

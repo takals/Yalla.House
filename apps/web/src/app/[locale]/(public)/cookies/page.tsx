@@ -8,7 +8,7 @@ export default function CookiePolicyPage() {
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-4">
+          <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Cookie-Richtlinie
           </div>
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
@@ -48,7 +48,7 @@ export default function CookiePolicyPage() {
               <p>
                 Diese Cookies sind <strong>erforderlich</strong> für die Funktionsfähigkeit der Plattform. Sie können nicht deaktiviert werden.
               </p>
-              <div className="bg-[#FFFBE0] border border-[#FFD400] rounded-lg p-4 space-y-3">
+              <div className="bg-brand-solid-bg border border-brand rounded-lg p-4 space-y-3">
                 <div>
                   <p><strong>Session Cookies</strong></p>
                   <p className="text-sm">Ermöglichen die Verwaltung Ihrer aktiven Sitzung während Sie die Plattform nutzen.</p>
@@ -176,7 +176,7 @@ export default function CookiePolicyPage() {
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#FFD400] font-semibold hover:text-[#E6C200] transition-colors"
+            className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors"
           >
             ← Zurück zur Startseite
           </Link>

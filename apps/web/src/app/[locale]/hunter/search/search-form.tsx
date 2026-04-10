@@ -32,11 +32,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
   const [intent, setIntent] = useState(defaults?.intent ?? 'buy')
   const [areaInput, setAreaInput] = useState('')
   const [areas, setAreas] = useState<{ name: string; postcode?: string }[]>(
-    defaults?.areas?.map(a => {
-      const base: { name: string; postcode?: string } = { name: a.name ?? '' }
-      if (a.postcode !== undefined) base.postcode = a.postcode
-      return base
-    }) ?? []
+    defaults?.areas?.map(a => ({ name: a.name ?? '', postcode: a.postcode })) ?? []
   )
   const [radiusKm, setRadiusKm] = useState(5)
   const [budgetMin, setBudgetMin] = useState(defaults?.budget_min ? String(defaults.budget_min / 100) : '')
@@ -182,7 +178,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 onChange={e => setAreaInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addArea())}
                 placeholder="City, district, or postcode"
-                className="flex-1 px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm focus:outline-none focus:ring-2 focus:ring-[#FFD400]/30"
+                className="flex-1 px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
               <button type="button" onClick={addArea} className="px-4 py-2 bg-[#EDEEF2] rounded-lg text-sm font-semibold hover:bg-[#D9DCE4] transition">
                 Add
@@ -190,9 +186,9 @@ export function SearchForm({ defaults }: SearchFormProps) {
             </div>
             <div className="flex flex-wrap gap-2">
               {areas.map((a, i) => (
-                <span key={i} className="inline-flex items-center gap-1 bg-[#FFFBE0] text-[#7A5F00] text-xs font-semibold px-3 py-1 rounded-full border border-[#FFD400]/30">
+                <span key={i} className="inline-flex items-center gap-1 bg-brand-solid-bg text-brand-badge-text text-xs font-semibold px-3 py-1 rounded-full border border-brand/30">
                   {a.name}
-                  <button type="button" onClick={() => removeArea(i)} className="text-[#7A5F00] hover:text-red-600 ml-1">&times;</button>
+                  <button type="button" onClick={() => removeArea(i)} className="text-brand-badge-text hover:text-red-600 ml-1">&times;</button>
                 </span>
               ))}
             </div>
@@ -207,7 +203,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               max={50}
               value={radiusKm}
               onChange={e => setRadiusKm(Number(e.target.value))}
-              className="w-full accent-[#FFD400]"
+              className="w-full accent-brand"
             />
           </div>
 
@@ -314,7 +310,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               onChange={e => setNotes(e.target.value)}
               placeholder="Near a park, high ceilings, family-friendly, modern kitchen, wheelchair accessible..."
               rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#FFD400]/30"
+              className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30"
             />
           </div>
 
@@ -345,7 +341,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
           <button
             type="submit"
             disabled={saving || areas.length === 0}
-            className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-[#E6C200] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'Saving...' : 'Save Search & Continue'}
           </button>
@@ -359,7 +355,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
     <form onSubmit={handleSubmitConsent}>
       <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-full bg-[#FFFBE0] border-2 border-brand flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-full bg-brand-solid-bg border-2 border-brand flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl">🤝</span>
           </div>
           <h2 className="text-xl font-bold mb-2">Agent Outreach</h2>
@@ -380,7 +376,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
             onClick={() => setAgentOutreach(true)}
             className={`w-full p-4 rounded-xl border-2 text-left transition ${
               agentOutreach
-                ? 'border-brand bg-[#FFFBE0]'
+                ? 'border-brand bg-brand-solid-bg'
                 : 'border-[#D8DBE5] bg-white hover:border-[#C8CCD6]'
             }`}
           >
@@ -402,7 +398,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
             onClick={() => { setAgentOutreach(false); setPhoneAllowed(false) }}
             className={`w-full p-4 rounded-xl border-2 text-left transition ${
               !agentOutreach
-                ? 'border-brand bg-[#FFFBE0]'
+                ? 'border-brand bg-brand-solid-bg'
                 : 'border-[#D8DBE5] bg-white hover:border-[#C8CCD6]'
             }`}
           >
@@ -428,7 +424,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 type="checkbox"
                 checked={phoneAllowed}
                 onChange={e => setPhoneAllowed(e.target.checked)}
-                className="w-4 h-4 accent-[#FFD400] rounded"
+                className="w-4 h-4 accent-brand rounded"
               />
               <div>
                 <p className="text-sm font-medium">Allow matched agents to call me by phone</p>
@@ -451,7 +447,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
         <button
           type="submit"
           disabled={saving}
-          className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-[#E6C200] transition disabled:opacity-50"
+          className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-brand-hover transition disabled:opacity-50"
         >
           {saving ? 'Saving...' : agentOutreach ? 'Save & Start Matching' : 'Save & Continue'}
         </button>

@@ -7,12 +7,9 @@ type ListingRow = Database['public']['Tables']['listings']['Row']
 type AssignmentRow = Database['public']['Tables']['listing_agent_assignments']['Row']
 type UserRow = Database['public']['Tables']['users']['Row']
 
-type ListingSummary = Pick<ListingRow, 'id' | 'address_line1' | 'city' | 'postcode' | 'status'>
-type AgentSummary = Pick<UserRow, 'id' | 'full_name' | 'email'>
-
 interface AssignmentWithDetails extends AssignmentRow {
-  listing?: ListingSummary | null
-  agent?: AgentSummary | null
+  listing?: ListingRow | null
+  agent?: UserRow | null
 }
 
 export default async function OwnerAgentsPage() {
@@ -28,7 +25,7 @@ export default async function OwnerAgentsPage() {
     .order('created_at', { ascending: false })
     .limit(100)
 
-  const listings: (ListingSummary | null)[] = listingsData ?? []
+  const listings: (Pick<ListingRow, 'id' | 'address_line1' | 'city' | 'postcode' | 'status'> | null)[] = listingsData ?? []
   const listingIds = listings.filter(Boolean).map(l => l!.id)
 
   // Parallel fetch: assignments and agent details
@@ -150,7 +147,7 @@ function AssignmentCard({ assignment }: { assignment: AssignmentWithDetails }) {
   const tierBadgeClass = {
     advisory: 'bg-blue-50 text-blue-700',
     assisted: 'bg-purple-50 text-purple-700',
-    managed: 'bg-[#FFFBE0] text-[#7A5F00]',
+    managed: 'bg-brand-solid-bg text-brand-badge-text',
   }[assignment.tier] || 'bg-gray-50 text-gray-700'
 
   const tierLabels = {

@@ -70,7 +70,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-[#FFD400] text-[#0F1117]'
+          ? 'bg-brand border-brand text-[#0F1117]'
           : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
       }`}
     >
@@ -190,7 +190,7 @@ export function BriefForm({ profile }: Props) {
                   type="button"
                   onClick={() => setIntent(v)}
                   className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                    intent === v ? 'bg-brand border-[#FFD400] text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                    intent === v ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
                   }`}
                 >
                   {v === 'buy' ? 'Buy' : 'Rent'}

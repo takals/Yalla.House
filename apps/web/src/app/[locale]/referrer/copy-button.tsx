@@ -23,7 +23,7 @@ export default function CopyButton({ code }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      className="px-3 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition inline-flex items-center gap-2"
+      className="px-3 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition inline-flex items-center gap-2"
     >
       {copied ? (
         <>

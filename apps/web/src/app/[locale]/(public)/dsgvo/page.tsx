@@ -8,7 +8,7 @@ export default function GDPRPage() {
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-4">
+          <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             DSGVO und Datensicherheit
           </div>
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
@@ -126,7 +126,7 @@ export default function GDPRPage() {
               <p>
                 Alle Ihre Daten werden <strong>ausschließlich in der Europäischen Union verarbeitet und gespeichert</strong>. Es gibt keine Datenübertragungen in Länder außerhalb des EWR.
               </p>
-              <div className="bg-[#FFFBE0] border border-[#FFD400] rounded-lg p-4 space-y-2">
+              <div className="bg-brand-solid-bg border border-brand rounded-lg p-4 space-y-2">
                 <p><strong>Supabase (Datenbank):</strong> EU-Region (Frankreich)</p>
                 <p><strong>Vercel (Hosting):</strong> EU-CDN (Deutschland, Niederlande, Finnland)</p>
                 <p><strong>Stripe (Payments):</strong> EU-konform, mit Datenschutzvereinbarung</p>
@@ -144,22 +144,22 @@ export default function GDPRPage() {
                 Folgende Auftragsverarbeiter verarbeiten Daten in unserem Auftrag:
               </p>
               <div className="space-y-3">
-                <div className="border-l-4 border-[#FFD400] pl-4">
+                <div className="border-l-4 border-brand pl-4">
                   <p><strong>Supabase</strong> (Datenbank-Hosting)</p>
                   <p className="text-sm">Datenverarbeitungsvereinbarung: Ja</p>
                   <p className="text-sm">Standort: Frankreich (EU)</p>
                 </div>
-                <div className="border-l-4 border-[#FFD400] pl-4">
+                <div className="border-l-4 border-brand pl-4">
                   <p><strong>Vercel</strong> (Anwendungs-Hosting)</p>
                   <p className="text-sm">Datenverarbeitungsvereinbarung: Ja</p>
                   <p className="text-sm">Standort: EU</p>
                 </div>
-                <div className="border-l-4 border-[#FFD400] pl-4">
+                <div className="border-l-4 border-brand pl-4">
                   <p><strong>Stripe</strong> (Zahlungsabwicklung)</p>
                   <p className="text-sm">Datenverarbeitungsvereinbarung: Ja</p>
                   <p className="text-sm">Standort: EU-konform</p>
                 </div>
-                <div className="border-l-4 border-[#FFD400] pl-4">
+                <div className="border-l-4 border-brand pl-4">
                   <p><strong>Immoscout24 & Immowelt</strong> (Portal-Syndikation)</p>
                   <p className="text-sm">Datenverarbeitungsvereinbarung: Ja</p>
                   <p className="text-sm">Standort: Deutschland</p>
@@ -216,7 +216,7 @@ export default function GDPRPage() {
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#FFD400] font-semibold hover:text-[#E6C200] transition-colors"
+            className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors"
           >
             ← Zurück zur Startseite
           </Link>

@@ -2,19 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { QuoteForm } from './quote-form'
-// Tiny relative-time helper — avoids pulling in date-fns
-function formatRelative(date: Date, locale: string): string {
-  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
-  const diffMs = date.getTime() - Date.now()
-  const diffSec = Math.round(diffMs / 1000)
-  const abs = Math.abs(diffSec)
-  if (abs < 60) return rtf.format(diffSec, 'second')
-  if (abs < 3600) return rtf.format(Math.round(diffSec / 60), 'minute')
-  if (abs < 86400) return rtf.format(Math.round(diffSec / 3600), 'hour')
-  if (abs < 2592000) return rtf.format(Math.round(diffSec / 86400), 'day')
-  if (abs < 31536000) return rtf.format(Math.round(diffSec / 2592000), 'month')
-  return rtf.format(Math.round(diffSec / 31536000), 'year')
-}
+import { formatDistanceToNow } from 'date-fns'
+import { deDE, enGB } from 'date-fns/locale'
 
 interface ServiceRequest {
   id: string
@@ -42,13 +31,7 @@ interface ServiceRequest {
   } | null
 }
 
-type CategoryColor = { bg: string; text: string; dot: string }
-type StatusInfo = { label: string; bg: string; text: string }
-
-const DEFAULT_CATEGORY_COLOR: CategoryColor = { bg: '#DBEAFE', text: '#1E40AF', dot: '#0284C7' }
-const DEFAULT_STATUS_INFO: StatusInfo = { label: 'Unknown', bg: '#F3F4F6', text: '#374151' }
-
-const categoryColors: Record<string, CategoryColor> = {
+const categoryColors: Record<string, { bg: string; text: string; dot: string }> = {
   photography: { bg: '#DBEAFE', text: '#1E40AF', dot: '#0284C7' },
   floorplan: { bg: '#DBEAFE', text: '#1E40AF', dot: '#0284C7' },
   epc: { bg: '#DCFCE7', text: '#166534', dot: '#16A34A' },
@@ -59,8 +42,8 @@ const categoryColors: Record<string, CategoryColor> = {
   drone: { bg: '#DBEAFE', text: '#1E40AF', dot: '#0284C7' },
 }
 
-const statusConfig: Record<string, StatusInfo> = {
-  pending: { label: 'Open', bg: '#FFFBE0', text: '#7A5F00' },
+const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
+  pending: { label: 'Open', bg: '#FFF5EE', text: '#8B4513' },
   quoted: { label: 'Quoted', bg: '#DBEAFE', text: '#1E40AF' },
   accepted: { label: 'Accepted', bg: '#DCFCE7', text: '#166534' },
   in_progress: { label: 'In Progress', bg: '#FEF3C7', text: '#92400E' },
@@ -104,7 +87,7 @@ export default async function PartnerRequestsPage({
   ).slice(0, 10)
 
   const isLocaleDE = locale === 'de'
-  const dateLocale = isLocaleDE ? 'de' : 'en-GB'
+  const dateLocale = isLocaleDE ? deDE : enGB
 
   return (
     <div className="max-w-4xl">
@@ -128,7 +111,7 @@ export default async function PartnerRequestsPage({
           </p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
-          <p className="text-2xl font-bold text-[#FFD400]">{myActive.length}</p>
+          <p className="text-2xl font-bold text-brand">{myActive.length}</p>
           <p className="text-xs text-[#5E6278]">
             {isLocaleDE ? 'Aktiv' : 'Active'}
           </p>
@@ -150,7 +133,7 @@ export default async function PartnerRequestsPage({
           </h2>
           <div className="space-y-3">
             {available.map((request) => {
-              const colors: CategoryColor = categoryColors[request.category] ?? DEFAULT_CATEGORY_COLOR
+              const colors = categoryColors[request.category] || categoryColors.photography
               const address = request.listings
                 ? `${request.listings.address_line1}, ${request.listings.city}, ${request.listings.postcode}`
                 : request.title
@@ -175,7 +158,10 @@ export default async function PartnerRequestsPage({
                       </div>
                     </div>
                     <span className="text-xs text-[#999]">
-                      {formatRelative(new Date(request.created_at), dateLocale)}
+                      {formatDistanceToNow(new Date(request.created_at), {
+                        addSuffix: true,
+                        locale: dateLocale,
+                      })}
                     </span>
                   </div>
 
@@ -218,13 +204,13 @@ export default async function PartnerRequestsPage({
       {myActive.length > 0 && (
         <div className="mb-8">
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#FFD400]" />
+            <span className="w-2 h-2 rounded-full bg-brand" />
             {isLocaleDE ? 'Meine aktiven Anfragen' : 'My Active Requests'} ({myActive.length})
           </h2>
           <div className="space-y-3">
             {myActive.map((request) => {
-              const statusInfo: StatusInfo = statusConfig[request.status] ?? DEFAULT_STATUS_INFO
-              const colors: CategoryColor = categoryColors[request.category] ?? DEFAULT_CATEGORY_COLOR
+              const statusInfo = statusConfig[request.status]
+              const colors = categoryColors[request.category] || categoryColors.photography
               const address = request.listings
                 ? `${request.listings.address_line1}, ${request.listings.city}`
                 : request.title
@@ -272,7 +258,10 @@ export default async function PartnerRequestsPage({
                       <span className="text-[#5E6278] font-semibold">
                         {isLocaleDE ? 'Status seit:' : 'Updated:'}
                       </span>{' '}
-                      {formatRelative(new Date(request.updated_at), dateLocale)}
+                      {formatDistanceToNow(new Date(request.updated_at), {
+                        addSuffix: true,
+                        locale: dateLocale,
+                      })}
                     </div>
                   </div>
 
@@ -295,7 +284,7 @@ export default async function PartnerRequestsPage({
 
                   <Link
                     href={`/partner/requests/${request.id}`}
-                    className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+                    className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
                   >
                     {isLocaleDE ? 'Details anzeigen' : 'View Details'} →
                   </Link>
@@ -315,8 +304,8 @@ export default async function PartnerRequestsPage({
           </h2>
           <div className="space-y-2">
             {completed.map((request) => {
-              const statusInfo: StatusInfo = statusConfig[request.status] ?? DEFAULT_STATUS_INFO
-              const colors: CategoryColor = categoryColors[request.category] ?? DEFAULT_CATEGORY_COLOR
+              const statusInfo = statusConfig[request.status]
+              const colors = categoryColors[request.category] || categoryColors.photography
 
               return (
                 <div

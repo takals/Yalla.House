@@ -118,7 +118,7 @@ export default async function HunterPage() {
         </div>
 
         {/* Neue Treffer */}
-        <div className={`bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px] ${matchCount > 0 ? 'ring-2 ring-[#FFD400]' : ''}`}>
+        <div className={`bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px] ${matchCount > 0 ? 'ring-2 ring-brand' : ''}`}>
           <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">Neue Treffer</p>
           <p className={`text-4xl font-black tabular-nums leading-none mt-2 ${matchCount > 0 ? 'text-[#0F1117]' : 'text-[#C5C8D0]'}`}>
             {matchCount}
@@ -202,7 +202,7 @@ export default async function HunterPage() {
             <p className="text-[#5E6278] text-sm mb-5">Noch keine Besichtigungsanfragen.</p>
             <Link
               href="/listings"
-              className="inline-flex items-center gap-2 bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+              className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
               style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1)' }}
             >
               Inserate durchsuchen

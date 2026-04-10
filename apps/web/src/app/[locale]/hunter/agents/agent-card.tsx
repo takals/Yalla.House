@@ -64,7 +64,7 @@ export function AgentCard({ assignment }: Props) {
             {STATUS_LABELS[status] ?? status}
           </span>
           {agentInitiated && status === 'invited' && (
-            <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] border border-yellow-200 whitespace-nowrap">
+            <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-brand-solid-bg text-brand-badge-text border border-yellow-200 whitespace-nowrap">
               Makler möchte deinen Passport
             </span>
           )}

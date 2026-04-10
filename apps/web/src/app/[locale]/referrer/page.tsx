@@ -42,14 +42,14 @@ export default async function ReferrerDashboard() {
         </div>
 
         <div className="bg-surface rounded-xl p-8 border border-[#E2E4EB] text-center">
-          <Award className="w-12 h-12 mx-auto mb-4 text-[#FFD400]" />
+          <Award className="w-12 h-12 mx-auto mb-4 text-brand" />
           <h2 className="text-lg font-bold mb-2">Earn by Referring</h2>
           <p className="text-[#5E6278] text-sm mb-6">
             Invite sellers to Yalla.House and earn commissions for each milestone they reach.
           </p>
           <Link
             href="/referrer/join"
-            className="inline-block px-6 py-2 bg-brand text-black font-bold rounded-lg hover:bg-[#E6C200] transition"
+            className="inline-block px-6 py-2 bg-brand text-black font-bold rounded-lg hover:bg-brand-hover transition"
           >
             Join the Program →
           </Link>
@@ -122,7 +122,7 @@ export default async function ReferrerDashboard() {
           <p className="text-xs text-[#5E6278] mt-1">Total Earned</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB]">
-          <p className="text-2xl font-bold text-[#FFD400]">€{(pendingPayout / 100).toFixed(2)}</p>
+          <p className="text-2xl font-bold text-brand">€{(pendingPayout / 100).toFixed(2)}</p>
           <p className="text-xs text-[#5E6278] mt-1">Pending Payout</p>
         </div>
       </div>
@@ -131,13 +131,13 @@ export default async function ReferrerDashboard() {
       <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-5 mb-8">
         <h2 className="text-sm font-bold mb-4">Your Referral Code</h2>
         <div className="space-y-3">
-          <div className="bg-[#FFFBE0] rounded-lg p-4 flex items-center justify-between">
+          <div className="bg-brand-solid-bg rounded-lg p-4 flex items-center justify-between">
             <code className="font-mono text-sm font-bold text-[#000]">
               {referrer.referrer_code}
             </code>
             <CopyButton code={referrer.referrer_code} />
           </div>
-          <div className="bg-[#FFFBE0] rounded-lg p-4">
+          <div className="bg-brand-solid-bg rounded-lg p-4">
             <p className="text-xs text-[#5E6278] mb-2">Full Referral Link:</p>
             <code className="text-xs font-mono text-[#000] break-all">
               {referralLink}
@@ -179,7 +179,7 @@ export default async function ReferrerDashboard() {
       <div className="flex gap-3">
         <Link
           href="/referrer/leads"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-black font-bold rounded-lg hover:bg-[#E6C200] transition"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-black font-bold rounded-lg hover:bg-brand-hover transition"
         >
           <Users className="w-4 h-4" />
           View Referrals

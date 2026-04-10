@@ -23,9 +23,9 @@ interface HunterPassport {
 }
 
 const FINANCE_LABELS: Record<string, { label: string; cls: string }> = {
-  cash:              { label: 'Cash-Käufer', cls: 'bg-[#FFFBE0] text-[#7A5F00]' },
+  cash:              { label: 'Cash-Käufer', cls: 'bg-brand-solid-bg text-brand-badge-text' },
   mortgage_approved: { label: 'Hypothek (Zusage)', cls: 'bg-[#DCFCE7] text-[#166534]' },
-  mortgage_pending:  { label: 'Hypothek (laufend)', cls: 'bg-[#FFFBE0] text-[#7A5F00]' },
+  mortgage_pending:  { label: 'Hypothek (laufend)', cls: 'bg-brand-solid-bg text-brand-badge-text' },
   not_specified:     { label: 'Nicht angegeben', cls: 'bg-[#F1F5F9] text-[#64748B]' },
 }
 

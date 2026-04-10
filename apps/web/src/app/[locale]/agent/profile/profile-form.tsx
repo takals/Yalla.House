@@ -42,7 +42,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-[#FFD400] text-[#0F1117]'
+          ? 'bg-brand border-brand text-[#0F1117]'
           : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
       }`}
     >
@@ -123,7 +123,7 @@ export function ProfileForm({ profile }: Props) {
               type="button"
               onClick={() => setFocus(o.value)}
               className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                focus === o.value ? 'bg-brand border-[#FFD400] text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                focus === o.value ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
               }`}
             >
               {o.label}
@@ -150,7 +150,7 @@ export function ProfileForm({ profile }: Props) {
           ✓ Verifizierter Makler — verifiziert am {new Date(profile.verified_at).toLocaleDateString('de-DE')}
         </div>
       ) : (
-        <div className="bg-[#FFFBE0] border border-[#FFD400] rounded-2xl px-5 py-4 text-sm text-[#7A5F00]">
+        <div className="bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 text-sm text-brand-badge-text">
           <span className="font-semibold">Verifizierung ausstehend</span> — Sende deine Maklernummer und ein Nachweis an{' '}
           <a href="mailto:verify@yalla.house" className="underline">verify@yalla.house</a>.
           Verifizierte Makler erhalten höhere Sichtbarkeit bei Käufern.
