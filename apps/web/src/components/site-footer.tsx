@@ -1,42 +1,136 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const t = await getTranslations('nav')
+
   return (
-    <footer className="bg-[#0d0d0d] border-t border-white/10 px-4 pt-12 pb-8">
+    <footer
+      className="bg-page-dark px-8 pt-12 pb-6"
+      style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
+    >
       <div className="max-w-6xl mx-auto">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+          {/* Brand column */}
           <div>
-            <div className="font-extrabold text-lg text-white tracking-tight mb-2">Yalla.House</div>
-            <div className="text-sm text-white/40 mb-3">Klüger verkaufen — mit oder ohne Makler.</div>
-            <div className="text-xs text-white/30">Yalla.House GmbH<br />Registriert in Deutschland.</div>
+            <Link href="/" className="font-bold text-xl text-brand hover:text-brand block mb-2">
+              🏡 Yalla.House
+            </Link>
+            <div className="text-sm text-text-on-dark-secondary mb-3">
+              Your property sale. Your data. Your choice of agent.
+            </div>
           </div>
+
+          {/* For you */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">Richtlinien</h4>
-            <ul className="space-y-2 text-sm text-white/50">
-              <li><Link href="/datenschutz" className="hover:text-white transition-colors">Datenschutzrichtlinie</Link></li>
-              <li><Link href="/nutzungsbedingungen" className="hover:text-white transition-colors">Nutzungsbedingungen</Link></li>
-              <li><Link href="/cookies" className="hover:text-white transition-colors">Cookie-Richtlinie</Link></li>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">For You</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/owner"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  For Owners
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hunter"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  For Home Hunters
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/agent"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  For Agents
+                </Link>
+              </li>
             </ul>
           </div>
+
+          {/* Company */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">Rechtliches &amp; Compliance</h4>
-            <ul className="space-y-2 text-sm text-white/50">
-              <li><Link href="/dsgvo" className="hover:text-white transition-colors">DSGVO &amp; Datensicherheit</Link></li>
-              <li><Link href="/sicherheit" className="hover:text-white transition-colors">Sicherheit &amp; Datenschutz</Link></li>
-              <li><Link href="/impressum" className="hover:text-white transition-colors">Impressum</Link></li>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">Company</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/about"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  {t('about')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/services"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  {t('services')}
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@yalla.house"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
+
+          {/* Legal */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white/40 mb-4">Kontakt</h4>
-            <ul className="space-y-2 text-sm text-white/50">
-              <li><a href="mailto:support@yalla.house" className="hover:text-white transition-colors">Support</a></li>
-              <li><a href="https://wa.me/4915000000000" target="_blank" rel="noopener" className="hover:text-white transition-colors">WhatsApp</a></li>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">Legal</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/datenschutz"
+                  className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/nutzungsbedingungen"
+                  className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  Terms of Use
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/impressum"
+                  className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  Impressum
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between gap-2 text-xs text-white/30">
-          <span>&copy; 2025 Yalla.House GmbH. Alle Rechte vorbehalten.</span>
-          <span>Auf ImmobilienScout24 &middot; Immowelt &middot; ImmoNet gelistet</span>
+
+        {/* Bottom bar */}
+        <div
+          className="pt-6 flex flex-col sm:flex-row justify-between gap-2 text-xs text-text-on-dark-muted"
+          style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
+        >
+          <span>&copy; {new Date().getFullYear()} Yalla.House. All rights reserved.</span>
+          <span>London &middot; Redbridge</span>
         </div>
       </div>
     </footer>

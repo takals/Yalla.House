@@ -8,9 +8,39 @@
     "signOut": "Sign Out"
   },
   "hero": {
-    "headline": "Sell without an agent.",
-    "subline": "Your home. Your terms. Yalla.",
-    "cta": "List for free"
+    "headline": "Your property sale, under your control.",
+    "subline": "Free owner dashboard. Market data. Comparable sales. Then send your brief to competing agents — and choose the best deal.",
+    "cta": "Create your free dashboard",
+    "ctaHunter": "I'm looking to buy"
+  },
+  "howItWorks": {
+    "title": "How it works",
+    "step1Title": "Create your dashboard",
+    "step1Body": "Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale.",
+    "step2Title": "Send your brief to agents",
+    "step2Body": "One click sends your Owner Brief to competing agents in your area. They respond with real proposals — commission, marketing plan, portal coverage.",
+    "step3Title": "Compare, choose, track",
+    "step3Body": "Pick the best agent. Once instructed, they connect to your dashboard so you see every viewing, offer, and update in real time."
+  },
+  "paths": {
+    "ownerTitle": "For Owners",
+    "ownerTagline": "Free forever. No commission.",
+    "ownerBody": "Get a free dashboard with market data and comparable sales. When you're ready, send your brief to agents and choose the best deal.",
+    "ownerCta": "Create your dashboard",
+    "hunterTitle": "For Home Hunters",
+    "hunterTagline": "Find your next home.",
+    "hunterBody": "Tell us what you're looking for. We'll match you with properties and keep you updated as new homes hit the market.",
+    "hunterCta": "Start your search",
+    "agentTitle": "For Agents",
+    "agentTagline": "Win new instructions.",
+    "agentBody": "Receive Owner Briefs from motivated sellers in your area. Respond with your proposal and win the instruction — on merit, not marketing spend.",
+    "agentCta": "Learn more"
+  },
+  "ctaBand": {
+    "headline": "Ready to take control of your sale?",
+    "body": "Create your free dashboard in two minutes. No card required. No commission — ever.",
+    "cta": "Get started free",
+    "agentLink": "I'm an agent"
   },
   "listing": {
     "status": {
