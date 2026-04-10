@@ -110,7 +110,7 @@ export default function AgentAssignmentsPage() {
   const TierBadge = ({ tier }: { tier: string }) => {
     const config = {
       advisory: { bg: '#DBEAFE', text: '#1E40AF', label: 'Advisory' },
-      assisted: { bg: '#FFFBE0', text: '#7A5F00', label: 'Assisted' },
+      assisted: { bg: '#FFF5EE', text: '#8B4513', label: 'Assisted' },
       managed: { bg: '#DCFCE7', text: '#166534', label: 'Managed' },
     }
     const c = config[tier as keyof typeof config] || config.advisory
@@ -126,7 +126,7 @@ export default function AgentAssignmentsPage() {
 
   const StatusBadge = ({ status }: { status: string }) => {
     const config = {
-      invited: { bg: '#FFFBE0', text: '#7A5F00', label: 'Invitation Pending' },
+      invited: { bg: '#FFF5EE', text: '#8B4513', label: 'Invitation Pending' },
       accepted: { bg: '#DCFCE7', text: '#166534', label: 'Active' },
       active: { bg: '#DCFCE7', text: '#166534', label: 'Active' },
       revoked: { bg: '#FEE2E2', text: '#991B1B', label: 'Revoked' },
@@ -205,7 +205,7 @@ export default function AgentAssignmentsPage() {
           <p className="text-xs text-[#5E6278]">Total assignments</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
-          <p className="text-2xl font-bold text-[#FFD400]">{pending.length}</p>
+          <p className="text-2xl font-bold text-brand">{pending.length}</p>
           <p className="text-xs text-[#5E6278]">Pending invitations</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
@@ -218,12 +218,12 @@ export default function AgentAssignmentsPage() {
       {pending.length > 0 && (
         <div className="mb-8">
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#FFD400]" />
+            <span className="w-2 h-2 rounded-full bg-brand" />
             Invitation Pending ({pending.length})
           </h2>
           <div className="space-y-3">
             {pending.map((a) => (
-              <div key={a.id} className="bg-surface rounded-xl border-2 border-[#FFD400]/40 p-5">
+              <div key={a.id} className="bg-surface rounded-xl border-2 border-brand/40 p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <p className="text-sm font-bold mb-1">{a.listing.title}</p>
@@ -236,7 +236,7 @@ export default function AgentAssignmentsPage() {
                     </div>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="text-sm font-bold text-[#FFD400]">
+                    <p className="text-sm font-bold text-brand">
                       £{(a.listing.price / 100).toLocaleString()}
                     </p>
                   </div>
@@ -296,7 +296,7 @@ export default function AgentAssignmentsPage() {
 
                 <Link
                   href={`/agent/assignments/${a.id}`}
-                  className="inline-block mt-4 px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+                  className="inline-block mt-4 px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
                 >
                   View Assignment →
                 </Link>

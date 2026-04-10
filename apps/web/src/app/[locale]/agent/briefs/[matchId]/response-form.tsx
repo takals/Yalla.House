@@ -112,7 +112,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
             placeholder="Introduce yourself and explain why your suggestions are a good fit..."
             rows={4}
             required
-            className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#FFD400]/30"
+            className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30"
           />
           <p className="text-xs text-[#999] mt-1">
             Tip: specific, detailed replies score higher. Include property details, not just "call us".
@@ -201,7 +201,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
         <button
           type="submit"
           disabled={saving || !message.trim()}
-          className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-[#E6C200] transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {saving ? 'Submitting...' : 'Submit Reply'}
         </button>

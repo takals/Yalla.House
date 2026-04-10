@@ -331,7 +331,7 @@ export function PassportForm({ profile, userName }: Props) {
             {/* Decorative glow */}
             <div
               className="absolute -top-8 -right-8 w-24 h-24 rounded-full pointer-events-none"
-              style={{ background: 'rgba(255,212,0,0.08)' }}
+              style={{ background: 'rgba(212,118,78,0.08)' }}
             />
             {/* Header */}
             <div className="flex items-center justify-between mb-4">

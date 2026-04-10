@@ -54,7 +54,7 @@ export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
       >
         <div
           className="absolute -top-6 -right-6 w-20 h-20 rounded-full pointer-events-none"
-          style={{ background: 'rgba(255,212,0,0.08)' }}
+          style={{ background: 'rgba(212,118,78,0.08)' }}
         />
         <div className="flex items-center justify-between mb-3">
           <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand">🛂 Home Passport</span>

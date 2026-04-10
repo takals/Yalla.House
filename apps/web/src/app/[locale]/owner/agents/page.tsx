@@ -7,9 +7,12 @@ type ListingRow = Database['public']['Tables']['listings']['Row']
 type AssignmentRow = Database['public']['Tables']['listing_agent_assignments']['Row']
 type UserRow = Database['public']['Tables']['users']['Row']
 
+type ListingSummary = Pick<ListingRow, 'id' | 'address_line1' | 'city' | 'postcode' | 'status'>
+type AgentSummary = Pick<UserRow, 'id' | 'full_name' | 'email'>
+
 interface AssignmentWithDetails extends AssignmentRow {
-  listing?: ListingRow | null
-  agent?: UserRow | null
+  listing?: ListingSummary | null
+  agent?: AgentSummary | null
 }
 
 export default async function OwnerAgentsPage() {
@@ -25,7 +28,7 @@ export default async function OwnerAgentsPage() {
     .order('created_at', { ascending: false })
     .limit(100)
 
-  const listings: (Pick<ListingRow, 'id' | 'address_line1' | 'city' | 'postcode' | 'status'> | null)[] = listingsData ?? []
+  const listings: (ListingSummary | null)[] = listingsData ?? []
   const listingIds = listings.filter(Boolean).map(l => l!.id)
 
   // Parallel fetch: assignments and agent details

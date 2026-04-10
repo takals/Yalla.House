@@ -32,7 +32,11 @@ export function SearchForm({ defaults }: SearchFormProps) {
   const [intent, setIntent] = useState(defaults?.intent ?? 'buy')
   const [areaInput, setAreaInput] = useState('')
   const [areas, setAreas] = useState<{ name: string; postcode?: string }[]>(
-    defaults?.areas?.map(a => ({ name: a.name ?? '', postcode: a.postcode })) ?? []
+    defaults?.areas?.map(a => {
+      const base: { name: string; postcode?: string } = { name: a.name ?? '' }
+      if (a.postcode !== undefined) base.postcode = a.postcode
+      return base
+    }) ?? []
   )
   const [radiusKm, setRadiusKm] = useState(5)
   const [budgetMin, setBudgetMin] = useState(defaults?.budget_min ? String(defaults.budget_min / 100) : '')

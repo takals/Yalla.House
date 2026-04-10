@@ -96,7 +96,7 @@ export default async function PartnerDashboardPage({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {/* Active Requests */}
         <div className="bg-surface rounded-lg p-5 border border-[#E2E4EB] text-center">
-          <p className="text-3xl font-bold text-[#FFD400]">{activeCount}</p>
+          <p className="text-3xl font-bold text-brand">{activeCount}</p>
           <p className="text-xs text-[#5E6278] mt-1">
             {isLocaleDE ? 'Aktive Anfragen' : 'Active Requests'}
           </p>
@@ -126,7 +126,7 @@ export default async function PartnerDashboardPage({
             <span
               className="inline-block w-4 h-4 rounded-full"
               style={{
-                backgroundColor: profileComplete ? '#16A34A' : '#FFD400',
+                backgroundColor: profileComplete ? '#16A34A' : '#D4764E',
               }}
             />
           </p>
@@ -161,7 +161,7 @@ export default async function PartnerDashboardPage({
               : 'Browse available requests and submit quotes'}
           </p>
           <div className="mt-4 pt-4 border-t border-[#E2E4EB]">
-            <span className="text-sm font-bold text-[#FFD400]">
+            <span className="text-sm font-bold text-brand">
               {activeCount} {isLocaleDE ? 'aktiv' : 'active'}
             </span>
           </div>
@@ -187,7 +187,7 @@ export default async function PartnerDashboardPage({
             <span
               className="text-sm font-bold"
               style={{
-                color: profileComplete ? '#16A34A' : '#FFD400',
+                color: profileComplete ? '#16A34A' : '#D4764E',
               }}
             >
               {profileComplete
@@ -215,7 +215,7 @@ export default async function PartnerDashboardPage({
           </p>
           <Link
             href={`${isLocaleDE ? '' : '/en'}/partner/requests`}
-            className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+            className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
           >
             {isLocaleDE ? 'Anfragen ansehen' : 'View Requests'} →
           </Link>
@@ -236,7 +236,7 @@ export default async function PartnerDashboardPage({
           <div className="flex gap-2 justify-center">
             <Link
               href={`${isLocaleDE ? '' : '/en'}/partner/profile`}
-              className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-[#E6C200] transition"
+              className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
             >
               {isLocaleDE ? 'Profil erstellen' : 'Create Profile'}
             </Link>

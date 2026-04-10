@@ -47,7 +47,15 @@ export default async function ReferralLeadsPage() {
   const referrer = referrerData as Referrer
 
   // Fetch referrals with user data and events
-  const { data: referralsData } = await supabase
+  type ReferralRow = {
+    id: string
+    referred_user_id: string
+    referred_role: string
+    created_at: string
+    user: { full_name: string | null; email: string } | null
+  }
+
+  const { data: referralsRaw } = await supabase
     .from('referrals')
     .select(`
       id, referred_user_id, referred_role, created_at,
@@ -56,29 +64,32 @@ export default async function ReferralLeadsPage() {
     .eq('referrer_id', referrer.id)
     .order('created_at', { ascending: false })
 
-  const referralIds = (referralsData ?? []).map(r => r.id)
+  const referralsData = (referralsRaw ?? []) as unknown as ReferralRow[]
+  const referralIds: string[] = referralsData.map(r => r.id)
 
   // Fetch all events for these referrals
-  const { data: eventsData } = await referralIds.length > 0
-    ? supabase
+  const { data: eventsData } = referralIds.length > 0
+    ? await supabase
         .from('referral_events')
         .select('*')
         .in('referral_id', referralIds)
-    : Promise.resolve({ data: null })
+    : { data: null as ReferralEvent[] | null }
 
   const events = (eventsData ?? []) as ReferralEvent[]
-  const eventsByReferral = events.reduce(
+  const eventsByReferral = events.reduce<Record<string, ReferralEvent[]>>(
     (acc, event) => {
-      if (!acc[event.referral_id]) {
-        acc[event.referral_id] = []
+      const list = acc[event.referral_id]
+      if (list) {
+        list.push(event)
+      } else {
+        acc[event.referral_id] = [event]
       }
-      acc[event.referral_id].push(event)
       return acc
     },
-    {} as Record<string, ReferralEvent[]>
+    {}
   )
 
-  const referralsWithEvents = (referralsData ?? []).map(r => ({
+  const referralsWithEvents = referralsData.map(r => ({
     ...r,
     events: eventsByReferral[r.id] ?? [],
   })) as ReferralWithEvents[]

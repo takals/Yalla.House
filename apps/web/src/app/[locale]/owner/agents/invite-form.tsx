@@ -124,7 +124,7 @@ export function InviteAgentForm({ listings }: Props) {
               key={tierOption}
               className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                 tier === tierOption
-                  ? 'border-brand bg-[rgba(255,212,0,.08)]'
+                  ? 'border-brand bg-[rgba(212,118,78,.08)]'
                   : 'border-[#E2E4EB] bg-surface hover:border-[#D8DBE5]'
               }`}
               onClick={() => setTier(tierOption)}

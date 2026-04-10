@@ -138,16 +138,20 @@ export default async function SearchProfilePage() {
       )}
 
       {/* New search form */}
-      <SearchForm
-        defaults={profile ? {
-          intent: profile.intent ?? 'buy',
-          areas: profile.target_areas ?? [],
-          budget_min: profile.budget_min,
-          budget_max: profile.budget_max,
-          property_types: profile.property_types ?? [],
-          timeline: profile.timeline ?? 'flexible',
-        } : undefined}
-      />
+      {profile ? (
+        <SearchForm
+          defaults={{
+            intent: profile.intent ?? 'buy',
+            areas: (profile.target_areas ?? []) as { name?: string; postcode?: string }[],
+            budget_min: profile.budget_min ?? null,
+            budget_max: profile.budget_max ?? null,
+            property_types: (profile.property_types ?? []) as string[],
+            timeline: profile.timeline ?? 'flexible',
+          }}
+        />
+      ) : (
+        <SearchForm />
+      )}
 
     </div>
   )
