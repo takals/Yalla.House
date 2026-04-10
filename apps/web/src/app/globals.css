@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    --brand: #FFD400;
-    --brand-hover: #E6C200;
+    --brand: #D4764E;
+    --brand-hover: #BF6840;
     --bg: #EDEEF2;
     --surface: #ffffff;
     --text-primary: #0F1117;
@@ -23,7 +23,7 @@
   }
 
   body {
-    @apply bg-bg font-sans text-[#0F1117];
+    @apply font-sans text-[#0F1117];
     line-height: 1.5;
     font-feature-settings: "kern", "liga", "ss01";
   }
@@ -37,7 +37,7 @@
 
 @layer utilities {
   .glass-header {
-    background: rgba(237, 238, 242, 0.88);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
   }
