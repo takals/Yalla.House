@@ -124,8 +124,41 @@ export const distributeBrief = inngest.createFunction(
       })
     }
 
-    // TODO: Future enhancement — send email digest to agents who have
-    // email notifications enabled in their preferences.
+    // Send email notifications to matched agents
+    await step.run('send-agent-emails', async () => {
+      const { sendHunterBriefEmail } = await import('@/lib/resend')
+
+      for (const matchId of matchIds) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: match } = await (db as any)
+          .from('agent_matches')
+          .select('id, agent_id, agent:users!agent_matches_agent_id_fkey(email, full_name)')
+          .eq('id', matchId)
+          .eq('status', 'sent')
+          .single()
+
+        if (!match?.agent) continue
+
+        try {
+          await sendHunterBriefEmail({
+            agentEmail: match.agent.email,
+            agentName: match.agent.full_name,
+            hunterFirstName: hunterFirstName,
+            intent: search.intent,
+            areas: search.areas,
+            budgetMin: search.budget_min,
+            budgetMax: search.budget_max,
+            currency: search.currency ?? 'GBP',
+            propertyTypes: search.property_types,
+            bedroomsMin: search.bedrooms_min,
+            timeline: search.timeline,
+            matchId: matchId,
+          })
+        } catch (err) {
+          console.error(`Failed to email agent ${match.agent_id}:`, err)
+        }
+      }
+    })
 
     return { sent: sentCount, searchRequestId, expiresAt }
   }

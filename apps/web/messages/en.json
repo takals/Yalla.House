@@ -28,6 +28,7 @@
   },
   "howItWorks": {
     "title": "How it works",
+    "subtitle": "Three steps. No commission. Full control.",
     "step1Title": "Create your dashboard",
     "step1Body": "Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale.",
     "step2Title": "Send your brief to agents",
@@ -48,6 +49,17 @@
     "agentTagline": "Win new instructions.",
     "agentBody": "Receive Owner Briefs from motivated sellers in your area. Respond with your proposal and win the instruction — on merit, not marketing spend.",
     "agentCta": "Learn more"
+  },
+  "whyYalla": {
+    "title": "Why Yalla?",
+    "item1Title": "You get a dashboard. Not a bill.",
+    "item1Body": "Every other platform charges you to list. We give you a free dashboard first — market data, comparable sales, a timeline for your sale. The dashboard is yours whether you use an agent or not.",
+    "item2Title": "Agents compete for you.",
+    "item2Body": "Instead of calling one agent and hoping for the best, you send your brief to multiple agents simultaneously. They respond with real proposals. You compare. You choose.",
+    "item3Title": "Your data, always.",
+    "item3Body": "Track every viewing, every offer, every piece of feedback in one place. If you instruct an agent, they connect to your dashboard so you see what's happening in real time.",
+    "item4Title": "We're not agents. We're your tools.",
+    "item4Body": "Yalla is a technology platform, not an estate agency. We don't take commission. We don't list your property. We give you the information and connections to make the best decision."
   },
   "ctaBand": {
     "headline": "Ready to take control of your sale?",

@@ -28,6 +28,7 @@
   },
   "howItWorks": {
     "title": "So funktioniert's",
+    "subtitle": "Drei Schritte. Keine Provision. Volle Kontrolle.",
     "step1Title": "Dashboard erstellen",
     "step1Body": "Geben Sie Ihre Adresse ein und erhalten Sie ein kostenloses Eigentümer-Dashboard mit lokalen Marktdaten, vergleichbaren Verkäufen und einem Zeitplan für Ihren Verkauf.",
     "step2Title": "Brief an Makler senden",
@@ -48,6 +49,17 @@
     "agentTagline": "Gewinnen Sie neue Aufträge.",
     "agentBody": "Erhalten Sie Eigentümer-Briefs von motivierten Verkäufern in Ihrer Gegend. Antworten Sie mit Ihrem Vorschlag und gewinnen Sie den Auftrag — durch Leistung, nicht durch Werbeausgaben.",
     "agentCta": "Mehr erfahren"
+  },
+  "whyYalla": {
+    "title": "Warum Yalla?",
+    "item1Title": "Sie bekommen ein Dashboard. Keine Rechnung.",
+    "item1Body": "Jede andere Plattform verlangt Geld fürs Inserieren. Wir geben Ihnen zuerst ein kostenloses Dashboard — Marktdaten, vergleichbare Verkäufe, einen Zeitplan. Das Dashboard gehört Ihnen, ob Sie einen Makler beauftragen oder nicht.",
+    "item2Title": "Makler konkurrieren um Sie.",
+    "item2Body": "Statt einen Makler anzurufen und das Beste zu hoffen, senden Sie Ihren Brief an mehrere Makler gleichzeitig. Sie antworten mit echten Vorschlägen. Sie vergleichen. Sie entscheiden.",
+    "item3Title": "Ihre Daten, immer.",
+    "item3Body": "Verfolgen Sie jede Besichtigung, jedes Angebot, jedes Feedback an einem Ort. Wenn Sie einen Makler beauftragen, verbindet er sich mit Ihrem Dashboard — Sie sehen alles in Echtzeit.",
+    "item4Title": "Wir sind keine Makler. Wir sind Ihre Werkzeuge.",
+    "item4Body": "Yalla ist eine Technologie-Plattform, kein Maklerunternehmen. Wir nehmen keine Provision. Wir inserieren Ihre Immobilie nicht. Wir geben Ihnen die Informationen und Verbindungen für die beste Entscheidung."
   },
   "ctaBand": {
     "headline": "Bereit, die Kontrolle über Ihren Verkauf zu übernehmen?",

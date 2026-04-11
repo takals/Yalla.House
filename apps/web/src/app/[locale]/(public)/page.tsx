@@ -8,6 +8,7 @@ export default async function HomePage() {
   const stats = await getTranslations('stats')
   const how = await getTranslations('howItWorks')
   const paths = await getTranslations('paths')
+  const why = await getTranslations('whyYalla')
   const cta = await getTranslations('ctaBand')
 
   return (
@@ -71,7 +72,7 @@ export default async function HomePage() {
             {how('title')}
           </h2>
           <p className="text-text-on-dark-secondary text-center mb-12 max-w-xl mx-auto">
-            Three steps. No commission. Full control.
+            {how('subtitle')}
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -182,32 +183,15 @@ export default async function HomePage() {
       <section className="pb-24 px-4">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-title-1 text-white text-center mb-12">
-            Why Yalla?
+            {why('title')}
           </h2>
           <div className="space-y-8">
-            {[
-              {
-                title: 'You get a dashboard. Not a bill.',
-                body: 'Every other platform charges you to list. We give you a free dashboard first — market data, comparable sales, a timeline for your sale. The dashboard is yours whether you use an agent or not.',
-              },
-              {
-                title: 'Agents compete for you.',
-                body: 'Instead of calling one agent and hoping for the best, you send your brief to multiple agents simultaneously. They respond with real proposals. You compare. You choose.',
-              },
-              {
-                title: 'Your data, always.',
-                body: 'Track every viewing, every offer, every piece of feedback in one place. If you instruct an agent, they connect to your dashboard so you see what\'s happening in real time.',
-              },
-              {
-                title: 'We\'re not agents. We\'re your tools.',
-                body: 'Yalla is a technology platform, not an estate agency. We don\'t take commission. We don\'t list your property. We give you the information and connections to make the best decision.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="flex gap-4">
+            {([1, 2, 3, 4] as const).map((n) => (
+              <div key={n} className="flex gap-4">
                 <div className="w-1.5 rounded-full bg-brand flex-shrink-0 self-stretch" />
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1">{item.title}</h3>
-                  <p className="text-sm text-text-on-dark-secondary leading-relaxed">{item.body}</p>
+                  <h3 className="text-lg font-bold text-white mb-1">{why(`item${n}Title`)}</h3>
+                  <p className="text-sm text-text-on-dark-secondary leading-relaxed">{why(`item${n}Body`)}</p>
                 </div>
               </div>
             ))}

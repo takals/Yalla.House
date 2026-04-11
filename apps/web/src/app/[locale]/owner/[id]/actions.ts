@@ -330,6 +330,17 @@ export async function sendBriefAction(
     }
   }
 
+  // Record brief-sent metadata on the listing
+  if (sentCount > 0) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase.from('listings') as any)
+      .update({
+        brief_sent_at: new Date().toISOString(),
+        brief_agent_count: sentCount,
+      })
+      .eq('id', listingId)
+  }
+
   return { success: true, agentCount: sentCount }
 }
 

@@ -106,6 +106,93 @@ export async function sendOwnerBriefEmail(opts: {
   }
 }
 
+// ── Hunter Brief → agent (search notification) ───────────────────────────────
+
+export async function sendHunterBriefEmail(opts: {
+  agentEmail: string
+  agentName: string | null
+  hunterFirstName: string
+  intent: string
+  areas: Array<{ name?: string }> | null
+  budgetMin: number | null
+  budgetMax: number | null
+  currency: string
+  propertyTypes: string[] | null
+  bedroomsMin: number | null
+  timeline: string | null
+  matchId: string
+}): Promise<void> {
+  const greeting = opts.agentName ? `Hi ${opts.agentName.split(' ')[0]},` : 'Hi,'
+
+  const areaNames = (opts.areas ?? [])
+    .map((a) => a.name)
+    .filter(Boolean)
+    .join(', ') || 'your area'
+
+  const intentLabel = opts.intent === 'rent' ? 'rent' : 'buy'
+
+  const formatBudget = (val: number | null): string => {
+    if (!val) return '—'
+    const symbol = opts.currency === 'GBP' ? '£' : '€'
+    return `${symbol}${(val / 100).toLocaleString('en-GB')}`
+  }
+
+  const budgetRow = (opts.budgetMin || opts.budgetMax)
+    ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Budget</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${formatBudget(opts.budgetMin)} – ${formatBudget(opts.budgetMax)}</td></tr>`
+    : ''
+
+  const typesRow = opts.propertyTypes && opts.propertyTypes.length > 0
+    ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Types</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.propertyTypes.join(', ')}</td></tr>`
+    : ''
+
+  const bedsRow = opts.bedroomsMin != null
+    ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Min. bedrooms</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.bedroomsMin}+</td></tr>`
+    : ''
+
+  const timelineRow = opts.timeline
+    ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Timeline</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.timeline}</td></tr>`
+    : ''
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
+    <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
+      A home hunter (<strong style="color:#0F1117;">${opts.hunterFirstName}</strong>) is looking to <strong style="color:#0F1117;">${intentLabel}</strong> in <strong style="color:#0F1117;">${areaNames}</strong> and has been matched with you on Yalla.House.
+    </p>
+
+    <div style="background:#F5F5FA;border-radius:10px;padding:20px;margin-bottom:24px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Looking to</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${intentLabel === 'rent' ? 'Rent' : 'Buy'}</td></tr>
+        <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Areas</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${areaNames}</td></tr>
+        ${budgetRow}
+        ${typesRow}
+        ${bedsRow}
+        ${timelineRow}
+      </table>
+    </div>
+
+    <p style="margin:0 0 4px;font-size:15px;color:#5E6278;">
+      Sign in to your agent dashboard to view the full brief and respond with suitable properties.
+    </p>
+
+    ${ctaButton('View Brief & Respond', `${BASE_URL}/agent/briefs`)}
+
+    <p style="margin-top:24px;font-size:13px;color:#999;">
+      You're receiving this because your coverage area matches this hunter's search. Contact details are not shared until the hunter chooses to connect.
+    </p>
+  `)
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: opts.agentEmail,
+      subject: `New Search Brief — ${opts.hunterFirstName} wants to ${intentLabel} in ${areaNames}`,
+      html,
+    })
+  } catch (err) {
+    console.error('sendHunterBriefEmail failed:', err)
+  }
+}
+
 // ── Email 1: New viewing request → owner ─────────────────────────────────────
 
 export async function sendNewViewingRequestEmail(opts: {

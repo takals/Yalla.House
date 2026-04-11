@@ -22,6 +22,7 @@ export default async function EditListingPage({ params }: Props) {
       size_sqm, bedrooms, bathrooms, floor, total_floors, construction_year,
       sale_price, rent_price, price_qualifier, nebenkosten, kaution,
       title_de, description_de, country_fields, created_at,
+      brief_sent_at, brief_agent_count,
       listing_media(id, url, thumb_url, is_primary, sort_order, type)
     `)
     .eq('id', id)
