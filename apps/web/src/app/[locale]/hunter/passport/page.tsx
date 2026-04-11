@@ -1,9 +1,11 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import Link from 'next/link'
-import { PassportForm } from './passport-form'
+import { getTranslations } from 'next-intl/server'
+import { PassportPageClient } from './passport-page-client'
 
 export default async function PassportPage() {
+  const t = await getTranslations('hunterPassport')
+  const ti = await getTranslations('intake')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -11,7 +13,7 @@ export default async function PassportPage() {
   const [profileResult, userResult] = await Promise.all([
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_profiles') as any)
-      .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline, brief_updated_at')
+      .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline')
       .eq('user_id', userId)
       .maybeSingle(),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,64 +23,86 @@ export default async function PassportPage() {
       .maybeSingle(),
   ])
 
+  // Prepare translations dict for client component
+  const intakeTranslations: Record<string, string> = {
+    greeting: ti('hunterPassport.greeting'),
+    placeholder: ti('placeholder'),
+    send: ti('send'),
+    reviewTitle: ti('reviewTitle'),
+    reviewEditBtn: ti('reviewEdit'),
+    submitBtn: ti('submit'),
+    errorMsg: ti('errorGeneric'),
+    modeChat: ti('modeChat'),
+    modeClassic: ti('modeClassic'),
+    voiceStart: ti('voiceStart'),
+    voiceStop: ti('voiceStop'),
+    voiceNotSupported: ti('voiceNotSupported'),
+    // Questions
+    q_intent: ti('hunterPassport.intentQ'),
+    q_target_areas: ti('hunterPassport.areasQ'),
+    q_budget_min: ti('hunterPassport.budgetMinQ'),
+    q_budget_max: ti('hunterPassport.budgetMaxQ'),
+    q_property_types: ti('hunterPassport.propertyTypesQ'),
+    q_min_bedrooms: ti('hunterPassport.bedroomsQ'),
+    q_must_haves: ti('hunterPassport.mustHavesQ'),
+    q_dealbreakers: ti('hunterPassport.dealbreakersQ'),
+    q_finance_status: ti('hunterPassport.financeQ'),
+    q_timeline: ti('hunterPassport.timelineQ'),
+    // Option labels
+    opt_buy: 'Buy',
+    opt_rent: 'Rent',
+    opt_east_london: 'East London',
+    opt_north_london: 'North London',
+    opt_south_east_london: 'South East London',
+    opt_zone_2: 'Zone 2',
+    opt_zone_3: 'Zone 3',
+    opt_west_london: 'West London',
+    opt_south_west_london: 'South West London',
+    opt_flat: 'Flat',
+    opt_terraced: 'Terraced',
+    opt_semi_detached: 'Semi-detached',
+    opt_detached: 'Detached',
+    opt_new_build: 'New build',
+    opt_period: 'Period',
+    opt_studio: 'Studio',
+    opt_1br: '1 bed',
+    opt_2br: '2 beds',
+    opt_3br: '3 beds',
+    opt_4plus: '4+ beds',
+    opt_balcony: 'Balcony',
+    opt_near_station: 'Near station',
+    opt_garden: 'Garden',
+    opt_parking: 'Parking',
+    opt_ev_charging: 'EV charging',
+    opt_period_features: 'Period features',
+    opt_open_plan: 'Open plan',
+    opt_guest_wc: 'Guest WC',
+    opt_storage: 'Storage',
+    opt_quiet_street: 'Quiet street',
+    opt_no_auctions: 'No auctions',
+    opt_no_retirement: 'No retirement homes',
+    opt_no_ground_floor: 'No ground floor',
+    opt_no_top_floor_no_lift: 'No top floor without lift',
+    opt_no_shared_ownership: 'No shared ownership',
+    opt_no_ex_social: 'No ex-social',
+    opt_no_estate_only: 'No estate-agency only',
+    opt_not_specified: 'Not specified',
+    opt_mortgage_pending: 'Mortgage in progress',
+    opt_mortgage_approved: 'Mortgage in principle',
+    opt_cash: 'Cash buyer',
+    opt_asap: 'As soon as possible',
+    opt_3m: '3 months',
+    opt_6m: '3–6 months',
+    opt_1y: '1 year',
+    opt_flexible: 'Flexible',
+  }
+
   return (
-    <div className="max-w-5xl">
-
-        {/* Hero */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 bg-[#FFFBE0] text-[#7A5F00] text-xs font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide border border-[#FFD400]">
-            🛂 Your Verified Buyer Identity
-          </div>
-          <h1 className="text-3xl font-extrabold tracking-tight mb-3">
-            Create Your Home Passport
-          </h1>
-          <p className="text-[#5E6278] text-base max-w-2xl mb-6">
-            Set it once. Agents request access — you stay in control.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl">
-            {[
-              'A portable buyer profile you own and control',
-              'Agents request access — you decide who sees it',
-              'Verified finance status builds agent trust instantly',
-              'Filter newsletters — only strong matches reach you',
-              'Surface off-market opportunities before portals do',
-            ].map(benefit => (
-              <div key={benefit} className="flex items-start gap-2 text-sm text-[#0F1117]">
-                <span className="text-green-600 font-bold mt-0.5 flex-shrink-0">✓</span>
-                <span>{benefit}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* How it works */}
-        <div className="bg-surface rounded-2xl p-6 mb-10 border border-[#E2E4EB]">
-          <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-5">How Your Home Passport Works</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              { n: '1', title: 'Set your criteria', body: 'Location, budget, property type, must-haves and finance status.' },
-              { n: '2', title: 'Agents request access', body: 'Agents discover your Passport and request to connect — you approve.' },
-              { n: '3', title: 'Only matches reach you', body: 'Everything irrelevant is filtered out. Strong opportunities only.' },
-            ].map(step => (
-              <div key={step.n} className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center text-sm font-black flex-shrink-0">
-                  {step.n}
-                </div>
-                <div>
-                  <p className="font-semibold text-sm mb-1">{step.title}</p>
-                  <p className="text-xs text-[#5E6278] leading-relaxed">{step.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Form */}
-        <PassportForm
-          profile={profileResult.data}
-          userName={userResult.data?.full_name ?? null}
-        />
-
-      </div>
+    <PassportPageClient
+      userId={userId}
+      profile={profileResult.data}
+      userName={userResult.data?.full_name ?? null}
+      translations={intakeTranslations}
+    />
   )
 }

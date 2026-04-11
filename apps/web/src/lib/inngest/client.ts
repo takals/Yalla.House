@@ -25,4 +25,20 @@ export type Events = {
       ownerId: string
     }
   }
+  'intake/session.completed': {
+    data: {
+      sessionId: string
+      userId: string
+      flowId: string
+      voiceUsed: boolean
+      fieldsFromMemory: number
+      fieldsTotal: number
+      durationSeconds: number
+    }
+  }
+  'intake/patterns.analyze': {
+    data: {
+      flowId: string
+    }
+  }
 }
