@@ -1,122 +1,86 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { LayoutDashboard, Send, BarChart3, Home, Search, Handshake } from 'lucide-react'
-import HeroHeadline from '@/components/hero-headline'
+import { Home, Search, Handshake } from 'lucide-react'
+import HomepageHero from '@/components/homepage-hero'
 
 export default async function HomePage() {
   const t = await getTranslations('hero')
+  const th = await getTranslations('heroHunter')
   const stats = await getTranslations('stats')
+  const statsH = await getTranslations('statsHunter')
   const how = await getTranslations('howItWorks')
-  const paths = await getTranslations('paths')
+  const howH = await getTranslations('howItWorksHunter')
   const why = await getTranslations('whyYalla')
+  const whyH = await getTranslations('whyYallaHunter')
+  const paths = await getTranslations('paths')
   const cta = await getTranslations('ctaBand')
 
   return (
     <main className="bg-page-dark min-h-screen">
 
-      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <HeroHeadline
-            prefix={t('headlinePrefix')}
-            words={t('headlineWords').split(',')}
-            suffix={t('headlineSuffix')}
-          />
-          <p className="text-lede text-text-on-dark-secondary max-w-2xl mx-auto mb-10">
-            {t('subline')}
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/owner"
-              className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
-              style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-            >
-              {t('cta')} →
-            </Link>
-            <Link
-              href="/hunter/brief"
-              className="inline-flex items-center text-text-on-dark-secondary hover:text-white font-medium px-6 py-3.5 rounded-lg transition-[color] duration-300 text-base border border-white/10 hover:border-white/20"
-            >
-              {t('ctaHunter')} →
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ── MODE-AWARE: HERO + STATS + HOW IT WORKS + WHY YALLA ──────── */}
+      <HomepageHero
+        toggleOwnerLabel={t('toggleOwner')}
+        toggleHunterLabel={t('toggleHunter')}
+        owner={{
+          headlinePrefix: t('headlinePrefix'),
+          headlineWords: t('headlineWords').split(','),
+          headlineSuffix: t('headlineSuffix'),
+          subline: t('subline'),
+          cta: t('cta'),
+          ctaHref: '/owner',
+          stats: [
+            { value: stats('stat1Value'), label: stats('stat1Label') },
+            { value: stats('stat2Value'), label: stats('stat2Label') },
+            { value: stats('stat3Value'), label: stats('stat3Label') },
+            { value: stats('stat4Value'), label: stats('stat4Label') },
+          ],
+          howTitle: how('title'),
+          howSubtitle: how('subtitle'),
+          steps: [
+            { title: how('step1Title'), body: how('step1Body') },
+            { title: how('step2Title'), body: how('step2Body') },
+            { title: how('step3Title'), body: how('step3Body') },
+          ],
+          whyTitle: why('title'),
+          whyItems: [
+            { title: why('item1Title'), body: why('item1Body') },
+            { title: why('item2Title'), body: why('item2Body') },
+            { title: why('item3Title'), body: why('item3Body') },
+            { title: why('item4Title'), body: why('item4Body') },
+          ],
+        }}
+        hunter={{
+          headlinePrefix: th('headlinePrefix'),
+          headlineWords: th('headlineWords').split(','),
+          headlineSuffix: th('headlineSuffix'),
+          subline: th('subline'),
+          cta: th('cta'),
+          ctaHref: '/hunter/passport',
+          stats: [
+            { value: statsH('stat1Value'), label: statsH('stat1Label') },
+            { value: statsH('stat2Value'), label: statsH('stat2Label') },
+            { value: statsH('stat3Value'), label: statsH('stat3Label') },
+            { value: statsH('stat4Value'), label: statsH('stat4Label') },
+          ],
+          howTitle: howH('title'),
+          howSubtitle: howH('subtitle'),
+          steps: [
+            { title: howH('step1Title'), body: howH('step1Body') },
+            { title: howH('step2Title'), body: howH('step2Body') },
+            { title: howH('step3Title'), body: howH('step3Body') },
+          ],
+          whyTitle: whyH('title'),
+          whyItems: [
+            { title: whyH('item1Title'), body: whyH('item1Body') },
+            { title: whyH('item2Title'), body: whyH('item2Body') },
+            { title: whyH('item3Title'), body: whyH('item3Body') },
+            { title: whyH('item4Title'), body: whyH('item4Body') },
+          ],
+        }}
+      />
 
-      {/* ── STATS STRIP ──────────────────────────────────────────────────────── */}
-      <section className="pb-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { value: stats('stat1Value'), label: stats('stat1Label') },
-              { value: stats('stat2Value'), label: stats('stat2Label') },
-              { value: stats('stat3Value'), label: stats('stat3Label') },
-              { value: stats('stat4Value'), label: stats('stat4Label') },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-card-dark rounded-card-dark p-5 text-center shadow-dark-card"
-              >
-                <div className="text-2xl font-bold text-brand mb-1">{stat.value}</div>
-                <div className="text-xs text-text-on-dark-muted leading-snug">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── HOW IT WORKS ─────────────────────────────────────────────────────── */}
-      <section className="pb-24 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-title-1 text-white text-center mb-4">
-            {how('title')}
-          </h2>
-          <p className="text-text-on-dark-secondary text-center mb-12 max-w-xl mx-auto">
-            {how('subtitle')}
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <LayoutDashboard size={24} />,
-                step: '01',
-                title: how('step1Title'),
-                body: how('step1Body'),
-              },
-              {
-                icon: <Send size={24} />,
-                step: '02',
-                title: how('step2Title'),
-                body: how('step2Body'),
-              },
-              {
-                icon: <BarChart3 size={24} />,
-                step: '03',
-                title: how('step3Title'),
-                body: how('step3Body'),
-              },
-            ].map((item) => (
-              <div
-                key={item.step}
-                className="bg-surface-dark rounded-card-dark p-6 group hover:bg-card-dark transition-[background-color] duration-300"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand">
-                    {item.icon}
-                  </div>
-                  <span className="text-xs font-bold text-text-on-dark-muted uppercase tracking-widest">
-                    Step {item.step}
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                <p className="text-sm text-text-on-dark-secondary leading-relaxed">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── THREE PATHS ──────────────────────────────────────────────────────── */}
+      {/* ── THREE PATHS ──────────────────────────────────────────────────── */}
       <section className="pb-24 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-3 gap-6">
@@ -179,29 +143,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── WHY YALLA ────────────────────────────────────────────────────────── */}
-      <section className="pb-24 px-4">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-title-1 text-white text-center mb-12">
-            {why('title')}
-          </h2>
-          <div className="space-y-8">
-            {([1, 2, 3, 4] as const).map((n) => (
-              <div key={n} className="flex gap-4">
-                <div className="w-1.5 rounded-full bg-brand flex-shrink-0 self-stretch" />
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-1">{why(`item${n}Title`)}</h3>
-                  <p className="text-sm text-text-on-dark-secondary leading-relaxed">{why(`item${n}Body`)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA BAND ─────────────────────────────────────────────────────────── */}
+      {/* ── CTA BAND ─────────────────────────────────────────────────────── */}
       <section className="relative py-20 px-4 overflow-hidden">
-        {/* Radial glow */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{

@@ -14,7 +14,36 @@
     "headlineSuffix": ", unter Ihrer Kontrolle.",
     "subline": "Kostenloses Eigentümer-Dashboard. Marktdaten. Vergleichbare Verkäufe. Dann senden Sie Ihr Brief an konkurrierende Makler — und wählen Sie das beste Angebot.",
     "cta": "Kostenloses Dashboard erstellen",
-    "ctaHunter": "Ich suche eine Immobilie"
+    "ctaHunter": "Ich suche eine Immobilie",
+    "toggleOwner": "Ich verkaufe",
+    "toggleHunter": "Ich suche"
+  },
+  "heroHunter": {
+    "headlinePrefix": "Ihre Immobilien",
+    "headlineWords": "suche,kauf",
+    "headlineSuffix": ", endlich organisiert.",
+    "subline": "Sagen Sie uns, wonach Sie suchen. Wir verbinden Sie mit lokalen Maklern, die Ihnen passende Immobilien senden — gefiltert, bewertet und in einem Dashboard.",
+    "cta": "Home Passport erstellen"
+  },
+  "statsHunter": {
+    "stat1Value": "12.000+",
+    "stat1Label": "Makler in unserem Netzwerk in ganz Großbritannien",
+    "stat2Value": "83 %",
+    "stat2Label": "der Suchenden sagen, Makler senden irrelevante Angebote",
+    "stat3Value": "0 €",
+    "stat3Label": "Kosten Ihres Yalla Home Passport — immer kostenlos",
+    "stat4Value": "30 Sek.",
+    "stat4Label": "bis Ihre Suche steht und Sie mit Maklern verbunden werden"
+  },
+  "howItWorksHunter": {
+    "title": "So funktioniert's",
+    "subtitle": "Drei Schritte. Kein Spam. Nur was Sie wollen.",
+    "step1Title": "Home Passport erstellen",
+    "step1Body": "Geben Sie Ihre Gebiete, Ihr Budget, den Immobilientyp und Ihre Anforderungen ein. Dauert zwei Minuten — und ist für immer kostenlos.",
+    "step2Title": "Wir matchen Sie mit Maklern",
+    "step2Body": "Lokale Makler in Ihrer Gegend erhalten Ihren Brief. Sie antworten mit Immobilien, die wirklich zu Ihren Kriterien passen — keine Massen-E-Mails.",
+    "step3Title": "Alles in einem Dashboard",
+    "step3Body": "Makler-E-Mails, Inserate, Besichtigungsanfragen — alles gefiltert und organisiert in Ihrem Dashboard. Kein Posteingangs-Chaos mehr."
   },
   "stats": {
     "stat1Value": "5.000 €+",
@@ -60,6 +89,17 @@
     "item3Body": "Verfolgen Sie jede Besichtigung, jedes Angebot, jedes Feedback an einem Ort. Wenn Sie einen Makler beauftragen, verbindet er sich mit Ihrem Dashboard — Sie sehen alles in Echtzeit.",
     "item4Title": "Wir sind keine Makler. Wir sind Ihre Werkzeuge.",
     "item4Body": "Yalla ist eine Technologie-Plattform, kein Maklerunternehmen. Wir nehmen keine Provision. Wir inserieren Ihre Immobilie nicht. Wir geben Ihnen die Informationen und Verbindungen für die beste Entscheidung."
+  },
+  "whyYallaHunter": {
+    "title": "Warum Yalla?",
+    "item1Title": "Schluss mit der E-Mail-Flut von Maklern.",
+    "item1Body": "Makler versenden dieselben Inserate an Tausende. 90 % davon passen nicht zu dem, was Sie suchen. Yalla filtert alles nach Ihren Kriterien — nur relevante Immobilien erreichen Ihr Dashboard.",
+    "item2Title": "Makler arbeiten für Sie. Nicht umgekehrt.",
+    "item2Body": "Erstellen Sie Ihren Home Passport einmalig und lassen Sie Makler mit passenden Immobilien auf Sie zukommen. Kein Scrollen mehr. Kein Hinterherlaufen. Sie setzen den Brief — sie liefern.",
+    "item3Title": "Alles an einem Ort.",
+    "item3Body": "Besichtigungen, Angebote, Makler-Nachrichten, Immobiliendetails — alles in Ihrem Dashboard. Keine verstreuten WhatsApp-Threads, keine verlorenen E-Mails, keine vergessenen Termine.",
+    "item4Title": "Ihre Daten gehören Ihnen.",
+    "item4Body": "Wir verkaufen Ihre Daten nicht. Makler sehen nur Ihren Vornamen, bis Sie sich für eine Verbindung entscheiden. Sie kontrollieren, wer Sie kontaktiert und wann."
   },
   "ctaBand": {
     "headline": "Bereit, die Kontrolle über Ihren Verkauf zu übernehmen?",

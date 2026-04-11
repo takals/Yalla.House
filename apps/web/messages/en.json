@@ -14,7 +14,36 @@
     "headlineSuffix": ", under your control.",
     "subline": "Free owner dashboard. Market data. Comparable sales. Then send your brief to competing agents — and choose the best deal.",
     "cta": "Create your free dashboard",
-    "ctaHunter": "I'm looking to buy"
+    "ctaHunter": "I'm looking to buy",
+    "toggleOwner": "I'm selling",
+    "toggleHunter": "I'm searching"
+  },
+  "heroHunter": {
+    "headlinePrefix": "Your property ",
+    "headlineWords": "search,purchase",
+    "headlineSuffix": ", finally organised.",
+    "subline": "Tell us what you're looking for. We match you with local agents who send you relevant properties — filtered, ranked, and in one dashboard.",
+    "cta": "Create your Home Passport"
+  },
+  "statsHunter": {
+    "stat1Value": "12,000+",
+    "stat1Label": "Agents in our network across the UK",
+    "stat2Value": "83%",
+    "stat2Label": "of hunters say agents send irrelevant listings",
+    "stat3Value": "£0",
+    "stat3Label": "Cost of your Yalla Home Passport — always free",
+    "stat4Value": "30 sec",
+    "stat4Label": "to set your search and get matched with agents"
+  },
+  "howItWorksHunter": {
+    "title": "How it works",
+    "subtitle": "Three steps. Zero spam. Only what you want.",
+    "step1Title": "Build your Home Passport",
+    "step1Body": "Tell us your areas, budget, property type, and must-haves. Takes two minutes — and it's free forever.",
+    "step2Title": "We match you with agents",
+    "step2Body": "Local agents in your area receive your brief. They respond with properties that actually fit your criteria — not bulk mailouts.",
+    "step3Title": "Everything in one dashboard",
+    "step3Body": "Agent emails, listings, viewing requests — all filtered and organised in your dashboard. No more inbox chaos."
   },
   "stats": {
     "stat1Value": "£5,000+",
@@ -60,6 +89,17 @@
     "item3Body": "Track every viewing, every offer, every piece of feedback in one place. If you instruct an agent, they connect to your dashboard so you see what's happening in real time.",
     "item4Title": "We're not agents. We're your tools.",
     "item4Body": "Yalla is a technology platform, not an estate agency. We don't take commission. We don't list your property. We give you the information and connections to make the best decision."
+  },
+  "whyYallaHunter": {
+    "title": "Why Yalla?",
+    "item1Title": "Stop drowning in agent emails.",
+    "item1Body": "Agents blast the same listings to thousands. 90% of what you receive doesn't match what you want. Yalla filters everything through your criteria so only relevant properties reach your dashboard.",
+    "item2Title": "Agents work for you. Not the other way around.",
+    "item2Body": "Create your Home Passport once and let agents come to you with properties that fit. No more scrolling. No more chasing. You set the brief — they deliver.",
+    "item3Title": "One place for everything.",
+    "item3Body": "Viewings, offers, agent messages, property details — all tracked in your dashboard. No scattered WhatsApp threads, no lost emails, no forgotten viewings.",
+    "item4Title": "Your data stays yours.",
+    "item4Body": "We don't sell your details. Agents only see your first name until you choose to connect. You control who contacts you and when."
   },
   "ctaBand": {
     "headline": "Ready to take control of your sale?",

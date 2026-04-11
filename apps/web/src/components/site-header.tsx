@@ -50,10 +50,13 @@ export async function SiteHeader() {
           </Link>
           <Link
             href={user ? accountHref : '/auth/login'}
-            className="text-[0.95rem] font-semibold text-white bg-brand hover:bg-brand-hover px-6 py-2.5 rounded-lg transition-[background-color] duration-300 whitespace-nowrap"
+            className={user
+              ? 'text-[0.95rem] font-semibold text-white bg-brand hover:bg-brand-hover px-6 py-2.5 rounded-lg transition-[background-color] duration-300 whitespace-nowrap'
+              : 'text-[0.95rem] font-semibold text-white hover:text-brand-hover transition-[color] duration-[400ms] whitespace-nowrap'
+            }
             style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
           >
-            {user ? t('dashboard') : t('listYourPlace')}
+            {user ? t('dashboard') : t('login')}
           </Link>
         </nav>
       </div>
