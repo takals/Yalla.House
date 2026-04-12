@@ -1,4 +1,17 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Privacy Policy | Yalla.House' : 'Datenschutzerklärung | Yalla.House',
+    description: isEnglish
+      ? 'Privacy policy and data protection information for Yalla.House.'
+      : 'Datenschutzerklärung und Datenschutzrichtlinien von Yalla.House.',
+  }
+}
 
 export default function DataProtectionPage() {
   const lastUpdated = '01.04.2026'

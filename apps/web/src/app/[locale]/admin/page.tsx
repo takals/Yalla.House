@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { createServiceClient } from '@/lib/supabase/server'
@@ -20,6 +21,22 @@ const VIEWING_STYLES: Record<string, string> = {
   cancelled: 'bg-gray-100 text-gray-500',
   completed: 'bg-blue-50 text-blue-700',
   no_show: 'bg-red-50 text-red-600',
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Admin Dashboard | Yalla.House' : 'Admin-Dashboard | Yalla.House',
+    description: isEnglish
+      ? 'Manage the Yalla platform and monitor system activity.'
+      : 'Verwalten Sie die Yalla-Plattform und überwachen Sie das System.',
+    robots: {
+      index: false,
+      follow: false,
+    },
+  }
 }
 
 export default async function AdminPage() {

@@ -1,4 +1,17 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Legal Notice | Yalla.House' : 'Impressum | Yalla.House',
+    description: isEnglish
+      ? 'Legal notice and contact information for Yalla.House.'
+      : 'Impressum und rechtliche Informationen zu Yalla.House.',
+  }
+}
 
 export default function ImpressumPage() {
   const lastUpdated = '01.04.2026'

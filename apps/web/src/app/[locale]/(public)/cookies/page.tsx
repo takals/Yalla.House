@@ -1,4 +1,17 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Cookie Policy | Yalla.House' : 'Cookie-Richtlinie | Yalla.House',
+    description: isEnglish
+      ? 'Cookie policy and preferences for Yalla.House.'
+      : 'Cookie-Richtlinie und Einstellungen für Yalla.House.',
+  }
+}
 
 export default function CookiePolicyPage() {
   const lastUpdated = '01.04.2026'

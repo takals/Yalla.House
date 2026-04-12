@@ -1,7 +1,39 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { Home, Search, Handshake } from 'lucide-react'
 import HomepageHero from '@/components/homepage-hero'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Sell Your Home Commission-Free | Yalla.House' : 'Immobilie provisionsfrei verkaufen | Yalla.House',
+    description: isEnglish
+      ? 'Sell your home for free without an agent. List on Rightmove & Zoopla. Keep every pound. Yalla.House makes home selling simple.'
+      : 'Verkaufen Sie Ihre Immobilie ohne Makler und behalten Sie jede Provision. Kostenlos. Einfach. Transparent.',
+    keywords: isEnglish
+      ? ['sell home', 'free property sale', 'commission-free', 'home selling', 'property listings']
+      : ['Immobilie verkaufen', 'provisionsfrei', 'Makler-Alternative', 'kostenlos', 'Immobilienverkauf'],
+    openGraph: {
+      type: 'website',
+      title: isEnglish ? 'Sell Your Home Commission-Free | Yalla.House' : 'Immobilie provisionsfrei verkaufen | Yalla.House',
+      description: isEnglish
+        ? 'Sell your home for free without an agent. Keep every pound.'
+        : 'Verkaufen Sie Ihre Immobilie ohne Makler und behalten Sie jede Provision.',
+      url: isEnglish ? 'https://yalla.house/en' : 'https://yalla.house',
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Yalla.House - Commission-Free Property Selling',
+        },
+      ],
+    },
+  }
+}
 
 export default async function HomePage() {
   const t = await getTranslations('hero')

@@ -1,6 +1,35 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Check, Star } from 'lucide-react'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'About Us — Mission & Values | Yalla.House' : 'Über uns — Mission & Werte | Yalla.House',
+    description: isEnglish
+      ? 'Yalla.House makes property selling transparent, fair, and commission-free. No agent fees. Full control.'
+      : 'Yalla.House macht Immobilienverkauf transparent, fair und provisionsfrei. Ohne Makler-Gebühren. Volle Kontrolle.',
+    openGraph: {
+      type: 'website',
+      title: isEnglish ? 'About Us — Mission & Values | Yalla.House' : 'Über uns — Mission & Werte | Yalla.House',
+      description: isEnglish
+        ? 'Yalla.House makes property selling transparent, fair, and commission-free. No agent fees. Full control.'
+        : 'Yalla.House macht Immobilienverkauf transparent, fair und provisionsfrei. Ohne Makler-Gebühren. Volle Kontrolle.',
+      url: isEnglish ? 'https://yalla.house/en/about' : 'https://yalla.house/about',
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Yalla.House',
+        },
+      ],
+    },
+  }
+}
 
 export default async function AboutPage() {
   const t = await getTranslations('about')

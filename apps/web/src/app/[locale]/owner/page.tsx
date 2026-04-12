@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
@@ -12,6 +13,22 @@ type MessageThread = Database['public']['Tables']['message_threads']['Row']
 
 interface Props {
   searchParams: Promise<{ billing?: string }>
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Owner Dashboard | Yalla.House' : 'Eigentümer-Dashboard | Yalla.House',
+    description: isEnglish
+      ? 'Manage your property sale. Track viewings, offers, and agent proposals.'
+      : 'Verwalten Sie Ihren Immobilienverkauf. Verfolgen Sie Besichtigungen, Angebote und Makler-Vorschläge.',
+    robots: {
+      index: false,
+      follow: false,
+    },
+  }
 }
 
 export default async function OwnerDashboard({ searchParams }: Props) {

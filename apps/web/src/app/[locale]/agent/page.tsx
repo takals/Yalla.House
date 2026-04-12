@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
@@ -20,6 +21,22 @@ interface RawAssignment {
     finance_status: string | null
     brief_updated_at: string | null
   } | null
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Agent Dashboard | Yalla.House' : 'Makler-Dashboard | Yalla.House',
+    description: isEnglish
+      ? 'Manage your listings, viewings, and communication with owners.'
+      : 'Verwalten Sie Ihre Aufträge, Besichtigungen und Kommunikation mit Eigentümern.',
+    robots: {
+      index: false,
+      follow: false,
+    },
+  }
 }
 
 export default async function AgentPage() {

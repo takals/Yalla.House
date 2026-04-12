@@ -1,10 +1,39 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import {
   LayoutDashboard, Send, BarChart3, Shield,
   Camera, ScanLine, FileText, Megaphone,
   CheckCircle2, ArrowRight,
 } from 'lucide-react'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Services & Pricing | Yalla.House' : 'Dienstleistungen & Preise | Yalla.House',
+    description: isEnglish
+      ? 'Solutions for owners, home hunters, and agents. Free dashboards and comprehensive marketing tools.'
+      : 'Lösungen für Eigentümer, Suchende und Makler. Kostenlose Dashboards und umfangreiche Marketingtools.',
+    openGraph: {
+      type: 'website',
+      title: isEnglish ? 'Services & Pricing | Yalla.House' : 'Dienstleistungen & Preise | Yalla.House',
+      description: isEnglish
+        ? 'Solutions for owners, home hunters, and agents. Free dashboards and comprehensive marketing tools.'
+        : 'Lösungen für Eigentümer, Suchende und Makler. Kostenlose Dashboards und umfangreiche Marketingtools.',
+      url: isEnglish ? 'https://yalla.house/en/services' : 'https://yalla.house/services',
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Yalla.House',
+        },
+      ],
+    },
+  }
+}
 
 export default async function ServicesPage() {
   const t = await getTranslations('services')

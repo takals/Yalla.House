@@ -1,4 +1,17 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'GDPR | Yalla.House' : 'DSGVO | Yalla.House',
+    description: isEnglish
+      ? 'GDPR policy and data protection officer contact.'
+      : 'DSGVO-Richtlinien und Datenschutzbeauftragte Kontakt.',
+  }
+}
 
 export default function GDPRPage() {
   const lastUpdated = '01.04.2026'

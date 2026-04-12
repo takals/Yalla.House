@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
@@ -8,6 +9,36 @@ type Listing = Database['public']['Tables']['listings']['Row']
 
 interface Props {
   params: { id: string; locale: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id, locale } = params
+  const supabase = await createClient()
+
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('title_de, title, description_de, description, city, postcode')
+    .eq('id', id)
+    .single()
+
+  if (!listing) {
+    return {
+      title: locale === 'de' ? 'Brief nicht gefunden' : 'Brief not found',
+    }
+  }
+
+  const title = locale === 'de'
+    ? (listing.title_de ?? listing.title ?? 'Immobilien-Brief')
+    : (listing.title ?? listing.title_de ?? 'Property Brief')
+  
+  const description = locale === 'de'
+    ? (listing.description_de ?? listing.description ?? '')
+    : (listing.description ?? listing.description_de ?? '')
+
+  return {
+    title: `${title} | Brief für Makler | Yalla.House`,
+    description: description.slice(0, 160),
+  }
 }
 
 export default async function BriefLandingPage({ params }: Props) {

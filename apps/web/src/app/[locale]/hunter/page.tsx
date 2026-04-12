@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
@@ -15,6 +16,22 @@ interface ViewingWithListing {
     postcode: string
     place_id: string
   } | null
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Home Hunter Dashboard | Yalla.House' : 'Suchenden-Dashboard | Yalla.House',
+    description: isEnglish
+      ? 'Find your next home. Browse available properties and view new listings.'
+      : 'Finden Sie Ihr nächstes Zuhause. Durchsuchen Sie verfügbare Immobilien und sehen Sie neue Angebote.',
+    robots: {
+      index: false,
+      follow: false,
+    },
+  }
 }
 
 export default async function HunterPage() {

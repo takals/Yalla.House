@@ -1,9 +1,38 @@
 'use client'
 
+import type { Metadata } from 'next'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { useSearchParams } from 'next/navigation'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const isEnglish = locale === 'en'
+
+  return {
+    title: isEnglish ? 'Sign In | Yalla.House' : 'Anmelden | Yalla.House',
+    description: isEnglish
+      ? 'Sign in to your owner, home hunter, or agent dashboard.'
+      : 'Melden Sie sich in Ihrem Eigentümer-, Suchenden- oder Makler-Dashboard an.',
+    openGraph: {
+      type: 'website',
+      title: isEnglish ? 'Sign In | Yalla.House' : 'Anmelden | Yalla.House',
+      description: isEnglish
+        ? 'Sign in to your owner, home hunter, or agent dashboard.'
+        : 'Melden Sie sich in Ihrem Eigentümer-, Suchenden- oder Makler-Dashboard an.',
+      url: isEnglish ? 'https://yalla.house/en/login' : 'https://yalla.house/login',
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Yalla.House',
+        },
+      ],
+    },
+  }
+}
 
 export default function LoginPage() {
   const t = useTranslations('auth')
