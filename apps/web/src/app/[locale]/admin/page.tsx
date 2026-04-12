@@ -3,7 +3,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { Lock } from 'lucide-react'
+import { Lock, Zap } from 'lucide-react'
 
 const STATUS_STYLES: Record<string, string> = {
   draft: 'bg-gray-100 text-gray-500',
@@ -135,6 +135,27 @@ export default async function AdminPage() {
           <span className="text-xs font-bold px-3 py-1.5 bg-brand rounded-full">{t('admin.pageTitle')}</span>
         </div>
 
+
+        {/* Smart Booking Shortcut CTA */}
+        <Link
+          href="/admin/booking"
+          className="block bg-[#0F1117] rounded-2xl p-5 mb-8 hover:shadow-lg transition-all group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[#D4764E] flex items-center justify-center">
+                <Zap size={22} className="text-white" />
+              </div>
+              <div>
+                <p className="text-white font-bold text-base">Smart Booking Shortcut</p>
+                <p className="text-white/50 text-sm">Search property, send link — one click</p>
+              </div>
+            </div>
+            <span className="text-xs font-bold px-3 py-1 bg-[#D4764E] text-white rounded-full group-hover:bg-[#BF6840] transition-colors">
+              Open
+            </span>
+          </div>
+        </Link>
 
         {/* Stats grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
