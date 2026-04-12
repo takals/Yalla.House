@@ -66,6 +66,20 @@ const EMAIL_TRANSLATIONS = {
     agentInviteCta: 'View Brief & Submit Your Proposal',
     agentInviteFooter: (postcode: string) =>
       `You're receiving this because you're listed as an estate agent covering ${postcode}. If this isn't relevant, simply ignore this email.`,
+    viewingReminderSubject: (title: string, when: string) => `Viewing reminder — ${title} (${when})`,
+    viewingReminderGreeting: (name: string) => name ? `Hello ${name},` : 'Hello,',
+    viewingReminderHunterIntro: (title: string, date: string) =>
+      `Just a reminder: your viewing at ${title} is scheduled for ${date}.`,
+    viewingReminderOwnerIntro: (title: string, date: string) =>
+      `A viewing for ${title} is scheduled for ${date}.`,
+    viewingReminderBody: 'Make sure you\'re ready. You can manage this viewing from your dashboard.',
+    viewingReminderCta: 'View My Dashboard',
+    viewingCheckInSubject: (title: string) => `How was the viewing? — ${title}`,
+    viewingCheckInGreeting: (name: string) => name ? `Hello ${name},` : 'Hello,',
+    viewingCheckInIntro: (title: string) =>
+      `We hope your viewing at ${title} went well! Let us know what you thought.`,
+    viewingCheckInBody: 'Your feedback helps us improve the experience for everyone — and helps the owner understand your interest.',
+    viewingCheckInCta: 'Leave Feedback',
     buy: 'buy',
     rent: 'rent',
     sale: 'For Sale',
@@ -135,6 +149,20 @@ const EMAIL_TRANSLATIONS = {
     agentInviteCta: 'Brief ansehen & dein Angebot einreichen',
     agentInviteFooter: (postcode: string) =>
       `Du erhältst diese E-Mail, weil du als Immobilienmakler in ${postcode} registriert bist. Falls das nicht relevant ist, ignoriere diese E-Mail einfach.`,
+    viewingReminderSubject: (title: string, when: string) => `Besichtigungserinnerung — ${title} (${when})`,
+    viewingReminderGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
+    viewingReminderHunterIntro: (title: string, date: string) =>
+      `Kurze Erinnerung: deine Besichtigung bei ${title} ist für ${date} geplant.`,
+    viewingReminderOwnerIntro: (title: string, date: string) =>
+      `Eine Besichtigung für ${title} ist für ${date} geplant.`,
+    viewingReminderBody: 'Stell sicher, dass du bereit bist. Du kannst diese Besichtigung in deinem Dashboard verwalten.',
+    viewingReminderCta: 'Mein Dashboard ansehen',
+    viewingCheckInSubject: (title: string) => `Wie war die Besichtigung? — ${title}`,
+    viewingCheckInGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
+    viewingCheckInIntro: (title: string) =>
+      `Wir hoffen, dass deine Besichtigung bei ${title} gut gelaufen ist! Lass uns wissen, was du davon hältst.`,
+    viewingCheckInBody: 'Dein Feedback hilft uns, das Erlebnis für alle zu verbessern — und hilft dem Eigentümer, dein Interesse besser einzuschätzen.',
+    viewingCheckInCta: 'Feedback geben',
     buy: 'kaufen',
     rent: 'mieten',
     sale: 'Zum Verkauf',
@@ -567,5 +595,93 @@ export async function sendAgentInviteEmail(opts: {
     const error = err instanceof Error ? err.message : 'Failed to send email'
     console.error('sendAgentInviteEmail failed:', error)
     return { success: false, error }
+  }
+}
+
+export async function sendViewingReminderEmail(opts: {
+  recipientEmail: string
+  recipientName: string | null
+  listingTitle: string
+  listingCity: string
+  scheduledAt: string
+  role: 'hunter' | 'owner'
+  countryCode?: string
+  locale?: EmailLocale
+}): Promise<void> {
+  const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
+  const locale = opts.locale ?? 'en-GB'
+  const t = EMAIL_TRANSLATIONS[locale]
+
+  const greeting = t.viewingReminderGreeting(opts.recipientName?.split(' ')[0] ?? '')
+  const date = new Date(opts.scheduledAt).toLocaleDateString(locale, {
+    weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',
+  })
+  const when = new Date(opts.scheduledAt).toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' })
+
+  const intro = opts.role === 'hunter'
+    ? t.viewingReminderHunterIntro(opts.listingTitle, date)
+    : t.viewingReminderOwnerIntro(opts.listingTitle, date)
+
+  const dashboardUrl = opts.role === 'hunter' ? `${BASE_URL}/hunter` : `${BASE_URL}/owner/viewings`
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
+    <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
+      ${intro}
+    </p>
+    <p style="margin:0;font-size:15px;color:#5E6278;">
+      ${t.viewingReminderBody}
+    </p>
+
+    ${ctaButton(t.viewingReminderCta, dashboardUrl)}
+  `, countryCode)
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: opts.recipientEmail,
+      subject: t.viewingReminderSubject(opts.listingTitle, when),
+      html,
+    })
+  } catch (err) {
+    console.error('sendViewingReminderEmail failed:', err)
+  }
+}
+
+export async function sendViewingCheckInEmail(opts: {
+  hunterEmail: string
+  hunterName: string | null
+  listingTitle: string
+  viewingId: string
+  locale?: EmailLocale
+  countryCode?: string
+}): Promise<void> {
+  const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
+  const locale = opts.locale ?? 'en-GB'
+  const t = EMAIL_TRANSLATIONS[locale]
+
+  const greeting = t.viewingCheckInGreeting(opts.hunterName?.split(' ')[0] ?? '')
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
+    <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
+      ${t.viewingCheckInIntro(opts.listingTitle)}
+    </p>
+    <p style="margin:0;font-size:15px;color:#5E6278;">
+      ${t.viewingCheckInBody}
+    </p>
+
+    ${ctaButton(t.viewingCheckInCta, `${BASE_URL}/hunter/viewings/${opts.viewingId}/feedback`)}
+  `, countryCode)
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: opts.hunterEmail,
+      subject: t.viewingCheckInSubject(opts.listingTitle),
+      html,
+    })
+  } catch (err) {
+    console.error('sendViewingCheckInEmail failed:', err)
   }
 }

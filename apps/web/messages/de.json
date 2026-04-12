@@ -499,6 +499,36 @@
     "pending": "Ausstehend",
     "confirmed": "Bestätigt",
     "totalSlots": "Gesamte Slots",
-    "booked": "Gebucht"
+    "booked": "Gebucht",
+    "availabilityTitle": "Verfügbare Termine",
+    "addSlot": "Termin hinzufügen",
+    "cancel": "Abbrechen",
+    "selectListing": "Inserat wählen",
+    "date": "Datum",
+    "startTime": "Startzeit",
+    "endTime": "Endzeit",
+    "save": "Speichern",
+    "available": "Verfügbar",
+    "noSlots": "Noch keine Termine. Füge welche hinzu, damit Interessenten Besichtigungen buchen können.",
+    "remove": "Entfernen",
+    "fillAllFields": "Bitte alle Felder ausfüllen"
+  },
+  "hunterFeedback": {
+    "notFound": "Besichtigung nicht gefunden.",
+    "checkinTitle": "Du bist da!",
+    "checkinDescription": "Tippe unten, um dem Eigentümer oder Makler mitzuteilen, dass du zur Besichtigung eingetroffen bist.",
+    "checkinButton": "Ich bin da",
+    "feedbackTitle": "Wie war die Besichtigung?",
+    "ratingLabel": "Bewerte dein Erlebnis",
+    "ratingRequired": "Bitte wähle eine Bewertung",
+    "interestLabel": "Bist du an dieser Immobilie interessiert?",
+    "interestRequired": "Bitte gib dein Interesse an",
+    "interested": "Interessiert",
+    "notInterested": "Nicht für mich",
+    "notesLabel": "Kommentare? (optional)",
+    "notesPlaceholder": "Was hältst du von der Immobilie?",
+    "submitFeedback": "Feedback absenden",
+    "doneTitle": "Vielen Dank!",
+    "doneDescription": "Dein Feedback wurde übermittelt. Der Eigentümer wird benachrichtigt."
   }
 }

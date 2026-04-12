@@ -3,12 +3,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { sendViewingConfirmedEmail, sendViewingDeclinedEmail } from '@/lib/resend'
 import { sendViewingConfirmedWhatsApp, sendViewingDeclinedWhatsApp } from '@/lib/whatsapp'
+import { inngest } from '@/lib/inngest/client'
 
 interface ViewingWithContext {
   hunter_id: string
   listing_id: string
+  scheduled_at: string | null
   hunter: { email: string; full_name: string | null; phone: string | null } | null
-  listing: { owner_id: string; title_de: string | null; city: string } | null
+  listing: { owner_id: string; title_de: string | null; city: string; agent_id: string | null } | null
 }
 
 async function verifyViewingOwnership(viewingId: string) {
@@ -19,9 +21,9 @@ async function verifyViewingOwnership(viewingId: string) {
   const { data: viewing } = await (supabase as any)
     .from('viewings')
     .select(`
-      hunter_id, listing_id,
+      hunter_id, listing_id, scheduled_at,
       hunter:users!hunter_id(email, full_name, phone),
-      listing:listings!listing_id(owner_id, title_de, city)
+      listing:listings!listing_id(owner_id, title_de, city, agent_id)
     `)
     .eq('id', viewingId)
     .single() as { data: ViewingWithContext | null }
@@ -67,6 +69,117 @@ export async function confirmViewingAction(
         listingTitle: title,
       }).catch(e => console.error('buyer confirmed whatsapp error:', e))
     }
+
+    // Trigger viewing lifecycle (reminders, check-in, etc.)
+    if (viewing.scheduled_at) {
+      inngest.send({
+        name: 'viewing/confirmed',
+        data: {
+          viewingId,
+          listingId: viewing.listing_id,
+          hunterId: viewing.hunter_id,
+          ownerId: user!.id,
+          agentId: viewing.listing.agent_id ?? null,
+          scheduledAt: viewing.scheduled_at,
+          listingTitle: title,
+          listingCity: viewing.listing.city,
+        },
+      }).catch(e => console.error('inngest viewing/confirmed error:', e))
+    }
+  }
+
+  return { success: true }
+}
+
+// ── Owner Availability Slot Management ────────────────────────
+
+export async function addOwnerSlotAction(
+  listingId: string,
+  startsAt: string,
+  endsAt: string
+): Promise<{ success: true; slotId: string } | { error: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Nicht autorisiert' }
+
+  // Verify owner owns this listing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: listing } = await (supabase.from('listings') as any)
+    .select('id, owner_id')
+    .eq('id', listingId)
+    .eq('owner_id', user.id)
+    .single()
+
+  if (!listing) return { error: 'Inserat nicht gefunden' }
+
+  // Validate times
+  const start = new Date(startsAt)
+  const end = new Date(endsAt)
+  if (end <= start) return { error: 'Endzeit muss nach Startzeit liegen' }
+  if (start < new Date()) return { error: 'Termin kann nicht in der Vergangenheit liegen' }
+
+  // Check daily limit (max 8 slots per listing per day)
+  const dayStart = new Date(start)
+  dayStart.setHours(0, 0, 0, 0)
+  const dayEnd = new Date(start)
+  dayEnd.setHours(23, 59, 59, 999)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { count } = await (supabase.from('availability_slots') as any)
+    .select('id', { count: 'exact', head: true })
+    .eq('listing_id', listingId)
+    .gte('starts_at', dayStart.toISOString())
+    .lte('starts_at', dayEnd.toISOString())
+
+  if ((count ?? 0) >= 8) return { error: 'Maximale Anzahl an Terminen pro Tag erreicht (8)' }
+
+  // Create the slot
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: slot, error } = await (supabase.from('availability_slots') as any)
+    .insert({
+      listing_id: listingId,
+      owner_id: user.id,
+      starts_at: startsAt,
+      ends_at: endsAt,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/London',
+      is_booked: false,
+    })
+    .select('id')
+    .single()
+
+  if (error) {
+    console.error('addOwnerSlotAction error:', error)
+    return { error: 'Fehler beim Erstellen des Termins' }
+  }
+
+  return { success: true, slotId: slot.id }
+}
+
+export async function removeOwnerSlotAction(
+  slotId: string
+): Promise<{ success: true } | { error: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Nicht autorisiert' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: slot } = await (supabase.from('availability_slots') as any)
+    .select('id, owner_id, is_booked')
+    .eq('id', slotId)
+    .single()
+
+  if (!slot) return { error: 'Termin nicht gefunden' }
+  if (slot.owner_id !== user.id) return { error: 'Nicht autorisiert' }
+  if (slot.is_booked) return { error: 'Gebuchte Termine können nicht gelöscht werden' }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from('availability_slots') as any)
+    .delete()
+    .eq('id', slotId)
+
+  if (error) {
+    console.error('removeOwnerSlotAction error:', error)
+    return { error: 'Fehler beim Löschen' }
   }
 
   return { success: true }

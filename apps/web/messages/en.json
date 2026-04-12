@@ -499,6 +499,36 @@
     "pending": "Pending",
     "confirmed": "Confirmed",
     "totalSlots": "Total Slots",
-    "booked": "Booked"
+    "booked": "Booked",
+    "availabilityTitle": "Availability Slots",
+    "addSlot": "Add Slot",
+    "cancel": "Cancel",
+    "selectListing": "Select Listing",
+    "date": "Date",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "save": "Save",
+    "available": "Available",
+    "noSlots": "No availability slots yet. Add some so buyers can book viewings.",
+    "remove": "Remove",
+    "fillAllFields": "Please fill in all fields"
+  },
+  "hunterFeedback": {
+    "notFound": "Viewing not found.",
+    "checkinTitle": "You're Here!",
+    "checkinDescription": "Tap below to let the owner or agent know you've arrived for the viewing.",
+    "checkinButton": "I've Arrived",
+    "feedbackTitle": "How Was the Viewing?",
+    "ratingLabel": "Rate your experience",
+    "ratingRequired": "Please select a rating",
+    "interestLabel": "Are you interested in this property?",
+    "interestRequired": "Please indicate your interest",
+    "interested": "Interested",
+    "notInterested": "Not for me",
+    "notesLabel": "Any comments? (optional)",
+    "notesPlaceholder": "What did you think of the property?",
+    "submitFeedback": "Submit Feedback",
+    "doneTitle": "Thank You!",
+    "doneDescription": "Your feedback has been submitted. The owner will be notified."
   }
 }

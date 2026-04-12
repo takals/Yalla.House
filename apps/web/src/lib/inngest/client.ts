@@ -65,4 +65,56 @@ export type Events = {
       maxInvites: number
     }
   }
+  // ── Viewing lifecycle events ──────────────────────────────
+  'viewing/confirmed': {
+    data: {
+      viewingId: string
+      listingId: string
+      hunterId: string
+      ownerId: string
+      agentId: string | null
+      scheduledAt: string      // ISO timestamp
+      listingTitle: string
+      listingCity: string
+    }
+  }
+  'viewing/reminder.24h': {
+    data: {
+      viewingId: string
+      hunterId: string
+      ownerId: string
+      agentId: string | null
+      scheduledAt: string
+      listingTitle: string
+      listingCity: string
+    }
+  }
+  'viewing/reminder.1h': {
+    data: {
+      viewingId: string
+      hunterId: string
+      ownerId: string
+      agentId: string | null
+      scheduledAt: string
+      listingTitle: string
+      listingCity: string
+    }
+  }
+  'viewing/checkin.requested': {
+    data: {
+      viewingId: string
+      hunterId: string
+      listingTitle: string
+    }
+  }
+  'viewing/completed': {
+    data: {
+      viewingId: string
+      hunterId: string
+      ownerId: string
+      agentId: string | null
+      listingId: string
+      listingTitle: string
+    }
+  }
 }

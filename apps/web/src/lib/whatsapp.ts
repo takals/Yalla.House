@@ -8,6 +8,7 @@
  *   1. yalla_new_viewing_request  — params: {{1}} ownerName, {{2}} listingTitle, {{3}} buyerName, {{4}} buyerPhone
  *   2. yalla_viewing_confirmed    — params: {{1}} buyerName, {{2}} listingTitle
  *   3. yalla_viewing_declined     — params: {{1}} buyerName, {{2}} listingTitle
+ *   4. yalla_viewing_reminder     — params: {{1}} recipientName, {{2}} listingTitle, {{3}} scheduledDate
  */
 
 const API_KEY = process.env['WHATSAPP_API_KEY']
@@ -80,7 +81,7 @@ export async function sendViewingRequestWhatsApp(opts: {
   buyerPhone: string | null
 }): Promise<void> {
   try {
-    await sendTemplate('yalla_new_viewing_request', opts.ownerPhone, [
+    await sendTemplate(opts.ownerPhone, 'yalla_new_viewing_request', [
       opts.ownerName?.split(' ')[0] ?? 'Eigentümer',
       opts.listingTitle,
       opts.buyerName,
@@ -99,7 +100,7 @@ export async function sendViewingConfirmedWhatsApp(opts: {
   listingTitle: string
 }): Promise<void> {
   try {
-    await sendTemplate('yalla_viewing_confirmed', opts.buyerPhone, [
+    await sendTemplate(opts.buyerPhone, 'yalla_viewing_confirmed', [
       opts.buyerName?.split(' ')[0] ?? 'Interessent',
       opts.listingTitle,
     ])
@@ -116,11 +117,33 @@ export async function sendViewingDeclinedWhatsApp(opts: {
   listingTitle: string
 }): Promise<void> {
   try {
-    await sendTemplate('yalla_viewing_declined', opts.buyerPhone, [
+    await sendTemplate(opts.buyerPhone, 'yalla_viewing_declined', [
       opts.buyerName?.split(' ')[0] ?? 'Interessent',
       opts.listingTitle,
     ])
   } catch (err) {
     console.error('sendViewingDeclinedWhatsApp failed:', err)
+  }
+}
+
+// ── Notification 4: Viewing reminder → hunter/owner ──────────────────────────
+
+export async function sendViewingReminderWhatsApp(opts: {
+  recipientPhone: string
+  recipientName: string | null
+  listingTitle: string
+  scheduledAt: string
+}): Promise<void> {
+  try {
+    const date = new Date(opts.scheduledAt).toLocaleDateString('de-DE', {
+      weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+    })
+    await sendTemplate(opts.recipientPhone, 'yalla_viewing_reminder', [
+      opts.recipientName?.split(' ')[0] ?? 'Interessent',
+      opts.listingTitle,
+      date,
+    ])
+  } catch (err) {
+    console.error('sendViewingReminderWhatsApp failed:', err)
   }
 }

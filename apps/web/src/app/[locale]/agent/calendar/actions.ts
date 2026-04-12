@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { inngest } from '@/lib/inngest/client'
 
 export async function addAvailabilitySlotAction(
   listingId: string,
@@ -107,6 +108,16 @@ export async function confirmViewingAction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authorised' }
 
+  // Fetch viewing context for lifecycle events
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: viewing } = await (supabase.from('viewings') as any)
+    .select(`
+      id, hunter_id, listing_id, scheduled_at,
+      listing:listings!listing_id(owner_id, title_de, city)
+    `)
+    .eq('id', viewingId)
+    .single()
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'confirmed', updated_at: new Date().toISOString() })
@@ -115,6 +126,24 @@ export async function confirmViewingAction(
   if (error) {
     console.error('confirmViewingAction error:', error)
     return { error: 'Failed to confirm viewing' }
+  }
+
+  // Trigger viewing lifecycle (reminders, check-in, etc.)
+  if (viewing?.scheduled_at && viewing.listing) {
+    const title = viewing.listing.title_de ?? viewing.listing_id
+    inngest.send({
+      name: 'viewing/confirmed',
+      data: {
+        viewingId,
+        listingId: viewing.listing_id,
+        hunterId: viewing.hunter_id,
+        ownerId: viewing.listing.owner_id,
+        agentId: user.id,
+        scheduledAt: viewing.scheduled_at,
+        listingTitle: title,
+        listingCity: viewing.listing.city,
+      },
+    }).catch(e => console.error('inngest viewing/confirmed error:', e))
   }
 
   return { success: true }

@@ -3,14 +3,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { ViewingList, type ViewingRow } from './viewing-list'
-
-interface SlotRow {
-  id: string
-  listing_id: string
-  starts_at: string
-  ends_at: string
-  is_booked: boolean
-}
+import { AvailabilityManager, type SlotRow } from './availability-manager'
 
 export default async function ViewingsPage() {
   const t = await getTranslations('ownerViewings')
@@ -33,8 +26,7 @@ export default async function ViewingsPage() {
 
   // Step 2: get viewings and availability slots in parallel
   let viewings: ViewingRow[] = []
-  let slotCount = 0
-  let bookedCount = 0
+  let allSlots: SlotRow[] = []
 
   if (listingIds.length > 0) {
     const [viewingsResult, slotsResult] = await Promise.all([
@@ -50,16 +42,18 @@ export default async function ViewingsPage() {
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.from('availability_slots') as any)
-        .select('id, is_booked')
+        .select('id, listing_id, starts_at, ends_at, is_booked')
         .in('listing_id', listingIds)
-        .gte('starts_at', new Date().toISOString()),
+        .gte('starts_at', new Date().toISOString())
+        .order('starts_at', { ascending: true }),
     ])
 
     viewings = viewingsResult.data ?? []
-    const slots: SlotRow[] = slotsResult.data ?? []
-    slotCount = slots.length
-    bookedCount = slots.filter(s => s.is_booked).length
+    allSlots = slotsResult.data ?? []
   }
+
+  const slotCount = allSlots.length
+  const bookedCount = allSlots.filter(s => s.is_booked).length
 
   const pendingCount = viewings.filter(v => v.status === 'pending').length
   const confirmedCount = viewings.filter(v => v.status === 'confirmed').length
@@ -108,6 +102,29 @@ export default async function ViewingsPage() {
         </div>
 
         <ViewingList initialViewings={viewings} listingMap={listingMap} />
+
+        <AvailabilityManager
+          initialSlots={allSlots}
+          listings={(myListings ?? []).map((l: { id: string; title_de: string | null; place_id: string }) => ({
+            id: l.id,
+            title: l.title_de ?? l.place_id,
+          }))}
+          translations={{
+            availabilityTitle: t('availabilityTitle'),
+            addSlot: t('addSlot'),
+            cancel: t('cancel'),
+            selectListing: t('selectListing'),
+            date: t('date'),
+            startTime: t('startTime'),
+            endTime: t('endTime'),
+            save: t('save'),
+            available: t('available'),
+            booked: t('booked'),
+            noSlots: t('noSlots'),
+            remove: t('remove'),
+            fillAllFields: t('fillAllFields'),
+          }}
+        />
     </div>
   )
 }
