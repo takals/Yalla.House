@@ -65,7 +65,9 @@ CREATE TABLE agent_profiles (
   languages         text[] DEFAULT ARRAY['de'],
   focus             text CHECK (focus IN ('sale','rent','both')) DEFAULT 'both',
   verified_at       timestamptz,
-  subscription_tier text CHECK (subscription_tier IN ('free','pro','enterprise')) DEFAULT 'free'
+  subscription_tier text CHECK (subscription_tier IN ('free','pro','enterprise')) DEFAULT 'free',
+  partner_agreement_signed_at timestamptz,
+  partner_agreement_version   text
 );
 
 CREATE TABLE partner_profiles (

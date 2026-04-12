@@ -413,5 +413,38 @@
     "trackingInfoText": "Wir verfolgen, ob Makler deinen Brief geöffnet und angeklickt haben. Wenn sie mit einem Angebot antworten, siehst du es hier.",
     "trackingTipLabel": "Profi-Tipp",
     "trackingTipText": "Vergleiche Antworten sorgfältig — die schnellste Antwort ist nicht immer das beste Angebot. Achte auf Provisionsätze, Marketingpläne und Portal-Abdeckung."
+  },
+  "partnerAgreement": {
+    "title": "Yalla Partnervereinbarung",
+    "subtitle": "Eine kurze Vereinbarung — dann sind Sie verbunden. Lesen, unterschreiben, Immobilien importieren.",
+    "section1Title": "Datenverarbeitung",
+    "section1Point1": "Immobiliendaten, die über die Yalla-CRM-API abgerufen werden, dürfen nur intern verwendet werden. Sie können sie in Ihr CRM importieren, mit Kollegen in Ihrer Agentur teilen und zur Betreuung des Eigentümers nutzen.",
+    "section1Point2": "Sie dürfen Yalla-Inseratdaten nicht auf Drittportalen veröffentlichen, massenhaft abrufen oder ohne schriftliche Zustimmung des Eigentümers außerhalb Ihrer Agentur weitergeben.",
+    "section1Point3": "Persönliche Daten des Eigentümers (Name, E-Mail, Telefon) werden erst offengelegt, wenn der Eigentümer Ihren Vorschlag annimmt. Bis dahin läuft jede Kommunikation über Yalla.",
+    "section2Title": "Portal-Vorautorisierung",
+    "section2Point1": "Wenn der Eigentümer Sie beauftragt, seine Immobilie auf einem Portal zu listen (Rightmove, Zoopla, OnTheMarket usw.), sind Sie vorautorisiert, dies im Rahmen Ihrer bestehenden Portal-Vereinbarungen zu tun.",
+    "section2Point2": "Yalla erhebt keine Gebühren für Portal-Inserate über Ihre eigenen Vereinbarungen. Das Yalla-Dashboard des Eigentümers zeigt den Portal-Status automatisch an.",
+    "section2Point3": "Wenn der Eigentümer Ihren Auftrag widerruft, müssen Sie die Immobilie innerhalb von 48 Stunden von allen Portalen entfernen.",
+    "section3Title": "Plattformregeln",
+    "section3Point1": "Antworten Sie auf Eigentümer-Briefings innerhalb von 48 Stunden. Abgelaufene Briefings ohne Antwort können Ihren Match-Score beeinflussen.",
+    "section3Point2": "Seien Sie transparent bei den Gebühren. Jede Provision, Pauschalgebühr oder Zusatzkosten müssen in Ihrem Vorschlag genannt werden, bevor der Eigentümer zustimmt.",
+    "section3Point3": "Yalla behält sich das Recht vor, den API-Zugang bei Verstoß gegen diese Bedingungen auszusetzen. Wir informieren Sie immer zuerst und geben Ihnen die Möglichkeit zur Klärung.",
+    "versionNotice": "Partnervereinbarung v1.0 — zuletzt aktualisiert April 2026"
+  },
+  "agentListing": {
+    "agentViewBanner": "Makler-Ansicht — Eigentümer-Daten verborgen",
+    "agentViewBannerSub": "Dies ist eine Immobilie im Briefing-Stadium. Die Identität des Eigentümers bleibt privat, bis Ihr Vorschlag angenommen wird.",
+    "underOffer": "Unter Angebot",
+    "propertyType": "Immobilienart",
+    "livingSpace": "Wohnfläche",
+    "bedrooms": "Schlafzimmer",
+    "bathrooms": "Badezimmer",
+    "floor": "Etage",
+    "built": "Baujahr",
+    "energyRating": "Energieausweis",
+    "parking": "Parkplatz",
+    "yes": "Ja",
+    "description": "Beschreibung",
+    "photos": "Fotos"
   }
 }

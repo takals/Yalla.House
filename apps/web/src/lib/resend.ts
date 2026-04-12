@@ -544,6 +544,12 @@ export async function sendAgentInviteEmail(opts: {
 
     ${ctaButton(t.agentInviteCta, `${BASE_URL}/agent/briefs/${opts.listingId}`)}
 
+    <div style="text-align:center;margin-top:12px;">
+      <a href="${BASE_URL}/agent/listing/${opts.listingId}" style="display:inline-block;padding:10px 24px;background:#EDEEF2;color:#0F1117;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;border:1px solid #D8DBE5;">
+        ${locale === 'en-GB' ? 'View Property Details' : 'Immobiliendetails ansehen'}
+      </a>
+    </div>
+
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.agentInviteFooter(opts.listingPostcode)}
     </p>

@@ -413,5 +413,38 @@
     "agentInviteDescription": "Yalla.House connects motivated sellers with local agents — no upfront fees, no lock-in.",
     "agentInviteCta": "View Brief & Submit Your Proposal",
     "agentInviteFooter": "You're receiving this because you're listed as an agent. If this isn't relevant, simply ignore."
+  },
+  "partnerAgreement": {
+    "title": "Yalla Partner Agreement",
+    "subtitle": "One short agreement — then you're connected. Read it, sign it, start importing listings.",
+    "section1Title": "Data Handling",
+    "section1Point1": "Property data accessed via Yalla's CRM API is for your internal use only. You may import it into your CRM, share it with colleagues within your agency, and use it to serve the property owner.",
+    "section1Point2": "You must not republish Yalla listing data on third-party portals, scrape it in bulk, or share it outside your agency without the owner's written consent.",
+    "section1Point3": "Owner personal details (name, email, phone) are only revealed once the owner accepts your proposal. Until then, all communication goes through Yalla.",
+    "section2Title": "Portal Pre-authorisation",
+    "section2Point1": "When the owner instructs you to list their property on a portal (Rightmove, Zoopla, OnTheMarket, etc.), you are pre-authorised to do so under your agency's existing portal agreements.",
+    "section2Point2": "Yalla does not charge for portal listings made through your own agreements. The owner's Yalla dashboard will reflect the live portal status automatically.",
+    "section2Point3": "If the owner revokes your assignment, you must delist the property from any portals within 48 hours.",
+    "section3Title": "Platform Rules",
+    "section3Point1": "Respond to owner briefs within 48 hours. Briefs that expire without a response may affect your match score.",
+    "section3Point2": "Be transparent about fees. Any commission, fixed fee, or add-on cost must be stated in your proposal before the owner accepts.",
+    "section3Point3": "Yalla reserves the right to suspend API access if these terms are breached. We'll always notify you first and give you a chance to resolve it.",
+    "versionNotice": "Partner Agreement v1.0 — last updated April 2026"
+  },
+  "agentListing": {
+    "agentViewBanner": "Agent View — Owner details hidden",
+    "agentViewBannerSub": "This is a brief-stage property. The owner's identity stays private until they accept your proposal.",
+    "underOffer": "Under Offer",
+    "propertyType": "Property Type",
+    "livingSpace": "Living Space",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "floor": "Floor",
+    "built": "Built",
+    "energyRating": "Energy Rating",
+    "parking": "Parking",
+    "yes": "Yes",
+    "description": "Description",
+    "photos": "Photos"
   }
 }
