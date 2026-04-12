@@ -465,5 +465,40 @@
     "acceptProposal": "Vorschlag annehmen",
     "decline": "Ablehnen",
     "accepted": "Angenommen — arbeitet an Ihrer Immobilie"
+  },
+  "agentCalendar": {
+    "title": "Besichtigungskalender",
+    "subtitle": "Verfügbarkeit und Besichtigungsanfragen für Ihre Immobilien verwalten",
+    "addSlots": "Slots hinzufügen",
+    "upcoming": "Anstehend",
+    "noSlots": "Noch keine Verfügbarkeitsslots. Fügen Sie welche hinzu, damit Käufer Besichtigungen buchen können.",
+    "noViewings": "Noch keine Besichtigungsanfragen.",
+    "booked": "Gebucht",
+    "available": "Verfügbar",
+    "pending": "Ausstehend",
+    "confirmed": "Bestätigt",
+    "addAvailability": "Verfügbarkeit hinzufügen",
+    "selectListing": "Inserat auswählen",
+    "date": "Datum",
+    "startTime": "Startzeit",
+    "endTime": "Endzeit",
+    "save": "Slot speichern",
+    "cancel": "Abbrechen",
+    "viewingsLabel": "Besichtigungen",
+    "slotsLabel": "Slots",
+    "inPerson": "Vor Ort",
+    "virtual": "Virtuell",
+    "confirm": "Bestätigen",
+    "decline": "Ablehnen",
+    "remove": "Entfernen"
+  },
+  "ownerViewings": {
+    "title": "Besichtigungsanfragen",
+    "listings": "Inserate",
+    "viewings": "Besichtigungen",
+    "pending": "Ausstehend",
+    "confirmed": "Bestätigt",
+    "totalSlots": "Gesamte Slots",
+    "booked": "Gebucht"
   }
 }

@@ -465,5 +465,40 @@
     "acceptProposal": "Accept Proposal",
     "decline": "Decline",
     "accepted": "Accepted — working on your property"
+  },
+  "agentCalendar": {
+    "title": "Viewing Calendar",
+    "subtitle": "Manage availability and viewing requests for your listings",
+    "addSlots": "Add Slots",
+    "upcoming": "Upcoming",
+    "noSlots": "No availability slots yet. Add some to let buyers book viewings.",
+    "noViewings": "No viewing requests yet.",
+    "booked": "Booked",
+    "available": "Available",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "addAvailability": "Add Availability",
+    "selectListing": "Select Listing",
+    "date": "Date",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "save": "Save Slot",
+    "cancel": "Cancel",
+    "viewingsLabel": "Viewings",
+    "slotsLabel": "Slots",
+    "inPerson": "In Person",
+    "virtual": "Virtual",
+    "confirm": "Confirm",
+    "decline": "Decline",
+    "remove": "Remove"
+  },
+  "ownerViewings": {
+    "title": "Viewing Requests",
+    "listings": "Listings",
+    "viewings": "Viewings",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "totalSlots": "Total Slots",
+    "booked": "Booked"
   }
 }

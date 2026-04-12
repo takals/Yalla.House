@@ -145,6 +145,7 @@ export const hunterNav: NavItem[] = [
 export const agentNav: NavItem[] = [
   { href: '/agent',            label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
   { href: '/agent/assignments', label: 'Assignments', icon: <Building2 size={15} /> },
+  { href: '/agent/calendar',   label: 'Calendar',   icon: <Calendar size={15} /> },
   { href: '/agent/briefs',     label: 'Briefs',   icon: <Inbox size={15} /> },
   { href: '/agent/hunters',    label: 'Hunters', icon: <Users size={15} /> },
   { href: '/agent/agreement',  label: 'Partner Agreement', icon: <Handshake size={15} /> },

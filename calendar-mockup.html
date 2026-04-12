@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yalla.House — Viewing Calendar Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; background: #EDEEF2; color: #0F1117; }
+
+  .tabs { display: flex; background: #0F1117; padding: 16px 24px 0; gap: 0; }
+  .tab { padding: 10px 20px; border: none; cursor: pointer; font: 600 13px 'Plus Jakarta Sans'; border-radius: 8px 8px 0 0; transition: all .15s; }
+  .tab.active { background: #fff; color: #0F1117; }
+  .tab:not(.active) { background: transparent; color: rgba(255,255,255,.5); }
+  .tab:not(.active):hover { color: rgba(255,255,255,.8); }
+
+  .panel { display: none; padding: 24px; max-width: 900px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat { background: #fff; border-radius: 16px; padding: 16px; }
+  .stat-val { font-size: 28px; font-weight: 800; }
+  .stat-label { font-size: 11px; color: #5E6278; margin-top: 2px; }
+
+  .card { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 12px; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .card-title { font-weight: 700; font-size: 14px; }
+
+  .badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px; display: inline-flex; align-items: center; gap: 4px; }
+  .badge-yellow { background: #FEF3C7; color: #92400E; }
+  .badge-green { background: #DCFCE7; color: #166534; }
+  .badge-blue { background: #DBEAFE; color: #1E40AF; }
+  .badge-gray { background: #F3F4F6; color: #6B7280; }
+
+  .tab-switcher { display: flex; gap: 4px; background: #F5F5FA; border-radius: 8px; padding: 4px; margin-bottom: 16px; }
+  .tab-switcher button { padding: 8px 16px; border: none; cursor: pointer; border-radius: 6px; font: 600 13px 'Plus Jakarta Sans'; transition: all .15s; background: transparent; color: #5E6278; }
+  .tab-switcher button.active { background: #fff; color: #0F1117; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+  .slot-list { display: flex; flex-direction: column; gap: 8px; }
+  .slot-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: #fff; border-left: 4px solid; }
+  .slot-item.available { border-left-color: #E5E7EB; }
+  .slot-item.booked { border-left-color: #059669; }
+
+  .viewing-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 16px 20px; background: #fff; border-radius: 14px; margin-bottom: 8px; }
+  .viewing-meta { font-size: 12px; color: #5E6278; display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .viewing-name { font-weight: 600; font-size: 14px; }
+
+  .btn { padding: 8px 16px; border: none; cursor: pointer; border-radius: 8px; font: 600 12px 'Plus Jakarta Sans'; transition: all .15s; }
+  .btn-brand { background: #D4764E; color: #fff; }
+  .btn-brand:hover { background: #BF6840; }
+  .btn-outline { background: #F5F5FA; color: #5E6278; }
+  .btn-outline:hover { background: #E4E6EF; }
+  .btn-sm { padding: 6px 12px; font-size: 11px; }
+
+  .day-group { margin-bottom: 16px; }
+  .day-label { font-size: 12px; font-weight: 700; color: #5E6278; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .5px; }
+
+  .time-slots { display: flex; flex-wrap: wrap; gap: 8px; }
+  .time-slot { padding: 8px 14px; border-radius: 8px; border: 1.5px solid #E2E4EB; font: 600 13px 'Plus Jakarta Sans'; cursor: pointer; transition: all .15s; background: #fff; color: #0F1117; }
+  .time-slot:hover { border-color: #D4764E; color: #D4764E; }
+  .time-slot.selected { background: #D4764E; color: #fff; border-color: #D4764E; }
+
+  .booking-form { margin-top: 16px; padding-top: 16px; border-top: 1px solid #E2E4EB; }
+  .booking-form textarea { width: 100%; border: 1px solid #E2E4EB; border-radius: 8px; padding: 10px 12px; font: 400 13px 'Plus Jakarta Sans'; resize: none; }
+  .booking-form .btn { width: 100%; margin-top: 12px; padding: 12px; font-size: 14px; font-weight: 700; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group label { font-size: 11px; font-weight: 600; color: #5E6278; display: block; margin-bottom: 4px; }
+  .form-group input, .form-group select { width: 100%; border: 1px solid #E2E4EB; border-radius: 8px; padding: 8px 12px; font: 400 13px 'Plus Jakarta Sans'; }
+
+  .add-form { border: 2px solid #D4764E; border-radius: 16px; padding: 20px; background: #fff; margin-bottom: 16px; }
+
+  .success-card { background: #fff; border: 1.5px solid #BBF7D0; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 12px; }
+  .success-icon { width: 40px; height: 40px; border-radius: 50%; background: #DCFCE7; display: flex; align-items: center; justify-content: center; color: #059669; font-size: 20px; }
+
+  .empty { text-align: center; padding: 40px; color: #5E6278; font-size: 14px; }
+  .empty-icon { font-size: 32px; color: #D1D5DB; margin-bottom: 8px; }
+
+  .header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('agent')">Agent Calendar</button>
+  <button class="tab" onclick="showTab('booking')">Buyer Booking</button>
+  <button class="tab" onclick="showTab('owner')">Owner Viewings</button>
+</div>
+
+<!-- ═══ AGENT CALENDAR ═══ -->
+<div id="agent" class="panel active">
+  <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 4px;">Viewing Calendar</h1>
+  <p style="font-size: 13px; color: #5E6278; margin-bottom: 20px;">Manage availability and viewing requests for your listings</p>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-val" style="color: #D4764E;">3</div><div class="stat-label">Pending</div></div>
+    <div class="stat"><div class="stat-val" style="color: #059669;">5</div><div class="stat-label">Confirmed</div></div>
+    <div class="stat"><div class="stat-val">12</div><div class="stat-label">Available</div></div>
+    <div class="stat"><div class="stat-val">5</div><div class="stat-label">Booked</div></div>
+  </div>
+
+  <div class="header-bar">
+    <div class="tab-switcher">
+      <button class="active" onclick="agentTab(this,'agent-viewings')">Viewings (8)</button>
+      <button onclick="agentTab(this,'agent-slots')">Slots (17)</button>
+    </div>
+    <button class="btn btn-brand" id="add-slot-btn" style="display:none;" onclick="toggleAddForm()">+ Add Availability</button>
+  </div>
+
+  <!-- Add form -->
+  <div class="add-form" id="add-form" style="display:none;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+      <span style="font-weight: 700; font-size: 14px;">Add Availability</span>
+      <button onclick="toggleAddForm()" style="border: none; background: none; cursor: pointer; color: #999; font-size: 16px;">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Select Listing</label>
+        <select><option>42 Victoria Road, Ilford IG1</option><option>18 Cranbrook Rd, Ilford IG1</option></select>
+      </div>
+      <div class="form-group"><label>Date</label><input type="date" value="2026-04-18"></div>
+      <div class="form-group"><label>Start Time</label><input type="time" value="10:00"></div>
+      <div class="form-group"><label>End Time</label><input type="time" value="10:30"></div>
+    </div>
+    <div style="display: flex; gap: 8px; justify-content: flex-end;">
+      <button class="btn btn-outline" onclick="toggleAddForm()">Cancel</button>
+      <button class="btn btn-brand" onclick="toggleAddForm()">Save Slot</button>
+    </div>
+  </div>
+
+  <!-- Viewings sub-tab -->
+  <div id="agent-viewings">
+    <div class="viewing-card">
+      <div style="flex:1;">
+        <div class="viewing-name">42 Victoria Road, Ilford IG1</div>
+        <div class="viewing-meta">📍 Ilford</div>
+        <div class="viewing-meta" style="margin-top:6px;">👤 <strong style="color:#0F1117;">Sarah Mitchell</strong> &nbsp; sarah@email.com</div>
+        <div class="viewing-meta" style="margin-top:6px;">🕐 Sat, 19 Apr · 10:00 – 10:30 &nbsp; <span class="badge badge-green" style="font-size:9px;">In Person</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <span class="badge badge-yellow">Pending</span>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-sm">✕ Decline</button>
+          <button class="btn btn-brand btn-sm">✓ Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="viewing-card">
+      <div style="flex:1;">
+        <div class="viewing-name">18 Cranbrook Rd, Ilford IG1</div>
+        <div class="viewing-meta">📍 Ilford</div>
+        <div class="viewing-meta" style="margin-top:6px;">👤 <strong style="color:#0F1117;">James Cooper</strong> &nbsp; j.cooper@mail.com</div>
+        <div class="viewing-meta" style="margin-top:6px;">🕐 Sat, 19 Apr · 11:00 – 11:30 &nbsp; <span class="badge badge-blue" style="font-size:9px;">Virtual</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <span class="badge badge-green">Confirmed</span>
+      </div>
+    </div>
+
+    <div class="viewing-card">
+      <div style="flex:1;">
+        <div class="viewing-name">42 Victoria Road, Ilford IG1</div>
+        <div class="viewing-meta">📍 Ilford</div>
+        <div class="viewing-meta" style="margin-top:6px;">👤 <strong style="color:#0F1117;">Priya Sharma</strong> &nbsp; priya.s@gmail.com</div>
+        <div class="viewing-meta" style="margin-top:6px;">🕐 Sun, 20 Apr · 14:00 – 14:30 &nbsp; <span class="badge badge-green" style="font-size:9px;">In Person</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+        <span class="badge badge-yellow">Pending</span>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-outline btn-sm">✕ Decline</button>
+          <button class="btn btn-brand btn-sm">✓ Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slots sub-tab -->
+  <div id="agent-slots" style="display:none;">
+    <div class="slot-list">
+      <div class="slot-item booked">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">42 Victoria Road, Ilford IG1</div>
+          <div style="font-size:12px;color:#5E6278;margin-top:3px;">🕐 Sat, 19 Apr · 10:00 – 10:30</div>
+        </div>
+        <span class="badge badge-green">Booked</span>
+      </div>
+      <div class="slot-item booked">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">18 Cranbrook Rd, Ilford IG1</div>
+          <div style="font-size:12px;color:#5E6278;margin-top:3px;">🕐 Sat, 19 Apr · 11:00 – 11:30</div>
+        </div>
+        <span class="badge badge-green">Booked</span>
+      </div>
+      <div class="slot-item available">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">42 Victoria Road, Ilford IG1</div>
+          <div style="font-size:12px;color:#5E6278;margin-top:3px;">🕐 Sat, 19 Apr · 14:00 – 14:30</div>
+        </div>
+        <span class="badge badge-gray">Available</span>
+        <button style="border:none;background:none;cursor:pointer;color:#999;font-size:14px;">🗑</button>
+      </div>
+      <div class="slot-item available">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">42 Victoria Road, Ilford IG1</div>
+          <div style="font-size:12px;color:#5E6278;margin-top:3px;">🕐 Sun, 20 Apr · 10:00 – 10:30</div>
+        </div>
+        <span class="badge badge-gray">Available</span>
+        <button style="border:none;background:none;cursor:pointer;color:#999;font-size:14px;">🗑</button>
+      </div>
+      <div class="slot-item available">
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">18 Cranbrook Rd, Ilford IG1</div>
+          <div style="font-size:12px;color:#5E6278;margin-top:3px;">🕐 Sun, 20 Apr · 11:00 – 11:30</div>
+        </div>
+        <span class="badge badge-gray">Available</span>
+        <button style="border:none;background:none;cursor:pointer;color:#999;font-size:14px;">🗑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BUYER BOOKING ═══ -->
+<div id="booking" class="panel">
+  <div class="card" style="max-width:420px; margin: 0 auto;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+      <span style="color:#D4764E;font-size:18px;">📅</span>
+      <span style="font-weight:700;font-size:15px;">Book a Viewing</span>
+    </div>
+
+    <div class="day-group">
+      <div class="day-label">Sat, 19 Apr</div>
+      <div class="time-slots">
+        <div class="time-slot" onclick="selectSlot(this)">🕐 10:00 – 10:30</div>
+        <div class="time-slot" onclick="selectSlot(this)">🕐 11:00 – 11:30</div>
+        <div class="time-slot selected" onclick="selectSlot(this)">🕐 14:00 – 14:30</div>
+      </div>
+    </div>
+
+    <div class="day-group">
+      <div class="day-label">Sun, 20 Apr</div>
+      <div class="time-slots">
+        <div class="time-slot" onclick="selectSlot(this)">🕐 10:00 – 10:30</div>
+        <div class="time-slot" onclick="selectSlot(this)">🕐 11:00 – 11:30</div>
+        <div class="time-slot" onclick="selectSlot(this)">🕐 15:00 – 15:30</div>
+      </div>
+    </div>
+
+    <div class="day-group">
+      <div class="day-label">Tue, 22 Apr</div>
+      <div class="time-slots">
+        <div class="time-slot" onclick="selectSlot(this)">🕐 09:00 – 09:30</div>
+        <div class="time-slot" onclick="selectSlot(this)">🕐 16:00 – 16:30</div>
+      </div>
+    </div>
+
+    <div class="booking-form">
+      <label style="font-size:11px;font-weight:600;color:#5E6278;display:block;margin-bottom:4px;">Add a note (optional)</label>
+      <textarea rows="2" placeholder="Any questions or preferences..."></textarea>
+      <button class="btn btn-brand" onclick="showBooked()">Book This Slot</button>
+    </div>
+  </div>
+
+  <!-- Success state -->
+  <div id="booked-success" style="display:none; max-width:420px; margin:24px auto 0;">
+    <div class="success-card">
+      <div class="success-icon">✓</div>
+      <div>
+        <div style="font-weight:700;font-size:14px;color:#166534;">Viewing booked!</div>
+        <div style="font-size:12px;color:#059669;margin-top:2px;">The owner will confirm your viewing shortly.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OWNER VIEWINGS ═══ -->
+<div id="owner" class="panel">
+  <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 20px;">Viewing Requests</h1>
+
+  <div class="stat-row">
+    <div class="stat"><div class="stat-val" style="color: #D4764E;">2</div><div class="stat-label">Pending</div></div>
+    <div class="stat"><div class="stat-val" style="color: #059669;">3</div><div class="stat-label">Confirmed</div></div>
+    <div class="stat"><div class="stat-val">8</div><div class="stat-label">Total Slots</div></div>
+    <div class="stat"><div class="stat-val">5</div><div class="stat-label">Booked</div></div>
+  </div>
+
+  <div class="viewing-card">
+    <div style="flex:1;">
+      <a href="#" style="font-weight:600;font-size:14px;color:#0F1117;text-decoration:none;">42 Victoria Road, Ilford IG1</a>
+      <div class="viewing-meta" style="margin-top:4px;">👤 <strong style="color:#0F1117;">Sarah Mitchell</strong> · sarah@email.com · 07700 900123</div>
+      <div style="margin-top:6px;font-style:italic;font-size:12px;color:#5E6278;">"Very interested in the garden flat, would love to see the basement conversion."</div>
+      <div style="margin-top:6px;font-size:11px;color:#999;">Received: 12/04/2026</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <span class="badge badge-yellow">Pending</span>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-outline btn-sm">Decline</button>
+        <button class="btn btn-brand btn-sm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="viewing-card">
+    <div style="flex:1;">
+      <a href="#" style="font-weight:600;font-size:14px;color:#0F1117;text-decoration:none;">42 Victoria Road, Ilford IG1</a>
+      <div class="viewing-meta" style="margin-top:4px;">👤 <strong style="color:#0F1117;">James Cooper</strong> · j.cooper@mail.com</div>
+      <div style="margin-top:6px;font-size:11px;color:#999;">Received: 11/04/2026</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <span class="badge badge-green">Confirmed</span>
+    </div>
+  </div>
+
+  <div class="viewing-card">
+    <div style="flex:1;">
+      <a href="#" style="font-weight:600;font-size:14px;color:#0F1117;text-decoration:none;">18 Cranbrook Rd, Ilford IG1</a>
+      <div class="viewing-meta" style="margin-top:4px;">👤 <strong style="color:#0F1117;">Priya Sharma</strong> · priya.s@gmail.com · 07700 900456</div>
+      <div style="margin-top:6px;font-style:italic;font-size:12px;color:#5E6278;">"First-time buyer, pre-approved mortgage. Available weekends only."</div>
+      <div style="margin-top:6px;font-size:11px;color:#999;">Received: 10/04/2026</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <span class="badge badge-yellow">Pending</span>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-outline btn-sm">Decline</button>
+        <button class="btn btn-brand btn-sm">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function agentTab(btn, panelId) {
+  var parent = btn.parentElement;
+  parent.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('agent-viewings').style.display = panelId === 'agent-viewings' ? 'block' : 'none';
+  document.getElementById('agent-slots').style.display = panelId === 'agent-slots' ? 'block' : 'none';
+  document.getElementById('add-slot-btn').style.display = panelId === 'agent-slots' ? 'inline-flex' : 'none';
+}
+
+function toggleAddForm() {
+  var form = document.getElementById('add-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.time-slot').forEach(function(s) { s.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function showBooked() {
+  document.getElementById('booked-success').style.display = 'block';
+  document.querySelector('.booking-form').style.display = 'none';
+}
+</script>
+</body>
+</html>

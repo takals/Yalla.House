@@ -36,6 +36,113 @@ interface ViewingPayload {
   message?: string
 }
 
+export async function fetchAvailableSlotsAction(
+  listingId: string
+): Promise<{ slots: Array<{ id: string; starts_at: string; ends_at: string }> }> {
+  const { createServiceClient: svc } = await import('@/lib/supabase/server')
+  const service = svc()
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (service.from('availability_slots') as any)
+    .select('id, starts_at, ends_at')
+    .eq('listing_id', listingId)
+    .eq('is_booked', false)
+    .gte('starts_at', new Date().toISOString())
+    .order('starts_at', { ascending: true })
+    .limit(50)
+
+  return { slots: data ?? [] }
+}
+
+export async function bookSlotAction(
+  listingId: string,
+  slotId: string,
+  notes?: string
+): Promise<{ success: true } | { error: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Please sign in to book a viewing' }
+
+  const service = createServiceClient()
+
+  // Verify slot exists, belongs to this listing, and is not booked
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: slot } = await (service.from('availability_slots') as any)
+    .select('id, listing_id, starts_at, is_booked')
+    .eq('id', slotId)
+    .single()
+
+  if (!slot) return { error: 'Slot not found' }
+  if (slot.listing_id !== listingId) return { error: 'Slot does not belong to this listing' }
+  if (slot.is_booked) return { error: 'This slot has already been booked' }
+
+  // Create viewing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: viewing, error: viewingError } = await (service.from('viewings') as any)
+    .insert({
+      listing_id: listingId,
+      hunter_id: user.id,
+      slot_id: slotId,
+      scheduled_at: slot.starts_at,
+      status: 'pending',
+      type: 'in_person',
+      hunter_notes: notes?.trim() || null,
+    })
+    .select('id')
+    .single()
+
+  if (viewingError || !viewing) {
+    console.error('bookSlotAction viewing insert error:', viewingError)
+    return { error: 'Failed to book viewing' }
+  }
+
+  // Mark slot as booked
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await (service.from('availability_slots') as any)
+    .update({ is_booked: true, viewing_id: viewing.id })
+    .eq('id', slotId)
+
+  // Notify owner (fire-and-forget)
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: listingData } = await (service.from('listings') as any)
+      .select('title_de, city, owner_id')
+      .eq('id', listingId)
+      .single()
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: hunterData } = await (service.from('users') as any)
+      .select('full_name, email, phone')
+      .eq('id', user.id)
+      .single()
+
+    if (listingData?.owner_id && hunterData?.email) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: ownerData } = await (service.from('users') as any)
+        .select('email, full_name, phone')
+        .eq('id', listingData.owner_id)
+        .single()
+
+      if (ownerData?.email) {
+        sendNewViewingRequestEmail({
+          ownerEmail: ownerData.email,
+          ownerName: ownerData.full_name,
+          listingTitle: listingData.title_de ?? listingId,
+          listingCity: listingData.city,
+          buyerName: hunterData.full_name ?? hunterData.email,
+          buyerEmail: hunterData.email,
+          buyerPhone: hunterData.phone,
+          buyerMessage: notes?.trim() || null,
+        }).catch(e => console.error('slot booking owner email error:', e))
+      }
+    }
+  } catch (e) {
+    console.error('bookSlotAction notify error:', e)
+  }
+
+  return { success: true }
+}
+
 export async function requestViewingAction(
   listingId: string,
   payload: ViewingPayload
