@@ -29,9 +29,17 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
   const router = useRouter()
 
   async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/auth/login')
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      })
+
+      if (response.ok) {
+        router.push('/')
+      }
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
   }
 
   function isActive(item: NavItem) {

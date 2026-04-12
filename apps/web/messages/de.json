@@ -1,4 +1,24 @@
 {
+  "auth": {
+    "loginTitle": "Melden Sie sich in Ihrem Konto an",
+    "emailPlaceholder": "ihre@email.com",
+    "sendMagicLink": "Magic Link senden",
+    "checkEmail": "Überprüfen Sie Ihre E-Mail",
+    "magicLinkSent": "Wir haben einen Magic Link an Ihre E-Mail gesendet. Klicken Sie darauf, um sich anzumelden. Der Link verfällt in 24 Stunden.",
+    "signupTitle": "Erstellen Sie Ihr Konto",
+    "errorInvalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    "errorAuthFailed": "Anmeldung fehlgeschlagen. Der Link ist möglicherweise abgelaufen oder wurde bereits verwendet. Bitte versuchen Sie es erneut.",
+    "errorExpiredLink": "Dieser Link ist abgelaufen. Bitte fordern Sie einen neuen an.",
+    "errorInvalidLink": "Dieser Link ist ungültig. Bitte fordern Sie einen neuen an.",
+    "errorAlreadyUsed": "Dieser Link wurde bereits verwendet. Bitte fordern Sie einen neuen an.",
+    "errorEmailRequired": "E-Mail-Adresse erforderlich.",
+    "sendingMagicLink": "Wird gesendet...",
+    "selectRole": "Welche Option beschreibt Sie am besten?",
+    "selectRoleOwner": "Ich verkaufe eine Immobilie",
+    "selectRoleHunter": "Ich suche nach einem Zuhause",
+    "selectRoleAgent": "Ich bin ein Immobilienmakler",
+    "continueButton": "Weiter"
+  },
   "nav": {
     "listYourPlace": "Immobilie inserieren",
     "services": "Leistungen & Preise",

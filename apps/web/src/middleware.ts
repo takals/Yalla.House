@@ -13,8 +13,12 @@ const intlMiddleware = createIntlMiddleware({
 
 // Routes that require authentication.
 // TEMPORARILY EMPTY — dashboards are open during the public preview phase so
-// visitors can explore each role without creating an account. Re-add paths
-// here (e.g. '/admin') when we're ready to gate them again.
+// visitors can explore each role without creating an account.
+//
+// When ready to gate dashboards, add paths like:
+//   const protectedPaths = ['/owner', '/hunter', '/agent', '/admin']
+//
+// This will enforce session validation and redirect unauthenticated users to /auth/login
 const protectedPaths: string[] = []
 
 export async function middleware(request: NextRequest) {

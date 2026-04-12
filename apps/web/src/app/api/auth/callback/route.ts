@@ -26,7 +26,15 @@ export async function GET(request: NextRequest) {
     )
 
     const { error, data } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error && data.user) {
+    if (error) {
+      // Auth exchange failed — redirect to login with error
+      const loginUrl = new URL('/auth/login', origin)
+      loginUrl.searchParams.set('error', 'auth_failed')
+      if (next && next !== '/owner') loginUrl.searchParams.set('next', next)
+      return NextResponse.redirect(loginUrl.toString())
+    }
+
+    if (data.user) {
       // Ensure public.users row exists (FK required by listings)
       await (supabase.from('users') as any).upsert(
         {
@@ -34,12 +42,27 @@ export async function GET(request: NextRequest) {
           email: data.user.email ?? '',
           language: 'de',
         },
-        { onConflict: 'id', ignoreDuplicates: true }
+        { onConflict: 'id', ignoreDuplicates: false }
       )
-      return NextResponse.redirect(`${origin}${next}`)
+
+      // Determine redirect based on 'next' param or default to /owner
+      let redirectUrl = next
+      if (!next || next === '/owner') {
+        // Default: redirect to /owner dashboard
+        redirectUrl = '/owner'
+      }
+
+      // Ensure URL is safe and relative
+      if (redirectUrl && !redirectUrl.startsWith('/')) {
+        redirectUrl = '/owner'
+      }
+
+      return NextResponse.redirect(`${origin}${redirectUrl}`)
     }
   }
 
-  // Auth failed — redirect to login with error
-  return NextResponse.redirect(`${origin}/auth/login?error=auth_failed`)
+  // No code provided — redirect to login with error
+  const loginUrl = new URL('/auth/login', origin)
+  loginUrl.searchParams.set('error', 'auth_failed')
+  return NextResponse.redirect(loginUrl.toString())
 }

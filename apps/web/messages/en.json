@@ -1,4 +1,24 @@
 {
+  "auth": {
+    "loginTitle": "Sign in to your account",
+    "emailPlaceholder": "your@email.com",
+    "sendMagicLink": "Send Magic Link",
+    "checkEmail": "Check your email",
+    "magicLinkSent": "We've sent a magic link to your email. Click it to sign in. The link expires in 24 hours.",
+    "signupTitle": "Create your account",
+    "errorInvalidEmail": "Please enter a valid email address.",
+    "errorAuthFailed": "Sign in failed. The link may have expired or been used already. Please try again.",
+    "errorExpiredLink": "This link has expired. Please request a new one.",
+    "errorInvalidLink": "This link is invalid. Please request a new one.",
+    "errorAlreadyUsed": "This link has already been used. Please request a new one.",
+    "errorEmailRequired": "Email address is required.",
+    "sendingMagicLink": "Sending...",
+    "selectRole": "What best describes you?",
+    "selectRoleOwner": "I'm selling a property",
+    "selectRoleHunter": "I'm searching for a home",
+    "selectRoleAgent": "I'm a real estate agent",
+    "continueButton": "Continue"
+  },
   "nav": {
     "listYourPlace": "List Your Place",
     "services": "Services & Pricing",
