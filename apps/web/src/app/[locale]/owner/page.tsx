@@ -125,7 +125,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
           {t('tabListings')}
         </Link>
         <Link
-          href="/owner/inquiries"
+          href="/owner/inbox"
           className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors"
         >
           {t('tabInquiries')}
@@ -259,7 +259,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
           {/* Latest Messages */}
           <SectionCard
             title={t('sectionLatestMessages')}
-            action={{ label: t('actionViewAll'), href: '/owner/inquiries' }}
+            action={{ label: t('actionViewAll'), href: '/owner/inbox' }}
           >
             {threads.length === 0 ? (
               <p className="text-[#5E6278] py-6">{t('noMessages')}</p>

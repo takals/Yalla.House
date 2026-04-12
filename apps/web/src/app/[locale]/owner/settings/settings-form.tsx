@@ -1,0 +1,88 @@
+'use client'
+
+import { User, Building2 } from 'lucide-react'
+import { EditableField } from './editable-field'
+import { updateUserProfileAction, updateOwnerProfileAction } from './actions'
+
+interface SettingsFormProps {
+  userProfile: {
+    full_name: string
+    email: string
+    phone: string
+  }
+  ownerProfile: {
+    company_name: string
+    tax_id: string
+  }
+  translations: {
+    sectionPersonal: string
+    sectionBusiness: string
+    labelFullName: string
+    labelEmail: string
+    labelPhone: string
+    labelCompanyName: string
+    labelTaxId: string
+    labelReadOnly: string
+    buttonEdit: string
+    buttonAdd: string
+    notSet: string
+  }
+}
+
+export function SettingsForm({ userProfile, ownerProfile, translations: t }: SettingsFormProps) {
+  return (
+    <>
+      {/* Personal Information Card */}
+      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 space-y-4">
+        <div className="flex items-center gap-3 mb-2">
+          <User size={20} className="text-[#0F1117]" />
+          <h2 className="font-bold text-[#0F1117] text-base">{t.sectionPersonal}</h2>
+        </div>
+        <EditableField
+          label={t.labelFullName}
+          value={userProfile.full_name || t.notSet}
+          placeholder={t.labelFullName}
+          actionLabel={t.buttonEdit}
+          onSave={async (value) => updateUserProfileAction({ full_name: value })}
+        />
+        <EditableField
+          label={t.labelEmail}
+          value={userProfile.email}
+          placeholder=""
+          actionLabel={t.labelReadOnly}
+          isReadOnly
+          onSave={async () => ({ success: true })}
+        />
+        <EditableField
+          label={t.labelPhone}
+          value={userProfile.phone || t.notSet}
+          placeholder="+49..."
+          actionLabel={t.buttonEdit}
+          onSave={async (value) => updateUserProfileAction({ phone: value })}
+        />
+      </div>
+
+      {/* Company Details Card */}
+      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 space-y-4">
+        <div className="flex items-center gap-3 mb-2">
+          <Building2 size={20} className="text-[#0F1117]" />
+          <h2 className="font-bold text-[#0F1117] text-base">{t.sectionBusiness}</h2>
+        </div>
+        <EditableField
+          label={t.labelCompanyName}
+          value={ownerProfile.company_name || t.notSet}
+          placeholder={t.labelCompanyName}
+          actionLabel={ownerProfile.company_name ? t.buttonEdit : t.buttonAdd}
+          onSave={async (value) => updateOwnerProfileAction({ company_name: value })}
+        />
+        <EditableField
+          label={t.labelTaxId}
+          value={ownerProfile.tax_id || t.notSet}
+          placeholder={t.labelTaxId}
+          actionLabel={ownerProfile.tax_id ? t.buttonEdit : t.buttonAdd}
+          onSave={async (value) => updateOwnerProfileAction({ tax_id: value })}
+        />
+      </div>
+    </>
+  )
+}

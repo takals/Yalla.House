@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { ArrowLeft, Wifi, WifiOff, Star } from 'lucide-react'
+import { ProposalActions } from './proposal-actions'
 
 export default async function OwnerProposalsPage({
   searchParams,
@@ -154,14 +155,12 @@ export default async function OwnerProposalsPage({
 
                   {/* Actions */}
                   {proposal.status === 'invited' && (
-                    <div className="flex gap-3 pt-2">
-                      <button className="flex-1 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-2.5 rounded-xl transition-colors text-sm">
-                        {t('acceptProposal')}
-                      </button>
-                      <button className="px-6 bg-bg hover:bg-[#D9DCE4] text-[#0F1117] font-semibold py-2.5 rounded-xl transition-colors text-sm border border-[#E2E4EB]">
-                        {t('decline')}
-                      </button>
-                    </div>
+                    <ProposalActions
+                      assignmentId={proposal.id}
+                      acceptLabel={t('acceptProposal')}
+                      declineLabel={t('decline')}
+                      acceptedLabel={t('accepted')}
+                    />
                   )}
 
                   {proposal.status === 'accepted' && (

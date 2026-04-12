@@ -209,7 +209,11 @@
     "noShow": "Nicht erschienen"
   },
   "comms": {
-    "noMessagesDesc": "Wenn Makler auf Ihre Briefs antworten, werden Konversationen hier angezeigt."
+    "noMessagesDesc": "Wenn Makler auf Ihre Briefs antworten, werden Konversationen hier angezeigt.",
+    "inbox": "Posteingang",
+    "emailExplainer": "Alle Nachrichten von Maklern, Käufern und Systembenachrichtigungen erscheinen hier.",
+    "yourYallaEmail": "Ihre Yalla-E-Mail",
+    "noMessages": "Noch keine Nachrichten"
   },
   "agentDiscovery": {
     "title": "Finden Sie Makler in Ihrer Nähe",

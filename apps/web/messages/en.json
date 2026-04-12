@@ -209,7 +209,11 @@
     "noShow": "No Show"
   },
   "comms": {
-    "noMessagesDesc": "When agents respond to your briefs, conversations will appear here."
+    "noMessagesDesc": "When agents respond to your briefs, conversations will appear here.",
+    "inbox": "Inbox",
+    "emailExplainer": "All messages from agents, buyers, and system notifications appear here.",
+    "yourYallaEmail": "Your Yalla Email",
+    "noMessages": "No messages yet"
   },
   "agentDiscovery": {
     "title": "Find Estate Agents Near You",

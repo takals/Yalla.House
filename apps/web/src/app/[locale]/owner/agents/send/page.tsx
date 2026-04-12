@@ -1,28 +1,59 @@
+import { createClient } from '@/lib/supabase/server'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { fromMinorUnits } from '@yalla/integrations'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { ArrowLeft, Mail, Eye, CheckCircle2, Clock, ArrowRight } from 'lucide-react'
+import { SendBriefButton } from './send-brief-button'
 
 interface Props {
-  searchParams: Promise<{ agents?: string }>
+  searchParams: Promise<{ agents?: string; listing?: string }>
 }
 
 export default async function SendBriefPage({ searchParams }: Props) {
-  const { agents: agentIds } = await searchParams
+  const { agents: agentIds, listing: listingId } = await searchParams
   const t = await getTranslations('ownerAgents')
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const userId = user?.id ?? PREVIEW_USER_ID
 
-  // Mock selected agents
-  const selectedAgentIds = agentIds?.split(',') || []
-  const allAgents: Record<string, { name: string; contact: string }> = {
-    'agent-1': { name: 'John Smith & Co', contact: 'john@johnsmith.co.uk' },
-    'agent-2': { name: 'London Heights Estates', contact: 'hello@londonheights.co.uk' },
-    'agent-3': { name: 'City Centre Properties', contact: 'info@citycentre.co.uk' },
-    'agent-4': { name: 'Riverside Lettings & Sales', contact: 'sales@riverside.co.uk' },
-    'agent-5': { name: 'Tower Bridge Area Agents', contact: 'hello@towerbridgeagents.co.uk' },
+  // Fetch owner's listing (use provided listingId or most recent)
+  let listingQuery = (supabase as any)
+    .from('listings')
+    .select('id, address_line1, city, postcode, bedrooms, property_type, description_de, sale_price, country_code')
+    .eq('owner_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (listingId) {
+    listingQuery = listingQuery.eq('id', listingId)
   }
 
-  const selectedAgents = selectedAgentIds
-    .map(id => allAgents[id as string])
-    .filter(Boolean)
+  const { data: listingData } = await listingQuery.limit(1).single()
+  const listing = listingData as any
+
+  // Fetch selected agents from Supabase
+  const selectedAgentIds = agentIds?.split(',').filter(Boolean) || []
+  let selectedAgents: Array<{ id: string; name: string; contact: string }> = []
+
+  if (selectedAgentIds.length > 0) {
+    const { data: agentsData } = await (supabase as any)
+      .from('users')
+      .select(`
+        id, full_name, email,
+        agent_profiles!inner(agency_name)
+      `)
+      .in('id', selectedAgentIds)
+
+    selectedAgents = (agentsData ?? []).map((agent: any) => ({
+      id: agent.id,
+      name: agent.agent_profiles?.[0]?.agency_name || agent.full_name || 'Agent',
+      contact: agent.email || '',
+    }))
+  }
+
+  const formattedPrice = listing?.sale_price
+    ? fromMinorUnits(listing.sale_price, listing.country_code === 'DE' ? 'EUR' : 'GBP')
+    : null
 
   return (
     <div className="max-w-6xl">
@@ -42,29 +73,39 @@ export default async function SendBriefPage({ searchParams }: Props) {
           {/* Property Brief Card */}
           <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
             <h2 className="font-bold text-[#0F1117] mb-4">{t('briefPropertyTitle')}</h2>
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefAddress')}</p>
-                <p className="font-semibold text-[#0F1117]">124 Shoreditch High Street</p>
-                <p className="text-sm text-[#5E6278]">London, E1 6JE</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4 py-4 border-y border-[#E2E4EB]">
+            {listing ? (
+              <div className="space-y-4">
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefBedrooms')}</p>
-                  <p className="font-semibold text-[#0F1117]">3 bedrooms</p>
+                  <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefAddress')}</p>
+                  <p className="font-semibold text-[#0F1117]">{listing.address_line1}</p>
+                  <p className="text-sm text-[#5E6278]">{listing.city}{listing.postcode ? `, ${listing.postcode}` : ''}</p>
                 </div>
-                <div>
-                  <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefProperty')}</p>
-                  <p className="font-semibold text-[#0F1117]">Converted Warehouse</p>
+                <div className="grid grid-cols-2 gap-4 py-4 border-y border-[#E2E4EB]">
+                  <div>
+                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefBedrooms')}</p>
+                    <p className="font-semibold text-[#0F1117]">{listing.bedrooms ?? '—'} bedrooms</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefProperty')}</p>
+                    <p className="font-semibold text-[#0F1117]">{listing.property_type ?? '—'}</p>
+                  </div>
                 </div>
+                {listing.description_de && (
+                  <div>
+                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefDescription')}</p>
+                    <p className="text-sm text-[#5E6278]">{listing.description_de}</p>
+                  </div>
+                )}
+                {formattedPrice && (
+                  <div>
+                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">Price</p>
+                    <p className="font-bold text-lg text-[#0F1117]">{formattedPrice}</p>
+                  </div>
+                )}
               </div>
-              <div>
-                <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefDescription')}</p>
-                <p className="text-sm text-[#5E6278]">
-                  Spacious, light-filled apartment with high ceilings in a converted warehouse. Private terrace with views across East London.
-                </p>
-              </div>
-            </div>
+            ) : (
+              <p className="text-sm text-[#5E6278]">No listing found. Create a listing first.</p>
+            )}
           </div>
 
           {/* What Happens Next */}
@@ -109,10 +150,10 @@ export default async function SendBriefPage({ searchParams }: Props) {
             ) : (
               <>
                 <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
-                  {selectedAgents.map((agent, idx) => (
-                    <div key={idx} className="bg-[#EDEEF2] rounded-lg p-3">
-                      <p className="font-semibold text-sm text-[#0F1117]">{agent?.name || 'Unknown'}</p>
-                      <p className="text-xs text-[#5E6278]">{agent?.contact || 'N/A'}</p>
+                  {selectedAgents.map((agent) => (
+                    <div key={agent.id} className="bg-[#EDEEF2] rounded-lg p-3">
+                      <p className="font-semibold text-sm text-[#0F1117]">{agent.name}</p>
+                      <p className="text-xs text-[#5E6278]">{agent.contact}</p>
                     </div>
                   ))}
                 </div>
@@ -129,10 +170,13 @@ export default async function SendBriefPage({ searchParams }: Props) {
                     <Eye size={16} />
                     {t('sendPreviewEmail')}
                   </button>
-                  <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#D4764E] text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors">
-                    <Mail size={16} />
-                    {t('sendBriefNow')}
-                  </button>
+                  {listing && (
+                    <SendBriefButton
+                      listingId={listing.id}
+                      agentIds={selectedAgents.map(a => a.id)}
+                      label={t('sendBriefNow')}
+                    />
+                  )}
                 </div>
               </>
             )}

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { User, Building2, Bell, Globe, AlertTriangle } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { SettingsForm } from './settings-form'
 
 interface OwnerProfile {
   user_id: string
@@ -37,39 +38,31 @@ export default async function OwnerSettingsPage() {
         <p className="text-sm text-[#656565] mt-1">{t('pageDescription')}</p>
       </div>
 
-      {/* Personal Information Card */}
-      <SettingsSection icon={User} title={t('sectionPersonal')}>
-        <SettingItem
-          label={t('labelFullName')}
-          value={userProfile?.full_name || t('notSet')}
-          actionLabel={t('buttonEdit')}
-        />
-        <SettingItem
-          label={t('labelEmail')}
-          value={user?.email || 'preview@yalla.house'}
-          actionLabel={t('labelReadOnly')}
-          isReadOnly
-        />
-        <SettingItem
-          label={t('labelPhone')}
-          value={userProfile?.phone || t('notSet')}
-          actionLabel={t('buttonEdit')}
-        />
-      </SettingsSection>
-
-      {/* Company Details Card */}
-      <SettingsSection icon={Building2} title={t('sectionBusiness')}>
-        <SettingItem
-          label={t('labelCompanyName')}
-          value={ownerProfile?.company_name || t('notSet')}
-          actionLabel={ownerProfile?.company_name ? t('buttonEdit') : t('buttonAdd')}
-        />
-        <SettingItem
-          label={t('labelTaxId')}
-          value={ownerProfile?.tax_id || t('notSet')}
-          actionLabel={ownerProfile?.tax_id ? t('buttonEdit') : t('buttonAdd')}
-        />
-      </SettingsSection>
+      {/* Personal + Business — editable via client component */}
+      <SettingsForm
+        userProfile={{
+          full_name: userProfile?.full_name ?? '',
+          email: user?.email || 'preview@yalla.house',
+          phone: userProfile?.phone ?? '',
+        }}
+        ownerProfile={{
+          company_name: ownerProfile?.company_name ?? '',
+          tax_id: ownerProfile?.tax_id ?? '',
+        }}
+        translations={{
+          sectionPersonal: t('sectionPersonal'),
+          sectionBusiness: t('sectionBusiness'),
+          labelFullName: t('labelFullName'),
+          labelEmail: t('labelEmail'),
+          labelPhone: t('labelPhone'),
+          labelCompanyName: t('labelCompanyName'),
+          labelTaxId: t('labelTaxId'),
+          labelReadOnly: t('labelReadOnly'),
+          buttonEdit: t('buttonEdit'),
+          buttonAdd: t('buttonAdd'),
+          notSet: t('notSet'),
+        }}
+      />
 
       {/* Notification Preferences Card */}
       <SettingsSection icon={Bell} title={t('sectionNotifications')} badge={t('badgeSoon')}>
