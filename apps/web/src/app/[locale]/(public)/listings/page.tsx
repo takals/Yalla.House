@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -29,6 +30,7 @@ function formatPrice(
 }
 
 export default async function ListingsPage({ params, searchParams }: Props) {
+  const t = await getTranslations('listings')
   const { locale } = await params
   const { city, intent, type, min, max } = await searchParams
 

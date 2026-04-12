@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { getTranslations } from 'next-intl/server'
 import { SettingsClient } from './settings-client'
 
 interface RawAssignment {
@@ -17,6 +18,7 @@ interface RawConsentEvent {
 }
 
 export default async function SettingsPage() {
+  const t = await getTranslations('hunterSettings')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -63,18 +65,48 @@ export default async function SettingsPage() {
     created_at: ev.created_at,
   }))
 
+  const labels = {
+    profile: t('profile'),
+    email: t('email'),
+    phone: t('phone'),
+    fullName: t('fullName'),
+    saveChanges: t('saveChanges'),
+    saving: t('saving'),
+    profileSaved: t('profileSaved'),
+    privacy: t('privacy'),
+    pauseAllSharing: t('pauseAllSharing'),
+    pauseAllSharingDesc: t('pauseAllSharingDesc'),
+    pause: t('pause'),
+    connectedAgents: t('connectedAgents'),
+    unknownAgency: t('unknownAgency'),
+    disconnect: t('disconnect'),
+    deleteData: t('deleteData'),
+    consentLog: t('consentLog'),
+    briefShared: t('briefShared'),
+    contactShared: t('contactShared'),
+    dataPaused: t('dataPaused'),
+    dataResumed: t('dataResumed'),
+    agentDisconnected: t('agentDisconnected'),
+    dataDeleted: t('dataDeleted'),
+    dangerZone: t('dangerZone'),
+    deleteAllData: t('deleteAllData'),
+    deleteAllDataDesc: t('deleteAllDataDesc'),
+    delete: t('delete'),
+  }
+
   return (
     <div className="max-w-2xl">
 
         <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-1">Konto & Datenschutz</h1>
-          <p className="text-[#5E6278] text-sm">Profil verwalten und Datenweitergabe kontrollieren.</p>
+          <h1 className="text-2xl font-bold mb-1">{t('title')}</h1>
+          <p className="text-[#5E6278] text-sm">{t('subtitle')}</p>
         </div>
 
         <SettingsClient
           profile={profile}
           assignments={assignments}
           consentLog={consentLog}
+          labels={labels}
         />
 
     </div>

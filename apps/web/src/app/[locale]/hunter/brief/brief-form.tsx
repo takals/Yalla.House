@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { Check, CheckCircle2 } from 'lucide-react'
 import { saveBriefAction } from './actions'
 
 interface BriefProfile {
@@ -70,7 +71,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-[#FFD400] text-[#0F1117]'
+          ? 'bg-brand border-brand text-[#0F1117]'
           : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
       }`}
     >
@@ -155,8 +156,8 @@ export function BriefForm({ profile }: Props) {
       <input type="hidden" name="timeline" value={timeline} />
 
       {state.success && (
-        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium">
-          ✓ Brief activated — the system is now working for you.
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium flex items-center gap-2">
+          <CheckCircle2 size={16} /> Brief activated — the system is now working for you.
         </div>
       )}
       {state.error && (
@@ -190,7 +191,7 @@ export function BriefForm({ profile }: Props) {
                   type="button"
                   onClick={() => setIntent(v)}
                   className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                    intent === v ? 'bg-brand border-[#FFD400] text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                    intent === v ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
                   }`}
                 >
                   {v === 'buy' ? 'Buy' : 'Rent'}
@@ -385,7 +386,7 @@ export function BriefForm({ profile }: Props) {
                 <p className="text-xs font-semibold text-[#5E6278] mb-2">This brief will be shared with:</p>
                 {['Matching engine', 'Connected agents', 'Newsletter feeds'].map(item => (
                   <div key={item} className="flex items-center gap-1.5 text-xs text-[#5E6278] mb-1">
-                    <span className="text-green-600">✓</span> {item}
+                    <Check size={12} className="text-green-600 flex-shrink-0" /> {item}
                   </div>
                 ))}
               </div>

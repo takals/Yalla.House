@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import { ShieldCheck, Check } from 'lucide-react'
 import { disconnectHunterAction } from './actions'
 
 interface HunterPassport {
@@ -23,9 +24,9 @@ interface HunterPassport {
 }
 
 const FINANCE_LABELS: Record<string, { label: string; cls: string }> = {
-  cash:              { label: 'Cash-Käufer', cls: 'bg-[#FFFBE0] text-[#7A5F00]' },
+  cash:              { label: 'Cash-Käufer', cls: 'bg-brand-solid-bg text-brand-badge-text' },
   mortgage_approved: { label: 'Hypothek (Zusage)', cls: 'bg-[#DCFCE7] text-[#166534]' },
-  mortgage_pending:  { label: 'Hypothek (laufend)', cls: 'bg-[#FFFBE0] text-[#7A5F00]' },
+  mortgage_pending:  { label: 'Hypothek (laufend)', cls: 'bg-brand-solid-bg text-brand-badge-text' },
   not_specified:     { label: 'Nicht angegeben', cls: 'bg-[#F1F5F9] text-[#64748B]' },
 }
 
@@ -57,11 +58,15 @@ export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
           style={{ background: 'rgba(255,212,0,0.08)' }}
         />
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand">🛂 Home Passport</span>
+          <div className="flex items-center gap-1 text-[0.6rem] font-black uppercase tracking-widest text-brand">
+            <ShieldCheck size={14} />
+            Home Passport
+          </div>
           {passport.hasPassport ? (
-            <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full border"
+            <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1"
               style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.25)' }}>
-              ✓ Aktiv
+              <Check size={10} />
+              Aktiv
             </span>
           ) : (
             <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full border"

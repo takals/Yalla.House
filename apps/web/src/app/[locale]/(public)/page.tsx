@@ -1,107 +1,178 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Home, Search, Handshake } from 'lucide-react'
+import HomepageHero from '@/components/homepage-hero'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const t = await getTranslations('hero')
+  const th = await getTranslations('heroHunter')
+  const stats = await getTranslations('stats')
+  const statsH = await getTranslations('statsHunter')
+  const how = await getTranslations('howItWorks')
+  const howH = await getTranslations('howItWorksHunter')
+  const why = await getTranslations('whyYalla')
+  const whyH = await getTranslations('whyYallaHunter')
+  const paths = await getTranslations('paths')
+  const cta = await getTranslations('ctaBand')
+
   return (
-    <main className="bg-white min-h-[calc(100vh-64px)]">
+    <main className="bg-page-dark min-h-screen">
 
-      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
-      <section className="pt-section-top pb-10 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-display text-[#0F1117] mb-5">
-            Dein Immobilien-<br />
-            <span className="text-brand">Dashboard.</span>
-          </h1>
-          <p className="text-lede text-[#656565] max-w-xl mx-auto">
-            Plane, starte und manage deinen Immobilienverkauf — alles an einem Ort. Wähle deine Rolle und leg los.
+      {/* ── MODE-AWARE: HERO + STATS + HOW IT WORKS + WHY YALLA ──────── */}
+      <HomepageHero
+        toggleOwnerLabel={t('toggleOwner')}
+        toggleHunterLabel={t('toggleHunter')}
+        owner={{
+          headlinePrefix: t('headlinePrefix'),
+          headlineWords: t('headlineWords').split(','),
+          headlineSuffix: t('headlineSuffix'),
+          subline: t('subline'),
+          cta: t('cta'),
+          ctaHref: '/owner',
+          stats: [
+            { value: stats('stat1Value'), label: stats('stat1Label') },
+            { value: stats('stat2Value'), label: stats('stat2Label') },
+            { value: stats('stat3Value'), label: stats('stat3Label') },
+            { value: stats('stat4Value'), label: stats('stat4Label') },
+          ],
+          howTitle: how('title'),
+          howSubtitle: how('subtitle'),
+          steps: [
+            { title: how('step1Title'), body: how('step1Body') },
+            { title: how('step2Title'), body: how('step2Body') },
+            { title: how('step3Title'), body: how('step3Body') },
+          ],
+          whyTitle: why('title'),
+          whyItems: [
+            { title: why('item1Title'), body: why('item1Body') },
+            { title: why('item2Title'), body: why('item2Body') },
+            { title: why('item3Title'), body: why('item3Body') },
+            { title: why('item4Title'), body: why('item4Body') },
+          ],
+        }}
+        hunter={{
+          headlinePrefix: th('headlinePrefix'),
+          headlineWords: th('headlineWords').split(','),
+          headlineSuffix: th('headlineSuffix'),
+          subline: th('subline'),
+          cta: th('cta'),
+          ctaHref: '/hunter/passport',
+          stats: [
+            { value: statsH('stat1Value'), label: statsH('stat1Label') },
+            { value: statsH('stat2Value'), label: statsH('stat2Label') },
+            { value: statsH('stat3Value'), label: statsH('stat3Label') },
+            { value: statsH('stat4Value'), label: statsH('stat4Label') },
+          ],
+          howTitle: howH('title'),
+          howSubtitle: howH('subtitle'),
+          steps: [
+            { title: howH('step1Title'), body: howH('step1Body') },
+            { title: howH('step2Title'), body: howH('step2Body') },
+            { title: howH('step3Title'), body: howH('step3Body') },
+          ],
+          whyTitle: whyH('title'),
+          whyItems: [
+            { title: whyH('item1Title'), body: whyH('item1Body') },
+            { title: whyH('item2Title'), body: whyH('item2Body') },
+            { title: whyH('item3Title'), body: whyH('item3Body') },
+            { title: whyH('item4Title'), body: whyH('item4Body') },
+          ],
+        }}
+      />
+
+      {/* ── THREE PATHS ──────────────────────────────────────────────────── */}
+      <section className="pb-24 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6">
+
+            {/* Owner */}
+            <div className="bg-surface-dark rounded-card-dark p-6 border border-white/[0.04] hover:border-brand/30 transition-[border-color] duration-300">
+              <div className="w-10 h-10 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand mb-4">
+                <Home size={22} />
+              </div>
+              <h3 className="text-base font-bold text-white mb-1">{paths('ownerTitle')}</h3>
+              <p className="text-xs text-brand font-semibold mb-3">{paths('ownerTagline')}</p>
+              <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-5">
+                {paths('ownerBody')}
+              </p>
+              <Link
+                href="/owner"
+                className="text-sm font-semibold text-brand hover:text-brand-hover transition-[color] duration-300"
+              >
+                {paths('ownerCta')} →
+              </Link>
+            </div>
+
+            {/* Hunter */}
+            <div className="bg-surface-dark rounded-card-dark p-6 border border-white/[0.04] hover:border-brand/30 transition-[border-color] duration-300">
+              <div className="w-10 h-10 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand mb-4">
+                <Search size={22} />
+              </div>
+              <h3 className="text-base font-bold text-white mb-1">{paths('hunterTitle')}</h3>
+              <p className="text-xs text-brand font-semibold mb-3">{paths('hunterTagline')}</p>
+              <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-5">
+                {paths('hunterBody')}
+              </p>
+              <Link
+                href="/hunter/brief"
+                className="text-sm font-semibold text-brand hover:text-brand-hover transition-[color] duration-300"
+              >
+                {paths('hunterCta')} →
+              </Link>
+            </div>
+
+            {/* Agent */}
+            <div className="bg-surface-dark rounded-card-dark p-6 border border-white/[0.04] hover:border-brand/30 transition-[border-color] duration-300">
+              <div className="w-10 h-10 rounded-card-dark bg-brand/10 flex items-center justify-center text-brand mb-4">
+                <Handshake size={22} />
+              </div>
+              <h3 className="text-base font-bold text-white mb-1">{paths('agentTitle')}</h3>
+              <p className="text-xs text-brand font-semibold mb-3">{paths('agentTagline')}</p>
+              <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-5">
+                {paths('agentBody')}
+              </p>
+              <Link
+                href="/agent"
+                className="text-sm font-semibold text-brand hover:text-brand-hover transition-[color] duration-300"
+              >
+                {paths('agentCta')} →
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA BAND ─────────────────────────────────────────────────────── */}
+      <section className="relative py-20 px-4 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212, 118, 78, 0.08), transparent)',
+          }}
+        />
+        <div className="relative max-w-2xl mx-auto text-center">
+          <h2 className="text-title-1 text-white mb-4">
+            {cta('headline')}
+          </h2>
+          <p className="text-lede text-text-on-dark-secondary mb-8">
+            {cta('body')}
           </p>
-        </div>
-      </section>
-
-      {/* ── ROLE SELECTOR ────────────────────────────────────────────────────── */}
-      <section className="pb-16 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-            <Link href="/owner" className="group relative bg-[#FAFAFA] hover:bg-white rounded-2xl border border-[#E2E4EB] hover:border-[#FFD400] p-6 transition-all duration-200 hover:shadow-[0_12px_40px_rgba(0,0,0,.08)]">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#FFF8D6] flex items-center justify-center text-2xl flex-shrink-0">🏡</div>
-                <div className="flex-1 min-w-0">
-                  <h2 className="font-bold text-[#0F1117] text-base mb-1 group-hover:text-black">Eigentümer / Verkäufer</h2>
-                  <p className="text-sm text-[#999] leading-snug">Inserate verwalten, Besichtigungen koordinieren, Angebote vergleichen</p>
-                </div>
-              </div>
-              <div className="mt-4 text-xs font-semibold text-[#FFD400] opacity-0 group-hover:opacity-100 transition-opacity">
-                Dashboard öffnen →
-              </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/owner"
+              className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
+              style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
+            >
+              {cta('cta')} →
             </Link>
-
-            <Link href="/hunter" className="group relative bg-[#FAFAFA] hover:bg-white rounded-2xl border border-[#E2E4EB] hover:border-[#6366F1] p-6 transition-all duration-200 hover:shadow-[0_12px_40px_rgba(0,0,0,.08)]">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#EDF4FF] flex items-center justify-center text-2xl flex-shrink-0">🔍</div>
-                <div className="flex-1 min-w-0">
-                  <h2 className="font-bold text-[#0F1117] text-base mb-1 group-hover:text-black">Home Hunter</h2>
-                  <p className="text-sm text-[#999] leading-snug">Objekte durchsuchen, Besichtigungen buchen, Angebote abgeben</p>
-                </div>
-              </div>
-              <div className="mt-4 text-xs font-semibold text-[#6366F1] opacity-0 group-hover:opacity-100 transition-opacity">
-                Dashboard öffnen →
-              </div>
-            </Link>
-
-            <Link href="/agent" className="group relative bg-[#FAFAFA] hover:bg-white rounded-2xl border border-[#E2E4EB] hover:border-[#0EA5E9] p-6 transition-all duration-200 hover:shadow-[0_12px_40px_rgba(0,0,0,.08)]">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#FFF7ED] flex items-center justify-center text-2xl flex-shrink-0">📍</div>
-                <div className="flex-1 min-w-0">
-                  <h2 className="font-bold text-[#0F1117] text-base mb-1 group-hover:text-black">Makler</h2>
-                  <p className="text-sm text-[#999] leading-snug">Jobs annehmen, Besichtigungen durchführen, Berichte erstellen</p>
-                </div>
-              </div>
-              <div className="mt-4 text-xs font-semibold text-[#0EA5E9] opacity-0 group-hover:opacity-100 transition-opacity">
-                Dashboard öffnen →
-              </div>
-            </Link>
-
-            <Link href="/admin" className="group relative bg-[#FAFAFA] hover:bg-white rounded-2xl border border-[#E2E4EB] hover:border-[#22c55e] p-6 transition-all duration-200 hover:shadow-[0_12px_40px_rgba(0,0,0,.08)]">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#F0FDF4] flex items-center justify-center text-2xl flex-shrink-0">⚙️</div>
-                <div className="flex-1 min-w-0">
-                  <h2 className="font-bold text-[#0F1117] text-base mb-1 group-hover:text-black">Admin</h2>
-                  <p className="text-sm text-[#999] leading-snug">Plattformverwaltung, Nutzer & Übersicht</p>
-                </div>
-              </div>
-              <div className="mt-4 text-xs font-semibold text-[#22c55e] opacity-0 group-hover:opacity-100 transition-opacity">
-                Dashboard öffnen →
-              </div>
-            </Link>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ── NEW LISTING CTA ──────────────────────────────────────────────────── */}
-      <section className="pb-20 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="border-t border-[#E2E4EB] pt-10">
-            <p className="text-sm text-[#656565] mb-5">Noch kein Inserat? Starte in unter 5 Minuten.</p>
-            <Link href="/owner/new" className="inline-flex items-center bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold px-8 py-3.5 rounded-xl transition-colors text-base">
-              Kostenlose Immobilien-Analyse →
+            <Link
+              href="/agent"
+              className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
+            >
+              {cta('agentLink')} →
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* ── TRUST LINE ───────────────────────────────────────────────────────── */}
-      <section className="border-t border-[#E2E4EB] bg-[#FAFAFA] py-6 px-4">
-        <div className="max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-6 text-sm text-[#999]">
-          <span>Auf <strong className="text-[#333]">IS24</strong> &amp; <strong className="text-[#333]">Immowelt</strong> gelistet</span>
-          <span className="w-px h-4 bg-[#D8DBE5] hidden sm:block"></span>
-          <span>Keine Provision</span>
-          <span className="w-px h-4 bg-[#D8DBE5] hidden sm:block"></span>
-          <span>DSGVO-konform</span>
-          <span className="w-px h-4 bg-[#D8DBE5] hidden sm:block"></span>
-          <Link href="/about" className="text-[#FFD400] hover:text-[#E6C200] font-semibold transition-colors">
-            Mehr erfahren →
-          </Link>
         </div>
       </section>
 

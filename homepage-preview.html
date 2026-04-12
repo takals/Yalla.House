@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yalla.House — Homepage Preview (v3)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.475.0/dist/umd/lucide.min.js"></script>
+<style>
+  :root {
+    --brand: #D4764E;
+    --brand-hover: #BF6840;
+    --page-dark: #161616;
+    --surface-dark: #1C1C1C;
+    --card-dark: #2B2B2B;
+    --text-white: #ffffff;
+    --text-secondary: rgba(255,255,255,.55);
+    --text-muted: rgba(255,255,255,.35);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--page-dark);
+    color: var(--text-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    position: fixed; top:0; left:0; right:0; z-index:50;
+    padding: 16px 32px;
+    background: rgba(22,22,22,.88);
+    backdrop-filter: blur(14px);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-size:20px; font-weight:800; letter-spacing:-.02em; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-link {
+    font-size: 14px; font-weight: 500; color: var(--text-secondary);
+    text-decoration: none; transition: color .2s;
+  }
+  .nav-link:hover { color: var(--text-white); }
+  .nav-signin {
+    font-size: 14px; font-weight: 600; color: var(--text-white);
+    text-decoration: none; padding: 8px 18px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.15); transition: all .2s;
+  }
+  .nav-signin:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.04); }
+
+  /* Toggle */
+  .toggle-wrap {
+    display: inline-flex; background: rgba(255,255,255,.06);
+    border-radius: 100px; padding: 4px; margin-bottom: 40px;
+  }
+  .toggle-btn {
+    padding: 10px 24px; border-radius: 100px; font-size: 14px;
+    font-weight: 600; border: none; cursor: pointer; transition: all .3s;
+    background: transparent; color: var(--text-secondary);
+  }
+  .toggle-btn.active {
+    background: var(--brand); color: var(--text-white);
+    box-shadow: 0 2px 8px rgba(212,118,78,.3);
+  }
+  .toggle-btn:not(.active):hover { color: var(--text-white); }
+
+  /* Hero */
+  .hero { padding: 130px 20px 80px; text-align: center; }
+  .hero-inner { max-width: 720px; margin: 0 auto; }
+  h1.hero-h1 {
+    font-size: clamp(2.25rem, 5.5vw, 3.5rem);
+    font-weight: 800; letter-spacing: -.035em; line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .rotating-word {
+    display: inline-block;
+    color: var(--brand);
+    transition: opacity .6s ease-in-out;
+  }
+  .subline {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--text-secondary); line-height: 1.65;
+    max-width: 600px; margin: 0 auto 40px;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--brand); color: var(--text-white);
+    font-weight: 700; font-size: 16px; padding: 14px 32px;
+    border-radius: 10px; text-decoration: none; transition: background .3s;
+  }
+  .btn-primary:hover { background: var(--brand-hover); }
+
+  /* Stats */
+  .stats { padding: 0 20px 80px; }
+  .stats-grid {
+    max-width: 900px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+  @media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card {
+    background: var(--card-dark); border-radius: 6px;
+    padding: 20px; text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .stat-value { font-size: 24px; font-weight: 800; color: var(--brand); margin-bottom: 4px; }
+  .stat-label { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+  /* How it works */
+  .how { padding: 0 20px 96px; }
+  .how-inner { max-width: 900px; margin: 0 auto; }
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 800; letter-spacing: -.03em;
+    text-align: center; margin-bottom: 12px;
+  }
+  .section-subtitle {
+    text-align: center; color: var(--text-secondary);
+    margin-bottom: 48px; font-size: 15px;
+  }
+  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } }
+  .step-card {
+    background: var(--surface-dark); border-radius: 6px;
+    padding: 28px; transition: background .3s;
+  }
+  .step-card:hover { background: var(--card-dark); }
+  .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .step-icon {
+    width: 40px; height: 40px; border-radius: 6px;
+    background: rgba(212,118,78,.1); color: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-num {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .12em;
+  }
+  .step-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .step-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* Why Yalla */
+  .why { padding: 0 20px 96px; }
+  .why-inner { max-width: 720px; margin: 0 auto; }
+  .why-items { display: flex; flex-direction: column; gap: 32px; }
+  .why-item { display: flex; gap: 16px; }
+  .why-bar {
+    width: 6px; border-radius: 100px; background: var(--brand);
+    flex-shrink: 0; align-self: stretch;
+  }
+  .why-item h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .why-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* Three Paths */
+  .paths { padding: 0 20px 96px; }
+  .paths-grid {
+    max-width: 900px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  @media (max-width: 768px) { .paths-grid { grid-template-columns: 1fr; } }
+  .path-card {
+    background: var(--surface-dark); border-radius: 6px; padding: 28px;
+    border: 1px solid rgba(255,255,255,.04); transition: border-color .3s;
+  }
+  .path-card:hover { border-color: rgba(212,118,78,.3); }
+  .path-icon {
+    width: 40px; height: 40px; border-radius: 6px;
+    background: rgba(212,118,78,.1); color: var(--brand);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .path-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .path-tagline { font-size: 12px; color: var(--brand); font-weight: 600; margin-bottom: 12px; }
+  .path-card > p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+  .path-link { font-size: 14px; font-weight: 600; color: var(--brand); text-decoration: none; }
+  .path-link:hover { color: var(--brand-hover); }
+
+  /* CTA Band */
+  .cta-band { position: relative; padding: 80px 20px; overflow: hidden; }
+  .cta-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,118,78,.08), transparent);
+  }
+  .cta-inner { position: relative; max-width: 600px; margin: 0 auto; text-align: center; }
+  .cta-inner > p { font-size: clamp(1rem, 2vw, 1.15rem); color: var(--text-secondary); line-height: 1.65; margin-bottom: 32px; }
+  .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; align-items: center; }
+  .cta-agent { color: var(--text-secondary); font-weight: 500; font-size: 14px; text-decoration: none; transition: color .3s; }
+  .cta-agent:hover { color: var(--text-white); }
+
+  /* Footer */
+  .footer {
+    padding: 40px 32px; border-top: 1px solid rgba(255,255,255,.06);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-brand { font-size: 16px; font-weight: 800; letter-spacing: -.02em; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-link { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color .2s; }
+  .footer-link:hover { color: var(--text-secondary); }
+  .footer-copy { font-size: 12px; color: var(--text-muted); width: 100%; text-align: center; margin-top: 12px; }
+
+  /* Transitions */
+  .fade-section { transition: opacity .4s ease-in-out; }
+  .fade-section.hidden { opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- Header — no "List Your Place", just nav + sign in -->
+<div class="header">
+  <div class="logo">Yalla.House</div>
+  <div class="nav-links">
+    <a href="#" class="nav-link">Services & Pricing</a>
+    <a href="#" class="nav-link">About</a>
+    <a href="#" class="nav-signin">Sign In</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="toggle-wrap">
+      <button class="toggle-btn active" data-mode="owner">I'm selling</button>
+      <button class="toggle-btn" data-mode="hunter">I'm searching</button>
+    </div>
+    <div class="fade-section" id="heroContent">
+      <h1 class="hero-h1" id="headline"></h1>
+      <p class="subline" id="subline"></p>
+      <a href="#" class="btn-primary" id="ctaPrimary"></a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid fade-section" id="statsGrid"></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-inner fade-section" id="howSection">
+    <h2 class="section-title" id="howTitle"></h2>
+    <p class="section-subtitle" id="howSubtitle"></p>
+    <div class="steps-grid" id="stepsGrid"></div>
+  </div>
+</section>
+
+<!-- WHY YALLA -->
+<section class="why">
+  <div class="why-inner fade-section" id="whySection">
+    <h2 class="section-title" id="whyTitle" style="margin-bottom:48px;"></h2>
+    <div class="why-items" id="whyItems"></div>
+  </div>
+</section>
+
+<!-- THREE PATHS (static) -->
+<section class="paths">
+  <div class="paths-grid">
+    <div class="path-card">
+      <div class="path-icon"><i data-lucide="home" style="width:22px;height:22px;"></i></div>
+      <h3>For Owners</h3>
+      <div class="path-tagline">Free forever. No commission.</div>
+      <p>Get a free dashboard with market data and comparable sales. When you're ready, send your brief to agents and choose the best deal.</p>
+      <a href="#" class="path-link">Create your dashboard &rarr;</a>
+    </div>
+    <div class="path-card">
+      <div class="path-icon"><i data-lucide="search" style="width:22px;height:22px;"></i></div>
+      <h3>For Home Hunters</h3>
+      <div class="path-tagline">Find your next home.</div>
+      <p>Tell us what you're looking for. We'll match you with properties and keep you updated as new homes hit the market.</p>
+      <a href="#" class="path-link">Start your search &rarr;</a>
+    </div>
+    <div class="path-card">
+      <div class="path-icon"><i data-lucide="handshake" style="width:22px;height:22px;"></i></div>
+      <h3>For Agents</h3>
+      <div class="path-tagline">Win new instructions.</div>
+      <p>Receive Owner Briefs from motivated sellers in your area. Respond with your proposal and win the instruction — on merit, not marketing spend.</p>
+      <a href="#" class="path-link">Learn more &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <h2 class="section-title" style="margin-bottom:16px;">Ready to take control of your sale?</h2>
+    <p>Create your free dashboard in two minutes. No card required. No commission — ever.</p>
+    <div class="cta-row">
+      <a href="#" class="btn-primary">Get started free &rarr;</a>
+      <a href="#" class="cta-agent">I'm an agent &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">Yalla.House</div>
+  <div class="footer-links">
+    <a href="#" class="footer-link">Services & Pricing</a>
+    <a href="#" class="footer-link">About</a>
+    <a href="#" class="footer-link">Privacy</a>
+    <a href="#" class="footer-link">Terms</a>
+    <a href="#" class="footer-link">Impressum</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 Yalla.House. All rights reserved.</div>
+</footer>
+
+<script>
+// Icon names per mode — Lucide icon names
+var STEP_ICONS = {
+  owner: ['layout-dashboard', 'send', 'bar-chart-3'],
+  hunter: ['clipboard-list', 'users', 'layout']
+};
+
+var MODES = {
+  owner: {
+    prefix: 'Your property ',
+    words: ['selling', 'renting'],
+    suffix: ', under your control.',
+    subline: 'Free owner dashboard. Market data. Comparable sales. Then send your brief to competing agents \u2014 and choose the best deal.',
+    cta: 'Create your free dashboard',
+    stats: [
+      { value: '\u00A35,000+', label: 'Average agent commission on a Redbridge property' },
+      { value: '69%', label: "of owners want weekly updates but don't get them" },
+      { value: '\u00A30', label: 'Cost of your Yalla owner dashboard \u2014 always free' },
+      { value: '2 min', label: 'to create your dashboard and see your market data' }
+    ],
+    howTitle: 'How it works',
+    howSubtitle: 'Three steps. No commission. Full control.',
+    steps: [
+      { title: 'Create your dashboard', body: 'Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale.' },
+      { title: 'Send your brief to agents', body: 'One click sends your Owner Brief to competing agents in your area. They respond with real proposals \u2014 commission, marketing plan, portal coverage.' },
+      { title: 'Compare, choose, track', body: 'Pick the best agent. Once instructed, they connect to your dashboard so you see every viewing, offer, and update in real time.' }
+    ],
+    whyTitle: 'Why Yalla?',
+    whyItems: [
+      { title: 'You get a dashboard. Not a bill.', body: 'Every other platform charges you to list. We give you a free dashboard first \u2014 market data, comparable sales, a timeline for your sale. The dashboard is yours whether you use an agent or not.' },
+      { title: 'Agents compete for you.', body: 'Instead of calling one agent and hoping for the best, you send your brief to multiple agents simultaneously. They respond with real proposals. You compare. You choose.' },
+      { title: 'Your data, always.', body: "Track every viewing, every offer, every piece of feedback in one place. If you instruct an agent, they connect to your dashboard so you see what's happening in real time." },
+      { title: "We're not agents. We're your tools.", body: "Yalla is a technology platform, not an estate agency. We don't take commission. We don't list your property. We give you the information and connections to make the best decision." }
+    ]
+  },
+  hunter: {
+    prefix: 'Your property ',
+    words: ['search', 'purchase'],
+    suffix: ', finally organised.',
+    subline: 'Tell us what you\u2019re looking for. We match you with local agents who send you relevant properties \u2014 filtered, ranked, and in one dashboard.',
+    cta: 'Create your Home Passport',
+    stats: [
+      { value: '12,000+', label: 'Agents in our network across the UK' },
+      { value: '83%', label: 'of hunters say agents send irrelevant listings' },
+      { value: '\u00A30', label: 'Cost of your Yalla Home Passport \u2014 always free' },
+      { value: '30 sec', label: 'to set your search and get matched with agents' }
+    ],
+    howTitle: 'How it works',
+    howSubtitle: 'Three steps. Zero spam. Only what you want.',
+    steps: [
+      { title: 'Build your Home Passport', body: 'Tell us your areas, budget, property type, and must-haves. Takes two minutes \u2014 and it\u2019s free forever.' },
+      { title: 'We match you with agents', body: 'Local agents in your area receive your brief. They respond with properties that actually fit your criteria \u2014 not bulk mailouts.' },
+      { title: 'Everything in one dashboard', body: 'Agent emails, listings, viewing requests \u2014 all filtered and organised in your dashboard. No more inbox chaos.' }
+    ],
+    whyTitle: 'Why Yalla?',
+    whyItems: [
+      { title: 'Stop drowning in agent emails.', body: "Agents blast the same listings to thousands. 90% of what you receive doesn't match what you want. Yalla filters everything through your criteria so only relevant properties reach your dashboard." },
+      { title: 'Agents work for you. Not the other way around.', body: 'Create your Home Passport once and let agents come to you with properties that fit. No more scrolling. No more chasing. You set the brief \u2014 they deliver.' },
+      { title: 'One place for everything.', body: 'Viewings, offers, agent messages, property details \u2014 all tracked in your dashboard. No scattered WhatsApp threads, no lost emails, no forgotten viewings.' },
+      { title: 'Your data stays yours.', body: "We don't sell your details. Agents only see your first name until you choose to connect. You control who contacts you and when." }
+    ]
+  }
+};
+
+var currentMode = 'owner';
+var wordIndex = 0;
+var wordInterval = null;
+var fadeTimeout = null;
+
+function renderContent(mode) {
+  var c = MODES[mode];
+  var icons = STEP_ICONS[mode];
+
+  document.getElementById('headline').innerHTML =
+    c.prefix + '<span class="rotating-word" id="rotatingWord">' + c.words[0] + '</span>' + c.suffix;
+
+  document.getElementById('subline').textContent = c.subline;
+  document.getElementById('ctaPrimary').textContent = c.cta + ' \u2192';
+
+  // Stats
+  var statsHtml = '';
+  for (var i = 0; i < c.stats.length; i++) {
+    statsHtml += '<div class="stat-card"><div class="stat-value">' + c.stats[i].value + '</div><div class="stat-label">' + c.stats[i].label + '</div></div>';
+  }
+  document.getElementById('statsGrid').innerHTML = statsHtml;
+
+  // Steps with Lucide icons
+  document.getElementById('howTitle').textContent = c.howTitle;
+  document.getElementById('howSubtitle').textContent = c.howSubtitle;
+  var stepsHtml = '';
+  for (var j = 0; j < c.steps.length; j++) {
+    var s = c.steps[j];
+    var num = String(j + 1).padStart(2, '0');
+    stepsHtml += '<div class="step-card"><div class="step-header"><div class="step-icon"><i data-lucide="' + icons[j] + '" style="width:22px;height:22px;"></i></div><span class="step-num">Step ' + num + '</span></div><h3>' + s.title + '</h3><p>' + s.body + '</p></div>';
+  }
+  document.getElementById('stepsGrid').innerHTML = stepsHtml;
+
+  // Why Yalla
+  document.getElementById('whyTitle').textContent = c.whyTitle;
+  var whyHtml = '';
+  for (var k = 0; k < c.whyItems.length; k++) {
+    var w = c.whyItems[k];
+    whyHtml += '<div class="why-item"><div class="why-bar"></div><div><h3>' + w.title + '</h3><p>' + w.body + '</p></div></div>';
+  }
+  document.getElementById('whyItems').innerHTML = whyHtml;
+
+  // Re-initialize Lucide icons
+  if (window.lucide) lucide.createIcons();
+
+  // Word rotation
+  wordIndex = 0;
+  startWordRotation(c.words);
+}
+
+function startWordRotation(words) {
+  if (wordInterval) clearInterval(wordInterval);
+  wordInterval = setInterval(function() {
+    var el = document.getElementById('rotatingWord');
+    if (!el) return;
+    el.style.opacity = '0';
+    setTimeout(function() {
+      wordIndex = (wordIndex + 1) % words.length;
+      el.textContent = words[wordIndex];
+      el.style.opacity = '1';
+    }, 600);
+  }, 3500);
+}
+
+function switchMode(newMode) {
+  if (newMode === currentMode) return;
+
+  var sections = document.querySelectorAll('.fade-section');
+  for (var i = 0; i < sections.length; i++) sections[i].classList.add('hidden');
+
+  var btns = document.querySelectorAll('.toggle-btn');
+  for (var j = 0; j < btns.length; j++)
+    btns[j].classList.toggle('active', btns[j].getAttribute('data-mode') === newMode);
+
+  if (fadeTimeout) clearTimeout(fadeTimeout);
+  fadeTimeout = setTimeout(function() {
+    currentMode = newMode;
+    renderContent(newMode);
+    for (var k = 0; k < sections.length; k++) sections[k].classList.remove('hidden');
+  }, 400);
+}
+
+var toggleBtns = document.querySelectorAll('.toggle-btn');
+for (var t = 0; t < toggleBtns.length; t++) {
+  toggleBtns[t].addEventListener('click', function() {
+    switchMode(this.getAttribute('data-mode'));
+  });
+}
+
+// Initial render
+renderContent('owner');
+</script>
+</body>
+</html>

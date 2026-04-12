@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
-  LogOut,
+  LogOut, Search,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -50,10 +50,10 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         {/* Logo */}
         <div className="h-[60px] flex items-center px-5 flex-shrink-0">
           <Link href="/" className="font-extrabold text-[1.05rem] tracking-tight text-white">
-            Yalla<span className="text-[#FFD400]">.</span>House
+            Yalla<span className="text-[#D4764E]">.</span>House
           </Link>
           {section === 'admin' && (
-            <span className="ml-2 text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#FFD400] rounded-sm text-[#0F1117]">
+            <span className="ml-2 text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#D4764E] rounded-sm text-[#0F1117]">
               Admin
             </span>
           )}
@@ -70,11 +70,11 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1), color 0.15s cubic-bezier(0.16,1,0.3,1)' }}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-[0.875rem] font-semibold mb-0.5 ${
                   active
-                    ? 'bg-[rgba(255,212,0,0.12)] text-[#FFD400]'
+                    ? 'bg-[rgba(212,118,78,0.12)] text-[#D4764E]'
                     : 'text-white/40 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                <span className={`flex-shrink-0 ${active ? 'text-[#FFD400]' : 'text-white/30'}`}>
+                <span className={`flex-shrink-0 ${active ? 'text-[#D4764E]' : 'text-white/30'}`}>
                   {item.icon}
                 </span>
                 {item.label}
@@ -98,7 +98,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
               >
                 <LogOut size={10} />
-                Abmelden
+                Sign out
               </button>
             </div>
           </div>
@@ -130,29 +130,42 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
 // ── Pre-built nav configs ─────────────────────────────────────────────────────
 
+// Navigation items are hardcoded here with German labels.
+// Translations for labels are handled server-side in layout files.
+
 export const hunterNav: NavItem[] = [
   { href: '/hunter',          label: 'Dashboard',        icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/hunter/search',   label: 'Search',            icon: <Search size={15} /> },
   { href: '/hunter/passport', label: 'Home Passport',    icon: <ShieldCheck size={15} /> },
-  { href: '/hunter/agents',   label: 'Makler-Manager',   icon: <Handshake size={15} /> },
-  { href: '/hunter/inbox',    label: 'Posteingang',       icon: <Inbox size={15} /> },
-  { href: '/hunter/settings', label: 'Einstellungen',    icon: <Settings size={15} /> },
+  { href: '/hunter/agents',   label: 'Agents',   icon: <Handshake size={15} /> },
+  { href: '/hunter/inbox',    label: 'Inbox',       icon: <Inbox size={15} /> },
+  { href: '/hunter/settings', label: 'Settings',    icon: <Settings size={15} /> },
 ]
 
 export const agentNav: NavItem[] = [
-  { href: '/agent',          label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
-  { href: '/agent/hunters',  label: 'Verbundene Käufer', icon: <Users size={15} /> },
-  { href: '/agent/profile',  label: 'Mein Profil',       icon: <UserCircle size={15} /> },
+  { href: '/agent',            label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/agent/assignments', label: 'Assignments', icon: <Building2 size={15} /> },
+  { href: '/agent/briefs',     label: 'Briefs',   icon: <Inbox size={15} /> },
+  { href: '/agent/hunters',    label: 'Hunters', icon: <Users size={15} /> },
+  { href: '/agent/profile',    label: 'Profile',       icon: <UserCircle size={15} /> },
 ]
 
 export const adminNav: NavItem[] = [
-  { href: '/admin',          label: 'Übersicht',         icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/admin',          label: 'Overview',         icon: <LayoutDashboard size={15} />, exact: true },
 ]
 
 export const ownerNav: NavItem[] = [
   { href: '/owner',          label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
-  { href: '/owner/listings', label: 'Meine Inserate',    icon: <Home size={15} /> },
-  { href: '/owner/viewings', label: 'Besichtigungen',    icon: <Calendar size={15} /> },
-  { href: '/owner/new',      label: 'Neues Inserat',     icon: <Plus size={15} /> },
-  { href: '/owner/plans',    label: 'Pläne & Billing',   icon: <Star size={15} /> },
-  { href: '/owner/settings', label: 'Einstellungen',     icon: <Settings size={15} /> },
+  { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} /> },
+  { href: '/owner/viewings', label: 'Viewings',    icon: <Calendar size={15} /> },
+  { href: '/owner/agents',   label: 'Agents',      icon: <Handshake size={15} /> },
+  { href: '/owner/inbox',    label: 'Inbox',       icon: <Inbox size={15} /> },
+  { href: '/owner/new',      label: 'New Listing',     icon: <Plus size={15} /> },
+  { href: '/owner/plans',    label: 'Plans & Billing',   icon: <Star size={15} /> },
+  { href: '/owner/settings', label: 'Settings',     icon: <Settings size={15} /> },
+]
+
+export const partnerNav: NavItem[] = [
+  { href: '/partner',          label: 'Dashboard', icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/partner/requests', label: 'Requests',  icon: <Inbox size={15} /> },
 ]

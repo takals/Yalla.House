@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { getTranslations } from 'next-intl/server'
+import { ShieldCheck } from 'lucide-react'
 import { HunterPassportCard } from './hunter-passport-card'
 
 interface RawAssignment {
@@ -23,6 +25,7 @@ interface RawAssignment {
 }
 
 export default async function AgentHuntersPage() {
+  const t = await getTranslations('agentDash')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -62,31 +65,35 @@ export default async function AgentHuntersPage() {
     hasPassport: !!a.hunter_profile?.brief_updated_at,
   }))
 
+  const passportCountText = passports.length > 0
+    ? `${passports.length} ${passports.length === 1 ? t('activeConnection') : t('activeConnections')} · ${passports.filter(p => p.hasPassport).length} ${t('withPassport')}`
+    : t('noActiveBuyers')
+
   return (
     <>
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold mb-0.5">Verbundene Käufer</h1>
+          <h1 className="text-xl font-bold mb-0.5">{t('connectedBuyers')}</h1>
           <p className="text-sm text-[#5E6278]">
-            {passports.length > 0
-              ? `${passports.length} aktive Verbindung${passports.length !== 1 ? 'en' : ''} · ${passports.filter(p => p.hasPassport).length} mit Passport`
-              : 'Noch keine aktiven Verbindungen'}
+            {passportCountText}
           </p>
         </div>
         {passports.length > 0 && (
           <div className="flex items-center gap-2 text-xs text-[#5E6278]">
             <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-            {passports.filter(p => p.hasPassport).length} von {passports.length} mit Passport
+            {passports.filter(p => p.hasPassport).length} von {passports.length} {t('withPassport')}
           </div>
         )}
       </div>
 
       {passports.length === 0 ? (
         <div className="bg-white rounded-2xl p-12 text-center border border-[#E2E4EB]">
-          <p className="text-3xl mb-4">🛂</p>
-          <p className="font-semibold mb-2">Noch keine verbundenen Käufer</p>
+          <div className="flex justify-center mb-4">
+            <ShieldCheck size={48} className="text-[#D9DCE4]" />
+          </div>
+          <p className="font-semibold mb-2">{t('noActiveBuyers')}</p>
           <p className="text-sm text-[#5E6278] max-w-sm mx-auto">
-            Sobald Käufer deine Anfragen annehmen, siehst du ihre Home Passports hier — mit Budget, Gebieten und Finanzstatus.
+            {t('noBuyersDesc')}
           </p>
         </div>
       ) : (

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { Check, CheckCircle2, Banknote, Clock, Minus, Home } from 'lucide-react'
 import { savePassportAction } from './actions'
 
 interface PassportProfile {
@@ -71,7 +72,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-[#FFD400] text-[#0F1117]'
+          ? 'bg-brand border-brand text-[#0F1117]'
           : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
       }`}
     >
@@ -92,15 +93,15 @@ function StepHeader({ n, title }: { n: string; title: string }) {
 }
 
 function FinanceBadge({ status }: { status: string }) {
-  const styles: Record<string, { cls: string; label: string; icon: string }> = {
-    cash:              { cls: 'bg-[#FFFBE0] text-[#7A5F00]',    label: 'Cash buyer',             icon: '💰' },
-    mortgage_approved: { cls: 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]', label: 'Mortgage in principle', icon: '✓' },
-    mortgage_pending:  { cls: 'bg-[rgba(251,191,36,0.15)] text-[#FBBF24]', label: 'Mortgage in progress',  icon: '⏳' },
-    not_specified:     { cls: 'bg-[rgba(255,255,255,0.07)] text-[rgba(255,255,255,0.4)]', label: 'Finance not specified', icon: '—' },
+  const styles: Record<string, { cls: string; label: string; icon: React.ReactNode }> = {
+    cash:              { cls: 'bg-brand-solid-bg text-brand-badge-text',    label: 'Cash buyer',             icon: <Banknote size={12} /> },
+    mortgage_approved: { cls: 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]', label: 'Mortgage in principle', icon: <Check size={12} /> },
+    mortgage_pending:  { cls: 'bg-[rgba(251,191,36,0.15)] text-[#FBBF24]', label: 'Mortgage in progress',  icon: <Clock size={12} /> },
+    not_specified:     { cls: 'bg-[rgba(255,255,255,0.07)] text-[rgba(255,255,255,0.4)]', label: 'Finance not specified', icon: <Minus size={12} /> },
   }
-  const s = (styles[status] ?? styles.not_specified) as { cls: string; label: string; icon: string }
+  const s = (styles[status] ?? styles.not_specified) as { cls: string; label: string; icon: React.ReactNode }
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-bold ${s.cls}`}>
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${s.cls}`}>
       {s.icon} {s.label}
     </span>
   )
@@ -168,8 +169,8 @@ export function PassportForm({ profile, userName }: Props) {
       <input type="hidden" name="timeline" value={timeline} />
 
       {state.success && (
-        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium">
-          ✓ Passport saved — agents can now request access.
+        <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium flex items-center gap-2">
+          <CheckCircle2 size={16} /> Passport saved — agents can now request access.
         </div>
       )}
       {state.error && (
@@ -203,7 +204,7 @@ export function PassportForm({ profile, userName }: Props) {
                   type="button"
                   onClick={() => setIntent(v)}
                   className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                    intent === v ? 'bg-brand border-[#FFD400] text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                    intent === v ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
                   }`}
                 >
                   {v === 'buy' ? 'Buy' : 'Rent'}
@@ -335,13 +336,13 @@ export function PassportForm({ profile, userName }: Props) {
             />
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand">
-                🏠 Home Passport
+              <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand flex items-center gap-1">
+                <Home size={14} /> Home Passport
               </span>
               {isVerified ? (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.6rem] font-bold uppercase tracking-wide border"
                   style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.25)' }}>
-                  ✓ Verified
+                  <Check size={10} /> Verified
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.6rem] font-bold uppercase tracking-wide border"

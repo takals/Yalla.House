@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import { Check } from 'lucide-react'
 import { updateAssignmentStatusAction, sendBriefAction } from './actions'
 
 interface Assignment {
@@ -64,7 +65,7 @@ export function AgentCard({ assignment }: Props) {
             {STATUS_LABELS[status] ?? status}
           </span>
           {agentInitiated && status === 'invited' && (
-            <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-[#FFFBE0] text-[#7A5F00] border border-yellow-200 whitespace-nowrap">
+            <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-brand-solid-bg text-brand-badge-text border border-yellow-200 whitespace-nowrap">
               Makler möchte deinen Passport
             </span>
           )}
@@ -105,9 +106,9 @@ export function AgentCard({ assignment }: Props) {
             <button
               onClick={() => update('active')}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
-              Annehmen ✓
+              Annehmen <Check size={14} />
             </button>
             <button
               onClick={() => update('ignored')}

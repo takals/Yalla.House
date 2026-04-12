@@ -539,6 +539,33 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['hunter_consent_log']['Row'], 'id' | 'created_at'>
         Update: Partial<Database['public']['Tables']['hunter_consent_log']['Insert']>
       }
+      listing_agent_assignments: {
+        Row: {
+          id: string
+          listing_id: string
+          agent_id: string
+          owner_id: string
+          tier: 'advisory' | 'assisted' | 'managed'
+          status: 'invited' | 'accepted' | 'active' | 'paused' | 'revoked'
+          can_edit_listing: boolean
+          can_manage_viewings: boolean
+          can_negotiate: boolean
+          can_message_buyers: boolean
+          fee_type: 'flat' | 'percentage' | 'none' | null
+          fee_amount: number | null
+          fee_currency: string | null
+          invited_at: string
+          accepted_at: string | null
+          revoked_at: string | null
+          revoked_reason: string | null
+          notes: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['listing_agent_assignments']['Row'],
+          'id' | 'invited_at' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['listing_agent_assignments']['Insert']>
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>

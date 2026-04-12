@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { AgentCard } from './agent-card'
 
@@ -14,6 +15,7 @@ interface Assignment {
 }
 
 export default async function AgentsPage() {
+  const t = await getTranslations('hunterAgents')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -57,9 +59,9 @@ export default async function AgentsPage() {
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-1">Makler-Manager</h1>
+          <h1 className="text-2xl font-bold mb-1">{t('title')}</h1>
           <p className="text-[#5E6278] text-sm">
-            Verwalte deine verbundenen Makler und kontrolliere die Datenweitergabe.
+            {t('subtitle')}
           </p>
         </div>
 
@@ -67,10 +69,10 @@ export default async function AgentsPage() {
         {assignments.length > 0 && (
           <div className="flex gap-3 mb-6 flex-wrap">
             {[
-              { label: 'Verbunden', count: assignments.length },
-              { label: 'Aktiv', count: activeCount },
-              { label: 'Eingeladen', count: invitedCount },
-              { label: 'Ignoriert', count: ignoredCount },
+              { label: t('connected'), count: assignments.length },
+              { label: t('active'), count: activeCount },
+              { label: t('invited'), count: invitedCount },
+              { label: t('ignored'), count: ignoredCount },
             ].map(s => (
               <div key={s.label} className="bg-surface rounded-lg px-4 py-2 text-center">
                 <p className="text-lg font-bold">{s.count}</p>
@@ -90,19 +92,19 @@ export default async function AgentsPage() {
         ) : (
           <div className="bg-surface rounded-card p-10 text-center mb-8">
             <p className="text-[#5E6278] text-sm">
-              Noch keine verbundenen Makler. Sobald ein Makler dein Profil findet oder du einen Brief sendest, erscheint er hier.
+              {t('noAgentsDesc')}
             </p>
           </div>
         )}
 
         {/* Find agents placeholder */}
         <div className="bg-surface rounded-card p-6 border border-[#E2E4EB]">
-          <h3 className="font-semibold mb-1">Makler in deiner Region finden</h3>
+          <h3 className="font-semibold mb-1">{t('findAgents')}</h3>
           <p className="text-sm text-[#5E6278] mb-4">
-            Die Makler-Suche ist in Kürze verfügbar. Sobald Makler in deiner Region auf der Plattform aktiv sind, kannst du sie hier finden und deinen Brief direkt teilen.
+            {t('findAgentsDesc')}
           </p>
           <span className="inline-flex items-center px-3 py-1 rounded-full bg-yellow-50 text-yellow-800 border border-yellow-200 text-xs font-semibold">
-            Demnächst verfügbar
+            {t('comingSoon')}
           </span>
         </div>
 

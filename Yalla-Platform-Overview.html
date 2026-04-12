@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yalla.House — Platform Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root { --brand: #D4764E; --bg: #0f0f0f; --surface: #1a1a1a; --card: #222; --border: #333; --text: #fff; --text-sec: rgba(255,255,255,.6); --green: #22c55e; --yellow: #eab308; --red: #ef4444; --blue: #3b82f6; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; line-height: 1.6; }
+.container { max-width: 1100px; margin: 0 auto; padding: 48px 32px; }
+h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: 8px; }
+h1 span { color: var(--brand); }
+.subtitle { color: var(--text-sec); font-size: 1.1rem; margin-bottom: 48px; }
+h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.02em; margin: 48px 0 20px; padding-bottom: 12px; border-bottom: 2px solid var(--brand); }
+h3 { font-size: 1.1rem; font-weight: 700; margin: 28px 0 12px; color: var(--brand); }
+.legend { display: flex; gap: 24px; margin-bottom: 32px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: .875rem; }
+.dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.dot-green { background: var(--green); }
+.dot-yellow { background: var(--yellow); }
+.dot-red { background: var(--red); }
+.dot-blue { background: var(--blue); }
+.figma-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.figma-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color .2s; }
+.figma-card:hover { border-color: var(--brand); }
+.figma-card h4 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; }
+.figma-card p { font-size: .8rem; color: var(--text-sec); margin-bottom: 12px; }
+.figma-card a { display: inline-block; font-size: .8rem; font-weight: 600; color: var(--brand); text-decoration: none; }
+.figma-card a:hover { text-decoration: underline; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0 32px; font-size: .875rem; }
+th { text-align: left; padding: 10px 12px; background: var(--card); border: 1px solid var(--border); font-weight: 700; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-sec); }
+td { padding: 10px 12px; border: 1px solid var(--border); vertical-align: top; }
+td a { color: var(--brand); text-decoration: none; }
+td a:hover { text-decoration: underline; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
+.status-built { background: rgba(34,197,94,.15); color: var(--green); }
+.status-stub { background: rgba(234,179,8,.15); color: var(--yellow); }
+.status-planned { background: rgba(239,68,68,.15); color: var(--red); }
+.status-next { background: rgba(59,130,246,.15); color: var(--blue); }
+.role-section { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; margin-bottom: 24px; }
+.role-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.role-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; background: rgba(212,118,78,.12); }
+.role-title { font-size: 1.15rem; font-weight: 800; }
+.role-count { font-size: .8rem; color: var(--text-sec); margin-left: auto; }
+.gap-section { margin-top: 48px; }
+.gap-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+.gap-card h4 { font-size: .9rem; font-weight: 700; margin-bottom: 4px; }
+.gap-card p { font-size: .8rem; color: var(--text-sec); }
+.api-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+.api-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
+.api-card .method { font-size: .7rem; font-weight: 700; color: var(--green); margin-right: 6px; }
+.api-card .path { font-size: .8rem; font-family: monospace; color: var(--text); }
+.api-card .desc { font-size: .75rem; color: var(--text-sec); margin-top: 4px; }
+.timestamp { font-size: .75rem; color: var(--text-sec); margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Yalla.<span>House</span> Platform Overview</h1>
+<p class="subtitle">Complete platform map — every role, every page, every action. What's built, what's next, and where to find it.</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot dot-green"></div> Built &amp; Live</div>
+  <div class="legend-item"><div class="dot dot-yellow"></div> Stub / Partial</div>
+  <div class="legend-item"><div class="dot dot-red"></div> Planned / Not Started</div>
+  <div class="legend-item"><div class="dot dot-blue"></div> Next Priority</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>Figma Diagrams</h2>
+<p style="color:var(--text-sec);font-size:.9rem;margin-bottom:16px;">Click "Open in FigJam" to claim each diagram into the Yalla.House Figma workspace. All diagrams are color-coded: green = built, yellow = stub, red = planned.</p>
+
+<div class="figma-grid">
+  <div class="figma-card">
+    <h4>Master Platform Map</h4>
+    <p>All 6 roles, all pages, API endpoints, and cross-role connections in one view.</p>
+    <a href="https://www.figma.com/online-whiteboard/create-diagram/ec9351a8-d253-4310-b4c7-650600bba5f7" target="_blank">Open in FigJam &rarr;</a>
+  </div>
+  <div class="figma-card">
+    <h4>Owner Journey Flow</h4>
+    <p>Full seller journey: signup &rarr; listing &rarr; photos &rarr; portals &rarr; brief &rarr; viewings &rarr; plans.</p>
+    <a href="https://www.figma.com/online-whiteboard/create-diagram/13dec120-97b7-4db0-b6e9-fecc4045cd04" target="_blank">Open in FigJam &rarr;</a>
+  </div>
+  <div class="figma-card">
+    <h4>Hunter Journey Flow</h4>
+    <p>Buyer journey: passport &rarr; search &rarr; consent &rarr; agent match &rarr; inbox &rarr; settings.</p>
+    <a href="https://www.figma.com/online-whiteboard/create-diagram/6e35cbec-ba5f-42ea-b33f-5b96c84bb080" target="_blank">Open in FigJam &rarr;</a>
+  </div>
+  <div class="figma-card">
+    <h4>Agent Journey Flow</h4>
+    <p>Agent onboarding: brief email &rarr; landing &rarr; login &rarr; profile &rarr; respond &rarr; hunters.</p>
+    <a href="https://www.figma.com/online-whiteboard/create-diagram/97217d74-8525-44bb-924d-eee7f1bb0392" target="_blank">Open in FigJam &rarr;</a>
+  </div>
+  <div class="figma-card">
+    <h4>Partner + Referrer + Admin</h4>
+    <p>Supporting roles plus all Inngest background jobs (matching, dispatch, scoring).</p>
+    <a href="https://www.figma.com/online-whiteboard/create-diagram/2558c9ec-ca66-4a6d-8637-42b33791bdd2" target="_blank">Open in FigJam &rarr;</a>
+  </div>
+  <div class="figma-card">
+    <h4>Cross-Role Data Flow</h4>
+    <p>Sequence diagram: Owner&rarr;Agent brief flow, Hunter&rarr;Agent matching, assignment lifecycle.</p>
+    <a href="https://www.figma.com/online-whiteboard/create-diagram/961e2719-f407-4b23-a9fd-903305ccb89b" target="_blank">Open in FigJam &rarr;</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>Public Pages</h2>
+
+<table>
+<tr><th>Page</th><th>Route</th><th>Status</th><th>Live Link</th><th>Notes</th></tr>
+<tr><td>Homepage (Owner/Hunter toggle)</td><td>/</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en" target="_blank">yalla.house/en</a></td><td>Mode-aware hero, stats, how-it-works, why-yalla, three paths, CTA band</td></tr>
+<tr><td>Login (Magic Link)</td><td>/auth/login</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/auth/login" target="_blank">yalla.house/en/auth/login</a></td><td>OTP magic link via Supabase Auth</td></tr>
+<tr><td>Property Listings</td><td>/listings</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/listings" target="_blank">yalla.house/en/listings</a></td><td>Searchable grid: city, intent, type, price filter</td></tr>
+<tr><td>Property Detail</td><td>/p/[place_id]</td><td><span class="status status-built">Built</span></td><td>—</td><td>Photo carousel, contact form, SEO metadata</td></tr>
+<tr><td>Agent Brief Landing</td><td>/brief/[id]</td><td><span class="status status-built">Built</span></td><td>—</td><td>Property teaser for agents, CTA to login</td></tr>
+<tr><td>Services &amp; Pricing</td><td>/services</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/services" target="_blank">yalla.house/en/services</a></td><td>Service offerings with icon grid</td></tr>
+<tr><td>About</td><td>/about</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/about" target="_blank">yalla.house/en/about</a></td><td>Company info, stats, mission</td></tr>
+<tr><td>Legal Pages (x5)</td><td>/impressum, /datenschutz, /dsgvo, /nutzungsbedingungen, /cookies, /sicherheit</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/impressum" target="_blank">Impressum</a></td><td>All German legal compliance pages</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+
+<div class="role-section">
+<div class="role-header">
+  <div class="role-icon">🏠</div>
+  <div class="role-title">Owner / Seller Dashboard</div>
+  <div class="role-count">8 pages &bull; 7 built, 1 stub</div>
+</div>
+<table>
+<tr><th>Page</th><th>Route</th><th>Status</th><th>Live Link</th><th>Key Actions</th></tr>
+<tr><td>Dashboard Home</td><td>/owner</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/owner" target="_blank">Live</a></td><td>Stats: listings, viewings, offers, messages, billing</td></tr>
+<tr><td>My Listings</td><td>/owner/listings</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/owner/listings" target="_blank">Live</a></td><td>All properties with status badges, "New Listing" CTA</td></tr>
+<tr><td>New Listing Wizard</td><td>/owner/new</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/owner/new" target="_blank">Live</a></td><td>4-step form: address, details, photos, pricing</td></tr>
+<tr><td>Edit Listing</td><td>/owner/[id]</td><td><span class="status status-built">Built</span></td><td>—</td><td>Update details, photos, portal sync, send brief to agents</td></tr>
+<tr><td>Viewings</td><td>/owner/viewings</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/owner/viewings" target="_blank">Live</a></td><td>Calendar, hunter info, viewing type, status</td></tr>
+<tr><td>Agent Assignments</td><td>/owner/agents</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/owner/agents" target="_blank">Live</a></td><td>Invite agents, manage permissions per listing</td></tr>
+<tr><td>Plans &amp; Billing</td><td>/owner/plans</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/owner/plans" target="_blank">Live</a></td><td>3 pricing tiers, Stripe checkout (blocked: needs company reg)</td></tr>
+<tr><td>Settings</td><td>/owner/settings</td><td><span class="status status-stub">Stub</span></td><td><a href="https://yalla.house/en/owner/settings" target="_blank">Live</a></td><td>Email + account ID only. Notifications = "coming soon"</td></tr>
+</table>
+</div>
+
+<div class="role-section">
+<div class="role-header">
+  <div class="role-icon">🔍</div>
+  <div class="role-title">Hunter / Buyer Dashboard</div>
+  <div class="role-count">6 pages &bull; 6 built</div>
+</div>
+<table>
+<tr><th>Page</th><th>Route</th><th>Status</th><th>Live Link</th><th>Key Actions</th></tr>
+<tr><td>Dashboard Home</td><td>/hunter</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/hunter" target="_blank">Live</a></td><td>Profile card, brief status, viewings, agent connections</td></tr>
+<tr><td>Home Passport</td><td>/hunter/passport</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/hunter/passport" target="_blank">Live</a></td><td>Intent, budget, areas, property types, must-haves, timeline</td></tr>
+<tr><td>Search + Matching</td><td>/hunter/search</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/hunter/search" target="_blank">Live</a></td><td>Create search briefs, consent to agent outreach, triggers matching</td></tr>
+<tr><td>Inbox / Agent Replies</td><td>/hunter/inbox</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/hunter/inbox" target="_blank">Live</a></td><td>Replies grouped by priority tier, promote/dismiss/block</td></tr>
+<tr><td>My Agents</td><td>/hunter/agents</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/hunter/agents" target="_blank">Live</a></td><td>Connected agents with status, data scope, connection date</td></tr>
+<tr><td>Settings + Permissions</td><td>/hunter/settings</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/hunter/settings" target="_blank">Live</a></td><td>Email, phone, linked agents with revoke access</td></tr>
+</table>
+</div>
+
+<div class="role-section">
+<div class="role-header">
+  <div class="role-icon">🤝</div>
+  <div class="role-title">Agent Dashboard</div>
+  <div class="role-count">6 pages &bull; 6 built</div>
+</div>
+<table>
+<tr><th>Page</th><th>Route</th><th>Status</th><th>Live Link</th><th>Key Actions</th></tr>
+<tr><td>Dashboard Home</td><td>/agent</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/agent" target="_blank">Live</a></td><td>Profile card, connected hunters, briefs, assignment stats</td></tr>
+<tr><td>Briefs (List)</td><td>/agent/briefs</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/agent/briefs" target="_blank">Live</a></td><td>Pending/responded tabs, match score, search details</td></tr>
+<tr><td>Brief Detail + Reply</td><td>/agent/briefs/[matchId]</td><td><span class="status status-built">Built</span></td><td>—</td><td>View search criteria, submit property recommendations</td></tr>
+<tr><td>Connected Hunters</td><td>/agent/hunters</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/agent/hunters" target="_blank">Live</a></td><td>Passport data: intent, budget, areas, timeline</td></tr>
+<tr><td>Assignments</td><td>/agent/assignments</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/agent/assignments" target="_blank">Live</a></td><td>Manage listing permissions, tier, status</td></tr>
+<tr><td>Agent Profile</td><td>/agent/profile</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/agent/profile" target="_blank">Live</a></td><td>Agency name, license, property types, focus areas</td></tr>
+</table>
+</div>
+
+<div class="role-section">
+<div class="role-header">
+  <div class="role-icon">⚙️</div>
+  <div class="role-title">Admin + Partner + Referrer</div>
+  <div class="role-count">5 pages &bull; 5 built</div>
+</div>
+<table>
+<tr><th>Page</th><th>Route</th><th>Status</th><th>Live Link</th><th>Key Actions</th></tr>
+<tr><td>Admin Dashboard</td><td>/admin</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/admin" target="_blank">Live</a></td><td>All listings + viewings oversight, role-gated</td></tr>
+<tr><td>Partner Dashboard</td><td>/partner</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/partner" target="_blank">Live</a></td><td>Active/completed requests, avg rating</td></tr>
+<tr><td>Partner Requests</td><td>/partner/requests</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/partner/requests" target="_blank">Live</a></td><td>Photography, floorplan, EPC, survey + submit quotes</td></tr>
+<tr><td>Referrer Dashboard</td><td>/referrer</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/referrer" target="_blank">Live</a></td><td>Referral link, stats, payouts</td></tr>
+<tr><td>Referrer Leads</td><td>/referrer/leads</td><td><span class="status status-built">Built</span></td><td><a href="https://yalla.house/en/referrer/leads" target="_blank">Live</a></td><td>Milestone tracking with per-event earnings</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>API Endpoints (11 groups, 17 endpoints)</h2>
+
+<div class="api-grid">
+  <div class="api-card"><span class="method">GET</span><span class="path">/api/auth/callback</span><div class="desc">Supabase auth exchange</div></div>
+  <div class="api-card"><span class="method">GET</span><span class="path">/api/hunter/inbox</span><div class="desc">Aggregated hunter inbox</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/search-requests</span><div class="desc">Create search brief</div></div>
+  <div class="api-card"><span class="method">PATCH</span><span class="path">/api/search-requests/[id]</span><div class="desc">Update/pause/close</div></div>
+  <div class="api-card"><span class="method">GET</span><span class="path">/api/search-requests/[id]/matches</span><div class="desc">Matched agents</div></div>
+  <div class="api-card"><span class="method">GET</span><span class="path">/api/search-requests/[id]/responses</span><div class="desc">Agent responses</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/search-requests/[id]/consent</span><div class="desc">Consent + trigger matching</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/agent/respond/[matchId]</span><div class="desc">Agent submits reply</div></div>
+  <div class="api-card"><span class="method">PATCH</span><span class="path">/api/responses/[id]/action</span><div class="desc">Promote/dismiss/block</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/assignments</span><div class="desc">Owner invites agent</div></div>
+  <div class="api-card"><span class="method">PATCH</span><span class="path">/api/assignments/[id]</span><div class="desc">Update assignment</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/service-requests</span><div class="desc">Create service request</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/service-requests/[id]/quote</span><div class="desc">Partner submits quote</div></div>
+  <div class="api-card"><span class="method">GET</span><span class="path">/api/notifications</span><div class="desc">User notifications</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/billing/checkout</span><div class="desc">Stripe checkout</div></div>
+  <div class="api-card"><span class="method">POST</span><span class="path">/api/billing/webhook</span><div class="desc">Stripe webhook</div></div>
+  <div class="api-card"><span class="method">ALL</span><span class="path">/api/inngest</span><div class="desc">Background jobs</div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>Background Jobs (Inngest)</h2>
+<table>
+<tr><th>Function</th><th>Trigger</th><th>Purpose</th><th>Status</th></tr>
+<tr><td>match-agents</td><td>search-request.created</td><td>Match agents by postcode area overlap</td><td><span class="status status-built">Built</span></td></tr>
+<tr><td>distribute-brief</td><td>match completed</td><td>Email matched agents with hunter brief</td><td><span class="status status-built">Built</span></td></tr>
+<tr><td>notify-assignment</td><td>assignment created</td><td>Notify agent of new listing assignment</td><td><span class="status status-built">Built</span></td></tr>
+<tr><td>score-response</td><td>agent response submitted</td><td>Rank agent replies by relevance</td><td><span class="status status-built">Built</span></td></tr>
+<tr><td>route-service-request</td><td>service-request.created</td><td>Dispatch to matching partners</td><td><span class="status status-built">Built</span></td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="gap-section">
+<h2>Gaps &amp; Aspirational Features</h2>
+<p style="color:var(--text-sec);font-size:.9rem;margin-bottom:20px;">What's not yet built or needs significant improvement. Ordered by priority.</p>
+
+<h3>Blocked</h3>
+<div class="gap-card"><h4>Stripe Products &amp; Pricing</h4><p>Plans page built, but Stripe products can't be created until company registration completes. Checkout flow is wired but has no real price IDs.</p></div>
+<div class="gap-card"><h4>Reapit API (Portal Sync)</h4><p>Portal badges are visual-only. Real Rightmove/Zoopla sync requires Reapit OAuth application — blocked on Sprint Zero Day 1.</p></div>
+
+<h3>Next Priority</h3>
+<div class="gap-card"><h4>Owner Settings (Notifications)</h4><p>Currently a stub. Needs: notification preferences, email frequency, push notification opt-in, connected services management.</p></div>
+<div class="gap-card"><h4>Dedicated Owner Email Addresses</h4><p>{ref}@mail.yalla.house via SendGrid/SES inbound parse. Discussed in strategy but not built.</p></div>
+<div class="gap-card"><h4>Real-time Messaging</h4><p>Currently toast-only notifications. Needs: in-app messaging between owners and agents, Supabase Realtime channels.</p></div>
+
+<h3>Version 2 Aspirations</h3>
+<div class="gap-card"><h4>AI Property Valuation</h4><p>Auto-generate comparable sales data using Land Registry API + AI analysis. Currently manual market data.</p></div>
+<div class="gap-card"><h4>Virtual Viewings</h4><p>3D property tours integration. Currently viewings are physical-only.</p></div>
+<div class="gap-card"><h4>Agent Marketplace</h4><p>Public agent profiles with ratings, specializations, and direct booking. Currently agents are matched behind the scenes.</p></div>
+<div class="gap-card"><h4>Token Economics</h4><p>Platform credits for services, referral rewards, agent performance bonuses. Strategy documented but not implemented.</p></div>
+<div class="gap-card"><h4>Mobile App (PWA)</h4><p>Progressive Web App shell for push notifications and offline listing drafts.</p></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<h2>Summary</h2>
+<table>
+<tr><th>Category</th><th>Total</th><th>Built</th><th>Stub</th><th>Planned</th></tr>
+<tr><td>Public Pages</td><td>8</td><td>8</td><td>0</td><td>0</td></tr>
+<tr><td>Owner Dashboard</td><td>8</td><td>7</td><td>1</td><td>0</td></tr>
+<tr><td>Hunter Dashboard</td><td>6</td><td>6</td><td>0</td><td>0</td></tr>
+<tr><td>Agent Dashboard</td><td>6</td><td>6</td><td>0</td><td>0</td></tr>
+<tr><td>Admin</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>Partner</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td>Referrer</td><td>2</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td>API Endpoints</td><td>17</td><td>17</td><td>0</td><td>0</td></tr>
+<tr><td>Background Jobs</td><td>5</td><td>5</td><td>0</td><td>0</td></tr>
+<tr><td style="font-weight:800;">TOTAL</td><td style="font-weight:800;">55</td><td style="font-weight:800;color:var(--green);">54</td><td style="font-weight:800;color:var(--yellow);">1</td><td style="font-weight:800;color:var(--red);">0</td></tr>
+</table>
+
+<p class="timestamp">Generated 11 April 2026 &bull; Yalla.House Platform Overview v1.0</p>
+
+</div>
+</body>
+</html>

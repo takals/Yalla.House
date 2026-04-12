@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { CheckCircle2, Check } from 'lucide-react'
 import { saveAgentProfileAction } from './actions'
 
 interface AgentProfileData {
@@ -42,7 +43,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-[#FFD400] text-[#0F1117]'
+          ? 'bg-brand border-brand text-[#0F1117]'
           : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
       }`}
     >
@@ -73,8 +74,9 @@ export function ProfileForm({ profile }: Props) {
       <input type="hidden" name="focus" value={focus} />
 
       {state && 'success' in state && (
-        <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium">
-          ✓ Profil gespeichert.
+        <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium flex items-center gap-2">
+          <CheckCircle2 size={16} className="text-green-700 flex-shrink-0" />
+          Profil gespeichert.
         </div>
       )}
       {state && 'error' in state && (
@@ -123,7 +125,7 @@ export function ProfileForm({ profile }: Props) {
               type="button"
               onClick={() => setFocus(o.value)}
               className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                focus === o.value ? 'bg-brand border-[#FFD400] text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                focus === o.value ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
               }`}
             >
               {o.label}
@@ -146,11 +148,12 @@ export function ProfileForm({ profile }: Props) {
 
       {/* Verification status */}
       {profile?.verified_at ? (
-        <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 text-sm text-green-800">
-          ✓ Verifizierter Makler — verifiziert am {new Date(profile.verified_at).toLocaleDateString('de-DE')}
+        <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 text-sm text-green-800 flex items-center gap-2">
+          <Check size={14} className="text-green-700 flex-shrink-0" />
+          <span>Verifizierter Makler — verifiziert am {new Date(profile.verified_at).toLocaleDateString('de-DE')}</span>
         </div>
       ) : (
-        <div className="bg-[#FFFBE0] border border-[#FFD400] rounded-2xl px-5 py-4 text-sm text-[#7A5F00]">
+        <div className="bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 text-sm text-brand-badge-text">
           <span className="font-semibold">Verifizierung ausstehend</span> — Sende deine Maklernummer und ein Nachweis an{' '}
           <a href="mailto:verify@yalla.house" className="underline">verify@yalla.house</a>.
           Verifizierte Makler erhalten höhere Sichtbarkeit bei Käufern.

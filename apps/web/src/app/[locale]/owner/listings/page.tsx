@@ -1,13 +1,16 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
-import { Plus } from 'lucide-react'
+import { Plus, Home } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
+import { getTranslations, type AbstractIntlMessages } from 'next-intl/server'
 import type { Database } from '@/types/database'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 
 export default async function OwnerListingsPage() {
+  const t = await getTranslations('ownerListings')
+  const ts = await getTranslations('statusLabels')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -25,9 +28,9 @@ export default async function OwnerListingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#0F1117]">Meine Inserate</h1>
+          <h1 className="text-3xl font-bold text-[#0F1117]">{t('pageTitle')}</h1>
           <p className="text-sm text-[#5E6278] mt-1">
-            {allListings.length} {allListings.length === 1 ? 'Inserat' : 'Inserate'}
+            {t('listingCount', { count: allListings.length })}
           </p>
         </div>
         <Link
@@ -35,20 +38,20 @@ export default async function OwnerListingsPage() {
           className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4" />
-          Neues Inserat
+          {t('newListing')}
         </Link>
       </div>
 
       {/* Listings grid */}
       {allListings.length === 0 ? (
         <div className="bg-surface rounded-card border border-[#E2E4EB] py-16 text-center">
-          <p className="text-[#5E6278] mb-4">Sie haben noch keine Inserate erstellt.</p>
+          <p className="text-[#5E6278] mb-4">{t('noListingsCreated')}</p>
           <Link
             href="/owner/new"
             className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" />
-            Erstes Inserat erstellen
+            {t('createFirstListing')}
           </Link>
         </div>
       ) : (
@@ -68,13 +71,13 @@ export default async function OwnerListingsPage() {
               >
                 {/* Placeholder image area */}
                 <div className="h-40 bg-[#EDEEF2] flex items-center justify-center">
-                  <span className="text-3xl text-[#D9DCE4]">🏠</span>
+                  <Home size={48} className="text-[#D9DCE4]" />
                 </div>
 
                 <div className="p-4">
                   {/* Status badge */}
                   <div className="flex items-center justify-between mb-2">
-                    <StatusBadge status={listing.status} />
+                    <StatusBadge status={listing.status} t={ts} />
                     <span className="text-xs text-[#999]">{listing.place_id}</span>
                   </div>
 
@@ -111,7 +114,7 @@ export default async function OwnerListingsPage() {
   )
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status, t }: { status: string; t: ReturnType<typeof getTranslations> }) {
   const styles: Record<string, string> = {
     draft: 'bg-gray-100 text-gray-600',
     active: 'bg-green-100 text-green-700',
@@ -121,15 +124,6 @@ function StatusBadge({ status }: { status: string }) {
     let: 'bg-purple-100 text-purple-700',
     archived: 'bg-gray-100 text-gray-400',
   }
-  const labels: Record<string, string> = {
-    draft: 'Entwurf',
-    active: 'Aktiv',
-    paused: 'Pausiert',
-    under_offer: 'Angebot liegt vor',
-    sold: 'Verkauft',
-    let: 'Vermietet',
-    archived: 'Archiviert',
-  }
 
   return (
     <span
@@ -137,7 +131,7 @@ function StatusBadge({ status }: { status: string }) {
         styles[status] ?? styles['draft']
       }`}
     >
-      {labels[status] ?? status}
+      {t(status) ?? status}
     </span>
   )
 }

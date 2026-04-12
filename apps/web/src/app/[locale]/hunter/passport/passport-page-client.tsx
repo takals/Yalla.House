@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck, Check, Home } from 'lucide-react'
 import { PassportForm } from './passport-form'
 import { HunterPassportIntake } from '@/components/intake/hunter-passport-intake'
 
@@ -83,7 +83,7 @@ export function PassportPageClient({
             'Surface off-market opportunities before portals do',
           ].map(benefit => (
             <div key={benefit} className="flex items-start gap-2 text-sm text-[#0F1117]">
-              <span className="text-green-600 font-bold mt-0.5 flex-shrink-0">✓</span>
+              <Check size={14} className="text-green-600 mt-0.5 flex-shrink-0" />
               <span>{benefit}</span>
             </div>
           ))}

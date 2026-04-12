@@ -8,7 +8,7 @@ export default function DataProtectionPage() {
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-xs font-bold uppercase tracking-widest text-[#FFD400] mb-4">
+          <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Datenschutzrichtlinie
           </div>
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
@@ -82,27 +82,27 @@ export default function DataProtectionPage() {
             </h2>
             <ul className="space-y-3 text-[#656565] leading-relaxed">
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Kontoverwaltung:</strong> Kontoerstellung, Authentifizierung und Verwaltung Ihres Profils</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Listing-Verwaltung:</strong> Veröffentlichung und Synchronisierung von Angeboten auf Portal-Plattformen (IS24, Immowelt)</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Kommunikation:</strong> Kontaktaufnahme, Support-Anfragen und Benachrichtigungen</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Zahlungsabwicklung:</strong> Verarbeitung von Transaktionen über Stripe</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Analytics:</strong> Anonyme Nutzungsstatistiken zur Verbesserung unserer Services</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Rechtliche Verpflichtungen:</strong> Compliance mit geltenden Gesetzen</span>
               </li>
             </ul>
@@ -135,7 +135,7 @@ export default function DataProtectionPage() {
               <p>
                 Ihre Daten werden nur an folgende Verarbeiter weitergegeben:
               </p>
-              <div className="bg-[#FFFBE0] border border-[#FFD400] rounded-lg p-4 space-y-2">
+              <div className="bg-brand-solid-bg border border-brand rounded-lg p-4 space-y-2">
                 <p><strong>Supabase (PostgreSQL Hosting):</strong> EU-Region (Frank­reich). Datensicherheitsvereinbarung unterzeichnet.</p>
                 <p><strong>Stripe (Zahlungsabwicklung):</strong> EU-konform. Zusätzliche Informationen in den Stripe-Datenschutzrichtlinien.</p>
                 <p><strong>Immoscout24 & Immowelt:</strong> Listing-Daten werden synchronisiert, um Ihre Angebote zu veröffentlichen.</p>
@@ -157,27 +157,27 @@ export default function DataProtectionPage() {
             </p>
             <ul className="space-y-3 text-[#656565] leading-relaxed">
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Auskunftsrecht (Art. 15):</strong> Sie können jederzeit erfahren, welche Daten wir über Sie speichern</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Berichtigungsrecht (Art. 16):</strong> Sie können falsche oder unvollständige Daten korrigieren</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Löschungsrecht (Art. 17):</strong> Sie können die Löschung Ihrer Daten verlangen (unter bestimmten Bedingungen)</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Einschränkungsrecht (Art. 18):</strong> Sie können die Verarbeitung einschränken</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Datenübertragungsrecht (Art. 20):</strong> Sie können Ihre Daten in einem strukturierten Format erhalten</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-[#FFD400] font-bold">•</span>
+                <span className="text-brand font-bold">•</span>
                 <span><strong>Widerspruchsrecht (Art. 21):</strong> Sie können der Verarbeitung widersprechen</span>
               </li>
             </ul>
@@ -213,7 +213,7 @@ export default function DataProtectionPage() {
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[#FFD400] font-semibold hover:text-[#E6C200] transition-colors"
+            className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors"
           >
             ← Zurück zur Startseite
           </Link>

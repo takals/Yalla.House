@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
+import { Check } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 import { CheckoutButton } from './checkout-button'
 
 interface Props {
@@ -7,6 +9,7 @@ interface Props {
 
 export default async function PlansPage({ searchParams }: Props) {
   const { listing_id } = await searchParams
+  const t = await getTranslations('ownerPlans')
   const supabase = await createClient()
   // Preview phase: no auth gate. Plans page is publicly browsable.
 
@@ -22,9 +25,9 @@ export default async function PlansPage({ searchParams }: Props) {
     <div className="max-w-5xl">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold mb-2">Tarif wählen</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('pageTitle')}</h1>
           <p className="text-[#5E6278]">
-            Einmalige Zahlung — kein Abo, keine Agenturprovision.
+            {t('pageDescription')}
           </p>
         </div>
 
@@ -50,7 +53,7 @@ export default async function PlansPage({ searchParams }: Props) {
               >
                 {isRecommended && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-[#0F1117] text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
-                    Empfohlen
+                    {t('badgeRecommended')}
                   </span>
                 )}
 
@@ -58,16 +61,14 @@ export default async function PlansPage({ searchParams }: Props) {
                   <h2 className="text-xl font-bold">{plan.name_de ?? plan.name}</h2>
                   <div className="mt-2 flex items-baseline gap-1">
                     <span className="text-3xl font-extrabold">{priceDisplay}</span>
-                    <span className="text-sm text-[#5E6278]">einmalig</span>
+                    <span className="text-sm text-[#5E6278]">{t('labelOneTime')}</span>
                   </div>
                 </div>
 
                 <ul className="space-y-2 flex-1 mb-6">
                   {features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm">
-                      <svg className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
+                      <Check size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
                       <span className="text-[#3F4254]">{feature}</span>
                     </li>
                   ))}
@@ -81,7 +82,7 @@ export default async function PlansPage({ searchParams }: Props) {
                     disabled
                     className="w-full py-3 rounded-xl font-bold text-sm bg-[#E4E6EF] text-[#5E6278] cursor-not-allowed"
                   >
-                    Bald verfügbar
+                    {t('buttonSoonAvailable')}
                   </button>
                 )}
               </div>

@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { ShieldCheck, Building2, Banknote, CheckCircle, Clock } from 'lucide-react'
 
 interface RawAssignment {
   id: string
@@ -21,6 +23,7 @@ interface RawAssignment {
 }
 
 export default async function AgentPage() {
+  const t = await getTranslations('agentDash')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -60,28 +63,28 @@ export default async function AgentPage() {
   const passportCount = assignments.filter(a => a.status === 'active' && a.hunter_profile?.brief_updated_at).length
 
   const STATUS_LABEL: Record<string, string> = {
-    invited: 'Eingeladen',
-    active: 'Verbunden',
-    paused: 'Pausiert',
-    ignored: 'Ignoriert',
+    invited: t('invited'),
+    active: t('connected'),
+    paused: t('paused'),
+    ignored: t('ignored'),
   }
   const STATUS_STYLE: Record<string, string> = {
-    invited: 'bg-[#FFFBE0] text-[#7A5F00] border-[#FFD400]',
+    invited: 'bg-brand-solid-bg text-brand-badge-text border-brand',
     active: 'bg-[#DCFCE7] text-[#166534] border-[#BBF7D0]',
     paused: 'bg-[#F1F5F9] text-[#64748B] border-[#CBD5E1]',
     ignored: 'bg-[#F1F5F9] text-[#94A3B8] border-[#E2E8F0]',
   }
 
-  const FINANCE_LABEL: Record<string, string> = {
-    cash: '💰 Cash',
-    mortgage_approved: '✓ Hypothek (Zusage)',
-    mortgage_pending: '⏳ Hypothek (laufend)',
-    not_specified: '—',
+  const FINANCE_LABEL: Record<string, { label: string; icon: React.ReactNode }> = {
+    cash: { label: t('cash'), icon: <Banknote size={14} className="inline mr-1" /> },
+    mortgage_approved: { label: t('mortgageApproved'), icon: <CheckCircle size={14} className="inline mr-1 text-green-600" /> },
+    mortgage_pending: { label: t('mortgagePending'), icon: <Clock size={14} className="inline mr-1" /> },
+    not_specified: { label: '—', icon: null },
   }
 
   const modules = [
-    { href: '/agent/hunters', title: 'Verbundene Käufer', subtitle: 'Home Passports deiner zugewiesenen Käufer', icon: '🛂' },
-    { href: '/agent/profile', title: 'Mein Profil', subtitle: 'Agenturname, Tätigkeitsgebiete und Typen', icon: '🏢' },
+    { href: '/agent/hunters', title: t('myBuyers'), subtitle: t('buyersSubtitle'), icon: <ShieldCheck size={24} /> },
+    { href: '/agent/profile', title: 'Mein Profil', subtitle: 'Agenturname, Tätigkeitsgebiete und Typen', icon: <Building2 size={24} /> },
   ]
 
   return (
@@ -90,14 +93,14 @@ export default async function AgentPage() {
         {/* Header */}
         <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-3xl font-bold mb-1">Hallo, {firstName}</h1>
+            <h1 className="text-3xl font-bold mb-1">{t('hello', { name: firstName })}</h1>
             <p className="text-[#5E6278] text-sm">{agentUser?.email}</p>
           </div>
           {agentProfile?.agency_name && (
             <div className="bg-surface rounded-xl px-4 py-2 border border-[#E2E4EB] text-sm">
               <span className="font-semibold">{agentProfile.agency_name}</span>
               {agentProfile.verified_at && (
-                <span className="ml-2 text-green-700 text-xs font-bold">✓ Verifiziert</span>
+                <span className="ml-2 text-green-700 text-xs font-bold">{t('verified')}</span>
               )}
             </div>
           )}
@@ -105,16 +108,16 @@ export default async function AgentPage() {
 
         {/* Profile setup nudge */}
         {!agentProfile?.agency_name && (
-          <div className="mb-6 bg-[#FFFBE0] border border-[#FFD400] rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
+          <div className="mb-6 bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
             <div>
-              <p className="font-semibold text-sm">Profil einrichten</p>
-              <p className="text-xs text-[#7A5F00] mt-0.5">Trag deinen Agenturname und deine Tätigkeitsgebiete ein, damit Käufer dich finden können.</p>
+              <p className="font-semibold text-sm">{t('setupProfile')}</p>
+              <p className="text-xs text-brand-badge-text mt-0.5">{t('setupProfileDesc')}</p>
             </div>
             <Link
               href="/agent/profile"
               className="flex-shrink-0 bg-brand hover:bg-brand-hover text-[#0F1117] font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
             >
-              Jetzt einrichten →
+              {t('setupNow')}
             </Link>
           </div>
         )}
@@ -123,15 +126,15 @@ export default async function AgentPage() {
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold">{activeCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">Verbundene Käufer</p>
+            <p className="text-xs text-[#5E6278] mt-0.5">{t('connectedBuyers')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className={`text-2xl font-bold ${pendingCount > 0 ? 'text-brand' : ''}`}>{pendingCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">Ausstehend</p>
+            <p className="text-xs text-[#5E6278] mt-0.5">{t('pending')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold">{passportCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">Passports erhalten</p>
+            <p className="text-xs text-[#5E6278] mt-0.5">{t('passportsReceived')}</p>
           </div>
         </div>
 
@@ -143,7 +146,7 @@ export default async function AgentPage() {
               href={mod.href}
               className="bg-surface rounded-card p-5 flex items-center gap-4 hover:shadow-md transition-shadow group"
             >
-              <span className="text-2xl">{mod.icon}</span>
+              <div className="text-brand flex-shrink-0">{mod.icon}</div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-[#0F1117] group-hover:text-brand transition-colors">{mod.title}</p>
                 <p className="text-sm text-[#5E6278] mt-0.5">{mod.subtitle}</p>
@@ -154,17 +157,17 @@ export default async function AgentPage() {
         </div>
 
         {/* Connected hunters */}
-        <h2 className="text-lg font-bold mb-4">Meine Käufer-Verbindungen</h2>
+        <h2 className="text-lg font-bold mb-4">{t('myConnections')}</h2>
 
         {assignments.length === 0 ? (
           <div className="bg-surface rounded-card p-10 text-center">
-            <p className="text-[#5E6278] text-sm mb-2">Noch keine Verbindungen.</p>
-            <p className="text-xs text-[#999]">Käufer können deinen Passport anfragen — oder du kannst ihnen eine Einladung senden.</p>
+            <p className="text-[#5E6278] text-sm mb-2">{t('noConnections')}</p>
+            <p className="text-xs text-[#999]">{t('noConnectionsDesc')}</p>
           </div>
         ) : (
           <div className="space-y-3">
             {assignments.map(a => {
-              const name = a.hunter_user?.full_name ?? a.hunter_user?.email ?? 'Anonymer Käufer'
+              const name = a.hunter_user?.full_name ?? a.hunter_user?.email ?? t('anonymousBuyer')
               const profile = a.hunter_profile
               const budget = profile?.budget_max
                 ? `bis €${Math.round(profile.budget_max / 100).toLocaleString('de-DE')}`
@@ -187,8 +190,8 @@ export default async function AgentPage() {
                         {STATUS_LABEL[a.status] ?? a.status}
                       </span>
                       {hasPassport && (
-                        <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full border bg-[rgba(74,222,128,0.12)] text-[#166534] border-[#BBF7D0]">
-                          🛂 Passport
+                        <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full border bg-[rgba(74,222,128,0.12)] text-[#166534] border-[#BBF7D0] inline-flex items-center gap-1">
+                          <ShieldCheck size={11} /> Passport
                         </span>
                       )}
                     </div>
@@ -197,11 +200,16 @@ export default async function AgentPage() {
                       <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-[#5E6278]">
                         {budget && <span>{budget}</span>}
                         {areas && <span>{areas}</span>}
-                        {finance && <span>{finance}</span>}
+                        {finance && profile.finance_status && (
+                          <span className="inline-flex items-center gap-1">
+                            {FINANCE_LABEL[profile.finance_status]?.icon}
+                            <span>{FINANCE_LABEL[profile.finance_status]?.label}</span>
+                          </span>
+                        )}
                       </div>
                     ) : (
                       <p className="text-xs text-[#999]">
-                        {a.status === 'invited' ? 'Einladung ausstehend — Käufer hat noch nicht zugestimmt' : 'Kein Passport-Zugang'}
+                        {a.status === 'invited' ? t('invitationPending') : t('noPassportAccess')}
                       </p>
                     )}
                   </div>
@@ -211,7 +219,7 @@ export default async function AgentPage() {
                       href={`/agent/hunters`}
                       className="flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors"
                     >
-                      Passport →
+                      {t('viewPassport')}
                     </Link>
                   )}
                 </div>

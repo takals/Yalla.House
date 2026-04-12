@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "listYourPlace": "List Your Place",
+    "services": "Services & Pricing",
+    "about": "About",
+    "login": "Sign In",
+    "dashboard": "Dashboard",
+    "signOut": "Sign Out"
+  },
+  "hero": {
+    "headline": "Your property sale, under your control.",
+    "headlinePrefix": "Your property ",
+    "headlineWords": "sale,rental",
+    "headlineSuffix": ", under your control.",
+    "subline": "Free owner dashboard. Market data. Comparable sales. Then send your brief to competing agents — and choose the best deal.",
+    "cta": "Create your free dashboard",
+    "ctaHunter": "I'm looking to buy",
+    "toggleOwner": "I'm selling",
+    "toggleHunter": "I'm searching"
+  },
+  "heroHunter": {
+    "headlinePrefix": "Your property ",
+    "headlineWords": "search,purchase",
+    "headlineSuffix": ", finally organised.",
+    "subline": "Tell us what you're looking for. We match you with local agents who send you relevant properties — filtered, ranked, and in one dashboard.",
+    "cta": "Create your Home Passport"
+  },
+  "statsHunter": {
+    "stat1Value": "12,000+",
+    "stat1Label": "Agents in our network across the UK",
+    "stat2Value": "83%",
+    "stat2Label": "of hunters say agents send irrelevant listings",
+    "stat3Value": "£0",
+    "stat3Label": "Cost of your Yalla Home Passport — always free",
+    "stat4Value": "30 sec",
+    "stat4Label": "to set your search and get matched with agents"
+  },
+  "admin": {
+    "pageTitle": "Admin",
+    "pageSubtitle": "Yalla.House Platform Overview",
+    "noAccess": "No Access",
+    "noAccessMessage": "This area is only for administrators.",
+    "totalListings": "Total Listings",
+    "users": "Users",
+    "viewings": "Viewings",
+    "paidTariffs": "Paid Tariffs",
+    "active": "active",
+    "pending": "pending",
+    "recentListings": "Recent Listings",
+    "recentViewings": "Recent Viewings",
+    "recentUsers": "Recent Users",
+    "noListings": "No listings.",
+    "noViewings": "No viewings.",
+    "noUsers": "No users.",
+    "completions": "Completions"
+  },
+  "partnerDash": {
+    "pageTitle": "Partner Dashboard",
+    "pageSubtitle": "Overview of your activity and requests",
+    "completeProfile": "Complete Your Profile",
+    "profileHelper": "A complete profile helps you receive more service requests.",
+    "updateProfile": "Update Profile",
+    "activeRequests": "Active Requests",
+    "completed": "Completed",
+    "avgRating": "Avg Rating",
+    "profileStatus": "Profile Status",
+    "profileActive": "Active",
+    "profileIncomplete": "Incomplete",
+    "serviceRequests": "Service Requests",
+    "browseRequests": "Browse available requests and submit quotes",
+    "manageProfile": "My Profile",
+    "manageProfileDesc": "Manage business info and services",
+    "recentActivity": "Recent Activity",
+    "activeRequestsMsg": "You have active requests. Go to Service Requests to respond to new opportunities.",
+    "viewRequests": "View Requests",
+    "welcomePartner": "Welcome to Yalla Partners",
+    "getStarted": "Get started by completing your profile and browsing available service requests.",
+    "createProfile": "Create Profile",
+    "browseRequestsBtn": "Browse Requests"
+  },
+  "viewingLabels": {
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "cancelled": "Cancelled",
+    "completed": "Completed",
+    "noShow": "No Show"
+  }
+}

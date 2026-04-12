@@ -326,8 +326,9 @@ export function ConversationalIntake({
           {/* Review state message */}
           {showReview && !submitting && (
             <div className="flex justify-start">
-              <div className="bg-[#E8F5E9] rounded-2xl px-4 py-2.5 text-[0.9375rem] text-[#2E7D32]">
-                ✓ {translations.reviewTitle}
+              <div className="bg-[#E8F5E9] rounded-2xl px-4 py-2.5 text-[0.9375rem] text-[#2E7D32] flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-[#2E7D32] flex-shrink-0" />
+                {translations.reviewTitle}
               </div>
             </div>
           )}

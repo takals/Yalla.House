@@ -2,11 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Lock } from 'lucide-react'
 
-const STATUS_LABELS: Record<string, string> = {
-  draft: 'Entwurf', active: 'Aktiv', paused: 'Pausiert',
-  under_offer: 'Angebot', sold: 'Verkauft', let: 'Vermietet', archived: 'Archiviert',
-}
 const STATUS_STYLES: Record<string, string> = {
   draft: 'bg-gray-100 text-gray-500',
   active: 'bg-green-100 text-green-700',
@@ -15,10 +13,6 @@ const STATUS_STYLES: Record<string, string> = {
   sold: 'bg-purple-100 text-purple-700',
   let: 'bg-purple-100 text-purple-700',
   archived: 'bg-gray-100 text-gray-400',
-}
-const VIEWING_LABELS: Record<string, string> = {
-  pending: 'Ausstehend', confirmed: 'Bestätigt',
-  cancelled: 'Abgebrochen', completed: 'Abgeschlossen', no_show: 'Nicht erschienen',
 }
 const VIEWING_STYLES: Record<string, string> = {
   pending: 'bg-yellow-50 text-yellow-800',
@@ -29,6 +23,8 @@ const VIEWING_STYLES: Record<string, string> = {
 }
 
 export default async function AdminPage() {
+  const t = await getTranslations()
+
   // Auth check
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -47,9 +43,9 @@ export default async function AdminPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="bg-surface rounded-card p-10 text-center max-w-sm">
-          <p className="text-2xl mb-2">🔒</p>
-          <p className="font-bold mb-1">Kein Zugriff</p>
-          <p className="text-sm text-[#5E6278]">Dieser Bereich ist nur für Administratoren.</p>
+          <Lock size={32} className="mx-auto mb-2 text-[#5E6278]" />
+          <p className="font-bold mb-1">{t('admin.noAccess')}</p>
+          <p className="text-sm text-[#5E6278]">{t('admin.noAccessMessage')}</p>
         </div>
       </div>
     )
@@ -106,11 +102,31 @@ export default async function AdminPage() {
       .limit(8),
   ])
 
+  // Build status labels using translations
+  const STATUS_LABELS: Record<string, string> = {
+    draft: t('statusLabels.draft'),
+    active: t('statusLabels.active'),
+    paused: t('statusLabels.paused'),
+    under_offer: t('statusLabels.underOffer'),
+    sold: t('statusLabels.sold'),
+    let: t('statusLabels.let'),
+    archived: t('statusLabels.archived'),
+  }
+
+  // Build viewing labels using translations
+  const VIEWING_LABELS: Record<string, string> = {
+    pending: t('viewingLabels.pending'),
+    confirmed: t('viewingLabels.confirmed'),
+    cancelled: t('viewingLabels.cancelled'),
+    completed: t('viewingLabels.completed'),
+    no_show: t('viewingLabels.noShow'),
+  }
+
   const stats = [
-    { label: 'Inserate gesamt', value: listingsCount.count ?? 0, sub: `${activeListingsCount.count ?? 0} aktiv` },
-    { label: 'Nutzer', value: usersCount.count ?? 0, sub: 'registriert' },
-    { label: 'Besichtigungen', value: (viewingsCount as any).count ?? 0, sub: `${(pendingViewingsCount as any).count ?? 0} ausstehend` },
-    { label: 'Bezahlte Tarife', value: (paidBillingCount as any).count ?? 0, sub: 'Abschlüsse' },
+    { label: t('admin.totalListings'), value: listingsCount.count ?? 0, sub: `${activeListingsCount.count ?? 0} ${t('admin.active')}` },
+    { label: t('admin.users'), value: usersCount.count ?? 0, sub: 'registriert' },
+    { label: t('admin.viewings'), value: (viewingsCount as any).count ?? 0, sub: `${(pendingViewingsCount as any).count ?? 0} ${t('admin.pending')}` },
+    { label: t('admin.paidTariffs'), value: (paidBillingCount as any).count ?? 0, sub: t('admin.completions') },
   ]
 
   return (
@@ -119,10 +135,10 @@ export default async function AdminPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Admin</h1>
-            <p className="text-sm text-[#5E6278] mt-0.5">Yalla.House Plattformübersicht</p>
+            <h1 className="text-3xl font-bold">{t('admin.pageTitle')}</h1>
+            <p className="text-sm text-[#5E6278] mt-0.5">{t('admin.pageSubtitle')}</p>
           </div>
-          <span className="text-xs font-bold px-3 py-1.5 bg-brand rounded-full">Admin</span>
+          <span className="text-xs font-bold px-3 py-1.5 bg-brand rounded-full">{t('admin.pageTitle')}</span>
         </div>
 
 
@@ -141,10 +157,10 @@ export default async function AdminPage() {
 
           {/* Recent listings */}
           <section>
-            <h2 className="text-base font-bold mb-4">Neueste Inserate</h2>
+            <h2 className="text-base font-bold mb-4">{t('admin.recentListings')}</h2>
             <div className="bg-surface rounded-card divide-y divide-[#E2E4EB]">
               {(recentListings.data ?? []).length === 0 && (
-                <p className="px-5 py-4 text-sm text-[#5E6278]">Keine Inserate.</p>
+                <p className="px-5 py-4 text-sm text-[#5E6278]">{t('admin.noListings')}</p>
               )}
               {(recentListings.data ?? []).map((l: any) => (
                 <div key={l.id} className="px-5 py-3 flex items-center justify-between gap-3">
@@ -167,10 +183,10 @@ export default async function AdminPage() {
 
           {/* Recent viewings */}
           <section>
-            <h2 className="text-base font-bold mb-4">Neueste Besichtigungen</h2>
+            <h2 className="text-base font-bold mb-4">{t('admin.recentViewings')}</h2>
             <div className="bg-surface rounded-card divide-y divide-[#E2E4EB]">
               {(recentViewings.data ?? []).length === 0 && (
-                <p className="px-5 py-4 text-sm text-[#5E6278]">Keine Besichtigungen.</p>
+                <p className="px-5 py-4 text-sm text-[#5E6278]">{t('admin.noViewings')}</p>
               )}
               {((recentViewings as any).data ?? []).map((v: any) => (
                 <div key={v.id} className="px-5 py-3 flex items-center justify-between gap-3">
@@ -192,10 +208,10 @@ export default async function AdminPage() {
 
           {/* Recent users */}
           <section className="lg:col-span-2">
-            <h2 className="text-base font-bold mb-4">Neueste Nutzer</h2>
+            <h2 className="text-base font-bold mb-4">{t('admin.recentUsers')}</h2>
             <div className="bg-surface rounded-card divide-y divide-[#E2E4EB]">
               {((recentUsers as any).data ?? []).length === 0 && (
-                <p className="px-5 py-4 text-sm text-[#5E6278]">Keine Nutzer.</p>
+                <p className="px-5 py-4 text-sm text-[#5E6278]">{t('admin.noUsers')}</p>
               )}
               {((recentUsers as any).data ?? []).map((u: any) => (
                 <div key={u.id} className="px-5 py-3 flex items-center justify-between gap-3">

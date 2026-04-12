@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { ViewingCard } from './viewing-card'
 
@@ -17,6 +18,7 @@ interface ViewingWithListing {
 }
 
 export default async function HunterPage() {
+  const t = await getTranslations('hunterDash')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -81,9 +83,9 @@ export default async function HunterPage() {
   const confirmedViewings = viewings.filter(v => v.status === 'confirmed').length
   const firstName = profile?.full_name?.split(' ')[0] ?? 'dort'
 
-  const passportStatus = brief
-    ? brief.brief_updated_at ? 'Aktiv' : 'Entwurf'
-    : 'Nicht erstellt'
+  const passportStatusLabel = brief
+    ? brief.brief_updated_at ? t('active') : t('draft')
+    : t('notCreated')
   const passportDot = brief
     ? brief.brief_updated_at ? 'bg-emerald-400' : 'bg-amber-400'
     : 'bg-white/20'
@@ -94,7 +96,7 @@ export default async function HunterPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-extrabold tracking-tight text-[#0F1117] mb-0.5">
-          Hallo, {firstName}
+          {t('hello', { name: firstName })}
         </h1>
         <p className="text-[0.875rem] text-[#5E6278]">{profile?.email}</p>
       </div>
@@ -104,22 +106,22 @@ export default async function HunterPage() {
 
         {/* Besichtigungen — wide card */}
         <div className="col-span-2 bg-[#0F1117] rounded-2xl p-6 flex flex-col justify-between min-h-[120px]">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-white/40">Besichtigungen</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-white/40">{t('viewings')}</p>
           <div className="flex items-end gap-3 mt-2">
             <p className="text-5xl font-black tabular-nums text-white leading-none">
               {pendingViewings + confirmedViewings}
             </p>
             {confirmedViewings > 0 && (
               <span className="mb-1 text-[0.75rem] font-semibold text-emerald-400">
-                {confirmedViewings} bestätigt
+                {t('confirmed', { count: confirmedViewings })}
               </span>
             )}
           </div>
         </div>
 
         {/* Neue Treffer */}
-        <div className={`bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px] ${matchCount > 0 ? 'ring-2 ring-[#FFD400]' : ''}`}>
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">Neue Treffer</p>
+        <div className={`bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px] ${matchCount > 0 ? 'ring-2 ring-brand' : ''}`}>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('newMatches')}</p>
           <p className={`text-4xl font-black tabular-nums leading-none mt-2 ${matchCount > 0 ? 'text-[#0F1117]' : 'text-[#C5C8D0]'}`}>
             {matchCount}
           </p>
@@ -127,13 +129,13 @@ export default async function HunterPage() {
 
         {/* Verbundene Makler */}
         <div className="bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">Makler</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('agents')}</p>
           <p className="text-4xl font-black tabular-nums leading-none mt-2 text-[#0F1117]">{agentCount}</p>
         </div>
 
         {/* Aktive Angebote */}
         <div className="bg-white rounded-2xl p-5 flex flex-col justify-between">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">Angebote</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('offers')}</p>
           <p className="text-4xl font-black tabular-nums leading-none mt-2 text-[#0F1117]">{offerCount}</p>
         </div>
 
@@ -141,42 +143,42 @@ export default async function HunterPage() {
         <div className="col-span-2 lg:col-span-3 bg-white rounded-2xl p-5 flex items-center gap-4">
           <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${passportDot}`} />
           <div>
-            <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">Passport-Status</p>
-            <p className="font-bold text-[#0F1117] mt-0.5">{passportStatus}</p>
+            <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('passportStatus')}</p>
+            <p className="font-bold text-[#0F1117] mt-0.5">{passportStatusLabel}</p>
           </div>
           <Link
             href="/hunter/passport"
             className="ml-auto text-[0.8125rem] font-semibold text-[#5E6278] hover:text-[#0F1117] transition-colors whitespace-nowrap"
           >
-            Bearbeiten →
+            {t('editPassport')} →
           </Link>
         </div>
       </div>
 
       {/* Quick-access module grid */}
       <div>
-        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[#5E6278] mb-3">Module</p>
+        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[#5E6278] mb-3">{t('modules')}</p>
         <div className="grid sm:grid-cols-2 gap-3">
 
           <ModuleCard
             href="/hunter/passport"
-            title="Home Passport"
-            subtitle="Dein Käufer-Profil — Makler beantragen Zugang"
+            title={t('homePassport')}
+            subtitle={t('homePassportDesc')}
             accentClass="bg-[#0F1117]"
             accentLabel="ID"
           />
           <ModuleCard
             href="/hunter/agents"
-            title="Makler-Manager"
-            subtitle="Verbundene Makler verwalten und Passport teilen"
+            title={t('agentManager')}
+            subtitle={t('agentManagerDesc')}
             accentClass="bg-[#EDEEF2]"
             accentLabel="AG"
             lightAccent
           />
           <ModuleCard
             href="/hunter/inbox"
-            title="Posteingang"
-            subtitle="Passende Objekte aus Makler-Newslettern"
+            title={t('inbox')}
+            subtitle={t('inboxDesc')}
             accentClass="bg-[#EDEEF2]"
             accentLabel="IN"
             lightAccent
@@ -184,8 +186,8 @@ export default async function HunterPage() {
           />
           <ModuleCard
             href="/hunter/settings"
-            title="Einstellungen"
-            subtitle="Profil und Datenweitergabe verwalten"
+            title={t('settings')}
+            subtitle={t('settingsDesc')}
             accentClass="bg-[#EDEEF2]"
             accentLabel="ES"
             lightAccent
@@ -195,17 +197,17 @@ export default async function HunterPage() {
 
       {/* Viewings section */}
       <div>
-        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[#5E6278] mb-3">Besichtigungsanfragen</p>
+        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[#5E6278] mb-3">{t('viewingRequests')}</p>
 
         {viewings.length === 0 && (
           <div className="bg-white rounded-2xl p-12 text-center">
-            <p className="text-[#5E6278] text-sm mb-5">Noch keine Besichtigungsanfragen.</p>
+            <p className="text-[#5E6278] text-sm mb-5">{t('noViewingRequests')}</p>
             <Link
               href="/listings"
-              className="inline-flex items-center gap-2 bg-[#FFD400] hover:bg-[#E6C200] text-[#0F1117] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+              className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
               style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1)' }}
             >
-              Inserate durchsuchen
+              {t('browseListings')}
             </Link>
           </div>
         )}
@@ -237,7 +239,7 @@ export default async function HunterPage() {
                 href="/listings"
                 className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] transition-colors"
               >
-                Weitere Inserate durchsuchen →
+                {t('moreListings')} →
               </Link>
             </div>
           </div>

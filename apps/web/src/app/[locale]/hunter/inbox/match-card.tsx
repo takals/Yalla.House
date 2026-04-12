@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition, useState } from 'react'
+import { Check, X } from 'lucide-react'
 import { updateMatchStatusAction } from './actions'
 
 interface Match {
@@ -78,11 +79,11 @@ export function MatchCard({ match }: Props) {
             {criteria.map(([key, pass]) => (
               <span
                 key={key}
-                className={`text-[0.7rem] font-bold px-2 py-0.5 rounded-full ${
+                className={`text-[0.7rem] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 ${
                   pass ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-700'
                 }`}
               >
-                {pass ? '' : '✗ '}{key}
+                {pass ? <Check size={10} /> : <X size={10} />}{key}
               </span>
             ))}
           </div>
@@ -108,7 +109,9 @@ export function MatchCard({ match }: Props) {
             </>
           )}
           {match.status === 'saved' && (
-            <span className="text-xs font-semibold text-green-700">✓ Gespeichert</span>
+            <span className="text-xs font-semibold text-green-700 inline-flex items-center gap-1">
+              <Check size={14} /> Gespeichert
+            </span>
           )}
         </div>
       </div>

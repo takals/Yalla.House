@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { Home, Building2, Building, Store, TreePine } from 'lucide-react'
 import { createListingAction, type WizardPayload } from './actions'
 
 interface WizardFormData {
@@ -46,13 +47,13 @@ const STEP_TITLES = [
 ]
 
 const PROPERTY_TYPES = [
-  { value: 'house',      label: 'Haus',       emoji: '🏠' },
-  { value: 'flat',       label: 'Wohnung',    emoji: '🏢' },
-  { value: 'apartment',  label: 'Apartment',  emoji: '🏙️' },
-  { value: 'villa',      label: 'Villa',      emoji: '🏡' },
-  { value: 'commercial', label: 'Gewerbe',    emoji: '🏪' },
-  { value: 'land',       label: 'Grundstück', emoji: '🌿' },
-  { value: 'other',      label: 'Sonstiges',  emoji: '···' },
+  { value: 'house',      label: 'Haus',       icon: 'home' },
+  { value: 'flat',       label: 'Wohnung',    icon: 'building2' },
+  { value: 'apartment',  label: 'Apartment',  icon: 'building' },
+  { value: 'villa',      label: 'Villa',      icon: 'home' },
+  { value: 'commercial', label: 'Gewerbe',    icon: 'store' },
+  { value: 'land',       label: 'Grundstück', icon: 'treepine' },
+  { value: 'other',      label: 'Sonstiges',  icon: null },
 ]
 
 const ENERGY_CLASSES = ['A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -125,18 +126,23 @@ function Step1({
           <p className="mb-3 text-xs text-red-500">{errors.property_type}</p>
         )}
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-          {PROPERTY_TYPES.map(({ value, label, emoji }) => (
+          {PROPERTY_TYPES.map(({ value, label, icon }) => (
             <button
               key={value}
               type="button"
               onClick={() => set('property_type', value)}
               className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-colors text-center ${
                 form.property_type === value
-                  ? 'border-brand bg-[#FFFBE0]'
+                  ? 'border-brand bg-brand-solid-bg'
                   : 'border-[#E4E6EF] hover:border-brand/50'
               }`}
             >
-              <span className="text-2xl leading-none">{emoji}</span>
+              {icon === 'home' && <Home size={24} className="text-[#0F1117]" />}
+              {icon === 'building2' && <Building2 size={24} className="text-[#0F1117]" />}
+              {icon === 'building' && <Building size={24} className="text-[#0F1117]" />}
+              {icon === 'store' && <Store size={24} className="text-[#0F1117]" />}
+              {icon === 'treepine' && <TreePine size={24} className="text-[#0F1117]" />}
+              {icon === null && <span className="text-xs font-bold text-[#0F1117]">···</span>}
               <span className="text-xs font-semibold text-[#0F1117] leading-tight">{label}</span>
             </button>
           ))}
@@ -158,7 +164,7 @@ function Step1({
               onClick={() => set('intent', value)}
               className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-colors ${
                 form.intent === value
-                  ? 'border-brand bg-[#FFFBE0] text-[#0F1117]'
+                  ? 'border-brand bg-brand-solid-bg text-[#0F1117]'
                   : 'border-[#E4E6EF] text-[#5E6278] hover:border-brand/50'
               }`}
             >

@@ -41,4 +41,28 @@ export type Events = {
       flowId: string
     }
   }
+  'brief/agents.insufficient': {
+    data: {
+      listingId: string
+      ownerId: string
+      postcode: string
+      city: string
+      registeredAgentCount: number
+      minimumRequired: number
+    }
+  }
+  'agent/invite.send': {
+    data: {
+      prospectiveAgentId: string
+      listingId: string
+      template: 'owner_brief' | 'cold_outreach'
+    }
+  }
+  'agent/invite.batch': {
+    data: {
+      postcode: string
+      listingId: string
+      maxInvites: number
+    }
+  }
 }

@@ -39,3 +39,8 @@ fix-git-push.sh
 
 # Claude global (local-only)
 CLAUDE_global.md
+
+# Claude secrets & local sync outputs (never commit)
+.claude/.gh-token*
+.claude/.vercel-token
+.claude/vercel-logs/
