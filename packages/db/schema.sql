@@ -485,7 +485,8 @@ CREATE POLICY "listings_public_read" ON listings
   FOR SELECT USING (status IN ('active','under_offer'));
 
 CREATE POLICY "listings_owner_all" ON listings
-  FOR ALL USING (auth.uid() = owner_id);
+  FOR ALL USING (auth.uid() = owner_id)
+  WITH CHECK (auth.uid() = owner_id);
 
 -- Offers: hunter sees own offers, owner sees offers on their listings
 CREATE POLICY "offers_hunter_own" ON offers

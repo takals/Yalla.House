@@ -102,8 +102,8 @@ export async function createListingAction(
   })
 
   if (error) {
-    console.error('Listing insert error:', error)
-    return { error: 'Fehler beim Speichern. Bitte versuchen Sie es erneut.' }
+    console.error('Listing creation error:', error)
+    return { error: error.message || 'Fehler beim Speichern. Bitte versuchen Sie es erneut.' }
   }
 
   redirect('/owner')
