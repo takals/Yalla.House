@@ -446,5 +446,24 @@
     "yes": "Yes",
     "description": "Description",
     "photos": "Photos"
+  },
+  "ownerProposals": {
+    "backToTracking": "Back to tracking",
+    "title": "Agent Proposals",
+    "subtitle": "Compare proposals side by side. Commission, service, and transparency at a glance.",
+    "noProposals": "No proposals yet. Once agents respond to your brief, their proposals will appear here.",
+    "unknownAgent": "Unknown Agent",
+    "verified": "Verified",
+    "licenseNo": "License",
+    "liveUpdates": "Live Updates",
+    "manualUpdates": "Manual Updates",
+    "liveUpdatesDesc": "Viewings, offers, and status changes sync to your dashboard automatically",
+    "manualUpdatesDesc": "This agent will update you manually via messages",
+    "commission": "Commission",
+    "updateStyle": "How you'll be updated",
+    "serviceOverview": "Service Overview",
+    "acceptProposal": "Accept Proposal",
+    "decline": "Decline",
+    "accepted": "Accepted — working on your property"
   }
 }

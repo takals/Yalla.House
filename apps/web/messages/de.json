@@ -446,5 +446,24 @@
     "yes": "Ja",
     "description": "Beschreibung",
     "photos": "Fotos"
+  },
+  "ownerProposals": {
+    "backToTracking": "Zurück zur Nachverfolgung",
+    "title": "Makler-Vorschläge",
+    "subtitle": "Vergleichen Sie Vorschläge nebeneinander. Provision, Service und Transparenz auf einen Blick.",
+    "noProposals": "Noch keine Vorschläge. Sobald Makler auf Ihr Briefing antworten, erscheinen ihre Vorschläge hier.",
+    "unknownAgent": "Unbekannter Makler",
+    "verified": "Verifiziert",
+    "licenseNo": "Lizenz",
+    "liveUpdates": "Live-Updates",
+    "manualUpdates": "Manuelle Updates",
+    "liveUpdatesDesc": "Besichtigungen, Angebote und Statusänderungen werden automatisch in Ihr Dashboard synchronisiert",
+    "manualUpdatesDesc": "Dieser Makler wird Sie manuell per Nachricht auf dem Laufenden halten",
+    "commission": "Provision",
+    "updateStyle": "So werden Sie informiert",
+    "serviceOverview": "Service-Übersicht",
+    "acceptProposal": "Vorschlag annehmen",
+    "decline": "Ablehnen",
+    "accepted": "Angenommen — arbeitet an Ihrer Immobilie"
   }
 }
