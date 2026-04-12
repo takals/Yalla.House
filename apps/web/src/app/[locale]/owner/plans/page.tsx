@@ -13,7 +13,6 @@ export default async function PlansPage({ searchParams }: Props) {
   const supabase = await createClient()
   // Preview phase: no auth gate. Plans page is publicly browsable.
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: plans } = await (supabase.from('subscription_plans') as any)
     .select('id, name, name_de, amount, currency, features, stripe_price_id, period')
     .eq('target_role', 'owner')

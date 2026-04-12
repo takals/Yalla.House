@@ -10,7 +10,6 @@ export async function cancelViewingAction(
   if (!user) return { error: 'Nicht autorisiert' }
 
   // Verify the viewing belongs to this hunter
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select('id, status, hunter_id')
     .eq('id', viewingId)
@@ -23,7 +22,6 @@ export async function cancelViewingAction(
     return { error: 'Diese Anfrage kann nicht mehr abgebrochen werden.' }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'cancelled', updated_at: new Date().toISOString() })
     .eq('id', viewingId)

@@ -29,13 +29,11 @@ export default async function AgentPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   const [profileResult, assignmentsResult] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_profiles') as any)
       .select('agency_name, license_number, coverage_areas, property_types, verified_at, subscription_tier')
       .eq('user_id', userId)
       .maybeSingle(),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_hunter_assignments') as any)
       .select(`
         id, status, data_scope, connected_at, created_at,
@@ -47,7 +45,6 @@ export default async function AgentPage() {
       .order('created_at', { ascending: false }),
   ])
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userResult = await (supabase.from('users') as any)
     .select('full_name, email')
     .eq('id', userId)

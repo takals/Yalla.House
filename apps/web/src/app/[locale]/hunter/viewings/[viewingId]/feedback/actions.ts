@@ -11,7 +11,6 @@ export async function checkinAction(
   if (!user) return { error: 'Not authorised' }
 
   // Verify this viewing belongs to the hunter
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select('id, hunter_id, status, listing_id')
     .eq('id', viewingId)
@@ -22,7 +21,6 @@ export async function checkinAction(
   if (viewing.status !== 'confirmed') return { error: 'Viewing is not confirmed' }
 
   // Update status to indicate hunter has arrived
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({
       checked_in_at: new Date().toISOString(),
@@ -49,7 +47,6 @@ export async function submitFeedbackAction(
   if (!user) return { error: 'Not authorised' }
 
   // Verify ownership
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select(`
       id, hunter_id, listing_id,
@@ -62,7 +59,6 @@ export async function submitFeedbackAction(
   if (!viewing) return { error: 'Viewing not found' }
 
   // Update viewing with feedback
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({
       status: 'completed',

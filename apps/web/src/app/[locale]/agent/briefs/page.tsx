@@ -10,7 +10,6 @@ export default async function AgentBriefsPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch all matches assigned to this agent
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: matches } = await (supabase as any)
     .from('agent_matches')
     .select(`

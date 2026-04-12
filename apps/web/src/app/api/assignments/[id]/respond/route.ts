@@ -23,7 +23,6 @@ export async function POST(
   }
 
   // Fetch the assignment
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase as any)
     .from('listing_agent_assignments')
     .select('id, owner_id, agent_id, status, listing_id')
@@ -88,7 +87,6 @@ export async function POST(
   }
 
   // Update the assignment
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: updated, error } = await (supabase as any)
     .from('listing_agent_assignments')
     .update({

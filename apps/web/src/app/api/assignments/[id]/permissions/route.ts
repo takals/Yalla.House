@@ -18,7 +18,6 @@ export async function GET(
   }
 
   // Fetch assignment and verify user is owner or agent
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase as any)
     .from('listing_agent_assignments')
     .select(
@@ -64,7 +63,6 @@ export async function PATCH(
   }
 
   // Fetch assignment and verify caller is the owner
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase as any)
     .from('listing_agent_assignments')
     .select('id, owner_id')
@@ -114,7 +112,6 @@ export async function PATCH(
   }
 
   // Update permissions
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: updated, error } = await (supabase as any)
     .from('listing_agent_assignments')
     .update(updateData)

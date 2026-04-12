@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
       {
         cookies: {
           getAll() { return cookieStore.getAll() },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setAll(cookiesToSet: any[]) {
             cookiesToSet.forEach(({ name, value, options }: any) =>
               cookieStore.set(name, value, options)
@@ -29,7 +28,6 @@ export async function GET(request: NextRequest) {
     const { error, data } = await supabase.auth.exchangeCodeForSession(code)
     if (!error && data.user) {
       // Ensure public.users row exists (FK required by listings)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase.from('users') as any).upsert(
         {
           id: data.user.id,

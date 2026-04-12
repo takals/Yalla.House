@@ -19,7 +19,6 @@ export async function POST(
   }
 
   // Verify the match belongs to this agent and is in 'sent' status
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: match } = await (supabase as any)
     .from('agent_matches')
     .select('id, agent_id, status, search_request_id')
@@ -45,7 +44,6 @@ export async function POST(
   }
 
   // Check for phone number in message text if consent disallows it
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: consent } = await (supabase as any)
     .from('contact_consent')
     .select('phone_allowed')
@@ -63,7 +61,6 @@ export async function POST(
   }
 
   // Insert the response
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: response, error } = await (supabase as any)
     .from('agent_responses')
     .insert({

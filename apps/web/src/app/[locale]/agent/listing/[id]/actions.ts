@@ -19,7 +19,6 @@ export async function submitProposalAction(
   }
 
   // Verify listing exists and is active
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select('id, owner_id, status')
@@ -32,7 +31,6 @@ export async function submitProposalAction(
   }
 
   // Check agent hasn't already submitted
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existing } = await (supabase as any)
     .from('listing_agent_assignments')
     .select('id')
@@ -46,7 +44,6 @@ export async function submitProposalAction(
 
   // Create the assignment record
   // Agents always get full-service (managed) — the proposal is about their commission + service pitch
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any)
     .from('listing_agent_assignments')
     .insert({

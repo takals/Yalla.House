@@ -24,13 +24,11 @@ export default async function SettingsPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   const [profileResult, assignmentsResult, consentResult] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name, email, phone')
       .eq('id', userId)
       .single(),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_hunter_assignments') as any)
       .select(`
         id, status,
@@ -41,7 +39,6 @@ export default async function SettingsPage() {
       .neq('status', 'disconnected')
       .order('created_at', { ascending: false }),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_consent_log') as any)
       .select('id, event_type, created_at, agent:users!agent_id(full_name)')
       .eq('hunter_id', userId)

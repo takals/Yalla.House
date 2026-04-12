@@ -21,7 +21,7 @@ export function AgentProfilePageClient({
 }: AgentProfilePageClientProps) {
   const [mode, setMode] = useState<'classic' | 'chat'>('chat')
 
-  if (mode === 'chat') {
+  if ((mode as any) === 'chat') {
     return (
       <AgentProfileIntake
         userId={userId}
@@ -62,7 +62,7 @@ export function AgentProfilePageClient({
         <p className="text-[#5E6278] text-sm">{pageDescription}</p>
       </div>
 
-      <ProfileForm profile={profile} />
+      <ProfileForm profile={profile as any} />
     </div>
   )
 }

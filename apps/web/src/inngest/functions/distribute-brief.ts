@@ -17,7 +17,6 @@ export const distributeBrief = inngest.createFunction(
 
     // 1. Fetch the search request + hunter info
     const { data: search } = await step.run('fetch-search', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('search_requests')
         .select(`
@@ -66,7 +65,6 @@ export const distributeBrief = inngest.createFunction(
     for (const matchId of matchIds) {
       await step.run(`send-brief-${matchId}`, async () => {
         // Fetch the agent match + agent info
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data: match } = await (db as any)
           .from('agent_matches')
           .select('id, agent_id, status')
@@ -76,7 +74,6 @@ export const distributeBrief = inngest.createFunction(
         if (!match || match.status !== 'pending') return
 
         // Create in-platform notification via message_threads
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data: thread } = await (db as any)
           .from('message_threads')
           .insert({
@@ -91,7 +88,6 @@ export const distributeBrief = inngest.createFunction(
 
         if (thread) {
           // Add agent as participant
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (db as any).from('thread_participants').insert({
             thread_id: thread.id,
             user_id: match.agent_id,
@@ -99,7 +95,6 @@ export const distributeBrief = inngest.createFunction(
           })
 
           // Send the brief as a system message
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (db as any).from('messages').insert({
             thread_id: thread.id,
             sender_id: match.agent_id, // system-generated, attributed to agent for visibility
@@ -110,7 +105,6 @@ export const distributeBrief = inngest.createFunction(
         }
 
         // Update match status → sent
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (db as any)
           .from('agent_matches')
           .update({
@@ -129,7 +123,6 @@ export const distributeBrief = inngest.createFunction(
       const { sendHunterBriefEmail } = await import('@/lib/resend')
 
       for (const matchId of matchIds) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { data: match } = await (db as any)
           .from('agent_matches')
           .select('id, agent_id, agent:users!agent_matches_agent_id_fkey(email, full_name)')

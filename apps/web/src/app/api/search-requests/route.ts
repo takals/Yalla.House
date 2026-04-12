@@ -24,7 +24,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Ensure hunter_profile exists (idempotent upsert)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase as any).from('hunter_profiles').upsert(
     {
       user_id: user.id,
@@ -40,14 +39,12 @@ export async function POST(request: NextRequest) {
   )
 
   // Ensure hunter role
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase as any).from('user_roles').upsert(
     { user_id: user.id, role: 'hunter' },
     { onConflict: 'user_id,role', ignoreDuplicates: true }
   )
 
   // Create the search request
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: searchRequest, error } = await (supabase as any)
     .from('search_requests')
     .insert({
@@ -88,7 +85,6 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from('search_requests')
     .select(`

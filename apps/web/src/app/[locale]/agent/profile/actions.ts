@@ -31,7 +31,6 @@ export async function saveAgentProfileAction(
     focus: (formData.get('focus') as string) || 'both',
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_profiles') as any)
     .upsert(profileData, { onConflict: 'user_id' })
 
@@ -41,7 +40,6 @@ export async function saveAgentProfileAction(
   }
 
   // Ensure agent role exists
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('user_roles') as any)
     .upsert({ user_id: user.id, role: 'agent', is_active: true }, { onConflict: 'user_id,role' })
 

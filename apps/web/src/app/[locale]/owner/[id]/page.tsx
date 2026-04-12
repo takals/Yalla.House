@@ -31,14 +31,12 @@ export default async function EditListingPage({ params }: Props) {
 
   if (!listing) redirect('/owner')
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: portals } = await (supabase.from('portal_config') as any)
     .select('id, slug, display_name, min_photos')
     .eq('country_code', 'DE')
     .eq('is_active', true)
     .order('display_name') as { data: PortalRow[] | null }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: portalStatuses } = await (supabase.from('listing_portal_status') as any)
     .select('portal_id, status, external_id, error_message, last_sync_at')
     .eq('listing_id', id) as { data: PortalStatusRow[] | null }

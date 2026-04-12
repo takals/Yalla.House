@@ -16,12 +16,10 @@ export default async function OwnerSettingsPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   const [userResult, profileResult] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name, email, phone')
       .eq('id', userId)
       .maybeSingle(),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('owner_profiles') as any)
       .select('company_name, tax_id')
       .eq('user_id', userId)
@@ -140,7 +138,7 @@ export default async function OwnerSettingsPage() {
 // ========== Sub-components ==========
 
 interface SettingsSectionProps {
-  icon?: React.ComponentType<{ size: number; className: string }>
+  icon?: any
   title: string
   badge?: string
   isDanger?: boolean

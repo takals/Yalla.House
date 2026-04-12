@@ -19,7 +19,6 @@ export default async function AssignmentDetailPage({ params }: Props) {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch the assignment with full details
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase as any)
     .from('listing_agent_assignments')
     .select(`
@@ -99,9 +98,9 @@ export default async function AssignmentDetailPage({ params }: Props) {
     return (
       <span
         className="text-xs font-bold px-2 py-0.5 rounded-full"
-        style={{ backgroundColor: c.bg, color: c.text }}
+        style={{ backgroundColor: c?.bg || '#FEE2E2', color: c?.text || '#991B1B' }}
       >
-        {c.label}
+        {c?.label || 'Unknown'}
       </span>
     )
   }
@@ -118,9 +117,9 @@ export default async function AssignmentDetailPage({ params }: Props) {
     return (
       <span
         className="text-xs font-bold px-2 py-0.5 rounded-full"
-        style={{ backgroundColor: c.bg, color: c.text }}
+        style={{ backgroundColor: c?.bg || '#DCFCE7', color: c?.text || '#166534' }}
       >
-        {c.label}
+        {c?.label || 'Unknown'}
       </span>
     )
   }
@@ -206,7 +205,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
             {assignment.status === 'accepted' || assignment.status === 'active'
               ? <>
                   <Check size={16} className="inline mr-2" />
-                  You've accepted this brief
+                  You&apos;ve accepted this brief
                 </>
               : `This brief has been ${assignment.status}`}
           </p>

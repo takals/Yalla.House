@@ -74,6 +74,5 @@ async function logCommsEvent(event: {
   listing_id?: string
 }) {
   const db = createServiceClient()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (db.from('comms_events') as any).insert(event)
 }

@@ -12,7 +12,6 @@ export default async function SearchProfilePage() {
 
   // Fetch existing searches + hunter profile defaults
   const [searchesResult, profileResult] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase as any)
       .from('search_requests')
       .select(`
@@ -23,7 +22,6 @@ export default async function SearchProfilePage() {
       `)
       .eq('hunter_id', userId)
       .order('created_at', { ascending: false }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase as any)
       .from('hunter_profiles')
       .select('intent, budget_min, budget_max, target_areas, property_types, timeline')

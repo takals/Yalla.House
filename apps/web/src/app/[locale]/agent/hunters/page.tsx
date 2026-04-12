@@ -30,7 +30,6 @@ export default async function AgentHuntersPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: raw } = await (supabase.from('agent_hunter_assignments') as any)
     .select(`
       id, status, data_scope, connected_at,

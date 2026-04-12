@@ -124,7 +124,7 @@ export function OwnerBriefIntake({
 
   return (
     <div className="relative h-screen">
-      <ConversationalIntake config={flowConfig} />
+      <ConversationalIntake {...flowConfig} />
 
       {/* Voice toggle button (fixed position) */}
       {isVoiceSupported && (

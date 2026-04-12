@@ -25,7 +25,6 @@ export default async function HunterInboxPage() {
   // Fetch all message threads where this hunter is a participant
   let threads: ThreadWithData[] = []
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabase as any)
       .from('message_threads')
       .select(`

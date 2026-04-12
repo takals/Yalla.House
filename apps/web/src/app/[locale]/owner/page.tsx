@@ -348,7 +348,7 @@ function SectionCard({ title, action, children }: SectionCardProps) {
   )
 }
 
-function ViewingItem({ viewing, t }: { viewing: Viewing; t: ReturnType<typeof getTranslations> }) {
+function ViewingItem({ viewing, t }: { viewing: Viewing; t: any }) {
   const scheduledDate = new Date(viewing.scheduled_at!)
   const now = new Date()
   const daysUntil = Math.ceil((scheduledDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
@@ -377,7 +377,7 @@ function ViewingItem({ viewing, t }: { viewing: Viewing; t: ReturnType<typeof ge
   )
 }
 
-function StatusBadge({ status, t }: { status: string; t: ReturnType<typeof getTranslations> }) {
+function StatusBadge({ status, t }: { status: string; t: any }) {
   const styles: Record<string, string> = {
     draft: 'bg-gray-100 text-gray-600',
     active: 'bg-green-100 text-green-700',

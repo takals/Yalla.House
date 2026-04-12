@@ -66,7 +66,7 @@ export default function AgentAssignmentsPage() {
         .eq('agent_id', agentId)
         .order('created_at', { ascending: false })
 
-      setAssignments(data ?? [])
+      setAssignments((data ?? []) as any)
       setLoading(false)
     }
 

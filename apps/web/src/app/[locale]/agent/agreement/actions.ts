@@ -16,7 +16,6 @@ export async function signAgreementAction(data: { signatoryName: string }) {
   }
 
   // Upsert — agent might not have a profile row yet
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any)
     .from('agent_profiles')
     .upsert(

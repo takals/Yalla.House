@@ -13,7 +13,6 @@ export async function updateProfileAction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('users') as any)
     .update({
       full_name: formData.get('full_name') as string || null,
@@ -34,7 +33,6 @@ export async function pauseAllSharingAction(pause: boolean): Promise<ActionResul
 
   const newStatus = pause ? 'paused' : 'active'
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_hunter_assignments') as any)
     .update({ status: newStatus, updated_at: new Date().toISOString() })
     .eq('hunter_id', user.id)
@@ -42,7 +40,6 @@ export async function pauseAllSharingAction(pause: boolean): Promise<ActionResul
 
   if (error) return { error: 'Fehler beim Aktualisieren.' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('hunter_consent_log') as any)
     .insert({ hunter_id: user.id, event_type: pause ? 'data_paused' : 'data_resumed' })
 
@@ -55,14 +52,12 @@ export async function disconnectAgentAction(assignmentId: string): Promise<Actio
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase.from('agent_hunter_assignments') as any)
     .select('agent_id')
     .eq('id', assignmentId)
     .eq('hunter_id', user.id)
     .single()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_hunter_assignments') as any)
     .update({ status: 'disconnected', updated_at: new Date().toISOString() })
     .eq('id', assignmentId)
@@ -70,7 +65,6 @@ export async function disconnectAgentAction(assignmentId: string): Promise<Actio
 
   if (error) return { error: 'Fehler beim Trennen.' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('hunter_consent_log') as any)
     .insert({ hunter_id: user.id, agent_id: assignment?.agent_id ?? null, event_type: 'agent_disconnected' })
 
@@ -83,20 +77,17 @@ export async function deleteAgentDataAction(assignmentId: string): Promise<Actio
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase.from('agent_hunter_assignments') as any)
     .select('agent_id')
     .eq('id', assignmentId)
     .eq('hunter_id', user.id)
     .single()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('agent_hunter_assignments') as any)
     .delete()
     .eq('id', assignmentId)
     .eq('hunter_id', user.id)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('hunter_consent_log') as any)
     .insert({ hunter_id: user.id, agent_id: assignment?.agent_id ?? null, event_type: 'data_deleted' })
 

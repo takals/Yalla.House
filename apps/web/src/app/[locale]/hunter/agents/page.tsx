@@ -21,7 +21,6 @@ export default async function AgentsPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch assignments with agent profile + user name
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: rawAssignments } = await (supabase.from('agent_hunter_assignments') as any)
     .select(`
       id, agent_id, status, data_scope, initiated_by,

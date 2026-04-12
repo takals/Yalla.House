@@ -24,7 +24,6 @@ export default async function OwnerInboxPage() {
   // Fetch all message threads where this owner is a participant
   let threads: ThreadWithData[] = []
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabase as any)
       .from('message_threads')
       .select(`

@@ -220,7 +220,7 @@ export async function sendOwnerBriefEmail(opts: {
 }): Promise<void> {
   const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
   const locale = opts.locale ?? 'en-GB'
-  const t = EMAIL_TRANSLATIONS[locale]
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
   const config = getCountryConfig(countryCode)
 
   const greeting = t.ownerBriefGreeting(opts.agentName?.split(' ')[0] ?? '')
@@ -247,7 +247,7 @@ export async function sendOwnerBriefEmail(opts: {
     'de-DE': { house: 'Haus', flat: 'Wohnung', apartment: 'Apartment', villa: 'Villa', commercial: 'Gewerbe', land: 'Grundstück', other: 'Immobilie' },
   }
 
-  const typeLabel = typeLabels[locale][opts.propertyType] ?? 'Property'
+  const typeLabel = ((typeLabels[locale] ?? typeLabels['en-GB']) ?? {})[opts.propertyType] ?? 'Property'
 
   const html = emailWrapper(`
     <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
@@ -305,7 +305,7 @@ export async function sendHunterBriefEmail(opts: {
 }): Promise<void> {
   const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
   const locale = opts.locale ?? 'en-GB'
-  const t = EMAIL_TRANSLATIONS[locale]
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
   const config = getCountryConfig(countryCode)
 
   const greeting = t.hunterBriefGreeting(opts.agentName?.split(' ')[0] ?? '')
@@ -531,7 +531,7 @@ export async function sendAgentInviteEmail(opts: {
 }): Promise<{ success: boolean; error?: string }> {
   const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
   const locale = opts.locale ?? 'en-GB'
-  const t = EMAIL_TRANSLATIONS[locale]
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
   const config = getCountryConfig(countryCode)
 
   const greeting = t.agentInviteGreeting(opts.agentName?.split(' ')[0] ?? '')
@@ -541,7 +541,7 @@ export async function sendAgentInviteEmail(opts: {
     'de-DE': { house: 'Haus', flat: 'Wohnung', apartment: 'Apartment', villa: 'Villa', commercial: 'Gewerbe', land: 'Grundstück', other: 'Immobilie' },
   }
 
-  const typeLabel = typeLabels[locale][opts.propertyType] ?? 'Property'
+  const typeLabel = ((typeLabels[locale] ?? typeLabels['en-GB']) ?? {})[opts.propertyType] ?? 'Property'
 
   const bedroomsRow = opts.bedrooms != null
     ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">${t.agentInviteBeds}</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.bedrooms}</td></tr>`

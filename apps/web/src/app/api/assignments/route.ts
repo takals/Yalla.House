@@ -25,7 +25,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Verify caller owns the listing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select('id, owner_id')
@@ -40,7 +39,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Verify agent exists
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: agent } = await (supabase as any)
     .from('users')
     .select('id, full_name, email')
@@ -52,7 +50,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Insert assignment with status='invited'
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment, error } = await (supabase as any)
     .from('listing_agent_assignments')
     .insert({
@@ -100,7 +97,6 @@ export async function GET() {
   }
 
   // Query assignments where user is owner or agent
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from('listing_agent_assignments')
     .select(`

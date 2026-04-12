@@ -50,7 +50,6 @@ export const scoreResponse = inngest.createFunction(
 
     // 1. Fetch the response + match + search request
     const { data: response } = await step.run('fetch-response', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('agent_responses')
         .select('id, message, properties')
@@ -63,7 +62,6 @@ export const scoreResponse = inngest.createFunction(
     }
 
     const { data: match } = await step.run('fetch-match', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('agent_matches')
         .select('id, search_request_id')
@@ -76,7 +74,6 @@ export const scoreResponse = inngest.createFunction(
     }
 
     const { data: search } = await step.run('fetch-search', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('search_requests')
         .select('*')
@@ -187,7 +184,6 @@ export const scoreResponse = inngest.createFunction(
 
     // 3. Update the response with score + tier
     await step.run('update-response', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (db as any)
         .from('agent_responses')
         .update({
@@ -199,7 +195,6 @@ export const scoreResponse = inngest.createFunction(
 
     // 4. Update the match status → responded
     await step.run('update-match', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (db as any)
         .from('agent_matches')
         .update({ status: 'responded' })

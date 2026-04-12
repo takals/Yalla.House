@@ -11,12 +11,10 @@ export default async function PassportPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   const [profileResult, userResult] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_profiles') as any)
       .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline')
       .eq('user_id', userId)
       .maybeSingle(),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name')
       .eq('id', userId)

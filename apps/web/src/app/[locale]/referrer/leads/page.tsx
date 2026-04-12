@@ -47,7 +47,7 @@ export default async function ReferralLeadsPage() {
   const referrer = referrerData as Referrer
 
   // Fetch referrals with user data and events
-  const { data: referralsData } = await supabase
+  const { data: referralsData } = await (supabase as any)
     .from('referrals')
     .select(`
       id, referred_user_id, referred_role, created_at,
@@ -56,11 +56,11 @@ export default async function ReferralLeadsPage() {
     .eq('referrer_id', referrer.id)
     .order('created_at', { ascending: false })
 
-  const referralIds = (referralsData ?? []).map(r => r.id)
+  const referralIds = (referralsData ?? []).map((r: any) => r.id)
 
   // Fetch all events for these referrals
   const { data: eventsData } = await referralIds.length > 0
-    ? supabase
+    ? (supabase as any)
         .from('referral_events')
         .select('*')
         .in('referral_id', referralIds)
@@ -72,13 +72,16 @@ export default async function ReferralLeadsPage() {
       if (!acc[event.referral_id]) {
         acc[event.referral_id] = []
       }
-      acc[event.referral_id].push(event)
+      const arr = acc[event.referral_id]
+      if (arr) {
+        arr.push(event)
+      }
       return acc
     },
     {} as Record<string, ReferralEvent[]>
   )
 
-  const referralsWithEvents = (referralsData ?? []).map(r => ({
+  const referralsWithEvents = (referralsData ?? []).map((r: any) => ({
     ...r,
     events: eventsByReferral[r.id] ?? [],
   })) as ReferralWithEvents[]

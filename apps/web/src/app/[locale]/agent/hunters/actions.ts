@@ -10,7 +10,6 @@ export async function requestAccessAction(hunterUserId: string): Promise<ActionR
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_hunter_assignments') as any)
     .upsert(
       {
@@ -25,7 +24,6 @@ export async function requestAccessAction(hunterUserId: string): Promise<ActionR
 
   if (error) return { error: 'Fehler beim Senden der Anfrage.' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('hunter_consent_log') as any)
     .insert({ hunter_id: hunterUserId, agent_id: user.id, event_type: 'brief_shared' })
 
@@ -38,7 +36,6 @@ export async function disconnectHunterAction(assignmentId: string): Promise<Acti
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_hunter_assignments') as any)
     .update({ status: 'disconnected', updated_at: new Date().toISOString() })
     .eq('id', assignmentId)

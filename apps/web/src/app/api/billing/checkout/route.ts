@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Fetch plan
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: plan } = await (supabase.from('subscription_plans') as any)
     .select('id, name, amount, currency, stripe_price_id, target_role, is_active')
     .eq('id', planId)
@@ -34,12 +33,10 @@ export async function POST(request: NextRequest) {
   }
 
   // Ensure public.users row exists and fetch stripe_customer_id
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('users') as any).upsert(
     { id: user.id, email: user.email ?? '', language: 'de' },
     { onConflict: 'id', ignoreDuplicates: true }
   )
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: userRow } = await (supabase.from('users') as any)
     .select('stripe_customer_id')
     .eq('id', user.id)
@@ -54,14 +51,12 @@ export async function POST(request: NextRequest) {
     }
     const customer = await stripe.customers.create(customerParams)
     stripeCustomerId = customer.id
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase.from('users') as any)
       .update({ stripe_customer_id: stripeCustomerId })
       .eq('id', user.id)
   }
 
   // Create pending billing record
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: billingRecord, error: billingError } = await (supabase.from('billing_records') as any)
     .insert({
       user_id: user.id,

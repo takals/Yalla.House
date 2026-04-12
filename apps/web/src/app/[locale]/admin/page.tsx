@@ -31,7 +31,6 @@ export default async function AdminPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Admin role check
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: roleRow } = await (supabase.from('user_roles') as any)
     .select('role')
     .eq('user_id', userId)
@@ -69,11 +68,8 @@ export default async function AdminPage() {
     service.from('listings').select('id', { count: 'exact', head: true }),
     service.from('listings').select('id', { count: 'exact', head: true }).eq('status', 'active'),
     service.from('users').select('id', { count: 'exact', head: true }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (service.from('viewings') as any).select('id', { count: 'exact', head: true }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (service.from('viewings') as any).select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (service.from('billing_records') as any).select('id', { count: 'exact', head: true }).eq('status', 'paid'),
 
     // Recent listings
@@ -84,7 +80,6 @@ export default async function AdminPage() {
       .limit(10),
 
     // Recent viewings
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (service.from('viewings') as any)
       .select(`
         id, status, created_at,
@@ -95,7 +90,6 @@ export default async function AdminPage() {
       .limit(10),
 
     // Recent users
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (service.from('users') as any)
       .select('id, full_name, email, created_at, country_code')
       .order('created_at', { ascending: false })

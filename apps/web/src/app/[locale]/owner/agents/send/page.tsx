@@ -111,8 +111,8 @@ export default async function SendBriefPage({ searchParams }: Props) {
                 <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
                   {selectedAgents.map((agent, idx) => (
                     <div key={idx} className="bg-[#EDEEF2] rounded-lg p-3">
-                      <p className="font-semibold text-sm text-[#0F1117]">{agent.name}</p>
-                      <p className="text-xs text-[#5E6278]">{agent.contact}</p>
+                      <p className="font-semibold text-sm text-[#0F1117]">{agent?.name || 'Unknown'}</p>
+                      <p className="text-xs text-[#5E6278]">{agent?.contact || 'N/A'}</p>
                     </div>
                   ))}
                 </div>

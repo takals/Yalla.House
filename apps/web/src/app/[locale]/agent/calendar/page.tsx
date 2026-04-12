@@ -35,7 +35,6 @@ export default async function AgentCalendarPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Get agent's active listing assignments
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignments } = await (supabase.from('listing_agent_assignments') as any)
     .select(`
       id, listing_id,
@@ -52,7 +51,6 @@ export default async function AgentCalendarPage() {
 
   if (listingIds.length > 0) {
     const [slotsResult, viewingsResult] = await Promise.all([
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.from('availability_slots') as any)
         .select('id, listing_id, starts_at, ends_at, is_booked, viewing_id')
         .in('listing_id', listingIds)
@@ -60,7 +58,6 @@ export default async function AgentCalendarPage() {
         .order('starts_at', { ascending: true })
         .limit(200),
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.from('viewings') as any)
         .select(`
           id, listing_id, slot_id, scheduled_at, status, type,

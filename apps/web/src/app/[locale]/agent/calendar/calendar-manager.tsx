@@ -65,7 +65,7 @@ function formatTime(iso: string): string {
 }
 
 function formatDateInput(iso: string): string {
-  return new Date(iso).toISOString().split('T')[0]
+  return new Date(iso).toISOString().split('T')[0] ?? ''
 }
 
 type Tab = 'viewings' | 'slots'
@@ -299,7 +299,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                       </p>
                       {listingMap[viewing.listing_id]?.city && (
                         <p className="text-xs text-[#5E6278] flex items-center gap-1 mt-0.5">
-                          <MapPin size={11} /> {listingMap[viewing.listing_id].city}
+                          <MapPin size={11} /> {listingMap[viewing.listing_id]?.city}
                         </p>
                       )}
 

@@ -29,7 +29,6 @@ export async function PATCH(
   }
 
   // Fetch the response + verify ownership through the chain
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: response } = await (supabase as any)
     .from('agent_responses')
     .select(`
@@ -47,7 +46,6 @@ export async function PATCH(
   }
 
   // Update the response action
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any)
     .from('agent_responses')
     .update({ hunter_action: action })
@@ -59,7 +57,6 @@ export async function PATCH(
 
   // If blocking, add to blocked_agents
   if (action === 'blocked' && response.agent_match?.agent_id) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase as any).from('blocked_agents').upsert(
       {
         hunter_id: user.id,

@@ -13,7 +13,6 @@ export async function updateAssignmentStatusAction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_hunter_assignments') as any)
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', assignmentId)
@@ -22,13 +21,11 @@ export async function updateAssignmentStatusAction(
   if (error) return { error: 'Fehler beim Aktualisieren.' }
 
   if (status === 'disconnected') {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: assignment } = await (supabase.from('agent_hunter_assignments') as any)
       .select('agent_id')
       .eq('id', assignmentId)
       .single()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase.from('hunter_consent_log') as any)
       .insert({ hunter_id: user.id, agent_id: assignment?.agent_id ?? null, event_type: 'agent_disconnected' })
   }
@@ -43,7 +40,6 @@ export async function sendBriefAction(agentId: string): Promise<ActionResult> {
   if (!user) return { error: 'Nicht autorisiert' }
 
   // Upsert assignment
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_hunter_assignments') as any)
     .upsert(
       { hunter_id: user.id, agent_id: agentId, status: 'invited', initiated_by: 'hunter', updated_at: new Date().toISOString() },
@@ -53,7 +49,6 @@ export async function sendBriefAction(agentId: string): Promise<ActionResult> {
   if (error) return { error: 'Fehler beim Senden des Briefs.' }
 
   // Log consent event
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('hunter_consent_log') as any)
     .insert({ hunter_id: user.id, agent_id: agentId, event_type: 'brief_shared' })
 

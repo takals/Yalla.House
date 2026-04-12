@@ -101,7 +101,7 @@ export const DEFAULT_COUNTRY = 'GB'
 export function getCountryConfig(countryCode: string): CountryConfig {
   const config = COUNTRY_CONFIGS[countryCode.toUpperCase()]
   if (!config) {
-    return COUNTRY_CONFIGS[DEFAULT_COUNTRY]
+    return COUNTRY_CONFIGS[DEFAULT_COUNTRY]!
   }
   return config
 }

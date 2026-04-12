@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Verify caller owns the listing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select('id, owner_id')
@@ -42,7 +41,6 @@ export async function POST(request: NextRequest) {
   }
 
   // Verify all agents exist
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: agents } = await (supabase as any)
     .from('users')
     .select('id')
@@ -86,7 +84,6 @@ export async function POST(request: NextRequest) {
   const createdAssignments = []
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: assignments, error: insertError } = await (supabase as any)
       .from('listing_agent_assignments')
       .insert(
@@ -121,7 +118,6 @@ export async function POST(request: NextRequest) {
 
   // Update listing: set brief_sent_at and brief_agent_count
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase as any)
       .from('listings')
       .update({
@@ -153,7 +149,6 @@ export async function POST(request: NextRequest) {
   if (agentIds.length < minimumRequired) {
     try {
       // Fetch listing details for the invite event
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: listingDetails } = await (supabase as any)
         .from('listings')
         .select('postcode, city, property_type, bedrooms, sale_price')
@@ -170,7 +165,7 @@ export async function POST(request: NextRequest) {
             city: listingDetails.city ?? '',
             registeredAgentCount: agentIds.length,
             minimumRequired,
-          },
+          } as any,
         })
         autoInviteTriggered = true
       }

@@ -13,7 +13,6 @@ import {
 // ─── Helper: look up user contact info ───────────────────────
 async function getUserContact(userId: string) {
   const db = createServiceClient()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (db.from('users') as any)
     .select('email, full_name, phone, language')
     .eq('id', userId)
@@ -24,7 +23,7 @@ async function getUserContact(userId: string) {
 // ─── Helper: create in-app notification ──────────────────────
 async function notify(userId: string, title: string, body: string, actionUrl: string, sourceType: string, sourceId: string) {
   const db = createServiceClient()
-  await db.rpc('create_notification', {
+  await (db as any).rpc('create_notification', {
     p_user_id: userId,
     p_title: title,
     p_body: body,
@@ -32,7 +31,7 @@ async function notify(userId: string, title: string, body: string, actionUrl: st
     p_source_type: sourceType,
     p_source_id: sourceId,
     p_actor_id: null,
-  }).catch(e => console.error('notification rpc error:', e))
+  }).catch((e: any) => console.error('notification rpc error:', e))
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -153,7 +152,6 @@ export const viewing24hReminder = inngest.createFunction(
     // Check viewing is still confirmed (not cancelled)
     const stillValid = await step.run('check-status', async () => {
       const db = createServiceClient()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data } = await (db.from('viewings') as any)
         .select('status')
         .eq('id', viewingId)
@@ -255,7 +253,6 @@ export const viewing1hReminder = inngest.createFunction(
     // Check still valid
     const stillValid = await step.run('check-status', async () => {
       const db = createServiceClient()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data } = await (db.from('viewings') as any)
         .select('status')
         .eq('id', viewingId)
@@ -352,7 +349,6 @@ export const viewingCompleted = inngest.createFunction(
     // Mark as completed
     await step.run('mark-completed', async () => {
       const db = createServiceClient()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (db.from('viewings') as any)
         .update({ status: 'completed', updated_at: new Date().toISOString() })
         .eq('id', viewingId)

@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
 
     // Mark billing record as paid
     if (billing_record_id) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (serviceClient.from('billing_records') as any)
         .update({
           status: 'paid',
@@ -52,7 +51,6 @@ export async function POST(request: NextRequest) {
 
     // Activate listing
     if (listing_id && user_id) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (serviceClient.from('listings') as any)
         .update({ status: 'active' })
         .eq('id', listing_id)

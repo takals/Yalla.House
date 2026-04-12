@@ -33,7 +33,6 @@ export default async function OwnerProposalsPage({
   }> = []
 
   if (listingId) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data } = await (supabase as any)
       .from('listing_agent_assignments')
       .select(`

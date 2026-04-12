@@ -55,13 +55,13 @@ export function useIntakeMemory({
       try {
         setIsLoading(true)
 
-        const { data, error } = await supabase
+        const { data, error } = await (supabase
           .from('intake_memories')
           .select('*')
           .eq('flow_id', flowId)
           .eq('user_id', userId)
           .is('deleted_at', null)
-          .order('created_at', { ascending: false })
+          .order('created_at', { ascending: false }) as any)
 
         if (error) {
           console.error('Failed to fetch intake memories:', error)
@@ -73,7 +73,7 @@ export function useIntakeMemory({
         const memoryMap: Record<string, IntakeMemoryEntry> = {}
 
         if (data && Array.isArray(data)) {
-          for (const row of data) {
+          for (const row of data as any[]) {
             const field = row.field as string
 
             if (!memoryMap[field]) {
@@ -121,7 +121,7 @@ export function useIntakeMemory({
 
       // Persist to database
       try {
-        const { error } = await supabase.from('intake_memories').insert([
+        const { error } = await (supabase.from('intake_memories').insert([
           {
             flow_id: flowId,
             user_id: userId,
@@ -131,7 +131,7 @@ export function useIntakeMemory({
             confidence: finalConfidence,
             created_at: now,
           },
-        ])
+        ] as any) as any)
 
         if (error) {
           console.error(`Failed to remember field "${field}":`, error)
@@ -176,7 +176,7 @@ export function useIntakeMemory({
       try {
         const now = new Date().toISOString()
 
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('intake_memories')
           .update({ deleted_at: now })
           .eq('flow_id', flowId)

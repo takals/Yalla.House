@@ -142,7 +142,7 @@ export default async function BriefLandingPage({ params }: Props) {
             Ready to respond?
           </h2>
           <p className="text-sm text-text-on-dark-secondary mb-8 max-w-sm mx-auto">
-            Sign in to your agent dashboard to view the full brief and submit your proposal. Don't have an account? It takes 2 minutes.
+            Sign in to your agent dashboard to view the full brief and submit your proposal. Don&apos;t have an account? It takes 2 minutes.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link

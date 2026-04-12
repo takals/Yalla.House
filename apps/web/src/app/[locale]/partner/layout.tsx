@@ -9,7 +9,6 @@ export default async function PartnerLayout({ children }: { children: React.Reac
   // Preview phase: no auth gate. Render the shell even when there's no user.
   let fullName: string | null = null
   if (user) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: profile } = await (supabase.from('users') as any)
       .select('full_name')
       .eq('id', user.id)

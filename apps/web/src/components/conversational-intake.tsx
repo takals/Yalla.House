@@ -91,13 +91,13 @@ export function ConversationalIntake({
     if (firstUnansweredIdx !== -1) {
       setCurrentStepIndex(firstUnansweredIdx)
       const firstStep = allSteps[firstUnansweredIdx]
-      initMessages.push({
-        id: '1',
-        role: 'yalla',
-        content: firstStep.question,
-        stepId: firstStep.id,
-        type: 'options',
-      })
+      if (firstStep) {
+        initMessages.push({
+          id: '1',
+          role: 'yalla',
+          content: firstStep.question,
+        } as any)
+      }
     }
 
     setMessages(initMessages)
@@ -164,15 +164,15 @@ export function ConversationalIntake({
     const nextIdx = currentStepIndex + 1
     if (nextIdx < allSteps.length) {
       const nextStep = allSteps[nextIdx]
-      const nextMsg: Message = {
-        id: String(messages.length + 2),
-        role: 'yalla',
-        content: nextStep.question,
-        stepId: nextStep.id,
-        type: 'options',
+      if (nextStep) {
+        const nextMsg: Message = {
+          id: String(messages.length + 2),
+          role: 'yalla',
+          content: nextStep.question,
+        } as any
+        setMessages(prev => [...prev, nextMsg])
+        setCurrentStepIndex(nextIdx)
       }
-      setMessages(prev => [...prev, nextMsg])
-      setCurrentStepIndex(nextIdx)
     } else {
       // All questions answered - show review
       setShowReview(true)

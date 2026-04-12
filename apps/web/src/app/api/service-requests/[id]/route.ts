@@ -20,7 +20,6 @@ export async function GET(
   }
 
   // Fetch the service request with all related data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: serviceRequest } = await (supabase as any)
     .from('service_requests')
     .select(`
@@ -81,7 +80,6 @@ export async function PATCH(
   const body = await request.json()
 
   // Fetch current service request
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: serviceRequest } = await (supabase as any)
     .from('service_requests')
     .select('id, requester_id, partner_id, status')
@@ -108,7 +106,6 @@ export async function PATCH(
         )
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: updated, error } = await (supabase as any)
         .from('service_requests')
         .update({
@@ -130,7 +127,6 @@ export async function PATCH(
 
     if (status === 'in_progress') {
       // Partner marks request in progress
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: updated, error } = await (supabase as any)
         .from('service_requests')
         .update({
@@ -157,7 +153,6 @@ export async function PATCH(
         )
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: updated, error } = await (supabase as any)
         .from('service_requests')
         .update({
@@ -201,7 +196,6 @@ export async function PATCH(
         )
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: updated, error } = await (supabase as any)
         .from('service_requests')
         .update({
@@ -221,7 +215,6 @@ export async function PATCH(
 
     if (status === 'cancelled') {
       // Requester cancelling a request
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: updated, error } = await (supabase as any)
         .from('service_requests')
         .update({
@@ -248,7 +241,6 @@ export async function PATCH(
         )
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: updated, error } = await (supabase as any)
         .from('service_requests')
         .update({

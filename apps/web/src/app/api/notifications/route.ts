@@ -89,7 +89,7 @@ export async function PATCH(request: Request) {
 
     const now = new Date().toISOString()
 
-    let updateQuery = supabase
+    let updateQuery = (supabase as any)
       .from('notifications')
       .update({ status: 'read', read_at: now })
       .eq('user_id', user.id)

@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
   }
 
   // Fetch all non-deleted memories for this user + flow
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: memories, error } = await (supabase as any)
     .from('intake_memories')
     .select('field, value, source, confidence, updated_at')
@@ -96,7 +95,6 @@ export async function DELETE(request: NextRequest) {
   }
 
   // Soft-delete: set deleted_at = now()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: deleteError } = await (supabase as any)
     .from('intake_memories')
     .update({ deleted_at: new Date().toISOString() })

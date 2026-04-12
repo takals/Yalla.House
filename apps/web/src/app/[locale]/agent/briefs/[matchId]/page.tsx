@@ -17,7 +17,6 @@ export default async function RespondToBriefPage({
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch the match with search details
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: match } = await (supabase as any)
     .from('agent_matches')
     .select(`

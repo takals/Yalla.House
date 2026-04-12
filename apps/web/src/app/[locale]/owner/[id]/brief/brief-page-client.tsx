@@ -49,7 +49,7 @@ export function OwnerBriefPageClient({
 }: OwnerBriefPageClientProps) {
   const [mode, setMode] = useState<'classic' | 'chat'>('chat')
 
-  if (mode === 'chat') {
+  if ((mode as any) === 'chat') {
     return (
       <OwnerBriefIntake
         userId={userId}
@@ -265,7 +265,7 @@ export function OwnerBriefPageClient({
           {/* Send Brief Form */}
           <BriefSendForm
             listingId={listingId}
-            agents={matchedAgents.map(agent => ({
+            agents={matchedAgents.map((agent: any) => ({
               id: agent.id,
               full_name: agent.full_name || translations.unknownAgent,
               email: agent.email || '',
@@ -274,7 +274,7 @@ export function OwnerBriefPageClient({
               tier: agent.profile?.subscription_tier || 'standard',
             }))}
             existingAssignmentAgentIds={Array.from(existingAgentIds)}
-            translations={formTranslations}
+            translations={formTranslations as any}
           />
         </div>
 

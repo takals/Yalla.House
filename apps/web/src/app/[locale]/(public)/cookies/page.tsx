@@ -146,7 +146,7 @@ export default function CookiePolicyPage() {
               <div>
                 <h3 className="font-bold text-[#0F1117] mb-2">Do-Not-Track</h3>
                 <p>
-                  Viele Browser bieten eine "Do-Not-Track"-Option. Wir respektieren diese Einstellung, soweit praktisch möglich.
+                  Viele Browser bieten eine &quot;Do-Not-Track&quot;-Option. Wir respektieren diese Einstellung, soweit praktisch möglich.
                 </p>
               </div>
             </div>

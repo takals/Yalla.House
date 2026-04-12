@@ -31,19 +31,16 @@ export default async function HunterPage() {
     agentsResult,
     matchesResult,
   ] = await Promise.all([
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('users') as any)
       .select('full_name, email')
       .eq('id', userId)
       .maybeSingle(),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('hunter_profiles') as any)
       .select('intent, timeline, brief_updated_at')
       .eq('user_id', userId)
       .maybeSingle(),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('viewings') as any)
       .select(`
         id, status, hunter_notes, created_at,
@@ -53,19 +50,16 @@ export default async function HunterPage() {
       .order('created_at', { ascending: false })
       .limit(50),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('offers') as any)
       .select('id', { count: 'exact', head: true })
       .eq('hunter_id', userId)
       .in('status', ['submitted', 'under_review']),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('agent_hunter_assignments') as any)
       .select('id', { count: 'exact', head: true })
       .eq('hunter_id', userId)
       .eq('status', 'active'),
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (supabase.from('property_matches') as any)
       .select('id', { count: 'exact', head: true })
       .eq('hunter_id', userId)

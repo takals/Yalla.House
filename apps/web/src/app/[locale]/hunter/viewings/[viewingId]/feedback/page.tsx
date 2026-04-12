@@ -15,7 +15,6 @@ export default async function ViewingFeedbackPage({ params }: PageProps) {
   if (!user) redirect('/api/auth/login')
 
   // Fetch viewing with listing info
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select(`
       id, hunter_id, status, scheduled_at, checked_in_at,

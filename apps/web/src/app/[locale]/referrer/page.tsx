@@ -39,7 +39,7 @@ export default async function ReferrerDashboard() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-1">Referral Program</h1>
           <p className="text-[#5E6278] text-sm">
-            You haven't joined the referral program yet.
+            You haven&apos;t joined the referral program yet.
           </p>
         </div>
 

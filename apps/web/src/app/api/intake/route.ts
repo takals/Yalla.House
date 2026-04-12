@@ -46,7 +46,6 @@ export async function POST(request: NextRequest) {
   }
 
   // 1. Create intake_session
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: session, error: sessionError } = await (supabase as any)
     .from('intake_sessions')
     .insert({
@@ -76,7 +75,6 @@ export async function POST(request: NextRequest) {
   const memoryErrors: string[] = []
 
   for (const [field, value] of Object.entries(data)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: memError } = await (supabase as any)
       .from('intake_memories')
       .upsert(

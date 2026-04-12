@@ -9,7 +9,6 @@ export default async function AgentProfilePage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: profile } = await (supabase.from('agent_profiles') as any)
     .select('agency_name, license_number, property_types, focus, verified_at, subscription_tier')
     .eq('user_id', userId)

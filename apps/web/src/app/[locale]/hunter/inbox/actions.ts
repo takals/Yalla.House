@@ -10,7 +10,6 @@ export async function muteSourceAction(sourceId: string, mute: boolean): Promise
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('agent_inbox_sources') as any)
     .update({ status: mute ? 'muted' : 'active' })
     .eq('id', sourceId)
@@ -29,7 +28,6 @@ export async function updateMatchStatusAction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('property_matches') as any)
     .update({ status })
     .eq('id', matchId)

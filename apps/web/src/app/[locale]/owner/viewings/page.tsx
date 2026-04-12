@@ -30,7 +30,6 @@ export default async function ViewingsPage() {
 
   if (listingIds.length > 0) {
     const [viewingsResult, slotsResult] = await Promise.all([
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.from('viewings') as any)
         .select(`
           id, listing_id, status, type, scheduled_at, hunter_notes, created_at,
@@ -40,7 +39,6 @@ export default async function ViewingsPage() {
         .order('created_at', { ascending: false })
         .limit(100) as { data: ViewingRow[] | null },
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (supabase.from('availability_slots') as any)
         .select('id, listing_id, starts_at, ends_at, is_booked')
         .in('listing_id', listingIds)

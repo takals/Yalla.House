@@ -47,11 +47,11 @@ export function FeedbackForm({
 
   async function handleSubmitFeedback() {
     if (rating === 0) {
-      setError(t.ratingRequired)
+      setError(t.ratingRequired ?? 'Rating required')
       return
     }
     if (interested === null) {
-      setError(t.interestRequired)
+      setError(t.interestRequired ?? 'Interest required')
       return
     }
     setActing(true)

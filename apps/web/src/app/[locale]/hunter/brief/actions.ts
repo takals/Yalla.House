@@ -47,7 +47,6 @@ export async function saveBriefAction(
   }
 
   // Upsert hunter_profiles
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: profileError } = await (supabase.from('hunter_profiles') as any)
     .upsert(profileData, { onConflict: 'user_id' })
 
@@ -57,7 +56,6 @@ export async function saveBriefAction(
   }
 
   // Ensure hunter role exists
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('user_roles') as any)
     .upsert({ user_id: user.id, role: 'hunter', is_active: true }, { onConflict: 'user_id,role' })
 

@@ -16,7 +16,6 @@ export async function checkAuthAction(): Promise<{
     return { authenticated: false, userName: null, userEmail: null }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: profile } = await (supabase.from('users') as any)
     .select('full_name')
     .eq('id', user.id)
@@ -42,7 +41,6 @@ export async function fetchAvailableSlotsAction(
   const { createServiceClient: svc } = await import('@/lib/supabase/server')
   const service = svc()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (service.from('availability_slots') as any)
     .select('id, starts_at, ends_at')
     .eq('listing_id', listingId)
@@ -66,7 +64,6 @@ export async function bookSlotAction(
   const service = createServiceClient()
 
   // Verify slot exists, belongs to this listing, and is not booked
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: slot } = await (service.from('availability_slots') as any)
     .select('id, listing_id, starts_at, is_booked')
     .eq('id', slotId)
@@ -77,7 +74,6 @@ export async function bookSlotAction(
   if (slot.is_booked) return { error: 'This slot has already been booked' }
 
   // Create viewing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: viewing, error: viewingError } = await (service.from('viewings') as any)
     .insert({
       listing_id: listingId,
@@ -97,27 +93,23 @@ export async function bookSlotAction(
   }
 
   // Mark slot as booked
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (service.from('availability_slots') as any)
     .update({ is_booked: true, viewing_id: viewing.id })
     .eq('id', slotId)
 
   // Notify owner (fire-and-forget)
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: listingData } = await (service.from('listings') as any)
       .select('title_de, city, owner_id')
       .eq('id', listingId)
       .single()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: hunterData } = await (service.from('users') as any)
       .select('full_name, email, phone')
       .eq('id', user.id)
       .single()
 
     if (listingData?.owner_id && hunterData?.email) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: ownerData } = await (service.from('users') as any)
         .select('email, full_name, phone')
         .eq('id', listingData.owner_id)
@@ -155,7 +147,6 @@ export async function requestViewingAction(
   const service = createServiceClient()
 
   // Look up existing user by email
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existing } = await (service.from('users') as any)
     .select('id')
     .eq('email', payload.email.trim().toLowerCase())
@@ -178,7 +169,6 @@ export async function requestViewingAction(
     }
 
     // Insert public user record
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: userInsertError } = await (service.from('users') as any).insert({
       id: authData.user.id,
       email: payload.email.trim().toLowerCase(),
@@ -194,7 +184,6 @@ export async function requestViewingAction(
   }
 
   // Insert viewing record
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: viewingError } = await (service.from('viewings') as any).insert({
     listing_id: listingId,
     hunter_id: userId,
@@ -210,14 +199,12 @@ export async function requestViewingAction(
 
   // Notify owner — fire-and-forget, never blocks the response
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: listingData } = await (service.from('listings') as any)
       .select('title_de, city, owner_id')
       .eq('id', listingId)
       .single() as { data: { title_de: string | null; city: string; owner_id: string } | null }
 
     if (listingData?.owner_id) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: ownerData } = await (service.from('users') as any)
         .select('email, full_name, phone')
         .eq('id', listingData.owner_id)

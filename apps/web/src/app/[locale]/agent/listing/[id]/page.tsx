@@ -14,7 +14,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id, locale } = await params
   const supabase = await createClient()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabase as any)
     .from('listings')
     .select('title_de, title, city, postcode')
@@ -42,7 +41,6 @@ export default async function AgentListingPage({ params }: Props) {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch listing with media — no owner personal info
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select(`
@@ -61,7 +59,6 @@ export default async function AgentListingPage({ params }: Props) {
   if (!listing) notFound()
 
   // Check if agent already has an assignment for this listing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existingAssignment } = await (supabase as any)
     .from('listing_agent_assignments')
     .select('id, status, tier')

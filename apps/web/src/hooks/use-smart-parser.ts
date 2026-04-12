@@ -87,7 +87,7 @@ function parseBedroomCount(text: string): string | number | null {
 
   // Try numeric match
   const numMatch = /(\d+)/.exec(normalized)
-  if (numMatch) {
+  if (numMatch && numMatch[1]) {
     return parseInt(numMatch[1], 10)
   }
 
@@ -115,7 +115,7 @@ function parseBudget(text: string): number | null {
 
   for (const pattern of patterns) {
     const match = pattern.exec(normalized)
-    if (match) {
+    if (match && match[1]) {
       let value = parseInt(match[1].replace(/,/g, ''), 10)
 
       // Handle k suffix
@@ -139,7 +139,7 @@ function parseBudget(text: string): number | null {
 function extractPostcodeArea(text: string): string | null {
   const postcodePattern = /\b([a-z]{1,2}\d{1,2}[a-z]?)\s*(?:\d[a-z]{2})?\b/i
   const match = postcodePattern.exec(text)
-  return match ? match[1].toUpperCase() : null
+  return match && match[1] ? match[1].toUpperCase() : null
 }
 
 // Main parser function
@@ -270,7 +270,7 @@ export function parseIntakeResponse(
     currentStep.label.toLowerCase().includes('intent')
   ) {
     const intents = matchPatterns(INTENT_PATTERNS, 0.95)
-    if (intents.length > 0) {
+    if (intents.length > 0 && intents[0]) {
       const intentText = intents[0].toLowerCase()
       let intentValue = 'buying'
       if (intentText.includes('rent')) {
@@ -320,7 +320,7 @@ export function parseIntakeResponse(
   // Always scan for intent
   if (!fieldsToSkip.has('intent')) {
     const intents = matchPatterns(INTENT_PATTERNS, 0.95)
-    if (intents.length > 0 && !results.find((r) => r.field === 'intent')) {
+    if (intents.length > 0 && intents[0] && !results.find((r) => r.field === 'intent')) {
       const intentText = intents[0].toLowerCase()
       let intentValue = 'buying'
       if (intentText.includes('rent')) {

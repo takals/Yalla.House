@@ -28,7 +28,6 @@ export async function GET(
   }
 
   // Verify agent has signed Partner Agreement
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: agentProfile } = await (supabase as any)
     .from('agent_profiles')
     .select('user_id, partner_agreement_signed_at')
@@ -54,7 +53,6 @@ export async function GET(
   }
 
   // Fetch listing — no owner fields
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select(`
@@ -107,7 +105,6 @@ export async function GET(
   })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function buildCrmPayload(listing: any, fields: string) {
   const basic = {
     reference: listing.place_id ?? listing.id,
@@ -159,9 +156,7 @@ function buildCrmPayload(listing: any, fields: string) {
   return {
     ...extended,
     media: (listing.listing_media ?? [])
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .sort((a: any, b: any) => a.sort_order - b.sort_order)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .map((m: any) => ({
         url: m.url,
         thumb_url: m.thumb_url,
@@ -172,7 +167,6 @@ function buildCrmPayload(listing: any, fields: string) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toCsv(data: any): string {
   // Flatten to a single row for CSV export
   const flat: Record<string, string> = {

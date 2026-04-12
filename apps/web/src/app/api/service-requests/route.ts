@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: serviceRequest, error } = await (supabase as any)
     .from('service_requests')
     .insert({
@@ -87,7 +86,6 @@ export async function GET() {
   }
 
   // Check user roles
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: userRoles } = await (supabase as any)
     .from('user_roles')
     .select('role')
@@ -99,7 +97,6 @@ export async function GET() {
   let query = null
   if (isPartner) {
     // Partner sees requests assigned to them OR unassigned with matching postcode
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     query = (supabase as any)
       .from('service_requests')
       .select(`
@@ -114,7 +111,6 @@ export async function GET() {
       .order('created_at', { ascending: false })
   } else {
     // Owner/Agent sees only their own requests
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     query = (supabase as any)
       .from('service_requests')
       .select(`

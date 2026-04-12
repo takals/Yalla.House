@@ -19,7 +19,6 @@ export const notifyServiceComplete = inngest.createFunction(
 
     // 1. Fetch the service request with category
     const { data: request } = await step.run('fetch-request', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('service_requests')
         .select('id, category, requester_id')
@@ -33,7 +32,6 @@ export const notifyServiceComplete = inngest.createFunction(
 
     // 2. Fetch partner name
     const { data: partner } = await step.run('fetch-partner', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('users')
         .select('id, full_name')
@@ -48,7 +46,6 @@ export const notifyServiceComplete = inngest.createFunction(
     // 3. Determine action URL based on requester role
     // Fetch requester to check role
     const { data: requester } = await step.run('fetch-requester', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('users')
         .select('id, role')
@@ -65,7 +62,6 @@ export const notifyServiceComplete = inngest.createFunction(
     await step.run('create-notification', async () => {
       const partnerName = partner.full_name ?? 'A partner'
       const category = request.category ?? 'service'
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (db as any).rpc('create_notification', {
         p_user_id: requesterId,
         p_title: 'Service Completed',

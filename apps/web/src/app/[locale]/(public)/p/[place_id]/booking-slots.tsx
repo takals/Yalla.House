@@ -113,7 +113,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
       <div className="space-y-4">
         {Array.from(grouped.entries()).map(([day, daySlots]) => (
           <div key={day}>
-            <p className="text-xs font-semibold text-[#5E6278] mb-2">{formatDay(daySlots[0].starts_at)}</p>
+            <p className="text-xs font-semibold text-[#5E6278] mb-2">{daySlots[0] ? formatDay(daySlots[0]?.starts_at) : day}</p>
             <div className="flex flex-wrap gap-2">
               {daySlots.map(slot => (
                 <button

@@ -116,7 +116,7 @@ export function AgentListingCta({
     setSubmitting(false)
 
     if ('error' in result) {
-      setError(result.error)
+      setError(result.error ?? 'An error occurred')
     } else {
       setDone(true)
     }

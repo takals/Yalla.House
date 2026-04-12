@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
   }
 
   // Verify Partner Agreement
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: agentProfile } = await (supabase as any)
     .from('agent_profiles')
     .select('user_id, partner_agreement_signed_at')
@@ -50,7 +49,6 @@ export async function GET(request: NextRequest) {
   const to = from + perPage - 1
 
   // Fetch assignments with listing data
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let query = (supabase as any)
     .from('listing_agent_assignments')
     .select(`
@@ -80,7 +78,6 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const listings = (assignments ?? []).filter((a: any) => a.listing).map((a: any) => ({
     assignment_id: a.id,
     assignment_tier: a.tier,

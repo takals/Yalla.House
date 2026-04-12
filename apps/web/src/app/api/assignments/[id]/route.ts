@@ -21,7 +21,6 @@ export async function PATCH(
   }
 
   // Fetch the assignment
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase as any)
     .from('listing_agent_assignments')
     .select('id, owner_id, agent_id, status, tier')
@@ -107,7 +106,6 @@ export async function PATCH(
   }
 
   // Update the assignment
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: updated, error } = await (supabase as any)
     .from('listing_agent_assignments')
     .update(updateData)

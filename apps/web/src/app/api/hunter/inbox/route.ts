@@ -15,7 +15,6 @@ export async function GET() {
   }
 
   // 1. Get all active search request IDs for this hunter
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: searches } = await (supabase as any)
     .from('search_requests')
     .select('id, intent, areas, status')
@@ -35,7 +34,6 @@ export async function GET() {
   const searchIds = searches.map((s: { id: string }) => s.id)
 
   // 2. Get all matches for these searches
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: matches } = await (supabase as any)
     .from('agent_matches')
     .select('id, search_request_id, agent_id, match_score, status')
@@ -44,7 +42,6 @@ export async function GET() {
   const matchIds = (matches ?? []).map((m: { id: string }) => m.id)
 
   // 3. Get all responses
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: responses } = await (supabase as any)
     .from('agent_responses')
     .select(`

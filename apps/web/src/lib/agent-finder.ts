@@ -122,12 +122,12 @@ async function findRegisteredAgents(
   supabase: ReturnType<typeof createServiceClient>
 ): Promise<RegisteredAgent[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase
       .from('agent_profiles')
       .select('user_id, agency_name, coverage_areas, verified_at, subscription_tier')
       .eq('focus', 'both') // or could be 'sale' or 'rent'
       .is('coverage_areas', null === false)
-      .limit(maxResults);
+      .limit(maxResults)) as any;
 
     if (error) {
       console.error('[AgentFinder] Error fetching registered agents:', error);
@@ -137,7 +137,7 @@ async function findRegisteredAgents(
     if (!data) return [];
 
     // Filter agents by coverage area postcode match
-    const matching = data
+    const matching = (data as any[])
       .filter((agent) => {
         const coverage = agent.coverage_areas as any;
         if (!Array.isArray(coverage)) return false;
@@ -194,12 +194,12 @@ async function findProspectiveAgents(
   supabase: ReturnType<typeof createServiceClient>
 ): Promise<ProspectiveAgent[]> {
   try {
-    let query = supabase
+    let query = (supabase
       .from('prospective_agents')
       .select(
         'id, agency_name, agent_name, email, postcode, postcode_prefix, source, source_url, status, invited_count, last_invited_at, rating, review_count'
       )
-      .eq('postcode_prefix', postcodePrefix);
+      .eq('postcode_prefix', postcodePrefix)) as any;
 
     // Filter by status unless includeDeclined is true
     if (!includeDeclined) {
@@ -215,7 +215,7 @@ async function findProspectiveAgents(
 
     if (!data) return [];
 
-    return data.map((agent) => ({
+    return (data as any[]).map((agent) => ({
       id: agent.id,
       agencyName: agent.agency_name,
       agentName: agent.agent_name || null,
@@ -374,12 +374,11 @@ export async function markAgentInvited(
 
   try {
     // Update prospective_agents
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from('prospective_agents')
       .update({
         status: 'invited',
         invited_at: new Date().toISOString(),
-        invited_count: supabase.rpc('increment_invite_count', { agent_id: prospectiveAgentId }),
         last_invited_at: new Date().toISOString(),
       })
       .eq('id', prospectiveAgentId);
@@ -390,13 +389,13 @@ export async function markAgentInvited(
     }
 
     // Log the invite
-    const { error: logError } = await supabase.from('agent_invite_log').insert({
+    const { error: logError } = await (supabase.from('agent_invite_log').insert({
       prospective_agent_id: prospectiveAgentId,
       listing_id: listingId || null,
       channel,
       template,
       sent_at: new Date().toISOString(),
-    });
+    } as any)) as any;
 
     if (logError) {
       console.error('[AgentFinder] Error logging invite:', logError);

@@ -45,7 +45,7 @@ export function PassportPageClient({
     </div>
   )
 
-  if (mode === 'chat') {
+  if ((mode as any) === 'chat') {
     return (
       <div className="max-w-5xl">
         {modeToggle}
@@ -114,8 +114,8 @@ export function PassportPageClient({
 
       {/* Form */}
       <PassportForm
-        profile={profile}
-        userName={userName}
+        profile={profile as any}
+        userName={userName as any}
       />
     </div>
   )

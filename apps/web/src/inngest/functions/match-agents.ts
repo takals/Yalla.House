@@ -55,7 +55,6 @@ export const matchAgents = inngest.createFunction(
 
     // 1. Fetch the search request
     const { data: search, error: searchErr } = await step.run('fetch-search', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('search_requests')
         .select('*')
@@ -69,7 +68,6 @@ export const matchAgents = inngest.createFunction(
 
     // 2. Fetch blocked agents for this hunter
     const { data: blocked } = await step.run('fetch-blocked', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('blocked_agents')
         .select('agent_id')
@@ -79,7 +77,6 @@ export const matchAgents = inngest.createFunction(
 
     // 3. Fetch all active agents (exclude the hunter themselves)
     const { data: agents } = await step.run('fetch-agents', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('agent_profiles')
         .select('user_id, coverage_areas, property_types, price_bands, languages, focus')
@@ -204,7 +201,6 @@ export const matchAgents = inngest.createFunction(
     }))
 
     const { data: inserted, error: insertErr } = await step.run('insert-matches', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('agent_matches')
         .insert(matchRows)

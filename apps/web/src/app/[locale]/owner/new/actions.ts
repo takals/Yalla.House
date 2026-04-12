@@ -40,7 +40,6 @@ export async function createListingAction(
   }
 
   // Ensure public.users row exists (FK required by listings)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('users') as any).upsert(
     { id: user.id, email: user.email ?? '', language: 'de' },
     { onConflict: 'id', ignoreDuplicates: true }
@@ -68,7 +67,6 @@ export async function createListingAction(
   if (payload.rooms) countryFields['rooms'] = parseFloat(payload.rooms)
   if (payload.energy_class) countryFields['energy_class'] = payload.energy_class
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('listings') as any).insert({
     owner_id: user.id,
     country_code: 'DE',

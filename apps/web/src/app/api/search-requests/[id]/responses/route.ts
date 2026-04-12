@@ -18,7 +18,6 @@ export async function GET(
   }
 
   // Verify ownership
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: search } = await (supabase as any)
     .from('search_requests')
     .select('id, hunter_id')
@@ -30,7 +29,6 @@ export async function GET(
   }
 
   // Fetch responses via agent_matches join
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from('agent_responses')
     .select(`
@@ -42,7 +40,6 @@ export async function GET(
       )
     `)
     .in('agent_match_id', (
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (supabase as any)
         .from('agent_matches')
         .select('id')

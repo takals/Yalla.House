@@ -79,8 +79,8 @@ export default async function TrackingPage() {
     }
     const cfg = config[status] || config.delivered
     return (
-      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${cfg.bg} ${cfg.text}`}>
-        {cfg.icon}
+      <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold ${cfg?.bg || 'bg-gray-50'} ${cfg?.text || 'text-gray-700'}`}>
+        {cfg?.icon || null}
         {t(`trackingStatus.${status}`)}
       </div>
     )

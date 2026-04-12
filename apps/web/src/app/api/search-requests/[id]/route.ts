@@ -20,7 +20,6 @@ export async function PATCH(
   const body = await request.json()
 
   // Only allow updating own searches (RLS enforced, but double-check)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: existing } = await (supabase as any)
     .from('search_requests')
     .select('id, hunter_id')
@@ -48,7 +47,6 @@ export async function PATCH(
     return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from('search_requests')
     .update(update)

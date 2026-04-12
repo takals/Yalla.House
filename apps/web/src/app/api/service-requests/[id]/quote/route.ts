@@ -30,7 +30,6 @@ export async function POST(
   }
 
   // Fetch the service request
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: serviceRequest } = await (supabase as any)
     .from('service_requests')
     .select('id, requester_id, partner_id, status')
@@ -53,7 +52,6 @@ export async function POST(
   }
 
   // Update the service request with quote
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: updated, error } = await (supabase as any)
     .from('service_requests')
     .update({
@@ -72,7 +70,6 @@ export async function POST(
   }
 
   // Create a notification for the requester
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase as any).from('notifications').insert({
     user_id: serviceRequest.requester_id,
     type: 'service_quote_received',

@@ -20,7 +20,6 @@ export const routeServiceRequest = inngest.createFunction(
 
     // 1. Fetch the service request details
     const { data: request } = await step.run('fetch-request', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('service_requests')
         .select('id, category, postcode, description')
@@ -38,7 +37,6 @@ export const routeServiceRequest = inngest.createFunction(
     // 3. Query partner_profiles for matching partners
     // Partners match if: service_types contains the category AND coverage_areas overlaps the postcode
     const { data: partners } = await step.run('find-matching-partners', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (db as any)
         .from('partner_profiles')
         .select('user_id, full_name, service_types, coverage_areas')
@@ -86,7 +84,6 @@ export const routeServiceRequest = inngest.createFunction(
     for (const partner of matchingPartners) {
       await step.run(`notify-partner-${partner.user_id}`, async () => {
         const postcodeDisplay = postcode ?? 'your area'
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (db as any).rpc('create_notification', {
           p_user_id: partner.user_id,
           p_title: 'New Service Request',

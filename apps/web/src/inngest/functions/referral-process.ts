@@ -20,7 +20,6 @@ export const referralProcess = inngest.createFunction(
     const db = createServiceClient()
 
     // Find the referral record for this user
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: referral, error } = await (db as any)
       .from('referrals')
       .select('id, referrer_id')
@@ -35,7 +34,6 @@ export const referralProcess = inngest.createFunction(
     const value = PAYOUT_TABLE[milestone] ?? 0
 
     // Upsert referral event (UNIQUE constraint prevents double-crediting)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: insertError } = await (db as any).from('referral_events').upsert({
       referral_id: referral.id,
       milestone,

@@ -116,7 +116,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
             className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30"
           />
           <p className="text-xs text-[#999] mt-1">
-            Tip: specific, detailed replies score higher. Include property details, not just "call us".
+            Tip: specific, detailed replies score higher. Include property details, not just &quot;call us&quot;.
           </p>
         </div>
 

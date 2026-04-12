@@ -13,7 +13,6 @@ export async function addAvailabilitySlotAction(
   if (!user) return { error: 'Not authorised' }
 
   // Verify agent is assigned to this listing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase.from('listing_agent_assignments') as any)
     .select('id')
     .eq('agent_id', user.id)
@@ -24,7 +23,6 @@ export async function addAvailabilitySlotAction(
   if (!assignment) return { error: 'Not assigned to this listing' }
 
   // Get the listing owner_id for the slot
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase.from('listings') as any)
     .select('owner_id')
     .eq('id', listingId)
@@ -39,7 +37,6 @@ export async function addAvailabilitySlotAction(
   if (start < new Date()) return { error: 'Cannot create slots in the past' }
 
   // Create the slot
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: slot, error } = await (supabase.from('availability_slots') as any)
     .insert({
       listing_id: listingId,
@@ -68,7 +65,6 @@ export async function removeAvailabilitySlotAction(
   if (!user) return { error: 'Not authorised' }
 
   // Verify slot exists and isn't booked, and agent is assigned
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: slot } = await (supabase.from('availability_slots') as any)
     .select('id, listing_id, is_booked')
     .eq('id', slotId)
@@ -78,7 +74,6 @@ export async function removeAvailabilitySlotAction(
   if (slot.is_booked) return { error: 'Cannot remove a booked slot' }
 
   // Check assignment
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: assignment } = await (supabase.from('listing_agent_assignments') as any)
     .select('id')
     .eq('agent_id', user.id)
@@ -88,7 +83,6 @@ export async function removeAvailabilitySlotAction(
 
   if (!assignment) return { error: 'Not assigned to this listing' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('availability_slots') as any)
     .delete()
     .eq('id', slotId)
@@ -109,7 +103,6 @@ export async function confirmViewingAction(
   if (!user) return { error: 'Not authorised' }
 
   // Fetch viewing context for lifecycle events
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select(`
       id, hunter_id, listing_id, scheduled_at,
@@ -118,7 +111,6 @@ export async function confirmViewingAction(
     .eq('id', viewingId)
     .single()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'confirmed', updated_at: new Date().toISOString() })
     .eq('id', viewingId)
@@ -156,7 +148,6 @@ export async function declineViewingAction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authorised' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'cancelled', updated_at: new Date().toISOString() })
     .eq('id', viewingId)

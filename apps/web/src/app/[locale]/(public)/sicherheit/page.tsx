@@ -54,7 +54,7 @@ export default function SecurityPage() {
                   Alle Kommunikation zwischen Ihrem Browser und unserem Server wird mit <strong>TLS 1.3</strong> verschlüsselt. Dies ist der neueste und sicherste Standard für HTTPS.
                 </p>
                 <p className="text-sm mt-2">
-                  Zertifikat: Let's Encrypt, automatisch erneuert
+                  Zertifikat: Let&apos;s Encrypt, automatisch erneuert
                 </p>
               </div>
               <div>

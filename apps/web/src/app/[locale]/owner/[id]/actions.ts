@@ -69,7 +69,6 @@ export async function updateListingAction(
   if (payload.rooms) countryFields['rooms'] = parseFloat(payload.rooms)
   if (payload.energy_class) countryFields['energy_class'] = payload.energy_class
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('listings') as any)
     .update({
       intent: payload.intent as 'sale' | 'rent' | 'both',
@@ -127,7 +126,6 @@ export async function savePhotoAction(
     .single()
   if (!listing || listing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase.from('listing_media') as any).insert({
     listing_id: listingId,
     type: 'photo',
@@ -167,7 +165,6 @@ export async function deletePhotoAction(
   await serviceClient.storage.from('listing-photos').remove([storagePath])
 
   // Delete DB row
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('listing_media') as any)
     .delete()
     .eq('id', mediaId)
@@ -197,13 +194,11 @@ export async function setPrimaryPhotoAction(
   if (!listing || listing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
 
   // Clear all primary flags for this listing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase.from('listing_media') as any)
     .update({ is_primary: false })
     .eq('listing_id', listingId)
 
   // Set the selected one as primary
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('listing_media') as any)
     .update({ is_primary: true })
     .eq('id', mediaId)
@@ -244,7 +239,6 @@ export async function changeStatusAction(
   const allowed = STATUS_TRANSITIONS[existing.status] ?? []
   if (!allowed.includes(newStatus)) return { error: 'Ungültige Statusänderung' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('listings') as any)
     .update({ status: newStatus })
     .eq('id', id)
@@ -332,7 +326,6 @@ export async function sendBriefAction(
 
   // Record brief-sent metadata on the listing
   if (sentCount > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (supabase.from('listings') as any)
       .update({
         brief_sent_at: new Date().toISOString(),
@@ -363,7 +356,6 @@ export async function submitToPortalAction(
   if (!listing || listing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
 
   // Upsert portal status to queued
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: upsertError } = await (supabase.from('listing_portal_status') as any)
     .upsert(
       { listing_id: listingId, portal_id: portalId, status: 'queued', error_message: null },

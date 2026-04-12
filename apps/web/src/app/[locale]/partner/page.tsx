@@ -17,7 +17,6 @@ export default async function PartnerDashboardPage({
   // Preview phase: no role gate. Render the partner dashboard for any visitor.
 
   // Fetch active requests count
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: activeRequests } = await (supabase as any)
     .from('service_requests')
     .select('id')
@@ -27,7 +26,6 @@ export default async function PartnerDashboardPage({
   const activeCount = activeRequests?.length ?? 0
 
   // Fetch completed requests count
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: completedRequests } = await (supabase as any)
     .from('service_requests')
     .select('id, rating')
@@ -38,13 +36,12 @@ export default async function PartnerDashboardPage({
   const averageRating =
     completedCount > 0
       ? (
-          completedRequests!.reduce((sum, r: { rating: number | null }) => sum + (r.rating || 0), 0) /
+          completedRequests!.reduce((sum: number, r: { rating: number | null }) => sum + (r.rating || 0), 0) /
           completedRequests!.length
         ).toFixed(1)
       : null
 
   // Fetch partner profile completeness
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: partnerProfile } = await (supabase as any)
     .from('partner_profiles')
     .select('id, business_name, categories, service_area_radius')

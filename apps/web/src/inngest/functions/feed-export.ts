@@ -47,7 +47,6 @@ export const feedExport = inngest.createFunction(
         credMap[c.key_name] = c.key_value
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return [listingRes.data, portalRes.data as any, mappingsRes.data ?? [], credMap] as const
     })
 
@@ -142,6 +141,5 @@ async function updatePortalStatus(
     ...(opts.setLiveAt && { live_at: now }),
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (db.from('listing_portal_status') as any).upsert(row, { onConflict: 'listing_id,portal_id' })
 }

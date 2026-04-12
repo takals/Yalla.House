@@ -3,7 +3,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { Plus, Home } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
-import { getTranslations, type AbstractIntlMessages } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import type { Database } from '@/types/database'
 
 type Listing = Database['public']['Tables']['listings']['Row']
@@ -114,7 +114,7 @@ export default async function OwnerListingsPage() {
   )
 }
 
-function StatusBadge({ status, t }: { status: string; t: ReturnType<typeof getTranslations> }) {
+function StatusBadge({ status, t }: { status: string; t: any }) {
   const styles: Record<string, string> = {
     draft: 'bg-gray-100 text-gray-600',
     active: 'bg-green-100 text-green-700',
@@ -131,7 +131,7 @@ function StatusBadge({ status, t }: { status: string; t: ReturnType<typeof getTr
         styles[status] ?? styles['draft']
       }`}
     >
-      {t(status) ?? status}
+      {(t as any)(status) ?? status}
     </span>
   )
 }

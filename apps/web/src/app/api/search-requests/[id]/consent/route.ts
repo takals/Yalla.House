@@ -20,7 +20,6 @@ export async function POST(
   }
 
   // Verify ownership
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: search } = await (supabase as any)
     .from('search_requests')
     .select('id, hunter_id, status')
@@ -39,7 +38,6 @@ export async function POST(
   }
 
   // Upsert consent (one per search request)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: consent, error } = await (supabase as any)
     .from('contact_consent')
     .upsert(
@@ -71,7 +69,6 @@ export async function POST(
   }
 
   // Log consent event
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (supabase as any).from('hunter_consent_log').insert({
     hunter_id: user.id,
     event_type: agent_outreach ? 'brief_shared' : 'data_paused',

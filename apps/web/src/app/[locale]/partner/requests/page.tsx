@@ -75,7 +75,6 @@ export default async function PartnerRequestsPage({
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch service requests
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: requests } = await (supabase as any)
     .from('service_requests')
     .select(`
@@ -160,7 +159,7 @@ export default async function PartnerRequestsPage({
                     <div className="flex items-center gap-3">
                       <span
                         className="text-xs font-bold px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: colors.bg, color: colors.text }}
+                        style={{ backgroundColor: colors?.bg || '#DBEAFE', color: colors?.text || '#1E40AF' }}
                       >
                         {request.category.charAt(0).toUpperCase() + request.category.slice(1)}
                       </span>
@@ -218,7 +217,7 @@ export default async function PartnerRequestsPage({
           </h2>
           <div className="space-y-3">
             {myActive.map((request) => {
-              const statusInfo = statusConfig[request.status]
+              const statusInfo = statusConfig[request.status] || statusConfig.pending
               const colors = categoryColors[request.category] || categoryColors.photography
               const address = request.listings
                 ? `${request.listings.address_line1}, ${request.listings.city}`
@@ -233,7 +232,7 @@ export default async function PartnerRequestsPage({
                     <div className="flex items-center gap-3">
                       <span
                         className="text-xs font-bold px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: colors.bg, color: colors.text }}
+                        style={{ backgroundColor: colors?.bg || '#DBEAFE', color: colors?.text || '#1E40AF' }}
                       >
                         {request.category.charAt(0).toUpperCase() + request.category.slice(1)}
                       </span>
@@ -244,9 +243,9 @@ export default async function PartnerRequestsPage({
                     </div>
                     <span
                       className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: statusInfo.bg, color: statusInfo.text }}
+                      style={{ backgroundColor: statusInfo?.bg || '#F3F4F6', color: statusInfo?.text || '#374151' }}
                     >
-                      {statusInfo.label}
+                      {statusInfo?.label || 'Unknown'}
                     </span>
                   </div>
 
@@ -310,7 +309,7 @@ export default async function PartnerRequestsPage({
           </h2>
           <div className="space-y-2">
             {completed.map((request) => {
-              const statusInfo = statusConfig[request.status]
+              const statusInfo = statusConfig[request.status] || statusConfig.pending
               const colors = categoryColors[request.category] || categoryColors.photography
 
               return (
@@ -338,9 +337,9 @@ export default async function PartnerRequestsPage({
                   </div>
                   <span
                     className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: statusInfo.bg, color: statusInfo.text }}
+                    style={{ backgroundColor: statusInfo?.bg || '#F3F4F6', color: statusInfo?.text || '#374151' }}
                   >
-                    {statusInfo.label}
+                    {statusInfo?.label || 'Unknown'}
                   </span>
                 </div>
               )

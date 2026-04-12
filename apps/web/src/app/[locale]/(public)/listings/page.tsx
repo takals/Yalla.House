@@ -36,7 +36,6 @@ export default async function ListingsPage({ params, searchParams }: Props) {
 
   const supabase = await createClient()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let q = (supabase.from('listings') as any)
     .select('id, place_id, title_de, intent, property_type, city, postcode, size_sqm, bedrooms, sale_price, rent_price, currency, listing_media(url, is_primary, type)')
     .eq('status', 'active')

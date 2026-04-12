@@ -39,10 +39,9 @@ async function verifyViewingOwnership(viewingId: string) {
 export async function confirmViewingAction(
   viewingId: string
 ): Promise<{ success: true } | { error: string }> {
-  const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId)
-  if (authError || !supabase) return { error: authError ?? 'Nicht autorisiert' }
+  const { error: authError, supabase, user, viewing } = await verifyViewingOwnership(viewingId)
+  if (authError || !supabase || !user) return { error: authError ?? 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'confirmed', updated_at: new Date().toISOString() })
     .eq('id', viewingId)
@@ -103,7 +102,6 @@ export async function addOwnerSlotAction(
   if (!user) return { error: 'Nicht autorisiert' }
 
   // Verify owner owns this listing
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase.from('listings') as any)
     .select('id, owner_id')
     .eq('id', listingId)
@@ -124,7 +122,6 @@ export async function addOwnerSlotAction(
   const dayEnd = new Date(start)
   dayEnd.setHours(23, 59, 59, 999)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { count } = await (supabase.from('availability_slots') as any)
     .select('id', { count: 'exact', head: true })
     .eq('listing_id', listingId)
@@ -134,7 +131,6 @@ export async function addOwnerSlotAction(
   if ((count ?? 0) >= 8) return { error: 'Maximale Anzahl an Terminen pro Tag erreicht (8)' }
 
   // Create the slot
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: slot, error } = await (supabase.from('availability_slots') as any)
     .insert({
       listing_id: listingId,
@@ -162,7 +158,6 @@ export async function removeOwnerSlotAction(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: slot } = await (supabase.from('availability_slots') as any)
     .select('id, owner_id, is_booked')
     .eq('id', slotId)
@@ -172,7 +167,6 @@ export async function removeOwnerSlotAction(
   if (slot.owner_id !== user.id) return { error: 'Nicht autorisiert' }
   if (slot.is_booked) return { error: 'Gebuchte Termine können nicht gelöscht werden' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('availability_slots') as any)
     .delete()
     .eq('id', slotId)
@@ -191,7 +185,6 @@ export async function declineViewingAction(
   const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId)
   if (authError || !supabase) return { error: authError ?? 'Nicht autorisiert' }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'cancelled', updated_at: new Date().toISOString() })
     .eq('id', viewingId)

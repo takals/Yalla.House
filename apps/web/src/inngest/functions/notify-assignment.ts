@@ -27,7 +27,6 @@ export const notifyAssignment = inngest.createFunction(
 
       // 1. Fetch listing details (address, city)
       const { data: listing } = await step.run('fetch-listing', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (db as any)
           .from('listings')
           .select('id, address, city')
@@ -41,7 +40,6 @@ export const notifyAssignment = inngest.createFunction(
 
       // 2. Fetch owner name
       const { data: owner } = await step.run('fetch-owner', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (db as any)
           .from('users')
           .select('id, full_name')
@@ -52,7 +50,6 @@ export const notifyAssignment = inngest.createFunction(
       // 3. Create notification for agent
       await step.run('create-agent-notification', async () => {
         const address = `${listing.address}${listing.city ? `, ${listing.city}` : ''}`
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (db as any).rpc('create_notification', {
           p_user_id: agentId,
           p_title: 'Collaboration Invitation',
@@ -78,7 +75,6 @@ export const notifyAssignment = inngest.createFunction(
 
       // 1. Fetch listing details (address, city)
       const { data: listing } = await step.run('fetch-listing', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (db as any)
           .from('listings')
           .select('id, address, city')
@@ -92,7 +88,6 @@ export const notifyAssignment = inngest.createFunction(
 
       // 2. Fetch agent name
       const { data: agent } = await step.run('fetch-agent', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (db as any)
           .from('users')
           .select('id, full_name')
@@ -108,7 +103,6 @@ export const notifyAssignment = inngest.createFunction(
       await step.run('create-owner-notification', async () => {
         const address = `${listing.address}${listing.city ? `, ${listing.city}` : ''}`
         const agentName = agent.full_name ?? 'An agent'
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (db as any).rpc('create_notification', {
           p_user_id: ownerId,
           p_title: 'Assignment Accepted',
@@ -122,7 +116,6 @@ export const notifyAssignment = inngest.createFunction(
 
       // 4. Link the agent to the listing via listings.agent_id
       await step.run('link-agent-to-listing', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (db as any)
           .from('listings')
           .update({ agent_id: agentId })

@@ -11,7 +11,6 @@ export default async function PartnerAgreementPage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Check if already signed
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: profile } = await (supabase as any)
     .from('agent_profiles')
     .select('partner_agreement_signed_at, partner_agreement_version, agency_name')

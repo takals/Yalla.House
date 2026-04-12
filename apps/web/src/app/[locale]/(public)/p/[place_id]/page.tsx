@@ -12,7 +12,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { place_id, locale } = await params
   const supabase = await createClient()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data } = await (supabase as any)
     .from('listings')
     .select('title_de, title, description_de, description, city, postcode, listing_media(url, is_primary)')
@@ -48,7 +47,6 @@ export default async function PropertyPage({ params }: Props) {
   const { place_id, locale } = await params
   const supabase = await createClient()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select(`

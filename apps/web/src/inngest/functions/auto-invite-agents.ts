@@ -42,7 +42,6 @@ export const autoInviteAgents = inngest.createFunction(
 
     // Step 2: Fetch prospective agents with 'new' status
     const prospectiveAgents = await step.run('fetch-prospective-agents', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error } = await (db as any)
         .from('prospective_agents')
         .select('id, email, agency_name, agent_name, postcode_prefix, status, invited_count')
@@ -76,7 +75,6 @@ export const autoInviteAgents = inngest.createFunction(
 
     // Step 4: Fetch listing details for email context
     const listingDetails = await step.run('fetch-listing-details', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data, error } = await (db as any)
         .from('listings')
         .select('id, property_type, bedrooms, sale_price')
@@ -132,7 +130,6 @@ export const autoInviteAgents = inngest.createFunction(
         // Update prospective agent status
         await step.run(`update-agent-${agent.id}`, async () => {
           try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await (db as any)
               .from('prospective_agents')
               .update({
@@ -150,7 +147,6 @@ export const autoInviteAgents = inngest.createFunction(
         // Log the invitation
         await step.run(`log-invite-${agent.id}`, async () => {
           try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await (db as any)
               .from('agent_invite_log')
               .insert({
