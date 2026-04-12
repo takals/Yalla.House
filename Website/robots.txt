@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /dashboards/
+Sitemap: https://yalla.house/sitemap.xml

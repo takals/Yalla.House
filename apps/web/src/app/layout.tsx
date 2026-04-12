@@ -70,6 +70,18 @@ export const metadata: Metadata = {
   applicationName: 'Yalla.House',
 }
 
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: 'Yalla.House',
+  description: 'UK flat-fee property selling platform. No commission, no agent. Sell your property without an estate agent.',
+  url: 'https://yalla.house',
+  logo: 'https://yalla.house/og-image.png',
+  areaServed: { '@type': 'Country', name: 'Germany' },
+  priceRange: 'Flat fee',
+  sameAs: [],
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang="de" className={jakarta.variable}>
@@ -79,6 +91,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="alternate" hrefLang="en" href="https://yalla.house/en" />
         <link rel="alternate" hrefLang="x-default" href="https://yalla.house" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       <body>{children}</body>
     </html>
