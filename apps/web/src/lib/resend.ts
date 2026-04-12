@@ -95,6 +95,29 @@ const EMAIL_TRANSLATIONS = {
     priceOnApplication: 'Price on application',
     rentOnApplication: 'Rent on application',
     pcm: 'pcm',
+    welcomeSubject: 'Welcome to Yalla.House',
+    welcomeGreeting: (name: string) => name ? `Hi ${name},` : 'Hi,',
+    welcomeIntro: 'Your account is ready. Here\'s what you can do next.',
+    welcomeQuickStart: 'Quick start guide',
+    welcomeStep1: 'Post your property directly on Rightmove and Zoopla',
+    welcomeStep2: 'Set your asking price (or let the market tell you)',
+    welcomeStep3: 'Get offers from local agents',
+    welcomeStep4: 'Keep every pound of your sale',
+    welcomeDashboardLabel: 'Go to Your Dashboard',
+    welcomeFooter: 'Questions? We\'re here to help.',
+    assignmentSubject: (address: string) => `Assignment confirmed — ${address}`,
+    assignmentGreeting: (name: string) => name ? `Hi ${name},` : 'Hi,',
+    assignmentIntro: (agentName: string, address: string) =>
+      `Good news! ${agentName} has accepted your instruction to sell ${address}.`,
+    assignmentNextSteps: 'What happens next',
+    assignmentStep1: 'Your agent will arrange a valuation visit',
+    assignmentStep2: 'Property details and photos will be uploaded to portals',
+    assignmentStep3: 'You\'ll start receiving buyer enquiries',
+    assignmentStep4: 'Your agent handles negotiations and viewings',
+    assignmentCommission: 'Commission',
+    assignmentTerms: 'Terms',
+    assignmentDashboard: 'View Assignment',
+    assignmentFooter: 'You\'re in control — cancel anytime.',
   },
   'de-DE': {
     ownerBriefSubject: 'Neuer Eigentümer-Brief',
@@ -178,6 +201,29 @@ const EMAIL_TRANSLATIONS = {
     priceOnApplication: 'Preis auf Anfrage',
     rentOnApplication: 'Miete auf Anfrage',
     pcm: 'p. M.',
+    welcomeSubject: 'Willkommen bei Yalla.House',
+    welcomeGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
+    welcomeIntro: 'Dein Konto ist bereit. Hier erfährst du, was du als Nächstes tun kannst.',
+    welcomeQuickStart: 'Schnellstartanleitung',
+    welcomeStep1: 'Stelle deine Immobilie direkt auf Immobilienportale',
+    welcomeStep2: 'Lege deinen Angebotspreis fest (oder lasse den Markt sprechen)',
+    welcomeStep3: 'Erhalte Angebote von lokalen Maklern',
+    welcomeStep4: 'Behalte jeden Euro aus deinem Verkauf',
+    welcomeDashboardLabel: 'Gehe zu deinem Dashboard',
+    welcomeFooter: 'Fragen? Wir sind da, um dir zu helfen.',
+    assignmentSubject: (address: string) => `Beauftragung bestätigt — ${address}`,
+    assignmentGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
+    assignmentIntro: (agentName: string, address: string) =>
+      `Gute Neuigkeiten! ${agentName} hat deine Beauftragung für den Verkauf von ${address} angenommen.`,
+    assignmentNextSteps: 'Was kommt als Nächstes',
+    assignmentStep1: 'Dein Makler wird einen Besichtigungstermin vereinbaren',
+    assignmentStep2: 'Immobiliendetails und Fotos werden auf Portalen hochgeladen',
+    assignmentStep3: 'Du erhältst Anfragen von potenziellen Käufern',
+    assignmentStep4: 'Dein Makler kümmert sich um Verhandlungen und Besichtigungen',
+    assignmentCommission: 'Provision',
+    assignmentTerms: 'Bedingungen',
+    assignmentDashboard: 'Beauftragung anzeigen',
+    assignmentFooter: 'Du hast die Kontrolle — du kannst jederzeit kündigen.',
   },
 }
 
@@ -690,5 +736,137 @@ export async function sendViewingCheckInEmail(opts: {
     })
   } catch (err) {
     console.error('sendViewingCheckInEmail failed:', err)
+  }
+}
+
+export async function sendWelcomeEmail(opts: {
+  userEmail: string
+  userName: string | null
+  userRole: 'owner' | 'hunter' | 'agent'
+  countryCode?: string
+  locale?: EmailLocale
+}): Promise<{ success: boolean; error?: string }> {
+  const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
+  const locale = opts.locale ?? 'en-GB'
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
+
+  const greeting = t.welcomeGreeting(opts.userName?.split(' ')[0] ?? '')
+
+  let dashboardUrl: string
+  if (opts.userRole === 'owner') {
+    dashboardUrl = `${BASE_URL}/owner`
+  } else if (opts.userRole === 'hunter') {
+    dashboardUrl = `${BASE_URL}/hunter`
+  } else {
+    dashboardUrl = `${BASE_URL}/agent`
+  }
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
+    <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
+      ${t.welcomeIntro}
+    </p>
+
+    <div style="background:#F5F5FA;border-radius:10px;padding:24px;margin-bottom:24px;">
+      <h3 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#0F1117;">
+        ${t.welcomeQuickStart}
+      </h3>
+      <ol style="margin:0;padding-left:20px;color:#5E6278;font-size:14px;line-height:1.8;">
+        <li style="margin-bottom:8px;">${t.welcomeStep1}</li>
+        <li style="margin-bottom:8px;">${t.welcomeStep2}</li>
+        <li style="margin-bottom:8px;">${t.welcomeStep3}</li>
+        <li>${t.welcomeStep4}</li>
+      </ol>
+    </div>
+
+    ${ctaButton(t.welcomeDashboardLabel, dashboardUrl)}
+
+    <p style="margin-top:24px;font-size:13px;color:#999;">
+      ${t.welcomeFooter}
+    </p>
+  `, countryCode)
+
+  try {
+    await getResend().emails.send({
+      from: FROM,
+      to: opts.userEmail,
+      subject: t.welcomeSubject,
+      html,
+    })
+    return { success: true }
+  } catch (err) {
+    const error = err instanceof Error ? err.message : 'Failed to send welcome email'
+    console.error('sendWelcomeEmail failed:', error)
+    return { success: false, error }
+  }
+}
+
+export async function sendAssignmentAcceptedEmail(opts: {
+  ownerEmail: string
+  ownerName: string | null
+  agentName: string
+  address: string
+  commission: number | null
+  currency: string
+  listingId: string
+  countryCode?: string
+  locale?: EmailLocale
+}): Promise<{ success: boolean; error?: string }> {
+  const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
+  const locale = opts.locale ?? 'en-GB'
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
+  const config = getCountryConfig(countryCode)
+
+  const greeting = t.assignmentGreeting(opts.ownerName?.split(' ')[0] ?? '')
+  const intro = t.assignmentIntro(opts.agentName, opts.address)
+
+  const commissionRow = opts.commission != null
+    ? `<tr><td style="padding:8px 0;color:#5E6278;font-size:14px;">${t.assignmentCommission}</td><td style="padding:8px 0 8px 16px;font-size:14px;font-weight:600;">${formatCurrency(opts.commission, opts.currency, locale)}</td></tr>`
+    : ''
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">${greeting}</p>
+    <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
+      ${intro}
+    </p>
+
+    <div style="background:#F5F5FA;border-radius:10px;padding:24px;margin-bottom:24px;">
+      <h3 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#0F1117;">
+        ${t.assignmentNextSteps}
+      </h3>
+      <ol style="margin:0;padding-left:20px;color:#5E6278;font-size:14px;line-height:1.8;">
+        <li style="margin-bottom:8px;">${t.assignmentStep1}</li>
+        <li style="margin-bottom:8px;">${t.assignmentStep2}</li>
+        <li style="margin-bottom:8px;">${t.assignmentStep3}</li>
+        <li>${t.assignmentStep4}</li>
+      </ol>
+    </div>
+
+    <div style="background:#F5F5FA;border-radius:10px;padding:20px;margin-bottom:24px;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:8px 0;color:#5E6278;font-size:14px;">${t.assignmentTerms}</td><td style="padding:8px 0 8px 16px;font-size:14px;font-weight:600;">${opts.agentName}</td></tr>
+        ${commissionRow}
+      </table>
+    </div>
+
+    ${ctaButton(t.assignmentDashboard, `${BASE_URL}/owner/listings/${opts.listingId}`)}
+
+    <p style="margin-top:24px;font-size:13px;color:#999;">
+      ${t.assignmentFooter}
+    </p>
+  `, countryCode)
+
+  try {
+    await getResend().emails.send({
+      from: FROM,
+      to: opts.ownerEmail,
+      subject: t.assignmentSubject(opts.address),
+      html,
+    })
+    return { success: true }
+  } catch (err) {
+    const error = err instanceof Error ? err.message : 'Failed to send assignment email'
+    console.error('sendAssignmentAcceptedEmail failed:', error)
+    return { success: false, error }
   }
 }
