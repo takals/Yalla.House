@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { requestViewingAction } from './actions'
+import { useState, useEffect } from 'react'
+import { requestViewingAction, checkAuthAction } from './actions'
 
 export function ContactCard({
   listingId,
@@ -17,30 +17,77 @@ export function ContactCard({
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
 
   const isDE = locale === 'de'
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    setError(null)
-
-    const result = await requestViewingAction(listingId, {
-      name,
-      email,
-      ...(phone ? { phone } : {}),
-      ...(message ? { message } : {}),
+  // Check auth status on mount
+  useEffect(() => {
+    checkAuthAction().then(result => {
+      setIsLoggedIn(result.authenticated)
+      if (result.userName) setName(result.userName)
+      if (result.userEmail) setEmail(result.userEmail)
     })
+  }, [])
 
-    setSubmitting(false)
-
-    if ('error' in result) {
-      setError(result.error)
-    } else {
-      setDone(true)
-    }
+  // Loading state
+  if (isLoggedIn === null) {
+    return (
+      <div className="bg-surface rounded-card p-6 shadow-sm">
+        <div className="animate-pulse space-y-3">
+          <div className="h-5 bg-gray-200 rounded w-3/4" />
+          <div className="h-10 bg-gray-200 rounded" />
+          <div className="h-10 bg-gray-200 rounded" />
+        </div>
+      </div>
+    )
   }
 
+  // Not logged in — show account creation gate
+  if (!isLoggedIn) {
+    return (
+      <div className="bg-surface rounded-card p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-[#0F1117] mb-2">
+          {isDE ? 'Eigentümer kontaktieren' : 'Contact the owner'}
+        </h2>
+        <p className="text-sm text-[#5E6278] mb-4">
+          {isDE
+            ? 'Erstellen Sie ein kostenloses Konto, um den Eigentümer zu kontaktieren. Das schützt vor Spam und sorgt für sichere Kommunikation.'
+            : 'Create a free account to contact the owner. This keeps enquiries genuine and communication secure.'}
+        </p>
+
+        <div className="space-y-2">
+          <a
+            href={`/api/auth/callback?redirect=/p/${listingId}`}
+            className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-2.5 rounded-lg transition-colors text-sm"
+          >
+            {isDE ? 'Kostenlos registrieren' : 'Create free account'}
+          </a>
+          <a
+            href={`/api/auth/callback?redirect=/p/${listingId}`}
+            className="w-full flex items-center justify-center gap-2 bg-bg hover:bg-[#D9DCE4] text-[#0F1117] font-semibold py-2.5 rounded-lg transition-colors text-sm border border-[#E2E4EB]"
+          >
+            {isDE ? 'Anmelden' : 'Sign in'}
+          </a>
+        </div>
+
+        <div className="mt-4 pt-3 border-t border-[#E2E4EB]">
+          <div className="flex items-start gap-2">
+            <svg className="w-3.5 h-3.5 text-[#5E6278] mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <p className="text-xs text-[#5E6278]">
+              {isDE
+                ? 'Ihre Daten werden nie an Dritte weitergegeben. Der Eigentümer sieht nur, was Sie im Formular angeben.'
+                : 'Your details are never shared with third parties. The owner only sees what you provide in the form.'}
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Success state
   if (done) {
     return (
       <div className="bg-surface rounded-card p-6 shadow-sm">
@@ -63,6 +110,28 @@ export function ContactCard({
         </div>
       </div>
     )
+  }
+
+  // Logged in — show contact form
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setSubmitting(true)
+    setError(null)
+
+    const result = await requestViewingAction(listingId, {
+      name,
+      email,
+      ...(phone ? { phone } : {}),
+      ...(message ? { message } : {}),
+    })
+
+    setSubmitting(false)
+
+    if ('error' in result) {
+      setError(result.error)
+    } else {
+      setDone(true)
+    }
   }
 
   return (
@@ -108,7 +177,7 @@ export function ContactCard({
             type="tel"
             value={phone}
             onChange={e => setPhone(e.target.value)}
-            placeholder="+49 ..."
+            placeholder="+44 ..."
             className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
           />
         </div>

@@ -1,8 +1,33 @@
 'use server'
 
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { sendNewViewingRequestEmail } from '@/lib/resend'
 import { sendViewingRequestWhatsApp } from '@/lib/whatsapp'
+
+export async function checkAuthAction(): Promise<{
+  authenticated: boolean
+  userName: string | null
+  userEmail: string | null
+}> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { authenticated: false, userName: null, userEmail: null }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profile } = await (supabase.from('users') as any)
+    .select('full_name')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  return {
+    authenticated: true,
+    userName: profile?.full_name ?? null,
+    userEmail: user.email ?? null,
+  }
+}
 
 interface ViewingPayload {
   name: string

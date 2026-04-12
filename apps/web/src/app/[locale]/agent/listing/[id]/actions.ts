@@ -5,11 +5,18 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function submitProposalAction(
   listingId: string,
-  data: { tier: string; message: string }
+  data: { commission: string; serviceOverview: string }
 ) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
+
+  if (!data.commission.trim()) {
+    return { error: 'Please enter your commission quote.' }
+  }
+  if (!data.serviceOverview.trim()) {
+    return { error: 'Please describe your service offering.' }
+  }
 
   // Verify listing exists and is active
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,13 +44,8 @@ export async function submitProposalAction(
     return { error: 'You have already submitted a proposal for this property.' }
   }
 
-  // Validate tier
-  const validTiers = ['advisory', 'assisted', 'managed']
-  if (!validTiers.includes(data.tier)) {
-    return { error: 'Invalid collaboration tier.' }
-  }
-
-  // Create the assignment record (status: invited = proposal pending)
+  // Create the assignment record
+  // Agents always get full-service (managed) — the proposal is about their commission + service pitch
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error } = await (supabase as any)
     .from('listing_agent_assignments')
@@ -51,14 +53,15 @@ export async function submitProposalAction(
       listing_id: listingId,
       agent_id: userId,
       owner_id: listing.owner_id,
-      tier: data.tier,
+      tier: 'managed',
       status: 'invited',
-      notes: data.message,
-      // Default permissions based on tier
-      can_edit_listing: data.tier === 'managed',
-      can_manage_viewings: data.tier !== 'advisory',
-      can_negotiate: data.tier === 'managed',
-      can_message_buyers: data.tier !== 'advisory',
+      notes: `Commission: ${data.commission}\n\nService overview:\n${data.serviceOverview}`,
+      fee_type: 'quoted',
+      // Full-service permissions by default
+      can_edit_listing: true,
+      can_manage_viewings: true,
+      can_negotiate: true,
+      can_message_buyers: true,
     })
 
   if (error) {
