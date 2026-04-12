@@ -111,10 +111,15 @@
 <header class="site-header">
   <div class="header-inner">
     <a href="index.html" class="brand">Yalla.House</a>
-    <nav class="site-nav">
+    <nav class="site-nav" id="siteNav">
       <a href="services.html" class="nav-link" data-i18n="nav.services">Services &amp; Pricing</a>
       <a href="about.html" class="nav-link active" data-i18n="nav.about">About</a>
     </nav>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleMobileNav()" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <div class="nav-right">
       <div class="lang-switcher">
         <button id="lang-btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -455,11 +460,22 @@ function toggleUserMenu() {
   var open = d.classList.toggle('open');
   t.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
+function toggleMobileNav() {
+  var nav = document.getElementById('siteNav');
+  var toggle = document.getElementById('mobileMenuToggle');
+  var isOpen = nav.classList.toggle('mobile-open');
+  toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
 document.addEventListener('click', function(e) {
   var menu = document.getElementById('userMenu');
   if (menu && !menu.contains(e.target)) {
     document.getElementById('userMenuDropdown').classList.remove('open');
     document.getElementById('userMenuTrigger').setAttribute('aria-expanded', 'false');
+  }
+  var nav = document.getElementById('siteNav');
+  if (nav && !nav.contains(e.target) && !document.getElementById('mobileMenuToggle').contains(e.target)) {
+    nav.classList.remove('mobile-open');
+    document.getElementById('mobileMenuToggle').setAttribute('aria-expanded', 'false');
   }
 });
 function showToast(msg, type) {
