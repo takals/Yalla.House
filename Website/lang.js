@@ -80,6 +80,10 @@ var TRANSLATIONS = {
     'step3.p':   'Buyers book directly from live slots you set. Review offers in your dashboard, with full visibility.',
     'step4.h4':  'Complete the Sale',
     'step4.p':   'Legal support, document storage, and a sign-off checklist — everything needed to reach notary and completion.',
+    'step5.h4':  'Monitor Performance',
+    'step5.p':   'Weekly updates, buyer funnel data, agent response times. See exactly what&#39;s happening with your sale.',
+    'step6.h4':  'Close the Deal',
+    'step6.p':   'Documents, milestones, legal handoff — everything you need to reach notary and completion smoothly.',
 
     /* ── INDEX — Services ── */
     'svc.tag':  'Services',
@@ -379,6 +383,10 @@ var TRANSLATIONS = {
     'step3.p':   'K&#228;ufer buchen direkt aus Ihren Verf&#252;gbarkeitsterminen. Angebote im Dashboard pr&#252;fen mit voller Transparenz.',
     'step4.h4':  'Den Verkauf abschlie&#223;en',
     'step4.p':   'Rechtliche Unterst&#252;tzung, Dokumentenspeicherung und eine Abschluss-Checkliste — alles, was Sie zum Notartermin brauchen.',
+    'step5.h4':  'Leistung &#252;berwachen',
+    'step5.p':   'W&#246;chentliche Updates, K&#228;uferdaten, Antwortzeiten der Makler. Sehen Sie genau, was mit Ihrem Verkauf passiert.',
+    'step6.h4':  'Den Abschluss machen',
+    'step6.p':   'Dokumente, Meilensteine, rechtliche &#220;bergabe — alles f&#252;r einen reibungslosen Notartermin.',
 
     /* ── INDEX — Services ── */
     'svc.tag':  'Leistungen',
