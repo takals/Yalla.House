@@ -44,3 +44,5 @@ CLAUDE_global.md
 .claude/.gh-token*
 .claude/.vercel-token
 .claude/vercel-logs/
+.pnpm-store/
+node_modules/

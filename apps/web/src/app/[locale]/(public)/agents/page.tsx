@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { MapPin, Shield, Users, Home, FileText } from 'lucide-react'
+import { MapPin, Shield, Home, Building2, TreePine, Hammer, Users } from 'lucide-react'
 import { AgentSearch } from './agent-search'
 
 interface SearchParams {
@@ -95,15 +95,15 @@ export default async function AgentsPage({
     }
   }
 
-  const propertyTypeEmoji = (type: string) => {
-    const emojis: Record<string, string> = {
-      residential: '🏠',
-      commercial: '🏢',
-      land: '🌳',
-      new_build: '🏗️',
-      multi_unit: '👥',
+  const propertyTypeIcon = (type: string) => {
+    const icons: Record<string, React.ReactNode> = {
+      residential: <Home size={16} className="text-brand" />,
+      commercial: <Building2 size={16} className="text-brand" />,
+      land: <TreePine size={16} className="text-brand" />,
+      new_build: <Hammer size={16} className="text-brand" />,
+      multi_unit: <Users size={16} className="text-brand" />,
     }
-    return emojis[type] || '🏠'
+    return icons[type] || <Home size={16} className="text-brand" />
   }
 
   return (
@@ -205,11 +205,15 @@ export default async function AgentsPage({
                           <p className="text-xs font-semibold text-text-on-dark-muted uppercase tracking-widest mb-2">
                             Properties
                           </p>
-                          <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-wrap gap-3">
                             {agent.property_types.map((type: string) => (
-                              <span key={type} className="text-sm">
-                                {propertyTypeEmoji(type)}
-                              </span>
+                              <div
+                                key={type}
+                                className="w-6 h-6 rounded-md bg-brand/10 flex items-center justify-center"
+                                title={type.replace('_', ' ')}
+                              >
+                                {propertyTypeIcon(type)}
+                              </div>
                             ))}
                           </div>
                         </div>

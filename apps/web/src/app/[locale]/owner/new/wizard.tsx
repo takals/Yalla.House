@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { Home, Building2, Building, Store, TreePine } from 'lucide-react'
+import { Home, Building2, Building, Store, TreePine, MapPin } from 'lucide-react'
 import { createListingAction, type WizardPayload } from './actions'
+import { getCountryConfig } from '@/lib/country-config'
 
 interface WizardFormData {
   property_type: string
@@ -343,10 +344,27 @@ function Step3({
 }
 
 function Step4({
-  form, errors, set,
-}: { form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void }) {
+  form, errors, set, currency,
+}: { form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; currency: string }) {
   const showSale = form.intent === 'sale' || form.intent === 'both'
   const showRent = form.intent === 'rent' || form.intent === 'both'
+
+  // Get currency symbol from Intl formatter
+  const getCurrencySymbol = () => {
+    try {
+      const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+      })
+      const parts = formatter.formatToParts(1)
+      const symbol = parts.find(p => p.type === 'currency')?.value || currency
+      return symbol
+    } catch {
+      return currency
+    }
+  }
+
+  const currencySymbol = getCurrencySymbol()
 
   return (
     <div className="space-y-5">
@@ -376,7 +394,7 @@ function Step4({
       {showSale && (
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Kaufpreis (€)"
+            label={`Kaufpreis (${currencySymbol})`}
             id="sale_price"
             type="number"
             min="0"
@@ -402,7 +420,7 @@ function Step4({
       {showRent && (
         <div className="space-y-4">
           <Input
-            label="Kaltmiete pro Monat (€)"
+            label={`Kaltmiete pro Monat (${currencySymbol})`}
             id="rent_price"
             type="number"
             min="0"
@@ -414,7 +432,7 @@ function Step4({
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Nebenkosten (€/Monat)"
+              label={`Nebenkosten (${currencySymbol}/Monat)`}
               id="nebenkosten"
               type="number"
               min="0"
@@ -423,7 +441,7 @@ function Step4({
               onChange={e => set('nebenkosten', e.target.value)}
             />
             <Input
-              label="Kaution (€)"
+              label={`Kaution (${currencySymbol})`}
               id="kaution"
               type="number"
               min="0"
@@ -456,7 +474,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   )
 }
 
-function Step5({ form }: { form: WizardFormData }) {
+function Step5({ form, currency, localeFormatting }: { form: WizardFormData; currency: string; localeFormatting: string }) {
   const typeLabel =
     PROPERTY_TYPES.find(p => p.value === form.property_type)?.label ?? form.property_type
   const intentLabels: Record<string, string> = {
@@ -465,11 +483,11 @@ function Step5({ form }: { form: WizardFormData }) {
     both: 'Verkauf & Miete',
   }
 
-  const formatEur = (val: string) => {
+  const formatCurrencyValue = (val: string) => {
     const n = parseFloat(val)
     return isNaN(n) || n <= 0
       ? ''
-      : n.toLocaleString('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
+      : n.toLocaleString(localeFormatting, { style: 'currency', currency: currency, maximumFractionDigits: 0 })
   }
 
   return (
@@ -510,16 +528,16 @@ function Step5({ form }: { form: WizardFormData }) {
       <SummarySection label="Preis & Beschreibung">
         <SummaryRow label="Titel" value={form.title_de} />
         {form.sale_price && (
-          <SummaryRow label="Kaufpreis" value={formatEur(form.sale_price)} />
+          <SummaryRow label="Kaufpreis" value={formatCurrencyValue(form.sale_price)} />
         )}
         {form.rent_price && (
-          <SummaryRow label="Kaltmiete" value={`${formatEur(form.rent_price)}/Monat`} />
+          <SummaryRow label="Kaltmiete" value={`${formatCurrencyValue(form.rent_price)}/Monat`} />
         )}
         {form.nebenkosten && (
-          <SummaryRow label="Nebenkosten" value={`${formatEur(form.nebenkosten)}/Monat`} />
+          <SummaryRow label="Nebenkosten" value={`${formatCurrencyValue(form.nebenkosten)}/Monat`} />
         )}
         {form.kaution && (
-          <SummaryRow label="Kaution" value={formatEur(form.kaution)} />
+          <SummaryRow label="Kaution" value={formatCurrencyValue(form.kaution)} />
         )}
       </SummarySection>
     </div>
@@ -528,12 +546,17 @@ function Step5({ form }: { form: WizardFormData }) {
 
 // ── Main wizard ─────────────────────────────────────────────────────────────
 
-export function ListingWizard({ ownerId }: { ownerId: string }) {
+export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: string }) {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState<WizardFormData>(INITIAL)
   const [errors, setErrors] = useState<FormErrors>({})
   const [serverError, setServerError] = useState('')
   const [isPending, startTransition] = useTransition()
+
+  // Derive country from locale: 'en' -> 'GB', 'de' or default -> 'DE'
+  const countryCode = locale === 'en' ? 'GB' : 'DE'
+  const countryConfig = getCountryConfig(countryCode)
+  const localeFormatting = countryCode === 'GB' ? 'en-GB' : 'de-DE'
 
   function set(key: keyof WizardFormData, value: string) {
     setForm(f => ({ ...f, [key]: value }))
@@ -617,8 +640,8 @@ export function ListingWizard({ ownerId }: { ownerId: string }) {
         {step === 1 && <Step1 form={form} errors={errors} set={set} />}
         {step === 2 && <Step2 form={form} errors={errors} set={set} />}
         {step === 3 && <Step3 form={form} errors={errors} set={set} isFlat={isFlat} />}
-        {step === 4 && <Step4 form={form} errors={errors} set={set} />}
-        {step === 5 && <Step5 form={form} />}
+        {step === 4 && <Step4 form={form} errors={errors} set={set} currency={countryConfig.currency} />}
+        {step === 5 && <Step5 form={form} currency={countryConfig.currency} localeFormatting={localeFormatting} />}
       </div>
 
       {/* Server error */}
