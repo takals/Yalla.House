@@ -118,7 +118,7 @@ export default async function AdminPage() {
 
   const stats = [
     { label: t('admin.totalListings'), value: listingsCount.count ?? 0, sub: `${activeListingsCount.count ?? 0} ${t('admin.active')}` },
-    { label: t('admin.users'), value: usersCount.count ?? 0, sub: 'registriert' },
+    { label: t('admin.users'), value: usersCount.count ?? 0, sub: t('admin.registered') },
     { label: t('admin.viewings'), value: (viewingsCount as any).count ?? 0, sub: `${(pendingViewingsCount as any).count ?? 0} ${t('admin.pending')}` },
     { label: t('admin.paidTariffs'), value: (paidBillingCount as any).count ?? 0, sub: t('admin.completions') },
   ]

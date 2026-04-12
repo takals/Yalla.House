@@ -24,12 +24,15 @@ export default function AssignmentActions({
       const response = await fetch(`/api/assignments/${assignmentId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({
+          status: action === 'accept' ? 'accepted' : 'revoked',
+          revoked_reason: action === 'decline' ? 'Agent declined' : undefined,
+        }),
       })
 
       if (!response.ok) {
         const error = await response.json()
-        alert(`Error: ${error.message || 'Failed to process assignment'}`)
+        alert(`Error: ${error.error || 'Failed to process assignment'}`)
         setLoading(false)
         setActionType(null)
         return
