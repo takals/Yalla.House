@@ -1,7 +1,14 @@
 import { Resend } from 'resend'
 import { getCountryConfig, formatCurrency, DEFAULT_COUNTRY } from './country-config'
 
-const resend = new Resend(process.env['RESEND_API_KEY'])
+// Lazy-init: Resend throws if API key is missing, which breaks `next build` in CI
+let _resend: Resend | null = null
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env['RESEND_API_KEY'] ?? 'placeholder')
+  }
+  return _resend
+}
 const FROM = process.env['RESEND_FROM_EMAIL'] ?? 'Yalla.House <noreply@yalla.house>'
 const BASE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://yalla.house'
 
@@ -276,7 +283,7 @@ export async function sendOwnerBriefEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.agentEmail,
       subject: `${t.ownerBriefSubject} — ${typeLabel} in ${opts.city || opts.postcode}`,
@@ -367,7 +374,7 @@ export async function sendHunterBriefEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.agentEmail,
       subject: t.hunterBriefSubject(opts.hunterFirstName, intentLabel, areaNames),
@@ -426,7 +433,7 @@ export async function sendNewViewingRequestEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.ownerEmail,
       subject: t.newViewingSubject(opts.listingTitle),
@@ -468,7 +475,7 @@ export async function sendViewingConfirmedEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.buyerEmail,
       subject: t.viewingConfirmedSubject(opts.listingTitle),
@@ -505,7 +512,7 @@ export async function sendViewingDeclinedEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.buyerEmail,
       subject: t.viewingDeclinedSubject(opts.listingTitle),
@@ -584,7 +591,7 @@ export async function sendAgentInviteEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.agentEmail,
       subject: t.agentInviteSubject(typeLabel, opts.listingCity),
@@ -637,7 +644,7 @@ export async function sendViewingReminderEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.recipientEmail,
       subject: t.viewingReminderSubject(opts.listingTitle, when),
@@ -675,7 +682,7 @@ export async function sendViewingCheckInEmail(opts: {
   `, countryCode)
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to: opts.hunterEmail,
       subject: t.viewingCheckInSubject(opts.listingTitle),
