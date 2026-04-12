@@ -7,7 +7,7 @@
     "strict": true,
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
     "paths": {}
   },
   "exclude": ["node_modules", "dist", ".next"]
