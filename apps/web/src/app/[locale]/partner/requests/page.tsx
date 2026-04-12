@@ -2,9 +2,21 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { QuoteForm } from './quote-form'
-import { formatDistanceToNow } from 'date-fns'
-import { deDE, enGB } from 'date-fns/locale'
 import { Star } from 'lucide-react'
+
+function formatRelativeTime(date: Date, locale: string): string {
+  const now = new Date()
+  const diffMs = now.getTime() - date.getTime()
+  const diffSec = Math.round(diffMs / 1000)
+  const abs = Math.abs(diffSec)
+  const rtf = new Intl.RelativeTimeFormat(locale === 'de' ? 'de' : 'en', { numeric: 'auto' })
+  if (abs < 60) return rtf.format(-diffSec, 'second')
+  if (abs < 3600) return rtf.format(-Math.round(diffSec / 60), 'minute')
+  if (abs < 86400) return rtf.format(-Math.round(diffSec / 3600), 'hour')
+  if (abs < 2592000) return rtf.format(-Math.round(diffSec / 86400), 'day')
+  if (abs < 31536000) return rtf.format(-Math.round(diffSec / 2592000), 'month')
+  return rtf.format(-Math.round(diffSec / 31536000), 'year')
+}
 
 interface ServiceRequest {
   id: string
@@ -88,7 +100,6 @@ export default async function PartnerRequestsPage({
   ).slice(0, 10)
 
   const isLocaleDE = locale === 'de'
-  const dateLocale = isLocaleDE ? deDE : enGB
 
   return (
     <div className="max-w-4xl">
@@ -159,10 +170,7 @@ export default async function PartnerRequestsPage({
                       </div>
                     </div>
                     <span className="text-xs text-[#999]">
-                      {formatDistanceToNow(new Date(request.created_at), {
-                        addSuffix: true,
-                        locale: dateLocale,
-                      })}
+                      {formatRelativeTime(new Date(request.created_at), locale)}
                     </span>
                   </div>
 
@@ -259,10 +267,7 @@ export default async function PartnerRequestsPage({
                       <span className="text-[#5E6278] font-semibold">
                         {isLocaleDE ? 'Status seit:' : 'Updated:'}
                       </span>{' '}
-                      {formatDistanceToNow(new Date(request.updated_at), {
-                        addSuffix: true,
-                        locale: dateLocale,
-                      })}
+                      {formatRelativeTime(new Date(request.updated_at), locale)}
                     </div>
                   </div>
 
