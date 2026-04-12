@@ -1,63 +1,98 @@
+import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { ArrowLeft, Mail, Eye, MousePointerClick, MessageSquare, CheckCircle2, Clock, AlertCircle } from 'lucide-react'
 
+interface Assignment {
+  id: string
+  status: 'invited' | 'accepted' | 'active' | 'paused' | 'revoked'
+  invited_at: string
+  accepted_at: string | null
+  revoked_at: string | null
+  agent: {
+    agency_name: string | null
+  } | null
+}
+
+function formatTimeAgo(isoDate: string): string {
+  const now = new Date()
+  const date = new Date(isoDate)
+  const diffMs = now.getTime() - date.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+
+  if (diffMins < 1) return 'just now'
+  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+
+  const weeks = Math.floor(diffDays / 7)
+  if (weeks < 4) return `${weeks} week${weeks > 1 ? 's' : ''} ago`
+
+  const months = Math.floor(diffDays / 30)
+  return `${months} month${months > 1 ? 's' : ''} ago`
+}
+
 export default async function TrackingPage() {
   const t = await getTranslations('ownerAgents')
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const userId = user?.id ?? PREVIEW_USER_ID
 
-  // Mock tracking data
-  const trackingData = [
-    {
-      agentName: 'John Smith & Co',
-      sentTime: '2 hours ago',
-      status: 'delivered',
-      delivered: true,
-      opened: true,
-      clicked: true,
-      responded: false,
-      responseTime: null,
-    },
-    {
-      agentName: 'London Heights Estates',
-      sentTime: '2 hours ago',
-      status: 'proposal',
-      delivered: true,
-      opened: true,
-      clicked: true,
-      responded: true,
-      responseTime: '45 minutes ago',
-    },
-    {
-      agentName: 'City Centre Properties',
-      sentTime: '2 hours ago',
-      status: 'opened',
-      delivered: true,
-      opened: true,
-      clicked: false,
-      responded: false,
-      responseTime: null,
-    },
-    {
-      agentName: 'Riverside Lettings & Sales',
-      sentTime: '2 hours ago',
-      status: 'delivered',
-      delivered: true,
-      opened: false,
-      clicked: false,
-      responded: false,
-      responseTime: null,
-    },
-    {
-      agentName: 'Tower Bridge Area Agents',
-      sentTime: '1 hour ago',
-      status: 'delivered',
-      delivered: true,
-      opened: false,
-      clicked: false,
-      responded: false,
-      responseTime: null,
-    },
-  ]
+  // Fetch all assignments for this owner's listings
+  let assignments: Assignment[] = []
+
+  const { data } = await (supabase as any)
+    .from('listing_agent_assignments')
+    .select(`
+      id, status, invited_at, accepted_at, revoked_at,
+      agent:agent_profiles!listing_agent_assignments_agent_id_fkey(
+        agency_name
+      )
+    `)
+    .eq('owner_id', userId)
+    .order('invited_at', { ascending: false })
+
+  assignments = data ?? []
+
+  // Calculate tracking states based on assignment status and timestamps
+  const trackingData = assignments.map(assignment => {
+    const isDelivered = !!assignment.invited_at
+    const isOpened = !!assignment.accepted_at || !!assignment.revoked_at
+    const isClicked = !!assignment.accepted_at || !!assignment.revoked_at
+    const isResponded = !!assignment.accepted_at || !!assignment.revoked_at
+
+    let status = 'delivered'
+    if (isResponded) {
+      status = assignment.status === 'revoked' ? 'declined' : 'accepted'
+    } else if (isOpened) {
+      status = 'opened'
+    }
+
+    const responseTime = isResponded && (assignment.accepted_at || assignment.revoked_at)
+      ? formatTimeAgo(assignment.accepted_at || assignment.revoked_at!)
+      : null
+
+    return {
+      id: assignment.id,
+      agentName: assignment.agent?.agency_name || 'Unknown Agent',
+      sentTime: formatTimeAgo(assignment.invited_at),
+      status,
+      delivered: isDelivered,
+      opened: isOpened,
+      clicked: isClicked,
+      responded: isResponded,
+      responseTime,
+    }
+  })
+
+  // Calculate summary stats
+  const totalSent = trackingData.length
+  const delivered = trackingData.filter(r => r.delivered).length
+  const opened = trackingData.filter(r => r.opened).length
+  const accepted = trackingData.filter(r => r.status === 'accepted').length
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { bg: string; text: string; icon: React.ReactNode }> = {
@@ -71,10 +106,15 @@ export default async function TrackingPage() {
         text: 'text-blue-700',
         icon: <Eye size={14} />,
       },
-      proposal: {
+      accepted: {
         bg: 'bg-green-50',
         text: 'text-green-700',
         icon: <CheckCircle2 size={14} />,
+      },
+      declined: {
+        bg: 'bg-red-50',
+        text: 'text-red-700',
+        icon: <Clock size={14} />,
       },
     }
     const cfg = config[status] || config.delivered
@@ -113,10 +153,10 @@ export default async function TrackingPage() {
       {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: t('trackingTotalSent'), value: '5', color: 'border-blue-200 bg-blue-50' },
-          { label: t('trackingDelivered'), value: '5', color: 'border-green-200 bg-green-50' },
-          { label: t('trackingOpened'), value: '3', color: 'border-purple-200 bg-purple-50' },
-          { label: t('trackingProposals'), value: '1', color: 'border-amber-200 bg-amber-50' },
+          { label: t('trackingTotalSent'), value: totalSent.toString(), color: 'border-blue-200 bg-blue-50' },
+          { label: t('trackingDelivered'), value: delivered.toString(), color: 'border-green-200 bg-green-50' },
+          { label: t('trackingOpened'), value: opened.toString(), color: 'border-purple-200 bg-purple-50' },
+          { label: t('trackingProposals'), value: accepted.toString(), color: 'border-amber-200 bg-amber-50' },
         ].map((stat, idx) => (
           <div
             key={idx}
@@ -157,24 +197,30 @@ export default async function TrackingPage() {
 
         {/* Table Rows */}
         <div className="divide-y divide-[#E2E4EB]">
-          {trackingData.map((row, idx) => (
-            <div key={idx} className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#FAFBFC] transition-colors">
-              <div className="col-span-4">
-                <p className="font-semibold text-[#0F1117]">{row.agentName}</p>
-                <p className="text-xs text-[#5E6278]">{row.sentTime}</p>
-              </div>
-              <div className="col-span-2 text-sm text-[#5E6278]">{row.sentTime}</div>
-              <div className="col-span-5 flex justify-between px-2">
-                {renderCheckmark(row.delivered)}
-                {renderCheckmark(row.opened)}
-                {renderCheckmark(row.clicked)}
-                {renderCheckmark(row.responded)}
-              </div>
-              <div className="col-span-1">
-                {getStatusBadge(row.status)}
-              </div>
+          {trackingData.length === 0 ? (
+            <div className="px-6 py-12 text-center">
+              <p className="text-[#5E6278]">{t('noAssignmentsYet')}</p>
             </div>
-          ))}
+          ) : (
+            trackingData.map((row) => (
+              <div key={row.id} className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#FAFBFC] transition-colors">
+                <div className="col-span-4">
+                  <p className="font-semibold text-[#0F1117]">{row.agentName}</p>
+                  <p className="text-xs text-[#5E6278]">{row.sentTime}</p>
+                </div>
+                <div className="col-span-2 text-sm text-[#5E6278]">{row.sentTime}</div>
+                <div className="col-span-5 flex justify-between px-2">
+                  {renderCheckmark(row.delivered)}
+                  {renderCheckmark(row.opened)}
+                  {renderCheckmark(row.clicked)}
+                  {renderCheckmark(row.responded)}
+                </div>
+                <div className="col-span-1">
+                  {getStatusBadge(row.status)}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
