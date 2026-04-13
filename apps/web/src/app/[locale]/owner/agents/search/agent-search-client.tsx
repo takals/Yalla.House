@@ -62,7 +62,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
     if (postcode.trim()) {
       const code = postcode.trim().toUpperCase()
       filtered = filtered.filter(agent =>
-        agent.coverage.some(c => c.includes(code))
+        agent.coverage.some(c => code.startsWith(c) || c.startsWith(code))
       )
     }
 
