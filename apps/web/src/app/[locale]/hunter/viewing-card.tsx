@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { cancelViewingAction } from './actions'
 
 interface Props {
@@ -14,12 +15,14 @@ interface Props {
   date: string
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  pending:   'Ausstehend',
-  confirmed: 'Bestätigt',
-  cancelled: 'Abgebrochen',
-  completed: 'Abgeschlossen',
-  no_show:   'Nicht erschienen',
+function StatusLabels(t: any): Record<string, string> {
+  return {
+    pending:   t('statusPending'),
+    confirmed: t('statusConfirmed'),
+    cancelled: t('statusCancelled'),
+    completed: t('statusCompleted'),
+    no_show:   t('statusNoShow'),
+  }
 }
 
 const STATUS_STYLES: Record<string, string> = {
@@ -31,12 +34,14 @@ const STATUS_STYLES: Record<string, string> = {
 }
 
 export function ViewingCard({ id, initialStatus, title, location, placeId, hunterNotes, date }: Props) {
+  const t = useTranslations('hunterDashboard')
+  const STATUS_LABELS = StatusLabels(t)
   const [status, setStatus] = useState(initialStatus)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   async function handleCancel() {
-    if (!confirm('Anfrage wirklich zurückziehen?')) return
+    if (!confirm(t('confirmCancel'))) return
     setLoading(true)
     setError(null)
     const prev = status
@@ -65,13 +70,13 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
 
       {status === 'confirmed' && (
         <div className="mb-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-sm text-green-800">
-          Der Eigentümer hat Ihre Anfrage bestätigt und wird sich in Kürze bei Ihnen melden.
+          {t('confirmationMessage')}
         </div>
       )}
 
       {status === 'cancelled' && (
         <div className="mb-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-600">
-          Diese Besichtigung wurde abgebrochen.
+          {t('cancelledMessage')}
         </div>
       )}
 
@@ -84,7 +89,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
       )}
 
       <div className="flex items-center justify-between">
-        <p className="text-xs text-[#999]">Angefragt am {date}</p>
+        <p className="text-xs text-[#999]">{t('requestedOn')} {date}</p>
         <div className="flex items-center gap-3">
           {canCancel && (
             <button
@@ -92,7 +97,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
               disabled={loading}
               className="text-xs font-semibold text-[#5E6278] hover:text-red-600 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Wird abgebrochen…' : 'Zurückziehen'}
+              {loading ? t('cancelling') : t('withdraw')}
             </button>
           )}
           {placeId && (
@@ -100,7 +105,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
               href={`/p/${placeId}`}
               className="text-xs font-semibold text-[#0F1117] hover:underline"
             >
-              Inserat ansehen →
+              {t('viewListing')}
             </Link>
           )}
         </div>

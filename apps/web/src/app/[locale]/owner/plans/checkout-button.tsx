@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 export function CheckoutButton({
   planId,
@@ -11,6 +12,7 @@ export function CheckoutButton({
   listingId?: string | undefined
   disabled?: boolean | undefined
 }) {
+  const t = useTranslations('ownerDashboard')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -28,14 +30,14 @@ export function CheckoutButton({
       const data = await res.json() as { url?: string; error?: string }
 
       if (data.error || !data.url) {
-        setError(data.error ?? 'Unbekannter Fehler')
+        setError(data.error ?? t('checkout.unknownError'))
         setLoading(false)
         return
       }
 
       window.location.href = data.url
     } catch {
-      setError('Verbindungsfehler. Bitte erneut versuchen.')
+      setError(t('checkout.connectionError'))
       setLoading(false)
     }
   }
@@ -54,10 +56,10 @@ export function CheckoutButton({
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Weiterleitung …
+            {t('checkout.redirecting')}
           </span>
         ) : (
-          'Jetzt buchen'
+          t('checkout.book')
         )}
       </button>
       {error && (

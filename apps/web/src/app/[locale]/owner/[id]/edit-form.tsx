@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Home, Building2, Building, Store, TreePine } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { updateListingAction, changeStatusAction, sendBriefAction, type EditPayload } from './actions'
@@ -62,15 +63,7 @@ const STATUS_STYLES: Record<string, string> = {
   archived:    'bg-gray-100 text-gray-400',
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  draft:       'Entwurf',
-  active:      'Aktiv',
-  paused:      'Pausiert',
-  under_offer: 'Angebot liegt vor',
-  sold:        'Verkauft',
-  let:         'Vermietet',
-  archived:    'Archiviert',
-}
+// STATUS_LABELS will be moved to useTranslations call within component to access t()
 
 // ── Shared field primitives ──────────────────────────────────────────────────
 
@@ -183,6 +176,7 @@ export function ListingEditForm({
   portals: PortalRow[]
   portalStatuses: PortalStatusRow[]
 }) {
+  const t = useTranslations('ownerDashboard')
   const [form, setForm] = useState<EditPayload>(() => initForm(listing))
   const [errors, setErrors] = useState<FormErrors>({})
   const [serverError, setServerError] = useState('')
@@ -203,25 +197,25 @@ export function ListingEditForm({
 
   function validate(): boolean {
     const errs: FormErrors = {}
+    const currentYear = new Date().getFullYear()
 
-    if (!form.property_type) errs.property_type = 'Bitte Typ wählen'
-    if (!form.intent) errs.intent = 'Bitte Art wählen'
-    if (!form.address_line1.trim()) errs.address_line1 = 'Adresse erforderlich'
-    if (!/^\d{5}$/.test(form.postcode.trim())) errs.postcode = 'Bitte gültige Postleitzahl eingeben (5 Ziffern)'
-    if (!form.city.trim()) errs.city = 'Stadt erforderlich'
+    if (!form.property_type) errs.property_type = t('editForm.selectPropertyType')
+    if (!form.intent) errs.intent = t('editForm.selectIntent')
+    if (!form.address_line1.trim()) errs.address_line1 = t('editForm.addressRequired')
+    if (!/^\d{5}$/.test(form.postcode.trim())) errs.postcode = t('editForm.postcodeInvalid')
+    if (!form.city.trim()) errs.city = t('editForm.cityRequired')
 
     const year = parseInt(form.construction_year, 10)
-    const currentYear = new Date().getFullYear()
     if (form.construction_year && (isNaN(year) || year < 1800 || year > currentYear)) {
-      errs.construction_year = `Baujahr muss zwischen 1800 und ${currentYear} liegen`
+      errs.construction_year = t('editForm.constructionYearInvalid', { min: 1800, max: currentYear })
     }
 
-    if (!form.title_de.trim()) errs.title_de = 'Titel erforderlich'
+    if (!form.title_de.trim()) errs.title_de = t('editForm.titleRequired')
     if ((form.intent === 'sale' || form.intent === 'both') && !form.sale_price.trim()) {
-      errs.sale_price = 'Kaufpreis erforderlich'
+      errs.sale_price = t('editForm.salePriceRequired')
     }
     if ((form.intent === 'rent' || form.intent === 'both') && !form.rent_price.trim()) {
-      errs.rent_price = 'Kaltmiete erforderlich'
+      errs.rent_price = t('editForm.rentPriceRequired')
     }
 
     setErrors(errs)
@@ -271,7 +265,7 @@ export function ListingEditForm({
     if ('error' in result) {
       setBriefResult({ type: 'error', message: result.error })
     } else if ('success' in result) {
-      setBriefResult({ type: 'success', message: `Brief an ${result.agentCount} Makler gesendet!` })
+      setBriefResult({ type: 'success', message: t('editForm.briefSentSuccess', { count: result.agentCount }) })
     }
   }
 
@@ -290,23 +284,23 @@ export function ListingEditForm({
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          Meine Inserate
+          {t('editForm.myListings')}
         </Link>
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#0F1117]">Inserat bearbeiten</h1>
+            <h1 className="text-2xl font-bold text-[#0F1117]">{t('editForm.editTitle')}</h1>
             <p className="text-sm text-[#5E6278] mt-1">{listing.place_id}</p>
           </div>
           <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap mt-1 ${STATUS_STYLES[currentStatus] ?? STATUS_STYLES['draft']}`}>
-            {STATUS_LABELS[currentStatus] ?? currentStatus}
+            {t(`editForm.status.${currentStatus}`) ?? currentStatus}
           </span>
         </div>
       </div>
 
       {/* Status section */}
       <div className="bg-surface rounded-card shadow-sm p-6">
-        <h2 className="text-base font-bold text-[#0F1117] border-b border-[#E4E6EF] pb-3 mb-4">Status</h2>
+        <h2 className="text-base font-bold text-[#0F1117] border-b border-[#E4E6EF] pb-3 mb-4">{t('editForm.sectionStatus')}</h2>
 
         <div className="flex flex-wrap gap-2">
           {currentStatus === 'draft' && (
@@ -316,7 +310,7 @@ export function ListingEditForm({
               disabled={isChangingStatus}
               className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
             >
-              Veröffentlichen
+              {t('editForm.publish')}
             </button>
           )}
 
@@ -328,7 +322,7 @@ export function ListingEditForm({
                 disabled={isChangingStatus}
                 className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
               >
-                Pausieren
+                {t('editForm.pause')}
               </button>
               <button
                 type="button"
@@ -336,7 +330,7 @@ export function ListingEditForm({
                 disabled={isChangingStatus}
                 className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
               >
-                Als verkauft markieren
+                {t('editForm.markSold')}
               </button>
               <button
                 type="button"
@@ -344,7 +338,7 @@ export function ListingEditForm({
                 disabled={isChangingStatus}
                 className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
               >
-                Als vermietet markieren
+                {t('editForm.markLet')}
               </button>
             </>
           )}
@@ -356,7 +350,7 @@ export function ListingEditForm({
               disabled={isChangingStatus}
               className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
             >
-              Reaktivieren
+              {t('editForm.reactivate')}
             </button>
           )}
 
@@ -368,7 +362,7 @@ export function ListingEditForm({
                 disabled={isChangingStatus}
                 className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
               >
-                Als verkauft markieren
+                {t('editForm.markSold')}
               </button>
               <button
                 type="button"
@@ -376,16 +370,16 @@ export function ListingEditForm({
                 disabled={isChangingStatus}
                 className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
               >
-                Als vermietet markieren
+                {t('editForm.markLet')}
               </button>
             </>
           )}
 
           {['sold', 'let', 'archived'].includes(currentStatus) && (
             <p className="text-sm text-[#5E6278]">
-              {currentStatus === 'sold' && 'Dieses Inserat wurde als verkauft markiert.'}
-              {currentStatus === 'let' && 'Dieses Inserat wurde als vermietet markiert.'}
-              {currentStatus === 'archived' && 'Dieses Inserat ist archiviert.'}
+              {currentStatus === 'sold' && t('editForm.msgListingSold')}
+              {currentStatus === 'let' && t('editForm.msgListingLet')}
+              {currentStatus === 'archived' && t('editForm.msgListingArchived')}
             </p>
           )}
 
@@ -395,7 +389,7 @@ export function ListingEditForm({
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              Wird aktualisiert …
+              {t('editForm.updating')}
             </span>
           )}
         </div>
@@ -406,9 +400,9 @@ export function ListingEditForm({
       </div>
 
       {/* Section 1: Typ & Angebot */}
-      <Section title="Immobilientyp & Angebot">
+      <Section title={t('editForm.sectionTypeAndOffer')}>
         <div>
-          <p className="text-sm font-medium text-[#0F1117] mb-3">Immobilientyp</p>
+          <p className="text-sm font-medium text-[#0F1117] mb-3">{t('editForm.propertyType')}</p>
           {errors.property_type && (
             <p className="mb-2 text-xs text-red-500">{errors.property_type}</p>
           )}
@@ -437,7 +431,7 @@ export function ListingEditForm({
         </div>
 
         <div>
-          <p className="text-sm font-medium text-[#0F1117] mb-3">Angebotsart</p>
+          <p className="text-sm font-medium text-[#0F1117] mb-3">{t('editForm.offerType')}</p>
           {errors.intent && <p className="mb-2 text-xs text-red-500">{errors.intent}</p>}
           <div className="grid grid-cols-3 gap-3">
             {[
@@ -463,7 +457,7 @@ export function ListingEditForm({
       </Section>
 
       {/* Section 2: Adresse */}
-      <Section title="Adresse">
+      <Section title={t('editForm.sectionAddress')}>
         <Input
           label="Straße und Hausnummer"
           id="address_line1"
@@ -511,7 +505,7 @@ export function ListingEditForm({
       </Section>
 
       {/* Section 3: Objektdetails */}
-      <Section title="Objektdetails">
+      <Section title={t('editForm.sectionDetails')}>
         <div className="grid grid-cols-2 gap-4">
           <Input
             label="Wohnfläche (m²)"
@@ -602,7 +596,7 @@ export function ListingEditForm({
       </Section>
 
       {/* Section 4: Preis & Beschreibung */}
-      <Section title="Preis & Beschreibung">
+      <Section title={t('editForm.sectionPrice')}>
         <Input
           label="Inserat-Titel"
           id="title_de"
@@ -687,12 +681,12 @@ export function ListingEditForm({
       </Section>
 
       {/* Section 5: Photos */}
-      <Section title="Fotos">
+      <Section title={t('editForm.sectionPhotos')}>
         <PhotoManager listingId={listing.id} photos={photos} />
       </Section>
 
       {/* Section 6: Portale */}
-      <Section title="Portale">
+      <Section title={t('editForm.sectionPortals')}>
         <PortalSection
           listingId={listing.id}
           portals={portals}
@@ -702,20 +696,16 @@ export function ListingEditForm({
 
       {/* Section 7: Send Brief to Agents */}
       {(currentStatus === 'active' || currentStatus === 'draft') && (
-        <Section title="Brief an Makler senden">
+        <Section title={t('editForm.sectionBrief')}>
           <p className="text-sm text-[#5E6278] leading-relaxed">
-            Senden Sie Ihren Eigentümer-Brief an lokale Makler in Ihrer Gegend.
-            Die Makler erhalten eine Zusammenfassung Ihrer Immobilie und können
-            mit einem Vorschlag antworten. Ihre Kontaktdaten bleiben geschützt.
+            {t('editForm.briefDescription')}
           </p>
           {listing.brief_sent_at && (
             <div className="flex items-center gap-2 text-xs text-[#5E6278] bg-[#F5F5FA] rounded-lg px-3 py-2">
               <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-              Zuletzt gesendet am{' '}
-              {new Date(listing.brief_sent_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' })}
-              {listing.brief_agent_count ? ` an ${listing.brief_agent_count} Makler` : ''}
+              {t('editForm.lastSentOn', { date: new Date(listing.brief_sent_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }), count: listing.brief_agent_count || 0 })}
             </div>
           )}
           <div className="flex items-center gap-4">
@@ -731,14 +721,14 @@ export function ListingEditForm({
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Wird gesendet …
+                  {t('editForm.sendingBrief')}
                 </>
               ) : (
                 <>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                   </svg>
-                  Brief senden
+                  {t('editForm.sendBrief')}
                 </>
               )}
             </button>
@@ -762,7 +752,7 @@ export function ListingEditForm({
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-              Gespeichert
+              {t('editForm.saved')}
             </p>
           )}
         </div>
@@ -771,7 +761,7 @@ export function ListingEditForm({
           disabled={isPending}
           className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
         >
-          {isPending ? 'Wird gespeichert …' : 'Änderungen speichern'}
+          {isPending ? t('editForm.saving') : t('editForm.saveChanges')}
         </button>
       </div>
     </div>

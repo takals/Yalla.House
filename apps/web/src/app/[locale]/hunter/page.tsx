@@ -20,13 +20,14 @@ interface ViewingWithListing {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
+  const t = await getTranslations('hunterDashboard')
   const isEnglish = locale === 'en'
 
   return {
     title: isEnglish ? 'Home Hunter Dashboard | Yalla.House' : 'Suchenden-Dashboard | Yalla.House',
     description: isEnglish
       ? 'Find your next home. Browse available properties and view new listings.'
-      : 'Finden Sie Ihr nächstes Zuhause. Durchsuchen Sie verfügbare Immobilien und sehen Sie neue Angebote.',
+      : t('pageDescription'),
     robots: {
       index: false,
       follow: false,
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function HunterPage() {
-  const t = await getTranslations('hunterDash')
+  const t = await getTranslations('hunterDashboard')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -227,7 +228,7 @@ export default async function HunterPage() {
           <div className="grid gap-3">
             {viewings.map(viewing => {
               const listing = viewing.listing
-              const title = listing?.title_de ?? 'Inserat'
+              const title = listing?.title_de ?? t('listingFallback')
               const location = listing ? `${listing.postcode} ${listing.city}` : ''
               const date = new Date(viewing.created_at).toLocaleDateString('de-DE', {
                 day: '2-digit', month: 'long', year: 'numeric',

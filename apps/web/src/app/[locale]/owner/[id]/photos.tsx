@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { savePhotoAction, deletePhotoAction, setPrimaryPhotoAction } from './actions'
@@ -40,6 +41,7 @@ export function PhotoManager({
   listingId: string
   photos: PhotoRow[]
 }) {
+  const t = useTranslations('ownerDashboard')
   const { handleAuthRequired } = useAuthAction()
   const [photos, setPhotos] = useState<PhotoRow[]>(
     [...initialPhotos].sort((a, b) => a.sort_order - b.sort_order)
@@ -54,7 +56,7 @@ export function PhotoManager({
 
     for (const file of Array.from(files)) {
       if (file.size > MAX_BYTES) {
-        setUploadError(`"${file.name}" ist zu groß (max. 10 MB)`)
+        setUploadError(t('photos.fileTooLarge', { fileName: file.name }))
         continue
       }
 
@@ -66,7 +68,7 @@ export function PhotoManager({
         .upload(path, file, { upsert: false })
 
       if (storageError) {
-        setUploadError(`Upload fehlgeschlagen: ${storageError.message}`)
+        setUploadError(t('photos.uploadFailed', { error: storageError.message }))
         setUploading(false)
         continue
       }
@@ -202,14 +204,14 @@ export function PhotoManager({
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              Wird hochgeladen …
+              {t('photos.uploading')}
             </>
           ) : (
             <>
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              {photos.length === 0 ? 'Erstes Foto hinzufügen' : 'Weitere Fotos hinzufügen'}
+              {photos.length === 0 ? t('photos.addFirst') : t('photos.addMore')}
             </>
           )}
         </button>
@@ -221,7 +223,7 @@ export function PhotoManager({
 
       {photos.length === 0 && !uploading && (
         <p className="text-sm text-[#999999] text-center">
-          Noch keine Fotos. Portale wie ImmobilienScout24 empfehlen mindestens 5 Bilder.
+          {t('photos.empty')}
         </p>
       )}
     </div>

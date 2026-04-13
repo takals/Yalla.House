@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { createClient } from '@/lib/supabase/client'
 import { X } from 'lucide-react'
 
@@ -10,34 +11,12 @@ interface AuthGateModalProps {
   locale?: string
 }
 
-const translations = {
-  de: {
-    heading: 'Konto erstellen oder anmelden',
-    subtext: 'Um deine Daten zu speichern, erstelle ein kostenloses Konto oder melde dich an.',
-    emailPlaceholder: 'deine@email.com',
-    submitButton: 'Weiter mit E-Mail',
-    bottomText: 'Wir senden dir einen Magic Link — kein Passwort nötig.',
-    checkInbox: 'Prüfe dein Postfach',
-    sentMessage: 'Wir haben einen Magic Link an deine E-Mail gesendet.',
-  },
-  en: {
-    heading: 'Create an account or sign in',
-    subtext: 'To save your data, create a free account or sign in.',
-    emailPlaceholder: 'your@email.com',
-    submitButton: 'Continue with Email',
-    bottomText: 'We\'ll send you a magic link — no password needed.',
-    checkInbox: 'Check your inbox',
-    sentMessage: 'We\'ve sent a magic link to your email.',
-  },
-}
-
 export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalProps) {
+  const t = useTranslations('auth')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
-
-  const lang = (locale === 'en' ? translations.en : translations.de)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -110,12 +89,12 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
 
               {/* Heading */}
               <h2 className="text-xl font-bold text-text-primary mb-3 text-center">
-                {lang.heading}
+                {t('heading')}
               </h2>
 
               {/* Subtext */}
               <p className="text-sm text-text-secondary text-center mb-6">
-                {lang.subtext}
+                {t('subtext')}
               </p>
 
               {/* Form */}
@@ -123,7 +102,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
                 {/* Email input */}
                 <input
                   type="email"
-                  placeholder={lang.emailPlaceholder}
+                  placeholder={t('emailPlaceholder')}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value)
@@ -144,13 +123,13 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
                   disabled={loading}
                   className="w-full py-3 bg-brand hover:bg-brand-hover text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Wird gesendet...' : lang.submitButton}
+                  {loading ? t('sendingMagicLink') : t('continueWithEmail')}
                 </button>
               </form>
 
               {/* Bottom text */}
               <p className="text-xs text-text-muted text-center mt-6">
-                {lang.bottomText}
+                {t('bottomText')}
               </p>
             </>
           ) : (
@@ -159,12 +138,12 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
               <div className="text-center mb-8">
                 <div className="text-5xl mb-4">✉️</div>
                 <h2 className="text-xl font-bold text-text-primary mb-2">
-                  {lang.checkInbox}
+                  {t('checkInbox')}
                 </h2>
               </div>
 
               <p className="text-sm text-text-secondary text-center mb-2">
-                {lang.sentMessage}
+                {t('sentMessage')}
               </p>
 
               <p className="text-xs text-text-muted text-center font-mono bg-bg p-3 rounded-lg mb-6">
@@ -172,9 +151,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
               </p>
 
               <p className="text-xs text-text-muted text-center">
-                {locale === 'en'
-                  ? 'Didn\'t receive it? Check your spam folder or'
-                  : 'Erhalten nicht? Prüfe deinen Spam-Ordner oder'}
+                {locale === 'en' ? t('didNotReceiveEN') : t('didNotReceiveDE')}
                 {' '}
                 <button
                   onClick={() => {
@@ -183,7 +160,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
                   }}
                   className="text-brand hover:text-brand-hover font-semibold"
                 >
-                  {locale === 'en' ? 'try another email' : 'versuche eine andere E-Mail'}
+                  {locale === 'en' ? t('tryAnotherEmailEN') : t('tryAnotherEmailDE')}
                 </button>
               </p>
             </>

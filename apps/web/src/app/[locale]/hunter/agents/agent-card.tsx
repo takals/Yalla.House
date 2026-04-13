@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 import { updateAssignmentStatusAction, sendBriefAction } from './actions'
 
@@ -18,14 +19,6 @@ interface Props {
   assignment: Assignment
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  invited:      'Eingeladen',
-  active:       'Aktiv',
-  paused:       'Pausiert',
-  ignored:      'Ignoriert',
-  disconnected: 'Getrennt',
-}
-
 const STATUS_STYLES: Record<string, string> = {
   invited:      'bg-yellow-50 text-yellow-800 border border-yellow-200',
   active:       'bg-green-50 text-green-800 border border-green-200',
@@ -34,12 +27,27 @@ const STATUS_STYLES: Record<string, string> = {
   disconnected: 'bg-red-50 text-red-700 border border-red-200',
 }
 
-const SCOPE_LABELS: Record<string, string> = {
-  brief_only:         'Nur Brief',
-  brief_and_contact:  'Brief + Kontakt',
+function StatusLabels(t: any): Record<string, string> {
+  return {
+    invited:      t('statusInvited'),
+    active:       t('statusActive'),
+    paused:       t('statusPaused'),
+    ignored:      t('statusIgnored'),
+    disconnected: t('statusDisconnected'),
+  }
+}
+
+function ScopeLabels(t: any): Record<string, string> {
+  return {
+    brief_only:         t('scopeBriefOnly'),
+    brief_and_contact:  t('scopeBriefAndContact'),
+  }
 }
 
 export function AgentCard({ assignment }: Props) {
+  const t = useTranslations('hunterDashboard')
+  const STATUS_LABELS = StatusLabels(t)
+  const SCOPE_LABELS = ScopeLabels(t)
   const [isPending, startTransition] = useTransition()
   const { id, agent_id, status, data_scope, agency_name, agent_name, initiated_by } = assignment
   const agentInitiated = initiated_by === 'agent'
@@ -66,7 +74,7 @@ export function AgentCard({ assignment }: Props) {
           </span>
           {agentInitiated && status === 'invited' && (
             <span className="text-[0.6rem] font-bold px-2 py-0.5 rounded-full bg-brand-solid-bg text-brand-badge-text border border-yellow-200 whitespace-nowrap">
-              Makler möchte deinen Passport
+              {t('agentWantsPassport')}
             </span>
           )}
         </div>
@@ -115,7 +123,7 @@ export function AgentCard({ assignment }: Props) {
               disabled={isPending}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
             >
-              Ablehnen
+              {t('reject')}
             </button>
           </>
         )}

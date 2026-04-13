@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { MatchCard } from './match-card'
 
 interface MatchItem {
@@ -26,11 +27,12 @@ interface Props {
 type Tab = 'best' | 'possible'
 
 export function MatchFeed({ bestMatches, possibleMatches }: Props) {
+  const t = useTranslations('hunterDashboard')
   const [tab, setTab] = useState<Tab>('best')
 
   const tabs: { key: Tab; label: string; count: number }[] = [
-    { key: 'best', label: 'Beste Treffer', count: bestMatches.length },
-    { key: 'possible', label: 'Möglich', count: possibleMatches.length },
+    { key: 'best', label: t('bestMatches'), count: bestMatches.length },
+    { key: 'possible', label: t('possible'), count: possibleMatches.length },
   ]
 
   const active = tab === 'best' ? bestMatches : possibleMatches
@@ -57,7 +59,7 @@ export function MatchFeed({ bestMatches, possibleMatches }: Props) {
       {/* Cards */}
       {active.length === 0 ? (
         <div className="bg-surface rounded-card p-8 text-center text-sm text-[#5E6278]">
-          Keine Treffer in dieser Kategorie.
+          {t('noMatches')}
         </div>
       ) : (
         <div className="space-y-3">

@@ -25,13 +25,14 @@ interface RawAssignment {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
+  const t = await getTranslations('agentDashboard')
   const isEnglish = locale === 'en'
 
   return {
     title: isEnglish ? 'Agent Dashboard | Yalla.House' : 'Makler-Dashboard | Yalla.House',
     description: isEnglish
       ? 'Manage your listings, viewings, and communication with owners.'
-      : 'Verwalten Sie Ihre Aufträge, Besichtigungen und Kommunikation mit Eigentümern.',
+      : t('pageDescription'),
     robots: {
       index: false,
       follow: false,
@@ -40,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function AgentPage() {
-  const t = await getTranslations('agentDash')
+  const t = await getTranslations('agentDashboard')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -98,7 +99,7 @@ export default async function AgentPage() {
 
   const modules = [
     { href: '/agent/hunters', title: t('myBuyers'), subtitle: t('buyersSubtitle'), icon: <ShieldCheck size={24} /> },
-    { href: '/agent/profile', title: 'Mein Profil', subtitle: 'Agenturname, Tätigkeitsgebiete und Typen', icon: <Building2 size={24} /> },
+    { href: '/agent/profile', title: t('myProfile'), subtitle: t('profileSubtitle'), icon: <Building2 size={24} /> },
   ]
 
   return (

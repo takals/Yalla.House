@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { CheckCircle2, Check } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { saveAgentProfileAction } from './actions'
@@ -54,6 +55,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 }
 
 export function ProfileForm({ profile }: Props) {
+  const t = useTranslations('agentDashboard')
   const [state, setState] = useState<{ success?: true; error?: string } | null>(null)
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()
@@ -81,7 +83,7 @@ export function ProfileForm({ profile }: Props) {
       {state && 'success' in state && (
         <div className="bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium flex items-center gap-2">
           <CheckCircle2 size={16} className="text-green-700 flex-shrink-0" />
-          Profil gespeichert.
+          {t('profileSaved')}
         </div>
       )}
       {state && 'error' in state && (
@@ -92,10 +94,10 @@ export function ProfileForm({ profile }: Props) {
 
       {/* Agency info */}
       <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
-        <h3 className="font-bold text-base mb-5">Agentur</h3>
+        <h3 className="font-bold text-base mb-5">{t('agencySection')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-[#5E6278] mb-1">Agenturname *</label>
+            <label className="block text-xs font-medium text-[#5E6278] mb-1">{t('agencyNameLabel')} *</label>
             <input
               type="text"
               name="agency_name"
@@ -106,7 +108,7 @@ export function ProfileForm({ profile }: Props) {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#5E6278] mb-1">Maklernummer (IHK)</label>
+            <label className="block text-xs font-medium text-[#5E6278] mb-1">{t('licenseNumberLabel')}</label>
             <input
               type="text"
               name="license_number"
@@ -120,9 +122,9 @@ export function ProfileForm({ profile }: Props) {
 
       {/* Specialisation */}
       <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
-        <h3 className="font-bold text-base mb-5">Spezialisierung</h3>
+        <h3 className="font-bold text-base mb-5">{t('specializationSection')}</h3>
 
-        <p className="text-xs font-semibold text-[#5E6278] mb-3 uppercase tracking-wide">Schwerpunkt</p>
+        <p className="text-xs font-semibold text-[#5E6278] mb-3 uppercase tracking-wide">{t('focusLabel')}</p>
         <div className="flex gap-3 mb-6">
           {FOCUS_OPTIONS.map(o => (
             <button
@@ -138,7 +140,7 @@ export function ProfileForm({ profile }: Props) {
           ))}
         </div>
 
-        <p className="text-xs font-semibold text-[#5E6278] mb-3 uppercase tracking-wide">Immobilientypen</p>
+        <p className="text-xs font-semibold text-[#5E6278] mb-3 uppercase tracking-wide">{t('propertyTypesLabel')}</p>
         <div className="flex flex-wrap gap-2">
           {PROPERTY_TYPES.map(t => (
             <Chip
@@ -155,13 +157,13 @@ export function ProfileForm({ profile }: Props) {
       {profile?.verified_at ? (
         <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 text-sm text-green-800 flex items-center gap-2">
           <Check size={14} className="text-green-700 flex-shrink-0" />
-          <span>Verifizierter Makler — verifiziert am {new Date(profile.verified_at).toLocaleDateString('de-DE')}</span>
+          <span>{t('verifiedStatus')} {new Date(profile.verified_at).toLocaleDateString('de-DE')}</span>
         </div>
       ) : (
         <div className="bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 text-sm text-brand-badge-text">
-          <span className="font-semibold">Verifizierung ausstehend</span> — Sende deine Maklernummer und ein Nachweis an{' '}
+          <span className="font-semibold">{t('verificationPending')}</span> — {t('verificationInstructions')}
           <a href="mailto:verify@yalla.house" className="underline">verify@yalla.house</a>.
-          Verifizierte Makler erhalten höhere Sichtbarkeit bei Käufern.
+          {t('verificationBenefit')}
         </div>
       )}
 
@@ -170,7 +172,7 @@ export function ProfileForm({ profile }: Props) {
         disabled={isPending}
         className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-[#0F1117] font-bold py-3.5 rounded-2xl text-sm transition-colors"
       >
-        {isPending ? 'Wird gespeichert…' : 'Profil speichern'}
+        {isPending ? t('savingProfile') : t('saveProfile')}
       </button>
     </form>
   )

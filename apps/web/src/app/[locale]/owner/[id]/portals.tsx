@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { submitToPortalAction } from './actions'
 
 export interface PortalRow {
@@ -21,19 +22,19 @@ export interface PortalStatusRow {
 
 type StatusMap = Map<string, PortalStatusRow>
 
-function getStatusBadge(status: string | undefined, errorMessage: string | null | undefined) {
+function getStatusBadge(status: string | undefined, errorMessage: string | null | undefined, t: any) {
   if (!status || status === 'pending') {
-    return { label: 'Noch nicht eingereicht', className: 'bg-gray-100 text-gray-500', spinning: false }
+    return { label: t('portals.notSubmitted'), className: 'bg-gray-100 text-gray-500', spinning: false }
   }
   switch (status) {
     case 'queued':
-      return { label: 'In Warteschlange …', className: 'bg-yellow-100 text-yellow-700', spinning: true }
+      return { label: t('portals.queued'), className: 'bg-yellow-100 text-yellow-700', spinning: true }
     case 'published':
-      return { label: 'Aktiv', className: 'bg-green-100 text-green-700', spinning: false }
+      return { label: t('portals.active'), className: 'bg-green-100 text-green-700', spinning: false }
     case 'failed':
-      return { label: `Fehler: ${errorMessage ?? 'Unbekannter Fehler'}`, className: 'bg-red-100 text-red-700', spinning: false }
+      return { label: t('portals.error', { error: errorMessage ?? t('portals.unknownError') }), className: 'bg-red-100 text-red-700', spinning: false }
     case 'withdrawn':
-      return { label: 'Zurückgezogen', className: 'bg-gray-100 text-gray-500', spinning: false }
+      return { label: t('portals.withdrawn'), className: 'bg-gray-100 text-gray-500', spinning: false }
     default:
       return { label: status, className: 'bg-gray-100 text-gray-500', spinning: false }
   }
@@ -53,6 +54,7 @@ export function PortalSection({
   portals: PortalRow[]
   initialStatuses: PortalStatusRow[]
 }) {
+  const t = useTranslations('ownerDashboard')
   const router = useRouter()
   const [statuses, setStatuses] = useState<StatusMap>(() => {
     const m = new Map<string, PortalStatusRow>()
@@ -121,7 +123,7 @@ export function PortalSection({
   if (portals.length === 0) {
     return (
       <p className="text-sm text-[#999999]">
-        Keine aktiven Portale für diese Region konfiguriert.
+        {t('portals.none')}
       </p>
     )
   }
@@ -130,7 +132,7 @@ export function PortalSection({
     <div className="space-y-3">
       {portals.map(portal => {
         const row = statuses.get(portal.id)
-        const badge = getStatusBadge(row?.status, row?.error_message)
+        const badge = getStatusBadge(row?.status, row?.error_message, t)
         const isSubmitting = submitting.has(portal.id)
         const isQueued = row?.status === 'queued'
 
@@ -172,12 +174,12 @@ export function PortalSection({
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Wird eingereicht …
+                  {t('portals.submitting')}
                 </span>
               ) : row?.status === 'published' ? (
-                'Erneut einreichen'
+                t('portals.resubmit')
               ) : (
-                'Einreichen'
+                t('portals.submit')
               )}
             </button>
           </div>

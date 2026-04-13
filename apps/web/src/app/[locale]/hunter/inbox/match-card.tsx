@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Check, X } from 'lucide-react'
 import { updateMatchStatusAction } from './actions'
 
@@ -39,6 +40,7 @@ function ScoreCircle({ score }: { score: number }) {
 }
 
 export function MatchCard({ match }: Props) {
+  const t = useTranslations('hunterDashboard')
   const [isPending, startTransition] = useTransition()
   const [dismissed, setDismissed] = useState(false)
 
@@ -97,20 +99,20 @@ export function MatchCard({ match }: Props) {
                 disabled={isPending}
                 className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50"
               >
-                Speichern
+                {t('save')}
               </button>
               <button
                 onClick={() => update('dismissed')}
                 disabled={isPending}
                 className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
               >
-                Ablehnen
+                {t('reject')}
               </button>
             </>
           )}
           {match.status === 'saved' && (
             <span className="text-xs font-semibold text-green-700 inline-flex items-center gap-1">
-              <Check size={14} /> Gespeichert
+              <Check size={14} /> {t('saved')}
             </span>
           )}
         </div>
