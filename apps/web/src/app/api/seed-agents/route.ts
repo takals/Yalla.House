@@ -271,19 +271,7 @@ export async function POST(request: Request) {
 
   const supabase = createServiceClient()
 
-  // Step 1: Add new columns (idempotent)
-  const { error: migrationError } = await (supabase as any).rpc('exec_sql', {
-    sql: `
-      ALTER TABLE agent_profiles
-        ADD COLUMN IF NOT EXISTS website text,
-        ADD COLUMN IF NOT EXISTS phone text,
-        ADD COLUMN IF NOT EXISTS city text,
-        ADD COLUMN IF NOT EXISTS data_source text DEFAULT 'manual',
-        ADD COLUMN IF NOT EXISTS contact_email text;
-    `
-  })
-
-  // Step 2: Insert agents
+  // Insert agents
   let inserted = 0
   let skipped = 0
   const errors: string[] = []
@@ -299,7 +287,8 @@ export async function POST(request: Request) {
         id: userId,
         email,
         full_name: agent.agency_name,
-        preferred_locale: agent.country_code === 'DE' ? 'de' : 'en',
+        country_code: agent.country_code,
+        language: agent.country_code === 'DE' ? 'de' : 'en',
       })
 
     if (userError) {
@@ -331,30 +320,11 @@ export async function POST(request: Request) {
         verified_at: new Date().toISOString(),
         subscription_tier: 'free',
         languages: agent.country_code === 'DE' ? ['de', 'en'] : ['en'],
-        website: agent.website ?? null,
-        phone: agent.phone ?? null,
-        city: agent.city,
-        data_source: 'web_search',
       })
 
     if (profileError) {
-      // If profile insert fails (maybe column doesn't exist yet), try without new columns
-      const { error: profileError2 } = await (supabase as any)
-        .from('agent_profiles')
-        .insert({
-          user_id: userId,
-          agency_name: agent.agency_name,
-          coverage_areas: coverageAreas,
-          property_types: agent.property_types,
-          focus: agent.focus,
-          verified_at: new Date().toISOString(),
-          subscription_tier: 'free',
-          languages: agent.country_code === 'DE' ? ['de', 'en'] : ['en'],
-        })
-      if (profileError2) {
-        errors.push(`Profile ${agent.agency_name}: ${profileError2.message}`)
-        continue
-      }
+      errors.push(`Profile ${agent.agency_name}: ${profileError.message}`)
+      continue
     }
 
     inserted++
