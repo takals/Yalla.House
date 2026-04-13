@@ -3,6 +3,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { User, Building2, Bell, Globe, AlertTriangle } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { SettingsForm } from './settings-form'
+import { ListingDefaultsForm } from './listing-defaults-form'
 
 interface OwnerProfile {
   user_id: string
@@ -22,7 +23,7 @@ export default async function OwnerSettingsPage() {
       .eq('id', userId)
       .maybeSingle(),
     (supabase.from('owner_profiles') as any)
-      .select('company_name, tax_id')
+      .select('company_name, tax_id, default_intent, default_property_type, default_currency, default_price_qualifier, default_rent_period, default_city, default_postcode, default_region')
       .eq('user_id', userId)
       .maybeSingle(),
   ])
@@ -88,24 +89,57 @@ export default async function OwnerSettingsPage() {
         />
       </SettingsSection>
 
-      {/* Listing Defaults Card */}
-      <SettingsSection icon={Globe} title={t('sectionListingDefaults')}>
-        <SettingItem
-          label={t('labelDefaultCountry')}
-          value={t('valueGermany')}
-          actionLabel={t('buttonEdit')}
-        />
-        <SettingItem
-          label={t('labelDefaultCurrency')}
-          value={t('valueEUR')}
-          actionLabel={t('buttonEdit')}
-        />
-        <SettingItem
-          label={t('labelDefaultLanguage')}
-          value={t('valueGerman')}
-          actionLabel={t('buttonEdit')}
-        />
-      </SettingsSection>
+      {/* Listing Defaults — editable via client component */}
+      <ListingDefaultsForm
+        defaults={{
+          default_intent: ownerProfile?.default_intent ?? '',
+          default_property_type: ownerProfile?.default_property_type ?? '',
+          default_currency: ownerProfile?.default_currency ?? 'EUR',
+          default_price_qualifier: ownerProfile?.default_price_qualifier ?? '',
+          default_rent_period: ownerProfile?.default_rent_period ?? '',
+          default_city: ownerProfile?.default_city ?? '',
+          default_postcode: ownerProfile?.default_postcode ?? '',
+          default_region: ownerProfile?.default_region ?? '',
+        }}
+        translations={{
+          sectionListingDefaults: t('sectionListingDefaults'),
+          defaultsDescription: t('defaultsDescription'),
+          labelIntent: t('labelIntent'),
+          intentSale: t('intentSale'),
+          intentRent: t('intentRent'),
+          intentBoth: t('intentBoth'),
+          labelPropertyType: t('labelPropertyType'),
+          typeHouse: t('typeHouse'),
+          typeFlat: t('typeFlat'),
+          typeApartment: t('typeApartment'),
+          typeVilla: t('typeVilla'),
+          typeCommercial: t('typeCommercial'),
+          typeLand: t('typeLand'),
+          typeOther: t('typeOther'),
+          labelCurrency: t('labelCurrency'),
+          labelPriceQualifier: t('labelPriceQualifier'),
+          qualFixedPrice: t('qualFixedPrice'),
+          qualOffersOver: t('qualOffersOver'),
+          qualGuidePrice: t('qualGuidePrice'),
+          qualPOA: t('qualPOA'),
+          qualVB: t('qualVB'),
+          labelRentPeriod: t('labelRentPeriod'),
+          periodPCM: t('periodPCM'),
+          periodPW: t('periodPW'),
+          periodPQ: t('periodPQ'),
+          periodPA: t('periodPA'),
+          labelCity: t('labelCity'),
+          placeholderCity: t('placeholderCity'),
+          labelPostcode: t('labelPostcode'),
+          labelRegion: t('labelRegion'),
+          placeholderRegion: t('placeholderRegion'),
+          saveDefaults: t('saveDefaults'),
+          saving: t('saving'),
+          savedDefaults: t('savedDefaults'),
+          buttonEdit: t('buttonEdit'),
+          notSet: t('notSet'),
+        }}
+      />
 
       {/* Danger Zone Card */}
       <SettingsSection icon={AlertTriangle} title={t('sectionDangerZone')} isDanger>

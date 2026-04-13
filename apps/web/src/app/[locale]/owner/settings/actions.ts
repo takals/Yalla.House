@@ -52,3 +52,34 @@ export async function updateOwnerProfileAction(data: {
   revalidatePath('/owner/settings')
   return { success: true }
 }
+
+export async function updateListingDefaultsAction(data: {
+  default_intent?: string
+  default_property_type?: string
+  default_currency?: string
+  default_price_qualifier?: string
+  default_rent_period?: string
+  default_city?: string
+  default_postcode?: string
+  default_region?: string
+}) {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+
+  const supabase = await createClient()
+  const { error } = await (supabase as any)
+    .from('owner_profiles')
+    .upsert(
+      { user_id: auth.userId, ...data },
+      { onConflict: 'user_id' }
+    )
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  revalidatePath('/owner/settings')
+  return { success: true }
+}
