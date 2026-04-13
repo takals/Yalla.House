@@ -48,7 +48,7 @@
   },
   "statsHunter": {
     "stat1Value": "12.000+",
-    "stat1Label": "Makler in unserem Netzwerk in ganz Großbritannien",
+    "stat1Label": "Makler in unserem Netzwerk in ganz Deutschland",
     "stat2Value": "83 %",
     "stat2Label": "der Suchenden sagen, Makler senden irrelevante Angebote",
     "stat3Value": "0 €",
@@ -451,7 +451,7 @@
     "section1Point2": "Sie dürfen Yalla-Inseratdaten nicht auf Drittportalen veröffentlichen, massenhaft abrufen oder ohne schriftliche Zustimmung des Eigentümers außerhalb Ihrer Agentur weitergeben.",
     "section1Point3": "Persönliche Daten des Eigentümers (Name, E-Mail, Telefon) werden erst offengelegt, wenn der Eigentümer Ihren Vorschlag annimmt. Bis dahin läuft jede Kommunikation über Yalla.",
     "section2Title": "Portal-Vorautorisierung",
-    "section2Point1": "Wenn der Eigentümer Sie beauftragt, seine Immobilie auf einem Portal zu listen (Rightmove, Zoopla, OnTheMarket usw.), sind Sie vorautorisiert, dies im Rahmen Ihrer bestehenden Portal-Vereinbarungen zu tun.",
+    "section2Point1": "Wenn der Eigentümer Sie beauftragt, seine Immobilie auf einem Portal zu listen (ImmoScout24, Immowelt, OnTheMarket usw.), sind Sie vorautorisiert, dies im Rahmen Ihrer bestehenden Portal-Vereinbarungen zu tun.",
     "section2Point2": "Yalla erhebt keine Gebühren für Portal-Inserate über Ihre eigenen Vereinbarungen. Das Yalla-Dashboard des Eigentümers zeigt den Portal-Status automatisch an.",
     "section2Point3": "Wenn der Eigentümer Ihren Auftrag widerruft, müssen Sie die Immobilie innerhalb von 48 Stunden von allen Portalen entfernen.",
     "section3Title": "Plattformregeln",

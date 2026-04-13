@@ -12,9 +12,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const isEnglish = locale === 'en'
 
-  const baseTitle = isEnglish ? 'Yalla.House — Sell Your Home. Keep Every Pound.' : 'Yalla.House — Immobilie selbst verkaufen'
+  const baseTitle = isEnglish ? 'Yalla.House — Sell Your Property in Germany. Commission-free.' : 'Yalla.House — Immobilie selbst verkaufen'
   const baseDescription = isEnglish
-    ? 'Sell your home without an agent. Free. Commission-free. Keep every pound.'
+    ? 'Sell your property in Germany without an agent. Free. Commission-free. List on ImmoScout24 and Immowelt.'
     : 'Verkaufen Sie Ihre Immobilie ohne Makler. Kostenlos. Behalten Sie jede Provision.'
 
   return {
@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: {
       type: 'website',
       siteName: 'Yalla.House',
-      locale: isEnglish ? 'en_GB' : 'de_DE',
-      alternateLocale: isEnglish ? ['de_DE'] : ['en_GB'],
+      locale: isEnglish ? 'en_US' : 'de_DE',
+      alternateLocale: isEnglish ? ['de_DE'] : ['en_US'],
       title: baseTitle,
       description: baseDescription,
       url: isEnglish ? 'https://yalla.house/en' : 'https://yalla.house',
