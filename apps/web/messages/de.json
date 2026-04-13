@@ -855,5 +855,134 @@
     "voiceStart": "Aufzeichnung starten",
     "voiceStop": "Aufzeichnung stoppen",
     "voiceNotSupported": "Spracheingabe wird in deinem Browser nicht unterstützt"
+  },
+  "wizard": {
+    "stepTitles": {
+      "typeAndOffer": "Typ & Angebot",
+      "address": "Adresse",
+      "objectDetails": "Objektdetails",
+      "priceAndDescription": "Preis & Beschreibung",
+      "summary": "Zusammenfassung"
+    },
+    "step1": {
+      "propertyTypeHeading": "Welche Art von Immobilie?",
+      "intentHeading": "Angeboten als …",
+      "errorPropertyType": "Bitte Typ wählen",
+      "errorIntent": "Bitte Art wählen"
+    },
+    "propertyTypes": {
+      "house": "Haus",
+      "flat": "Wohnung",
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "commercial": "Gewerbe",
+      "land": "Grundstück",
+      "other": "Sonstiges"
+    },
+    "intents": {
+      "sale": "Zum Verkauf",
+      "rent": "Zur Miete",
+      "both": "Verkauf & Miete"
+    },
+    "step2": {
+      "heading": "Wo befindet sich die Immobilie?",
+      "streetLabel": "Straße und Hausnummer",
+      "streetPlaceholder": "Musterstraße 42",
+      "addressLineLabel": "Adresszusatz",
+      "addressLinePlaceholder": "Hinterhaus, EG links",
+      "postcodeLabel": "Postleitzahl",
+      "postcodePlaceholder": "10115",
+      "cityLabel": "Stadt",
+      "cityPlaceholder": "Berlin",
+      "regionLabel": "Bundesland",
+      "regionPlaceholder": "Berlin",
+      "errorStreet": "Adresse erforderlich",
+      "errorPostcode": "Bitte gültige Postleitzahl eingeben (5 Ziffern)",
+      "errorCity": "Stadt erforderlich"
+    },
+    "step3": {
+      "heading": "Objektdetails",
+      "subheading": "Alle Felder optional — je mehr, desto besser für Ihr Inserat.",
+      "sizeLabel": "Wohnfläche (m²)",
+      "sizePlaceholder": "85",
+      "roomsLabel": "Zimmer",
+      "roomsPlaceholder": "3",
+      "bedroomsLabel": "Schlafzimmer",
+      "bedroomsPlaceholder": "2",
+      "bathroomsLabel": "Badezimmer",
+      "bathroomsPlaceholder": "1",
+      "floorLabel": "Etage",
+      "floorPlaceholder": "3",
+      "totalFloorsLabel": "Gesamte Etagen",
+      "totalFloorsPlaceholder": "5",
+      "constructionYearLabel": "Baujahr",
+      "constructionYearPlaceholder": "1995",
+      "energyClassLabel": "Energieklasse",
+      "energyClassPlaceholder": "Keine Angabe",
+      "errorConstructionYear": "Baujahr muss zwischen 1800 und {year} liegen"
+    },
+    "step4": {
+      "heading": "Preis & Beschreibung",
+      "titleLabel": "Inserat-Titel",
+      "titlePlaceholder": "Gepflegte 3-Zimmer-Wohnung mit Balkon in Mitte",
+      "descriptionLabel": "Beschreibung",
+      "descriptionPlaceholder": "Beschreiben Sie Ihre Immobilie…",
+      "salePriceLabel": "Kaufpreis ({currency})",
+      "salePricePlaceholder": "350000",
+      "priceQualifierLabel": "Preishinweis",
+      "priceQualifierPlaceholder": "Kein Hinweis",
+      "priceQualifierFixed": "Festpreis",
+      "priceQualifierNegotiable": "Verhandelbar (VB)",
+      "rentPriceLabel": "Kaltmiete pro Monat ({currency})",
+      "rentPricePlaceholder": "1200",
+      "additionalCostsLabel": "Nebenkosten ({currency}/Monat)",
+      "additionalCostsPlaceholder": "200",
+      "depositLabel": "Kaution ({currency})",
+      "depositPlaceholder": "2400",
+      "errorTitle": "Titel erforderlich",
+      "errorSalePrice": "Kaufpreis erforderlich",
+      "errorRentPrice": "Kaltmiete erforderlich"
+    },
+    "step5": {
+      "heading": "Zusammenfassung",
+      "subheading": "Bitte prüfen Sie Ihre Angaben. Nach dem Speichern können Sie alles bearbeiten.",
+      "sectionTypeAndOffer": "Typ & Angebot",
+      "sectionAddress": "Adresse",
+      "sectionObjectDetails": "Objektdetails",
+      "sectionPriceAndDescription": "Preis & Beschreibung",
+      "labelType": "Typ",
+      "labelOffer": "Angebot",
+      "labelStreet": "Straße",
+      "labelAdditional": "Zusatz",
+      "labelPostcodeCity": "PLZ / Stadt",
+      "labelRegion": "Bundesland",
+      "labelSize": "Wohnfläche",
+      "labelRooms": "Zimmer",
+      "labelBedrooms": "Schlafzimmer",
+      "labelBathrooms": "Badezimmer",
+      "labelFloor": "Etage",
+      "labelConstructionYear": "Baujahr",
+      "labelEnergyClass": "Energieklasse",
+      "labelNoDetails": "Keine Details angegeben",
+      "labelTitle": "Titel",
+      "labelSalePrice": "Kaufpreis",
+      "labelRentPrice": "Kaltmiete",
+      "labelAdditionalCosts": "Nebenkosten",
+      "labelDeposit": "Kaution",
+      "perMonth": "/Monat"
+    },
+    "progress": {
+      "step": "Schritt {step} von 5"
+    },
+    "buttons": {
+      "next": "Weiter",
+      "back": "Zurück",
+      "submit": "Als Entwurf speichern",
+      "submitting": "Wird gespeichert …"
+    },
+    "validation": {
+      "required": "erforderlich",
+      "invalidPostcode": "Bitte gültige Postleitzahl eingeben (5 Ziffern)"
+    }
   }
 }

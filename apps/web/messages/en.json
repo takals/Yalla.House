@@ -855,5 +855,134 @@
     "voiceStart": "Start Recording",
     "voiceStop": "Stop Recording",
     "voiceNotSupported": "Voice input not supported in your browser"
+  },
+  "wizard": {
+    "stepTitles": {
+      "typeAndOffer": "Type & Offer",
+      "address": "Address",
+      "objectDetails": "Property Details",
+      "priceAndDescription": "Price & Description",
+      "summary": "Summary"
+    },
+    "step1": {
+      "propertyTypeHeading": "What type of property?",
+      "intentHeading": "Offered as …",
+      "errorPropertyType": "Please select a property type",
+      "errorIntent": "Please select an offer type"
+    },
+    "propertyTypes": {
+      "house": "House",
+      "flat": "Flat",
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "commercial": "Commercial",
+      "land": "Land",
+      "other": "Other"
+    },
+    "intents": {
+      "sale": "For Sale",
+      "rent": "For Rent",
+      "both": "Sale & Rent"
+    },
+    "step2": {
+      "heading": "Where is the property located?",
+      "streetLabel": "Street and house number",
+      "streetPlaceholder": "123 Main Street",
+      "addressLineLabel": "Address details",
+      "addressLinePlaceholder": "Apartment 4B, Building B",
+      "postcodeLabel": "Postcode",
+      "postcodePlaceholder": "10115",
+      "cityLabel": "City",
+      "cityPlaceholder": "Berlin",
+      "regionLabel": "State/Region",
+      "regionPlaceholder": "Berlin",
+      "errorStreet": "Address is required",
+      "errorPostcode": "Please enter a valid postcode (5 digits)",
+      "errorCity": "City is required"
+    },
+    "step3": {
+      "heading": "Property Details",
+      "subheading": "All fields optional — the more details, the better for your listing.",
+      "sizeLabel": "Living area (m²)",
+      "sizePlaceholder": "85",
+      "roomsLabel": "Rooms",
+      "roomsPlaceholder": "3",
+      "bedroomsLabel": "Bedrooms",
+      "bedroomsPlaceholder": "2",
+      "bathroomsLabel": "Bathrooms",
+      "bathroomsPlaceholder": "1",
+      "floorLabel": "Floor",
+      "floorPlaceholder": "3",
+      "totalFloorsLabel": "Total floors",
+      "totalFloorsPlaceholder": "5",
+      "constructionYearLabel": "Year built",
+      "constructionYearPlaceholder": "1995",
+      "energyClassLabel": "Energy class",
+      "energyClassPlaceholder": "Not specified",
+      "errorConstructionYear": "Year built must be between 1800 and {year}"
+    },
+    "step4": {
+      "heading": "Price & Description",
+      "titleLabel": "Listing title",
+      "titlePlaceholder": "Well-maintained 3-room apartment with balcony in city centre",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe your property…",
+      "salePriceLabel": "Purchase price ({currency})",
+      "salePricePlaceholder": "350000",
+      "priceQualifierLabel": "Price note",
+      "priceQualifierPlaceholder": "No note",
+      "priceQualifierFixed": "Fixed price",
+      "priceQualifierNegotiable": "Negotiable (OBO)",
+      "rentPriceLabel": "Base rent per month ({currency})",
+      "rentPricePlaceholder": "1200",
+      "additionalCostsLabel": "Additional costs ({currency}/month)",
+      "additionalCostsPlaceholder": "200",
+      "depositLabel": "Deposit ({currency})",
+      "depositPlaceholder": "2400",
+      "errorTitle": "Title is required",
+      "errorSalePrice": "Purchase price is required",
+      "errorRentPrice": "Rent price is required"
+    },
+    "step5": {
+      "heading": "Summary",
+      "subheading": "Please review your information. You can edit everything after saving.",
+      "sectionTypeAndOffer": "Type & Offer",
+      "sectionAddress": "Address",
+      "sectionObjectDetails": "Property Details",
+      "sectionPriceAndDescription": "Price & Description",
+      "labelType": "Type",
+      "labelOffer": "Offer",
+      "labelStreet": "Street",
+      "labelAdditional": "Details",
+      "labelPostcodeCity": "Postcode / City",
+      "labelRegion": "State/Region",
+      "labelSize": "Living area",
+      "labelRooms": "Rooms",
+      "labelBedrooms": "Bedrooms",
+      "labelBathrooms": "Bathrooms",
+      "labelFloor": "Floor",
+      "labelConstructionYear": "Year built",
+      "labelEnergyClass": "Energy class",
+      "labelNoDetails": "No details provided",
+      "labelTitle": "Title",
+      "labelSalePrice": "Purchase price",
+      "labelRentPrice": "Base rent",
+      "labelAdditionalCosts": "Additional costs",
+      "labelDeposit": "Deposit",
+      "perMonth": "/month"
+    },
+    "progress": {
+      "step": "Step {step} of 5"
+    },
+    "buttons": {
+      "next": "Next",
+      "back": "Back",
+      "submit": "Save as draft",
+      "submitting": "Saving …"
+    },
+    "validation": {
+      "required": "required",
+      "invalidPostcode": "Please enter a valid postcode (5 digits)"
+    }
   }
 }
