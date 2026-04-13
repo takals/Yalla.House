@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yalla.House — Agent Pages Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0F1117; color: #fff; }
+
+  /* Tab navigation */
+  .tab-bar { display: flex; gap: 4px; padding: 24px 32px 0; background: #0F1117; position: sticky; top: 0; z-index: 100; }
+  .tab-btn { padding: 10px 20px; border: none; border-radius: 10px 10px 0 0; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 600; transition: all .15s; }
+  .tab-btn.active { background: #EDEEF2; color: #0F1117; }
+  .tab-btn:not(.active) { background: #1a1b23; color: #999; }
+  .tab-btn:not(.active):hover { background: #252630; color: #ccc; }
+
+  /* Page frame */
+  .page-frame { background: #EDEEF2; min-height: 85vh; display: none; }
+  .page-frame.active { display: flex; }
+
+  /* Sidebar */
+  .sidebar { width: 240px; background: #0F1117; min-height: 85vh; padding: 20px 12px; flex-shrink: 0; }
+  .sidebar-logo { color: #FFD400; font-weight: 800; font-size: 16px; margin-bottom: 24px; padding: 0 8px; }
+  .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; color: #888; font-size: 13.5px; font-weight: 500; margin-bottom: 2px; text-decoration: none; }
+  .sidebar-link:hover { background: rgba(255,255,255,.06); color: #bbb; }
+  .sidebar-link.active { background: rgba(255,212,0,.12); color: #FFD400; }
+  .sidebar-link svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+  /* Main content */
+  .main { flex: 1; padding: 28px 32px; overflow-y: auto; max-height: 85vh; }
+
+  /* Cards */
+  .card { background: #fff; border: 1px solid #E2E4EB; border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+  .card-sm { padding: 20px; }
+
+  /* Banner */
+  .agent-banner { background: #FFFBE0; border: 1px solid rgba(255,212,0,.3); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .banner-icon { width: 32px; height: 32px; border-radius: 50%; background: #FFD400; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .banner-icon svg { width: 16px; height: 16px; }
+  .banner-title { font-size: 14px; font-weight: 700; color: #0F1117; }
+  .banner-sub { font-size: 12px; color: #5E6278; }
+
+  /* Layout for listing page */
+  .listing-layout { display: flex; gap: 24px; }
+  .listing-main { flex: 1; min-width: 0; }
+  .listing-side { width: 300px; flex-shrink: 0; }
+
+  /* Hero image placeholder */
+  .hero-img { width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; margin-bottom: 16px; position: relative; background: linear-gradient(135deg, #c4a97d 0%, #8B7355 50%, #6B5B3F 100%); display: flex; align-items: center; justify-content: center; }
+  .hero-img .house-icon { opacity: .3; }
+  .hero-img svg { width: 80px; height: 80px; stroke: #fff; fill: none; stroke-width: 1; }
+
+  /* Stats grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stat-label { font-size: 11px; color: #5E6278; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; margin-bottom: 2px; }
+  .stat-value { font-size: 18px; font-weight: 700; color: #0F1117; }
+
+  /* Text */
+  h1 { font-size: 24px; font-weight: 800; color: #0F1117; letter-spacing: -.02em; }
+  h2 { font-size: 16px; font-weight: 700; color: #0F1117; }
+  .text-muted { color: #5E6278; font-size: 14px; }
+  .text-sm { font-size: 13px; }
+  .text-xs { font-size: 12px; }
+  .price { font-size: 24px; font-weight: 800; color: #0F1117; margin-top: 12px; }
+
+  /* Badge */
+  .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
+  .badge-blue { background: #DBEAFE; color: #1E40AF; }
+
+  /* Buttons */
+  .btn { display: block; width: 100%; text-align: center; padding: 12px; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; border: none; cursor: pointer; transition: all .15s; }
+  .btn-brand { background: #FFD400; color: #0F1117; }
+  .btn-brand:hover { background: #E6C200; }
+  .btn-secondary { background: #EDEEF2; color: #0F1117; border: 1px solid #E2E4EB; }
+
+  /* Radio cards */
+  .radio-card { display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 12px; border: 1px solid #E2E4EB; margin-bottom: 6px; cursor: pointer; font-size: 13px; color: #0F1117; }
+  .radio-card.selected { border-color: #FFD400; background: #FFFBE0; }
+  .radio-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #D8DBE5; flex-shrink: 0; }
+  .radio-card.selected .radio-dot { border-color: #FFD400; background: #FFD400; box-shadow: inset 0 0 0 3px #fff; }
+
+  /* Textarea */
+  .textarea { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #E2E4EB; background: #EDEEF2; font-family: inherit; font-size: 13px; resize: none; outline: none; }
+  .textarea:focus { border-color: #FFD400; box-shadow: 0 0 0 3px rgba(255,212,0,.15); }
+
+  /* Input */
+  .input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid #E2E4EB; background: #EDEEF2; font-family: inherit; font-size: 13px; outline: none; }
+  .input:focus { border-color: #FFD400; box-shadow: 0 0 0 3px rgba(255,212,0,.15); }
+
+  /* Agreement sections */
+  .agreement-section { padding: 24px; border-bottom: 1px solid #E2E4EB; }
+  .agreement-section:last-child { border-bottom: none; }
+  .section-num { width: 24px; height: 24px; border-radius: 50%; background: #FFD400; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #0F1117; margin-right: 8px; }
+
+  /* Checkbox */
+  .checkbox-row { display: flex; align-items: flex-start; gap: 10px; }
+  .checkbox { width: 16px; height: 16px; border-radius: 4px; border: 2px solid #D8DBE5; flex-shrink: 0; margin-top: 2px; accent-color: #FFD400; }
+
+  /* CRM link card */
+  .crm-card { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .crm-card svg { width: 16px; height: 16px; stroke: #5E6278; fill: none; stroke-width: 2; }
+
+  /* Photo grid */
+  .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .photo-thumb { aspect-ratio: 1; border-radius: 12px; overflow: hidden; }
+  .photo-thumb:nth-child(1) { background: linear-gradient(135deg, #c4a97d, #8B7355); }
+  .photo-thumb:nth-child(2) { background: linear-gradient(135deg, #7BA5B5, #5B8595); }
+  .photo-thumb:nth-child(3) { background: linear-gradient(135deg, #9BB57A, #7B9560); }
+  .photo-thumb:nth-child(4) { background: linear-gradient(135deg, #B5A07A, #958060); }
+
+  /* Description */
+  .desc-text { color: #5E6278; font-size: 14px; line-height: 1.65; }
+
+  /* Version */
+  .version { font-size: 11px; color: #999; margin-bottom: 12px; }
+
+  /* Page label */
+  .page-label { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #0F1117; color: #FFD400; padding: 8px 20px; border-radius: 100px; font-size: 13px; font-weight: 700; z-index: 200; pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .page-label.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showPage('listing')">Agent Listing Page</button>
+  <button class="tab-btn" onclick="showPage('agreement')">Partner Agreement</button>
+  <button class="tab-btn" onclick="showPage('api')">CRM API Response</button>
+</div>
+
+<!-- ==================== PAGE 1: Agent Listing ==================== -->
+<div class="page-frame active" id="page-listing">
+  <div class="sidebar">
+    <div class="sidebar-logo">Yalla.House</div>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Assignments
+    </a>
+    <a class="sidebar-link active" href="#">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+      Briefs
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Hunters
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 7.65l.78.77L12 20.64l7.64-7.64.78-.77a5.4 5.4 0 0 0 0-7.65"/></svg>
+      Partner Agreement
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </div>
+  <div class="main">
+    <!-- Agent view banner -->
+    <div class="agent-banner">
+      <div class="banner-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F1117" stroke-width="2.5"><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      </div>
+      <div>
+        <div class="banner-title">Agent View — Owner details hidden</div>
+        <div class="banner-sub">This is a brief-stage property. The owner's identity stays private until they accept your proposal.</div>
+      </div>
+    </div>
+
+    <div class="listing-layout">
+      <div class="listing-main">
+        <!-- Hero -->
+        <div class="hero-img">
+          <svg class="house-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+
+        <!-- Title card -->
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div>
+              <h1>3-Bed Victorian Terrace, Clapham</h1>
+              <p class="text-muted" style="margin-top:4px;">SW4 7AA London</p>
+            </div>
+            <span class="badge badge-blue">Sale</span>
+          </div>
+          <div class="price">£625,000</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="card">
+          <div class="stats-grid">
+            <div><div class="stat-label">Property Type</div><div class="stat-value">House</div></div>
+            <div><div class="stat-label">Living Space</div><div class="stat-value">98 m²</div></div>
+            <div><div class="stat-label">Bedrooms</div><div class="stat-value">3</div></div>
+            <div><div class="stat-label">Bathrooms</div><div class="stat-value">2</div></div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="card">
+          <h2 style="margin-bottom:12px;">Description</h2>
+          <p class="desc-text">A beautifully presented three-bedroom Victorian terrace in the heart of Clapham. The property benefits from a recently refurbished kitchen-diner, a private south-facing garden, and excellent transport links. Close to Clapham Common and local amenities.</p>
+        </div>
+
+        <!-- Photos -->
+        <div class="card">
+          <h2 style="margin-bottom:12px;">Photos (4)</h2>
+          <div class="photo-grid">
+            <div class="photo-thumb"></div>
+            <div class="photo-thumb"></div>
+            <div class="photo-thumb"></div>
+            <div class="photo-thumb"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right sidebar -->
+      <div class="listing-side" style="position:sticky;top:28px;align-self:flex-start;">
+        <!-- CTA card -->
+        <div class="card">
+          <h2 style="margin-bottom:4px;">Respond via Yalla</h2>
+          <p class="text-xs text-muted" style="margin-bottom:16px;">Send the owner a proposal. Your contact details stay private until accepted.</p>
+
+          <div style="margin-bottom:12px;">
+            <div class="text-xs" style="font-weight:600;color:#5E6278;margin-bottom:6px;">Proposed collaboration</div>
+            <div class="radio-card selected">
+              <div class="radio-dot"></div>
+              Advisory — market guidance only
+            </div>
+            <div class="radio-card">
+              <div class="radio-dot"></div>
+              Assisted — viewings + messaging
+            </div>
+            <div class="radio-card">
+              <div class="radio-dot"></div>
+              Managed — full service
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <div class="text-xs" style="font-weight:600;color:#5E6278;margin-bottom:4px;">Message to owner</div>
+            <textarea class="textarea" rows="4" placeholder="Introduce yourself and explain your approach for this property…"></textarea>
+          </div>
+
+          <button class="btn btn-brand">Send Proposal</button>
+        </div>
+
+        <!-- CRM card -->
+        <div class="card card-sm" style="margin-top:12px;">
+          <div class="crm-card">
+            <svg viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 0 0-5.656 0l-4 4a4 4 0 1 0 5.656 5.656l1.102-1.101m-.758-4.899a4 4 0 0 0 5.656 0l4-4a4 4 0 0 0-5.656-5.656l-1.1 1.1"/></svg>
+            <span style="font-size:14px;font-weight:700;color:#0F1117;">Import to your CRM</span>
+          </div>
+          <p class="text-xs text-muted" style="margin-bottom:12px;">Connect your CRM system to automatically import property data.</p>
+          <button class="btn btn-secondary">Connect CRM</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2: Partner Agreement ==================== -->
+<div class="page-frame" id="page-agreement">
+  <div class="sidebar">
+    <div class="sidebar-logo">Yalla.House</div>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Assignments
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+      Briefs
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Hunters
+    </a>
+    <a class="sidebar-link active" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 7.65l.78.77L12 20.64l7.64-7.64.78-.77a5.4 5.4 0 0 0 0-7.65"/></svg>
+      Partner Agreement
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </div>
+  <div class="main">
+    <div style="max-width:720px;">
+      <h1 style="margin-bottom:4px;">Yalla Partner Agreement</h1>
+      <p class="text-muted" style="margin-bottom:24px;">One short agreement — then you're connected. Read it, sign it, start importing listings.</p>
+
+      <!-- Agreement card -->
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="agreement-section">
+          <div style="display:flex;align-items:center;margin-bottom:12px;">
+            <span class="section-num">1</span>
+            <h2>Data Handling</h2>
+          </div>
+          <div class="text-sm text-muted" style="line-height:1.65;">
+            <p style="margin-bottom:8px;">Property data accessed via Yalla's CRM API is for your internal use only. You may import it into your CRM, share it with colleagues within your agency, and use it to serve the property owner.</p>
+            <p style="margin-bottom:8px;">You must not republish Yalla listing data on third-party portals, scrape it in bulk, or share it outside your agency without the owner's written consent.</p>
+            <p>Owner personal details (name, email, phone) are only revealed once the owner accepts your proposal. Until then, all communication goes through Yalla.</p>
+          </div>
+        </div>
+
+        <div class="agreement-section">
+          <div style="display:flex;align-items:center;margin-bottom:12px;">
+            <span class="section-num">2</span>
+            <h2>Portal Pre-authorisation</h2>
+          </div>
+          <div class="text-sm text-muted" style="line-height:1.65;">
+            <p style="margin-bottom:8px;">When the owner instructs you to list their property on a portal (Rightmove, Zoopla, OnTheMarket, etc.), you are pre-authorised to do so under your agency's existing portal agreements.</p>
+            <p style="margin-bottom:8px;">Yalla does not charge for portal listings made through your own agreements. The owner's Yalla dashboard will reflect the live portal status automatically.</p>
+            <p>If the owner revokes your assignment, you must delist the property from any portals within 48 hours.</p>
+          </div>
+        </div>
+
+        <div class="agreement-section">
+          <div style="display:flex;align-items:center;margin-bottom:12px;">
+            <span class="section-num">3</span>
+            <h2>Platform Rules</h2>
+          </div>
+          <div class="text-sm text-muted" style="line-height:1.65;">
+            <p style="margin-bottom:8px;">Respond to owner briefs within 48 hours. Briefs that expire without a response may affect your match score.</p>
+            <p style="margin-bottom:8px;">Be transparent about fees. Any commission, fixed fee, or add-on cost must be stated in your proposal before the owner accepts.</p>
+            <p>Yalla reserves the right to suspend API access if these terms are breached. We'll always notify you first and give you a chance to resolve it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="version">Partner Agreement v1.0 — last updated April 2026</div>
+
+      <!-- Sign form -->
+      <div class="card">
+        <div style="margin-bottom:16px;">
+          <div class="text-xs" style="font-weight:600;color:#5E6278;margin-bottom:4px;">Full name (signatory) *</div>
+          <input class="input" type="text" placeholder="Your full legal name">
+        </div>
+
+        <div class="checkbox-row" style="margin-bottom:16px;">
+          <input type="checkbox" class="checkbox">
+          <span class="text-sm text-muted">I confirm that I have read and accept the Yalla Partner Agreement (v1.0). I am authorised to sign on behalf of my agency.</span>
+        </div>
+
+        <button class="btn btn-brand" style="opacity:.6;">Sign Partner Agreement</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: CRM API ==================== -->
+<div class="page-frame" id="page-api">
+  <div class="sidebar">
+    <div class="sidebar-logo">Yalla.House</div>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Assignments
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+      Briefs
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Hunters
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 7.65l.78.77L12 20.64l7.64-7.64.78-.77a5.4 5.4 0 0 0 0-7.65"/></svg>
+      Partner Agreement
+    </a>
+    <a class="sidebar-link" href="#">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profile
+    </a>
+  </div>
+  <div class="main">
+    <div style="max-width:780px;">
+      <h1 style="margin-bottom:4px;">CRM Integration API</h1>
+      <p class="text-muted" style="margin-bottom:24px;">Two endpoints for pulling listing data into your CRM. Requires a signed Partner Agreement.</p>
+
+      <!-- Endpoint 1 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+          <span style="background:#DCFCE7;color:#166534;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;">GET</span>
+          <code style="font-size:13px;color:#0F1117;font-weight:600;">/api/agent/listings</code>
+          <span class="text-xs text-muted" style="margin-left:auto;">List all your assigned properties</span>
+        </div>
+        <div style="background:#1a1b23;border-radius:12px;padding:16px;overflow-x:auto;">
+          <pre style="color:#e0e0e0;font-size:12px;line-height:1.6;margin:0;font-family:'SF Mono',Monaco,monospace;"><span style="color:#999;">// Response</span>
+{
+  <span style="color:#FFD400;">"data"</span>: [
+    {
+      <span style="color:#7BA5B5;">"assignment_id"</span>: <span style="color:#B5A07A;">"uuid-1234"</span>,
+      <span style="color:#7BA5B5;">"assignment_tier"</span>: <span style="color:#B5A07A;">"assisted"</span>,
+      <span style="color:#7BA5B5;">"listing"</span>: {
+        <span style="color:#7BA5B5;">"reference"</span>: <span style="color:#B5A07A;">"ChIJ-abc123"</span>,
+        <span style="color:#7BA5B5;">"title"</span>: <span style="color:#B5A07A;">"3-Bed Victorian Terrace"</span>,
+        <span style="color:#7BA5B5;">"city"</span>: <span style="color:#B5A07A;">"London"</span>,
+        <span style="color:#7BA5B5;">"sale_price"</span>: <span style="color:#9BB57A;">625000</span>,
+        <span style="color:#7BA5B5;">"detail_url"</span>: <span style="color:#B5A07A;">"/api/agent/listings/uuid"</span>
+      }
+    }
+  ],
+  <span style="color:#FFD400;">"meta"</span>: { <span style="color:#7BA5B5;">"total"</span>: <span style="color:#9BB57A;">12</span>, <span style="color:#7BA5B5;">"page"</span>: <span style="color:#9BB57A;">1</span> }
+}</pre>
+        </div>
+      </div>
+
+      <!-- Endpoint 2 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+          <span style="background:#DCFCE7;color:#166534;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;">GET</span>
+          <code style="font-size:13px;color:#0F1117;font-weight:600;">/api/agent/listings/{id}</code>
+          <span class="text-xs text-muted" style="margin-left:auto;">Full property detail + media</span>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+          <span style="background:#EDEEF2;border:1px solid #E2E4EB;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:#5E6278;">?format=json</span>
+          <span style="background:#EDEEF2;border:1px solid #E2E4EB;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:#5E6278;">?format=csv</span>
+          <span style="background:#EDEEF2;border:1px solid #E2E4EB;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:#5E6278;">?fields=basic</span>
+          <span style="background:#EDEEF2;border:1px solid #E2E4EB;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:#5E6278;">?fields=extended</span>
+          <span style="background:#EDEEF2;border:1px solid #E2E4EB;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600;color:#5E6278;">?fields=all</span>
+        </div>
+
+        <div style="background:#1a1b23;border-radius:12px;padding:16px;overflow-x:auto;">
+          <pre style="color:#e0e0e0;font-size:12px;line-height:1.6;margin:0;font-family:'SF Mono',Monaco,monospace;"><span style="color:#999;">// Response (fields=all)</span>
+{
+  <span style="color:#FFD400;">"data"</span>: {
+    <span style="color:#7BA5B5;">"reference"</span>: <span style="color:#B5A07A;">"ChIJ-abc123"</span>,
+    <span style="color:#7BA5B5;">"title"</span>: <span style="color:#B5A07A;">"3-Bed Victorian Terrace, Clapham"</span>,
+    <span style="color:#7BA5B5;">"address"</span>: {
+      <span style="color:#7BA5B5;">"street"</span>: <span style="color:#B5A07A;">"Northcote Road"</span>,
+      <span style="color:#7BA5B5;">"postcode"</span>: <span style="color:#B5A07A;">"SW4 7AA"</span>,
+      <span style="color:#7BA5B5;">"city"</span>: <span style="color:#B5A07A;">"London"</span>
+    },
+    <span style="color:#7BA5B5;">"pricing"</span>: { <span style="color:#7BA5B5;">"sale_price"</span>: <span style="color:#9BB57A;">625000</span>, <span style="color:#7BA5B5;">"currency"</span>: <span style="color:#B5A07A;">"GBP"</span> },
+    <span style="color:#7BA5B5;">"details"</span>: {
+      <span style="color:#7BA5B5;">"size_sqm"</span>: <span style="color:#9BB57A;">98</span>, <span style="color:#7BA5B5;">"bedrooms"</span>: <span style="color:#9BB57A;">3</span>,
+      <span style="color:#7BA5B5;">"bathrooms"</span>: <span style="color:#9BB57A;">2</span>, <span style="color:#7BA5B5;">"energy_rating"</span>: <span style="color:#B5A07A;">"C"</span>
+    },
+    <span style="color:#7BA5B5;">"media"</span>: [
+      { <span style="color:#7BA5B5;">"url"</span>: <span style="color:#B5A07A;">"https://..."</span>, <span style="color:#7BA5B5;">"is_primary"</span>: <span style="color:#9BB57A;">true</span> }
+    ]
+  },
+  <span style="color:#FFD400;">"meta"</span>: { <span style="color:#7BA5B5;">"source"</span>: <span style="color:#B5A07A;">"yalla.house"</span>, <span style="color:#7BA5B5;">"api_version"</span>: <span style="color:#B5A07A;">"1.0"</span> }
+}</pre>
+        </div>
+      </div>
+
+      <!-- Access gate -->
+      <div class="card" style="background:#FFFBE0;border-color:rgba(255,212,0,.3);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#FFD400;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F1117" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#0F1117;">Gated behind Partner Agreement</div>
+            <div class="text-xs text-muted">Agents must sign the agreement before making API calls. Unsigned requests get a 403 with a redirect to <code>/agent/agreement</code>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(name) {
+  document.querySelectorAll('.page-frame').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

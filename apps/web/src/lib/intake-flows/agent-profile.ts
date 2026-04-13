@@ -16,7 +16,7 @@ export function getAgentProfileFlow(
       question: translations.q_license_number || "What's your agent license number?",
       type: 'text',
       validation: { required: true, errorMsg: translations.err_license_number || 'Please enter your license number.' },
-      helperText: translations.hint_license_number || 'Your regulatory license (e.g., ARLA, NAEA)',
+      helperText: translations.hint_license_number || 'Your regulatory registration (e.g., IHK, IVD)',
     },
     {
       id: 'property_types',
@@ -48,7 +48,7 @@ export function getAgentProfileFlow(
       question: translations.q_coverage_areas || "What postcodes or areas do you cover? (Enter separated by commas)",
       type: 'text',
       validation: { required: true, errorMsg: translations.err_coverage_areas || 'Please enter your coverage areas.' },
-      helperText: translations.hint_coverage_areas || 'e.g., E1, E14, N1, NW1',
+      helperText: translations.hint_coverage_areas || 'e.g., 10115, 10785, 12099',
     },
     {
       id: 'years_experience',

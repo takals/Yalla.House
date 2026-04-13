@@ -9,7 +9,7 @@ export function getOwnerBriefFlow(
       question: translations.q_property_address || "What's the address of your property?",
       type: 'text',
       validation: { required: true, errorMsg: translations.err_property_address || 'Please enter the property address.' },
-      helperText: translations.hint_property_address || 'e.g., 123 High Street, London',
+      helperText: translations.hint_property_address || 'e.g., Schillerstraße 42, Berlin',
     },
     {
       id: 'property_type',
@@ -40,7 +40,7 @@ export function getOwnerBriefFlow(
     },
     {
       id: 'asking_price',
-      question: translations.q_asking_price || "What's your asking price (in £)?",
+      question: translations.q_asking_price || "What's your asking price (in €)?",
       type: 'number',
       validation: { required: true, min: 0, errorMsg: translations.err_asking_price || 'Please enter a valid price.' },
       helperText: translations.hint_asking_price || 'e.g., 450000',
