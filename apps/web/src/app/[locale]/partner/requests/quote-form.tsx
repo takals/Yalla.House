@@ -23,7 +23,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
     setSuccess(false)
 
     if (!amount || parseFloat(amount) <= 0) {
-      setError('Please enter a valid amount')
+      setError(t('quoteInvalidAmount'))
       return
     }
 
@@ -35,7 +35,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: Math.round(parseFloat(amount) * 100),
-          currency: 'GBP',
+          currency: 'EUR',
           message: message || null,
         }),
       })
@@ -65,7 +65,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
       >
-        Submit Quote →
+        {t('quoteBtn')} →
       </button>
 
       {isOpen && (
@@ -74,13 +74,13 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
             {/* Amount Input */}
             <div>
               <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-                Quote Amount (GBP)
+                {t('quoteAmountLabel')}
               </label>
               <input
                 type="number"
                 step="0.01"
                 min="0"
-                placeholder="e.g. 250.00"
+                placeholder={t('quoteAmountPlaceholder')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 disabled={isLoading}
@@ -91,10 +91,10 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
             {/* Message */}
             <div>
               <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-                Additional Message (optional)
+                {t('quoteMessageLabel')}
               </label>
               <textarea
-                placeholder="e.g. Will complete by Friday, includes 2 revisions..."
+                placeholder={t('quoteMessagePlaceholder')}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={isLoading}
@@ -113,7 +113,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
             {/* Success */}
             {success && (
               <div className="text-xs text-[#166534] bg-[#DCFCE7] px-3 py-2 rounded-lg border border-[#86EFAC]">
-                Quote submitted! The requester will be notified.
+                {t('quoteSuccess')}
               </div>
             )}
 
@@ -124,7 +124,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
                 disabled={isLoading || !amount}
                 className="flex-1 px-3 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? 'Submitting...' : 'Submit Quote'}
+                {isLoading ? t('quoteSubmitting') : t('quoteSubmit')}
               </button>
               <button
                 type="button"
@@ -132,7 +132,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
                 disabled={isLoading}
                 className="flex-1 px-3 py-2 border border-[#D8DBE5] text-[#5E6278] text-sm font-bold rounded-lg hover:bg-[#F5F5F7] transition disabled:opacity-50"
               >
-                Cancel
+                {t('quoteCancel')}
               </button>
             </div>
           </form>

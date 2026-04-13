@@ -1372,5 +1372,35 @@
       "required": "required",
       "postcodeInvalid": "Please enter a valid postcode (5 digits)"
     }
+  },
+  "partner": {
+    "pageTitle": "Service Requests",
+    "pageDescription": "Manage available requests and your active jobs",
+    "statAvailable": "Available",
+    "statActive": "Active",
+    "statCompleted": "Completed",
+    "sectionAvailable": "Available Requests",
+    "sectionMyActive": "My Active Requests",
+    "sectionCompleted": "Completed Jobs",
+    "labelRequester": "Requester:",
+    "labelPreferredDate": "Preferred Date:",
+    "labelFlexible": "Flexible",
+    "labelMyQuote": "My Quote:",
+    "labelPending": "Pending",
+    "labelUpdated": "Updated:",
+    "labelNotYetRated": "Not yet rated",
+    "btnViewDetails": "View Details",
+    "emptyTitle": "No service requests",
+    "emptyDescription": "Available requests will appear here when sellers request services.",
+    "quoteBtn": "Submit Quote",
+    "quoteAmountLabel": "Quote Amount (EUR)",
+    "quoteAmountPlaceholder": "e.g. 250.00",
+    "quoteMessageLabel": "Additional Message (optional)",
+    "quoteMessagePlaceholder": "e.g. Will complete by Friday, includes 2 revisions...",
+    "quoteSuccess": "Quote submitted! The requester will be notified.",
+    "quoteSubmitting": "Submitting...",
+    "quoteSubmit": "Submit Quote",
+    "quoteCancel": "Cancel",
+    "quoteInvalidAmount": "Please enter a valid amount"
   }
 }

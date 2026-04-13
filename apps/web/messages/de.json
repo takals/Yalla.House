@@ -1372,5 +1372,35 @@
       "required": "erforderlich",
       "postcodeInvalid": "Bitte gültige Postleitzahl eingeben (5 Ziffern)"
     }
+  },
+  "partner": {
+    "pageTitle": "Service-Anfragen",
+    "pageDescription": "Verwalten Sie verfügbare Anfragen und Ihre aktiven Aufträge",
+    "statAvailable": "Verfügbar",
+    "statActive": "Aktiv",
+    "statCompleted": "Abgeschlossen",
+    "sectionAvailable": "Verfügbare Anfragen",
+    "sectionMyActive": "Meine aktiven Anfragen",
+    "sectionCompleted": "Abgeschlossene Arbeiten",
+    "labelRequester": "Anfragender:",
+    "labelPreferredDate": "Bevorzugtes Datum:",
+    "labelFlexible": "Flexibel",
+    "labelMyQuote": "Mein Angebot:",
+    "labelPending": "Ausstehend",
+    "labelUpdated": "Status seit:",
+    "labelNotYetRated": "Noch nicht bewertet",
+    "btnViewDetails": "Details anzeigen",
+    "emptyTitle": "Keine Service-Anfragen",
+    "emptyDescription": "Verfügbare Anfragen erscheinen hier, wenn Verkäufer Services anfordern.",
+    "quoteBtn": "Angebot abgeben",
+    "quoteAmountLabel": "Angebotsbetrag (EUR)",
+    "quoteAmountPlaceholder": "z.B. 250,00",
+    "quoteMessageLabel": "Zusätzliche Nachricht (optional)",
+    "quoteMessagePlaceholder": "z.B. Fertig bis Freitag, inkl. 2 Korrekturrunden...",
+    "quoteSuccess": "Angebot gesendet! Der Anfragende wird benachrichtigt.",
+    "quoteSubmitting": "Wird gesendet...",
+    "quoteSubmit": "Angebot abgeben",
+    "quoteCancel": "Abbrechen",
+    "quoteInvalidAmount": "Bitte geben Sie einen gültigen Betrag ein"
   }
 }

@@ -3,6 +3,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { QuoteForm } from './quote-form'
 import { Star } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 
 function formatRelativeTime(date: Date, locale: string): string {
   const now = new Date()
@@ -70,6 +71,7 @@ export default async function PartnerRequestsPage({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
+  const t = await getTranslations('partner')
   const supabase = await createClient()
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -98,18 +100,13 @@ export default async function PartnerRequestsPage({
     r => r.partner_id === userId && ['completed', 'cancelled'].includes(r.status)
   ).slice(0, 10)
 
-  const isLocaleDE = locale === 'de'
-
   return (
     <div className="max-w-4xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">Service Requests</h1>
+        <h1 className="text-2xl font-bold mb-1">{t('pageTitle')}</h1>
         <p className="text-[#5E6278] text-sm">
-          {isLocaleDE
-            ? 'Verwalten Sie verfügbare Anfragen und Ihre aktiven Aufträge'
-            : 'Manage available requests and your active jobs'
-          }
+          {t('pageDescription')}
         </p>
       </div>
 
@@ -117,21 +114,15 @@ export default async function PartnerRequestsPage({
       <div className="grid grid-cols-3 gap-3 mb-8">
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
           <p className="text-2xl font-bold text-[#0284C7]">{available.length}</p>
-          <p className="text-xs text-[#5E6278]">
-            {isLocaleDE ? 'Verfügbar' : 'Available'}
-          </p>
+          <p className="text-xs text-[#5E6278]">{t('statAvailable')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
           <p className="text-2xl font-bold text-brand">{myActive.length}</p>
-          <p className="text-xs text-[#5E6278]">
-            {isLocaleDE ? 'Aktiv' : 'Active'}
-          </p>
+          <p className="text-xs text-[#5E6278]">{t('statActive')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
           <p className="text-2xl font-bold text-[#16A34A]">{completed.length}</p>
-          <p className="text-xs text-[#5E6278]">
-            {isLocaleDE ? 'Abgeschlossen' : 'Completed'}
-          </p>
+          <p className="text-xs text-[#5E6278]">{t('statCompleted')}</p>
         </div>
       </div>
 
@@ -140,7 +131,7 @@ export default async function PartnerRequestsPage({
         <div className="mb-8">
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#0284C7]" />
-            {isLocaleDE ? 'Verfügbare Anfragen' : 'Available Requests'} ({available.length})
+            {t('sectionAvailable')} ({available.length})
           </h2>
           <div className="space-y-3">
             {available.map((request) => {
@@ -182,21 +173,19 @@ export default async function PartnerRequestsPage({
                   <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
                     <div>
                       <span className="text-[#5E6278] font-semibold">
-                        {isLocaleDE ? 'Anfragender:' : 'Requester:'}
+                        {t('labelRequester')}
                       </span>{' '}
                       {requesterName}
                     </div>
                     <div>
                       <span className="text-[#5E6278] font-semibold">
-                        {isLocaleDE ? 'Bevorzugtes Datum:' : 'Preferred Date:'}
+                        {t('labelPreferredDate')}
                       </span>{' '}
                       {request.preferred_date
                         ? new Date(request.preferred_date).toLocaleDateString(
-                            isLocaleDE ? 'de-DE' : 'en-GB'
+                            locale === 'de' ? 'de-DE' : 'en-GB'
                           )
-                        : isLocaleDE
-                          ? 'Flexibel'
-                          : 'Flexible'}
+                        : t('labelFlexible')}
                     </div>
                   </div>
 
@@ -213,7 +202,7 @@ export default async function PartnerRequestsPage({
         <div className="mb-8">
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-brand" />
-            {isLocaleDE ? 'Meine aktiven Anfragen' : 'My Active Requests'} ({myActive.length})
+            {t('sectionMyActive')} ({myActive.length})
           </h2>
           <div className="space-y-3">
             {myActive.map((request) => {
@@ -252,19 +241,17 @@ export default async function PartnerRequestsPage({
                   <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
                     <div>
                       <span className="text-[#5E6278] font-semibold">
-                        {isLocaleDE ? 'Mein Angebot:' : 'My Quote:'}
+                        {t('labelMyQuote')}
                       </span>{' '}
                       {request.quoted_amount
-                        ? `${request.currency || 'GBP'} ${(request.quoted_amount / 100).toLocaleString(
-                            isLocaleDE ? 'de-DE' : 'en-GB'
+                        ? `${request.currency || 'EUR'} ${(request.quoted_amount / 100).toLocaleString(
+                            locale === 'de' ? 'de-DE' : 'en-GB'
                           )}`
-                        : isLocaleDE
-                          ? 'Ausstehend'
-                          : 'Pending'}
+                        : t('labelPending')}
                     </div>
                     <div>
                       <span className="text-[#5E6278] font-semibold">
-                        {isLocaleDE ? 'Status seit:' : 'Updated:'}
+                        {t('labelUpdated')}
                       </span>{' '}
                       {formatRelativeTime(new Date(request.updated_at), locale)}
                     </div>
@@ -291,7 +278,7 @@ export default async function PartnerRequestsPage({
                     href={`/partner/requests/${request.id}`}
                     className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
                   >
-                    {isLocaleDE ? 'Details anzeigen' : 'View Details'} →
+                    {t('btnViewDetails')} →
                   </Link>
                 </div>
               )
@@ -305,7 +292,7 @@ export default async function PartnerRequestsPage({
         <div>
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#16A34A]" />
-            {isLocaleDE ? 'Abgeschlossene Arbeiten' : 'Completed Jobs'} ({completed.length})
+            {t('sectionCompleted')} ({completed.length})
           </h2>
           <div className="space-y-2">
             {completed.map((request) => {
@@ -331,8 +318,7 @@ export default async function PartnerRequestsPage({
                           {request.review && ` · "${request.review}"`}
                         </>
                       )}
-                      {!request.rating && isLocaleDE && 'Noch nicht bewertet'}
-                      {!request.rating && !isLocaleDE && 'Not yet rated'}
+                      {!request.rating && t('labelNotYetRated')}
                     </p>
                   </div>
                   <span
@@ -352,12 +338,10 @@ export default async function PartnerRequestsPage({
       {available.length === 0 && myActive.length === 0 && completed.length === 0 && (
         <div className="bg-surface rounded-xl p-12 text-center border border-[#E2E4EB]">
           <p className="text-[#5E6278] font-medium mb-2">
-            {isLocaleDE ? 'Keine Service-Anfragen' : 'No service requests'}
+            {t('emptyTitle')}
           </p>
           <p className="text-xs text-[#999]">
-            {isLocaleDE
-              ? 'Verfügbare Anfragen erscheinen hier, wenn Verkäufer Services anfordern.'
-              : 'Available requests will appear here when sellers request services.'}
+            {t('emptyDescription')}
           </p>
         </div>
       )}
