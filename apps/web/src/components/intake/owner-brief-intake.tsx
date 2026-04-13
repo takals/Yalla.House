@@ -59,6 +59,14 @@ export function OwnerBriefIntake({
     ),
   }
 
+  // Clear voiceInput after it's been consumed
+  useEffect(() => {
+    if (voiceInput) {
+      const timer = setTimeout(() => setVoiceInput(''), 100)
+      return () => clearTimeout(timer)
+    }
+  }, [voiceInput])
+
   const handleComplete = useCallback(
     async (data: Record<string, unknown>) => {
       try {
@@ -99,6 +107,7 @@ export function OwnerBriefIntake({
     steps,
     onComplete: handleComplete,
     existingData,
+    externalInput: voiceEnabled ? voiceInput : undefined,
     translations: {
       greeting: translations.greeting || "Let's prepare a brief to send to agents.",
       placeholder: translations.placeholder || 'Type your answer...',
@@ -135,7 +144,7 @@ export function OwnerBriefIntake({
               toggleListening()
             }
           }}
-          className={`fixed bottom-6 right-6 w-12 h-12 rounded-full flex items-center justify-center transition-all z-50 ${
+          className={`fixed bottom-6 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-50 ${
             voiceEnabled
               ? 'bg-[#D4764E] text-white shadow-lg'
               : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
@@ -143,6 +152,7 @@ export function OwnerBriefIntake({
           title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
         >
           {isListening ? <Mic size={20} /> : <MicOff size={20} />}
+          <span className="text-sm font-medium">Voice AI</span>
         </button>
       )}
 

@@ -49,41 +49,47 @@ export function OwnerBriefPageClient({
 }: OwnerBriefPageClientProps) {
   const [mode, setMode] = useState<'classic' | 'chat'>('chat')
 
+  const modeToggle = (
+    <div className="mb-6 flex gap-2">
+      <button
+        onClick={() => setMode('chat')}
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+          mode === 'chat'
+            ? 'bg-[#D4764E] text-white'
+            : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+        }`}
+      >
+        Chat with Yalla
+      </button>
+      <button
+        onClick={() => setMode('classic')}
+        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+          mode === 'classic'
+            ? 'bg-[#D4764E] text-white'
+            : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+        }`}
+      >
+        Classic Form
+      </button>
+    </div>
+  )
+
   if ((mode as any) === 'chat') {
     return (
-      <OwnerBriefIntake
-        userId={userId}
-        listingId={listingId}
-        translations={intakeTranslations}
-      />
+      <div className="max-w-5xl">
+        {modeToggle}
+        <OwnerBriefIntake
+          userId={userId}
+          listingId={listingId}
+          translations={intakeTranslations}
+        />
+      </div>
     )
   }
 
   return (
     <div className="max-w-6xl">
-      {/* Toggle */}
-      <div className="mb-6 flex gap-2">
-        <button
-          onClick={() => setMode('chat')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-            mode === 'chat'
-              ? 'bg-[#D4764E] text-white'
-              : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
-          }`}
-        >
-          Chat with Yalla
-        </button>
-        <button
-          onClick={() => setMode('classic')}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-            mode === 'classic'
-              ? 'bg-[#D4764E] text-white'
-              : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
-          }`}
-        >
-          Classic Form
-        </button>
-      </div>
+      {modeToggle}
 
       {/* Back link */}
       <Link

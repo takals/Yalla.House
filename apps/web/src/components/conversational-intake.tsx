@@ -31,6 +31,7 @@ export interface IntakeFlowConfig {
   steps: IntakeStep[]
   onComplete: (data: Record<string, unknown>) => void | Promise<void>
   existingData?: Record<string, unknown>
+  externalInput?: string
   translations: {
     greeting: string
     placeholder: string
@@ -60,6 +61,7 @@ export function ConversationalIntake({
   steps: initialSteps,
   onComplete,
   existingData = {},
+  externalInput,
   translations,
 }: IntakeFlowConfig) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -114,6 +116,13 @@ export function ConversationalIntake({
       inputRef.current?.focus()
     }
   }, [isThinking, showReview])
+
+  // Watch externalInput (e.g., voice transcript) and populate input field
+  useEffect(() => {
+    if (externalInput) {
+      setInput(externalInput)
+    }
+  }, [externalInput])
 
   // Get current step
   const currentStep = allSteps[currentStepIndex]
