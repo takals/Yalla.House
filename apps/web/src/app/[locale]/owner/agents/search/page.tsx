@@ -41,15 +41,19 @@ export default async function AgentSearchPage() {
     `)
     .limit(500)
 
-  if (agentsError) {
-    console.error('[agent-search] Query error:', agentsError)
+  if (agentsError) console.error('[agent-search] Query error:', agentsError)
+  console.log('[agent-search] Raw rows:', allAgents?.length ?? 0)
+  if (allAgents?.[0]) {
+    const raw = allAgents[0].agent_profiles
+    console.log('[agent-search] agent_profiles type:', Array.isArray(raw) ? 'array' : typeof raw)
   }
-  console.log('[agent-search] Found agents:', allAgents?.length ?? 0)
 
   // Transform agents into the shape the client component expects
   const agents = (allAgents ?? [])
     .map((agent: any) => {
-      const profile = agent.agent_profiles?.[0]
+      // PostgREST !inner join returns object for 1-to-1, array for 1-to-many
+      const raw = agent.agent_profiles
+      const profile = Array.isArray(raw) ? raw[0] : raw
       if (!profile) return null
 
       // Parse coverage areas
