@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { Check, CheckCircle2, Banknote, Clock, Minus, Home } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { savePassportAction } from './actions'
 
 interface PassportProfile {
@@ -110,12 +111,14 @@ function FinanceBadge({ status }: { status: string }) {
 export function PassportForm({ profile, userName }: Props) {
   const [state, setState] = useState<{ success?: boolean; error?: string }>({})
   const [isPending, startTransition] = useTransition()
+  const { handleAuthRequired } = useAuthAction()
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     startTransition(async () => {
       const result = await savePassportAction({}, formData)
+      if (handleAuthRequired(result)) return
       setState(result)
     })
   }

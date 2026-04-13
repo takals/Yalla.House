@@ -1,15 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { requireAuth } from '@/lib/auth-guard'
 
 export async function submitProposalAction(
   listingId: string,
   data: { commission: string; serviceOverview: string }
 ) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
   if (!data.commission.trim()) {
     return { error: 'Please enter your commission quote.' }
@@ -17,6 +18,8 @@ export async function submitProposalAction(
   if (!data.serviceOverview.trim()) {
     return { error: 'Please describe your service offering.' }
   }
+
+  const supabase = await createClient()
 
   // Verify listing exists and is active
   const { data: listing } = await (supabase as any)
@@ -29,13 +32,12 @@ export async function submitProposalAction(
   if (!listing) {
     return { error: 'Listing not found or no longer available.' }
   }
-
   // Check agent hasn't already submitted
   const { data: existing } = await (supabase as any)
     .from('listing_agent_assignments')
     .select('id')
     .eq('listing_id', listingId)
-    .eq('agent_id', userId)
+    .eq('agent_id', auth.userId)
     .maybeSingle()
 
   if (existing) {
@@ -48,7 +50,7 @@ export async function submitProposalAction(
     .from('listing_agent_assignments')
     .insert({
       listing_id: listingId,
-      agent_id: userId,
+      agent_id: auth.userId,
       owner_id: listing.owner_id,
       tier: 'managed',
       status: 'invited',

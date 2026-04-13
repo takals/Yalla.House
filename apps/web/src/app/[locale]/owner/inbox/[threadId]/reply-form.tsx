@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Send, Loader2 } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { sendReplyAction } from './actions'
 
 interface ReplyFormProps {
@@ -12,6 +13,7 @@ export function ReplyForm({ threadId }: ReplyFormProps) {
   const [message, setMessage] = useState('')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { handleAuthRequired } = useAuthAction()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -21,6 +23,10 @@ export function ReplyForm({ threadId }: ReplyFormProps) {
     setError(null)
 
     const result = await sendReplyAction(threadId, message)
+    if (handleAuthRequired(result)) {
+      setSending(false)
+      return
+    }
     setSending(false)
 
     if (result.error) {

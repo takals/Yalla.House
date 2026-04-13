@@ -1,21 +1,23 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { revalidatePath } from 'next/cache'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 interface BriefState {
   success?: boolean
   error?: string
+  authRequired?: true
 }
 
 export async function saveBriefAction(
   _prevState: BriefState,
   formData: FormData
 ): Promise<BriefState> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
   const parseArray = (key: string): string[] => {
     try {
@@ -31,8 +33,10 @@ export async function saveBriefAction(
   const budgetMaxRaw = formData.get('budget_max')
   const minBedroomsRaw = formData.get('min_bedrooms')
 
+  const supabase = await createClient()
+
   const profileData = {
-    user_id: userId,
+    user_id: auth.userId,
     intent: (formData.get('intent') as string) || null,
     budget_min: budgetMinRaw ? parseInt(budgetMinRaw as string) * 100 : null, // convert £ to pence
     budget_max: budgetMaxRaw ? parseInt(budgetMaxRaw as string) * 100 : null,
@@ -58,7 +62,7 @@ export async function saveBriefAction(
 
   // Ensure hunter role exists
   await (supabase.from('user_roles') as any)
-    .upsert({ user_id: userId, role: 'hunter', is_active: true }, { onConflict: 'user_id,role' })
+    .upsert({ user_id: auth.userId, role: 'hunter', is_active: true }, { onConflict: 'user_id,role' })
 
   revalidatePath('/hunter')
   return { success: true }

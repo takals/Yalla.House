@@ -1,10 +1,10 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { sendViewingConfirmedEmail, sendViewingDeclinedEmail } from '@/lib/resend'
 import { sendViewingConfirmedWhatsApp, sendViewingDeclinedWhatsApp } from '@/lib/whatsapp'
 import { inngest } from '@/lib/inngest/client'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 interface ViewingWithContext {
   hunter_id: string
@@ -14,10 +14,8 @@ interface ViewingWithContext {
   listing: { owner_id: string; title_de: string | null; city: string; agent_id: string | null } | null
 }
 
-async function verifyViewingOwnership(viewingId: string) {
+async function verifyViewingOwnership(viewingId: string, userId: string) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
 
   const { data: viewing } = await (supabase as any)
     .from('viewings')
@@ -31,17 +29,22 @@ async function verifyViewingOwnership(viewingId: string) {
 
   const ownerCheck = viewing?.listing
   if (!viewing || ownerCheck?.owner_id !== userId) {
-    return { error: 'Not authorized' as const, supabase: null, user: null, viewing: null }
+    return { error: 'Not authorized' as const, supabase: null, viewing: null }
   }
 
-  return { error: null, supabase, user, viewing }
+  return { error: null, supabase, viewing }
 }
 
 export async function confirmViewingAction(
   viewingId: string
-): Promise<{ success: true } | { error: string }> {
-  const { error: authError, supabase, user, viewing } = await verifyViewingOwnership(viewingId)
-  if (authError || !supabase || !user) return { error: authError ?? 'Not authorized' }
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+
+  const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId, auth.userId)
+  if (authError || !supabase) return { error: authError ?? 'Not authorized' }
 
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'confirmed', updated_at: new Date().toISOString() })
@@ -78,7 +81,7 @@ export async function confirmViewingAction(
           viewingId,
           listingId: viewing.listing_id,
           hunterId: viewing.hunter_id,
-          ownerId: user!.id,
+          ownerId: auth.userId,
           agentId: viewing.listing.agent_id ?? null,
           scheduledAt: viewing.scheduled_at,
           listingTitle: title,
@@ -97,16 +100,18 @@ export async function addOwnerSlotAction(
   listingId: string,
   startsAt: string,
   endsAt: string
-): Promise<{ success: true; slotId: string } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true; slotId: string } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   // Verify owner owns this listing
   const { data: listing } = await (supabase.from('listings') as any)
     .select('id, owner_id')
     .eq('id', listingId)
-    .eq('owner_id', userId)
+    .eq('owner_id', auth.userId)
     .single()
 
   if (!listing) return { error: 'Listing not found' }
@@ -135,7 +140,7 @@ export async function addOwnerSlotAction(
   const { data: slot, error } = await (supabase.from('availability_slots') as any)
     .insert({
       listing_id: listingId,
-      owner_id: userId,
+      owner_id: auth.userId,
       starts_at: startsAt,
       ends_at: endsAt,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/London',
@@ -154,18 +159,20 @@ export async function addOwnerSlotAction(
 
 export async function removeOwnerSlotAction(
   slotId: string
-): Promise<{ success: true } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   const { data: slot } = await (supabase.from('availability_slots') as any)
     .select('id, owner_id, is_booked')
     .eq('id', slotId)
     .single()
 
   if (!slot) return { error: 'Slot not found' }
-  if (slot.owner_id !== userId) return { error: 'Not authorized' }
+  if (slot.owner_id !== auth.userId) return { error: 'Not authorized' }
   if (slot.is_booked) return { error: 'Cannot remove a booked slot' }
 
   const { error } = await (supabase.from('availability_slots') as any)
@@ -182,8 +189,13 @@ export async function removeOwnerSlotAction(
 
 export async function declineViewingAction(
   viewingId: string
-): Promise<{ success: true } | { error: string }> {
-  const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId)
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+
+  const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId, auth.userId)
   if (authError || !supabase) return { error: authError ?? 'Not authorized' }
 
   const { error } = await (supabase.from('viewings') as any)

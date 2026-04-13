@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { AuthGateProvider } from '@/components/auth-gate-provider'
 import '../globals.css'
 
 const locales = ['de', 'en'] as const
@@ -68,7 +69,9 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      {children}
+      <AuthGateProvider locale={locale}>
+        {children}
+      </AuthGateProvider>
     </NextIntlClientProvider>
   )
 }

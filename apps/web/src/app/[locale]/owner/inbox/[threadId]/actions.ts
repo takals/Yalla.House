@@ -1,24 +1,26 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { revalidatePath } from 'next/cache'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function sendReplyAction(threadId: string, body: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
   if (!body.trim()) {
     return { error: 'Message cannot be empty' }
   }
 
+  const supabase = await createClient()
   // Insert message
   const { error: msgError } = await (supabase as any)
     .from('messages')
     .insert({
       thread_id: threadId,
-      sender_id: userId,
+      sender_id: auth.userId,
       body: body.trim(),
       attachments: [],
       channel: 'in_app',

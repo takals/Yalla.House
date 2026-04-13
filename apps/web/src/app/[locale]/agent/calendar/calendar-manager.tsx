@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Calendar, Clock, MapPin, User, Plus, X, Check, XCircle, Trash2 } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { addAvailabilitySlotAction, removeAvailabilitySlotAction, confirmViewingAction, declineViewingAction } from './actions'
 
 interface Slot {
@@ -71,6 +72,7 @@ function formatDateInput(iso: string): string {
 type Tab = 'viewings' | 'slots'
 
 export function CalendarManager({ initialSlots, initialViewings, listingMap, listingIds, translations: t }: Props) {
+  const { handleAuthRequired } = useAuthAction()
   const [tab, setTab] = useState<Tab>('viewings')
   const [slots, setSlots] = useState(initialSlots)
   const [viewings, setViewings] = useState(initialViewings)
@@ -100,26 +102,36 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
     const result = await addAvailabilitySlotAction(formListing, startsAt, endsAt)
     setActing(s => { const n = new Set(s); n.delete('add'); return n })
 
+    if (handleAuthRequired(result)) {
+      return
+    }
+
     if ('error' in result) {
       setFormError(result.error)
       return
     }
 
-    setSlots(prev => [...prev, {
-      id: result.slotId,
-      listing_id: formListing,
-      starts_at: startsAt,
-      ends_at: endsAt,
-      is_booked: false,
-      viewing_id: null,
-    }])
-    setShowAddForm(false)
+    if ('success' in result) {
+      setSlots(prev => [...prev, {
+        id: result.slotId,
+        listing_id: formListing,
+        starts_at: startsAt,
+        ends_at: endsAt,
+        is_booked: false,
+        viewing_id: null,
+      }])
+      setShowAddForm(false)
+    }
   }
 
   async function handleRemoveSlot(slotId: string) {
     setActing(s => new Set(s).add(slotId))
     const result = await removeAvailabilitySlotAction(slotId)
     setActing(s => { const n = new Set(s); n.delete(slotId); return n })
+
+    if (handleAuthRequired(result)) {
+      return
+    }
 
     if ('success' in result) {
       setSlots(prev => prev.filter(s => s.id !== slotId))
@@ -131,6 +143,10 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
     const result = await confirmViewingAction(viewingId)
     setActing(s => { const n = new Set(s); n.delete(viewingId); return n })
 
+    if (handleAuthRequired(result)) {
+      return
+    }
+
     if ('success' in result) {
       setViewings(prev => prev.map(v => v.id === viewingId ? { ...v, status: 'confirmed' } : v))
     }
@@ -140,6 +156,10 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
     setActing(s => new Set(s).add(viewingId))
     const result = await declineViewingAction(viewingId)
     setActing(s => { const n = new Set(s); n.delete(viewingId); return n })
+
+    if (handleAuthRequired(result)) {
+      return
+    }
 
     if ('success' in result) {
       setViewings(prev => prev.filter(v => v.id !== viewingId))

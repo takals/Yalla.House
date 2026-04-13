@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { savePhotoAction, deletePhotoAction, setPrimaryPhotoAction } from './actions'
 
 export interface PhotoRow {
@@ -39,6 +40,7 @@ export function PhotoManager({
   listingId: string
   photos: PhotoRow[]
 }) {
+  const { handleAuthRequired } = useAuthAction()
   const [photos, setPhotos] = useState<PhotoRow[]>(
     [...initialPhotos].sort((a, b) => a.sort_order - b.sort_order)
   )
@@ -73,11 +75,16 @@ export function PhotoManager({
 
       const result = await savePhotoAction(listingId, publicUrl, photos.length)
 
+      if (handleAuthRequired(result)) {
+        setUploading(false)
+        return
+      }
+
       if ('error' in result) {
         setUploadError(result.error)
         // Clean up orphaned storage file
         await supabase.storage.from(BUCKET).remove([path])
-      } else {
+      } else if ('success' in result) {
         const newPhoto: PhotoRow = {
           id: result.id,
           url: publicUrl,
@@ -96,9 +103,12 @@ export function PhotoManager({
   async function handleDelete(photo: PhotoRow) {
     const storagePath = storagePathFromUrl(photo.url)
     const result = await deletePhotoAction(photo.id, storagePath)
+    if (handleAuthRequired(result)) {
+      return
+    }
     if ('error' in result) {
       setUploadError(result.error)
-    } else {
+    } else if ('success' in result) {
       setPhotos(prev => prev.filter(p => p.id !== photo.id))
     }
   }
@@ -106,9 +116,12 @@ export function PhotoManager({
   async function handleSetPrimary(photo: PhotoRow) {
     if (photo.is_primary) return
     const result = await setPrimaryPhotoAction(photo.id, listingId)
+    if (handleAuthRequired(result)) {
+      return
+    }
     if ('error' in result) {
       setUploadError(result.error)
-    } else {
+    } else if ('success' in result) {
       setPhotos(prev => prev.map(p => ({ ...p, is_primary: p.id === photo.id })))
     }
   }

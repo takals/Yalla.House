@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { signAgreementAction } from './actions'
 
 export function AgreementForm({ agencyName }: { agencyName: string }) {
@@ -8,6 +9,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
   const [signatoryName, setSignatoryName] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { handleAuthRequired } = useAuthAction()
 
   async function handleSign(e: React.FormEvent) {
     e.preventDefault()
@@ -16,10 +18,14 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
     setError(null)
 
     const result = await signAgreementAction({ signatoryName })
+    if (handleAuthRequired(result)) {
+      setSubmitting(false)
+      return
+    }
     setSubmitting(false)
 
     if ('error' in result) {
-      setError(result.error)
+      setError(result.error ?? null)
     }
     // On success, the server action redirects to /agent
   }

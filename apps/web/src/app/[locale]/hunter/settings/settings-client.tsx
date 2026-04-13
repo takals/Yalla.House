@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition, useState } from 'react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import {
   updateProfileAction,
   pauseAllSharingAction,
@@ -73,6 +74,7 @@ const EVENT_DOT: Record<string, string> = {
 }
 
 export function SettingsClient({ profile, assignments, consentLog, labels }: Props) {
+  const { handleAuthRequired } = useAuthAction()
   const [profileState, setProfileState] = useState<{ success?: true; error?: string } | null>(null)
   const [profilePending, startProfileTransition] = useTransition()
   const [isPending, startTransition] = useTransition()
@@ -83,7 +85,10 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
     const formData = new FormData(e.currentTarget)
     startProfileTransition(async () => {
       const result = await updateProfileAction(null, formData)
-      setProfileState(result)
+      if (handleAuthRequired(result)) return
+      if (!('authRequired' in result)) {
+        setProfileState(result)
+      }
     })
   }
 

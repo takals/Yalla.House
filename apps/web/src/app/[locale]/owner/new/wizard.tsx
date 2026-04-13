@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { Home, Building2, Building, Store, TreePine, MapPin } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { createListingAction, type WizardPayload } from './actions'
 import { getCountryConfig } from '@/lib/country-config'
 
@@ -547,6 +548,7 @@ function Step5({ form, currency, localeFormatting }: { form: WizardFormData; cur
 // ── Main wizard ─────────────────────────────────────────────────────────────
 
 export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: string }) {
+  const { handleAuthRequired } = useAuthAction()
   const [step, setStep] = useState(1)
   const [form, setForm] = useState<WizardFormData>(INITIAL)
   const [errors, setErrors] = useState<FormErrors>({})
@@ -613,7 +615,10 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
     const payload: WizardPayload = { ...form, ownerId }
     startTransition(async () => {
       const result = await createListingAction(payload)
-      if (result?.error) setServerError(result.error)
+      if (handleAuthRequired(result)) {
+        return
+      }
+      if (result && 'error' in result) setServerError(result.error)
     })
   }
 

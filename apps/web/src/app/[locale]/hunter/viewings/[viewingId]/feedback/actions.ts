@@ -1,21 +1,23 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { inngest } from '@/lib/inngest/client'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function checkinAction(
   viewingId: string
-): Promise<{ success: true } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   // Verify this viewing belongs to the hunter
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select('id, hunter_id, status, listing_id')
     .eq('id', viewingId)
-    .eq('hunter_id', userId)
+    .eq('hunter_id', auth.userId)
     .single()
 
   if (!viewing) return { error: 'Viewing not found' }
@@ -42,11 +44,13 @@ export async function submitFeedbackAction(
   rating: number,
   notes: string,
   interested: boolean
-): Promise<{ success: true } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   // Verify ownership
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select(`
@@ -54,7 +58,7 @@ export async function submitFeedbackAction(
       listing:listings!listing_id(owner_id, title_de, agent_id)
     `)
     .eq('id', viewingId)
-    .eq('hunter_id', userId)
+    .eq('hunter_id', auth.userId)
     .single()
 
   if (!viewing) return { error: 'Viewing not found' }
@@ -81,7 +85,7 @@ export async function submitFeedbackAction(
       name: 'viewing/completed',
       data: {
         viewingId,
-        hunterId: userId,
+        hunterId: auth.userId,
         ownerId: viewing.listing.owner_id,
         agentId: viewing.listing.agent_id ?? null,
         listingId: viewing.listing_id,

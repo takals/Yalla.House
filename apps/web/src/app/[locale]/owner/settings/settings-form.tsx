@@ -1,6 +1,7 @@
 'use client'
 
 import { User, Building2 } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { EditableField } from './editable-field'
 import { updateUserProfileAction, updateOwnerProfileAction } from './actions'
 
@@ -30,6 +31,26 @@ interface SettingsFormProps {
 }
 
 export function SettingsForm({ userProfile, ownerProfile, translations: t }: SettingsFormProps) {
+  const { handleAuthRequired } = useAuthAction()
+
+  const createSaveHandler = (action: (data: any) => Promise<any>) => async (value: string) => {
+    const result = await action({ full_name: value } as any)
+    if (handleAuthRequired(result)) return { error: 'Please log in to save changes' }
+    return result
+  }
+
+  const updateUserWithAuth = async (data: any) => {
+    const result = await updateUserProfileAction(data)
+    if (handleAuthRequired(result)) return { error: 'Please log in to save changes' }
+    return result
+  }
+
+  const updateOwnerWithAuth = async (data: any) => {
+    const result = await updateOwnerProfileAction(data)
+    if (handleAuthRequired(result)) return { error: 'Please log in to save changes' }
+    return result
+  }
+
   return (
     <>
       {/* Personal Information Card */}
@@ -43,7 +64,7 @@ export function SettingsForm({ userProfile, ownerProfile, translations: t }: Set
           value={userProfile.full_name || t.notSet}
           placeholder={t.labelFullName}
           actionLabel={t.buttonEdit}
-          onSave={async (value) => updateUserProfileAction({ full_name: value })}
+          onSave={async (value) => updateUserWithAuth({ full_name: value })}
         />
         <EditableField
           label={t.labelEmail}
@@ -58,7 +79,7 @@ export function SettingsForm({ userProfile, ownerProfile, translations: t }: Set
           value={userProfile.phone || t.notSet}
           placeholder="+49..."
           actionLabel={t.buttonEdit}
-          onSave={async (value) => updateUserProfileAction({ phone: value })}
+          onSave={async (value) => updateUserWithAuth({ phone: value })}
         />
       </div>
 
@@ -73,14 +94,14 @@ export function SettingsForm({ userProfile, ownerProfile, translations: t }: Set
           value={ownerProfile.company_name || t.notSet}
           placeholder={t.labelCompanyName}
           actionLabel={ownerProfile.company_name ? t.buttonEdit : t.buttonAdd}
-          onSave={async (value) => updateOwnerProfileAction({ company_name: value })}
+          onSave={async (value) => updateOwnerWithAuth({ company_name: value })}
         />
         <EditableField
           label={t.labelTaxId}
           value={ownerProfile.tax_id || t.notSet}
           placeholder={t.labelTaxId}
           actionLabel={ownerProfile.tax_id ? t.buttonEdit : t.buttonAdd}
-          onSave={async (value) => updateOwnerProfileAction({ tax_id: value })}
+          onSave={async (value) => updateOwnerWithAuth({ tax_id: value })}
         />
       </div>
     </>

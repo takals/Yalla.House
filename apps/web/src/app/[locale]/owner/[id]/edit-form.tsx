@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { Home, Building2, Building, Store, TreePine } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { updateListingAction, changeStatusAction, sendBriefAction, type EditPayload } from './actions'
 import { PhotoManager, type PhotoRow } from './photos'
 import { PortalSection, type PortalRow, type PortalStatusRow } from './portals'
@@ -192,6 +193,7 @@ export function ListingEditForm({
   const [isChangingStatus, setIsChangingStatus] = useState(false)
   const [isSendingBrief, setIsSendingBrief] = useState(false)
   const [briefResult, setBriefResult] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const { handleAuthRequired } = useAuthAction()
 
   function set(key: keyof EditPayload, value: string) {
     setForm(f => ({ ...f, [key]: value }))
@@ -232,6 +234,7 @@ export function ListingEditForm({
     setSaved(false)
     startTransition(async () => {
       const result = await updateListingAction(listing.id, form)
+      if (handleAuthRequired(result)) return
       if ('error' in result) {
         setServerError(result.error)
       } else {
@@ -244,6 +247,10 @@ export function ListingEditForm({
     setIsChangingStatus(true)
     setStatusError('')
     const result = await changeStatusAction(listing.id, newStatus)
+    if (handleAuthRequired(result)) {
+      setIsChangingStatus(false)
+      return
+    }
     setIsChangingStatus(false)
     if ('error' in result) {
       setStatusError(result.error)
@@ -256,10 +263,14 @@ export function ListingEditForm({
     setIsSendingBrief(true)
     setBriefResult(null)
     const result = await sendBriefAction(listing.id)
+    if (handleAuthRequired(result)) {
+      setIsSendingBrief(false)
+      return
+    }
     setIsSendingBrief(false)
     if ('error' in result) {
       setBriefResult({ type: 'error', message: result.error })
-    } else {
+    } else if ('success' in result) {
       setBriefResult({ type: 'success', message: `Brief an ${result.agentCount} Makler gesendet!` })
     }
   }

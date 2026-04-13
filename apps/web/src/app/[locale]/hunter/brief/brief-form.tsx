@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { Check, CheckCircle2 } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { saveBriefAction } from './actions'
 
 interface BriefProfile {
@@ -94,12 +95,14 @@ function StepHeader({ n, title }: { n: string; title: string }) {
 export function BriefForm({ profile }: Props) {
   const [state, setState] = useState<{ success?: boolean; error?: string }>({})
   const [isPending, startTransition] = useTransition()
+  const { handleAuthRequired } = useAuthAction()
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     startTransition(async () => {
       const result = await saveBriefAction({}, formData)
+      if (handleAuthRequired(result)) return
       setState(result)
     })
   }

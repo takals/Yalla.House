@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { addOwnerSlotAction, removeOwnerSlotAction } from './actions'
 import { Calendar, Clock, Trash2, Plus, X } from 'lucide-react'
 
@@ -34,6 +35,7 @@ export function AvailabilityManager({
   listings: ListingOption[]
   translations: Record<string, string>
 }) {
+  const { handleAuthRequired } = useAuthAction()
   const [slots, setSlots] = useState<SlotRow[]>(initialSlots)
   const [showForm, setShowForm] = useState(false)
   const [acting, setActing] = useState<Set<string>>(new Set())
@@ -59,9 +61,13 @@ export function AvailabilityManager({
     const result = await addOwnerSlotAction(selectedListing, startsAt, endsAt)
     setActing(s => { const n = new Set(s); n.delete('add'); return n })
 
+    if (handleAuthRequired(result)) {
+      return
+    }
+
     if ('error' in result) {
       setError(result.error)
-    } else {
+    } else if ('success' in result) {
       setSlots(prev => [...prev, {
         id: result.slotId,
         listing_id: selectedListing,
@@ -81,9 +87,13 @@ export function AvailabilityManager({
     const result = await removeOwnerSlotAction(slotId)
     setActing(s => { const n = new Set(s); n.delete(slotId); return n })
 
+    if (handleAuthRequired(result)) {
+      return
+    }
+
     if ('success' in result) {
       setSlots(prev => prev.filter(s => s.id !== slotId))
-    } else {
+    } else if ('error' in result) {
       setError(result.error)
     }
   }

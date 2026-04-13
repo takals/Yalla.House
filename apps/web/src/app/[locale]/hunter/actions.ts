@@ -1,20 +1,22 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { requireAuth } from '@/lib/auth-guard'
 
 export async function cancelViewingAction(
   viewingId: string
-): Promise<{ success: true } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   // Verify the viewing belongs to this hunter
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select('id, status, hunter_id')
     .eq('id', viewingId)
-    .eq('hunter_id', userId)
+    .eq('hunter_id', auth.userId)
     .single()
 
   if (!viewing) return { error: 'Viewing request not found.' }

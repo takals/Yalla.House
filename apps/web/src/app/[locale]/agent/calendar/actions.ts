@@ -1,22 +1,25 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { inngest } from '@/lib/inngest/client'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function addAvailabilitySlotAction(
   listingId: string,
   startsAt: string,
   endsAt: string
-): Promise<{ success: true; slotId: string } | { error: string }> {
+): Promise<{ success: true; slotId: string } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify agent is assigned to this listing
   const { data: assignment } = await (supabase.from('listing_agent_assignments') as any)
     .select('id')
-    .eq('agent_id', userId)
+    .eq('agent_id', auth.userId)
     .eq('listing_id', listingId)
     .eq('status', 'active')
     .maybeSingle()
@@ -60,11 +63,13 @@ export async function addAvailabilitySlotAction(
 
 export async function removeAvailabilitySlotAction(
   slotId: string
-): Promise<{ success: true } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   // Verify slot exists and isn't booked, and agent is assigned
   const { data: slot } = await (supabase.from('availability_slots') as any)
     .select('id, listing_id, is_booked')
@@ -77,7 +82,7 @@ export async function removeAvailabilitySlotAction(
   // Check assignment
   const { data: assignment } = await (supabase.from('listing_agent_assignments') as any)
     .select('id')
-    .eq('agent_id', userId)
+    .eq('agent_id', auth.userId)
     .eq('listing_id', slot.listing_id)
     .eq('status', 'active')
     .maybeSingle()
@@ -98,10 +103,13 @@ export async function removeAvailabilitySlotAction(
 
 export async function confirmViewingAction(
   viewingId: string
-): Promise<{ success: true } | { error: string }> {
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch viewing context for lifecycle events
   const { data: viewing } = await (supabase.from('viewings') as any)
@@ -131,7 +139,7 @@ export async function confirmViewingAction(
         listingId: viewing.listing_id,
         hunterId: viewing.hunter_id,
         ownerId: viewing.listing.owner_id,
-        agentId: userId,
+        agentId: auth.userId,
         scheduledAt: viewing.scheduled_at,
         listingTitle: title,
         listingCity: viewing.listing.city,
@@ -144,11 +152,13 @@ export async function confirmViewingAction(
 
 export async function declineViewingAction(
   viewingId: string
-): Promise<{ success: true } | { error: string }> {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'cancelled', updated_at: new Date().toISOString() })
     .eq('id', viewingId)

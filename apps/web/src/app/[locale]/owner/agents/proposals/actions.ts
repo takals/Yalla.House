@@ -1,14 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { revalidatePath } from 'next/cache'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function acceptProposalAction(assignmentId: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   // Verify ownership and update status
   const { error } = await (supabase as any)
     .from('listing_agent_assignments')
@@ -17,7 +19,7 @@ export async function acceptProposalAction(assignmentId: string) {
       accepted_at: new Date().toISOString(),
     })
     .eq('id', assignmentId)
-    .eq('owner_id', userId)
+    .eq('owner_id', auth.userId)
     .eq('status', 'invited')
 
   if (error) {
@@ -29,10 +31,12 @@ export async function acceptProposalAction(assignmentId: string) {
 }
 
 export async function declineProposalAction(assignmentId: string) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
+  const supabase = await createClient()
   const { error } = await (supabase as any)
     .from('listing_agent_assignments')
     .update({
@@ -40,7 +44,7 @@ export async function declineProposalAction(assignmentId: string) {
       revoked_at: new Date().toISOString(),
     })
     .eq('id', assignmentId)
-    .eq('owner_id', userId)
+    .eq('owner_id', auth.userId)
     .eq('status', 'invited')
 
   if (error) {

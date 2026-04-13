@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { CheckCircle2, Check } from 'lucide-react'
+import { useAuthAction } from '@/lib/use-auth-action'
 import { saveAgentProfileAction } from './actions'
 
 interface AgentProfileData {
@@ -55,13 +56,17 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 export function ProfileForm({ profile }: Props) {
   const [state, setState] = useState<{ success?: true; error?: string } | null>(null)
   const [isPending, startTransition] = useTransition()
+  const { handleAuthRequired } = useAuthAction()
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     startTransition(async () => {
       const result = await saveAgentProfileAction(null, formData)
-      setState(result)
+      if (handleAuthRequired(result)) return
+      if (!('authRequired' in result)) {
+        setState(result)
+      }
     })
   }
 

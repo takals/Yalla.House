@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { redirect } from 'next/navigation'
 
 export interface WizardPayload {
@@ -31,17 +32,20 @@ export interface WizardPayload {
 
 export async function createListingAction(
   payload: WizardPayload
-): Promise<{ error: string } | undefined> {
-  const supabase = await createClient()
+): Promise<{ error: string } | { authRequired: true } | undefined> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user || user.id !== payload.ownerId) {
+  if (auth.userId !== payload.ownerId) {
     return { error: 'Not authorized' }
   }
 
+  const supabase = await createClient()
   // Ensure public.users row exists (FK required by listings)
   await (supabase.from('users') as any).upsert(
-    { id: user.id, email: user.email ?? '', language: 'de' },
+    { id: auth.userId, email: auth.email, language: 'de' },
     { onConflict: 'id', ignoreDuplicates: true }
   )
 
@@ -68,7 +72,7 @@ export async function createListingAction(
   if (payload.energy_class) countryFields['energy_class'] = payload.energy_class
 
   const { error } = await (supabase.from('listings') as any).insert({
-    owner_id: user.id,
+    owner_id: auth.userId,
     country_code: 'DE',
     currency: 'EUR',
     status: 'draft',
