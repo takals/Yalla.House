@@ -166,7 +166,15 @@
     "forAgents": "Für Makler",
     "resources": "Ressourcen",
     "legal": "Rechtliches",
-    "company": "Unternehmen"
+    "company": "Unternehmen",
+    "about": "Über uns",
+    "services": "Leistungen & Preise"
+  },
+  "ctaBand": {
+    "headline": "Bereit, Ihren Verkauf selbst in die Hand zu nehmen?",
+    "body": "Erstellen Sie Ihr kostenloses Dashboard in unter zwei Minuten. Sehen Sie Ihre Marktdaten, dann senden Sie Ihr Exposé an konkurrierende Makler.",
+    "cta": "Kostenloses Dashboard erstellen",
+    "agentLink": "Ich bin Makler"
   },
   "statusLabels": {
     "draft": "Entwurf",

@@ -166,7 +166,15 @@
     "forAgents": "For Agents",
     "resources": "Resources",
     "legal": "Legal",
-    "company": "Company"
+    "company": "Company",
+    "about": "About",
+    "services": "Services & Pricing"
+  },
+  "ctaBand": {
+    "headline": "Ready to take control of your sale?",
+    "body": "Create your free dashboard in under two minutes. See your market data, then send your brief to competing agents.",
+    "cta": "Create your free dashboard",
+    "agentLink": "I'm an agent"
   },
   "statusLabels": {
     "draft": "Draft",
