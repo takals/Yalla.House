@@ -30,7 +30,7 @@ export default async function AgentSearchPage() {
   const ownerCountry = ownerListing?.country_code ?? 'DE'
 
   // Query all agent profiles from Supabase
-  const { data: allAgents } = await (supabase as any)
+  const { data: allAgents, error: agentsError } = await (supabase as any)
     .from('users')
     .select(`
       id, full_name, email,
@@ -40,6 +40,11 @@ export default async function AgentSearchPage() {
       )
     `)
     .limit(500)
+
+  if (agentsError) {
+    console.error('[agent-search] Query error:', agentsError)
+  }
+  console.log('[agent-search] Found agents:', allAgents?.length ?? 0)
 
   // Transform agents into the shape the client component expects
   const agents = (allAgents ?? [])
