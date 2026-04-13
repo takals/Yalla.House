@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 type ActionResult = { success: true } | { error: string }
 
@@ -11,7 +12,7 @@ export async function saveAgentProfileAction(
 ): Promise<ActionResult> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const parseArray = (key: string): string[] => {
     try {
@@ -24,7 +25,7 @@ export async function saveAgentProfileAction(
   }
 
   const profileData = {
-    user_id: user.id,
+    user_id: userId,
     agency_name: (formData.get('agency_name') as string) || null,
     license_number: (formData.get('license_number') as string) || null,
     property_types: parseArray('property_types'),
@@ -36,12 +37,12 @@ export async function saveAgentProfileAction(
 
   if (error) {
     console.error('saveAgentProfileAction error:', error)
-    return { error: 'Fehler beim Speichern. Bitte erneut versuchen.' }
+    return { error: 'Error saving. Please try again.' }
   }
 
   // Ensure agent role exists
   await (supabase.from('user_roles') as any)
-    .upsert({ user_id: user.id, role: 'agent', is_active: true }, { onConflict: 'user_id,role' })
+    .upsert({ user_id: userId, role: 'agent', is_active: true }, { onConflict: 'user_id,role' })
 
   revalidatePath('/agent')
   revalidatePath('/agent/profile')

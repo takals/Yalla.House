@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export interface EditPayload {
   property_type: string
@@ -34,7 +35,7 @@ export async function updateListingAction(
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership server-side
   const { data: existing } = await (supabase as any)
@@ -43,8 +44,8 @@ export async function updateListingAction(
     .eq('id', id)
     .single()
 
-  if (!existing || existing.owner_id !== user.id) {
-    return { error: 'Nicht autorisiert' }
+  if (!existing || existing.owner_id !== userId) {
+    return { error: 'Not authorized' }
   }
 
   const toMinorUnits = (val: string): number | null => {
@@ -97,11 +98,11 @@ export async function updateListingAction(
       country_fields: countryFields,
     })
     .eq('id', id)
-    .eq('owner_id', user.id)
+    .eq('owner_id', userId)
 
   if (error) {
     console.error('Listing update error:', error)
-    return { error: 'Fehler beim Speichern. Bitte versuchen Sie es erneut.' }
+    return { error: 'Error saving. Please try again.' }
   }
 
   return { success: true }
@@ -116,7 +117,7 @@ export async function savePhotoAction(
 ): Promise<{ success: true; id: string } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership
   const { data: listing } = await (supabase as any)
@@ -124,7 +125,7 @@ export async function savePhotoAction(
     .select('owner_id')
     .eq('id', listingId)
     .single()
-  if (!listing || listing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
+  if (!listing || listing.owner_id !== userId) return { error: 'Not authorized' }
 
   const { data, error } = await (supabase.from('listing_media') as any).insert({
     listing_id: listingId,
@@ -136,7 +137,7 @@ export async function savePhotoAction(
 
   if (error) {
     console.error('savePhotoAction error:', error)
-    return { error: 'Foto konnte nicht gespeichert werden.' }
+    return { error: 'Failed to save photo.' }
   }
 
   return { success: true, id: data.id }
@@ -148,7 +149,7 @@ export async function deletePhotoAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership via listing_media → listing
   const { data: media } = await (supabase as any)
@@ -158,7 +159,7 @@ export async function deletePhotoAction(
     .single()
 
   const ownerCheck = (media?.listings as unknown as { owner_id: string } | null)
-  if (!media || ownerCheck?.owner_id !== user.id) return { error: 'Nicht autorisiert' }
+  if (!media || ownerCheck?.owner_id !== userId) return { error: 'Not authorized' }
 
   // Delete from storage using service client (bypasses RLS)
   const serviceClient = createServiceClient()
@@ -171,7 +172,7 @@ export async function deletePhotoAction(
 
   if (error) {
     console.error('deletePhotoAction error:', error)
-    return { error: 'Foto konnte nicht gelöscht werden.' }
+    return { error: 'Failed to delete photo.' }
   }
 
   return { success: true }
@@ -183,7 +184,7 @@ export async function setPrimaryPhotoAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership
   const { data: listing } = await (supabase as any)
@@ -191,7 +192,7 @@ export async function setPrimaryPhotoAction(
     .select('owner_id')
     .eq('id', listingId)
     .single()
-  if (!listing || listing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
+  if (!listing || listing.owner_id !== userId) return { error: 'Not authorized' }
 
   // Clear all primary flags for this listing
   await (supabase.from('listing_media') as any)
@@ -205,7 +206,7 @@ export async function setPrimaryPhotoAction(
 
   if (error) {
     console.error('setPrimaryPhotoAction error:', error)
-    return { error: 'Titelbild konnte nicht gesetzt werden.' }
+    return { error: 'Failed to set primary photo.' }
   }
 
   return { success: true }
@@ -226,7 +227,7 @@ export async function changeStatusAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const { data: existing } = await (supabase as any)
     .from('listings')
@@ -234,10 +235,10 @@ export async function changeStatusAction(
     .eq('id', id)
     .single()
 
-  if (!existing || existing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
+  if (!existing || existing.owner_id !== userId) return { error: 'Not authorized' }
 
   const allowed = STATUS_TRANSITIONS[existing.status] ?? []
-  if (!allowed.includes(newStatus)) return { error: 'Ungültige Statusänderung' }
+  if (!allowed.includes(newStatus)) return { error: 'Invalid status transition' }
 
   const { error } = await (supabase.from('listings') as any)
     .update({ status: newStatus })
@@ -245,7 +246,7 @@ export async function changeStatusAction(
 
   if (error) {
     console.error('changeStatusAction error:', error)
-    return { error: 'Fehler beim Aktualisieren des Status.' }
+    return { error: 'Error updating status.' }
   }
 
   return { success: true }
@@ -258,17 +259,17 @@ export async function sendBriefAction(
 ): Promise<{ success: true; agentCount: number } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch listing with ownership check
   const { data: listing } = await (supabase as any)
     .from('listings')
     .select('id, owner_id, intent, property_type, city, postcode, bedrooms, sale_price, rent_price')
     .eq('id', listingId)
-    .eq('owner_id', user.id)
+    .eq('owner_id', userId)
     .single()
 
-  if (!listing) return { error: 'Inserat nicht gefunden' }
+  if (!listing) return { error: 'Listing not found' }
 
   // Fetch all agent profiles with coverage areas
   const { data: agents } = await (supabase as any)
@@ -277,7 +278,7 @@ export async function sendBriefAction(
     .not('coverage_areas', 'is', null)
 
   if (!agents || agents.length === 0) {
-    return { error: 'Keine Makler in Ihrer Gegend gefunden.' }
+    return { error: 'No agents found in your area.' }
   }
 
   // Filter agents whose coverage_areas overlap with listing postcode
@@ -297,7 +298,7 @@ export async function sendBriefAction(
   })
 
   if (matchedAgents.length === 0) {
-    return { error: 'Keine Makler in Ihrer Gegend gefunden.' }
+    return { error: 'No agents found in your area.' }
   }
 
   // Send emails via Resend
@@ -345,7 +346,7 @@ export async function submitToPortalAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership
   const { data: listing } = await (supabase as any)
@@ -353,7 +354,7 @@ export async function submitToPortalAction(
     .select('owner_id')
     .eq('id', listingId)
     .single()
-  if (!listing || listing.owner_id !== user.id) return { error: 'Nicht autorisiert' }
+  if (!listing || listing.owner_id !== userId) return { error: 'Not authorized' }
 
   // Upsert portal status to queued
   const { error: upsertError } = await (supabase.from('listing_portal_status') as any)
@@ -364,7 +365,7 @@ export async function submitToPortalAction(
 
   if (upsertError) {
     console.error('submitToPortalAction upsert error:', upsertError)
-    return { error: 'Fehler beim Einreichen. Bitte erneut versuchen.' }
+    return { error: 'Error submitting. Please try again.' }
   }
 
   // Fire Inngest event

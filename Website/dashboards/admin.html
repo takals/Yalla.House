@@ -323,7 +323,7 @@
             <div style="display:flex;flex-direction:column;gap:.5rem;">
               <div style="display:flex;align-items:center;gap:.875rem;padding:.875rem 1rem;background:#FEF9C3;border:1px solid #FDE68A;border-radius:var(--radius);border-left:4px solid #f59e0b;">
                 <i data-lucide="alert-triangle" style="width:16px;height:16px;stroke:#92400e;fill:none;stroke-width:2;flex-shrink:0;"></i>
-                <div style="flex:1;font-size:.875rem;font-weight:600;color:#92400e;">Rightmove API integration not yet connected — listings synced manually</div>
+                <div style="flex:1;font-size:.875rem;font-weight:600;color:#92400e;">IS24 API integration not yet connected — listings synced manually</div>
                 <button class="btn btn-ghost btn-sm" onclick="showView('integrations', document.querySelector('[onclick*=integrations]'))">View →</button>
               </div>
               <div style="display:flex;align-items:center;gap:.875rem;padding:.875rem 1rem;background:#FEE2E2;border:1px solid #FECACA;border-radius:var(--radius);border-left:4px solid #ef4444;">
@@ -396,12 +396,12 @@
               </div>
               <div class="activity-item">
                 <div class="activity-icon" style="background:#DCFCE7;"><i data-lucide="home" style="width:14px;height:14px;stroke:#166534;fill:none;stroke-width:2;"></i></div>
-                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">New listing submitted — 8 Rosewood Crescent, Birmingham</div><div style="font-size:.775rem;color:var(--text-muted);">Today · 08:17</div></div>
+                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">New listing submitted — Schiller Str. 8, Frankfurt</div><div style="font-size:.775rem;color:var(--text-muted);">Today · 08:17</div></div>
                 <span class="badge badge-yellow">Review</span>
               </div>
               <div class="activity-item">
                 <div class="activity-icon" style="background:var(--brand-solid-bg);"><i data-lucide="file-text" style="width:14px;height:14px;stroke:#7A5F00;fill:none;stroke-width:2;"></i></div>
-                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">Offer submitted — Tom Khalid on 14 Maple Street (£375,000)</div><div style="font-size:.775rem;color:var(--text-muted);">Yesterday · 14:22</div></div>
+                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">Offer submitted — Tom Khalid on Köpenicker Str. 14 (€375,000)</div><div style="font-size:.775rem;color:var(--text-muted);">Yesterday · 14:22</div></div>
                 <span class="badge badge-gray">Offer</span>
               </div>
               <div class="activity-item">
@@ -411,12 +411,12 @@
               </div>
               <div class="activity-item">
                 <div class="activity-icon" style="background:#DCFCE7;"><i data-lucide="credit-card" style="width:14px;height:14px;stroke:#166534;fill:none;stroke-width:2;"></i></div>
-                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">Payment received — John Smith · Starter Package · £199</div><div style="font-size:.775rem;color:var(--text-muted);">2 days ago · 10:00</div></div>
+                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">Payment received — John Smith · Starter Package · €199</div><div style="font-size:.775rem;color:var(--text-muted);">2 days ago · 10:00</div></div>
                 <span class="badge badge-green">Payment</span>
               </div>
               <div class="activity-item">
                 <div class="activity-icon" style="background:var(--bg-muted);"><i data-lucide="calendar-check" style="width:14px;height:14px;stroke:var(--text-secondary);fill:none;stroke-width:2;"></i></div>
-                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">Viewing booked — Alice Rubin · Sat 25 Feb · 14 Maple St.</div><div style="font-size:.775rem;color:var(--text-muted);">3 days ago</div></div>
+                <div style="flex:1;"><div style="font-size:.875rem;font-weight:600;">Viewing booked — Alice Rubin · Sat 25 Feb · Köpenicker Str. 14</div><div style="font-size:.775rem;color:var(--text-muted);">3 days ago</div></div>
                 <span class="badge badge-blue">Viewing</span>
               </div>
             </div>
@@ -588,8 +588,8 @@
               <div style="display:flex;align-items:center;gap:1rem;">
                 <div class="integration-indicator yellow"></div>
                 <div>
-                  <div style="font-size:.9375rem;font-weight:700;">Rightmove API</div>
-                  <div style="font-size:.8rem;color:#92400e;">Awaiting API key approval from Rightmove — listings synced manually</div>
+                  <div style="font-size:.9375rem;font-weight:700;">IS24 API</div>
+                  <div style="font-size:.8rem;color:#92400e;">Awaiting API key approval from IS24 — listings synced manually</div>
                 </div>
               </div>
               <button class="btn btn-secondary btn-sm">Configure</button>
@@ -598,7 +598,7 @@
               <div style="display:flex;align-items:center;gap:1rem;">
                 <div class="integration-indicator green"></div>
                 <div>
-                  <div style="font-size:.9375rem;font-weight:700;">Zoopla Feed</div>
+                  <div style="font-size:.9375rem;font-weight:700;">Immowelt Feed</div>
                   <div style="font-size:.8rem;color:var(--text-secondary);">XML feed active · Synced 24 minutes ago</div>
                 </div>
               </div>
@@ -610,8 +610,8 @@
             <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:var(--radius-lg);overflow:hidden;">
               <div style="padding:.75rem 1.25rem;font-size:.75rem;color:var(--text-muted);font-family:monospace;background:#1a1a2e;color:#a0aec0;border-radius:var(--radius-lg);">
                 <div style="color:#68d391;">[OK] 2026-02-22 09:41 — Stripe webhook received (payment_succeeded)</div>
-                <div style="color:#68d391;">[OK] 2026-02-22 09:30 — Zoopla feed sync completed (84 listings)</div>
-                <div style="color:#f6ad55;">[WARN] 2026-02-21 14:00 — Rightmove API key missing — skipping auto-submit</div>
+                <div style="color:#68d391;">[OK] 2026-02-22 09:30 — Immowelt feed sync completed (84 listings)</div>
+                <div style="color:#f6ad55;">[WARN] 2026-02-21 14:00 — IS24 API key missing — skipping auto-submit</div>
                 <div style="color:#68d391;">[OK] 2026-02-21 08:00 — SMTP test email sent successfully</div>
               </div>
             </div>
@@ -644,7 +644,7 @@
                     <span style="font-size:.775rem;color:var(--text-muted);">Yesterday · 11:05</span>
                   </div>
                 </div>
-                <p style="font-size:.8125rem;color:var(--text-secondary);">I was charged £398 but I only signed up for the Starter plan (£199). Please refund the difference.</p>
+                <p style="font-size:.8125rem;color:var(--text-secondary);">I was charged €398 but I only signed up for the Starter plan (€199). Please refund the difference.</p>
               </div>
               <div style="display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;">
                 <span class="badge badge-gray">Unassigned</span>
@@ -767,7 +767,7 @@
                 <span class="sidebar-badge">4</span>
               </div>
               <div class="kanban-card">
-                <div style="font-size:.875rem;font-weight:600;margin-bottom:.35rem;">Submit 14 Maple St. to Rightmove manually</div>
+                <div style="font-size:.875rem;font-weight:600;margin-bottom:.35rem;">Submit Köpenicker Str. 14 to IS24 manually</div>
                 <div style="font-size:.775rem;color:var(--text-muted);">Owner: John Smith · Due: Today</div>
                 <div style="margin-top:.5rem;"><span class="badge badge-red">Urgent</span></div>
               </div>
@@ -794,7 +794,7 @@
                 <span class="sidebar-badge">2</span>
               </div>
               <div class="kanban-card" style="border-left:3px solid var(--brand);">
-                <div style="font-size:.875rem;font-weight:600;margin-bottom:.35rem;">Set up Rightmove API — pending approval</div>
+                <div style="font-size:.875rem;font-weight:600;margin-bottom:.35rem;">Set up IS24 API — pending approval</div>
                 <div style="font-size:.775rem;color:var(--text-muted);">Owner: YH Tech · Started: 15 Feb</div>
                 <div style="margin-top:.5rem;"><span class="badge badge-yellow">In Review</span></div>
               </div>
@@ -811,7 +811,7 @@
                 <span class="sidebar-badge" style="background:var(--bg-muted);color:var(--text-secondary);">5</span>
               </div>
               <div class="kanban-card" style="opacity:.7;">
-                <div style="font-size:.875rem;font-weight:600;margin-bottom:.35rem;text-decoration:line-through;">Submit 7 Oak Close to Zoopla</div>
+                <div style="font-size:.875rem;font-weight:600;margin-bottom:.35rem;text-decoration:line-through;">Submit Schönhauser Allee 42 to Immowelt</div>
                 <div style="font-size:.775rem;color:var(--text-muted);">Completed 20 Feb</div>
               </div>
               <div class="kanban-card" style="opacity:.7;">
@@ -960,7 +960,7 @@
                 <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
               </div>
               <div class="feature-toggle-row">
-                <div><div style="font-size:.875rem;font-weight:600;">Rightmove Auto-Sync</div><div style="font-size:.775rem;color:var(--text-muted);">Disabled until API key approved</div></div>
+                <div><div style="font-size:.875rem;font-weight:600;">IS24 Auto-Sync</div><div style="font-size:.775rem;color:var(--text-muted);">Disabled until API key approved</div></div>
                 <label class="toggle"><input type="checkbox" disabled /><span class="toggle-slider"></span></label>
               </div>
             </div>

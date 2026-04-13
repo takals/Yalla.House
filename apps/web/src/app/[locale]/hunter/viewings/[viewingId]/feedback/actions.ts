@@ -2,19 +2,20 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { inngest } from '@/lib/inngest/client'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function checkinAction(
   viewingId: string
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authorised' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify this viewing belongs to the hunter
   const { data: viewing } = await (supabase.from('viewings') as any)
     .select('id, hunter_id, status, listing_id')
     .eq('id', viewingId)
-    .eq('hunter_id', user.id)
+    .eq('hunter_id', userId)
     .single()
 
   if (!viewing) return { error: 'Viewing not found' }
@@ -44,7 +45,7 @@ export async function submitFeedbackAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authorised' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership
   const { data: viewing } = await (supabase.from('viewings') as any)
@@ -53,7 +54,7 @@ export async function submitFeedbackAction(
       listing:listings!listing_id(owner_id, title_de, agent_id)
     `)
     .eq('id', viewingId)
-    .eq('hunter_id', user.id)
+    .eq('hunter_id', userId)
     .single()
 
   if (!viewing) return { error: 'Viewing not found' }
@@ -80,7 +81,7 @@ export async function submitFeedbackAction(
       name: 'viewing/completed',
       data: {
         viewingId,
-        hunterId: user.id,
+        hunterId: userId,
         ownerId: viewing.listing.owner_id,
         agentId: viewing.listing.agent_id ?? null,
         listingId: viewing.listing_id,

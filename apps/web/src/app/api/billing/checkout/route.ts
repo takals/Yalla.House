@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: 'Nicht autorisiert' }, { status: 401 })
+    return NextResponse.json({ error: 'Not authorized' }, { status: 401 })
   }
 
   const body = await request.json() as { planId: string; listingId?: string }

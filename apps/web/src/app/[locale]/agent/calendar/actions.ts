@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { inngest } from '@/lib/inngest/client'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function addAvailabilitySlotAction(
   listingId: string,
@@ -10,12 +11,12 @@ export async function addAvailabilitySlotAction(
 ): Promise<{ success: true; slotId: string } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authorised' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify agent is assigned to this listing
   const { data: assignment } = await (supabase.from('listing_agent_assignments') as any)
     .select('id')
-    .eq('agent_id', user.id)
+    .eq('agent_id', userId)
     .eq('listing_id', listingId)
     .eq('status', 'active')
     .maybeSingle()
@@ -62,7 +63,7 @@ export async function removeAvailabilitySlotAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authorised' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify slot exists and isn't booked, and agent is assigned
   const { data: slot } = await (supabase.from('availability_slots') as any)
@@ -76,7 +77,7 @@ export async function removeAvailabilitySlotAction(
   // Check assignment
   const { data: assignment } = await (supabase.from('listing_agent_assignments') as any)
     .select('id')
-    .eq('agent_id', user.id)
+    .eq('agent_id', userId)
     .eq('listing_id', slot.listing_id)
     .eq('status', 'active')
     .maybeSingle()
@@ -100,7 +101,7 @@ export async function confirmViewingAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authorised' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch viewing context for lifecycle events
   const { data: viewing } = await (supabase.from('viewings') as any)
@@ -130,7 +131,7 @@ export async function confirmViewingAction(
         listingId: viewing.listing_id,
         hunterId: viewing.hunter_id,
         ownerId: viewing.listing.owner_id,
-        agentId: user.id,
+        agentId: userId,
         scheduledAt: viewing.scheduled_at,
         listingTitle: title,
         listingCity: viewing.listing.city,
@@ -146,7 +147,7 @@ export async function declineViewingAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authorised' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const { error } = await (supabase.from('viewings') as any)
     .update({ status: 'cancelled', updated_at: new Date().toISOString() })

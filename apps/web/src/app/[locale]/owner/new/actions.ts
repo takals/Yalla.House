@@ -36,7 +36,7 @@ export async function createListingAction(
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user || user.id !== payload.ownerId) {
-    return { error: 'Nicht autorisiert' }
+    return { error: 'Not authorized' }
   }
 
   // Ensure public.users row exists (FK required by listings)

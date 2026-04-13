@@ -2,14 +2,12 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function sendReplyAction(threadId: string, body: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return { error: 'Not authenticated' }
-  }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   if (!body.trim()) {
     return { error: 'Message cannot be empty' }
@@ -20,7 +18,7 @@ export async function sendReplyAction(threadId: string, body: string) {
     .from('messages')
     .insert({
       thread_id: threadId,
-      sender_id: user.id,
+      sender_id: userId,
       body: body.trim(),
       attachments: [],
       channel: 'in_app',

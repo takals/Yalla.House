@@ -9,6 +9,7 @@ const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale,
   localePrefix: 'as-needed',  // /de/dashboard → /dashboard in DE, /en/dashboard in EN
+  localeDetection: true,  // Detect browser Accept-Language header
 })
 
 // Routes that require authentication.

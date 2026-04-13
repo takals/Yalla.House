@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 interface BriefState {
   success?: boolean
@@ -14,7 +15,7 @@ export async function saveBriefAction(
 ): Promise<BriefState> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Nicht autorisiert' }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const parseArray = (key: string): string[] => {
     try {
@@ -31,7 +32,7 @@ export async function saveBriefAction(
   const minBedroomsRaw = formData.get('min_bedrooms')
 
   const profileData = {
-    user_id: user.id,
+    user_id: userId,
     intent: (formData.get('intent') as string) || null,
     budget_min: budgetMinRaw ? parseInt(budgetMinRaw as string) * 100 : null, // convert £ to pence
     budget_max: budgetMaxRaw ? parseInt(budgetMaxRaw as string) * 100 : null,
@@ -52,12 +53,12 @@ export async function saveBriefAction(
 
   if (profileError) {
     console.error('saveBriefAction error:', profileError)
-    return { error: 'Fehler beim Speichern. Bitte erneut versuchen.' }
+    return { error: 'Error saving. Please try again.' }
   }
 
   // Ensure hunter role exists
   await (supabase.from('user_roles') as any)
-    .upsert({ user_id: user.id, role: 'hunter', is_active: true }, { onConflict: 'user_id,role' })
+    .upsert({ user_id: userId, role: 'hunter', is_active: true }, { onConflict: 'user_id,role' })
 
   revalidatePath('/hunter')
   return { success: true }

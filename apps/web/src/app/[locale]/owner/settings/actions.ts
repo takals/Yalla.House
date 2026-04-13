@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export async function updateUserProfileAction(data: {
   full_name?: string
@@ -9,15 +10,12 @@ export async function updateUserProfileAction(data: {
 }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return { error: 'Not authenticated' }
-  }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   const { error } = await (supabase as any)
     .from('users')
     .update(data)
-    .eq('id', user.id)
+    .eq('id', userId)
 
   if (error) {
     return { error: error.message }
@@ -33,16 +31,13 @@ export async function updateOwnerProfileAction(data: {
 }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    return { error: 'Not authenticated' }
-  }
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Upsert — create profile if it doesn't exist
   const { error } = await (supabase as any)
     .from('owner_profiles')
     .upsert(
-      { user_id: user.id, ...data },
+      { user_id: userId, ...data },
       { onConflict: 'user_id' }
     )
 

@@ -59,6 +59,7 @@ export async function bookSlotAction(
 ): Promise<{ success: true } | { error: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
   if (!user) return { error: 'Please sign in to book a viewing' }
 
   const service = createServiceClient()
