@@ -248,11 +248,16 @@ export function ConversationalIntake({
     }
   }
 
+  const [submitted, setSubmitted] = useState(false)
+
   // Submit
   const handleSubmit = async () => {
     setSubmitting(true)
     try {
       await onComplete(formData)
+      setSubmitted(true)
+      // Clear localStorage after successful save
+      try { localStorage.removeItem(`yalla_intake_${flowId}`) } catch {}
     } catch (err) {
       console.error('Intake submission error:', err)
       setMessages(prev => [...prev, { id: String(Date.now()), role: 'yalla', content: translations.errorMsg }])
@@ -260,6 +265,14 @@ export function ConversationalIntake({
       setSubmitting(false)
     }
   }
+
+  // Share URLs for spread-the-word
+  const shareText = 'I just set up my Home Passport on @YallaHouse \u2014 17,000+ verified agents, zero commission. Check it out!'
+  const shareUrl = 'https://yalla.house/en/agents'
+  const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`
+  const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`
+  const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`
+  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`
 
   const completedCount = Object.keys(formData).length
   const totalCount = allSteps.length
@@ -396,8 +409,8 @@ export function ConversationalIntake({
             </div>
           )}
 
-          {/* Review complete message */}
-          {showReview && !submitting && (
+          {/* Review complete — pre-submit */}
+          {showReview && !submitting && !submitted && (
             <div className="flex justify-start">
               <div className="flex gap-3 max-w-md">
                 <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
@@ -421,6 +434,41 @@ export function ConversationalIntake({
                     >
                       {submitting ? 'Saving...' : translations.submitBtn}
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Saved — spread the word */}
+          {submitted && (
+            <div className="flex justify-start">
+              <div className="flex gap-3 max-w-md">
+                <div className="w-8 h-8 rounded-full bg-[#D4764E] flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 size={14} className="text-white" />
+                </div>
+                <div className="space-y-4">
+                  <div className="bg-emerald-50 rounded-2xl rounded-tl-md px-4 py-2.5 text-sm text-emerald-800 font-medium">
+                    Your Home Passport is saved! We are matching you with agents in your area now.
+                  </div>
+                  <div className="bg-white rounded-2xl rounded-tl-md px-5 py-4 border border-slate-200">
+                    <p className="text-sm font-bold text-slate-900 mb-2">Spread the word</p>
+                    <p className="text-xs text-slate-500 mb-3">Help us grow and help others find great agents commission-free.</p>
+                    <div className="flex flex-wrap gap-2">
+                      <a href={twitterShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black text-white text-xs font-semibold hover:bg-gray-800 transition-colors">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        Post
+                      </a>
+                      <a href={facebookShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1877F2] text-white text-xs font-semibold hover:bg-[#166FE5] transition-colors">
+                        Facebook
+                      </a>
+                      <a href={whatsappShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366] text-white text-xs font-semibold hover:bg-[#20BD5A] transition-colors">
+                        WhatsApp
+                      </a>
+                      <a href={linkedinShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0A66C2] text-white text-xs font-semibold hover:bg-[#004182] transition-colors">
+                        LinkedIn
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
