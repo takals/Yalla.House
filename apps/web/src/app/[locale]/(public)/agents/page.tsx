@@ -40,45 +40,58 @@ export default async function AgentsPage({
   let searchedPostcode: string | null = null
 
   if (postcode) {
-    searchedPostcode = postcode.toUpperCase()
+    searchedPostcode = postcode.toUpperCase().replace(/\s+/g, '')
 
-    // Fetch agents with coverage matching this postcode
-    const { data } = await supabase
-      .from('agent_profiles')
-      .select(`
-        user_id,
-        agency_name,
-        focus,
-        verified_at,
-        coverage_areas,
-        property_types,
-        users (
-          id,
-          email,
-          full_name
-        )
-      `)
-      .not('verified_at', 'is', null)
-      .limit(500)
+    // Extract postcode area (letters) and outward code (letters+digits before space)
+    const areaMatch = searchedPostcode.match(/^([A-Z]{1,2})/)
+    const outwardMatch = searchedPostcode.match(/^([A-Z]{1,2}\d{1,2}[A-Z]?)/)
+    const area = areaMatch?.[1] || searchedPostcode
+    const outward = outwardMatch?.[1] || searchedPostcode
 
-    if (data) {
-      // Filter agents whose coverage includes this postcode
-      agents = (data as any[])
-        .filter((agent) => {
-          const areas = agent.coverage_areas || []
-          return areas.some((area: any) => {
-            const prefixes = area.postcode_prefixes || []
-            return prefixes.some((p: string) =>
-              searchedPostcode?.startsWith(p.toUpperCase())
-            )
-          })
-        })
-        .sort((a, b) => {
-          // Verified first, then by agency name
-          if (a.verified_at && !b.verified_at) return -1
-          if (!a.verified_at && b.verified_at) return 1
-          return (a.agency_name || '').localeCompare(b.agency_name || '')
-        })
+    try {
+      // Server-side filter: find agents whose coverage_areas contains this postcode prefix
+      // Try exact outward code first (e.g. SW11), fall back to area (e.g. SW)
+      const { data } = await supabase
+        .from('agent_profiles')
+        .select(`
+          user_id,
+          agency_name,
+          focus,
+          verified_at,
+          coverage_areas,
+          property_types
+        `)
+        .not('verified_at', 'is', null)
+        .contains('coverage_areas', JSON.stringify([{ postcode_prefixes: [outward] }]))
+        .order('agency_name')
+        .limit(60)
+
+      if (data && data.length > 0) {
+        agents = data as Agent[]
+      } else {
+        // Broaden to area prefix
+        const { data: broadData } = await supabase
+          .from('agent_profiles')
+          .select(`
+            user_id,
+            agency_name,
+            focus,
+            verified_at,
+            coverage_areas,
+            property_types
+          `)
+          .not('verified_at', 'is', null)
+          .contains('coverage_areas', JSON.stringify([{ postcode_prefixes: [area] }]))
+          .order('agency_name')
+          .limit(60)
+
+        if (broadData) {
+          agents = broadData as Agent[]
+        }
+      }
+    } catch {
+      // Graceful fallback if query fails
+      agents = []
     }
   }
 
