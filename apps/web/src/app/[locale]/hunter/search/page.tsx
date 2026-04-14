@@ -50,7 +50,7 @@ export default async function SearchProfilePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl">
           {[
             'Create your search once — we handle the rest',
-            'Only relevant agents are contacted (max 8)',
+            'All matching agents in your area are contacted',
             'Your name, email, and phone are never shared',
             'Agent replies scored and prioritised for you',
             'Block or dismiss any agent at any time',

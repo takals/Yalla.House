@@ -388,7 +388,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               </div>
               <div>
                 <p className="font-semibold text-sm">Yes, introduce me to relevant agents</p>
-                <p className="text-xs text-[#5E6278] mt-0.5">Recommended — up to 8 agents will receive your search brief</p>
+                <p className="text-xs text-[#5E6278] mt-0.5">Recommended — all matching agents in your area will receive your search brief</p>
               </div>
             </div>
           </button>
