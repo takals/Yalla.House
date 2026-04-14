@@ -1,18 +1,13 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      - 'Website/**'
-      - '_archive/**'
-      - '*.md'
   pull_request:
     branches: [main]
-    paths-ignore:
-      - 'Website/**'
-      - '_archive/**'
-      - '*.md'
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci.yml'
 
 concurrency:
   group: ci-${{ github.ref }}

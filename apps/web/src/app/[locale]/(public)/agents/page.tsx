@@ -42,11 +42,16 @@ export default async function AgentsPage({
   if (postcode) {
     searchedPostcode = postcode.toUpperCase().replace(/\s+/g, '')
 
-    // Extract postcode area (letters) and outward code (letters+digits before space)
-    const areaMatch = searchedPostcode.match(/^([A-Z]{1,2})/)
-    const outwardMatch = searchedPostcode.match(/^([A-Z]{1,2}\d{1,2}[A-Z]?)/)
-    const area = areaMatch?.[1] || searchedPostcode
-    const outward = outwardMatch?.[1] || searchedPostcode
+    // UK postcode: outward code = everything except the last 3 chars (inward code)
+    // "IG26PX" → outward "IG2", area "IG"
+    // "SW111AA" → outward "SW11", area "SW"
+    // If only 2-4 chars entered (just outward code), use as-is
+    let outward = searchedPostcode
+    if (searchedPostcode.length >= 5) {
+      outward = searchedPostcode.slice(0, -3) // strip inward code (always 3 chars: digit + 2 letters)
+    }
+    const areaMatch = outward.match(/^([A-Z]{1,2})/)
+    const area = areaMatch?.[1] || outward
 
     try {
       // Server-side filter: find agents whose coverage_areas contains this postcode prefix
