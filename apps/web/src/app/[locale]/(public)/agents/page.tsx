@@ -58,8 +58,8 @@ export default async function AgentsPage({
           full_name
         )
       `)
-      .eq('verified_at IS NOT NULL', true)
-      .limit(50)
+      .not('verified_at', 'is', null)
+      .limit(500)
 
     if (data) {
       // Filter agents whose coverage includes this postcode
@@ -284,7 +284,7 @@ export default async function AgentsPage({
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="text-3xl font-extrabold text-brand mb-2">
-                  500+
+                  17,000+
                 </div>
                 <p className="text-sm text-text-on-dark-secondary">
                   {t('statsAgents')}
@@ -292,7 +292,7 @@ export default async function AgentsPage({
               </div>
               <div className="text-center">
                 <div className="text-3xl font-extrabold text-brand mb-2">
-                  25+
+                  100+
                 </div>
                 <p className="text-sm text-text-on-dark-secondary">
                   {t('statsAreas')}
