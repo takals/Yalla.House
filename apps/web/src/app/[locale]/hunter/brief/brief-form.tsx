@@ -55,7 +55,7 @@ const TIMELINE_OPTIONS = [
 ]
 const AUTOMATIONS = [
   { key: 'matchPortals', label: 'Match properties from portals' },
-  { key: 'connectAgents', label: 'Connect me with local agents' },
+  { key: 'connectAgents', label: 'Connect my inbox to local agents' },
   { key: 'subscribeNewsletters', label: 'Subscribe to agent newsletters' },
   { key: 'filterAuto', label: 'Filter listings automatically' },
   { key: 'notifyMatches', label: 'Notify me when strong matches appear' },

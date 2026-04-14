@@ -18,9 +18,18 @@ interface PassportProfile {
   timeline: string | null
 }
 
+interface SampleAgent {
+  name: string
+  postcode: string
+  focus: string
+  services: string
+  address: string
+}
+
 interface Props {
   profile: PassportProfile | null
   userName: string | null
+  sampleAgents?: SampleAgent[]
 }
 
 const AREAS = ['East London', 'North London', 'South East London', 'Zone 2', 'Zone 3', 'West London', 'South West London']
@@ -56,7 +65,7 @@ const TIMELINE_OPTIONS = [
 ]
 const AUTOMATIONS = [
   { key: 'matchPortals', label: 'Match properties from portals' },
-  { key: 'connectAgents', label: 'Connect me with local agents' },
+  { key: 'connectAgents', label: 'Connect my inbox to local agents' },
   { key: 'subscribeNewsletters', label: 'Subscribe to agent newsletters' },
   { key: 'filterAuto', label: 'Filter listings automatically' },
   { key: 'notifyMatches', label: 'Notify me when strong matches appear' },
@@ -108,7 +117,7 @@ function FinanceBadge({ status }: { status: string }) {
   )
 }
 
-export function PassportForm({ profile, userName }: Props) {
+export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
   const [state, setState] = useState<{ success?: boolean; error?: string }>({})
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()
@@ -151,10 +160,10 @@ export function PassportForm({ profile, userName }: Props) {
   const hasPassport = areas.length > 0 || budgetMax !== '' || propertyTypes.length > 0
   const isVerified = financeStatus !== 'not_specified'
 
-  const sampleListings = [
-    { price: '£495k', location: 'Bow, E3', spec: '2 bed · Balcony · 7 min to station' },
-    { price: '£505k', location: 'Hackney, E8', spec: '3 bed · Garden · Near tube' },
-    { price: '£475k', location: 'Bethnal Green, E2', spec: '2 bed · Period flat · Zone 2' },
+  const displayAgents = sampleAgents.length > 0 ? sampleAgents : [
+    { name: 'Foxtons', postcode: 'SW11', focus: 'both', services: 'Sales, Lettings', address: 'Battersea' },
+    { name: 'Chestertons', postcode: 'E14', focus: 'sale', services: 'Residential Sales', address: 'Canary Wharf' },
+    { name: 'Barnard Marcus', postcode: 'SE1', focus: 'rent', services: 'Lettings', address: 'Southwark' },
   ]
 
   return (
@@ -432,25 +441,42 @@ export function PassportForm({ profile, userName }: Props) {
                 </label>
               ))}
             </div>
+            <div className="mt-4 bg-[#F0FDF4] rounded-lg p-3 border border-[#BBF7D0]">
+              <p className="text-xs text-[#166534] leading-relaxed">
+                <span className="font-bold">No spam guarantee:</span> All agent messages go to your Yalla inbox only. Your personal email stays private — you get a dedicated <span className="font-mono font-bold">@yalla.mail</span> address for all property communication.
+              </p>
+            </div>
           </div>
 
-          {/* Sample listings */}
+          {/* Agent matches */}
           <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB]">
             <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-4">
-              {hasPassport ? 'Listings we would show you' : 'Example matches'}
+              {hasPassport ? 'Agents in your area' : 'Example agent matches'}
             </p>
             <div className="space-y-3">
-              {sampleListings.map(l => (
-                <div key={l.location} className="text-sm">
-                  <span className="font-bold">{l.price}</span>
-                  <span className="text-[#5E6278]"> · {l.location}</span>
-                  <p className="text-xs text-[#999]">{l.spec}</p>
-                </div>
+              {displayAgents.slice(0, 3).map(a => (
+                <a key={a.name + a.postcode} href={`/en/agents?postcode=${a.postcode}`} className="block hover:bg-[#F5F5F7] rounded-lg p-2 -mx-2 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="font-bold text-sm">{a.name}</span>
+                      <p className="text-xs text-[#5E6278]">{a.address || a.postcode} · {a.services}</p>
+                    </div>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                      a.focus === 'both' ? 'bg-[#DBEAFE] text-[#1E40AF]'
+                      : a.focus === 'rent' ? 'bg-[#FEF3C7] text-[#92400E]'
+                      : 'bg-[#DCFCE7] text-[#166534]'
+                    }`}>
+                      {a.focus === 'both' ? 'Sales & Lettings' : a.focus === 'rent' ? 'Lettings' : 'Sales'}
+                    </span>
+                  </div>
+                </a>
               ))}
             </div>
-            <p className="text-xs text-[#999] mt-3 italic">
-              Real listings will appear once your Passport is active.
-            </p>
+            {sampleAgents.length > 0 && (
+              <a href="/en/agents" className="block text-xs text-brand font-semibold mt-3 hover:underline">
+                View all 17,000+ agents →
+              </a>
+            )}
           </div>
 
         </div>

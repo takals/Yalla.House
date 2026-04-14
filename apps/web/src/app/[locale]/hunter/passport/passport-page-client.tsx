@@ -5,11 +5,20 @@ import { ShieldCheck, Check, Home } from 'lucide-react'
 import { PassportForm } from './passport-form'
 import { HunterPassportIntake } from '@/components/intake/hunter-passport-intake'
 
+interface SampleAgent {
+  name: string
+  postcode: string
+  focus: string
+  services: string
+  address: string
+}
+
 interface PassportPageClientProps {
   userId: string
   profile?: Record<string, unknown> | null
   userName?: string | null
   translations: Record<string, string>
+  sampleAgents?: SampleAgent[]
 }
 
 export function PassportPageClient({
@@ -17,6 +26,7 @@ export function PassportPageClient({
   profile,
   userName,
   translations,
+  sampleAgents = [],
 }: PassportPageClientProps) {
   const [mode, setMode] = useState<'classic' | 'chat'>('chat')
 
@@ -116,6 +126,7 @@ export function PassportPageClient({
       <PassportForm
         profile={profile as any}
         userName={userName as any}
+        sampleAgents={sampleAgents}
       />
     </div>
   )

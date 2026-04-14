@@ -10,7 +10,7 @@ export default async function PassportPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  const [profileResult, userResult] = await Promise.all([
+  const [profileResult, userResult, agentsResult] = await Promise.all([
     (supabase.from('hunter_profiles') as any)
       .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline')
       .eq('user_id', userId)
@@ -19,6 +19,13 @@ export default async function PassportPage() {
       .select('full_name')
       .eq('id', userId)
       .maybeSingle(),
+    // Fetch a few real agents for the sample matches section
+    (supabase.from('agent_profiles') as any)
+      .select('agency_name, postcode, focus, service_types, raw_address')
+      .eq('data_source', 'propertymark')
+      .not('postcode', 'is', null)
+      .not('agency_name', 'is', null)
+      .limit(6),
   ])
 
   // Prepare translations dict for client component
@@ -95,12 +102,22 @@ export default async function PassportPage() {
     opt_flexible: t('opt_flexible'),
   }
 
+  // Format real agents for sample matches
+  const sampleAgents = (agentsResult.data ?? []).map((a: { agency_name: string; postcode: string; focus: string; service_types: string[]; raw_address: string }) => ({
+    name: a.agency_name,
+    postcode: a.postcode,
+    focus: a.focus,
+    services: Array.isArray(a.service_types) ? a.service_types.slice(0, 2).join(', ') : 'Sales',
+    address: a.raw_address,
+  }))
+
   return (
     <PassportPageClient
       userId={userId}
       profile={profileResult.data}
       userName={userResult.data?.full_name ?? null}
       translations={intakeTranslations}
+      sampleAgents={sampleAgents}
     />
   )
 }
