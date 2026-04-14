@@ -135,7 +135,7 @@ export function HunterPassportIntake({
 
   if (memoriesLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-full min-h-[400px]">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4764E]" />
           <p className="mt-4 text-[#5E6278]">Loading your profile...</p>
@@ -145,36 +145,30 @@ export function HunterPassportIntake({
   }
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-full">
       <ConversationalIntake {...flowConfig} />
 
-      {/* Voice toggle button (fixed position) */}
-      {isVoiceSupported && (
-        <button
-          onClick={() => {
-            setVoiceEnabled(!voiceEnabled)
-            if (!voiceEnabled) {
-              toggleListening()
-            }
-          }}
-          className={`fixed bottom-6 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-50 ${
-            voiceEnabled
-              ? 'bg-[#D4764E] text-white shadow-lg'
-              : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
-          }`}
-          title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
-        >
-          {isListening ? <Mic size={20} /> : <MicOff size={20} />}
-          <span className="text-sm font-medium">Voice AI</span>
-        </button>
-      )}
-
-      {/* Voice indicator */}
-      {voiceEnabled && isListening && (
-        <div className="fixed bottom-20 right-6 bg-[#D4764E] text-white rounded-lg px-4 py-2 text-xs font-medium z-50 animate-pulse">
-          Listening...
-        </div>
-      )}
+      {/* Voice toggle button */}
+      <button
+        onClick={() => {
+          if (!isVoiceSupported) return
+          setVoiceEnabled(!voiceEnabled)
+          if (!voiceEnabled) toggleListening()
+        }}
+        className={`fixed bottom-20 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-40 shadow-lg ${
+          voiceEnabled && isListening
+            ? 'bg-[#D4764E] text-white ring-4 ring-[#D4764E]/30 animate-pulse'
+            : voiceEnabled
+              ? 'bg-[#D4764E] text-white'
+              : 'bg-white text-slate-700 border border-slate-200 hover:border-[#D4764E] hover:bg-orange-50'
+        } ${!isVoiceSupported ? 'opacity-40 cursor-not-allowed' : ''}`}
+        title={!isVoiceSupported ? 'Voice not supported in this browser' : voiceEnabled ? 'Voice active — tap to disable' : 'Enable voice input'}
+      >
+        {voiceEnabled && isListening ? <Mic size={18} className="animate-pulse" /> : <Mic size={18} />}
+        <span className="text-sm font-semibold">
+          {voiceEnabled && isListening ? 'Listening...' : 'Voice AI'}
+        </span>
+      </button>
     </div>
   )
 }

@@ -72,9 +72,10 @@ export function getHunterPassportFlow(
     },
     {
       id: 'must_haves',
-      question: translations.q_must_haves || "What features are important to you?",
+      question: translations.q_must_haves || "What features are important to you? Pick as many as you like, or skip if you're flexible.",
       type: 'chips',
       options: [
+        { value: '_none', label: translations.opt_no_preference || "I'm flexible" },
         { value: 'balcony', label: translations.opt_balcony || 'Balcony' },
         { value: 'near_station', label: translations.opt_near_station || 'Near Station' },
         { value: 'garden', label: translations.opt_garden || 'Garden' },
@@ -92,6 +93,7 @@ export function getHunterPassportFlow(
       question: translations.q_dealbreakers || "Any deal-breakers we should know about?",
       type: 'chips',
       options: [
+        { value: '_none', label: translations.opt_no_dealbreakers || 'No deal-breakers' },
         { value: 'no_auctions', label: translations.opt_no_auctions || 'No Auctions' },
         { value: 'no_retirement', label: translations.opt_no_retirement || 'No Retirement Homes' },
         { value: 'no_ground_floor', label: translations.opt_no_ground_floor || 'No Ground Floor' },
