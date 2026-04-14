@@ -65,7 +65,19 @@ export function ConversationalIntake({
   translations,
 }: IntakeFlowConfig) {
   const [messages, setMessages] = useState<Message[]>([])
-  const [formData, setFormData] = useState<Record<string, unknown>>(existingData)
+  // Restore from localStorage if available (survives auth round-trip)
+  const [formData, setFormData] = useState<Record<string, unknown>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(`yalla_intake_${flowId}`)
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          return { ...parsed, ...existingData }
+        }
+      } catch {}
+    }
+    return existingData
+  })
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [allSteps, setAllSteps] = useState<IntakeStep[]>(initialSteps)
   const [input, setInput] = useState('')
@@ -142,6 +154,8 @@ export function ConversationalIntake({
 
     const newFormData = { ...formData, [currentStep.id]: answer }
     setFormData(newFormData)
+    // Persist to localStorage so data survives auth round-trip
+    try { localStorage.setItem(`yalla_intake_${flowId}`, JSON.stringify(newFormData)) } catch {}
 
     // Follow-ups
     let followUpSteps: IntakeStep[] = []

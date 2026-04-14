@@ -31,10 +31,13 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
 
     try {
       const supabase = createClient()
+      // Preserve current page so user returns here after auth
+      const returnTo = window.location.pathname + window.location.search
+      localStorage.setItem('yalla_auth_return', returnTo)
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
+          emailRedirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(returnTo)}`,
         },
       })
 

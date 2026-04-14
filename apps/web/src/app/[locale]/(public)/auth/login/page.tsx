@@ -11,7 +11,8 @@ export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const errorParam = searchParams.get('error')
-  const next = searchParams.get('next') ?? '/owner'
+  const storedReturn = typeof window !== 'undefined' ? localStorage.getItem('yalla_auth_return') : null
+  const next = searchParams.get('next') ?? storedReturn ?? '/hunter'
 
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
