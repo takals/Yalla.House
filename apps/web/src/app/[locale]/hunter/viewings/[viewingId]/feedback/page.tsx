@@ -12,7 +12,7 @@ export default async function ViewingFeedbackPage({ params }: PageProps) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/api/auth/login')
+  if (!user) redirect('/auth/login?next=/hunter/viewings')
 
   // Fetch viewing with listing info
   const { data: viewing } = await (supabase.from('viewings') as any)

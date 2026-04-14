@@ -34,6 +34,8 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
       // Preserve current page so user returns here after auth
       const returnTo = window.location.pathname + window.location.search
       localStorage.setItem('yalla_auth_return', returnTo)
+      // Set cookie so the server-side callback can read it
+      document.cookie = `yalla_auth_return=${encodeURIComponent(returnTo)};path=/;max-age=600;SameSite=Lax`
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email,
         options: {

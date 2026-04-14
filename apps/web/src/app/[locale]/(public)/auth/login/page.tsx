@@ -6,6 +6,13 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
+/** Set a same-site cookie so the server-side callback can read the return URL.
+ *  This survives the full redirect chain (Supabase → Google/email → callback).
+ *  Max-age 10 min — more than enough for any auth flow. */
+function setAuthReturnCookie(path: string) {
+  document.cookie = `yalla_auth_return=${encodeURIComponent(path)};path=/;max-age=600;SameSite=Lax`
+}
+
 export default function LoginPage() {
   const t = useTranslations('auth')
   const router = useRouter()
@@ -32,7 +39,13 @@ export default function LoginPage() {
     if (errorParam) {
       setError(t('errorAuthFailed'))
     }
-  }, [errorParam, t])
+
+    // Always persist the return URL in a cookie so the server-side
+    // callback has it even if Supabase strips the query param.
+    if (next && next !== '/hunter') {
+      setAuthReturnCookie(next)
+    }
+  }, [errorParam, t, next])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -48,6 +61,10 @@ export default function LoginPage() {
 
     // Save email for next time
     localStorage.setItem('yalla_last_email', email)
+
+    // Persist return URL in cookie (belt-and-suspenders with query param)
+    setAuthReturnCookie(next)
+    localStorage.setItem('yalla_auth_return', next)
 
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
@@ -162,6 +179,7 @@ export default function LoginPage() {
               type="button"
               onClick={async () => {
                 const supabase = createClient()
+                setAuthReturnCookie(next)
                 localStorage.setItem('yalla_auth_return', next)
                 await supabase.auth.signInWithOAuth({
                   provider: 'google',
@@ -177,6 +195,7 @@ export default function LoginPage() {
               type="button"
               onClick={async () => {
                 const supabase = createClient()
+                setAuthReturnCookie(next)
                 localStorage.setItem('yalla_auth_return', next)
                 await supabase.auth.signInWithOAuth({
                   provider: 'facebook',
