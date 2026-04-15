@@ -5,7 +5,7 @@ import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
-  LogOut, Search,
+  LogOut, Search, Info,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -143,6 +143,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
 export const hunterNav: NavItem[] = [
   { href: '/hunter',          label: 'Dashboard',        icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/hunter/info',     label: 'Benefits',         icon: <Info size={15} /> },
   { href: '/hunter/search',   label: 'Search',            icon: <Search size={15} /> },
   { href: '/hunter/passport', label: 'Home Passport',    icon: <ShieldCheck size={15} /> },
   { href: '/hunter/agents',   label: 'Agents',   icon: <Handshake size={15} /> },
@@ -152,6 +153,7 @@ export const hunterNav: NavItem[] = [
 
 export const agentNav: NavItem[] = [
   { href: '/agent',            label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/agent/info',       label: 'Benefits',          icon: <Info size={15} /> },
   { href: '/agent/assignments', label: 'Assignments', icon: <Building2 size={15} /> },
   { href: '/agent/calendar',   label: 'Calendar',   icon: <Calendar size={15} /> },
   { href: '/agent/briefs',     label: 'Briefs',   icon: <Inbox size={15} /> },
@@ -166,6 +168,7 @@ export const adminNav: NavItem[] = [
 
 export const ownerNav: NavItem[] = [
   { href: '/owner',          label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/owner/info',     label: 'Benefits',          icon: <Info size={15} /> },
   { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} /> },
   { href: '/owner/viewings', label: 'Viewings',    icon: <Calendar size={15} /> },
   { href: '/owner/agents',   label: 'Agents',      icon: <Handshake size={15} /> },
