@@ -157,10 +157,10 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
             },
             {
               num: '2',
-              title: isEN ? 'Go live on portals' : 'Auf Portalen veröffentlichen',
+              title: isEN ? 'Go live on free channels' : 'Auf kostenlosen Kanälen veröffentlichen',
               desc: isEN
-                ? 'Your listing syndicates to Rightmove, Zoopla, and free channels. Buyers start finding you within hours.'
-                : 'Ihr Inserat erscheint auf den großen Portalen und kostenlosen Kanälen. Käufer finden Sie innerhalb von Stunden.',
+                ? 'Your listing appears on OpenRent, Gumtree, Facebook Marketplace, and more — for free. If you want Rightmove and Zoopla, your matched agent handles that through their portal access.'
+                : 'Ihr Inserat erscheint auf OpenRent, Gumtree, Facebook Marketplace und mehr — kostenlos. Für Rightmove und Zoopla kümmert sich Ihr zugeordneter Makler darum.',
             },
             {
               num: '3',
@@ -190,8 +190,8 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
         </h2>
         <p className="text-sm text-[#5E6278] mb-8">
           {isEN
-            ? 'List for free. Add tools when you need them.'
-            : 'Kostenlos inserieren. Tools hinzufügen, wenn Sie sie brauchen.'}
+            ? 'List for free. Add tools as you need them — one-off or monthly.'
+            : 'Kostenlos inserieren. Tools bei Bedarf hinzufügen — einmalig oder monatlich.'}
         </p>
 
         <div className="grid md:grid-cols-3 gap-5">
