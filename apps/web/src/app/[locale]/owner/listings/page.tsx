@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus, Home, ExternalLink } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
@@ -22,6 +23,13 @@ export default async function OwnerListingsPage() {
     .order('created_at', { ascending: false })
 
   const allListings: Listing[] = listingsData ?? []
+
+  // Single listing shortcut: if owner has exactly 1 listing, go straight to it
+  if (allListings.length === 1) {
+    const only = allListings[0]!
+    const isPublic = only.status === 'active' || only.status === 'under_offer'
+    redirect(isPublic ? `/p/${only.place_id}` : `/owner/${only.id}`)
+  }
 
   return (
     <div className="max-w-7xl">
