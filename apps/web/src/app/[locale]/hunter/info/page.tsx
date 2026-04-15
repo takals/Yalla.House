@@ -16,7 +16,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
 
       {/* Sub-nav tabs */}
       <div className="flex gap-6 border-b border-[#E2E4EB] -mt-2">
-        <Link href="/hunter" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/hunter/info" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-[#5856D6] -mb-px">
+          Info
+        </Link>
+        <Link href="/hunter/overview" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
           Dashboard
         </Link>
         <Link href="/hunter/passport" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
@@ -24,9 +27,6 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
         </Link>
         <Link href="/hunter/inbox" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
           Inbox
-        </Link>
-        <Link href="/hunter/info" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-[#5856D6] -mb-px">
-          Info
         </Link>
       </div>
 

@@ -18,7 +18,10 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
 
       {/* Sub-nav tabs */}
       <div className="flex gap-6 mb-8 border-b border-[#E2E4EB]">
-        <Link href="/owner" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/owner/info" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
+          Info
+        </Link>
+        <Link href="/owner/overview" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
           {t('pageTitle')}
         </Link>
         <Link href="/owner/listings" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
@@ -26,9 +29,6 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
         </Link>
         <Link href="/owner/inbox" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
           {t('tabInquiries')}
-        </Link>
-        <Link href="/owner/info" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
-          Info
         </Link>
       </div>
 
