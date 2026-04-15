@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
-import { Plus, Home } from 'lucide-react'
+import { Plus, Home, ExternalLink } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
 import { getTranslations } from 'next-intl/server'
 import type { Database } from '@/types/database'
@@ -63,15 +63,25 @@ export default async function OwnerListingsPage() {
               ? new Intl.NumberFormat('de-DE', { style: 'currency', currency, maximumFractionDigits: 0 }).format(fromMinorUnits(price, currency))
               : null
 
+            // Live/under_offer listings link to the public page; others to the owner edit page
+            const isPublic = listing.status === 'active' || listing.status === 'under_offer'
+            const href = isPublic ? `/p/${listing.place_id}` : `/owner/${listing.id}`
+
             return (
               <Link
                 key={listing.id}
-                href={`/owner/${listing.id}`}
-                className="bg-surface rounded-card border border-[#E2E4EB] overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all will-change-transform group"
+                href={href}
+                className="bg-surface rounded-card border border-[#E2E4EB] overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all will-change-transform group relative"
               >
                 {/* Placeholder image area */}
-                <div className="h-40 bg-[#EDEEF2] flex items-center justify-center">
+                <div className="h-40 bg-[#EDEEF2] flex items-center justify-center relative">
                   <Home size={48} className="text-[#D9DCE4]" />
+                  {/* Public link indicator for live listings */}
+                  {isPublic && (
+                    <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm">
+                      <ExternalLink size={14} className="text-[#5E6278]" />
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-4">
@@ -114,7 +124,9 @@ export default async function OwnerListingsPage() {
   )
 }
 
-function StatusBadge({ status, t }: { status: string; t: any }) {
+function StatusBadge({ status, t }: { status: string; t: (key: string) => string }) {
+  const isLive = status === 'active'
+
   const styles: Record<string, string> = {
     draft: 'bg-gray-100 text-gray-600',
     active: 'bg-green-100 text-green-700',
@@ -127,11 +139,17 @@ function StatusBadge({ status, t }: { status: string; t: any }) {
 
   return (
     <span
-      className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
+      className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
         styles[status] ?? styles['draft']
       }`}
     >
-      {(t as any)(status) ?? status}
+      {isLive && (
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+        </span>
+      )}
+      {t(status) ?? status}
     </span>
   )
 }

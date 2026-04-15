@@ -174,7 +174,7 @@
   "statusLabels": {
     "draft": "Draft",
     "preview": "Preview",
-    "active": "Active",
+    "active": "Live",
     "paused": "Paused",
     "underOffer": "Under Offer",
     "sold": "Sold",
