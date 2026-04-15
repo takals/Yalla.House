@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Pencil, Share2, Copy, Check, Mail, MessageCircle, Link2 } from 'lucide-react'
 
 interface Props {
@@ -11,12 +12,12 @@ interface Props {
 }
 
 export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
+  const t = useTranslations('listingPage')
   const [isLive, setIsLive] = useState(status === 'active')
   const [toggling, setToggling] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  const isDE = locale === 'de'
   const publicUrl = `https://yalla.house/${locale === 'de' ? '' : 'en/'}p/${placeId}`
 
   async function handleToggle() {
@@ -41,24 +42,20 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const shareText = isDE
-    ? 'Schau dir diese Immobilie an:'
-    : 'Check out this property:'
-
   return (
     <div className="bg-[#0F1117] text-white">
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-4">
         {/* Left: owner badge + edit */}
         <div className="flex items-center gap-3">
           <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4764E] bg-[#D4764E]/10 px-2 py-0.5 rounded-full">
-            {isDE ? 'Ihre Immobilie' : 'Your Property'}
+            {t('ownerBadge')}
           </span>
           <a
             href={`/owner/${listingId}`}
             className="flex items-center gap-1.5 text-xs font-semibold text-white/50 hover:text-white transition-colors"
           >
             <Pencil size={12} />
-            {isDE ? 'Bearbeiten' : 'Edit'}
+            {t('ownerEdit')}
           </a>
         </div>
 
@@ -74,7 +71,7 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
               <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${isLive ? 'left-[18px]' : 'left-0.5'}`} />
             </div>
             <span className={isLive ? 'text-green-400' : 'text-white/40'}>
-              {isLive ? 'Live' : (isDE ? 'Entwurf' : 'Draft')}
+              {isLive ? 'Live' : t('ownerDraft')}
             </span>
           </button>
 
@@ -85,7 +82,7 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
               className="flex items-center gap-1.5 text-xs font-semibold text-white/50 hover:text-white transition-colors"
             >
               <Share2 size={14} />
-              <span className="hidden sm:inline">{isDE ? 'Teilen' : 'Share'}</span>
+              <span className="hidden sm:inline">{t('ownerShare')}</span>
             </button>
 
             {shareOpen && (
@@ -95,10 +92,10 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left"
                 >
                   {copied ? <Check size={14} className="text-green-400" /> : <Link2 size={14} />}
-                  {copied ? (isDE ? 'Kopiert!' : 'Copied!') : (isDE ? 'Link kopieren' : 'Copy link')}
+                  {copied ? t('ownerCopied') : t('ownerCopyLink')}
                 </button>
                 <a
-                  href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + publicUrl)}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(t('ownerShareText') + ' ' + publicUrl)}`}
                   target="_blank"
                   rel="noopener"
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors"
@@ -107,7 +104,7 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
                   WhatsApp
                 </a>
                 <a
-                  href={`mailto:?subject=${encodeURIComponent(isDE ? 'Immobilie auf Yalla.House' : 'Property on Yalla.House')}&body=${encodeURIComponent(shareText + '\n\n' + publicUrl)}`}
+                  href={`mailto:?subject=${encodeURIComponent(t('ownerEmailSubject'))}&body=${encodeURIComponent(t('ownerShareText') + '\n\n' + publicUrl)}`}
                   className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors"
                 >
                   <Mail size={14} />

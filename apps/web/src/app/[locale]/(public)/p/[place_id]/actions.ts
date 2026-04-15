@@ -136,6 +136,21 @@ export async function bookSlotAction(
   return { success: true }
 }
 
+export async function getSlotByIdAction(
+  slotId: string
+): Promise<{ slot: { id: string; starts_at: string; ends_at: string } | null }> {
+  const { createServiceClient: svc } = await import('@/lib/supabase/server')
+  const service = svc()
+
+  const { data } = await (service.from('availability_slots') as any)
+    .select('id, starts_at, ends_at')
+    .eq('id', slotId)
+    .eq('is_booked', false)
+    .single()
+
+  return { slot: data ?? null }
+}
+
 export async function requestViewingAction(
   listingId: string,
   payload: ViewingPayload

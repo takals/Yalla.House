@@ -1,21 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Calendar, Eye } from 'lucide-react'
 
 interface Props {
   status: string
   slotCount: number
   listingId: string
-  locale: string
 }
 
-export function StickyBookingBar({ status, slotCount, listingId, locale }: Props) {
-  const isDE = locale === 'de'
+export function StickyBookingBar({ status, slotCount, listingId }: Props) {
+  const t = useTranslations('listingPage')
   const isUnderOffer = status === 'under_offer'
 
   function scrollToBooking() {
-    // Try to scroll to booking slots first, fall back to contact form
     const bookingSection = document.querySelector('[data-booking-slots]')
       ?? document.querySelector('[data-contact-card]')
     if (bookingSection) {
@@ -28,7 +26,6 @@ export function StickyBookingBar({ status, slotCount, listingId, locale }: Props
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-4">
         {/* Left: status */}
         <div className="flex items-center gap-3 min-w-0">
-          {/* Live dot */}
           {!isUnderOffer && (
             <span className="relative flex h-2 w-2 flex-shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
@@ -39,14 +36,11 @@ export function StickyBookingBar({ status, slotCount, listingId, locale }: Props
             <span className="flex h-2 w-2 rounded-full bg-amber-400 flex-shrink-0" />
           )}
           <span className="text-xs font-bold text-[#0F1117] uppercase tracking-wide">
-            {isUnderOffer
-              ? (isDE ? 'Unter Angebot' : 'Under Offer')
-              : (isDE ? 'Live' : 'Live')
-            }
+            {isUnderOffer ? t('barUnderOffer') : t('barLive')}
           </span>
           {slotCount > 0 && (
             <span className="text-xs text-[#5E6278] hidden sm:inline">
-              {slotCount} {isDE ? (slotCount === 1 ? 'Termin verfügbar' : 'Termine verfügbar') : (slotCount === 1 ? 'slot available' : 'slots available')}
+              {t('barSlotAvailable', { count: slotCount })}
             </span>
           )}
         </div>
@@ -59,12 +53,8 @@ export function StickyBookingBar({ status, slotCount, listingId, locale }: Props
               className="flex items-center gap-2 bg-[#D4764E] hover:bg-[#BF6840] text-white font-bold text-sm px-5 py-2 rounded-lg transition-colors"
             >
               <Calendar size={14} />
-              <span className="hidden sm:inline">
-                {isDE ? 'Besichtigung buchen' : 'Book a Viewing'}
-              </span>
-              <span className="sm:hidden">
-                {isDE ? 'Buchen' : 'Book'}
-              </span>
+              <span className="hidden sm:inline">{t('barBookViewing')}</span>
+              <span className="sm:hidden">{t('barBookShort')}</span>
             </button>
           )}
           {isUnderOffer && (
@@ -73,12 +63,8 @@ export function StickyBookingBar({ status, slotCount, listingId, locale }: Props
               className="flex items-center gap-2 bg-[#0F1117] hover:bg-[#1C1F2E] text-white font-bold text-sm px-5 py-2 rounded-lg transition-colors"
             >
               <Eye size={14} />
-              <span className="hidden sm:inline">
-                {isDE ? 'Interesse anmelden' : 'Register Interest'}
-              </span>
-              <span className="sm:hidden">
-                {isDE ? 'Interesse' : 'Interest'}
-              </span>
+              <span className="hidden sm:inline">{t('barRegisterInterest')}</span>
+              <span className="sm:hidden">{t('barInterestShort')}</span>
             </button>
           )}
         </div>
