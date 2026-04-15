@@ -28,7 +28,7 @@
     "headlinePrefix": "Your property ",
     "headlineWords": "sale,rental",
     "headlineSuffix": ", under your control.",
-    "subline": "Free owner dashboard. Market data. Comparable sales. Then send your brief to competing agents — and choose the best deal.",
+    "subline": "Free owner dashboard. Market data. Comparable sales. Sell privately or invite agents to compete — it's your choice.",
     "cta": "Create your free dashboard",
     "ctaHunter": "I'm looking to buy",
     "toggleOwner": "I'm selling",
@@ -76,15 +76,15 @@
     "subtitle": "Three steps. No commission. Full control.",
     "step1Title": "Create your dashboard",
     "step1Body": "Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale.",
-    "step2Title": "Send your brief to agents",
-    "step2Body": "One click sends your Owner Brief to competing agents in your area. They respond with real proposals — commission, marketing plan, portal coverage.",
-    "step3Title": "Compare, choose, track",
-    "step3Body": "Pick the best agent. Once instructed, they connect to your dashboard so you see every viewing, offer, and update in real time."
+    "step2Title": "Sell your way",
+    "step2Body": "List privately and manage it yourself, or send your Owner Brief to competing agents in one click. They respond with real proposals — you compare and choose.",
+    "step3Title": "Stay in control",
+    "step3Body": "Track every viewing, offer, and update in real time. Whether you're selling privately or through an agent, your dashboard keeps everything in one place."
   },
   "paths": {
     "ownerTitle": "For Owners",
     "ownerTagline": "Free forever. No commission.",
-    "ownerBody": "Get a free dashboard with market data and comparable sales. When you're ready, send your brief to agents and choose the best deal.",
+    "ownerBody": "Get a free dashboard with market data and comparable sales. Sell privately or invite agents to compete — your property, your rules.",
     "ownerCta": "Create your dashboard",
     "hunterTitle": "For Home Hunters",
     "hunterTagline": "Find your next home.",
@@ -98,7 +98,7 @@
   "whyYalla": {
     "title": "Why Yalla?",
     "item1Title": "You get a dashboard. Not a bill.",
-    "item1Body": "Every other platform charges you to list. We give you a free dashboard first — market data, comparable sales, a timeline for your sale. The dashboard is yours whether you use an agent or not.",
+    "item1Body": "Every other platform charges you to list. We give you a free dashboard first — market data, comparable sales, a timeline for your sale. Sell privately or with an agent. The dashboard is yours either way.",
     "item2Title": "Agents compete for you.",
     "item2Body": "Instead of calling one agent and hoping for the best, you send your brief to multiple agents simultaneously. They respond with real proposals. You compare. You choose.",
     "item3Title": "Your data, always.",
@@ -167,7 +167,7 @@
   },
   "ctaBand": {
     "headline": "Ready to take control of your sale?",
-    "body": "Create your free dashboard in under two minutes. See your market data, then send your brief to competing agents.",
+    "body": "Create your free dashboard in under two minutes. See your market data, then sell privately or invite agents to compete.",
     "cta": "Create your free dashboard",
     "agentLink": "I'm an agent"
   },

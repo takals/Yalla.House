@@ -28,7 +28,7 @@
     "headlinePrefix": "Ihr ",
     "headlineWords": "Immobilienverkauf,Vermietung",
     "headlineSuffix": ", unter Ihrer Kontrolle.",
-    "subline": "Kostenloses Eigentümer-Dashboard. Marktdaten. Vergleichbare Verkäufe. Dann senden Sie Ihr Brief an konkurrierende Makler — und wählen Sie das beste Angebot.",
+    "subline": "Kostenloses Eigentümer-Dashboard. Marktdaten. Vergleichbare Verkäufe. Verkaufen Sie privat oder lassen Sie Makler um Sie konkurrieren — Ihre Wahl.",
     "cta": "Kostenloses Dashboard erstellen",
     "ctaHunter": "Ich suche eine Immobilie",
     "toggleOwner": "Ich verkaufe",
@@ -76,15 +76,15 @@
     "subtitle": "Drei Schritte. Keine Provision. Volle Kontrolle.",
     "step1Title": "Dashboard erstellen",
     "step1Body": "Geben Sie Ihre Adresse ein und erhalten Sie ein kostenloses Eigentümer-Dashboard mit lokalen Marktdaten, vergleichbaren Verkäufen und einem Zeitplan für Ihren Verkauf.",
-    "step2Title": "Brief an Makler senden",
-    "step2Body": "Ein Klick sendet Ihr Eigentümer-Brief an konkurrierende Makler in Ihrer Gegend. Sie antworten mit echten Vorschlägen — Provision, Marketingplan, Portal-Abdeckung.",
-    "step3Title": "Vergleichen, wählen, verfolgen",
-    "step3Body": "Wählen Sie den besten Makler. Nach der Beauftragung verbinden sie sich mit Ihrem Dashboard, sodass Sie jede Besichtigung, jedes Angebot und jedes Update in Echtzeit sehen."
+    "step2Title": "Verkaufen Sie auf Ihre Art",
+    "step2Body": "Inserieren Sie privat und verwalten Sie alles selbst, oder senden Sie Ihren Eigentümer-Brief mit einem Klick an konkurrierende Makler. Sie antworten mit echten Vorschlägen — Sie vergleichen und entscheiden.",
+    "step3Title": "Behalten Sie die Kontrolle",
+    "step3Body": "Verfolgen Sie jede Besichtigung, jedes Angebot und jedes Update in Echtzeit. Ob Sie privat oder über einen Makler verkaufen — Ihr Dashboard hält alles an einem Ort."
   },
   "paths": {
     "ownerTitle": "Für Eigentümer",
     "ownerTagline": "Für immer kostenlos. Keine Provision.",
-    "ownerBody": "Erhalten Sie ein kostenloses Dashboard mit Marktdaten und vergleichbaren Verkäufen. Wenn Sie bereit sind, senden Sie Ihr Brief an Makler und wählen Sie das beste Angebot.",
+    "ownerBody": "Erhalten Sie ein kostenloses Dashboard mit Marktdaten und vergleichbaren Verkäufen. Verkaufen Sie privat oder lassen Sie Makler konkurrieren — Ihre Immobilie, Ihre Regeln.",
     "ownerCta": "Dashboard erstellen",
     "hunterTitle": "Für Suchende",
     "hunterTagline": "Finden Sie Ihr nächstes Zuhause.",
@@ -98,7 +98,7 @@
   "whyYalla": {
     "title": "Warum Yalla?",
     "item1Title": "Sie bekommen ein Dashboard. Keine Rechnung.",
-    "item1Body": "Jede andere Plattform verlangt Geld fürs Inserieren. Wir geben Ihnen zuerst ein kostenloses Dashboard — Marktdaten, vergleichbare Verkäufe, einen Zeitplan. Das Dashboard gehört Ihnen, ob Sie einen Makler beauftragen oder nicht.",
+    "item1Body": "Jede andere Plattform verlangt Geld fürs Inserieren. Wir geben Ihnen zuerst ein kostenloses Dashboard — Marktdaten, vergleichbare Verkäufe, einen Zeitplan. Verkaufen Sie privat oder mit Makler. Das Dashboard gehört Ihnen in jedem Fall.",
     "item2Title": "Makler konkurrieren um Sie.",
     "item2Body": "Statt einen Makler anzurufen und das Beste zu hoffen, senden Sie Ihren Brief an mehrere Makler gleichzeitig. Sie antworten mit echten Vorschlägen. Sie vergleichen. Sie entscheiden.",
     "item3Title": "Ihre Daten, immer.",
@@ -167,7 +167,7 @@
   },
   "ctaBand": {
     "headline": "Bereit, Ihren Verkauf selbst in die Hand zu nehmen?",
-    "body": "Erstellen Sie Ihr kostenloses Dashboard in unter zwei Minuten. Sehen Sie Ihre Marktdaten, dann senden Sie Ihr Exposé an konkurrierende Makler.",
+    "body": "Erstellen Sie Ihr kostenloses Dashboard in unter zwei Minuten. Sehen Sie Ihre Marktdaten, dann verkaufen Sie privat oder lassen Sie Makler konkurrieren.",
     "cta": "Kostenloses Dashboard erstellen",
     "agentLink": "Ich bin Makler"
   },
