@@ -1,18 +1,24 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
+import { getCountryConfig } from '@/lib/country-config'
 import { PassportPageClient } from './passport-page-client'
 
-export default async function PassportPage() {
+export default async function PassportPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   const t = await getTranslations('hunterPassport')
   const ti = await getTranslations('intake')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
+  // Resolve country from locale
+  const countryCode = locale === 'de' ? 'DE' : 'GB'
+  const countryConfig = getCountryConfig(countryCode)
+
   const [profileResult, userResult, agentsResult] = await Promise.all([
     (supabase.from('hunter_profiles') as any)
-      .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline')
+      .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline, mortgage_verified, identity_verified, profile_complete, renter_ready')
       .eq('user_id', userId)
       .maybeSingle(),
     (supabase.from('users') as any)
@@ -27,6 +33,16 @@ export default async function PassportPage() {
       .not('agency_name', 'is', null)
       .limit(6),
   ])
+
+  const profileData = profileResult.data
+
+  // Build readiness from DB columns (default false if null)
+  const readiness = {
+    mortgage_verified: !!profileData?.mortgage_verified,
+    identity_verified: !!profileData?.identity_verified,
+    profile_complete: !!profileData?.profile_complete,
+    renter_ready: !!profileData?.renter_ready,
+  }
 
   // Prepare translations dict for client component
   const intakeTranslations: Record<string, string> = {
@@ -53,16 +69,13 @@ export default async function PassportPage() {
     q_dealbreakers: ti('hunterPassport.dealbreakersQ'),
     q_finance_status: ti('hunterPassport.financeQ'),
     q_timeline: ti('hunterPassport.timelineQ'),
-    // Option labels — pulled from translations
+    // Option labels
     opt_buy: t('opt_buy'),
     opt_rent: t('opt_rent'),
-    opt_mitte: t('opt_mitte'),
-    opt_prenzlauer_berg: t('opt_prenzlauer_berg'),
-    opt_kreuzberg: t('opt_kreuzberg'),
-    opt_charlottenburg: t('opt_charlottenburg'),
-    opt_schoeneberg: t('opt_schoeneberg'),
-    opt_neukoelln: t('opt_neukoelln'),
-    opt_friedrichshain: t('opt_friedrichshain'),
+    // Dynamic area labels — pulled from country config regions
+    ...Object.fromEntries(
+      countryConfig.regions.map(r => [`opt_area_${r.prefix.toLowerCase()}`, r.label])
+    ),
     opt_flat: t('opt_flat'),
     opt_terraced: t('opt_terraced'),
     opt_semi_detached: t('opt_semi_detached'),
@@ -100,6 +113,13 @@ export default async function PassportPage() {
     opt_6m: t('opt_6m'),
     opt_1y: t('opt_1y'),
     opt_flexible: t('opt_flexible'),
+    // Readiness badge labels
+    badge_mortgage: t('opt_mortgage_approved'),
+    badge_identity: locale === 'de' ? 'Identität verifiziert' : 'Identity Verified',
+    badge_profile: locale === 'de' ? 'Profil vollständig' : 'Profile Complete',
+    badge_renter: locale === 'de' ? 'Mieter-bereit' : 'Renter Ready',
+    badge_verify: locale === 'de' ? 'Verifizieren' : 'Verify',
+    badge_complete: locale === 'de' ? 'Vervollständigen' : 'Complete',
   }
 
   // Format real agents for sample matches
@@ -114,10 +134,15 @@ export default async function PassportPage() {
   return (
     <PassportPageClient
       userId={userId}
-      profile={profileResult.data}
+      profile={profileData}
       userName={userResult.data?.full_name ?? null}
       translations={intakeTranslations}
       sampleAgents={sampleAgents}
+      countryCode={countryCode}
+      locale={locale}
+      currency={countryConfig.currency}
+      regions={countryConfig.regions}
+      readiness={readiness}
     />
   )
 }

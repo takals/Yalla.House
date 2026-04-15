@@ -96,6 +96,76 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // 3. For hunter-passport flow: sync data to hunter_profiles + preference tags
+  if (flowId === 'hunter-passport') {
+    // Upsert hunter_profiles
+    const budgetMin = data.budget_min ? Number(data.budget_min) * 100 : null
+    const budgetMax = data.budget_max ? Number(data.budget_max) * 100 : null
+    const minBeds = data.min_bedrooms
+      ? (data.min_bedrooms === 'studio' ? 0 : data.min_bedrooms === '4plus' ? 4 : Number(data.min_bedrooms))
+      : null
+
+    await (supabase as any).from('hunter_profiles').upsert({
+      user_id: user.id,
+      intent: data.intent || null,
+      budget_min: budgetMin,
+      budget_max: budgetMax,
+      target_areas: data.target_areas || [],
+      property_types: data.property_types || [],
+      min_bedrooms: minBeds,
+      must_haves: data.must_haves || [],
+      dealbreakers: data.dealbreakers || [],
+      finance_status: data.finance_status || null,
+      timeline: data.timeline || null,
+      agent_assistance_consented: true,
+      brief_updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' })
+
+    // Ensure hunter role
+    await (supabase as any).from('user_roles').upsert(
+      { user_id: user.id, role: 'hunter', is_active: true },
+      { onConflict: 'user_id,role' }
+    )
+
+    // Save preference_tags to hunter_preference_tags junction table
+    const preferenceTags = data.preference_tags as Array<{ slug: string; sentiment: string }> | undefined
+    if (preferenceTags && preferenceTags.length > 0) {
+      // Look up tag IDs from slugs
+      const slugs = preferenceTags.map(t => t.slug)
+      const { data: tagRows } = await (supabase as any)
+        .from('property_tags')
+        .select('id, slug')
+        .in('slug', slugs)
+
+      if (tagRows && tagRows.length > 0) {
+        const slugToId = Object.fromEntries(
+          (tagRows as Array<{ id: number; slug: string }>).map(r => [r.slug, r.id])
+        )
+
+        // Delete existing preference tags for this user, then insert new ones
+        await (supabase as any)
+          .from('hunter_preference_tags')
+          .delete()
+          .eq('user_id', user.id)
+
+        const tagInserts = preferenceTags
+          .filter(t => slugToId[t.slug])
+          .map(t => ({
+            user_id: user.id,
+            tag_id: slugToId[t.slug],
+            sentiment: t.sentiment,
+            source: 'intake',
+          }))
+
+        if (tagInserts.length > 0) {
+          await (supabase as any)
+            .from('hunter_preference_tags')
+            .insert(tagInserts)
+        }
+      }
+    }
+  }
+
   // Return success even if some memories failed to save
   return NextResponse.json(
     {

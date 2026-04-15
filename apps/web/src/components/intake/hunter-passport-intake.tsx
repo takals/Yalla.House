@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
-import { Mic, MicOff } from 'lucide-react'
+import { Mic } from 'lucide-react'
 import { ConversationalIntake, type IntakeFlowConfig } from '@/components/conversational-intake'
 import { useVoiceRecognition } from '@/hooks/use-voice-recognition'
 import { useIntakeMemory } from '@/hooks/use-intake-memory'
@@ -12,6 +12,12 @@ interface HunterPassportIntakeProps {
   existingProfile?: Record<string, unknown> | null
   userName?: string | null
   translations: Record<string, string>
+  countryCode?: string
+  locale?: string
+  currency?: string
+  regions?: Array<{ prefix: string; label: string; range?: string }>
+  onFieldUpdate?: (field: string, value: unknown) => void
+  onBatchUpdate?: (data: Record<string, unknown>) => void
 }
 
 export function HunterPassportIntake({
@@ -19,18 +25,25 @@ export function HunterPassportIntake({
   existingProfile = null,
   userName = null,
   translations,
+  countryCode = 'DE',
+  locale = 'de',
+  currency = 'EUR',
+  regions = [],
+  onFieldUpdate,
+  onBatchUpdate,
 }: HunterPassportIntakeProps) {
   const [voiceEnabled, setVoiceEnabled] = useState(false)
   const [voiceInput, setVoiceInput] = useState('')
 
   // Voice recognition
+  const voiceLang = locale === 'de' ? 'de-DE' : 'en-GB'
   const {
     isListening,
     isSupported: isVoiceSupported,
     transcript,
     toggleListening,
   } = useVoiceRecognition({
-    language: 'en-GB',
+    language: voiceLang,
     continuous: true,
     interimResults: true,
     onResult: (transcribed) => {
@@ -59,6 +72,13 @@ export function HunterPassportIntake({
     ),
   }
 
+  // Notify parent of existing data on mount
+  useEffect(() => {
+    if (onBatchUpdate && Object.keys(existingData).length > 0) {
+      onBatchUpdate(existingData)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Build greeting with user context
   const buildGreeting = () => {
     const parts = [translations.greeting || 'Welcome to the Yalla Home Passport!']
@@ -82,9 +102,20 @@ export function HunterPassportIntake({
     }
   }, [voiceInput])
 
+  // Field-level update callback — fires each time a step is answered
+  const handleFieldUpdate = useCallback(
+    (field: string, value: unknown) => {
+      if (onFieldUpdate) onFieldUpdate(field, value)
+    },
+    [onFieldUpdate]
+  )
+
   const handleComplete = useCallback(
     async (data: Record<string, unknown>) => {
       try {
+        // Notify parent of final data
+        if (onBatchUpdate) onBatchUpdate(data)
+
         // Save to intake API + memories
         const response = await fetch('/api/intake', {
           method: 'POST',
@@ -92,7 +123,7 @@ export function HunterPassportIntake({
           body: JSON.stringify({
             flowId: 'hunter-passport',
             data,
-            messages: [], // Could track messages here if needed
+            messages: [],
             voiceUsed: voiceEnabled,
             fieldsFromMemory: Object.keys(memories).length,
             fieldsTotal: Object.keys(data).length,
@@ -103,22 +134,26 @@ export function HunterPassportIntake({
           throw new Error(`Intake API error: ${response.statusText}`)
         }
 
-        // Call parent onComplete handler if provided
         console.log('Hunter passport intake completed:', data)
       } catch (error) {
         console.error('Failed to save hunter passport intake:', error)
         throw error
       }
     },
-    [voiceEnabled, memories]
+    [voiceEnabled, memories, onBatchUpdate]
   )
 
-  const steps = getHunterPassportFlow(translations)
+  const steps = getHunterPassportFlow(translations, {
+    countryCode,
+    currency,
+    regions,
+  })
 
   const flowConfig: IntakeFlowConfig = {
     flowId: 'hunter-passport',
     steps,
     onComplete: handleComplete,
+    onFieldUpdate: handleFieldUpdate,
     existingData,
     externalInput: voiceEnabled ? voiceInput : undefined,
     translations: {
@@ -145,7 +180,7 @@ export function HunterPassportIntake({
   }
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full flex flex-col">
       <ConversationalIntake {...flowConfig} />
 
       {/* Voice toggle button */}
@@ -166,7 +201,7 @@ export function HunterPassportIntake({
       >
         {voiceEnabled && isListening ? <Mic size={18} className="animate-pulse" /> : <Mic size={18} />}
         <span className="text-sm font-semibold">
-          {voiceEnabled && isListening ? 'Listening...' : 'Voice AI'}
+          {voiceEnabled && isListening ? (translations.voiceStop ?? 'Listening...') : (translations.voiceStart ?? 'Voice AI')}
         </span>
       </button>
     </div>
