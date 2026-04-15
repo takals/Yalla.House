@@ -190,8 +190,8 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
         </h2>
         <p className="text-sm text-[#5E6278] mb-8">
           {isEN
-            ? 'List for free. Add tools as you need them — one-off or monthly.'
-            : 'Kostenlos inserieren. Tools bei Bedarf hinzufügen — einmalig oder monatlich.'}
+            ? 'Two plans for two stages: tools for your active sale, then ongoing home management after.'
+            : 'Zwei Pläne für zwei Phasen: Werkzeuge für Ihren aktiven Verkauf, dann laufende Hausverwaltung danach.'}
         </p>
 
         <div className="grid md:grid-cols-3 gap-5">
@@ -208,43 +208,55 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Receive agent proposals' : 'Makler-Vorschläge erhalten'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Inbox & messaging' : 'Posteingang & Nachrichten'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'AI listing description' : 'KI-Beschreibung'}</li>
-              <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {isEN ? 'Viewing calendar' : 'Besichtigungskalender'}</li>
-              <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {isEN ? 'Online viewing tour' : 'Online-Besichtigungstour'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Contractor marketplace' : 'Handwerker-Marktplatz'}</li>
             </ul>
           </div>
 
-          {/* Pro tier */}
-          <div className="rounded-xl border border-[#E2E4EB] p-6 bg-[#FAFBFC]">
-            <h3 className="text-lg font-bold text-[#0F1117] mb-1">Professional</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-1">£49<span className="text-sm font-normal text-[#5E6278]"> {isEN ? 'one-off' : 'einmalig'}</span></p>
-            <p className="text-xs text-[#5E6278] mb-4">+ £9/mo {isEN ? 'for calendar & tools' : 'für Kalender & Tools'}</p>
+          {/* Sell Smart — active sale */}
+          <div className="rounded-xl border-2 border-[#5856D6] p-6 relative bg-[#FAFBFC]">
+            <span className="absolute -top-3 left-4 bg-[#5856D6] text-white text-xs font-bold px-3 py-1 rounded-full">
+              {isEN ? 'DURING YOUR SALE' : 'WÄHREND IHRES VERKAUFS'}
+            </span>
+            <h3 className="text-lg font-bold text-[#0F1117] mt-2 mb-1">Sell Smart</h3>
+            <p className="text-3xl font-extrabold text-[#0F1117] mb-1">£19<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
+            <p className="text-xs text-[#5E6278] mb-4">{isEN ? 'cancel when your sale completes' : 'kündigen, wenn Ihr Verkauf abgeschlossen ist'}</p>
             <ul className="space-y-2.5 text-sm text-[#5E6278]">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Everything in Starter' : 'Alles aus Starter'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Viewing calendar & auto-booking' : 'Besichtigungskalender & Auto-Buchung'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Online viewing tour (3D walkthrough)' : 'Online-Besichtigungstour (3D-Rundgang)'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Comparable sales data' : 'Vergleichbare Verkaufsdaten'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Weekly market price check' : 'Wöchentlicher Marktpreischeck'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Automated buyer follow-ups' : 'Automatische Käufer-Follow-ups'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Offer comparison dashboard' : 'Angebotsvergleichs-Dashboard'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Document storage & sharing' : 'Dokumentenspeicher & Sharing'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Automated viewing reminders' : 'Automatische Besichtigungserinnerungen'}</li>
             </ul>
           </div>
 
-          {/* Concierge tier */}
+          {/* Home Passport — post-sale */}
           <div className="rounded-xl border border-[#E2E4EB] p-6 bg-[#FAFBFC]">
-            <h3 className="text-lg font-bold text-[#0F1117] mb-1">Concierge</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-1">£29<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <p className="text-xs text-[#5E6278] mb-4">{isEN ? 'cancel anytime' : 'jederzeit kündbar'}</p>
+            <h3 className="text-lg font-bold text-[#0F1117] mb-1">Home Passport</h3>
+            <p className="text-3xl font-extrabold text-[#0F1117] mb-1">£5<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
+            <p className="text-xs text-[#5E6278] mb-4">{isEN ? 'your home, organised forever' : 'Ihr Zuhause, für immer organisiert'}</p>
             <ul className="space-y-2.5 text-sm text-[#5E6278]">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Everything in Professional' : 'Alles aus Professional'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Maintenance & repairs marketplace' : 'Marktplatz für Wartung & Reparaturen'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Reduced rates on moving services' : 'Reduzierte Umzugspreise'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Professional photography & floor plan' : 'Professionelle Fotografie & Grundriss'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'EPC arrangement' : 'Energieausweis-Organisation'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Solicitor & conveyancer introductions' : 'Anwalts- & Notarempfehlungen'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Monthly home value estimate' : 'Monatliche Immobilienwert-Schätzung'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Maintenance scheduler & reminders' : 'Wartungsplaner & Erinnerungen'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Priority contractor booking' : 'Bevorzugte Handwerker-Buchung'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'All property documents in one place' : 'Alle Dokumente an einem Ort'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Annual EPC reminder & rebooking' : 'Jährliche EPC-Erinnerung & Neubuchung'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Home insurance comparison' : 'Versicherungsvergleich'}</li>
             </ul>
           </div>
         </div>
 
-        <p className="text-xs text-[#5E6278] mt-6 text-center">
+        <div className="mt-6 bg-[#F5F5FA] rounded-xl p-5">
+          <p className="text-sm text-[#5E6278] leading-relaxed">
+            <span className="font-semibold text-[#0F1117]">{isEN ? 'One-off services' : 'Einmalige Services'}:</span>{' '}
+            {isEN
+              ? 'Professional photography (from £99), floor plans (from £49), EPC arrangement (from £60), and solicitor introductions (from £150) are available as individual bookings through your dashboard — no subscription required.'
+              : 'Professionelle Fotografie (ab £99), Grundrisse (ab £49), EPC-Organisation (ab £60) und Anwaltsempfehlungen (ab £150) sind als Einzelbuchungen über Ihr Dashboard verfügbar.'}
+          </p>
+        </div>
+
+        <p className="text-xs text-[#5E6278] mt-4 text-center">
           {isEN
             ? 'All plans: zero commission on your sale. The price you agree with your buyer is the price you keep.'
             : 'Alle Pläne: null Provision auf Ihren Verkauf. Der vereinbarte Preis gehört Ihnen.'}
