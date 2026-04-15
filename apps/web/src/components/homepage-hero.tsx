@@ -128,13 +128,21 @@ export default function HomepageHero({
               {content.subline}
             </p>
 
-            <Link
-              href={content.ctaHref}
-              className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
-              style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-            >
-              {content.cta} →
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <Link
+                href={content.ctaHref}
+                className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
+                style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
+              >
+                {content.cta} →
+              </Link>
+              <Link
+                href="/agent"
+                className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
+              >
+                I&apos;m an agent →
+              </Link>
+            </div>
           </div>
         </div>
       </section>

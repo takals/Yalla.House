@@ -44,11 +44,11 @@ export async function SiteHeader() {
             {t('services')}
           </Link>
           <Link
-            href="/agents"
+            href="/partners"
             className="text-[0.95rem] text-white hover:text-brand-hover transition-[color] duration-[400ms] hidden sm:block"
             style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
           >
-            {t('agents')}
+            {t('partners')}
           </Link>
           <Link
             href="/about"
