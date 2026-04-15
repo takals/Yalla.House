@@ -251,8 +251,8 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
           <p className="text-sm text-[#5E6278] leading-relaxed">
             <span className="font-semibold text-[#0F1117]">{isEN ? 'One-off services' : 'Einmalige Services'}:</span>{' '}
             {isEN
-              ? 'Professional photography (from £99), floor plans (from £49), EPC arrangement (from £60), and solicitor introductions (from £150) are available as individual bookings through your dashboard — no subscription required.'
-              : 'Professionelle Fotografie (ab £99), Grundrisse (ab £49), EPC-Organisation (ab £60) und Anwaltsempfehlungen (ab £150) sind als Einzelbuchungen über Ihr Dashboard verfügbar.'}
+              ? 'Professional photography (from £99), floor plans (from £49), and EPC arrangement (from £60) are available as individual bookings through your dashboard — no subscription required. Need a solicitor? We maintain a directory of verified, SRA-regulated conveyancers you can browse and contact directly — at no cost to you.'
+              : 'Professionelle Fotografie (ab £99), Grundrisse (ab £49) und EPC-Organisation (ab £60) sind als Einzelbuchungen über Ihr Dashboard verfügbar. Brauchen Sie einen Anwalt? Wir pflegen ein Verzeichnis verifizierter Notare, die Sie kostenlos kontaktieren können.'}
           </p>
         </div>
 
