@@ -1,5 +1,16 @@
 # Code Style Rules
 
+## Internationalisation (i18n) — MANDATORY
+- **NEVER hardcode UI strings** in any language — no inline `isDE ? 'German' : 'English'` ternaries
+- ALL user-visible text MUST go through `next-intl` translations (`getTranslations` / `useTranslations`)
+- Server Components: use `getTranslations('namespace')` and pass translations as props to client components
+- Client Components: receive translations as `Record<string, string>` or use `useTranslations('namespace')`
+- Always add DE keys first (primary language), then EN — message files: `messages/de.json` + `messages/en.json`
+- Create a new namespace per feature area (e.g. `listingPage`, `ownerToolbar`, `viewingCalendar`)
+- Locale is determined by the `[locale]` route segment — user's language follows the URL prefix (`/en/...` = English, no prefix = German)
+- Platform must scale to new languages (e.g. French, Turkish, Arabic) by adding a message file only — zero code changes
+- Currency, date formats, and number formatting must use `Intl.NumberFormat` / `Intl.DateTimeFormat` with the resolved locale
+
 ## Formatting
 - 2-space indentation in HTML and CSS
 - Quote all HTML attribute values with double quotes
