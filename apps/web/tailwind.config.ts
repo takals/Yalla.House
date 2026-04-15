@@ -84,11 +84,16 @@ export default {
           from: { opacity: '0' },
           to:   { opacity: '1' },
         },
+        'sidebar-in': {
+          from: { transform: 'translateX(-100%)' },
+          to:   { transform: 'translateX(0)' },
+        },
       },
       animation: {
         'drawer-up':   'drawer-up 0.3s cubic-bezier(0.16,1,0.3,1)',
         'drawer-down': 'drawer-down 0.2s cubic-bezier(0.16,1,0.3,1)',
         'fade-in':     'fade-in 0.2s ease-out',
+        'sidebar-in':  'sidebar-in 0.25s cubic-bezier(0.16,1,0.3,1)',
       },
     },
   },
