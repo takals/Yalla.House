@@ -104,7 +104,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
   const grouped = groupByDay(slots)
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E2E4EB]">
+    <div data-booking-slots className="bg-white rounded-2xl p-6 shadow-sm border border-[#E2E4EB]">
       <div className="flex items-center gap-2 mb-4">
         <Calendar size={18} className="text-[#D4764E]" />
         <h3 className="font-bold text-sm">Book a Viewing</h3>

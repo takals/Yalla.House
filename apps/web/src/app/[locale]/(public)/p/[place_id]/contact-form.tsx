@@ -136,7 +136,7 @@ export function ContactCard({
 
   return (
     <div className="bg-surface rounded-card p-6 shadow-sm">
-      <h2 className="text-lg font-bold text-[#0F1117] mb-4">
+      <h2 data-contact-card className="text-lg font-bold text-[#0F1117] mb-4">
         {isDE ? 'Besichtigung anfragen' : 'Request a viewing'}
       </h2>
 
