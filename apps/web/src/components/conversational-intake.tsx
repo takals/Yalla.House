@@ -1,17 +1,25 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Send, CheckCircle2, ChevronDown, ChevronUp, Zap, FileText, Mic } from 'lucide-react'
+import { Send, CheckCircle2, ChevronDown, ChevronUp, ChevronLeft, Zap, FileText, Mic, CheckCheck } from 'lucide-react'
 
 // ─────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────
 
+export interface IntakeStepOptionGroup {
+  groupLabel: string
+  groupIcon?: string
+  options: Array<{ value: string; label: string }>
+}
+
 export interface IntakeStep {
   id: string
   question: string
-  type: 'text' | 'select' | 'multi-select' | 'number' | 'range' | 'toggle' | 'chips'
+  type: 'text' | 'select' | 'multi-select' | 'number' | 'range' | 'toggle' | 'chips' | 'tagged-preferences'
   options?: Array<{ value: string; label: string }>
+  /** Grouped options — for 'tagged-preferences' type */
+  optionGroups?: IntakeStepOptionGroup[]
   validation?: {
     required?: boolean
     min?: number
@@ -30,6 +38,7 @@ export interface IntakeFlowConfig {
   flowId: string
   steps: IntakeStep[]
   onComplete: (data: Record<string, unknown>) => void | Promise<void>
+  onFieldUpdate?: (field: string, value: unknown) => void
   existingData?: Record<string, unknown>
   externalInput?: string
   translations: {
@@ -60,6 +69,7 @@ export function ConversationalIntake({
   flowId,
   steps: initialSteps,
   onComplete,
+  onFieldUpdate,
   existingData = {},
   externalInput,
   translations,
@@ -87,6 +97,8 @@ export function ConversationalIntake({
   const [briefOpen, setBriefOpen] = useState(false)
   // For multi-select/chips: track pending selections before confirming
   const [pendingMulti, setPendingMulti] = useState<string[]>([])
+  // For tagged-preferences: track slug → sentiment
+  const [pendingTags, setPendingTags] = useState<Record<string, 'want' | 'need' | 'dealbreaker'>>({})
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -121,13 +133,15 @@ export function ConversationalIntake({
     if (externalInput) setInput(externalInput)
   }, [externalInput])
 
-  // Reset pending multi when step changes
+  // Reset pending multi/tags when step changes
   useEffect(() => {
     setPendingMulti([])
+    setPendingTags({})
   }, [currentStepIndex])
 
   const currentStep = allSteps[currentStepIndex]
   const isMultiStep = currentStep && (currentStep.type === 'multi-select' || currentStep.type === 'chips')
+  const isTaggedStep = currentStep && currentStep.type === 'tagged-preferences'
 
   // Handle submitting an answer and advancing
   const handleAnswerSubmit = useCallback(async (answer: unknown) => {
@@ -154,6 +168,8 @@ export function ConversationalIntake({
 
     const newFormData = { ...formData, [currentStep.id]: answer }
     setFormData(newFormData)
+    // Notify parent of field update (for live passport card)
+    if (onFieldUpdate) onFieldUpdate(currentStep.id, answer)
     // Persist to localStorage so data survives auth round-trip
     try { localStorage.setItem(`yalla_intake_${flowId}`, JSON.stringify(newFormData)) } catch {}
 
@@ -234,6 +250,51 @@ export function ConversationalIntake({
     if (pendingMulti.length > 0) handleAnswerSubmit(pendingMulti)
   }
 
+  // Select all (for multi-select/chips — excludes _none options)
+  const handleSelectAll = () => {
+    if (!currentStep?.options) return
+    const allValues = currentStep.options
+      .filter(o => o.value !== '_none')
+      .map(o => o.value)
+    setPendingMulti(allValues)
+  }
+
+  // Cycle a tag through: off → want → need → dealbreaker → off
+  const handleTagCycle = (slug: string) => {
+    setPendingTags(prev => {
+      const current = prev[slug]
+      if (!current) return { ...prev, [slug]: 'want' }
+      if (current === 'want') return { ...prev, [slug]: 'need' }
+      if (current === 'need') return { ...prev, [slug]: 'dealbreaker' }
+      // dealbreaker → remove
+      const next = { ...prev }
+      delete next[slug]
+      return next
+    })
+  }
+
+  // Confirm tagged preferences
+  const handleConfirmTags = () => {
+    const tagArray = Object.entries(pendingTags).map(([slug, sentiment]) => ({ slug, sentiment }))
+    handleAnswerSubmit(tagArray)
+  }
+
+  // Go back to previous step
+  const handleGoBack = () => {
+    if (currentStepIndex <= 0) return
+    const prevIdx = currentStepIndex - 1
+    setCurrentStepIndex(prevIdx)
+    setPendingMulti([])
+    const prevStep = allSteps[prevIdx]
+    if (prevStep) {
+      setMessages(prev => [...prev, {
+        id: String(Date.now()),
+        role: 'yalla',
+        content: prevStep.question,
+      }])
+    }
+  }
+
   // Edit a field
   const handleEditField = (stepId: string) => {
     const stepIdx = allSteps.findIndex(s => s.id === stepId)
@@ -280,6 +341,18 @@ export function ConversationalIntake({
 
   // Format value for brief display
   const formatValue = (step: IntakeStep, value: unknown): string => {
+    // Tagged preferences: [{slug, sentiment}]
+    if (step.type === 'tagged-preferences' && Array.isArray(value)) {
+      const tags = value as Array<{ slug: string; sentiment: string }>
+      if (tags.length === 0) return 'No preferences set'
+      // Find labels from optionGroups
+      const allOpts = step.optionGroups?.flatMap(g => g.options) ?? []
+      return tags.map(t => {
+        const label = allOpts.find(o => o.value === t.slug)?.label ?? t.slug
+        const badge = t.sentiment === 'need' ? '★' : t.sentiment === 'dealbreaker' ? '✕' : ''
+        return badge ? `${label} ${badge}` : label
+      }).join(', ')
+    }
     if (Array.isArray(value)) {
       return value.map(v => {
         if (v === '_none') return step.options?.find(o => o.value === '_none')?.label || 'No preference'
@@ -487,6 +560,38 @@ export function ConversationalIntake({
             {/* Chips / Options — horizontal wrap */}
             {['select', 'multi-select', 'chips'].includes(currentStep.type) && currentStep.options && (
               <div className="mb-3">
+                {/* Select All + Back row for multi-select */}
+                {isMultiStep && (
+                  <div className="flex items-center justify-between mb-2">
+                    {currentStepIndex > 0 ? (
+                      <button
+                        onClick={handleGoBack}
+                        className="flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors"
+                      >
+                        <ChevronLeft size={14} /> Back
+                      </button>
+                    ) : <span />}
+                    <button
+                      onClick={handleSelectAll}
+                      disabled={isThinking}
+                      className="flex items-center gap-1 text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors disabled:opacity-40"
+                    >
+                      <CheckCheck size={14} /> Select All
+                    </button>
+                  </div>
+                )}
+                {/* Back button for single-select (no Select All needed) */}
+                {!isMultiStep && currentStepIndex > 0 && (
+                  <div className="mb-2">
+                    <button
+                      onClick={handleGoBack}
+                      className="flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors"
+                    >
+                      <ChevronLeft size={14} /> Back
+                    </button>
+                  </div>
+                )}
+
                 <div className="flex flex-wrap gap-2">
                   {currentStep.options.map(opt => {
                     const isNoneOption = opt.value === '_none'
@@ -521,6 +626,92 @@ export function ConversationalIntake({
                     Continue with {pendingMulti.length} selected
                   </button>
                 )}
+              </div>
+            )}
+
+            {/* Tagged preferences — grouped chips with sentiment cycling */}
+            {isTaggedStep && currentStep.optionGroups && (
+              <div className="mb-3 max-h-[45vh] overflow-y-auto">
+                {/* Back + legend row */}
+                <div className="flex items-center justify-between mb-3 sticky top-0 bg-white py-1 z-10">
+                  {currentStepIndex > 0 ? (
+                    <button
+                      onClick={handleGoBack}
+                      className="flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors"
+                    >
+                      <ChevronLeft size={14} /> Back
+                    </button>
+                  ) : <span />}
+                  <div className="flex items-center gap-3 text-[10px] font-semibold">
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#D4764E]" /> Want</span>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Need</span>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500" /> No-go</span>
+                  </div>
+                </div>
+
+                {currentStep.optionGroups.map(group => (
+                  <div key={group.groupLabel} className="mb-4">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                      {group.groupLabel}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {group.options.map(opt => {
+                        const sentiment = pendingTags[opt.value]
+                        return (
+                          <button
+                            key={opt.value}
+                            onClick={() => handleTagCycle(opt.value)}
+                            disabled={isThinking}
+                            className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-all whitespace-nowrap select-none ${
+                              sentiment === 'want'
+                                ? 'bg-[#D4764E] border-[#D4764E] text-white'
+                                : sentiment === 'need'
+                                  ? 'bg-emerald-500 border-emerald-500 text-white'
+                                  : sentiment === 'dealbreaker'
+                                    ? 'bg-red-500 border-red-500 text-white'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-[#D4764E] hover:bg-orange-50'
+                            } disabled:opacity-40`}
+                          >
+                            {opt.label}
+                            {sentiment === 'need' && ' ★'}
+                            {sentiment === 'dealbreaker' && ' ✕'}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Confirm / skip */}
+                <div className="flex items-center gap-3 mt-2 sticky bottom-0 bg-white py-2">
+                  {Object.keys(pendingTags).length > 0 ? (
+                    <button
+                      onClick={handleConfirmTags}
+                      className="px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-[#BF6840] transition-colors"
+                    >
+                      Continue with {Object.keys(pendingTags).length} preferences
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleAnswerSubmit([])}
+                      className="px-5 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors"
+                    >
+                      Skip — no preferences
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Back button for text/number steps (when no option chips are shown) */}
+            {!['select', 'multi-select', 'chips', 'tagged-preferences'].includes(currentStep.type) && currentStepIndex > 0 && (
+              <div className="mb-2">
+                <button
+                  onClick={handleGoBack}
+                  className="flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                  <ChevronLeft size={14} /> Back
+                </button>
               </div>
             )}
 

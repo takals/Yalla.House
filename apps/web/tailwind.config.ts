@@ -71,6 +71,25 @@ export default {
       backdropBlur: {
         header: '12px',
       },
+      keyframes: {
+        'drawer-up': {
+          from: { transform: 'translateY(100%)' },
+          to:   { transform: 'translateY(0)' },
+        },
+        'drawer-down': {
+          from: { transform: 'translateY(0)' },
+          to:   { transform: 'translateY(100%)' },
+        },
+        'fade-in': {
+          from: { opacity: '0' },
+          to:   { opacity: '1' },
+        },
+      },
+      animation: {
+        'drawer-up':   'drawer-up 0.3s cubic-bezier(0.16,1,0.3,1)',
+        'drawer-down': 'drawer-down 0.2s cubic-bezier(0.16,1,0.3,1)',
+        'fade-in':     'fade-in 0.2s ease-out',
+      },
     },
   },
   plugins: [forms, typography],

@@ -12,16 +12,18 @@ import { createServiceClient } from '@/lib/supabase/server'
  *   Area overlap   35%
  *   Intent match   20%
  *   Budget align   20%
- *   Property type  15%
+ *   Property type  10%
  *   Language match  10%
+ *   Tag match      10%  (via DB function score_tag_match)
  */
 
 const WEIGHTS = {
-  area: 0.35,
+  area: 0.30,
   intent: 0.20,
   budget: 0.20,
-  propertyType: 0.15,
+  propertyType: 0.10,
   language: 0.10,
+  tags: 0.10,
 } as const
 
 const MATCH_THRESHOLD = 50
