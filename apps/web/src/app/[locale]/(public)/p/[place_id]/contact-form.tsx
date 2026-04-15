@@ -1,15 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { requestViewingAction, checkAuthAction } from './actions'
 
 export function ContactCard({
   listingId,
-  locale,
 }: {
   listingId: string
-  locale: string
 }) {
+  const t = useTranslations('listingPage')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -19,9 +19,6 @@ export function ContactCard({
   const [error, setError] = useState<string | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
 
-  const isDE = locale === 'de'
-
-  // Check auth status on mount
   useEffect(() => {
     checkAuthAction().then(result => {
       setIsLoggedIn(result.authenticated)
@@ -48,12 +45,10 @@ export function ContactCard({
     return (
       <div className="bg-surface rounded-card p-6 shadow-sm">
         <h2 className="text-lg font-bold text-[#0F1117] mb-2">
-          {isDE ? 'Eigentümer kontaktieren' : 'Contact the owner'}
+          {t('contactTitle')}
         </h2>
         <p className="text-sm text-[#5E6278] mb-4">
-          {isDE
-            ? 'Erstellen Sie ein kostenloses Konto, um den Eigentümer zu kontaktieren. Das schützt vor Spam und sorgt für sichere Kommunikation.'
-            : 'Create a free account to contact the owner. This keeps enquiries genuine and communication secure.'}
+          {t('contactGateText')}
         </p>
 
         <div className="space-y-2">
@@ -61,13 +56,13 @@ export function ContactCard({
             href={`/api/auth/callback?redirect=/p/${listingId}`}
             className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-2.5 rounded-lg transition-colors text-sm"
           >
-            {isDE ? 'Kostenlos registrieren' : 'Create free account'}
+            {t('contactCreateAccount')}
           </a>
           <a
             href={`/api/auth/callback?redirect=/p/${listingId}`}
             className="w-full flex items-center justify-center gap-2 bg-bg hover:bg-[#D9DCE4] text-[#0F1117] font-semibold py-2.5 rounded-lg transition-colors text-sm border border-[#E2E4EB]"
           >
-            {isDE ? 'Anmelden' : 'Sign in'}
+            {t('contactSignIn')}
           </a>
         </div>
 
@@ -77,9 +72,7 @@ export function ContactCard({
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
             <p className="text-xs text-[#5E6278]">
-              {isDE
-                ? 'Ihre Daten werden nie an Dritte weitergegeben. Der Eigentümer sieht nur, was Sie im Formular angeben.'
-                : 'Your details are never shared with third parties. The owner only sees what you provide in the form.'}
+              {t('contactPrivacy')}
             </p>
           </div>
         </div>
@@ -99,12 +92,10 @@ export function ContactCard({
           </div>
           <div>
             <p className="font-bold text-[#0F1117]">
-              {isDE ? 'Vielen Dank!' : 'Thank you!'}
+              {t('contactThankYou')}
             </p>
             <p className="text-sm text-[#5E6278] mt-1">
-              {isDE
-                ? 'Der Eigentümer meldet sich in Kürze bei Ihnen.'
-                : 'The owner will be in touch with you shortly.'}
+              {t('contactOwnerInTouch')}
             </p>
           </div>
         </div>
@@ -137,41 +128,41 @@ export function ContactCard({
   return (
     <div className="bg-surface rounded-card p-6 shadow-sm">
       <h2 data-contact-card className="text-lg font-bold text-[#0F1117] mb-4">
-        {isDE ? 'Besichtigung anfragen' : 'Request a viewing'}
+        {t('contactRequestViewing')}
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
           <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-            {isDE ? 'Name' : 'Name'} *
+            {t('contactName')} *
           </label>
           <input
             type="text"
             required
             value={name}
             onChange={e => setName(e.target.value)}
-            placeholder={isDE ? 'Ihr Name' : 'Your name'}
+            placeholder={t('contactNamePlaceholder')}
             className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
           />
         </div>
 
         <div>
           <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-            {isDE ? 'E-Mail' : 'Email'} *
+            {t('contactEmail')} *
           </label>
           <input
             type="email"
             required
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder={isDE ? 'ihre@email.de' : 'your@email.com'}
+            placeholder={t('contactEmailPlaceholder')}
             className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
           />
         </div>
 
         <div>
           <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-            {isDE ? 'Telefon' : 'Phone'} <span className="font-normal text-[#999999]">({isDE ? 'optional' : 'optional'})</span>
+            {t('contactPhone')} <span className="font-normal text-[#999999]">({t('contactOptional')})</span>
           </label>
           <input
             type="tel"
@@ -184,13 +175,13 @@ export function ContactCard({
 
         <div>
           <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-            {isDE ? 'Nachricht' : 'Message'} <span className="font-normal text-[#999999]">({isDE ? 'optional' : 'optional'})</span>
+            {t('contactMessage')} <span className="font-normal text-[#999999]">({t('contactOptional')})</span>
           </label>
           <textarea
             rows={3}
             value={message}
             onChange={e => setMessage(e.target.value)}
-            placeholder={isDE ? 'Ihre Nachricht an den Eigentümer …' : 'Your message to the owner…'}
+            placeholder={t('contactMessagePlaceholder')}
             className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent resize-none"
           />
         </div>
@@ -210,7 +201,7 @@ export function ContactCard({
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
           )}
-          {isDE ? 'Anfrage senden' : 'Send request'}
+          {t('contactSendRequest')}
         </button>
       </form>
     </div>
