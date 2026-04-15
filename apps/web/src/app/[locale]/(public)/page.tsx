@@ -88,7 +88,7 @@ export default async function HomePage() {
           headlineSuffix: th('headlineSuffix'),
           subline: th('subline'),
           cta: th('cta'),
-          ctaHref: '/hunter/passport',
+          ctaHref: '/hunter/info',
           stats: [
             { value: statsH('stat1Value'), label: statsH('stat1Label') },
             { value: statsH('stat2Value'), label: statsH('stat2Label') },
@@ -146,7 +146,7 @@ export default async function HomePage() {
                 {paths('hunterBody')}
               </p>
               <Link
-                href="/hunter/brief"
+                href="/hunter/info"
                 className="text-sm font-semibold text-brand hover:text-brand-hover transition-[color] duration-300"
               >
                 {paths('hunterCta')} →
