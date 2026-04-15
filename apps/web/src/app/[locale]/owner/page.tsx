@@ -147,6 +147,12 @@ export default async function OwnerDashboard({ searchParams }: Props) {
         >
           {t('tabInquiries')}
         </Link>
+        <Link
+          href="/owner/info"
+          className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors"
+        >
+          Info
+        </Link>
       </div>
 
       {/* Stat cards row */}

@@ -113,6 +113,22 @@ export default async function HunterPage() {
         <p className="text-[0.875rem] text-[#5E6278]">{profile?.email}</p>
       </div>
 
+      {/* Sub-nav tabs */}
+      <div className="flex gap-6 border-b border-[#E2E4EB] -mt-2">
+        <Link href="/hunter" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
+          Dashboard
+        </Link>
+        <Link href="/hunter/passport" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+          Passport
+        </Link>
+        <Link href="/hunter/inbox" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+          Inbox
+        </Link>
+        <Link href="/hunter/info" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+          Info
+        </Link>
+      </div>
+
       {/* Bento stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
 

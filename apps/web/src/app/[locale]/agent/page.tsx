@@ -106,7 +106,7 @@ export default async function AgentPage() {
     <div className="max-w-3xl">
 
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
+        <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-3xl font-bold mb-1">{t('hello', { name: firstName })}</h1>
             <p className="text-[#5E6278] text-sm">{agentUser?.email}</p>
@@ -119,6 +119,22 @@ export default async function AgentPage() {
               )}
             </div>
           )}
+        </div>
+
+        {/* Sub-nav tabs */}
+        <div className="flex gap-6 mb-8 border-b border-[#E2E4EB]">
+          <Link href="/agent" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
+            Dashboard
+          </Link>
+          <Link href="/agent/briefs" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+            Briefs
+          </Link>
+          <Link href="/agent/assignments" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+            Assignments
+          </Link>
+          <Link href="/agent/info" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+            Info
+          </Link>
         </div>
 
         {/* Profile setup nudge */}
