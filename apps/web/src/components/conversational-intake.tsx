@@ -116,6 +116,7 @@ export function ConversationalIntake({
       }
     }
     setMessages(initMessages)
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally run once on mount
   }, [])
 
   // Auto-scroll
@@ -201,7 +202,7 @@ export function ConversationalIntake({
       setShowReview(true)
     }
     setIsThinking(false)
-  }, [currentStep, currentStepIndex, formData, allSteps])
+  }, [currentStep, currentStepIndex, formData, allSteps, flowId, onFieldUpdate])
 
   // Text input submit
   const handleSendMessage = () => {
