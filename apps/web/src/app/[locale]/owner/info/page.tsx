@@ -231,18 +231,22 @@ export default async function OwnerInfoPage({ params }: { params: Promise<{ loca
             </ul>
           </div>
 
-          {/* Home Passport — post-sale */}
-          <div className="rounded-xl border border-[#E2E4EB] p-6 bg-[#FAFBFC]">
-            <h3 className="text-lg font-bold text-[#0F1117] mb-1">Home Passport</h3>
+          {/* Home Passport — ongoing home management */}
+          <div className="rounded-xl border-2 border-[#34C759] p-6 relative bg-[#FAFBFC]">
+            <span className="absolute -top-3 left-4 bg-[#34C759] text-white text-xs font-bold px-3 py-1 rounded-full">
+              {isEN ? 'YOUR HOME, MANAGED' : 'IHR ZUHAUSE, VERWALTET'}
+            </span>
+            <h3 className="text-lg font-bold text-[#0F1117] mt-2 mb-1">Home Passport</h3>
             <p className="text-3xl font-extrabold text-[#0F1117] mb-1">£5<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <p className="text-xs text-[#5E6278] mb-4">{isEN ? 'your home, organised forever' : 'Ihr Zuhause, für immer organisiert'}</p>
+            <p className="text-xs text-[#5E6278] mb-4">{isEN ? 'your home has a team — even when you\'re not there' : 'Ihr Zuhause hat ein Team — auch wenn Sie nicht da sind'}</p>
             <ul className="space-y-2.5 text-sm text-[#5E6278]">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Monthly home value estimate' : 'Monatliche Immobilienwert-Schätzung'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Book cleaners, gardeners & handymen' : 'Reinigung, Gärtner & Handwerker buchen'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Away mode: home check-ins, pet & plant care' : 'Abwesend: Haus-Checks, Tier- & Pflanzenpflege'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Monthly home value tracker' : 'Monatlicher Immobilienwert-Tracker'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Maintenance scheduler & reminders' : 'Wartungsplaner & Erinnerungen'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Priority contractor booking' : 'Bevorzugte Handwerker-Buchung'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'All property documents in one place' : 'Alle Dokumente an einem Ort'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Annual EPC reminder & rebooking' : 'Jährliche EPC-Erinnerung & Neubuchung'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Home insurance comparison' : 'Versicherungsvergleich'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Verified local service providers' : 'Verifizierte lokale Dienstleister'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'EPC & insurance reminders' : 'EPC- & Versicherungserinnerungen'}</li>
             </ul>
           </div>
         </div>
