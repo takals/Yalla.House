@@ -16,7 +16,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
-  const t = await getTranslations('notif')
+  const [t, tShell] = await Promise.all([
+    getTranslations('notif'),
+    getTranslations('shell'),
+  ])
 
   const [profileResult, notifData] = await Promise.all([
     user
@@ -24,6 +27,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       : Promise.resolve({ data: null }),
     fetchNotifications(supabase, userId),
   ])
+
+  const shellLabels: Record<string, string> = {
+    collapse: tShell('collapse'),
+    expandSidebar: tShell('expandSidebar'),
+    collapseSidebar: tShell('collapseSidebar'),
+    signOut: tShell('signOut'),
+  }
 
   return (
     <DashboardShell
@@ -34,6 +44,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       notifications={notifData.notifications}
       unreadCount={notifData.unreadCount}
       notificationLabels={getNotificationLabels(t)}
+      shellLabels={shellLabels}
     >
       {children}
     </DashboardShell>

@@ -119,15 +119,14 @@ export default function HomepageHero({
             className="transition-opacity duration-[400ms] ease-in-out"
             style={{ opacity: sectionVisible ? 1 : 0 }}
           >
-            <h1 className="text-display text-white mb-6">
-              {content.headlinePrefix}
+            <h1 className="text-display text-white mb-6 text-balance">
+              <span className="whitespace-nowrap">{content.headlinePrefix}
               <span
                 className="inline-block transition-opacity duration-[600ms] ease-in-out text-brand"
                 style={{ opacity: wordVisible ? 1 : 0 }}
               >
                 {content.headlineWords[wordIndex]}
-              </span>
-              {content.headlineSuffix}
+              </span></span>{content.headlineSuffix}
             </h1>
 
             <p className="text-lede text-text-on-dark-secondary max-w-2xl mx-auto mb-10">

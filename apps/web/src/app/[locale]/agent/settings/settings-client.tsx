@@ -48,8 +48,9 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
 
         <div className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'fullName')}</label>
+            <label htmlFor="agent-full-name" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'fullName')}</label>
             <input
+              id="agent-full-name"
               type="text"
               value={fullName}
               onChange={e => setFullName(e.target.value)}
@@ -58,8 +59,9 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'email')}</label>
+            <label htmlFor="agent-email" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'email')}</label>
             <input
+              id="agent-email"
               type="email"
               value={profile.email}
               disabled
@@ -68,8 +70,9 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'phone')}</label>
+            <label htmlFor="agent-phone" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'phone')}</label>
             <input
+              id="agent-phone"
               type="tel"
               value={phone}
               onChange={e => setPhone(e.target.value)}
@@ -78,8 +81,9 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'agencyName')}</label>
+            <label htmlFor="agent-agency-name" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'agencyName')}</label>
             <input
+              id="agent-agency-name"
               type="text"
               value={agencyName}
               onChange={e => setAgencyName(e.target.value)}
@@ -88,8 +92,9 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'agencyAddress')}</label>
+            <label htmlFor="agent-agency-address" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'agencyAddress')}</label>
             <input
+              id="agent-agency-address"
               type="text"
               value={agencyAddress}
               onChange={e => setAgencyAddress(e.target.value)}

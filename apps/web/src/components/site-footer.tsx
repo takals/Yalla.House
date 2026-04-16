@@ -7,6 +7,7 @@ export async function SiteFooter() {
 
   return (
     <footer
+      aria-label="Footer navigation"
       className="bg-page-dark px-8 pt-12 pb-6"
       style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
     >
@@ -18,13 +19,13 @@ export async function SiteFooter() {
               <Home size={20} /> Yalla.House
             </Link>
             <div className="text-sm text-text-on-dark-secondary mb-3">
-              Your property sale. Your data. Your choice of agent.
+              {t('tagline')}
             </div>
           </div>
 
           {/* For you */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">For You</h4>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">{t('forYou')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
@@ -32,7 +33,7 @@ export async function SiteFooter() {
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  For Owners
+                  {t('forOwners')}
                 </Link>
               </li>
               <li>
@@ -41,7 +42,7 @@ export async function SiteFooter() {
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  For Home Hunters
+                  {t('forHunters')}
                 </Link>
               </li>
               <li>
@@ -50,7 +51,7 @@ export async function SiteFooter() {
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  For Agents
+                  {t('forAgents')}
                 </Link>
               </li>
             </ul>
@@ -58,7 +59,7 @@ export async function SiteFooter() {
 
           {/* Company */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">Company</h4>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">{t('company')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
@@ -84,7 +85,7 @@ export async function SiteFooter() {
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  Contact
+                  {t('contact')}
                 </a>
               </li>
             </ul>
@@ -92,7 +93,7 @@ export async function SiteFooter() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">Legal</h4>
+            <h4 className="text-xs font-bold uppercase tracking-widest text-text-on-dark-muted mb-4">{t('legal')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
@@ -100,7 +101,7 @@ export async function SiteFooter() {
                   className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  Privacy Policy
+                  {t('privacyPolicy')}
                 </Link>
               </li>
               <li>
@@ -109,7 +110,7 @@ export async function SiteFooter() {
                   className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  Terms of Use
+                  {t('termsOfUse')}
                 </Link>
               </li>
               <li>
@@ -118,7 +119,7 @@ export async function SiteFooter() {
                   className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  Impressum
+                  {t('impressum')}
                 </Link>
               </li>
             </ul>
@@ -130,8 +131,8 @@ export async function SiteFooter() {
           className="pt-6 flex flex-col sm:flex-row justify-between gap-2 text-xs text-text-on-dark-muted"
           style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
         >
-          <span>&copy; {new Date().getFullYear()} Yalla.House. All rights reserved.</span>
-          <span>London &middot; Redbridge</span>
+          <span>{t('allRightsReserved', { year: new Date().getFullYear().toString() })}</span>
+          <span>{t('location')}</span>
         </div>
       </div>
     </footer>

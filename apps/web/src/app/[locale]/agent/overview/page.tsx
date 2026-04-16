@@ -46,31 +46,38 @@ export default async function AgentPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  const [profileResult, assignmentsResult] = await Promise.all([
-    (supabase.from('agent_profiles') as any)
-      .select('agency_name, license_number, coverage_areas, property_types, verified_at, subscription_tier')
-      .eq('user_id', userId)
-      .maybeSingle(),
+  let agentProfile: any = null
+  let assignments: RawAssignment[] = []
+  let agentUser: any = null
+  try {
+    const [profileResult, assignmentsResult] = await Promise.all([
+      (supabase.from('agent_profiles') as any)
+        .select('agency_name, license_number, coverage_areas, property_types, verified_at, subscription_tier')
+        .eq('user_id', userId)
+        .maybeSingle(),
 
-    (supabase.from('agent_hunter_assignments') as any)
-      .select(`
-        id, status, data_scope, connected_at, created_at,
-        hunter_user:users!hunter_id(full_name, email),
-        hunter_profile:hunter_profiles!hunter_id(intent, budget_min, budget_max, target_areas, property_types, finance_status, brief_updated_at)
-      `)
-      .eq('agent_id', userId)
-      .neq('status', 'disconnected')
-      .order('created_at', { ascending: false }),
-  ])
+      (supabase.from('agent_hunter_assignments') as any)
+        .select(`
+          id, status, data_scope, connected_at, created_at,
+          hunter_user:users!hunter_id(full_name, email),
+          hunter_profile:hunter_profiles!hunter_id(intent, budget_min, budget_max, target_areas, property_types, finance_status, brief_updated_at)
+        `)
+        .eq('agent_id', userId)
+        .neq('status', 'disconnected')
+        .order('created_at', { ascending: false }),
+    ])
 
-  const userResult = await (supabase.from('users') as any)
-    .select('full_name, email')
-    .eq('id', userId)
-    .maybeSingle()
+    const userResult = await (supabase.from('users') as any)
+      .select('full_name, email')
+      .eq('id', userId)
+      .maybeSingle()
 
-  const agentProfile = profileResult.data
-  const assignments: RawAssignment[] = assignmentsResult.data ?? []
-  const agentUser = userResult.data
+    agentProfile = profileResult.data
+    assignments = assignmentsResult.data ?? []
+    agentUser = userResult.data
+  } catch (err) {
+    console.error('Failed to load agent dashboard data:', err)
+  }
 
   const firstName = agentUser?.full_name?.split(' ')[0] ?? 'dort'
   const activeCount = assignments.filter(a => a.status === 'active').length

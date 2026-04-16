@@ -140,7 +140,7 @@ export function PhotoManager({
             >
               <Image
                 src={photo.url}
-                alt=""
+                alt={t('photos.photoAlt', { index: photos.indexOf(photo) + 1 })}
                 fill
                 className="object-cover"
                 sizes="(max-width: 640px) 50vw, 33vw"

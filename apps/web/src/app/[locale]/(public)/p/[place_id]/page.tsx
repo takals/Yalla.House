@@ -228,7 +228,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                   <div key={photo.id} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
                     <Image
                       src={photo.thumb_url ?? photo.url}
-                      alt={photo.caption_de ?? photo.caption ?? ''}
+                      alt={photo.caption_de ?? photo.caption ?? (title ? `${title} photo` : 'Property photo')}
                       fill
                       className="object-cover"
                     />

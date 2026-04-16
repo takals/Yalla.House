@@ -191,7 +191,7 @@ export default async function AgentListingPage({ params }: Props) {
                   <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
                     <Image
                       src={photo.thumb_url ?? photo.url}
-                      alt={(locale === 'de' ? photo.caption_de : photo.caption) ?? ''}
+                      alt={(locale === 'de' ? photo.caption_de : photo.caption) ?? (title ? `${title} photo` : 'Property photo')}
                       fill
                       className="object-cover"
                     />

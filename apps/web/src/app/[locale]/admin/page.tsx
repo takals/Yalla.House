@@ -71,47 +71,59 @@ export default async function AdminPage() {
   const service = createServiceClient()
 
   // Fetch all stats in parallel
-  const [
-    listingsCount,
-    activeListingsCount,
-    usersCount,
-    viewingsCount,
-    pendingViewingsCount,
-    paidBillingCount,
-    recentListings,
-    recentViewings,
-    recentUsers,
-  ] = await Promise.all([
-    service.from('listings').select('id', { count: 'exact', head: true }),
-    service.from('listings').select('id', { count: 'exact', head: true }).eq('status', 'active'),
-    service.from('users').select('id', { count: 'exact', head: true }),
-    (service.from('viewings') as any).select('id', { count: 'exact', head: true }),
-    (service.from('viewings') as any).select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    (service.from('billing_records') as any).select('id', { count: 'exact', head: true }).eq('status', 'paid'),
+  let listingsCount: any = { count: 0 }
+  let activeListingsCount: any = { count: 0 }
+  let usersCount: any = { count: 0 }
+  let viewingsCount: any = { count: 0 }
+  let pendingViewingsCount: any = { count: 0 }
+  let paidBillingCount: any = { count: 0 }
+  let recentListings: any = { data: [] }
+  let recentViewings: any = { data: [] }
+  let recentUsers: any = { data: [] }
+  try {
+    const results = await Promise.all([
+      service.from('listings').select('id', { count: 'exact', head: true }),
+      service.from('listings').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+      service.from('users').select('id', { count: 'exact', head: true }),
+      (service.from('viewings') as any).select('id', { count: 'exact', head: true }),
+      (service.from('viewings') as any).select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+      (service.from('billing_records') as any).select('id', { count: 'exact', head: true }).eq('status', 'paid'),
 
-    // Recent listings
-    service
-      .from('listings')
-      .select('id, place_id, title_de, city, status, created_at, owner_id')
-      .order('created_at', { ascending: false })
-      .limit(10),
+      // Recent listings
+      service
+        .from('listings')
+        .select('id, place_id, title_de, city, status, created_at, owner_id')
+        .order('created_at', { ascending: false })
+        .limit(10),
 
-    // Recent viewings
-    (service.from('viewings') as any)
-      .select(`
-        id, status, created_at,
-        hunter:users!hunter_id(full_name, email),
-        listing:listings!listing_id(title_de, city, place_id)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(10),
+      // Recent viewings
+      (service.from('viewings') as any)
+        .select(`
+          id, status, created_at,
+          hunter:users!hunter_id(full_name, email),
+          listing:listings!listing_id(title_de, city, place_id)
+        `)
+        .order('created_at', { ascending: false })
+        .limit(10),
 
-    // Recent users
-    (service.from('users') as any)
-      .select('id, full_name, email, created_at, country_code')
-      .order('created_at', { ascending: false })
-      .limit(8),
-  ])
+      // Recent users
+      (service.from('users') as any)
+        .select('id, full_name, email, created_at, country_code')
+        .order('created_at', { ascending: false })
+        .limit(8),
+    ])
+    listingsCount = results[0]
+    activeListingsCount = results[1]
+    usersCount = results[2]
+    viewingsCount = results[3]
+    pendingViewingsCount = results[4]
+    paidBillingCount = results[5]
+    recentListings = results[6]
+    recentViewings = results[7]
+    recentUsers = results[8]
+  } catch (err) {
+    console.error('Failed to load admin dashboard data:', err)
+  }
 
   // Build status labels using translations
   const STATUS_LABELS: Record<string, string> = {

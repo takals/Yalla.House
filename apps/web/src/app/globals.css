@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Focus indicators for keyboard navigation */
+:focus-visible {
+  outline: 2px solid #D4764E;
+  outline-offset: 2px;
+}
+
 @layer base {
   :root {
     --brand: #D4764E;

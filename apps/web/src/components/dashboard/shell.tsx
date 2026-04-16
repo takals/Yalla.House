@@ -35,12 +35,13 @@ interface Props {
   notifications?: NotificationData[]
   unreadCount?: number
   notificationLabels?: Record<string, string>
+  shellLabels?: Record<string, string>
 }
 
 const COLLAPSED_W = 'w-[60px]'
 const EXPANDED_W = 'w-[240px]'
 
-export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels }: Props) {
+export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels, shellLabels }: Props) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -103,14 +104,17 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         <button
           onClick={() => setCollapsed(c => !c)}
           className="mx-3 mb-2 flex items-center justify-center gap-2 px-2 py-1.5 rounded-md text-white/30 hover:text-white/70 hover:bg-white/[0.05] transition-colors"
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? (shellLabels?.expandSidebar ?? 'Expand sidebar') : (shellLabels?.collapseSidebar ?? 'Collapse sidebar')}
+          aria-expanded={!collapsed}
+          aria-controls="sidebar-nav"
         >
           {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
-          {!collapsed && <span className="text-xs font-medium">Collapse</span>}
+          {!collapsed && <span className="text-xs font-medium">{shellLabels?.collapse ?? 'Collapse'}</span>}
         </button>
 
         {/* Nav */}
-        <nav className="flex-1 py-1 px-2 overflow-y-auto overflow-x-hidden">
+        <nav aria-label="Dashboard navigation" role="navigation" className="flex-1 py-1 px-2 overflow-y-auto overflow-x-hidden">
+          <div id="sidebar-nav">
           {navItems.map(item => {
             const active = isActive(item)
             return (
@@ -134,6 +138,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
               </Link>
             )
           })}
+          </div>
         </nav>
 
         {/* User footer */}
@@ -156,7 +161,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                   className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <LogOut size={10} />
-                  Sign out
+                  {shellLabels?.signOut ?? 'Sign out'}
                 </button>
               </div>
             </div>

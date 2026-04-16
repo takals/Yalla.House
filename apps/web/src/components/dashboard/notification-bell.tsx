@@ -50,6 +50,17 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Close on Escape key
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && open) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [open])
+
   async function markAllRead() {
     try {
       const res = await fetch('/api/notifications', {
@@ -75,6 +86,8 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
         }}
         className="relative w-8 h-8 rounded-full bg-[#F5F5FA] hover:bg-[#E4E6EF] flex items-center justify-center transition-colors"
         aria-label={tx(t, 'notifications')}
+        aria-expanded={open}
+        aria-haspopup="true"
       >
         <Bell size={15} className="text-[#5E6278]" />
         {count > 0 && (
@@ -85,7 +98,7 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 w-80 bg-white rounded-xl border border-[#E2E4EB] shadow-lg z-50 overflow-hidden">
+        <div role="menu" className="absolute right-0 top-10 w-80 bg-white rounded-xl border border-[#E2E4EB] shadow-lg z-50 overflow-hidden">
           {/* Header */}
           <div className="px-4 py-3 border-b border-[#E2E4EB] flex items-center justify-between">
             <p className="text-sm font-bold text-[#0F1117]">{tx(t, 'notifications')}</p>

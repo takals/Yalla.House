@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { Home } from 'lucide-react'
+import { HeaderNav } from './header-nav'
 
 export async function SiteHeader() {
   const supabase = await createClient()
@@ -19,62 +20,34 @@ export async function SiteHeader() {
     if ((count ?? 0) === 0) accountHref = '/hunter'
   }
 
+  const navLinks = [
+    { href: '/services', label: t('services') },
+    { href: '/partners', label: t('partners') },
+    { href: '/about', label: t('about') },
+  ]
+
+  const cta = user
+    ? { href: accountHref, label: t('dashboard'), isLoggedIn: true }
+    : { href: '/auth/login', label: t('login'), isLoggedIn: false }
+
   return (
     <header
       className="sticky top-0 z-50 backdrop-blur-[12px]"
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
     >
-      <div className="max-w-6xl mx-auto px-8 h-14 flex items-center justify-between gap-4">
+      <div className="max-w-6xl mx-auto px-8 h-14 flex items-center justify-between gap-4 relative">
         {/* LEFT — Brand */}
         <Link
           href="/"
+          aria-label="Home"
           className="font-bold text-xl text-brand hover:text-brand transition-colors flex-shrink-0 flex items-center gap-2"
         >
           <Home size={20} className="text-brand" />
           Yalla.House
         </Link>
 
-        {/* CENTER + RIGHT — Nav + CTA */}
-        <nav className="flex items-center gap-8">
-          <Link
-            href="/services"
-            className="text-[0.95rem] text-white hover:text-brand-hover transition-[color] duration-[400ms] hidden sm:block"
-            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
-          >
-            {t('services')}
-          </Link>
-          <Link
-            href="/partners"
-            className="text-[0.95rem] text-white hover:text-brand-hover transition-[color] duration-[400ms] hidden sm:block"
-            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
-          >
-            {t('partners')}
-          </Link>
-          <Link
-            href="/about"
-            className="text-[0.95rem] text-white hover:text-brand-hover transition-[color] duration-[400ms] hidden sm:block"
-            style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
-          >
-            {t('about')}
-          </Link>
-          {user ? (
-            <Link
-              href={accountHref}
-              className="text-[0.95rem] font-semibold text-white bg-brand hover:bg-brand-hover px-6 py-2.5 rounded-lg transition-[background-color] duration-300 whitespace-nowrap"
-              style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-            >
-              {t('dashboard')}
-            </Link>
-          ) : (
-            <Link
-              href="/auth/login"
-              className="text-[0.95rem] font-semibold text-white border border-white/20 hover:border-brand hover:text-brand px-5 py-2 rounded-lg transition-all duration-300 whitespace-nowrap"
-              style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-            >
-              {t('login')}
-            </Link>
-          )}
-        </nav>
+        {/* CENTER + RIGHT — Nav + CTA (with mobile hamburger) */}
+        <HeaderNav links={navLinks} cta={cta} />
       </div>
     </header>
   )

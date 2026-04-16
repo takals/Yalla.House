@@ -115,7 +115,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8">
           <Link href="/" className="text-text-secondary hover:text-text-primary transition-colors text-sm font-medium">
-            ← Back to home
+            {t('backToHome')}
           </Link>
         </div>
 
@@ -131,7 +131,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-text-primary mb-1.5" htmlFor="email">
-                Email Address
+                {t('emailLabel')}
               </label>
               <input
                 id="email"
@@ -150,7 +150,7 @@ export default function LoginPage() {
                       onClick={handleClearEmail}
                       className="text-brand hover:text-brand-hover underline"
                     >
-                      Clear saved email
+                      {t('clearSavedEmail')}
                     </button>
                   )}
                 </p>
@@ -169,7 +169,7 @@ export default function LoginPage() {
           {/* Social login divider */}
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-text-muted">or continue with</span>
+            <span className="text-xs text-text-muted">{t('orContinueWith')}</span>
             <div className="flex-1 h-px bg-border" />
           </div>
 
@@ -210,7 +210,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-xs text-text-muted mt-4 text-center">
-            No account yet? We&apos;ll create one when you sign in.
+            {t('noAccountYet')}
           </p>
         </div>
       </div>

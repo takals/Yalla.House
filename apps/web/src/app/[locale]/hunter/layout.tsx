@@ -17,7 +17,10 @@ export default async function HunterLayout({ children }: { children: React.React
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  const t = await getTranslations('notif')
+  const [t, tShell] = await Promise.all([
+    getTranslations('notif'),
+    getTranslations('shell'),
+  ])
 
   // Fetch profile + notifications in parallel
   const [profileResult, notifData] = await Promise.all([
@@ -32,6 +35,13 @@ export default async function HunterLayout({ children }: { children: React.React
 
   const fullName = profileResult.data?.full_name ?? null
 
+  const shellLabels: Record<string, string> = {
+    collapse: tShell('collapse'),
+    expandSidebar: tShell('expandSidebar'),
+    collapseSidebar: tShell('collapseSidebar'),
+    signOut: tShell('signOut'),
+  }
+
   return (
     <DashboardShell
       navItems={hunterNav}
@@ -41,6 +51,7 @@ export default async function HunterLayout({ children }: { children: React.React
       notifications={notifData.notifications}
       unreadCount={notifData.unreadCount}
       notificationLabels={getNotificationLabels(t)}
+      shellLabels={shellLabels}
     >
       {children}
     </DashboardShell>

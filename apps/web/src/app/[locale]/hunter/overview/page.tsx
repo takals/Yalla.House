@@ -41,55 +41,65 @@ export default async function HunterPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  const [
-    profileResult,
-    briefResult,
-    viewingsResult,
-    offersResult,
-    agentsResult,
-    matchesResult,
-  ] = await Promise.all([
-    (supabase.from('users') as any)
-      .select('full_name, email')
-      .eq('id', userId)
-      .maybeSingle(),
+  let profile: any = null
+  let brief: any = null
+  let viewings: ViewingWithListing[] = []
+  let offerCount = 0
+  let agentCount = 0
+  let matchCount = 0
+  try {
+    const [
+      profileResult,
+      briefResult,
+      viewingsResult,
+      offersResult,
+      agentsResult,
+      matchesResult,
+    ] = await Promise.all([
+      (supabase.from('users') as any)
+        .select('full_name, email')
+        .eq('id', userId)
+        .maybeSingle(),
 
-    (supabase.from('hunter_profiles') as any)
-      .select('intent, timeline, brief_updated_at')
-      .eq('user_id', userId)
-      .maybeSingle(),
+      (supabase.from('hunter_profiles') as any)
+        .select('intent, timeline, brief_updated_at')
+        .eq('user_id', userId)
+        .maybeSingle(),
 
-    (supabase.from('viewings') as any)
-      .select(`
-        id, status, hunter_notes, created_at,
-        listing:listings!listing_id(title_de, city, postcode, place_id)
-      `)
-      .eq('hunter_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(50),
+      (supabase.from('viewings') as any)
+        .select(`
+          id, status, hunter_notes, created_at,
+          listing:listings!listing_id(title_de, city, postcode, place_id)
+        `)
+        .eq('hunter_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(50),
 
-    (supabase.from('offers') as any)
-      .select('id', { count: 'exact', head: true })
-      .eq('hunter_id', userId)
-      .in('status', ['submitted', 'under_review']),
+      (supabase.from('offers') as any)
+        .select('id', { count: 'exact', head: true })
+        .eq('hunter_id', userId)
+        .in('status', ['submitted', 'under_review']),
 
-    (supabase.from('agent_hunter_assignments') as any)
-      .select('id', { count: 'exact', head: true })
-      .eq('hunter_id', userId)
-      .eq('status', 'active'),
+      (supabase.from('agent_hunter_assignments') as any)
+        .select('id', { count: 'exact', head: true })
+        .eq('hunter_id', userId)
+        .eq('status', 'active'),
 
-    (supabase.from('property_matches') as any)
-      .select('id', { count: 'exact', head: true })
-      .eq('hunter_id', userId)
-      .eq('status', 'new'),
-  ])
+      (supabase.from('property_matches') as any)
+        .select('id', { count: 'exact', head: true })
+        .eq('hunter_id', userId)
+        .eq('status', 'new'),
+    ])
 
-  const profile = profileResult.data
-  const brief = briefResult.data
-  const viewings: ViewingWithListing[] = viewingsResult.data ?? []
-  const offerCount: number = offersResult.count ?? 0
-  const agentCount: number = agentsResult.count ?? 0
-  const matchCount: number = matchesResult.count ?? 0
+    profile = profileResult.data
+    brief = briefResult.data
+    viewings = viewingsResult.data ?? []
+    offerCount = offersResult.count ?? 0
+    agentCount = agentsResult.count ?? 0
+    matchCount = matchesResult.count ?? 0
+  } catch (err) {
+    console.error('Failed to load hunter dashboard data:', err)
+  }
 
   const pendingViewings = viewings.filter(v => v.status === 'pending').length
   const confirmedViewings = viewings.filter(v => v.status === 'confirmed').length

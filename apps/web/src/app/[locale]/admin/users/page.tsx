@@ -34,23 +34,30 @@ export default async function AdminUsersPage() {
   const service = createServiceClient()
 
   // Fetch users with their roles
-  const [usersResult, rolesResult, totalResult] = await Promise.all([
-    (service.from('users') as any)
-      .select('id, full_name, email, phone, country_code, created_at')
-      .order('created_at', { ascending: false })
-      .limit(200),
+  let users: any[] = []
+  let roles: any[] = []
+  let totalCount = 0
+  try {
+    const [usersResult, rolesResult, totalResult] = await Promise.all([
+      (service.from('users') as any)
+        .select('id, full_name, email, phone, country_code, created_at')
+        .order('created_at', { ascending: false })
+        .limit(200),
 
-    (service.from('user_roles') as any)
-      .select('user_id, role, is_active')
-      .eq('is_active', true),
+      (service.from('user_roles') as any)
+        .select('user_id, role, is_active')
+        .eq('is_active', true),
 
-    (service.from('users') as any)
-      .select('id', { count: 'exact', head: true }),
-  ])
+      (service.from('users') as any)
+        .select('id', { count: 'exact', head: true }),
+    ])
 
-  const users = usersResult.data ?? []
-  const roles = rolesResult.data ?? []
-  const totalCount = totalResult.count ?? 0
+    users = usersResult.data ?? []
+    roles = rolesResult.data ?? []
+    totalCount = totalResult.count ?? 0
+  } catch (err) {
+    console.error('Failed to load admin users data:', err)
+  }
 
   // Build role map: user_id → Set<role>
   const roleMap: Record<string, string[]> = {}

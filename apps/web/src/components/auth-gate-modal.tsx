@@ -105,7 +105,9 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Email input */}
+                <label htmlFor="auth-gate-email" className="sr-only">{t('emailPlaceholder')}</label>
                 <input
+                  id="auth-gate-email"
                   type="email"
                   placeholder={t('emailPlaceholder')}
                   value={email}

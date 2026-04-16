@@ -27,7 +27,7 @@ export default function AuthErrorPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8">
           <Link href="/" className="text-text-secondary hover:text-text-primary transition-colors text-sm font-medium">
-            ← Back to home
+            {t('backToHome')}
           </Link>
         </div>
 
@@ -38,7 +38,7 @@ export default function AuthErrorPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold mb-2 text-text-primary text-center">
-            Sign In Failed
+            {t('signInFailed')}
           </h1>
           <p className="text-text-secondary text-center mb-6">
             {t(messages.messageKey)}
@@ -49,18 +49,18 @@ export default function AuthErrorPage() {
               href="/auth/login"
               className="block w-full bg-brand hover:bg-brand-hover text-white font-bold py-3 rounded-lg transition-colors text-center"
             >
-              Try Again
+              {t('tryAgain')}
             </Link>
             <Link
               href="/"
               className="block w-full bg-bg-soft hover:bg-bg-muted text-text-primary font-bold py-3 rounded-lg transition-colors text-center border border-border"
             >
-              Back to Home
+              {t('backToHomeButton')}
             </Link>
           </div>
 
           <p className="text-xs text-text-muted mt-4 text-center">
-            Error code: {errorCode}
+            {t('errorCodeLabel', { code: errorCode })}
           </p>
         </div>
       </div>

@@ -721,7 +721,9 @@ export function ConversationalIntake({
               <p className="text-xs text-slate-400 mb-2">{currentStep.helperText}</p>
             )}
             <div className="flex gap-2">
+              <label htmlFor="intake-input" className="sr-only">{translations.placeholder}</label>
               <input
+                id="intake-input"
                 ref={inputRef}
                 type={currentStep.type === 'number' ? 'number' : 'text'}
                 value={input}

@@ -25,14 +25,20 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch all viewings for this hunter with listing data
-  const { data: viewingsData } = await (supabase.from('viewings') as any)
-    .select(`
-      id, listing_id, status, scheduled_at, hunter_notes, created_at,
-      listing:listings!listing_id(title, title_de, city, postcode, place_id)
-    `)
-    .eq('hunter_id', userId)
-    .order('created_at', { ascending: false })
-    .limit(200)
+  let viewingsData: any[] | null = null
+  try {
+    const result = await (supabase.from('viewings') as any)
+      .select(`
+        id, listing_id, status, scheduled_at, hunter_notes, created_at,
+        listing:listings!listing_id(title, title_de, city, postcode, place_id)
+      `)
+      .eq('hunter_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(200)
+    viewingsData = result.data
+  } catch (err) {
+    console.error('Failed to load hunter viewings data:', err)
+  }
 
   const viewings = (viewingsData ?? []).map((v: any) => ({
     id: v.id,

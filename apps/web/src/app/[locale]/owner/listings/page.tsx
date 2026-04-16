@@ -16,13 +16,18 @@ export default async function OwnerListingsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  const { data: listingsData } = await supabase
-    .from('listings')
-    .select('*')
-    .eq('owner_id', userId)
-    .order('created_at', { ascending: false })
+  let allListings: Listing[] = []
+  try {
+    const { data: listingsData } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('owner_id', userId)
+      .order('created_at', { ascending: false })
 
-  const allListings: Listing[] = listingsData ?? []
+    allListings = listingsData ?? []
+  } catch (err) {
+    console.error('Failed to load owner listings data:', err)
+  }
 
   // Single listing shortcut: if owner has exactly 1 listing, go straight to it
   if (allListings.length === 1) {
