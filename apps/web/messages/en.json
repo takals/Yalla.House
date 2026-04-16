@@ -1044,7 +1044,7 @@
       "selectPropertyType": "Please select property type",
       "selectIntent": "Please select offer type",
       "addressRequired": "Address required",
-      "postcodeInvalid": "Please enter valid postcode (5 digits)",
+      "postcodeInvalid": "Please enter a valid postcode",
       "cityRequired": "City required",
       "constructionYearInvalid": "Construction year must be between {min} and {max}",
       "titleRequired": "Title required",
@@ -1219,13 +1219,13 @@
       "addressLine1": "Street and house number",
       "addressLine1Placeholder": "123 Main Street",
       "addressLine2": "Address details",
-      "addressLine2Placeholder": "Apartment 4B, Building B",
+      "addressLine2Placeholder": "Flat 4B, Building B",
       "postcode": "Postcode",
-      "postcodePlaceholder": "10115",
+      "postcodePlaceholder": "SW1A 1AA",
       "city": "City",
-      "cityPlaceholder": "Berlin",
-      "region": "State/Region",
-      "regionPlaceholder": "Berlin"
+      "cityPlaceholder": "London",
+      "region": "Region",
+      "regionSelectDefault": "Select a region"
     },
     "step3": {
       "heading": "Property Details",
@@ -1297,7 +1297,7 @@
     },
     "validation": {
       "required": "required",
-      "postcodeInvalid": "Please enter a valid postcode (5 digits)"
+      "postcodeInvalid": "Please enter a valid postcode"
     }
   },
   "partner": {
