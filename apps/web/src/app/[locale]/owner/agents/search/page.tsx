@@ -124,8 +124,8 @@ export default async function AgentSearchPage() {
           <ArrowLeft size={16} />
           {t('back')}
         </Link>
-        <h1 className="text-3xl font-bold text-[#0F1117] mb-2">{t('pageTitle')}</h1>
-        <p className="text-[#5E6278]">{t('pageDescription')}</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">{t('pageTitle')}</h1>
+        <p className="text-text-secondary">{t('pageDescription')}</p>
       </div>
 
       {/* Client Component */}

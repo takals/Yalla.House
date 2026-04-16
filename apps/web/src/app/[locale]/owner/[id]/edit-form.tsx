@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Home, Building2, Building, Store, TreePine } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { updateListingAction, changeStatusAction, sendBriefAction, type EditPayload } from './actions'
@@ -74,7 +74,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-[#0F1117] mb-1.5">
+      <label htmlFor={id} className="block text-sm font-medium text-text-primary mb-1.5">
         {label}
         {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
@@ -93,7 +93,7 @@ function Input({
     <Field label={label} id={id} required={required} error={error}>
       <input
         id={id}
-        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-[#0F1117] bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
+        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
         {...props}
       />
     </Field>
@@ -109,7 +109,7 @@ function Select({
     <Field label={label} id={id} required={required} error={error}>
       <select
         id={id}
-        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-[#0F1117] bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
+        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
         {...props}
       >
         {children}
@@ -123,7 +123,7 @@ function Select({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-surface rounded-card shadow-sm p-6 space-y-5">
-      <h2 className="text-base font-bold text-[#0F1117] border-b border-[#E4E6EF] pb-3">{title}</h2>
+      <h2 className="text-base font-bold text-text-primary border-b border-[#E4E6EF] pb-3">{title}</h2>
       {children}
     </div>
   )
@@ -177,6 +177,8 @@ export function ListingEditForm({
   portalStatuses: PortalStatusRow[]
 }) {
   const t = useTranslations('ownerDashboard')
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [form, setForm] = useState<EditPayload>(() => initForm(listing))
   const [errors, setErrors] = useState<FormErrors>({})
   const [serverError, setServerError] = useState('')
@@ -279,7 +281,7 @@ export function ListingEditForm({
       <div>
         <Link
           href="/owner"
-          className="inline-flex items-center gap-1.5 text-sm text-[#5E6278] hover:text-[#0F1117] transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-4"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -289,8 +291,8 @@ export function ListingEditForm({
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#0F1117]">{t('editForm.editTitle')}</h1>
-            <p className="text-sm text-[#5E6278] mt-1">{listing.place_id}</p>
+            <h1 className="text-2xl font-bold text-text-primary">{t('editForm.editTitle')}</h1>
+            <p className="text-sm text-text-secondary mt-1">{listing.place_id}</p>
           </div>
           <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap mt-1 ${STATUS_STYLES[currentStatus] ?? STATUS_STYLES['draft']}`}>
             {t(`editForm.status.${currentStatus}`) ?? currentStatus}
@@ -300,7 +302,7 @@ export function ListingEditForm({
 
       {/* Status section */}
       <div className="bg-surface rounded-card shadow-sm p-6">
-        <h2 className="text-base font-bold text-[#0F1117] border-b border-[#E4E6EF] pb-3 mb-4">{t('editForm.sectionStatus')}</h2>
+        <h2 className="text-base font-bold text-text-primary border-b border-[#E4E6EF] pb-3 mb-4">{t('editForm.sectionStatus')}</h2>
 
         <div className="flex flex-wrap gap-2">
           {currentStatus === 'draft' && (
@@ -308,7 +310,7 @@ export function ListingEditForm({
               type="button"
               onClick={() => handleStatusChange('active')}
               disabled={isChangingStatus}
-              className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
             >
               {t('editForm.publish')}
             </button>
@@ -320,7 +322,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('paused')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.pause')}
               </button>
@@ -328,7 +330,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('sold')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markSold')}
               </button>
@@ -336,7 +338,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('let')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markLet')}
               </button>
@@ -348,7 +350,7 @@ export function ListingEditForm({
               type="button"
               onClick={() => handleStatusChange('active')}
               disabled={isChangingStatus}
-              className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-sm font-bold bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
             >
               {t('editForm.reactivate')}
             </button>
@@ -360,7 +362,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('sold')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markSold')}
               </button>
@@ -368,7 +370,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('let')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markLet')}
               </button>
@@ -376,7 +378,7 @@ export function ListingEditForm({
           )}
 
           {['sold', 'let', 'archived'].includes(currentStatus) && (
-            <p className="text-sm text-[#5E6278]">
+            <p className="text-sm text-text-secondary">
               {currentStatus === 'sold' && t('editForm.msgListingSold')}
               {currentStatus === 'let' && t('editForm.msgListingLet')}
               {currentStatus === 'archived' && t('editForm.msgListingArchived')}
@@ -384,7 +386,7 @@ export function ListingEditForm({
           )}
 
           {isChangingStatus && (
-            <span className="flex items-center gap-1.5 text-sm text-[#5E6278]">
+            <span className="flex items-center gap-1.5 text-sm text-text-secondary">
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -402,7 +404,7 @@ export function ListingEditForm({
       {/* Section 1: Typ & Angebot */}
       <Section title={t('editForm.sectionTypeAndOffer')}>
         <div>
-          <p className="text-sm font-medium text-[#0F1117] mb-3">{t('editForm.propertyType')}</p>
+          <p className="text-sm font-medium text-text-primary mb-3">{t('editForm.propertyType')}</p>
           {errors.property_type && (
             <p className="mb-2 text-xs text-red-500">{errors.property_type}</p>
           )}
@@ -418,20 +420,20 @@ export function ListingEditForm({
                     : 'border-[#E4E6EF] hover:border-brand/50'
                 }`}
               >
-                {icon === 'home' && <Home size={24} className="text-[#0F1117]" />}
-                {icon === 'building2' && <Building2 size={24} className="text-[#0F1117]" />}
-                {icon === 'building' && <Building size={24} className="text-[#0F1117]" />}
-                {icon === 'store' && <Store size={24} className="text-[#0F1117]" />}
-                {icon === 'treepine' && <TreePine size={24} className="text-[#0F1117]" />}
-                {icon === null && <span className="text-xs font-bold text-[#0F1117]">···</span>}
-                <span className="text-xs font-semibold text-[#0F1117] leading-tight">{label}</span>
+                {icon === 'home' && <Home size={24} className="text-text-primary" />}
+                {icon === 'building2' && <Building2 size={24} className="text-text-primary" />}
+                {icon === 'building' && <Building size={24} className="text-text-primary" />}
+                {icon === 'store' && <Store size={24} className="text-text-primary" />}
+                {icon === 'treepine' && <TreePine size={24} className="text-text-primary" />}
+                {icon === null && <span className="text-xs font-bold text-text-primary">···</span>}
+                <span className="text-xs font-semibold text-text-primary leading-tight">{label}</span>
               </button>
             ))}
           </div>
         </div>
 
         <div>
-          <p className="text-sm font-medium text-[#0F1117] mb-3">{t('editForm.offerType')}</p>
+          <p className="text-sm font-medium text-text-primary mb-3">{t('editForm.offerType')}</p>
           {errors.intent && <p className="mb-2 text-xs text-red-500">{errors.intent}</p>}
           <div className="grid grid-cols-3 gap-3">
             {[
@@ -445,8 +447,8 @@ export function ListingEditForm({
                 onClick={() => set('intent', value)}
                 className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-colors ${
                   form.intent === value
-                    ? 'border-brand bg-brand-solid-bg text-[#0F1117]'
-                    : 'border-[#E4E6EF] text-[#5E6278] hover:border-brand/50'
+                    ? 'border-brand bg-brand-solid-bg text-text-primary'
+                    : 'border-[#E4E6EF] text-text-secondary hover:border-brand/50'
                 }`}
               >
                 {label}
@@ -613,7 +615,7 @@ export function ListingEditForm({
             placeholder="Beschreiben Sie Ihre Immobilie…"
             value={form.description_de}
             onChange={e => set('description_de', e.target.value)}
-            className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-[#0F1117] bg-white resize-none"
+            className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white resize-none"
           />
         </Field>
 
@@ -697,15 +699,15 @@ export function ListingEditForm({
       {/* Section 7: Send Brief to Agents */}
       {(currentStatus === 'active' || currentStatus === 'draft') && (
         <Section title={t('editForm.sectionBrief')}>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('editForm.briefDescription')}
           </p>
           {listing.brief_sent_at && (
-            <div className="flex items-center gap-2 text-xs text-[#5E6278] bg-[#F5F5FA] rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-xs text-text-secondary bg-[#F5F5FA] rounded-lg px-3 py-2">
               <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-              {t('editForm.lastSentOn', { date: new Date(listing.brief_sent_at).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }), count: listing.brief_agent_count || 0 })}
+              {t('editForm.lastSentOn', { date: new Date(listing.brief_sent_at).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' }), count: listing.brief_agent_count || 0 })}
             </div>
           )}
           <div className="flex items-center gap-4">
@@ -713,7 +715,7 @@ export function ListingEditForm({
               type="button"
               onClick={handleSendBrief}
               disabled={isSendingBrief}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold rounded-lg transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-text-primary font-bold rounded-lg transition-colors disabled:opacity-50"
             >
               {isSendingBrief ? (
                 <>
@@ -759,7 +761,7 @@ export function ListingEditForm({
         <button
           onClick={handleSave}
           disabled={isPending}
-          className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
+          className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-text-primary font-bold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
         >
           {isPending ? t('editForm.saving') : t('editForm.saveChanges')}
         </button>

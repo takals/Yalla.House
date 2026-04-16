@@ -61,7 +61,7 @@ export default async function PartnerDashboardPage({
         <h1 className="text-2xl font-bold mb-1">
           {t('partnerDash.pageTitle')}
         </h1>
-        <p className="text-[#5E6278] text-sm">
+        <p className="text-text-secondary text-sm">
           {t('partnerDash.pageSubtitle')}
         </p>
       </div>
@@ -87,33 +87,33 @@ export default async function PartnerDashboardPage({
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {/* Active Requests */}
-        <div className="bg-surface rounded-lg p-5 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-5 border border-border-default text-center">
           <p className="text-3xl font-bold text-brand">{activeCount}</p>
-          <p className="text-xs text-[#5E6278] mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             {t('partnerDash.activeRequests')}
           </p>
         </div>
 
         {/* Completed Jobs */}
-        <div className="bg-surface rounded-lg p-5 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-5 border border-border-default text-center">
           <p className="text-3xl font-bold text-[#16A34A]">{completedCount}</p>
-          <p className="text-xs text-[#5E6278] mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             {t('partnerDash.completed')}
           </p>
         </div>
 
         {/* Average Rating */}
-        <div className="bg-surface rounded-lg p-5 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-5 border border-border-default text-center">
           <p className="text-3xl font-bold">
             {averageRating ? `${averageRating}` : '—'}
           </p>
-          <p className="text-xs text-[#5E6278] mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             {t('partnerDash.avgRating')}
           </p>
         </div>
 
         {/* Profile Status */}
-        <div className="bg-surface rounded-lg p-5 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-5 border border-border-default text-center">
           <p className="text-3xl font-bold">
             <span
               className="inline-block w-4 h-4 rounded-full"
@@ -122,7 +122,7 @@ export default async function PartnerDashboardPage({
               }}
             />
           </p>
-          <p className="text-xs text-[#5E6278] mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             {profileComplete
               ? t('partnerDash.profileActive')
               : t('partnerDash.profileIncomplete')}
@@ -135,7 +135,7 @@ export default async function PartnerDashboardPage({
         {/* View Requests */}
         <Link
           href={`${locale === 'de' ? '' : '/en'}/partner/requests`}
-          className="bg-surface rounded-xl p-6 border border-[#E2E4EB] hover:shadow-md transition block"
+          className="bg-surface rounded-xl p-6 border border-border-default hover:shadow-md transition block"
         >
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-bold">
@@ -143,10 +143,10 @@ export default async function PartnerDashboardPage({
             </h3>
             <span className="text-2xl">→</span>
           </div>
-          <p className="text-xs text-[#5E6278]">
+          <p className="text-xs text-text-secondary">
             {t('partnerDash.browseRequests')}
           </p>
-          <div className="mt-4 pt-4 border-t border-[#E2E4EB]">
+          <div className="mt-4 pt-4 border-t border-border-default">
             <span className="text-sm font-bold text-brand">
               {activeCount} {locale === 'de' ? 'aktiv' : 'active'}
             </span>
@@ -156,7 +156,7 @@ export default async function PartnerDashboardPage({
         {/* Manage Profile */}
         <Link
           href={`${locale === 'de' ? '' : '/en'}/partner/profile`}
-          className="bg-surface rounded-xl p-6 border border-[#E2E4EB] hover:shadow-md transition block"
+          className="bg-surface rounded-xl p-6 border border-border-default hover:shadow-md transition block"
         >
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-bold">
@@ -164,10 +164,10 @@ export default async function PartnerDashboardPage({
             </h3>
             <span className="text-2xl">→</span>
           </div>
-          <p className="text-xs text-[#5E6278]">
+          <p className="text-xs text-text-secondary">
             {t('partnerDash.manageProfileDesc')}
           </p>
-          <div className="mt-4 pt-4 border-t border-[#E2E4EB]">
+          <div className="mt-4 pt-4 border-t border-border-default">
             <span
               className="text-sm font-bold"
               style={{
@@ -184,11 +184,11 @@ export default async function PartnerDashboardPage({
 
       {/* Recent Activity */}
       {activeCount > 0 && (
-        <div className="bg-surface rounded-xl border border-[#E2E4EB] p-6">
+        <div className="bg-surface rounded-xl border border-border-default p-6">
           <h2 className="text-lg font-bold mb-4">
             {t('partnerDash.recentActivity')}
           </h2>
-          <p className="text-sm text-[#5E6278] mb-4">
+          <p className="text-sm text-text-secondary mb-4">
             {t('partnerDash.activeRequestsMsg')}
           </p>
           <Link
@@ -202,8 +202,8 @@ export default async function PartnerDashboardPage({
 
       {/* Empty State */}
       {activeCount === 0 && completedCount === 0 && (
-        <div className="bg-surface rounded-xl border border-[#E2E4EB] p-12 text-center">
-          <p className="text-[#5E6278] font-medium mb-2">
+        <div className="bg-surface rounded-xl border border-border-default p-12 text-center">
+          <p className="text-text-secondary font-medium mb-2">
             {t('partnerDash.welcomePartner')}
           </p>
           <p className="text-xs text-[#999] mb-4">
@@ -218,7 +218,7 @@ export default async function PartnerDashboardPage({
             </Link>
             <Link
               href={`${locale === 'de' ? '' : '/en'}/partner/requests`}
-              className="inline-block px-4 py-2 border border-[#D8DBE5] text-[#5E6278] text-sm font-bold rounded-lg hover:bg-[#F5F5F7] transition"
+              className="inline-block px-4 py-2 border border-[#D8DBE5] text-text-secondary text-sm font-bold rounded-lg hover:bg-hover-bg transition"
             >
               {t('partnerDash.browseRequestsBtn')}
             </Link>

@@ -73,12 +73,12 @@ export default async function AgentHuntersPage() {
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold mb-0.5">{t('connectedBuyers')}</h1>
-          <p className="text-sm text-[#5E6278]">
+          <p className="text-sm text-text-secondary">
             {passportCountText}
           </p>
         </div>
         {passports.length > 0 && (
-          <div className="flex items-center gap-2 text-xs text-[#5E6278]">
+          <div className="flex items-center gap-2 text-xs text-text-secondary">
             <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
             {passports.filter(p => p.hasPassport).length} von {passports.length} {t('withPassport')}
           </div>
@@ -86,12 +86,12 @@ export default async function AgentHuntersPage() {
       </div>
 
       {passports.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center border border-[#E2E4EB]">
+        <div className="bg-white rounded-2xl p-12 text-center border border-border-default">
           <div className="flex justify-center mb-4">
             <ShieldCheck size={48} className="text-[#D9DCE4]" />
           </div>
           <p className="font-semibold mb-2">{t('noActiveBuyers')}</p>
-          <p className="text-sm text-[#5E6278] max-w-sm mx-auto">
+          <p className="text-sm text-text-secondary max-w-sm mx-auto">
             {t('noBuyersDesc')}
           </p>
         </div>

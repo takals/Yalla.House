@@ -399,7 +399,7 @@ export function ConversationalIntake({
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="px-4 py-1.5 rounded-lg bg-[#D4764E] text-white text-xs font-semibold hover:bg-[#BF6840] transition-colors disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-lg bg-[#D4764E] text-white text-xs font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
                 >
                   {submitting ? 'Saving...' : translations.submitBtn}
                 </button>
@@ -504,7 +504,7 @@ export function ConversationalIntake({
                     <button
                       onClick={handleSubmit}
                       disabled={submitting}
-                      className="px-4 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-medium hover:bg-[#BF6840] transition-colors disabled:opacity-50"
+                      className="px-4 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-medium hover:bg-brand-hover transition-colors disabled:opacity-50"
                     >
                       {submitting ? 'Saving...' : translations.submitBtn}
                     </button>
@@ -622,7 +622,7 @@ export function ConversationalIntake({
                 {isMultiStep && pendingMulti.length > 0 && !pendingMulti.includes('_none') && (
                   <button
                     onClick={handleConfirmMulti}
-                    className="mt-3 px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-[#BF6840] transition-colors"
+                    className="mt-3 px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
                   >
                     Continue with {pendingMulti.length} selected
                   </button>
@@ -688,7 +688,7 @@ export function ConversationalIntake({
                   {Object.keys(pendingTags).length > 0 ? (
                     <button
                       onClick={handleConfirmTags}
-                      className="px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-[#BF6840] transition-colors"
+                      className="px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
                     >
                       Continue with {Object.keys(pendingTags).length} preferences
                     </button>
@@ -736,7 +736,7 @@ export function ConversationalIntake({
               <button
                 onClick={handleSendMessage}
                 disabled={!input.trim() || isThinking}
-                className="w-10 h-10 rounded-xl bg-[#D4764E] text-white flex items-center justify-center hover:bg-[#BF6840] transition-colors disabled:opacity-40 flex-shrink-0"
+                className="w-10 h-10 rounded-xl bg-[#D4764E] text-white flex items-center justify-center hover:bg-brand-hover transition-colors disabled:opacity-40 flex-shrink-0"
               >
                 <Send size={16} />
               </button>

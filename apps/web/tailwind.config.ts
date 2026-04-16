@@ -28,6 +28,14 @@ export default {
         'text-on-dark':           '#FFFFFF',
         'text-on-dark-secondary': '#888888',
         'text-on-dark-muted':     '#7C7F82',
+        // Semantic tokens for dashboard light theme
+        'text-primary':    '#0F1117',
+        'text-secondary':  '#5E6278',
+        'text-muted':      '#999999',
+        'border-default':  '#E2E4EB',
+        'border-light':    '#E4E6EF',
+        'hover-muted':     '#D9DCE4',
+        'hover-bg':        '#F5F5F7',
       },
       fontFamily: {
         sans: [

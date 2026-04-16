@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { addOwnerSlotAction, removeOwnerSlotAction, addBatchSlotsAction } from './actions'
 import { Calendar, Clock, Trash2, Plus, X, Repeat } from 'lucide-react'
@@ -18,12 +19,12 @@ interface ListingOption {
   title: string
 }
 
-function formatSlotTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+function formatSlotTime(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })
 }
 
-function formatSlotDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('de-DE', { weekday: 'short', day: 'numeric', month: 'short' })
+function formatSlotDate(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleDateString(dateLocale, { weekday: 'short', day: 'numeric', month: 'short' })
 }
 
 export function AvailabilityManager({
@@ -36,6 +37,8 @@ export function AvailabilityManager({
   translations: Record<string, string>
 }) {
   const { handleAuthRequired } = useAuthAction()
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [slots, setSlots] = useState<SlotRow[]>(initialSlots)
   const [showForm, setShowForm] = useState(false)
   const [acting, setActing] = useState<Set<string>>(new Set())
@@ -186,7 +189,7 @@ export function AvailabilityManager({
   // Group slots by date
   const grouped = new Map<string, SlotRow[]>()
   for (const slot of slots.sort((a, b) => a.starts_at.localeCompare(b.starts_at))) {
-    const day = formatSlotDate(slot.starts_at)
+    const day = formatSlotDate(slot.starts_at, dateLocale)
     if (!grouped.has(day)) grouped.set(day, [])
     grouped.get(day)!.push(slot)
   }
@@ -207,7 +210,7 @@ export function AvailabilityManager({
           <button
             type="button"
             onClick={() => setShowForm(f => !f)}
-            className="flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors"
           >
             {showForm ? <X size={14} /> : <Plus size={14} />}
             {showForm ? t.cancel : t.addSlot}
@@ -219,11 +222,11 @@ export function AvailabilityManager({
       <div className="flex gap-3 mb-4">
         <div className="bg-surface rounded-lg px-3 py-2 text-center flex-1">
           <p className="text-lg font-bold text-green-600">{availableSlots.length}</p>
-          <p className="text-xs text-[#5E6278]">{t.available}</p>
+          <p className="text-xs text-text-secondary">{t.available}</p>
         </div>
         <div className="bg-surface rounded-lg px-3 py-2 text-center flex-1">
           <p className="text-lg font-bold text-brand">{bookedSlots.length}</p>
-          <p className="text-xs text-[#5E6278]">{t.booked}</p>
+          <p className="text-xs text-text-secondary">{t.booked}</p>
         </div>
       </div>
 
@@ -233,7 +236,7 @@ export function AvailabilityManager({
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {listings.length > 1 && (
               <div className="col-span-2 sm:col-span-4">
-                <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.selectListing}</label>
+                <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.selectListing}</label>
                 <select
                   value={selectedListing}
                   onChange={e => setSelectedListing(e.target.value)}
@@ -246,7 +249,7 @@ export function AvailabilityManager({
               </div>
             )}
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.date}</label>
+              <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.date}</label>
               <input
                 type="date"
                 value={date}
@@ -256,7 +259,7 @@ export function AvailabilityManager({
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.startTime}</label>
+              <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.startTime}</label>
               <input
                 type="time"
                 value={startTime}
@@ -265,7 +268,7 @@ export function AvailabilityManager({
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.endTime}</label>
+              <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.endTime}</label>
               <input
                 type="time"
                 value={endTime}
@@ -278,7 +281,7 @@ export function AvailabilityManager({
                 type="button"
                 onClick={handleAdd}
                 disabled={acting.has('add')}
-                className="w-full text-sm font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+                className="w-full text-sm font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
               >
                 {acting.has('add') ? '...' : t.save}
               </button>
@@ -294,7 +297,7 @@ export function AvailabilityManager({
           <button
             type="button"
             onClick={() => { setShowQuickWeek(f => !f); setQwSuccess(null) }}
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors"
           >
             <Repeat size={14} />
             {t.quickWeek ?? 'Quick-fill week'}
@@ -308,11 +311,11 @@ export function AvailabilityManager({
 
           {showQuickWeek && (
             <div className="bg-surface rounded-card p-5 shadow-sm mt-3">
-              <p className="text-xs text-[#5E6278] mb-4">{t.quickWeekDesc ?? 'Create slots for the next 7 days automatically'}</p>
+              <p className="text-xs text-text-secondary mb-4">{t.quickWeekDesc ?? 'Create slots for the next 7 days automatically'}</p>
 
               {listings.length > 1 && (
                 <div className="mb-3">
-                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.selectListing}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.selectListing}</label>
                   <select
                     value={selectedListing}
                     onChange={e => setSelectedListing(e.target.value)}
@@ -327,7 +330,7 @@ export function AvailabilityManager({
 
               {/* Day selector */}
               <div className="mb-3">
-                <label className="text-xs font-semibold text-[#5E6278] mb-2 block">{t.selectDays ?? 'Select days'}</label>
+                <label className="text-xs font-semibold text-text-secondary mb-2 block">{t.selectDays ?? 'Select days'}</label>
                 <div className="flex gap-1.5">
                   {DAY_LABELS.map(d => (
                     <button
@@ -337,7 +340,7 @@ export function AvailabilityManager({
                       className={`w-9 h-9 rounded-lg text-xs font-bold transition-colors ${
                         qwDays.has(d.value)
                           ? 'bg-[#0F1117] text-white'
-                          : 'bg-[#F5F5FA] text-[#5E6278] hover:bg-[#E4E6EF]'
+                          : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
                       }`}
                     >
                       {d.label}
@@ -349,7 +352,7 @@ export function AvailabilityManager({
               {/* Time range + duration */}
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div>
-                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.fromTime ?? 'From'}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.fromTime ?? 'From'}</label>
                   <input
                     type="time"
                     value={qwFrom}
@@ -358,7 +361,7 @@ export function AvailabilityManager({
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.toTime ?? 'Until'}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.toTime ?? 'Until'}</label>
                   <input
                     type="time"
                     value={qwTo}
@@ -367,7 +370,7 @@ export function AvailabilityManager({
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.slotDuration ?? 'Duration'}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.slotDuration ?? 'Duration'}</label>
                   <select
                     value={qwDuration}
                     onChange={e => setQwDuration(Number(e.target.value))}
@@ -385,7 +388,7 @@ export function AvailabilityManager({
                 type="button"
                 onClick={handleQuickWeek}
                 disabled={acting.has('batch')}
-                className="w-full text-sm font-bold px-4 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+                className="w-full text-sm font-bold px-4 py-2.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
               >
                 {acting.has('batch') ? '...' : (t.generateSlots ?? 'Create slots')}
               </button>
@@ -398,13 +401,13 @@ export function AvailabilityManager({
       {/* Slot list grouped by day */}
       {slots.length === 0 ? (
         <div className="bg-surface rounded-card p-8 text-center shadow-sm">
-          <p className="text-sm text-[#5E6278]">{t.noSlots}</p>
+          <p className="text-sm text-text-secondary">{t.noSlots}</p>
         </div>
       ) : (
         <div className="space-y-3">
           {Array.from(grouped.entries()).map(([day, daySlots]) => (
             <div key={day}>
-              <p className="text-xs font-semibold text-[#5E6278] mb-2">{day}</p>
+              <p className="text-xs font-semibold text-text-secondary mb-2">{day}</p>
               <div className="space-y-2">
                 {daySlots.map(slot => (
                   <div
@@ -415,10 +418,10 @@ export function AvailabilityManager({
                       <Clock size={14} className={slot.is_booked ? 'text-brand' : 'text-green-500'} />
                       <div>
                         <span className="text-sm font-semibold">
-                          {formatSlotTime(slot.starts_at)} – {formatSlotTime(slot.ends_at)}
+                          {formatSlotTime(slot.starts_at, dateLocale)} – {formatSlotTime(slot.ends_at, dateLocale)}
                         </span>
                         {listings.length > 1 && (
-                          <span className="text-xs text-[#5E6278] ml-2">
+                          <span className="text-xs text-text-secondary ml-2">
                             {listingNameMap[slot.listing_id] ?? '—'}
                           </span>
                         )}

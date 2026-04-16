@@ -22,9 +22,9 @@ export default async function AdminBookingPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="bg-surface rounded-card p-10 text-center max-w-sm">
-          <Lock size={32} className="mx-auto mb-2 text-[#5E6278]" />
+          <Lock size={32} className="mx-auto mb-2 text-text-secondary" />
           <p className="font-bold mb-1">No Access</p>
-          <p className="text-sm text-[#5E6278]">Admin only.</p>
+          <p className="text-sm text-text-secondary">Admin only.</p>
         </div>
       </div>
     )
@@ -42,14 +42,14 @@ export default async function AdminBookingPage() {
           Back to Admin
         </Link>
         <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold text-[#0F1117] tracking-tight">
+          <h1 className="text-3xl font-bold text-text-primary tracking-tight">
             Smart Booking Shortcut
           </h1>
           <span className="text-xs font-bold px-2.5 py-1 bg-[#D4764E] text-white rounded-full">
             Tier C
           </span>
         </div>
-        <p className="text-sm text-[#5E6278] max-w-2xl">
+        <p className="text-sm text-text-secondary max-w-2xl">
           Caller rings in about a property. Search by ref code, postcode, or street name.
           Find the listing, then send them the link via SMS or WhatsApp — one click.
         </p>

@@ -43,7 +43,7 @@ export default async function OwnerSettingsPage() {
     <div className="max-w-3xl space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-extrabold text-[#0F1117] tracking-tight">{t('pageTitle')}</h1>
+        <h1 className="text-2xl font-extrabold text-text-primary tracking-tight">{t('pageTitle')}</h1>
         <p className="text-sm text-[#656565] mt-1">{t('pageDescription')}</p>
       </div>
 
@@ -153,7 +153,7 @@ export default async function OwnerSettingsPage() {
       <SettingsSection icon={AlertTriangle} title={t('sectionDangerZone')} isDanger>
         <div className="flex items-center justify-between py-3">
           <div>
-            <div className="text-sm font-semibold text-[#0F1117]">{t('labelDeleteAccount')}</div>
+            <div className="text-sm font-semibold text-text-primary">{t('labelDeleteAccount')}</div>
             <div className="text-xs text-[#999] mt-0.5">
               {t('deleteAccountWarning')}
             </div>
@@ -181,15 +181,15 @@ interface SettingsSectionProps {
 }
 
 function SettingsSection({ icon: Icon, title, badge, isDanger, children }: SettingsSectionProps) {
-  const borderClass = isDanger ? 'border-2 border-red-200' : 'border border-[#E2E4EB]'
+  const borderClass = isDanger ? 'border-2 border-red-200' : 'border border-border-default'
   const bgClass = isDanger ? 'bg-white' : 'bg-white'
 
   return (
     <div className={`${bgClass} rounded-2xl ${borderClass} p-6 space-y-4`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
-          {Icon && <Icon size={20} className={isDanger ? 'text-red-600' : 'text-[#0F1117]'} />}
-          <h2 className={`font-bold ${isDanger ? 'text-red-600' : 'text-[#0F1117]'} text-base`}>{title}</h2>
+          {Icon && <Icon size={20} className={isDanger ? 'text-red-600' : 'text-text-primary'} />}
+          <h2 className={`font-bold ${isDanger ? 'text-red-600' : 'text-text-primary'} text-base`}>{title}</h2>
         </div>
         {badge && (
           <span className="text-xs font-medium text-[#999] bg-[#F0F0F0] px-2 py-1 rounded">
@@ -213,8 +213,8 @@ function SettingItem({ label, value, actionLabel, isReadOnly }: SettingItemProps
   return (
     <div className="flex items-center justify-between py-3 border-b border-[#F0F0F0] last:border-b-0">
       <div className="flex-1">
-        <div className="text-sm font-semibold text-[#0F1117]">{label}</div>
-        <div className="text-sm text-[#5E6278] mt-0.5">{value}</div>
+        <div className="text-sm font-semibold text-text-primary">{label}</div>
+        <div className="text-sm text-text-secondary mt-0.5">{value}</div>
       </div>
       {isReadOnly ? (
         <span className="text-xs text-[#999]">{actionLabel}</span>
@@ -237,7 +237,7 @@ function NotificationToggle({ label, description, disabled }: NotificationToggle
   return (
     <div className={`flex items-center justify-between py-3 border-b border-[#F0F0F0] last:border-b-0 ${disabled ? 'opacity-50' : ''}`}>
       <div>
-        <div className="text-sm font-semibold text-[#0F1117]">{label}</div>
+        <div className="text-sm font-semibold text-text-primary">{label}</div>
         <div className="text-xs text-[#999] mt-0.5">{description}</div>
       </div>
       <div className="w-10 h-6 bg-[#E2E4EB] rounded-full relative cursor-not-allowed">

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import { ViewingCard } from '../viewing-card'
 
@@ -37,6 +37,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HunterPage() {
   const t = await getTranslations('hunterDashboard')
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -117,24 +119,24 @@ export default async function HunterPage() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-extrabold tracking-tight text-[#0F1117] mb-0.5">
+        <h1 className="text-2xl font-extrabold tracking-tight text-text-primary mb-0.5">
           {t('hello', { name: firstName })}
         </h1>
-        <p className="text-[0.875rem] text-[#5E6278]">{profile?.email}</p>
+        <p className="text-[0.875rem] text-text-secondary">{profile?.email}</p>
       </div>
 
       {/* Sub-nav tabs */}
-      <div className="flex gap-6 border-b border-[#E2E4EB] -mt-2">
-        <Link href="/hunter/info" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+      <div className="flex gap-6 border-b border-border-default -mt-2">
+        <Link href="/hunter/info" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           Info
         </Link>
-        <Link href="/hunter/overview" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
+        <Link href="/hunter/overview" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px">
           Dashboard
         </Link>
-        <Link href="/hunter/passport" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/hunter/passport" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           Passport
         </Link>
-        <Link href="/hunter/inbox" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/hunter/inbox" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           Inbox
         </Link>
       </div>
@@ -159,34 +161,34 @@ export default async function HunterPage() {
 
         {/* Neue Treffer */}
         <div className={`bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px] ${matchCount > 0 ? 'ring-2 ring-brand' : ''}`}>
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('newMatches')}</p>
-          <p className={`text-4xl font-black tabular-nums leading-none mt-2 ${matchCount > 0 ? 'text-[#0F1117]' : 'text-[#C5C8D0]'}`}>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-text-secondary">{t('newMatches')}</p>
+          <p className={`text-4xl font-black tabular-nums leading-none mt-2 ${matchCount > 0 ? 'text-text-primary' : 'text-[#C5C8D0]'}`}>
             {matchCount}
           </p>
         </div>
 
         {/* Verbundene Makler */}
         <div className="bg-white rounded-2xl p-5 flex flex-col justify-between min-h-[120px]">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('agents')}</p>
-          <p className="text-4xl font-black tabular-nums leading-none mt-2 text-[#0F1117]">{agentCount}</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-text-secondary">{t('agents')}</p>
+          <p className="text-4xl font-black tabular-nums leading-none mt-2 text-text-primary">{agentCount}</p>
         </div>
 
         {/* Aktive Angebote */}
         <div className="bg-white rounded-2xl p-5 flex flex-col justify-between">
-          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('offers')}</p>
-          <p className="text-4xl font-black tabular-nums leading-none mt-2 text-[#0F1117]">{offerCount}</p>
+          <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-text-secondary">{t('offers')}</p>
+          <p className="text-4xl font-black tabular-nums leading-none mt-2 text-text-primary">{offerCount}</p>
         </div>
 
         {/* Passport status */}
         <div className="col-span-2 lg:col-span-3 bg-white rounded-2xl p-5 flex items-center gap-4">
           <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${passportDot}`} />
           <div>
-            <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-[#5E6278]">{t('passportStatus')}</p>
-            <p className="font-bold text-[#0F1117] mt-0.5">{passportStatusLabel}</p>
+            <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-text-secondary">{t('passportStatus')}</p>
+            <p className="font-bold text-text-primary mt-0.5">{passportStatusLabel}</p>
           </div>
           <Link
             href="/hunter/passport"
-            className="ml-auto text-[0.8125rem] font-semibold text-[#5E6278] hover:text-[#0F1117] transition-colors whitespace-nowrap"
+            className="ml-auto text-[0.8125rem] font-semibold text-text-secondary hover:text-text-primary transition-colors whitespace-nowrap"
           >
             {t('editPassport')} →
           </Link>
@@ -195,7 +197,7 @@ export default async function HunterPage() {
 
       {/* Quick-access module grid */}
       <div>
-        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[#5E6278] mb-3">{t('modules')}</p>
+        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-text-secondary mb-3">{t('modules')}</p>
         <div className="grid sm:grid-cols-2 gap-3">
 
           <ModuleCard
@@ -209,7 +211,7 @@ export default async function HunterPage() {
             href="/hunter/agents"
             title={t('agentManager')}
             subtitle={t('agentManagerDesc')}
-            accentClass="bg-[#EDEEF2]"
+            accentClass="bg-bg"
             accentLabel="AG"
             lightAccent
           />
@@ -217,7 +219,7 @@ export default async function HunterPage() {
             href="/hunter/inbox"
             title={t('inbox')}
             subtitle={t('inboxDesc')}
-            accentClass="bg-[#EDEEF2]"
+            accentClass="bg-bg"
             accentLabel="IN"
             lightAccent
             badge={matchCount}
@@ -226,7 +228,7 @@ export default async function HunterPage() {
             href="/hunter/settings"
             title={t('settings')}
             subtitle={t('settingsDesc')}
-            accentClass="bg-[#EDEEF2]"
+            accentClass="bg-bg"
             accentLabel="ES"
             lightAccent
           />
@@ -235,14 +237,14 @@ export default async function HunterPage() {
 
       {/* Viewings section */}
       <div>
-        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-[#5E6278] mb-3">{t('viewingRequests')}</p>
+        <p className="text-[0.7rem] font-bold uppercase tracking-widest text-text-secondary mb-3">{t('viewingRequests')}</p>
 
         {viewings.length === 0 && (
           <div className="bg-white rounded-2xl p-12 text-center">
-            <p className="text-[#5E6278] text-sm mb-5">{t('noViewingRequests')}</p>
+            <p className="text-text-secondary text-sm mb-5">{t('noViewingRequests')}</p>
             <Link
               href="/listings"
-              className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+              className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
               style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1)' }}
             >
               {t('browseListings')}
@@ -256,7 +258,7 @@ export default async function HunterPage() {
               const listing = viewing.listing
               const title = listing?.title_de ?? t('listingFallback')
               const location = listing ? `${listing.postcode} ${listing.city}` : ''
-              const date = new Date(viewing.created_at).toLocaleDateString('de-DE', {
+              const date = new Date(viewing.created_at).toLocaleDateString(dateLocale, {
                 day: '2-digit', month: 'long', year: 'numeric',
               })
               return (
@@ -275,7 +277,7 @@ export default async function HunterPage() {
             <div className="text-center pt-2">
               <Link
                 href="/listings"
-                className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] transition-colors"
+                className="text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors"
               >
                 {t('moreListings')} →
               </Link>
@@ -305,21 +307,21 @@ function ModuleCard({
       className="group bg-white rounded-2xl p-5 flex items-center gap-4 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.09)]"
       style={{ transition: 'transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)' }}
     >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-[0.65rem] font-black tracking-wider flex-shrink-0 ${accentClass} ${lightAccent ? 'text-[#5E6278]' : 'text-white'}`}>
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-[0.65rem] font-black tracking-wider flex-shrink-0 ${accentClass} ${lightAccent ? 'text-text-secondary' : 'text-white'}`}>
         {accentLabel}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="font-bold text-[0.9375rem] text-[#0F1117] group-hover:text-[#0F1117]">{title}</p>
+          <p className="font-bold text-[0.9375rem] text-text-primary group-hover:text-text-primary">{title}</p>
           {badge > 0 && (
             <span className="text-[0.6rem] font-black min-w-[1.1rem] h-[1.1rem] px-1 rounded-full bg-red-500 text-white flex items-center justify-center">
               {badge}
             </span>
           )}
         </div>
-        <p className="text-[0.8125rem] text-[#5E6278] mt-0.5 truncate">{subtitle}</p>
+        <p className="text-[0.8125rem] text-text-secondary mt-0.5 truncate">{subtitle}</p>
       </div>
-      <svg className="w-4 h-4 text-[#C5C8D0] group-hover:text-[#0F1117] flex-shrink-0 transition-colors" style={{ transition: 'color 0.15s cubic-bezier(0.16,1,0.3,1)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-4 h-4 text-[#C5C8D0] group-hover:text-text-primary flex-shrink-0 transition-colors" style={{ transition: 'color 0.15s cubic-bezier(0.16,1,0.3,1)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
       </svg>
     </Link>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { ShieldCheck, Building2, Banknote, CheckCircle, Clock } from 'lucide-react'
 
 interface RawAssignment {
@@ -42,6 +42,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function AgentPage() {
   const t = await getTranslations('agentDashboard')
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -116,10 +118,10 @@ export default async function AgentPage() {
         <div className="mb-4 flex items-start justify-between gap-4 flex-wrap">
           <div>
             <h1 className="text-3xl font-bold mb-1">{t('hello', { name: firstName })}</h1>
-            <p className="text-[#5E6278] text-sm">{agentUser?.email}</p>
+            <p className="text-text-secondary text-sm">{agentUser?.email}</p>
           </div>
           {agentProfile?.agency_name && (
-            <div className="bg-surface rounded-xl px-4 py-2 border border-[#E2E4EB] text-sm">
+            <div className="bg-surface rounded-xl px-4 py-2 border border-border-default text-sm">
               <span className="font-semibold">{agentProfile.agency_name}</span>
               {agentProfile.verified_at && (
                 <span className="ml-2 text-green-700 text-xs font-bold">{t('verified')}</span>
@@ -129,17 +131,17 @@ export default async function AgentPage() {
         </div>
 
         {/* Sub-nav tabs */}
-        <div className="flex gap-6 mb-8 border-b border-[#E2E4EB]">
-          <Link href="/agent/info" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <div className="flex gap-6 mb-8 border-b border-border-default">
+          <Link href="/agent/info" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
             Info
           </Link>
-          <Link href="/agent/overview" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
+          <Link href="/agent/overview" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px">
             Dashboard
           </Link>
-          <Link href="/agent/briefs" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+          <Link href="/agent/briefs" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
             Briefs
           </Link>
-          <Link href="/agent/assignments" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+          <Link href="/agent/assignments" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
             Assignments
           </Link>
         </div>
@@ -153,7 +155,7 @@ export default async function AgentPage() {
             </div>
             <Link
               href="/agent/profile"
-              className="flex-shrink-0 bg-brand hover:bg-brand-hover text-[#0F1117] font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+              className="flex-shrink-0 bg-brand hover:bg-brand-hover text-text-primary font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
             >
               {t('setupNow')}
             </Link>
@@ -164,15 +166,15 @@ export default async function AgentPage() {
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold">{activeCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('connectedBuyers')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('connectedBuyers')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className={`text-2xl font-bold ${pendingCount > 0 ? 'text-brand' : ''}`}>{pendingCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('pending')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('pending')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold">{passportCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('passportsReceived')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('passportsReceived')}</p>
           </div>
         </div>
 
@@ -186,8 +188,8 @@ export default async function AgentPage() {
             >
               <div className="text-brand flex-shrink-0">{mod.icon}</div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-[#0F1117] group-hover:text-brand transition-colors">{mod.title}</p>
-                <p className="text-sm text-[#5E6278] mt-0.5">{mod.subtitle}</p>
+                <p className="font-semibold text-text-primary group-hover:text-brand transition-colors">{mod.title}</p>
+                <p className="text-sm text-text-secondary mt-0.5">{mod.subtitle}</p>
               </div>
               <span className="text-[#999] text-lg">→</span>
             </Link>
@@ -199,7 +201,7 @@ export default async function AgentPage() {
 
         {assignments.length === 0 ? (
           <div className="bg-surface rounded-card p-10 text-center">
-            <p className="text-[#5E6278] text-sm mb-2">{t('noConnections')}</p>
+            <p className="text-text-secondary text-sm mb-2">{t('noConnections')}</p>
             <p className="text-xs text-[#999]">{t('noConnectionsDesc')}</p>
           </div>
         ) : (
@@ -208,16 +210,16 @@ export default async function AgentPage() {
               const name = a.hunter_user?.full_name ?? a.hunter_user?.email ?? t('anonymousBuyer')
               const profile = a.hunter_profile
               const budget = profile?.budget_max
-                ? `bis €${Math.round(profile.budget_max / 100).toLocaleString('de-DE')}`
+                ? `bis €${Math.round(profile.budget_max / 100).toLocaleString(dateLocale)}`
                 : null
               const areas = profile?.target_areas?.slice(0, 2).join(', ') ?? null
               const finance = profile?.finance_status ? FINANCE_LABEL[profile.finance_status] : null
               const hasPassport = !!profile?.brief_updated_at
 
               return (
-                <div key={a.id} className="bg-surface rounded-2xl p-5 border border-[#E2E4EB] flex gap-4 items-start">
+                <div key={a.id} className="bg-surface rounded-2xl p-5 border border-border-default flex gap-4 items-start">
                   {/* Avatar */}
-                  <div className="w-10 h-10 rounded-full bg-[#EDEEF2] flex items-center justify-center text-sm font-bold text-[#5E6278] flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-bg flex items-center justify-center text-sm font-bold text-text-secondary flex-shrink-0">
                     {name.charAt(0).toUpperCase()}
                   </div>
 
@@ -235,7 +237,7 @@ export default async function AgentPage() {
                     </div>
 
                     {a.status === 'active' && profile ? (
-                      <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-[#5E6278]">
+                      <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-text-secondary">
                         {budget && <span>{budget}</span>}
                         {areas && <span>{areas}</span>}
                         {finance && profile.finance_status && (
@@ -255,7 +257,7 @@ export default async function AgentPage() {
                   {a.status === 'active' && (
                     <Link
                       href={`/agent/hunters`}
-                      className="flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors"
+                      className="flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors"
                     >
                       {t('viewPassport')}
                     </Link>

@@ -67,12 +67,12 @@ export function HunterViewingsList({ viewings, t, locale }: Props) {
 
       {/* Viewings list */}
       {filtered.length === 0 ? (
-        <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-12 text-center">
+        <div className="bg-surface rounded-2xl border border-border-default p-12 text-center">
           <AlertCircle className="w-8 h-8 text-[#D9DCE4] mx-auto mb-3" />
-          <p className="text-[#5E6278] font-medium mb-4">{tx(t, 'noViewings')}</p>
+          <p className="text-text-secondary font-medium mb-4">{tx(t, 'noViewings')}</p>
           <Link
             href="/listings"
-            className="inline-flex items-center gap-2 bg-[#D4764E] hover:bg-[#BF6840] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+            className="inline-flex items-center gap-2 bg-[#D4764E] hover:bg-brand-hover text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
           >
             {tx(t, 'browseListings')}
           </Link>
@@ -97,7 +97,7 @@ function FilterTab({ label, count, active, onClick }: {
       className={`text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors ${
         active
           ? 'bg-[#0F1117] text-white'
-          : 'bg-transparent text-[#5E6278] hover:bg-[#F1F3F5]'
+          : 'bg-transparent text-text-secondary hover:bg-[#F1F3F5]'
       }`}
     >
       {label} <span className="ml-1 opacity-60">{count}</span>
@@ -143,7 +143,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
   }
 
   return (
-    <div className={`bg-surface rounded-2xl border border-[#E2E4EB] overflow-hidden ${isPending ? 'opacity-60' : ''}`}>
+    <div className={`bg-surface rounded-2xl border border-border-default overflow-hidden ${isPending ? 'opacity-60' : ''}`}>
       {/* Header */}
       <div className="px-5 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
@@ -151,11 +151,11 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
             <Calendar className="w-4 h-4 text-[#D4764E]" />
           </div>
           <div className="min-w-0">
-            <p className="font-bold text-[#0F1117] text-sm truncate">
+            <p className="font-bold text-text-primary text-sm truncate">
               {viewing.listing_title ?? viewing.listing_postcode ?? tx(t, 'property')}
             </p>
             {(viewing.listing_postcode || viewing.listing_city) && (
-              <p className="text-xs text-[#5E6278] flex items-center gap-1">
+              <p className="text-xs text-text-secondary flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 {viewing.listing_postcode} {viewing.listing_city}
               </p>
@@ -182,12 +182,12 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
 
         {/* Date info */}
         <div className="flex flex-wrap gap-4 mb-3 text-sm">
-          <span className="text-[#5E6278]">
-            {tx(t, 'requestedOn')}: <span className="font-medium text-[#0F1117]">{requestDate}</span>
+          <span className="text-text-secondary">
+            {tx(t, 'requestedOn')}: <span className="font-medium text-text-primary">{requestDate}</span>
           </span>
           {scheduledDate && (
-            <span className="text-[#5E6278]">
-              {tx(t, 'scheduledFor')}: <span className="font-medium text-[#0F1117]">{scheduledDate}</span>
+            <span className="text-text-secondary">
+              {tx(t, 'scheduledFor')}: <span className="font-medium text-text-primary">{scheduledDate}</span>
             </span>
           )}
         </div>
@@ -195,11 +195,11 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
         {/* Notes */}
         {viewing.hunter_notes && (
           <div className="mb-3">
-            <p className="text-xs font-semibold text-[#5E6278] mb-1 flex items-center gap-1">
+            <p className="text-xs font-semibold text-text-secondary mb-1 flex items-center gap-1">
               <MessageSquare className="w-3 h-3" />
               {tx(t, 'yourNotes')}
             </p>
-            <p className="text-sm text-[#0F1117] bg-[#FAFBFC] rounded-lg p-3 border border-[#E2E4EB] italic">
+            <p className="text-sm text-text-primary bg-[#FAFBFC] rounded-lg p-3 border border-border-default italic">
               {viewing.hunter_notes}
             </p>
           </div>
@@ -211,7 +211,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
             <button
               onClick={handleCancel}
               disabled={isPending}
-              className="text-xs font-semibold text-[#5E6278] hover:text-red-600 transition-colors disabled:opacity-50"
+              className="text-xs font-semibold text-text-secondary hover:text-red-600 transition-colors disabled:opacity-50"
             >
               {isPending ? tx(t, 'cancelling') : tx(t, 'withdraw')}
             </button>
@@ -227,7 +227,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
           {viewing.place_id && (
             <Link
               href={`/p/${viewing.place_id}`}
-              className="text-xs font-semibold text-[#0F1117] hover:underline ml-auto"
+              className="text-xs font-semibold text-text-primary hover:underline ml-auto"
             >
               {tx(t, 'viewListing')} &rarr;
             </Link>

@@ -63,54 +63,54 @@ export default async function SendBriefPage({ searchParams }: Props) {
           <ArrowLeft size={16} />
           {t('sendBackButton')}
         </Link>
-        <h1 className="text-3xl font-bold text-[#0F1117] mb-2">{t('sendPageTitle')}</h1>
-        <p className="text-[#5E6278]">{t('sendPageDescription')}</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">{t('sendPageTitle')}</h1>
+        <p className="text-text-secondary">{t('sendPageDescription')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Property Brief */}
         <div className="lg:col-span-2 space-y-6">
           {/* Property Brief Card */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
-            <h2 className="font-bold text-[#0F1117] mb-4">{t('briefPropertyTitle')}</h2>
+          <div className="bg-white rounded-2xl border border-border-default p-6">
+            <h2 className="font-bold text-text-primary mb-4">{t('briefPropertyTitle')}</h2>
             {listing ? (
               <div className="space-y-4">
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefAddress')}</p>
-                  <p className="font-semibold text-[#0F1117]">{listing.address_line1}</p>
-                  <p className="text-sm text-[#5E6278]">{listing.city}{listing.postcode ? `, ${listing.postcode}` : ''}</p>
+                  <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefAddress')}</p>
+                  <p className="font-semibold text-text-primary">{listing.address_line1}</p>
+                  <p className="text-sm text-text-secondary">{listing.city}{listing.postcode ? `, ${listing.postcode}` : ''}</p>
                 </div>
-                <div className="grid grid-cols-2 gap-4 py-4 border-y border-[#E2E4EB]">
+                <div className="grid grid-cols-2 gap-4 py-4 border-y border-border-default">
                   <div>
-                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefBedrooms')}</p>
-                    <p className="font-semibold text-[#0F1117]">{listing.bedrooms ?? '—'} bedrooms</p>
+                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefBedrooms')}</p>
+                    <p className="font-semibold text-text-primary">{listing.bedrooms ?? '—'} bedrooms</p>
                   </div>
                   <div>
-                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefProperty')}</p>
-                    <p className="font-semibold text-[#0F1117]">{listing.property_type ?? '—'}</p>
+                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefProperty')}</p>
+                    <p className="font-semibold text-text-primary">{listing.property_type ?? '—'}</p>
                   </div>
                 </div>
                 {listing.description_de && (
                   <div>
-                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">{t('briefDescription')}</p>
-                    <p className="text-sm text-[#5E6278]">{listing.description_de}</p>
+                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefDescription')}</p>
+                    <p className="text-sm text-text-secondary">{listing.description_de}</p>
                   </div>
                 )}
                 {formattedPrice && (
                   <div>
-                    <p className="text-xs text-[#5E6278] font-semibold uppercase tracking-wider mb-1">Price</p>
-                    <p className="font-bold text-lg text-[#0F1117]">{formattedPrice}</p>
+                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">Price</p>
+                    <p className="font-bold text-lg text-text-primary">{formattedPrice}</p>
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-sm text-[#5E6278]">No listing found. Create a listing first.</p>
+              <p className="text-sm text-text-secondary">No listing found. Create a listing first.</p>
             )}
           </div>
 
           {/* What Happens Next */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
-            <h2 className="font-bold text-[#0F1117] mb-6">{t('sendWhatNextTitle')}</h2>
+          <div className="bg-white rounded-2xl border border-border-default p-6">
+            <h2 className="font-bold text-text-primary mb-6">{t('sendWhatNextTitle')}</h2>
             <div className="space-y-4">
               {[
                 { icon: <Mail size={18} />, title: t('sendStep1Title'), desc: t('sendStep1Desc') },
@@ -123,8 +123,8 @@ export default async function SendBriefPage({ searchParams }: Props) {
                     {step.icon}
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-[#0F1117] mb-1">{step.title}</p>
-                    <p className="text-sm text-[#5E6278]">{step.desc}</p>
+                    <p className="font-semibold text-text-primary mb-1">{step.title}</p>
+                    <p className="text-sm text-text-secondary">{step.desc}</p>
                   </div>
                 </div>
               ))}
@@ -135,12 +135,12 @@ export default async function SendBriefPage({ searchParams }: Props) {
         {/* Right Column: Selected Agents & Actions */}
         <div className="space-y-6">
           {/* Selected Agents Card */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 sticky top-8">
-            <h2 className="font-bold text-[#0F1117] mb-4">{t('sendSelectedAgentsTitle')}</h2>
+          <div className="bg-white rounded-2xl border border-border-default p-6 sticky top-8">
+            <h2 className="font-bold text-text-primary mb-4">{t('sendSelectedAgentsTitle')}</h2>
 
             {selectedAgents.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-sm text-[#5E6278] mb-4">{t('sendNoAgentsSelected')}</p>
+                <p className="text-sm text-text-secondary mb-4">{t('sendNoAgentsSelected')}</p>
                 <Link href="/owner/agents/search">
                   <button className="text-sm font-semibold text-[#D4764E]">
                     {t('sendSelectAgentsLink')}
@@ -151,22 +151,22 @@ export default async function SendBriefPage({ searchParams }: Props) {
               <>
                 <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
                   {selectedAgents.map((agent) => (
-                    <div key={agent.id} className="bg-[#EDEEF2] rounded-lg p-3">
-                      <p className="font-semibold text-sm text-[#0F1117]">{agent.name}</p>
-                      <p className="text-xs text-[#5E6278]">{agent.contact}</p>
+                    <div key={agent.id} className="bg-bg rounded-lg p-3">
+                      <p className="font-semibold text-sm text-text-primary">{agent.name}</p>
+                      <p className="text-xs text-text-secondary">{agent.contact}</p>
                     </div>
                   ))}
                 </div>
 
                 <Link href="/owner/agents/search">
-                  <button className="w-full text-sm font-semibold text-[#5E6278] py-2 mb-4 hover:text-[#0F1117] transition-colors flex items-center justify-center gap-2">
+                  <button className="w-full text-sm font-semibold text-text-secondary py-2 mb-4 hover:text-text-primary transition-colors flex items-center justify-center gap-2">
                     <ArrowRight size={14} />
                     {t('sendAddMoreAgents')}
                   </button>
                 </Link>
 
                 <div className="space-y-3">
-                  <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-[#E2E4EB] text-[#0F1117] font-semibold rounded-lg hover:bg-[#EDEEF2] transition-colors">
+                  <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-border-default text-text-primary font-semibold rounded-lg hover:bg-bg transition-colors">
                     <Eye size={16} />
                     {t('sendPreviewEmail')}
                   </button>

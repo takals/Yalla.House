@@ -74,7 +74,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
   const initials = (userName ?? userEmail).slice(0, 2).toUpperCase()
 
   return (
-    <div className="flex h-screen bg-[#EDEEF2] overflow-hidden">
+    <div className="flex h-screen bg-bg overflow-hidden">
 
       {/* ── Sidebar ──────────────────────────────── */}
       <aside
@@ -89,7 +89,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
             </Link>
           )}
           {!collapsed && section === 'admin' && (
-            <span className="text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#D4764E] rounded-sm text-[#0F1117]">
+            <span className="text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#D4764E] rounded-sm text-text-primary">
               Admin
             </span>
           )}
@@ -173,7 +173,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         {/* Topbar */}
-        <header className="h-[60px] bg-white border-b border-[#E2E4EB] flex items-center px-4 lg:px-6 gap-4 flex-shrink-0">
+        <header className="h-[60px] bg-white border-b border-border-default flex items-center px-4 lg:px-6 gap-4 flex-shrink-0">
           <div className="flex-1" />
           <div className="flex items-center gap-3">
             {notifications && notificationLabels && (
@@ -183,10 +183,10 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 t={notificationLabels}
               />
             )}
-            <div className="w-7 h-7 rounded-full bg-[#EDEEF2] flex items-center justify-center text-[0.7rem] font-bold text-[#5E6278]">
+            <div className="w-7 h-7 rounded-full bg-bg flex items-center justify-center text-[0.7rem] font-bold text-text-secondary">
               {initials}
             </div>
-            <span className="hidden sm:inline text-[0.8125rem] font-semibold text-[#0F1117]">{userName ?? userEmail}</span>
+            <span className="hidden sm:inline text-[0.8125rem] font-semibold text-text-primary">{userName ?? userEmail}</span>
           </div>
         </header>
 

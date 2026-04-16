@@ -17,14 +17,14 @@ export default function ImpressumPage() {
   const lastUpdated = '01.04.2026'
 
   return (
-    <main className="bg-[#EDEEF2]">
+    <main className="bg-bg">
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Impressum
           </div>
-          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
+          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Impressum gemäß § 5 TMG
           </h1>
           <p className="text-base text-[#656565]">
@@ -38,13 +38,13 @@ export default function ImpressumPage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* Angaben gemäß § 5 TMG */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Angaben gemäß § 5 Telemediengesetz (TMG)
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <p className="font-bold text-[#0F1117]">Diensteanbieter:</p>
+                <p className="font-bold text-text-primary">Diensteanbieter:</p>
                 <p>
                   Yalla.House GmbH<br />
                   [Straße und Hausnummer wird ergänzt]<br />
@@ -56,8 +56,8 @@ export default function ImpressumPage() {
           </div>
 
           {/* Kontaktinformationen */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kontaktinformationen
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -70,21 +70,21 @@ export default function ImpressumPage() {
           </div>
 
           {/* Geschäftsführung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Vertreten durch
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
               <div>
-                <p className="font-bold text-[#0F1117]">Geschäftsführer(in):</p>
+                <p className="font-bold text-text-primary">Geschäftsführer(in):</p>
                 <p>[Name wird ergänzt]</p>
               </div>
             </div>
           </div>
 
           {/* Handelsregister */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Registereintrag
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -96,8 +96,8 @@ export default function ImpressumPage() {
           </div>
 
           {/* Umsatzsteuer-ID */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Umsatzsteuer-Identifikationsnummer
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -109,8 +109,8 @@ export default function ImpressumPage() {
           </div>
 
           {/* Verantwortlicher Inhalt */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -123,8 +123,8 @@ export default function ImpressumPage() {
           </div>
 
           {/* Streitschlichtung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Streitschlichtung
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -141,13 +141,13 @@ export default function ImpressumPage() {
           </div>
 
           {/* Haftungsausschluss - Haftung für Inhalte */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Haftungsausschluss
             </h2>
             <div className="space-y-6 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-3">Haftung für Inhalte (gemäß § 7 Abs. 1 TMG)</h3>
+                <h3 className="font-bold text-text-primary mb-3">Haftung für Inhalte (gemäß § 7 Abs. 1 TMG)</h3>
                 <p>
                   Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
                 </p>
@@ -160,7 +160,7 @@ export default function ImpressumPage() {
               </div>
 
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-3">Haftung für Links (gemäß § 7 Abs. 1 TMG)</h3>
+                <h3 className="font-bold text-text-primary mb-3">Haftung für Links (gemäß § 7 Abs. 1 TMG)</h3>
                 <p>
                   Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
                 </p>
@@ -173,7 +173,7 @@ export default function ImpressumPage() {
               </div>
 
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-3">Urheberrecht</h3>
+                <h3 className="font-bold text-text-primary mb-3">Urheberrecht</h3>
                 <p>
                   Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des Autors oder Urhebers bzw. Seitenbetreibers.
                 </p>
@@ -188,8 +188,8 @@ export default function ImpressumPage() {
           </div>
 
           {/* Datenschutz & Cookies */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Datenschutz und Cookies
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -214,8 +214,8 @@ export default function ImpressumPage() {
           </div>
 
           {/* Kontakt für rechtliche Fragen */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kontakt für rechtliche Anfragen
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -231,7 +231,7 @@ export default function ImpressumPage() {
 
           {/* Hinweis zum Impressum */}
           <div className="bg-[#DBEAFE] border border-[#BAE6FD] rounded-2xl p-8">
-            <p className="text-[#0F1117] leading-relaxed">
+            <p className="text-text-primary leading-relaxed">
               <strong>Hinweis:</strong> Dieses Impressum enthält Platzhalter, die mit aktuellen Informationen der Yalla.House GmbH ergänzt werden müssen, bevor die Website öffentlich zugänglich gemacht wird. Ein unvollständiges Impressum kann zu rechtlichen Problemen führen.
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function ImpressumPage() {
       </section>
 
       {/* ── BACK LINK ────────────────────────────────────────────────────────── */}
-      <section className="py-12 px-4 border-t border-[#E2E4EB]">
+      <section className="py-12 px-4 border-t border-border-default">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"

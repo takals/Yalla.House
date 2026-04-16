@@ -174,7 +174,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
       </div>
 
       {/* ═══ KEY STATS BAR ═══ */}
-      <div className="bg-surface border-b border-[#E2E4EB]">
+      <div className="bg-surface border-b border-border-default">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-6 overflow-x-auto">
           {listing.size_sqm ? (
             <StatPill icon={<Home size={15} />} value={`${listing.size_sqm} m²`} label={t('statLivingSpace')} />
@@ -195,7 +195,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
       </div>
 
       {/* ═══ CALENDAR HERO — The main conversion section ═══ */}
-      <div className="bg-[#FAFBFC] border-b border-[#E2E4EB]">
+      <div className="bg-[#FAFBFC] border-b border-border-default">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <ViewingCalendar
             listingId={listing.id}
@@ -215,7 +215,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           {desc && (
             <div className="bg-surface rounded-card p-6 shadow-sm">
               <h2 className="text-lg font-bold mb-3">{t('descriptionTitle')}</h2>
-              <p className="text-[#5E6278] leading-relaxed whitespace-pre-line">{desc}</p>
+              <p className="text-text-secondary leading-relaxed whitespace-pre-line">{desc}</p>
             </div>
           )}
 
@@ -244,18 +244,18 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           <div className="sticky top-20 space-y-4">
             {!isOwner && <ContactCard listingId={listing.id} />}
             {isOwner && (
-              <div className="bg-surface rounded-card p-6 shadow-sm border border-[#E2E4EB]">
-                <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-3">
+              <div className="bg-surface rounded-card p-6 shadow-sm border border-border-default">
+                <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-3">
                   {t('quickActions')}
                 </p>
                 <div className="space-y-2">
-                  <a href={`/owner/${listing.id}`} className="block w-full text-center bg-[#EDEEF2] hover:bg-[#D9DCE4] text-[#0F1117] font-semibold text-sm py-2.5 rounded-lg transition-colors">
+                  <a href={`/owner/${listing.id}`} className="block w-full text-center bg-bg hover:bg-hover-muted text-text-primary font-semibold text-sm py-2.5 rounded-lg transition-colors">
                     {t('editListing')}
                   </a>
-                  <a href="/owner/viewings" className="block w-full text-center bg-[#EDEEF2] hover:bg-[#D9DCE4] text-[#0F1117] font-semibold text-sm py-2.5 rounded-lg transition-colors">
+                  <a href="/owner/viewings" className="block w-full text-center bg-bg hover:bg-hover-muted text-text-primary font-semibold text-sm py-2.5 rounded-lg transition-colors">
                     {t('manageViewings')}
                   </a>
-                  <a href="/owner/agents" className="block w-full text-center bg-[#EDEEF2] hover:bg-[#D9DCE4] text-[#0F1117] font-semibold text-sm py-2.5 rounded-lg transition-colors">
+                  <a href="/owner/agents" className="block w-full text-center bg-bg hover:bg-hover-muted text-text-primary font-semibold text-sm py-2.5 rounded-lg transition-colors">
                     {t('inviteAgents')}
                   </a>
                 </div>
@@ -273,8 +273,8 @@ function StatPill({ icon, value, label }: { icon: React.ReactNode; value: string
     <div className="flex items-center gap-2 flex-shrink-0">
       <div className="text-[#D4764E]">{icon}</div>
       <div className="leading-tight">
-        <p className="font-bold text-sm text-[#0F1117]">{value}</p>
-        <p className="text-[10px] text-[#5E6278] uppercase tracking-wide">{label}</p>
+        <p className="font-bold text-sm text-text-primary">{value}</p>
+        <p className="text-[10px] text-text-secondary uppercase tracking-wide">{label}</p>
       </div>
     </div>
   )

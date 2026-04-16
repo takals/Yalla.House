@@ -173,7 +173,7 @@ export function HunterPassportIntake({
       <div className="flex items-center justify-center h-full min-h-[400px]">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4764E]" />
-          <p className="mt-4 text-[#5E6278]">Loading your profile...</p>
+          <p className="mt-4 text-text-secondary">Loading your profile...</p>
         </div>
       </div>
     )

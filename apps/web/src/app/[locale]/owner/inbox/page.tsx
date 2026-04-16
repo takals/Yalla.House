@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { MessageCircle } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 
 interface ThreadWithData {
   id: string
@@ -17,6 +17,8 @@ interface ThreadWithData {
 
 export default async function OwnerInboxPage() {
   const t = await getTranslations()
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -67,7 +69,7 @@ export default async function OwnerInboxPage() {
     if (diffHours < 24) return `${diffHours}h ago`
     if (diffDays < 7) return `${diffDays}d ago`
 
-    return date.toLocaleDateString('en-GB', {
+    return date.toLocaleDateString(dateLocale, {
       month: 'short',
       day: 'numeric',
       year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
@@ -78,7 +80,7 @@ export default async function OwnerInboxPage() {
     <div className="max-w-4xl">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F1117] tracking-tight">
+        <h1 className="text-3xl font-bold text-text-primary tracking-tight">
           {t('comms.inbox')}
         </h1>
         <p className="text-sm text-[#656565] mt-2">
@@ -87,10 +89,10 @@ export default async function OwnerInboxPage() {
       </div>
 
       {/* Yalla Email Address Card */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 mb-8">
+      <div className="bg-white rounded-2xl border border-border-default p-6 mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-[#0F1117] mb-1">
+            <h2 className="text-sm font-semibold text-text-primary mb-1">
               {t('comms.yourYallaEmail')}
             </h2>
             <p className="text-base font-mono text-[#D4764E]">{yallaEmail}</p>
@@ -108,11 +110,11 @@ export default async function OwnerInboxPage() {
             <Link
               key={thread.id}
               href={`/owner/inbox/${thread.id}`}
-              className="block bg-white rounded-2xl border border-[#E2E4EB] p-6 hover:border-[#D4764E] hover:shadow-md transition-all"
+              className="block bg-white rounded-2xl border border-border-default p-6 hover:border-[#D4764E] hover:shadow-md transition-all"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-[#0F1117] text-base mb-1 truncate">
+                  <h3 className="font-semibold text-text-primary text-base mb-1 truncate">
                     {thread.subject || (thread.listing?.title_de || 'Message Thread')}
                   </h3>
                   {thread.listing && (
@@ -133,12 +135,12 @@ export default async function OwnerInboxPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-12 text-center">
+        <div className="bg-white rounded-2xl border border-border-default p-12 text-center">
           <MessageCircle
             size={48}
             className="mx-auto mb-4 text-[#D9DCE4]"
           />
-          <h3 className="text-base font-semibold text-[#0F1117] mb-1">
+          <h3 className="text-base font-semibold text-text-primary mb-1">
             {t('comms.noMessages')}
           </h3>
           <p className="text-sm text-[#656565] max-w-sm mx-auto">

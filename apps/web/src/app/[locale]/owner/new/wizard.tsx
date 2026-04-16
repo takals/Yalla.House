@@ -52,7 +52,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-[#0F1117] mb-1.5">
+      <label htmlFor={id} className="block text-sm font-medium text-text-primary mb-1.5">
         {label}
         {required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
@@ -71,7 +71,7 @@ function Input({
     <Field label={label} id={id} required={required} error={error}>
       <input
         id={id}
-        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-[#0F1117] bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
+        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
         {...props}
       />
     </Field>
@@ -87,7 +87,7 @@ function Select({
     <Field label={label} id={id} required={required} error={error}>
       <select
         id={id}
-        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-[#0F1117] bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
+        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${error ? 'border-red-400' : 'border-[#E4E6EF]'}`}
         {...props}
       >
         {children}
@@ -104,7 +104,7 @@ function Step1({
   return (
     <div className="space-y-7">
       <div>
-        <h2 className="text-xl font-bold text-[#0F1117] mb-4">{t('step1.heading')}</h2>
+        <h2 className="text-xl font-bold text-text-primary mb-4">{t('step1.heading')}</h2>
         {errors.property_type && (
           <p className="mb-3 text-xs text-red-500">{errors.property_type}</p>
         )}
@@ -120,20 +120,20 @@ function Step1({
                   : 'border-[#E4E6EF] hover:border-brand/50'
               }`}
             >
-              {icon === 'home' && <Home size={24} className="text-[#0F1117]" />}
-              {icon === 'building2' && <Building2 size={24} className="text-[#0F1117]" />}
-              {icon === 'building' && <Building size={24} className="text-[#0F1117]" />}
-              {icon === 'store' && <Store size={24} className="text-[#0F1117]" />}
-              {icon === 'treepine' && <TreePine size={24} className="text-[#0F1117]" />}
-              {icon === null && <span className="text-xs font-bold text-[#0F1117]">···</span>}
-              <span className="text-xs font-semibold text-[#0F1117] leading-tight">{label}</span>
+              {icon === 'home' && <Home size={24} className="text-text-primary" />}
+              {icon === 'building2' && <Building2 size={24} className="text-text-primary" />}
+              {icon === 'building' && <Building size={24} className="text-text-primary" />}
+              {icon === 'store' && <Store size={24} className="text-text-primary" />}
+              {icon === 'treepine' && <TreePine size={24} className="text-text-primary" />}
+              {icon === null && <span className="text-xs font-bold text-text-primary">···</span>}
+              <span className="text-xs font-semibold text-text-primary leading-tight">{label}</span>
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <h2 className="text-xl font-bold text-[#0F1117] mb-4">{t('step1.intentHeading')}</h2>
+        <h2 className="text-xl font-bold text-text-primary mb-4">{t('step1.intentHeading')}</h2>
         {errors.intent && <p className="mb-3 text-xs text-red-500">{errors.intent}</p>}
         <div className="grid grid-cols-3 gap-3">
           {[
@@ -147,8 +147,8 @@ function Step1({
               onClick={() => set('intent', value)}
               className={`py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-colors ${
                 form.intent === value
-                  ? 'border-brand bg-brand-solid-bg text-[#0F1117]'
-                  : 'border-[#E4E6EF] text-[#5E6278] hover:border-brand/50'
+                  ? 'border-brand bg-brand-solid-bg text-text-primary'
+                  : 'border-[#E4E6EF] text-text-secondary hover:border-brand/50'
               }`}
             >
               {label}
@@ -168,7 +168,7 @@ function Step2({
 }) {
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold text-[#0F1117]">{t('step2.heading')}</h2>
+      <h2 className="text-xl font-bold text-text-primary">{t('step2.heading')}</h2>
 
       <Input
         label={t('step2.addressLine1')}
@@ -236,8 +236,8 @@ function Step3({
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-[#0F1117]">{t('step3.heading')}</h2>
-        <p className="text-sm text-[#5E6278] mt-1">{t('step3.optionalFieldsHint')}</p>
+        <h2 className="text-xl font-bold text-text-primary">{t('step3.heading')}</h2>
+        <p className="text-sm text-text-secondary mt-1">{t('step3.optionalFieldsHint')}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -359,7 +359,7 @@ function Step4({
 
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold text-[#0F1117]">{t('step4.heading')}</h2>
+      <h2 className="text-xl font-bold text-text-primary">{t('step4.heading')}</h2>
 
       <Input
         label={t('step4.titleDe')}
@@ -378,7 +378,7 @@ function Step4({
           placeholder={t('step4.descriptionDePlaceholder')}
           value={form.description_de}
           onChange={e => set('description_de', e.target.value)}
-          className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-[#0F1117] bg-white resize-none"
+          className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white resize-none"
         />
       </Field>
 
@@ -450,7 +450,7 @@ function Step4({
 function SummarySection({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-xs font-bold text-[#5E6278] uppercase tracking-wider mb-2">{label}</h3>
+      <h3 className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-2">{label}</h3>
       <div className="bg-bg rounded-xl p-4 space-y-2">{children}</div>
     </div>
   )
@@ -459,8 +459,8 @@ function SummarySection({ label, children }: { label: string; children: React.Re
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4 text-sm">
-      <span className="text-[#5E6278] shrink-0">{label}</span>
-      <span className="font-medium text-[#0F1117] text-right">{value || '—'}</span>
+      <span className="text-text-secondary shrink-0">{label}</span>
+      <span className="font-medium text-text-primary text-right">{value || '—'}</span>
     </div>
   )
 }
@@ -485,8 +485,8 @@ function Step5({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-[#0F1117]">{t('step5.heading')}</h2>
-        <p className="text-sm text-[#5E6278] mt-1">
+        <h2 className="text-xl font-bold text-text-primary">{t('step5.heading')}</h2>
+        <p className="text-sm text-text-secondary mt-1">
           {t('step5.subheading')}
         </p>
       </div>
@@ -646,8 +646,8 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
       {/* Progress bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-[#5E6278]">{t('progress', { current: step, total: stepTitles.length })}</span>
-          <span className="text-sm font-semibold text-[#0F1117]">{stepTitles[step - 1]}</span>
+          <span className="text-sm text-text-secondary">{t('progress', { current: step, total: stepTitles.length })}</span>
+          <span className="text-sm font-semibold text-text-primary">{stepTitles[step - 1]}</span>
         </div>
         <div className="h-2 bg-[#E4E6EF] rounded-full overflow-hidden">
           <div
@@ -679,7 +679,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
           <button
             onClick={back}
             disabled={isPending}
-            className="px-5 py-2.5 border border-[#E4E6EF] text-[#5E6278] rounded-lg hover:bg-bg transition-colors font-medium disabled:opacity-50"
+            className="px-5 py-2.5 border border-[#E4E6EF] text-text-secondary rounded-lg hover:bg-bg transition-colors font-medium disabled:opacity-50"
           >
             {t('buttons.back')}
           </button>
@@ -690,7 +690,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
         {step < 5 ? (
           <button
             onClick={next}
-            className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold rounded-lg transition-colors"
+            className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-text-primary font-bold rounded-lg transition-colors"
           >
             {t('buttons.next')}
           </button>
@@ -698,7 +698,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold rounded-lg transition-colors disabled:opacity-50"
+            className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-text-primary font-bold rounded-lg transition-colors disabled:opacity-50"
           >
             {isPending ? t('buttons.submitting') : t('buttons.submit')}
           </button>

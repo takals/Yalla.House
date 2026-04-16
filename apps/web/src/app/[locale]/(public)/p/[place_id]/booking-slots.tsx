@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useLocale } from 'next-intl'
 import { Calendar, Clock, Check } from 'lucide-react'
 import { fetchAvailableSlotsAction, bookSlotAction } from './actions'
 
@@ -15,18 +16,18 @@ interface Props {
   authenticated: boolean
 }
 
-function formatDay(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+function formatDay(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleDateString(dateLocale, { weekday: 'short', day: 'numeric', month: 'short' })
 }
 
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+function formatTime(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })
 }
 
-function groupByDay(slots: Slot[]): Map<string, Slot[]> {
+function groupByDay(slots: Slot[], dateLocale: string): Map<string, Slot[]> {
   const groups = new Map<string, Slot[]>()
   for (const slot of slots) {
-    const day = new Date(slot.starts_at).toLocaleDateString('en-GB')
+    const day = new Date(slot.starts_at).toLocaleDateString(dateLocale)
     const existing = groups.get(day) ?? []
     existing.push(slot)
     groups.set(day, existing)
@@ -35,6 +36,8 @@ function groupByDay(slots: Slot[]): Map<string, Slot[]> {
 }
 
 export function BookingSlots({ listingId, authenticated }: Props) {
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [slots, setSlots] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null)
@@ -68,7 +71,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E2E4EB]">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-border-default">
         <div className="flex items-center gap-2 mb-4">
           <Calendar size={18} className="text-[#D4764E]" />
           <h3 className="font-bold text-sm">Available Viewing Slots</h3>
@@ -101,10 +104,10 @@ export function BookingSlots({ listingId, authenticated }: Props) {
     )
   }
 
-  const grouped = groupByDay(slots)
+  const grouped = groupByDay(slots, dateLocale)
 
   return (
-    <div data-booking-slots className="bg-white rounded-2xl p-6 shadow-sm border border-[#E2E4EB]">
+    <div data-booking-slots className="bg-white rounded-2xl p-6 shadow-sm border border-border-default">
       <div className="flex items-center gap-2 mb-4">
         <Calendar size={18} className="text-[#D4764E]" />
         <h3 className="font-bold text-sm">Book a Viewing</h3>
@@ -113,7 +116,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
       <div className="space-y-4">
         {Array.from(grouped.entries()).map(([day, daySlots]) => (
           <div key={day}>
-            <p className="text-xs font-semibold text-[#5E6278] mb-2">{daySlots[0] ? formatDay(daySlots[0]?.starts_at) : day}</p>
+            <p className="text-xs font-semibold text-text-secondary mb-2">{daySlots[0] ? formatDay(daySlots[0]?.starts_at, dateLocale) : day}</p>
             <div className="flex flex-wrap gap-2">
               {daySlots.map(slot => (
                 <button
@@ -124,12 +127,12 @@ export function BookingSlots({ listingId, authenticated }: Props) {
                     slot.id === selectedSlot
                       ? 'bg-[#D4764E] text-white border-[#D4764E]'
                       : authenticated
-                        ? 'bg-white text-[#0F1117] border-[#E2E4EB] hover:border-[#D4764E] hover:text-[#D4764E]'
-                        : 'bg-[#F5F5FA] text-[#999] border-[#E2E4EB] cursor-not-allowed'
+                        ? 'bg-white text-text-primary border-border-default hover:border-[#D4764E] hover:text-[#D4764E]'
+                        : 'bg-[#F5F5FA] text-[#999] border-border-default cursor-not-allowed'
                   }`}
                 >
                   <Clock size={13} />
-                  {formatTime(slot.starts_at)} – {formatTime(slot.ends_at)}
+                  {formatTime(slot.starts_at, dateLocale)} – {formatTime(slot.ends_at, dateLocale)}
                 </button>
               ))}
             </div>
@@ -144,8 +147,8 @@ export function BookingSlots({ listingId, authenticated }: Props) {
       )}
 
       {selectedSlot && authenticated && (
-        <div className="mt-4 pt-4 border-t border-[#E2E4EB]">
-          <label className="text-xs font-semibold text-[#5E6278] block mb-1">
+        <div className="mt-4 pt-4 border-t border-border-default">
+          <label className="text-xs font-semibold text-text-secondary block mb-1">
             Add a note (optional)
           </label>
           <textarea
@@ -153,13 +156,13 @@ export function BookingSlots({ listingId, authenticated }: Props) {
             onChange={e => setNotes(e.target.value)}
             placeholder="Any questions or preferences..."
             rows={2}
-            className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#D4764E]/30 resize-none"
+            className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#D4764E]/30 resize-none"
           />
           {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
           <button
             onClick={handleBook}
             disabled={booking}
-            className="mt-3 w-full bg-[#D4764E] hover:bg-[#BF6840] text-white font-bold text-sm py-3 rounded-lg transition-colors disabled:opacity-50"
+            className="mt-3 w-full bg-[#D4764E] hover:bg-brand-hover text-white font-bold text-sm py-3 rounded-lg transition-colors disabled:opacity-50"
           >
             {booking ? 'Booking...' : 'Book This Slot'}
           </button>

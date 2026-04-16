@@ -97,7 +97,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <h2 className="text-lg font-bold mb-4">Your Reply</h2>
 
         {error && (
@@ -127,9 +127,9 @@ export function ResponseForm({ matchId }: { matchId: string }) {
           </label>
           <div className="space-y-3">
             {properties.map((p, idx) => (
-              <div key={idx} className="bg-[#F5F5F7] rounded-lg p-4">
+              <div key={idx} className="bg-hover-bg rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-[#5E6278]">Property {idx + 1}</span>
+                  <span className="text-xs font-bold text-text-secondary">Property {idx + 1}</span>
                   {properties.length > 1 && (
                     <button type="button" onClick={() => removeProperty(idx)} className="text-xs text-[#991B1B] hover:underline">
                       Remove
@@ -182,7 +182,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
             <button
               type="button"
               onClick={addProperty}
-              className="mt-2 text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] transition"
+              className="mt-2 text-sm font-semibold text-text-secondary hover:text-text-primary transition"
             >
               + Add another property
             </button>
@@ -190,9 +190,9 @@ export function ResponseForm({ matchId }: { matchId: string }) {
         </div>
 
         {/* Privacy notice */}
-        <div className="bg-[#F5F5F7] rounded-lg p-3 mb-5">
-          <p className="text-xs text-[#5E6278]">
-            <span className="font-semibold text-[#0F1117]">Note: </span>
+        <div className="bg-hover-bg rounded-lg p-3 mb-5">
+          <p className="text-xs text-text-secondary">
+            <span className="font-semibold text-text-primary">Note: </span>
             Your reply goes through Yalla.House. The Home-Hunter&apos;s contact details are not
             shared. Phone numbers in your message will be redacted unless the hunter
             has enabled phone contact.

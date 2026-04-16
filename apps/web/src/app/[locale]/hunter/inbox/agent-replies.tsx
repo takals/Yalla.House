@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 
 interface AgentReply {
@@ -41,6 +42,8 @@ interface AgentRepliesProps {
 
 function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: boolean }) {
   const router = useRouter()
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [acting, setActing] = useState(false)
   const [dismissed, setDismissed] = useState(false)
 
@@ -70,16 +73,16 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
 
   return (
     <div className={`bg-surface rounded-xl border p-4 transition ${
-      expanded ? 'border-brand shadow-md' : 'border-[#E2E4EB]'
+      expanded ? 'border-brand shadow-md' : 'border-border-default'
     }`}>
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#EDEEF2] flex items-center justify-center text-sm font-bold text-[#5E6278]">
+          <div className="w-10 h-10 rounded-full bg-bg flex items-center justify-center text-sm font-bold text-text-secondary">
             {agent?.full_name?.[0]?.toUpperCase() ?? '?'}
           </div>
           <div>
             <p className="text-sm font-semibold">{agent?.full_name ?? 'Agent'}</p>
-            {agency && <p className="text-xs text-[#5E6278]">{agency}</p>}
+            {agency && <p className="text-xs text-text-secondary">{agency}</p>}
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -110,14 +113,14 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
       {/* Property suggestions */}
       {expanded && properties.length > 0 && (
         <div className="mb-3 space-y-2">
-          <p className="text-xs font-semibold text-[#5E6278] uppercase tracking-wide">
+          <p className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
             {properties.length} propert{properties.length === 1 ? 'y' : 'ies'} suggested
           </p>
           {properties.map((p, i) => (
-            <div key={i} className="bg-[#F5F5F7] rounded-lg p-3 flex items-center justify-between">
+            <div key={i} className="bg-hover-bg rounded-lg p-3 flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold">{p.title ?? 'Property'}</p>
-                <p className="text-xs text-[#5E6278]">
+                <p className="text-xs text-text-secondary">
                   {p.beds && `${p.beds} bed · `}
                   {p.area && `${p.area} · `}
                   {p.price && `£${(p.price / 100).toLocaleString()}`}
@@ -135,7 +138,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-2 pt-2 border-t border-[#E2E4EB]">
+      <div className="flex items-center gap-2 pt-2 border-t border-border-default">
         {reply.priority_tier !== 'top_match' && (
           <button
             onClick={() => handleAction('promoted')}
@@ -160,7 +163,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
           Block
         </button>
         <span className="text-xs text-[#999] ml-auto">
-          {new Date(reply.created_at).toLocaleDateString('en-GB')}
+          {new Date(reply.created_at).toLocaleDateString(dateLocale)}
         </span>
       </div>
     </div>
@@ -175,14 +178,14 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
       {/* Stats bar */}
       <div className="grid grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Active searches', value: stats.totalSearches, color: 'text-[#0F1117]' },
+          { label: 'Active searches', value: stats.totalSearches, color: 'text-text-primary' },
           { label: 'Agents contacted', value: stats.agentsContacted, color: 'text-[#1E40AF]' },
           { label: 'Replies received', value: stats.repliesReceived, color: 'text-[#166534]' },
           { label: 'Top matches', value: stats.topMatchCount, color: 'text-brand' },
         ].map(s => (
-          <div key={s.label} className="bg-surface rounded-lg p-3 border border-[#E2E4EB] text-center">
+          <div key={s.label} className="bg-surface rounded-lg p-3 border border-border-default text-center">
             <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-[#5E6278]">{s.label}</p>
+            <p className="text-xs text-text-secondary">{s.label}</p>
           </div>
         ))}
       </div>
@@ -218,7 +221,7 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
         <div>
           <button
             onClick={() => setShowLow(!showLow)}
-            className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] transition mb-3"
+            className="text-sm font-semibold text-text-secondary hover:text-text-primary transition mb-3"
           >
             {showLow ? '▾' : '▸'} More replies ({lowRelevance.length})
           </button>
@@ -232,8 +235,8 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
 
       {/* Empty state */}
       {topMatches.length === 0 && otherReplies.length === 0 && lowRelevance.length === 0 && (
-        <div className="bg-surface rounded-xl p-8 text-center border border-[#E2E4EB]">
-          <p className="text-[#5E6278] font-medium mb-1">No agent replies yet</p>
+        <div className="bg-surface rounded-xl p-8 text-center border border-border-default">
+          <p className="text-text-secondary font-medium mb-1">No agent replies yet</p>
           <p className="text-xs text-[#999]">
             {stats.agentsContacted > 0
               ? `${stats.agentsContacted} agents have been contacted. Replies usually arrive within 24–48 hours.`

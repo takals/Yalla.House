@@ -86,8 +86,8 @@ export default async function OwnerOffersPage({ params }: { params: Promise<{ lo
   return (
     <div className="max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F1117] mb-1">{t('pageTitle')}</h1>
-        <p className="text-[#5E6278] text-sm">{t('subtitle')}</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-1">{t('pageTitle')}</h1>
+        <p className="text-text-secondary text-sm">{t('subtitle')}</p>
       </div>
 
       <OffersClient offers={offers} t={tRecord} locale={locale} />

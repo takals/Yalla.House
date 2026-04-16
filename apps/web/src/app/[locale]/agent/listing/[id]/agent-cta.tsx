@@ -33,7 +33,7 @@ export function AgentListingCta({
   // Already has an active/accepted assignment
   if (existingAssignment && ['accepted', 'active'].includes(existingAssignment.status)) {
     return (
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <div className="flex items-start gap-3 mb-4">
           <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
             <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -41,17 +41,17 @@ export function AgentListingCta({
             </svg>
           </div>
           <div>
-            <p className="font-bold text-sm text-[#0F1117]">
+            <p className="font-bold text-sm text-text-primary">
               {isDE ? t('workingOnProperty') : 'You\'re working on this property'}
             </p>
-            <p className="text-xs text-[#5E6278] mt-0.5">
+            <p className="text-xs text-text-secondary mt-0.5">
               Status: {existingAssignment.status}
             </p>
           </div>
         </div>
         <a
           href={`/agent/assignments/${existingAssignment.id}`}
-          className="block text-center bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-2.5 rounded-xl transition-colors text-sm"
+          className="block text-center bg-brand hover:bg-brand-hover text-text-primary font-bold py-2.5 rounded-xl transition-colors text-sm"
         >
           {isDE ? t('viewAssignment') : 'View Assignment'}
         </a>
@@ -62,7 +62,7 @@ export function AgentListingCta({
   // Already submitted a proposal (invited status)
   if (existingAssignment && existingAssignment.status === 'invited') {
     return (
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#DBEAFE] flex items-center justify-center">
             <svg className="w-4 h-4 text-[#1E40AF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -70,10 +70,10 @@ export function AgentListingCta({
             </svg>
           </div>
           <div>
-            <p className="font-bold text-sm text-[#0F1117]">
+            <p className="font-bold text-sm text-text-primary">
               {isDE ? t('proposalSubmitted') : 'Proposal submitted'}
             </p>
-            <p className="text-xs text-[#5E6278] mt-0.5">
+            <p className="text-xs text-text-secondary mt-0.5">
               {isDE ? t('awaitingOwnerResponse') : 'Awaiting owner response'}
             </p>
           </div>
@@ -85,7 +85,7 @@ export function AgentListingCta({
   // Success state
   if (done) {
     return (
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
             <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -93,10 +93,10 @@ export function AgentListingCta({
             </svg>
           </div>
           <div>
-            <p className="font-bold text-sm text-[#0F1117]">
+            <p className="font-bold text-sm text-text-primary">
               {isDE ? t('proposalSent') : 'Proposal sent!'}
             </p>
-            <p className="text-xs text-[#5E6278] mt-0.5">
+            <p className="text-xs text-text-secondary mt-0.5">
               {isDE ? t('ownerReviewingProposal') : 'The owner will review your proposal in their dashboard.'}
             </p>
           </div>
@@ -133,18 +133,18 @@ export function AgentListingCta({
   return (
     <div className="space-y-4">
       {/* Respond via Yalla card */}
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
-        <h2 className="text-lg font-bold text-[#0F1117] mb-1">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
+        <h2 className="text-lg font-bold text-text-primary mb-1">
           {isDE ? t('respondViaYalla') : 'Respond via Yalla'}
         </h2>
-        <p className="text-xs text-[#5E6278] mb-4">
+        <p className="text-xs text-text-secondary mb-4">
           {isDE ? t('respondViaYallaDesc') : 'The owner compares proposals side by side. Quote your commission and pitch your service.'}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {/* Fee type */}
           <div>
-            <label className="block text-xs font-semibold text-[#5E6278] mb-1.5">
+            <label className="block text-xs font-semibold text-text-secondary mb-1.5">
               {isDE ? t('feeTypeLabel') : 'Fee structure'} *
             </label>
             <div className="flex gap-2">
@@ -156,7 +156,7 @@ export function AgentListingCta({
                   className={`flex-1 text-xs font-semibold py-2 rounded-xl border transition-colors ${
                     feeType === ft
                       ? 'bg-[#0F1117] text-white border-[#0F1117]'
-                      : 'bg-bg text-[#5E6278] border-[#E2E4EB] hover:border-[#D9DCE4]'
+                      : 'bg-bg text-text-secondary border-border-default hover:border-[#D9DCE4]'
                   }`}
                 >
                   {ft === 'percentage' ? (isDE ? 'Prozent' : 'Percentage')
@@ -171,7 +171,7 @@ export function AgentListingCta({
           {feeType !== 'none' && (
             <div className="flex gap-2">
               <div className="flex-1">
-                <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+                <label className="block text-xs font-semibold text-text-secondary mb-1">
                   {feeType === 'percentage'
                     ? (isDE ? 'Prozentsatz (%)' : 'Rate (%)')
                     : (isDE ? 'Betrag' : 'Amount')} *
@@ -184,18 +184,18 @@ export function AgentListingCta({
                   value={feeAmount}
                   onChange={e => setFeeAmount(e.target.value)}
                   placeholder={feeType === 'percentage' ? '1.5' : '2500'}
-                  className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-border-default rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                 />
               </div>
               {feeType === 'flat' && (
                 <div className="w-24">
-                  <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+                  <label className="block text-xs font-semibold text-text-secondary mb-1">
                     {isDE ? 'W\u00E4hrung' : 'Currency'}
                   </label>
                   <select
                     value={feeCurrency}
                     onChange={e => setFeeCurrency(e.target.value)}
-                    className="w-full px-2 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                    className="w-full px-2 py-2 text-sm border border-border-default rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                   >
                     <option value="GBP">GBP</option>
                     <option value="EUR">EUR</option>
@@ -207,7 +207,7 @@ export function AgentListingCta({
 
           {/* Service overview */}
           <div>
-            <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+            <label className="block text-xs font-semibold text-text-secondary mb-1">
               {isDE ? t('yourServiceOverview') : 'Your service overview'} *
             </label>
             <textarea
@@ -216,7 +216,7 @@ export function AgentListingCta({
               onChange={e => setServiceOverview(e.target.value)}
               required
               placeholder={isDE ? t('serviceOverviewPlaceholder') : 'Introduce yourself — local experience, portal coverage, marketing plan, timeline…'}
-              className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent resize-none"
+              className="w-full px-3 py-2 text-sm border border-border-default rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent resize-none"
             />
           </div>
 
@@ -227,7 +227,7 @@ export function AgentListingCta({
           <button
             type="submit"
             disabled={submitting || (feeType !== 'none' && !feeAmount) || !serviceOverview.trim()}
-            className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-3 rounded-xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+            className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold py-3 rounded-xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm"
           >
             {submitting && (
               <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -241,33 +241,33 @@ export function AgentListingCta({
       </div>
 
       {/* Listing data download */}
-      <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-5 border border-border-default">
         <div className="flex items-center gap-2 mb-2">
-          <svg className="w-4 h-4 text-[#5E6278]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <h3 className="text-sm font-bold text-[#0F1117]">
+          <h3 className="text-sm font-bold text-text-primary">
             {isDE ? t('downloadListingData') : 'Download listing data'}
           </h3>
         </div>
-        <p className="text-xs text-[#5E6278] mb-3">
+        <p className="text-xs text-text-secondary mb-3">
           {isDE ? t('downloadListingDataDesc') : 'CSV file ready to import into your CRM (Reapit, Alto, Jupix, etc.)'}
         </p>
         <a
           href={`/api/agent/listings/${listingId}?format=csv`}
-          className="block text-center bg-bg hover:bg-[#D9DCE4] text-[#0F1117] font-bold py-2 rounded-xl transition-colors text-sm border border-[#E2E4EB]"
+          className="block text-center bg-bg hover:bg-hover-muted text-text-primary font-bold py-2 rounded-xl transition-colors text-sm border border-border-default"
         >
           {isDE ? t('downloadCSV') : 'Download CSV'}
         </a>
       </div>
 
       {/* CRM connection — trust-first framing */}
-      <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-5 border border-border-default">
         <div className="flex items-center gap-2 mb-2">
-          <svg className="w-4 h-4 text-[#5E6278]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-4 h-4 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
-          <h3 className="text-sm font-bold text-[#0F1117]">
+          <h3 className="text-sm font-bold text-text-primary">
             {isDE ? t('connectCRM') : 'Connect your CRM'}
           </h3>
           <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#166534] uppercase tracking-wider">
@@ -277,37 +277,37 @@ export function AgentListingCta({
 
         {/* Benefit for the agent */}
         <div className="bg-[#F5F5FA] rounded-xl p-3 mb-3">
-          <p className="text-xs font-semibold text-[#0F1117] mb-1">
+          <p className="text-xs font-semibold text-text-primary mb-1">
             {isDE ? t('noExtraWork') : 'Zero extra work for you'}
           </p>
-          <p className="text-xs text-[#5E6278]">
+          <p className="text-xs text-text-secondary">
             {isDE ? t('autoSync') : 'Every viewing, offer, and status change in your CRM flows automatically to the owner\'s dashboard — no manual reporting needed.'}
           </p>
         </div>
 
         {/* Benefit for getting chosen */}
         <div className="bg-brand-solid-bg rounded-xl p-3 mb-3 border border-brand/20">
-          <p className="text-xs font-semibold text-[#0F1117] mb-1">
+          <p className="text-xs font-semibold text-text-primary mb-1">
             {isDE ? t('standOut') : 'Stand out in the selection'}
           </p>
-          <p className="text-xs text-[#5E6278]">
+          <p className="text-xs text-text-secondary">
             {isDE ? t('liveUpdatesBadge') : 'Your proposal gets a "Live Updates" badge. Owners prefer agents who work transparently — it can offset a higher commission.'}
           </p>
         </div>
 
         {/* Privacy assurance */}
         <div className="flex items-start gap-2 mb-3">
-          <svg className="w-3.5 h-3.5 text-[#5E6278] mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="w-3.5 h-3.5 text-text-secondary mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
-          <p className="text-xs text-[#5E6278]">
+          <p className="text-xs text-text-secondary">
             {isDE ? t('privacyAssurance') : 'We only see status changes for Yalla properties — never your full client book or other listings.'}
           </p>
         </div>
 
         <a
           href="/agent/agreement"
-          className="block text-center bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-2.5 rounded-xl transition-colors text-sm"
+          className="block text-center bg-brand hover:bg-brand-hover text-text-primary font-bold py-2.5 rounded-xl transition-colors text-sm"
         >
           {isDE ? t('connectCRMButton') : 'Connect CRM & enable live updates'}
         </a>

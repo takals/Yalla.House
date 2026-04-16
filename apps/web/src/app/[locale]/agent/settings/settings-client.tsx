@@ -43,12 +43,12 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
   return (
     <div className="space-y-8">
       {/* Profile section */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
-        <h2 className="text-base font-bold text-[#0F1117] mb-4">{tx(t, 'profile')}</h2>
+      <div className="bg-white rounded-2xl border border-border-default p-6">
+        <h2 className="text-base font-bold text-text-primary mb-4">{tx(t, 'profile')}</h2>
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="agent-full-name" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'fullName')}</label>
+            <label htmlFor="agent-full-name" className="text-xs font-semibold text-text-secondary mb-1 block">{tx(t, 'fullName')}</label>
             <input
               id="agent-full-name"
               type="text"
@@ -59,7 +59,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label htmlFor="agent-email" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'email')}</label>
+            <label htmlFor="agent-email" className="text-xs font-semibold text-text-secondary mb-1 block">{tx(t, 'email')}</label>
             <input
               id="agent-email"
               type="email"
@@ -70,7 +70,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label htmlFor="agent-phone" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'phone')}</label>
+            <label htmlFor="agent-phone" className="text-xs font-semibold text-text-secondary mb-1 block">{tx(t, 'phone')}</label>
             <input
               id="agent-phone"
               type="tel"
@@ -81,7 +81,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label htmlFor="agent-agency-name" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'agencyName')}</label>
+            <label htmlFor="agent-agency-name" className="text-xs font-semibold text-text-secondary mb-1 block">{tx(t, 'agencyName')}</label>
             <input
               id="agent-agency-name"
               type="text"
@@ -92,7 +92,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           </div>
 
           <div>
-            <label htmlFor="agent-agency-address" className="text-xs font-semibold text-[#5E6278] mb-1 block">{tx(t, 'agencyAddress')}</label>
+            <label htmlFor="agent-agency-address" className="text-xs font-semibold text-text-secondary mb-1 block">{tx(t, 'agencyAddress')}</label>
             <input
               id="agent-agency-address"
               type="text"
@@ -107,7 +107,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="text-sm font-bold px-5 py-2.5 bg-[#D4764E] hover:bg-[#BF6840] text-white rounded-lg transition-colors disabled:opacity-50"
+            className="text-sm font-bold px-5 py-2.5 bg-[#D4764E] hover:bg-brand-hover text-white rounded-lg transition-colors disabled:opacity-50"
           >
             {isPending ? tx(t, 'saving') : tx(t, 'saveChanges')}
           </button>
@@ -120,7 +120,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
       {/* Danger zone */}
       <div className="bg-white rounded-2xl border border-red-200 p-6">
         <h2 className="text-base font-bold text-red-600 mb-2">{tx(t, 'dangerZone')}</h2>
-        <p className="text-sm text-[#5E6278] mb-4">{tx(t, 'deleteAccountDesc')}</p>
+        <p className="text-sm text-text-secondary mb-4">{tx(t, 'deleteAccountDesc')}</p>
         <button
           disabled
           className="text-sm font-bold px-5 py-2.5 bg-red-50 text-red-600 border border-red-200 rounded-lg opacity-50 cursor-not-allowed"

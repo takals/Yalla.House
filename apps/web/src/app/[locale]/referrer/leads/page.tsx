@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { redirect } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import { type Database } from '@/types/database'
 
@@ -29,6 +30,8 @@ const MILESTONE_CONFIG = {
 } as const
 
 export default async function ReferralLeadsPage() {
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -93,14 +96,14 @@ export default async function ReferralLeadsPage() {
           ← Back to Dashboard
         </Link>
         <h1 className="text-2xl font-bold mb-1">Your Referrals</h1>
-        <p className="text-[#5E6278] text-sm">
+        <p className="text-text-secondary text-sm">
           Track the progress of each referral and their earned milestones.
         </p>
       </div>
 
       {referralsWithEvents.length === 0 ? (
-        <div className="bg-surface rounded-xl p-12 text-center border border-[#E2E4EB]">
-          <p className="text-[#5E6278] font-medium mb-2">No referrals yet</p>
+        <div className="bg-surface rounded-xl p-12 text-center border border-border-default">
+          <p className="text-text-secondary font-medium mb-2">No referrals yet</p>
           <p className="text-xs text-[#999] mb-4">
             Share your referral link to start earning money.
           </p>
@@ -139,13 +142,13 @@ export default async function ReferralLeadsPage() {
               .reduce((sum, e) => sum + (e.value || 0), 0)
 
             return (
-              <div key={referral.id} className="bg-surface rounded-xl border border-[#E2E4EB] p-5 hover:border-[#D9DCE4] transition">
+              <div key={referral.id} className="bg-surface rounded-xl border border-border-default p-5 hover:border-[#D9DCE4] transition">
                 <div className="mb-4">
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h3 className="font-bold text-sm">{userName}</h3>
-                      <p className="text-xs text-[#5E6278]">
-                        {roleLabel} · Joined {new Date(referral.created_at).toLocaleDateString('en-GB')}
+                      <p className="text-xs text-text-secondary">
+                        {roleLabel} · Joined {new Date(referral.created_at).toLocaleDateString(dateLocale)}
                       </p>
                     </div>
                     {totalEarned > 0 && (
@@ -158,7 +161,7 @@ export default async function ReferralLeadsPage() {
 
                 {/* Milestone Progress */}
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-[#5E6278] mb-3">Progress</p>
+                  <p className="text-xs font-semibold text-text-secondary mb-3">Progress</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
                     {allMilestones.map(milestone => {
                       const isCompleted = milestone.completed
@@ -166,8 +169,8 @@ export default async function ReferralLeadsPage() {
                         ? 'bg-[#DCFCE7]'
                         : milestone.key === 'SIGNUP'
                           ? 'bg-[#E2E4EB]'
-                          : 'bg-[#F5F5F7]'
-                      const textColor = isCompleted ? 'text-[#166534]' : 'text-[#5E6278]'
+                          : 'bg-hover-bg'
+                      const textColor = isCompleted ? 'text-[#166534]' : 'text-text-secondary'
                       const borderColor = isCompleted ? 'border-[#166534]' : 'border-transparent'
 
                       return (
@@ -179,7 +182,7 @@ export default async function ReferralLeadsPage() {
                             {milestone.label}
                           </p>
                           {milestone.amount > 0 && (
-                            <p className={`text-xs mt-1 ${isCompleted ? 'text-[#166534] font-bold' : 'text-[#5E6278]'}`}>
+                            <p className={`text-xs mt-1 ${isCompleted ? 'text-[#166534] font-bold' : 'text-text-secondary'}`}>
                               €{(milestone.amount / 100).toFixed(2)}
                             </p>
                           )}

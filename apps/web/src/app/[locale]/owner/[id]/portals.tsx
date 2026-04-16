@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { submitToPortalAction } from './actions'
 
 export interface PortalRow {
@@ -40,9 +40,9 @@ function getStatusBadge(status: string | undefined, errorMessage: string | null 
   }
 }
 
-function formatDate(iso: string | null): string {
+function formatDate(iso: string | null, dateLocale: string): string {
   if (!iso) return ''
-  return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  return new Date(iso).toLocaleDateString(dateLocale, { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 export function PortalSection({
@@ -55,6 +55,8 @@ export function PortalSection({
   initialStatuses: PortalStatusRow[]
 }) {
   const t = useTranslations('ownerDashboard')
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const router = useRouter()
   const [statuses, setStatuses] = useState<StatusMap>(() => {
     const m = new Map<string, PortalStatusRow>()
@@ -142,7 +144,7 @@ export function PortalSection({
             className="flex items-center justify-between gap-4 py-3 px-4 bg-[#F5F5FA] rounded-xl"
           >
             <div className="min-w-0">
-              <p className="font-semibold text-sm text-[#0F1117]">{portal.display_name}</p>
+              <p className="font-semibold text-sm text-text-primary">{portal.display_name}</p>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${badge.className}`}>
                   {badge.spinning && (
@@ -154,10 +156,10 @@ export function PortalSection({
                   {badge.label}
                 </span>
                 {row?.external_id && (
-                  <span className="text-xs text-[#5E6278]">ID: {row.external_id}</span>
+                  <span className="text-xs text-text-secondary">ID: {row.external_id}</span>
                 )}
                 {row?.last_sync_at && row.status === 'published' && (
-                  <span className="text-xs text-[#999999]">· {formatDate(row.last_sync_at)}</span>
+                  <span className="text-xs text-[#999999]">· {formatDate(row.last_sync_at, dateLocale)}</span>
                 )}
               </div>
             </div>
@@ -166,7 +168,7 @@ export function PortalSection({
               type="button"
               onClick={() => handleSubmit(portal.id)}
               disabled={isSubmitting || isQueued}
-              className="flex-shrink-0 text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+              className="flex-shrink-0 text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-1.5">

@@ -61,7 +61,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
           <p className="font-semibold truncate">{title}</p>
-          <p className="text-sm text-[#5E6278]">{location}</p>
+          <p className="text-sm text-text-secondary">{location}</p>
         </div>
         <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0 ${STATUS_STYLES[status] ?? STATUS_STYLES['pending']}`}>
           {STATUS_LABELS[status] ?? status}
@@ -81,7 +81,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
       )}
 
       {hunterNotes && (
-        <p className="text-sm text-[#5E6278] italic mb-3">&ldquo;{hunterNotes}&rdquo;</p>
+        <p className="text-sm text-text-secondary italic mb-3">&ldquo;{hunterNotes}&rdquo;</p>
       )}
 
       {error && (
@@ -95,7 +95,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
             <button
               onClick={handleCancel}
               disabled={loading}
-              className="text-xs font-semibold text-[#5E6278] hover:text-red-600 transition-colors disabled:opacity-50"
+              className="text-xs font-semibold text-text-secondary hover:text-red-600 transition-colors disabled:opacity-50"
             >
               {loading ? t('cancelling') : t('withdraw')}
             </button>
@@ -103,7 +103,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
           {placeId && (
             <Link
               href={`/p/${placeId}`}
-              className="text-xs font-semibold text-[#0F1117] hover:underline"
+              className="text-xs font-semibold text-text-primary hover:underline"
             >
               {t('viewListing')}
             </Link>

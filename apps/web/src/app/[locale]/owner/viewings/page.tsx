@@ -64,16 +64,16 @@ export default async function ViewingsPage() {
         </div>
 
         {/* Sub-nav */}
-        <div className="flex gap-4 mb-6 border-b border-[#E2E4EB]">
+        <div className="flex gap-4 mb-6 border-b border-border-default">
           <Link
             href="/owner"
-            className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors"
+            className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors"
           >
             {t('listings')}
           </Link>
           <Link
             href="/owner/viewings"
-            className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px"
+            className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px"
           >
             {t('viewings')}
           </Link>
@@ -83,19 +83,19 @@ export default async function ViewingsPage() {
         <div className="grid grid-cols-4 gap-3 mb-6">
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold text-brand">{pendingCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('pending')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('pending')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold text-green-600">{confirmedCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('confirmed')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('confirmed')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold">{slotCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('totalSlots')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('totalSlots')}</p>
           </div>
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold">{bookedCount}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{t('booked')}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{t('booked')}</p>
           </div>
         </div>
 

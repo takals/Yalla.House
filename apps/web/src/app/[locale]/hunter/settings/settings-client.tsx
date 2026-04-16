@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition, useState } from 'react'
+import { useLocale } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
 import {
   updateProfileAction,
@@ -74,6 +75,8 @@ const EVENT_DOT: Record<string, string> = {
 }
 
 export function SettingsClient({ profile, assignments, consentLog, labels }: Props) {
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const { handleAuthRequired } = useAuthAction()
   const [profileState, setProfileState] = useState<{ success?: true; error?: string } | null>(null)
   const [profilePending, startProfileTransition] = useTransition()
@@ -97,7 +100,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
 
       {/* Profile */}
       <div className="bg-surface rounded-card p-6">
-        <h3 className="font-semibold mb-4 pb-3 border-b border-[#E2E4EB]">{labels.profile}</h3>
+        <h3 className="font-semibold mb-4 pb-3 border-b border-border-default">{labels.profile}</h3>
         {profileState && 'success' in profileState! && (
           <div className="mb-4 bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-800 font-medium">
             {labels.profileSaved}
@@ -111,37 +114,37 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
         <form onSubmit={handleProfileSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{labels.fullName}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{labels.fullName}</label>
               <input
                 type="text"
                 name="full_name"
                 defaultValue={profile.full_name ?? ''}
-                className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+                className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{labels.phone}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{labels.phone}</label>
               <input
                 type="tel"
                 name="phone"
                 defaultValue={profile.phone ?? ''}
-                className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+                className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
               />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#5E6278] mb-1">{labels.email}</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1">{labels.email}</label>
             <input
               type="email"
               value={profile.email}
               readOnly
-              className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm bg-[#EDEEF2] text-[#999] cursor-not-allowed"
+              className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-bg text-[#999] cursor-not-allowed"
             />
           </div>
           <button
             type="submit"
             disabled={profilePending}
-            className="bg-brand hover:bg-brand-hover disabled:opacity-50 text-[#0F1117] font-semibold px-5 py-2 rounded-lg text-sm transition-colors"
+            className="bg-brand hover:bg-brand-hover disabled:opacity-50 text-text-primary font-semibold px-5 py-2 rounded-lg text-sm transition-colors"
           >
             {profilePending ? labels.saving : labels.saveChanges}
           </button>
@@ -150,18 +153,18 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
 
       {/* Privacy */}
       <div className="bg-surface rounded-card p-6">
-        <h3 className="font-semibold mb-4 pb-3 border-b border-[#E2E4EB]">{labels.privacy}</h3>
+        <h3 className="font-semibold mb-4 pb-3 border-b border-border-default">{labels.privacy}</h3>
 
         {/* Master pause */}
-        <div className="flex items-center justify-between mb-5 pb-4 border-b border-[#E2E4EB]">
+        <div className="flex items-center justify-between mb-5 pb-4 border-b border-border-default">
           <div>
             <p className="font-medium text-sm">{labels.pauseAllSharing}</p>
-            <p className="text-xs text-[#5E6278] mt-0.5">{labels.pauseAllSharingDesc}</p>
+            <p className="text-xs text-text-secondary mt-0.5">{labels.pauseAllSharingDesc}</p>
           </div>
           <button
             onClick={() => startTransition(async () => { await pauseAllSharingAction(true) })}
             disabled={isPending}
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
           >
             {labels.pause}
           </button>
@@ -170,7 +173,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
         {/* Per-agent rows */}
         {assignments.length > 0 && (
           <div className="mb-5">
-            <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-3">{labels.connectedAgents}</p>
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-3">{labels.connectedAgents}</p>
             <div className="space-y-3">
               {assignments.map(a => (
                 <div key={a.id} className="flex items-center gap-3 flex-wrap">
@@ -182,7 +185,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
                     <button
                       onClick={() => startTransition(async () => { await disconnectAgentAction(a.id) })}
                       disabled={isPending}
-                      className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
+                      className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-border-default text-text-secondary hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
                     >
                       {labels.disconnect}
                     </button>
@@ -203,7 +206,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
         {/* Consent log */}
         {consentLog.length > 0 && (
           <div>
-            <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-3">{labels.consentLog}</p>
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-3">{labels.consentLog}</p>
             <div className="space-y-2">
               {consentLog.map(ev => {
                 const eventLabel = {
@@ -217,12 +220,12 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
                 return (
                   <div key={ev.id} className="flex items-center gap-2 text-sm">
                     <span className={`w-2 h-2 rounded-full flex-shrink-0 ${EVENT_DOT[ev.event_type] ?? 'bg-gray-400'}`} />
-                    <span className="flex-1 text-[#5E6278]">
+                    <span className="flex-1 text-text-secondary">
                       {eventLabel}
                       {ev.agent_name ? ` — ${ev.agent_name}` : ''}
                     </span>
                     <span className="text-xs text-[#999] flex-shrink-0">
-                      {new Date(ev.created_at).toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })}
+                      {new Date(ev.created_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short' })}
                     </span>
                   </div>
                 )

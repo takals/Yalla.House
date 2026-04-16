@@ -96,24 +96,24 @@ export function BookingLookup() {
   return (
     <div className="space-y-6">
       {/* Search Bar */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+      <div className="bg-white rounded-2xl border border-border-default p-6">
         <div className="flex gap-3">
           <div className="flex-1 relative">
-            <Search size={16} className="absolute left-4 top-3.5 text-[#5E6278]" />
+            <Search size={16} className="absolute left-4 top-3.5 text-text-secondary" />
             <input
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearch()}
               placeholder="Ref code (yh_de_xxx), postcode (10115), or street name..."
-              className="w-full pl-10 pr-4 py-2.5 bg-[#EDEEF2] rounded-xl text-sm text-[#0F1117] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
+              className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-xl text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
               autoFocus
             />
           </div>
           <button
             onClick={handleSearch}
             disabled={searching || !query.trim()}
-            className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-xl hover:bg-[#BF6840] transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center gap-2"
           >
             {searching ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
             Search
@@ -144,7 +144,7 @@ export function BookingLookup() {
       {/* Results */}
       {results.length > 0 && (
         <div className="space-y-3">
-          <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wider">
+          <p className="text-xs font-bold text-text-secondary uppercase tracking-wider">
             {results.length} {results.length === 1 ? 'property' : 'properties'} found
           </p>
 
@@ -155,21 +155,21 @@ export function BookingLookup() {
               className={`bg-white rounded-2xl border-2 p-5 cursor-pointer transition-all hover:shadow-md ${
                 selectedId === result.id
                   ? 'border-[#D4764E] shadow-md'
-                  : 'border-[#E2E4EB]'
+                  : 'border-border-default'
               }`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     <MapPin size={16} className="text-[#D4764E] flex-shrink-0" />
-                    <h3 className="font-bold text-[#0F1117] truncate">
+                    <h3 className="font-bold text-text-primary truncate">
                       {result.address_line1 ?? 'Unknown address'}
                     </h3>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${STATUS_STYLES[result.status] ?? STATUS_STYLES['draft']}`}>
                       {result.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-[#5E6278]">
+                  <div className="flex items-center gap-4 text-sm text-text-secondary">
                     <span>{result.city}{result.postcode ? `, ${result.postcode}` : ''}</span>
                     {result.bedrooms && <span>{result.bedrooms} bed</span>}
                     {result.property_type && <span>{result.property_type}</span>}
@@ -184,12 +184,12 @@ export function BookingLookup() {
                   {/* Copy link */}
                   <button
                     onClick={e => { e.stopPropagation(); handleCopyLink(result.place_id) }}
-                    className="p-2 rounded-lg bg-[#EDEEF2] hover:bg-[#D9DCE4] transition-colors"
+                    className="p-2 rounded-lg bg-bg hover:bg-hover-muted transition-colors"
                     title="Copy property link"
                   >
                     {copied === result.place_id
                       ? <CheckCircle2 size={16} className="text-green-600" />
-                      : <Copy size={16} className="text-[#5E6278]" />
+                      : <Copy size={16} className="text-text-secondary" />
                     }
                   </button>
 
@@ -199,10 +199,10 @@ export function BookingLookup() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}
-                    className="p-2 rounded-lg bg-[#EDEEF2] hover:bg-[#D9DCE4] transition-colors"
+                    className="p-2 rounded-lg bg-bg hover:bg-hover-muted transition-colors"
                     title="Open property page"
                   >
-                    <ExternalLink size={16} className="text-[#5E6278]" />
+                    <ExternalLink size={16} className="text-text-secondary" />
                   </a>
                 </div>
               </div>
@@ -214,7 +214,7 @@ export function BookingLookup() {
       {/* Send Link Panel */}
       {selectedId && (
         <div className="bg-white rounded-2xl border-2 border-[#D4764E] p-6">
-          <h3 className="font-bold text-[#0F1117] mb-4 flex items-center gap-2">
+          <h3 className="font-bold text-text-primary mb-4 flex items-center gap-2">
             <Send size={18} className="text-[#D4764E]" />
             Send Property Link
           </h3>
@@ -239,25 +239,25 @@ export function BookingLookup() {
             <div className="flex gap-3">
               {/* Phone input */}
               <div className="flex-1 relative">
-                <Phone size={16} className="absolute left-4 top-3.5 text-[#5E6278]" />
+                <Phone size={16} className="absolute left-4 top-3.5 text-text-secondary" />
                 <input
                   type="tel"
                   value={phoneNumber}
                   onChange={e => setPhoneNumber(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSendLink()}
                   placeholder="+49 170 1234567"
-                  className="w-full pl-10 pr-4 py-2.5 bg-[#EDEEF2] rounded-xl text-sm text-[#0F1117] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
+                  className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-xl text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
                 />
               </div>
 
               {/* Channel toggle */}
-              <div className="flex bg-[#EDEEF2] rounded-xl overflow-hidden">
+              <div className="flex bg-bg rounded-xl overflow-hidden">
                 <button
                   onClick={() => setChannel('sms')}
                   className={`px-4 py-2.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                     channel === 'sms'
                       ? 'bg-[#D4764E] text-white'
-                      : 'text-[#5E6278] hover:text-[#0F1117]'
+                      : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
                   <MessageCircle size={14} />
@@ -268,7 +268,7 @@ export function BookingLookup() {
                   className={`px-4 py-2.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                     channel === 'whatsapp'
                       ? 'bg-[#25D366] text-white'
-                      : 'text-[#5E6278] hover:text-[#0F1117]'
+                      : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
                   <MessageCircle size={14} />
@@ -280,7 +280,7 @@ export function BookingLookup() {
               <button
                 onClick={handleSendLink}
                 disabled={sending || !phoneNumber.trim()}
-                className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-xl hover:bg-[#BF6840] transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {sending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                 Send

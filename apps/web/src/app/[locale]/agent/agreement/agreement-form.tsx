@@ -31,18 +31,18 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
   }
 
   return (
-    <form onSubmit={handleSign} className="bg-surface rounded-2xl p-6 border border-[#E2E4EB] space-y-4">
+    <form onSubmit={handleSign} className="bg-surface rounded-2xl p-6 border border-border-default space-y-4">
       {/* Agency name (read-only) */}
       {agencyName && (
         <div>
-          <label className="block text-xs font-semibold text-[#5E6278] mb-1">Agency</label>
+          <label className="block text-xs font-semibold text-text-secondary mb-1">Agency</label>
           <p className="text-sm font-medium">{agencyName}</p>
         </div>
       )}
 
       {/* Signatory name */}
       <div>
-        <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+        <label className="block text-xs font-semibold text-text-secondary mb-1">
           Full name (signatory) *
         </label>
         <input
@@ -51,7 +51,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
           value={signatoryName}
           onChange={e => setSignatoryName(e.target.value)}
           placeholder="Your full legal name"
-          className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          className="w-full px-3 py-2 text-sm border border-border-default rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
         />
       </div>
 
@@ -63,7 +63,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
           onChange={e => setAgreed(e.target.checked)}
           className="mt-0.5 accent-brand w-4 h-4"
         />
-        <span className="text-sm text-[#5E6278]">
+        <span className="text-sm text-text-secondary">
           I confirm that I have read and accept the Yalla Partner Agreement (v1.0).
           I am authorised to sign on behalf of my agency.
         </span>
@@ -76,7 +76,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
       <button
         type="submit"
         disabled={submitting || !agreed || !signatoryName.trim()}
-        className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-3 rounded-xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm"
+        className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold py-3 rounded-xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm"
       >
         {submitting && (
           <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

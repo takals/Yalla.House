@@ -41,14 +41,14 @@ export default async function OwnerListingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#0F1117]">{t('pageTitle')}</h1>
-          <p className="text-sm text-[#5E6278] mt-1">
+          <h1 className="text-3xl font-bold text-text-primary">{t('pageTitle')}</h1>
+          <p className="text-sm text-text-secondary mt-1">
             {t('listingCount', { count: allListings.length })}
           </p>
         </div>
         <Link
           href="/owner/new"
-          className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4" />
           {t('newListing')}
@@ -57,11 +57,11 @@ export default async function OwnerListingsPage() {
 
       {/* Listings grid */}
       {allListings.length === 0 ? (
-        <div className="bg-surface rounded-card border border-[#E2E4EB] py-16 text-center">
-          <p className="text-[#5E6278] mb-4">{t('noListingsCreated')}</p>
+        <div className="bg-surface rounded-card border border-border-default py-16 text-center">
+          <p className="text-text-secondary mb-4">{t('noListingsCreated')}</p>
           <Link
             href="/owner/new"
-            className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             <Plus className="w-4 h-4" />
             {t('createFirstListing')}
@@ -84,15 +84,15 @@ export default async function OwnerListingsPage() {
               <Link
                 key={listing.id}
                 href={href}
-                className="bg-surface rounded-card border border-[#E2E4EB] overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all will-change-transform group relative"
+                className="bg-surface rounded-card border border-border-default overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all will-change-transform group relative"
               >
                 {/* Placeholder image area */}
-                <div className="h-40 bg-[#EDEEF2] flex items-center justify-center relative">
+                <div className="h-40 bg-bg flex items-center justify-center relative">
                   <Home size={48} className="text-[#D9DCE4]" />
                   {/* Public link indicator for live listings */}
                   {isPublic && (
                     <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm">
-                      <ExternalLink size={14} className="text-[#5E6278]" />
+                      <ExternalLink size={14} className="text-text-secondary" />
                     </div>
                   )}
                 </div>
@@ -105,24 +105,24 @@ export default async function OwnerListingsPage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-[#0F1117] text-[0.9375rem] mb-1 group-hover:text-brand-dark transition-colors">
+                  <h3 className="font-bold text-text-primary text-[0.9375rem] mb-1 group-hover:text-brand-dark transition-colors">
                     {listing.title_de ?? listing.title ?? listing.place_id}
                   </h3>
 
                   {/* Location */}
-                  <p className="text-xs text-[#5E6278] mb-3">
+                  <p className="text-xs text-text-secondary mb-3">
                     {listing.postcode} {listing.city}
                   </p>
 
                   {/* Meta row */}
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#0F1117]">
+                    <span className="font-bold text-text-primary">
                       {formattedPrice ?? '—'}
                       {listing.intent === 'rent' && formattedPrice && (
-                        <span className="text-xs font-normal text-[#5E6278]">/Mo</span>
+                        <span className="text-xs font-normal text-text-secondary">/Mo</span>
                       )}
                     </span>
-                    <div className="flex gap-3 text-xs text-[#5E6278]">
+                    <div className="flex gap-3 text-xs text-text-secondary">
                       {listing.size_sqm && <span>{listing.size_sqm} m²</span>}
                       {listing.bedrooms && <span>{listing.bedrooms} Zi.</span>}
                     </div>

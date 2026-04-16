@@ -73,23 +73,23 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
   return (
     <div className="max-w-4xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-[#0F1117] mb-1">{t('pageTitle')}</h1>
-        <p className="text-[#5E6278] text-sm">{t('subtitle')}</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-1">{t('pageTitle')}</h1>
+        <p className="text-text-secondary text-sm">{t('subtitle')}</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="bg-surface rounded-2xl p-4 border border-[#E2E4EB]">
-          <p className="text-2xl font-bold text-[#0F1117]">{viewings.length}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t('filterAll')}</p>
+        <div className="bg-surface rounded-2xl p-4 border border-border-default">
+          <p className="text-2xl font-bold text-text-primary">{viewings.length}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t('filterAll')}</p>
         </div>
-        <div className="bg-surface rounded-2xl p-4 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-2xl p-4 border border-border-default">
           <p className="text-2xl font-bold text-[#D4764E]">{upcomingCount}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t('filterUpcoming')}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t('filterUpcoming')}</p>
         </div>
-        <div className="bg-surface rounded-2xl p-4 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-2xl p-4 border border-border-default">
           <p className="text-2xl font-bold text-green-600">{confirmedCount}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t('statusConfirmed')}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t('statusConfirmed')}</p>
         </div>
       </div>
 

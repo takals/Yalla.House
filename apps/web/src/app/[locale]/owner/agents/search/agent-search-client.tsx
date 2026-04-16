@@ -100,7 +100,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
             className={i < Math.floor(rating) ? 'fill-amber-400 text-amber-400' : 'text-[#D9DCE4]'}
           />
         ))}
-        <span className="text-xs text-[#5E6278] ml-1">{rating}</span>
+        <span className="text-xs text-text-secondary ml-1">{rating}</span>
       </div>
     )
   }
@@ -108,16 +108,16 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
   return (
     <div className="space-y-8">
       {/* Search Bar */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+      <div className="bg-white rounded-2xl border border-border-default p-6">
         <div className="flex gap-4 mb-6">
           <div className="flex-1 relative">
-            <MapPin size={16} className="absolute left-4 top-3.5 text-[#5E6278]" />
+            <MapPin size={16} className="absolute left-4 top-3.5 text-text-secondary" />
             <input
               type="text"
               placeholder={translations.searchPlaceholder}
               value={postcode}
               onChange={e => setPostcode(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#EDEEF2] rounded-lg text-sm text-[#0F1117] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
+              className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-lg text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
             />
           </div>
           <button className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors">
@@ -127,7 +127,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
 
         {/* Area Chips */}
         <div>
-          <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wider mb-3">{translations.areaChipsLabel}</p>
+          <p className="text-xs font-bold text-text-secondary uppercase tracking-wider mb-3">{translations.areaChipsLabel}</p>
           <div className="flex flex-wrap gap-2">
             {areaChips.map(area => (
               <button
@@ -142,7 +142,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
                 className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
                   selectedAreas.includes(area.code)
                     ? 'bg-[#D4764E] text-white'
-                    : 'bg-[#EDEEF2] text-[#0F1117] hover:bg-[#D9DCE4]'
+                    : 'bg-bg text-text-primary hover:bg-hover-muted'
                 }`}
               >
                 {area.code}
@@ -155,19 +155,19 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
       {/* Agent Cards */}
       <div className="space-y-4">
         {filteredAgents.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-12 text-center">
-            <p className="text-[#5E6278]">{translations.noAgentsFound}</p>
+          <div className="bg-white rounded-2xl border border-border-default p-12 text-center">
+            <p className="text-text-secondary">{translations.noAgentsFound}</p>
           </div>
         ) : (
           filteredAgents.map(agent => (
             <div
               key={agent.id}
-              className="bg-white rounded-2xl border border-[#E2E4EB] p-6 hover:-translate-y-0.5 hover:shadow-md transition-all"
+              className="bg-white rounded-2xl border border-border-default p-6 hover:-translate-y-0.5 hover:shadow-md transition-all"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-bold text-[#0F1117]">{agent.name}</h3>
+                    <h3 className="font-bold text-text-primary">{agent.name}</h3>
                     {agent.verified && (
                       <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-green-200">
                         <Shield size={12} />
@@ -175,14 +175,14 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-[#5E6278]">{agent.description}</p>
+                  <p className="text-sm text-text-secondary">{agent.description}</p>
                 </div>
                 <button
                   onClick={() => toggleAgentSelection(agent.id)}
                   className={`flex-shrink-0 ml-4 w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
                     selectedAgents.includes(agent.id)
                       ? 'bg-[#D4764E] border-[#D4764E]'
-                      : 'border-[#E2E4EB] hover:border-[#D4764E]'
+                      : 'border-border-default hover:border-[#D4764E]'
                   }`}
                 >
                   {selectedAgents.includes(agent.id) && (
@@ -192,34 +192,34 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-4 gap-4 mb-4 py-4 border-y border-[#E2E4EB]">
+              <div className="grid grid-cols-4 gap-4 mb-4 py-4 border-y border-border-default">
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold mb-1">{translations.matchScoreLabel}</p>
-                  <p className="font-bold text-[#0F1117]">{agent.matchScore}%</p>
+                  <p className="text-xs text-text-secondary font-semibold mb-1">{translations.matchScoreLabel}</p>
+                  <p className="font-bold text-text-primary">{agent.matchScore}%</p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold mb-1">{translations.ratingLabel}</p>
+                  <p className="text-xs text-text-secondary font-semibold mb-1">{translations.ratingLabel}</p>
                   {renderStars(agent.rating)}
                 </div>
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold mb-1">{translations.responseTimeLabel}</p>
-                  <p className="font-semibold text-sm text-[#0F1117]">{agent.responseTime}</p>
+                  <p className="text-xs text-text-secondary font-semibold mb-1">{translations.responseTimeLabel}</p>
+                  <p className="font-semibold text-sm text-text-primary">{agent.responseTime}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold mb-1">{translations.coverageLabel}</p>
-                  <p className="font-semibold text-sm text-[#0F1117]">{agent.coverage.length} areas</p>
+                  <p className="text-xs text-text-secondary font-semibold mb-1">{translations.coverageLabel}</p>
+                  <p className="font-semibold text-sm text-text-primary">{agent.coverage.length} areas</p>
                 </div>
               </div>
 
               {/* Tags */}
               <div className="space-y-3">
                 <div>
-                  <p className="text-xs text-[#5E6278] font-semibold mb-2">{translations.propertyTypesLabel}</p>
+                  <p className="text-xs text-text-secondary font-semibold mb-2">{translations.propertyTypesLabel}</p>
                   <div className="flex flex-wrap gap-2">
                     {agent.propertyTypes.map(type => (
                       <span
                         key={type}
-                        className="inline-block bg-[#EDEEF2] text-[#5E6278] text-xs font-semibold px-3 py-1 rounded-full"
+                        className="inline-block bg-bg text-text-secondary text-xs font-semibold px-3 py-1 rounded-full"
                       >
                         {type}
                       </span>
@@ -229,9 +229,9 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3 mt-4 pt-4 border-t border-[#E2E4EB]">
+              <div className="flex gap-3 mt-4 pt-4 border-t border-border-default">
                 <Link href={`/owner/agents/profile/${agent.id}`} className="flex-1">
-                  <button className="w-full text-sm font-semibold text-[#5E6278] py-2 hover:text-[#0F1117] transition-colors">
+                  <button className="w-full text-sm font-semibold text-text-secondary py-2 hover:text-text-primary transition-colors">
                     {translations.viewProfile}
                   </button>
                 </Link>
@@ -243,9 +243,9 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
 
       {/* Floating Action Bar */}
       {selectedAgents.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E2E4EB] p-6 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border-default p-6 shadow-lg">
           <div className="max-w-6xl mx-auto flex items-center justify-between">
-            <div className="text-sm font-semibold text-[#0F1117]">
+            <div className="text-sm font-semibold text-text-primary">
               {selectedAgents.length} {translations.selectedCount}
             </div>
             <button

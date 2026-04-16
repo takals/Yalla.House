@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import { useLocale } from 'next-intl'
 import { ShieldCheck, Check } from 'lucide-react'
 import { disconnectHunterAction } from './actions'
 
@@ -37,16 +38,18 @@ const PROP_LABELS: Record<string, string> = {
 
 export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
   const [isPending, startTransition] = useTransition()
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
 
   const name = passport.hunterName ?? passport.hunterEmail
   const finance = passport.financeStatus ? FINANCE_LABELS[passport.financeStatus] : null
   const budgetStr = passport.budgetMax
-    ? `bis €${Math.round(passport.budgetMax / 100).toLocaleString('de-DE')}`
+    ? `bis €${Math.round(passport.budgetMax / 100).toLocaleString(dateLocale)}`
     : null
   const types = passport.propertyTypes?.map(t => PROP_LABELS[t] ?? t) ?? []
 
   return (
-    <div className="bg-surface rounded-2xl border border-[#E2E4EB] overflow-hidden">
+    <div className="bg-surface rounded-2xl border border-border-default overflow-hidden">
 
       {/* Passport card header — dark gradient */}
       <div
@@ -126,8 +129,8 @@ export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
 
       {/* Must-haves */}
       {(passport.mustHaves?.length ?? 0) > 0 && (
-        <div className="px-5 py-4 border-t border-[#E2E4EB]">
-          <p className="text-[0.6rem] font-bold uppercase tracking-wide text-[#5E6278] mb-2">Must-haves</p>
+        <div className="px-5 py-4 border-t border-border-default">
+          <p className="text-[0.6rem] font-bold uppercase tracking-wide text-text-secondary mb-2">Must-haves</p>
           <div className="flex flex-wrap gap-1.5">
             {passport.mustHaves!.map(m => (
               <span key={m} className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#DCFCE7] text-[#166534]">{m}</span>
@@ -137,16 +140,16 @@ export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
       )}
 
       {/* Footer actions */}
-      <div className="px-5 py-4 border-t border-[#E2E4EB] flex items-center justify-between gap-3 flex-wrap">
+      <div className="px-5 py-4 border-t border-border-default flex items-center justify-between gap-3 flex-wrap">
         <div className="text-xs text-[#999]">
           {passport.connectedAt
-            ? `Verbunden seit ${new Date(passport.connectedAt).toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' })}`
+            ? `Verbunden seit ${new Date(passport.connectedAt).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' })}`
             : 'Verbindungszeit unbekannt'}
         </div>
         <button
           onClick={() => startTransition(async () => { await disconnectHunterAction(passport.assignmentId) })}
           disabled={isPending}
-          className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
+          className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
         >
           Verbindung trennen
         </button>

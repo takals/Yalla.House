@@ -140,7 +140,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
   if (step === 1) {
     return (
       <form onSubmit={handleSubmitSearch}>
-        <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-2xl p-6 border border-border-default">
           <h2 className="text-lg font-bold mb-6">New Search</h2>
 
           {error && (
@@ -159,7 +159,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                   className={`px-4 py-2 rounded-lg text-sm font-semibold border transition ${
                     intent === v
                       ? 'bg-brand border-brand text-black'
-                      : 'bg-white border-[#D8DBE5] text-[#5E6278] hover:border-[#C8CCD6]'
+                      : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
                   {v === 'buy' ? 'Buy' : 'Rent'}
@@ -180,7 +180,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 placeholder="City, district, or postcode"
                 className="flex-1 px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
-              <button type="button" onClick={addArea} className="px-4 py-2 bg-[#EDEEF2] rounded-lg text-sm font-semibold hover:bg-[#D9DCE4] transition">
+              <button type="button" onClick={addArea} className="px-4 py-2 bg-bg rounded-lg text-sm font-semibold hover:bg-hover-muted transition">
                 Add
               </button>
             </div>
@@ -210,7 +210,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
           {/* Budget */}
           <div className="mb-5 grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold mb-1 text-[#5E6278]">Currency</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">Currency</label>
               <select
                 value={currency}
                 onChange={e => setCurrency(e.target.value)}
@@ -221,7 +221,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1 text-[#5E6278]">Min budget</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">Min budget</label>
               <input
                 type="number"
                 value={budgetMin}
@@ -231,7 +231,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1 text-[#5E6278]">Max budget</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">Max budget</label>
               <input
                 type="number"
                 value={budgetMax}
@@ -254,7 +254,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition capitalize ${
                     propertyTypes.includes(t)
                       ? 'bg-brand border-brand text-black'
-                      : 'bg-white border-[#D8DBE5] text-[#5E6278] hover:border-[#C8CCD6]'
+                      : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
                   {t}
@@ -266,14 +266,14 @@ export function SearchForm({ defaults }: SearchFormProps) {
           {/* Bedrooms */}
           <div className="mb-5 grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold mb-1 text-[#5E6278]">Min bedrooms</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">Min bedrooms</label>
               <select value={bedroomsMin} onChange={e => setBedroomsMin(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm">
                 <option value="">Any</option>
                 {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1 text-[#5E6278]">Max bedrooms</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">Max bedrooms</label>
               <select value={bedroomsMax} onChange={e => setBedroomsMax(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm">
                 <option value="">Any</option>
                 {[1, 2, 3, 4, 5, 6].map(n => <option key={n} value={n}>{n}+</option>)}
@@ -293,7 +293,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition ${
                     timeline === t.value
                       ? 'bg-brand border-brand text-black'
-                      : 'bg-white border-[#D8DBE5] text-[#5E6278] hover:border-[#C8CCD6]'
+                      : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
                   {t.label}
@@ -328,7 +328,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition uppercase ${
                     languages.includes(l)
                       ? 'bg-brand border-brand text-black'
-                      : 'bg-white border-[#D8DBE5] text-[#5E6278] hover:border-[#C8CCD6]'
+                      : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
                   {l}
@@ -353,13 +353,13 @@ export function SearchForm({ defaults }: SearchFormProps) {
   // ─── STEP 2: Consent ──────────────────────────────────────────────
   return (
     <form onSubmit={handleSubmitConsent}>
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-full bg-brand-solid-bg border-2 border-brand flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl">🤝</span>
           </div>
           <h2 className="text-xl font-bold mb-2">Agent Outreach</h2>
-          <p className="text-[#5E6278] text-sm max-w-md mx-auto">
+          <p className="text-text-secondary text-sm max-w-md mx-auto">
             Would you like Yalla.House to share your search with relevant
             real estate agents in your area?
           </p>
@@ -388,7 +388,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               </div>
               <div>
                 <p className="font-semibold text-sm">Yes, introduce me to relevant agents</p>
-                <p className="text-xs text-[#5E6278] mt-0.5">Recommended — all matching agents in your area will receive your search brief</p>
+                <p className="text-xs text-text-secondary mt-0.5">Recommended — all matching agents in your area will receive your search brief</p>
               </div>
             </div>
           </button>
@@ -410,7 +410,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               </div>
               <div>
                 <p className="font-semibold text-sm">No, I only want to use Yalla.House directly</p>
-                <p className="text-xs text-[#5E6278] mt-0.5">You can enable this later from settings</p>
+                <p className="text-xs text-text-secondary mt-0.5">You can enable this later from settings</p>
               </div>
             </div>
           </button>
@@ -428,16 +428,16 @@ export function SearchForm({ defaults }: SearchFormProps) {
               />
               <div>
                 <p className="text-sm font-medium">Allow matched agents to call me by phone</p>
-                <p className="text-xs text-[#5E6278]">Unchecked by default — phone numbers are redacted otherwise</p>
+                <p className="text-xs text-text-secondary">Unchecked by default — phone numbers are redacted otherwise</p>
               </div>
             </label>
           </div>
         )}
 
         {/* Privacy note */}
-        <div className="bg-[#F5F5F7] rounded-lg p-3 mb-6">
-          <p className="text-xs text-[#5E6278] leading-relaxed">
-            <span className="font-semibold text-[#0F1117]">Privacy: </span>
+        <div className="bg-hover-bg rounded-lg p-3 mb-6">
+          <p className="text-xs text-text-secondary leading-relaxed">
+            <span className="font-semibold text-text-primary">Privacy: </span>
             Your name, email, and phone number are never shared with agents.
             They only receive your search criteria. All agent communication
             goes through Yalla.House. You can revoke consent at any time.

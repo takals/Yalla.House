@@ -143,7 +143,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
     ]
 
     return (
-      <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-[#E2E4EB]">
+      <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-border-default">
         {permissions.map((perm) => (
           <div key={perm.label} className="flex items-center gap-2">
             <div
@@ -159,7 +159,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
                 <X size={12} />
               )}
             </div>
-            <span className="text-xs text-[#5E6278]">{perm.label}</span>
+            <span className="text-xs text-text-secondary">{perm.label}</span>
           </div>
         ))}
       </div>
@@ -213,11 +213,11 @@ export default async function AssignmentDetailPage({ params }: Props) {
       )}
 
       {/* Main property card */}
-      <div className="bg-surface rounded-2xl border border-[#E2E4EB] overflow-hidden mb-6">
+      <div className="bg-surface rounded-2xl border border-border-default overflow-hidden mb-6">
         {/* Primary photo */}
         {primaryPhoto ? (
           <div
-            className="h-64 bg-[#EDEEF2] overflow-hidden"
+            className="h-64 bg-bg overflow-hidden"
             style={{
               backgroundImage: `url(${primaryPhoto.url})`,
               backgroundSize: 'cover',
@@ -225,7 +225,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
             }}
           />
         ) : (
-          <div className="h-64 bg-[#EDEEF2] flex items-center justify-center">
+          <div className="h-64 bg-bg flex items-center justify-center">
             <svg className="w-16 h-16 text-[#D9DCE4]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2.5-5L12 3l6.5 4 2.5 5m0 0l-1 3h-2m2-3h-4m0 0l-1-3-6.5-4L3 7m0 0l1 3h2m-2-3h4" />
             </svg>
@@ -234,10 +234,10 @@ export default async function AssignmentDetailPage({ params }: Props) {
 
         <div className="p-6">
           {/* Title and address */}
-          <h1 className="text-2xl font-bold text-[#0F1117] mb-2">
+          <h1 className="text-2xl font-bold text-text-primary mb-2">
             {listing?.title || `${listing?.address_line1}, ${listing?.city}`}
           </h1>
-          <p className="text-[#5E6278] mb-4">
+          <p className="text-text-secondary mb-4">
             {listing?.address_line1}
             {listing?.address_line2 && `, ${listing?.address_line2}`}
             <br />
@@ -245,28 +245,28 @@ export default async function AssignmentDetailPage({ params }: Props) {
           </p>
 
           {/* Key details grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-[#E2E4EB]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-border-default">
             <div>
-              <p className="text-xs text-[#5E6278] mb-1">Property Type</p>
-              <p className="font-semibold text-[#0F1117]">
+              <p className="text-xs text-text-secondary mb-1">Property Type</p>
+              <p className="font-semibold text-text-primary">
                 {listing?.property_type}
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#5E6278] mb-1">Bedrooms</p>
-              <p className="font-semibold text-[#0F1117]">
+              <p className="text-xs text-text-secondary mb-1">Bedrooms</p>
+              <p className="font-semibold text-text-primary">
                 {listing?.bedrooms}
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#5E6278] mb-1">Bathrooms</p>
-              <p className="font-semibold text-[#0F1117]">
+              <p className="text-xs text-text-secondary mb-1">Bathrooms</p>
+              <p className="font-semibold text-text-primary">
                 {listing?.bathrooms}
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#5E6278] mb-1">Size</p>
-              <p className="font-semibold text-[#0F1117]">
+              <p className="text-xs text-text-secondary mb-1">Size</p>
+              <p className="font-semibold text-text-primary">
                 {listing?.size_sqm} m²
               </p>
             </div>
@@ -274,13 +274,13 @@ export default async function AssignmentDetailPage({ params }: Props) {
 
           {/* Price */}
           <div className="mb-6">
-            <p className="text-xs text-[#5E6278] mb-1">
+            <p className="text-xs text-text-secondary mb-1">
               {listing?.intent === 'sale' ? 'Sale Price' : 'Monthly Rent'}
             </p>
             <p className="text-3xl font-bold text-brand">
               {formattedPrice || '—'}
               {listing?.intent === 'rent' && formattedPrice && (
-                <span className="text-sm font-normal text-[#5E6278]">/mo</span>
+                <span className="text-sm font-normal text-text-secondary">/mo</span>
               )}
             </p>
           </div>
@@ -288,8 +288,8 @@ export default async function AssignmentDetailPage({ params }: Props) {
           {/* Description */}
           {listing?.description_de && (
             <div className="mb-6">
-              <h3 className="font-semibold text-[#0F1117] mb-2">Description</h3>
-              <p className="text-sm text-[#5E6278] leading-relaxed">
+              <h3 className="font-semibold text-text-primary mb-2">Description</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
                 {listing.description_de}
               </p>
             </div>
@@ -299,18 +299,18 @@ export default async function AssignmentDetailPage({ params }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {listing?.seller_situation && (
               <div>
-                <p className="text-xs text-[#5E6278] mb-1">Seller Situation</p>
-                <p className="text-sm font-medium text-[#0F1117]">
+                <p className="text-xs text-text-secondary mb-1">Seller Situation</p>
+                <p className="text-sm font-medium text-text-primary">
                   {listing.seller_situation}
                 </p>
               </div>
             )}
             {listing?.preferred_completion && (
               <div>
-                <p className="text-xs text-[#5E6278] mb-1">
+                <p className="text-xs text-text-secondary mb-1">
                   Preferred Completion
                 </p>
-                <p className="text-sm font-medium text-[#0F1117]">
+                <p className="text-sm font-medium text-text-primary">
                   {listing.preferred_completion}
                 </p>
               </div>
@@ -322,17 +322,17 @@ export default async function AssignmentDetailPage({ params }: Props) {
       {/* Assignment details and owner info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Assignment details */}
-        <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-6">
-          <h3 className="font-semibold text-[#0F1117] mb-4">Assignment Details</h3>
+        <div className="bg-surface rounded-2xl border border-border-default p-6">
+          <h3 className="font-semibold text-text-primary mb-4">Assignment Details</h3>
 
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-[#5E6278] mb-1">Service Tier</p>
+              <p className="text-xs text-text-secondary mb-1">Service Tier</p>
               <TierBadge tier={assignment.tier} />
             </div>
 
             <div>
-              <p className="text-xs text-[#5E6278] mb-2">Your Permissions</p>
+              <p className="text-xs text-text-secondary mb-2">Your Permissions</p>
               <PermissionGrid
                 can_edit_listing={assignment.can_edit_listing}
                 can_manage_viewings={assignment.can_manage_viewings}
@@ -344,13 +344,13 @@ export default async function AssignmentDetailPage({ params }: Props) {
         </div>
 
         {/* Owner info */}
-        <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-6">
-          <h3 className="font-semibold text-[#0F1117] mb-4">Owner</h3>
+        <div className="bg-surface rounded-2xl border border-border-default p-6">
+          <h3 className="font-semibold text-text-primary mb-4">Owner</h3>
           <div>
-            <p className="text-sm text-[#0F1117] font-medium mb-1">
+            <p className="text-sm text-text-primary font-medium mb-1">
               {ownerFirstName}
             </p>
-            <p className="text-xs text-[#5E6278]">Property owner</p>
+            <p className="text-xs text-text-secondary">Property owner</p>
           </div>
         </div>
       </div>

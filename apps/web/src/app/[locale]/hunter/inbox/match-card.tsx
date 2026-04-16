@@ -1,7 +1,7 @@
 'use client'
 
 import { useTransition, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Check, X } from 'lucide-react'
 import { updateMatchStatusAction } from './actions'
 
@@ -41,6 +41,8 @@ function ScoreCircle({ score }: { score: number }) {
 
 export function MatchCard({ match }: Props) {
   const t = useTranslations('hunterDashboard')
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [isPending, startTransition] = useTransition()
   const [dismissed, setDismissed] = useState(false)
 
@@ -59,12 +61,12 @@ export function MatchCard({ match }: Props) {
   const criteria = Object.entries(match.match_breakdown)
 
   return (
-    <div className="bg-surface rounded-card p-5 flex gap-4 items-start border border-[#E2E4EB] hover:border-[#C8CCD6] hover:shadow-sm transition-all">
+    <div className="bg-surface rounded-card p-5 flex gap-4 items-start border border-border-default hover:border-[#C8CCD6] hover:shadow-sm transition-all">
       <ScoreCircle score={match.match_score} />
 
       <div className="flex-1 min-w-0">
         <p className="font-bold">{match.address}</p>
-        <p className="text-sm text-[#5E6278] mt-0.5">
+        <p className="text-sm text-text-secondary mt-0.5">
           {[price, match.bedrooms ? `${match.bedrooms} Zi.` : null, match.bathrooms ? `${match.bathrooms} Bad` : null, match.tenure].filter(Boolean).join(' · ')}
         </p>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -72,7 +74,7 @@ export function MatchCard({ match }: Props) {
             {match.source_name}
           </span>
           <span className="text-xs text-[#999]">
-            {new Date(match.received_at).toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })}
+            {new Date(match.received_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short' })}
           </span>
         </div>
 
@@ -97,14 +99,14 @@ export function MatchCard({ match }: Props) {
               <button
                 onClick={() => update('saved')}
                 disabled={isPending}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-text-primary transition-colors disabled:opacity-50"
               >
                 {t('save')}
               </button>
               <button
                 onClick={() => update('dismissed')}
                 disabled={isPending}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
               >
                 {t('reject')}
               </button>

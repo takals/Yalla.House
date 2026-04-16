@@ -120,7 +120,7 @@ export function AgentProfileIntake({
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4764E]" />
-          <p className="mt-4 text-[#5E6278]">Loading your profile...</p>
+          <p className="mt-4 text-text-secondary">Loading your profile...</p>
         </div>
       </div>
     )
@@ -142,7 +142,7 @@ export function AgentProfileIntake({
           className={`fixed bottom-6 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-50 ${
             voiceEnabled
               ? 'bg-[#D4764E] text-white shadow-lg'
-              : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+              : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
           }`}
           title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
         >

@@ -25,7 +25,7 @@ export default async function PlansPage({ searchParams }: Props) {
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold mb-2">{t('pageTitle')}</h1>
-          <p className="text-[#5E6278]">
+          <p className="text-text-secondary">
             {t('pageDescription')}
           </p>
         </div>
@@ -51,7 +51,7 @@ export default async function PlansPage({ searchParams }: Props) {
                 }`}
               >
                 {isRecommended && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-[#0F1117] text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-text-primary text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
                     {t('badgeRecommended')}
                   </span>
                 )}
@@ -60,7 +60,7 @@ export default async function PlansPage({ searchParams }: Props) {
                   <h2 className="text-xl font-bold">{plan.name_de ?? plan.name}</h2>
                   <div className="mt-2 flex items-baseline gap-1">
                     <span className="text-3xl font-extrabold">{priceDisplay}</span>
-                    <span className="text-sm text-[#5E6278]">{t('labelOneTime')}</span>
+                    <span className="text-sm text-text-secondary">{t('labelOneTime')}</span>
                   </div>
                 </div>
 
@@ -79,7 +79,7 @@ export default async function PlansPage({ searchParams }: Props) {
                   <button
                     type="button"
                     disabled
-                    className="w-full py-3 rounded-xl font-bold text-sm bg-[#E4E6EF] text-[#5E6278] cursor-not-allowed"
+                    className="w-full py-3 rounded-xl font-bold text-sm bg-[#E4E6EF] text-text-secondary cursor-not-allowed"
                   >
                     {t('buttonSoonAvailable')}
                   </button>

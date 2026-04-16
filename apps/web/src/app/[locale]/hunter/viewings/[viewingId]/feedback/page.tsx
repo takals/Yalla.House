@@ -27,7 +27,7 @@ export default async function ViewingFeedbackPage({ params }: PageProps) {
   if (!viewing) {
     return (
       <div className="max-w-lg mx-auto text-center py-16">
-        <p className="text-[#5E6278]">{t('notFound')}</p>
+        <p className="text-text-secondary">{t('notFound')}</p>
       </div>
     )
   }

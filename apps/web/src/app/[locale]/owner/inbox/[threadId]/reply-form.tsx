@@ -44,7 +44,7 @@ export function ReplyForm({ threadId }: ReplyFormProps) {
           onChange={e => setMessage(e.target.value)}
           placeholder="Type your reply..."
           rows={2}
-          className="flex-1 px-4 py-3 bg-white rounded-xl border border-[#E2E4EB] text-sm text-[#0F1117] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E] resize-none"
+          className="flex-1 px-4 py-3 bg-white rounded-xl border border-border-default text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E] resize-none"
           onKeyDown={e => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
               handleSubmit(e)
@@ -54,7 +54,7 @@ export function ReplyForm({ threadId }: ReplyFormProps) {
         <button
           type="submit"
           disabled={!message.trim() || sending}
-          className="self-end px-4 py-3 bg-[#D4764E] text-white rounded-xl hover:bg-[#BF6840] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="self-end px-4 py-3 bg-[#D4764E] text-white rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
         </button>

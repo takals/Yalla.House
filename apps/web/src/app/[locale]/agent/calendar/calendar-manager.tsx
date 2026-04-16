@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale } from 'next-intl'
 import { Calendar, Clock, MapPin, User, Plus, X, Check, XCircle, Trash2 } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { addAvailabilitySlotAction, removeAvailabilitySlotAction, confirmViewingAction, declineViewingAction } from './actions'
@@ -57,12 +58,12 @@ interface Props {
   translations: Translations
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+function formatDate(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleDateString(dateLocale, { weekday: 'short', day: 'numeric', month: 'short' })
 }
 
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+function formatTime(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })
 }
 
 function formatDateInput(iso: string): string {
@@ -73,6 +74,8 @@ type Tab = 'viewings' | 'slots'
 
 export function CalendarManager({ initialSlots, initialViewings, listingMap, listingIds, translations: t }: Props) {
   const { handleAuthRequired } = useAuthAction()
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [tab, setTab] = useState<Tab>('viewings')
   const [slots, setSlots] = useState(initialSlots)
   const [viewings, setViewings] = useState(initialViewings)
@@ -178,19 +181,19 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
       <div className="grid grid-cols-4 gap-3 mb-6">
         <div className="bg-surface rounded-card p-4">
           <p className="text-2xl font-bold text-brand">{pendingViewings.length}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t.pending}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t.pending}</p>
         </div>
         <div className="bg-surface rounded-card p-4">
           <p className="text-2xl font-bold text-green-600">{confirmedViewings.length}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t.confirmed}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t.confirmed}</p>
         </div>
         <div className="bg-surface rounded-card p-4">
           <p className="text-2xl font-bold">{availableSlots.length}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t.available}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t.available}</p>
         </div>
         <div className="bg-surface rounded-card p-4">
           <p className="text-2xl font-bold">{bookedSlots.length}</p>
-          <p className="text-xs text-[#5E6278] mt-0.5">{t.booked}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{t.booked}</p>
         </div>
       </div>
 
@@ -200,7 +203,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
           <button
             onClick={() => setTab('viewings')}
             className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
-              tab === 'viewings' ? 'bg-surface shadow-sm text-[#0F1117]' : 'text-[#5E6278] hover:text-[#0F1117]'
+              tab === 'viewings' ? 'bg-surface shadow-sm text-text-primary' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {t.viewings} ({viewings.length})
@@ -208,7 +211,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
           <button
             onClick={() => setTab('slots')}
             className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
-              tab === 'slots' ? 'bg-surface shadow-sm text-[#0F1117]' : 'text-[#5E6278] hover:text-[#0F1117]'
+              tab === 'slots' ? 'bg-surface shadow-sm text-text-primary' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {t.slots} ({slots.length})
@@ -218,7 +221,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
         {tab === 'slots' && (
           <button
             onClick={() => setShowAddForm(true)}
-            className="flex items-center gap-1.5 bg-brand hover:bg-brand-hover text-[#0F1117] font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 bg-brand hover:bg-brand-hover text-text-primary font-semibold text-sm px-4 py-2 rounded-lg transition-colors"
           >
             <Plus size={14} /> {t.addAvailability}
           </button>
@@ -237,11 +240,11 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
 
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] block mb-1">{t.selectListing}</label>
+              <label className="text-xs font-semibold text-text-secondary block mb-1">{t.selectListing}</label>
               <select
                 value={formListing}
                 onChange={e => setFormListing(e.target.value)}
-                className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
               >
                 {listingIds.map(id => (
                   <option key={id} value={id}>{getListingLabel(id)}</option>
@@ -249,30 +252,30 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
               </select>
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] block mb-1">{t.date}</label>
+              <label className="text-xs font-semibold text-text-secondary block mb-1">{t.date}</label>
               <input
                 type="date"
                 value={formDate}
                 onChange={e => setFormDate(e.target.value)}
-                className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] block mb-1">{t.startTime}</label>
+              <label className="text-xs font-semibold text-text-secondary block mb-1">{t.startTime}</label>
               <input
                 type="time"
                 value={formStart}
                 onChange={e => setFormStart(e.target.value)}
-                className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-[#5E6278] block mb-1">{t.endTime}</label>
+              <label className="text-xs font-semibold text-text-secondary block mb-1">{t.endTime}</label>
               <input
                 type="time"
                 value={formEnd}
                 onChange={e => setFormEnd(e.target.value)}
-                className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
             </div>
           </div>
@@ -282,14 +285,14 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
           <div className="flex gap-2 justify-end">
             <button
               onClick={() => setShowAddForm(false)}
-              className="text-sm font-semibold px-4 py-2 bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors"
+              className="text-sm font-semibold px-4 py-2 bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors"
             >
               {t.cancel}
             </button>
             <button
               onClick={handleAddSlot}
               disabled={acting.has('add')}
-              className="text-sm font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+              className="text-sm font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
             >
               {acting.has('add') ? '...' : t.save}
             </button>
@@ -303,7 +306,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
           {viewings.length === 0 ? (
             <div className="bg-surface rounded-card p-10 text-center">
               <Calendar size={32} className="mx-auto text-[#D1D5DB] mb-3" />
-              <p className="text-sm text-[#5E6278]">{t.noViewings}</p>
+              <p className="text-sm text-text-secondary">{t.noViewings}</p>
             </div>
           ) : (
             viewings.map(viewing => {
@@ -314,19 +317,19 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
                       {/* Listing */}
-                      <p className="text-sm font-semibold text-[#0F1117]">
+                      <p className="text-sm font-semibold text-text-primary">
                         {getListingLabel(viewing.listing_id)}
                       </p>
                       {listingMap[viewing.listing_id]?.city && (
-                        <p className="text-xs text-[#5E6278] flex items-center gap-1 mt-0.5">
+                        <p className="text-xs text-text-secondary flex items-center gap-1 mt-0.5">
                           <MapPin size={11} /> {listingMap[viewing.listing_id]?.city}
                         </p>
                       )}
 
                       {/* Hunter */}
-                      <div className="mt-2 flex items-center gap-2 text-sm text-[#5E6278]">
+                      <div className="mt-2 flex items-center gap-2 text-sm text-text-secondary">
                         <User size={13} />
-                        <span className="font-medium text-[#0F1117]">
+                        <span className="font-medium text-text-primary">
                           {viewing.hunter?.full_name ?? viewing.hunter?.email ?? 'Unknown'}
                         </span>
                         {viewing.hunter?.email && (
@@ -335,9 +338,9 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                       </div>
 
                       {/* Time */}
-                      <div className="mt-2 flex items-center gap-2 text-sm text-[#5E6278]">
+                      <div className="mt-2 flex items-center gap-2 text-sm text-text-secondary">
                         <Clock size={13} />
-                        <span>{formatDate(viewing.scheduled_at)} · {formatTime(viewing.scheduled_at)}</span>
+                        <span>{formatDate(viewing.scheduled_at, dateLocale)} · {formatTime(viewing.scheduled_at, dateLocale)}</span>
                         <span className={`text-[0.6rem] font-bold px-2 py-0.5 rounded-full border ${
                           viewing.type === 'virtual'
                             ? 'bg-blue-50 text-blue-700 border-blue-200'
@@ -363,14 +366,14 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                           <button
                             onClick={() => handleDecline(viewing.id)}
                             disabled={isActing}
-                            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#F5F5FA] hover:bg-red-50 text-[#5E6278] hover:text-red-600 rounded-lg transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#F5F5FA] hover:bg-red-50 text-text-secondary hover:text-red-600 rounded-lg transition-colors disabled:opacity-50"
                           >
                             <XCircle size={12} /> {t.decline}
                           </button>
                           <button
                             onClick={() => handleConfirm(viewing.id)}
                             disabled={isActing}
-                            className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
                           >
                             <Check size={12} /> {t.confirm}
                           </button>
@@ -391,25 +394,25 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
           {slots.length === 0 ? (
             <div className="bg-surface rounded-card p-10 text-center">
               <Calendar size={32} className="mx-auto text-[#D1D5DB] mb-3" />
-              <p className="text-sm text-[#5E6278]">{t.noSlots}</p>
+              <p className="text-sm text-text-secondary">{t.noSlots}</p>
             </div>
           ) : (
             slots.map(slot => (
               <div key={slot.id} className={`bg-surface rounded-card p-4 flex items-center gap-4 ${
-                slot.is_booked ? 'border-l-4 border-green-500' : 'border-l-4 border-[#E2E4EB]'
+                slot.is_booked ? 'border-l-4 border-green-500' : 'border-l-4 border-border-default'
               }`}>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#0F1117]">
+                  <p className="text-sm font-semibold text-text-primary">
                     {getListingLabel(slot.listing_id)}
                   </p>
-                  <p className="text-sm text-[#5E6278] mt-0.5 flex items-center gap-1">
+                  <p className="text-sm text-text-secondary mt-0.5 flex items-center gap-1">
                     <Clock size={12} />
-                    {formatDate(slot.starts_at)} · {formatTime(slot.starts_at)} – {formatTime(slot.ends_at)}
+                    {formatDate(slot.starts_at, dateLocale)} · {formatTime(slot.starts_at, dateLocale)} – {formatTime(slot.ends_at, dateLocale)}
                   </p>
                 </div>
 
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                  slot.is_booked ? 'bg-green-100 text-green-700' : 'bg-[#F5F5FA] text-[#5E6278]'
+                  slot.is_booked ? 'bg-green-100 text-green-700' : 'bg-[#F5F5FA] text-text-secondary'
                 }`}>
                   {slot.is_booked ? t.booked : t.available}
                 </span>

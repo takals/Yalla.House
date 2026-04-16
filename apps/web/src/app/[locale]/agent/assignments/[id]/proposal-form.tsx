@@ -91,9 +91,9 @@ export function ProposalForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-surface rounded-2xl border border-[#E2E4EB] p-6"
+      className="bg-surface rounded-2xl border border-border-default p-6"
     >
-      <h3 className="font-semibold text-[#0F1117] mb-4">
+      <h3 className="font-semibold text-text-primary mb-4">
         Submit Your Proposal
       </h3>
 
@@ -113,7 +113,7 @@ export function ProposalForm({
 
       {/* Fee structure */}
       <div className="mb-6">
-        <p className="text-sm font-medium text-[#0F1117] mb-3">Fee Structure</p>
+        <p className="text-sm font-medium text-text-primary mb-3">Fee Structure</p>
         <div className="space-y-2">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -126,7 +126,7 @@ export function ProposalForm({
               }}
               className="w-4 h-4"
             />
-            <span className="text-sm text-[#0F1117]">To Be Discussed (TBD)</span>
+            <span className="text-sm text-text-primary">To Be Discussed (TBD)</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -136,7 +136,7 @@ export function ProposalForm({
               onChange={(e) => setFeeType(e.target.value as 'flat')}
               className="w-4 h-4"
             />
-            <span className="text-sm text-[#0F1117]">Flat Fee</span>
+            <span className="text-sm text-text-primary">Flat Fee</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -146,7 +146,7 @@ export function ProposalForm({
               onChange={(e) => setFeeType(e.target.value as 'percentage')}
               className="w-4 h-4"
             />
-            <span className="text-sm text-[#0F1117]">Percentage Fee</span>
+            <span className="text-sm text-text-primary">Percentage Fee</span>
           </label>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function ProposalForm({
       {/* Fee amount (conditional) */}
       {feeType !== 'none' && (
         <div className="mb-6">
-          <label className="block text-sm font-medium text-[#0F1117] mb-2">
+          <label className="block text-sm font-medium text-text-primary mb-2">
             {feeType === 'flat' ? 'Fee Amount (£)' : 'Fee Amount (%)'}
           </label>
           <input
@@ -164,7 +164,7 @@ export function ProposalForm({
             placeholder={
               feeType === 'flat' ? 'e.g. 5000' : 'e.g. 5'
             }
-            className="w-full px-4 py-2.5 rounded-lg border border-[#E2E4EB] text-sm focus:outline-none focus:border-brand"
+            className="w-full px-4 py-2.5 rounded-lg border border-border-default text-sm focus:outline-none focus:border-brand"
             style={{
               backgroundColor: '#FFFFFF',
               color: '#0F1117',
@@ -175,7 +175,7 @@ export function ProposalForm({
 
       {/* Message to owner */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-[#0F1117] mb-2">
+        <label className="block text-sm font-medium text-text-primary mb-2">
           Message to Owner
         </label>
         <textarea
@@ -183,7 +183,7 @@ export function ProposalForm({
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Introduce yourself and explain why you're the right fit for this property. Minimum 50 characters."
           rows={5}
-          className="w-full px-4 py-3 rounded-lg border border-[#E2E4EB] text-sm focus:outline-none focus:border-brand font-sans"
+          className="w-full px-4 py-3 rounded-lg border border-border-default text-sm focus:outline-none focus:border-brand font-sans"
           style={{
             backgroundColor: '#FFFFFF',
             color: '#0F1117',

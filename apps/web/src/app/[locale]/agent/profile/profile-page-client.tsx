@@ -28,7 +28,7 @@ export function AgentProfilePageClient({
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
           mode === 'chat'
             ? 'bg-[#D4764E] text-white'
-            : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+            : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
         Chat with Yalla
@@ -38,7 +38,7 @@ export function AgentProfilePageClient({
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
           mode === 'classic'
             ? 'bg-[#D4764E] text-white'
-            : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+            : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
         Classic Form
@@ -65,7 +65,7 @@ export function AgentProfilePageClient({
 
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">{pageTitle}</h1>
-        <p className="text-[#5E6278] text-sm">{pageDescription}</p>
+        <p className="text-text-secondary text-sm">{pageDescription}</p>
       </div>
 
       <ProfileForm profile={profile as any} />

@@ -13,33 +13,33 @@ export default async function OwnerInfoPage() {
     <div className="max-w-5xl">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-[#0F1117]">
+        <h1 className="text-3xl font-bold text-text-primary">
           {t('pageTitle')}
         </h1>
       </div>
 
       {/* Sub-nav tabs */}
-      <div className="flex gap-6 mb-8 border-b border-[#E2E4EB]">
-        <Link href="/owner/info" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px">
+      <div className="flex gap-6 mb-8 border-b border-border-default">
+        <Link href="/owner/info" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px">
           {t('tabInfo')}
         </Link>
-        <Link href="/owner/overview" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/owner/overview" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           {tDash('pageTitle')}
         </Link>
-        <Link href="/owner/listings" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/owner/listings" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           {tDash('tabListings')}
         </Link>
-        <Link href="/owner/inbox" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/owner/inbox" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           {tDash('tabInquiries')}
         </Link>
       </div>
 
       {/* Hero intro */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8 mb-8">
-        <h2 className="text-xl font-bold text-[#0F1117] mb-3">
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-xl font-bold text-text-primary mb-3">
           {t('heroTitle')}
         </h2>
-        <p className="text-[#5E6278] leading-relaxed max-w-3xl">
+        <p className="text-text-secondary leading-relaxed max-w-3xl">
           {t('heroBody')}
         </p>
       </div>
@@ -48,87 +48,87 @@ export default async function OwnerInfoPage() {
       <div className="grid md:grid-cols-2 gap-5 mb-8">
 
         {/* 1: List for free */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Home size={22} className="text-brand" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {t('benefit1Title')}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit1Body')}
           </p>
         </div>
 
         {/* 2: Agents compete for you */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Handshake size={22} className="text-brand" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {t('benefit2Title')}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit2Body')}
           </p>
         </div>
 
         {/* 3: Real-time tracking */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <BarChart3 size={22} className="text-brand" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {t('benefit3Title')}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit3Body')}
           </p>
         </div>
 
         {/* 4: Viewings on autopilot */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Calendar size={22} className="text-brand" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {t('benefit4Title')}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit4Body')}
           </p>
         </div>
 
         {/* 5: One inbox */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <MessageSquare size={22} className="text-brand" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {t('benefit5Title')}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit5Body')}
           </p>
         </div>
 
         {/* 6: Keep every pound */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Shield size={22} className="text-brand" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {t('benefit6Title')}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit6Body')}
           </p>
         </div>
       </div>
 
       {/* How it works */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8 mb-8">
-        <h2 className="text-lg font-bold text-[#0F1117] mb-6">
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-lg font-bold text-text-primary mb-6">
           {t('howItWorksTitle')}
         </h2>
         <div className="space-y-6">
@@ -142,8 +142,8 @@ export default async function OwnerInfoPage() {
                 {step.num}
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-1">{step.title}</h3>
-                <p className="text-sm text-[#5E6278]">{step.desc}</p>
+                <h3 className="font-bold text-text-primary mb-1">{step.title}</h3>
+                <p className="text-sm text-text-secondary">{step.desc}</p>
               </div>
             </div>
           ))}
@@ -151,11 +151,11 @@ export default async function OwnerInfoPage() {
       </div>
 
       {/* Pricing */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8 mb-8">
-        <h2 className="text-lg font-bold text-[#0F1117] mb-2">
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-lg font-bold text-text-primary mb-2">
           {t('pricingTitle')}
         </h2>
-        <p className="text-sm text-[#5E6278] mb-8">
+        <p className="text-sm text-text-secondary mb-8">
           {t('pricingSubtitle')}
         </p>
 
@@ -165,9 +165,9 @@ export default async function OwnerInfoPage() {
             <span className="absolute -top-3 left-4 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('freeForever')}
             </span>
-            <h3 className="text-lg font-bold text-[#0F1117] mt-2 mb-1">Starter</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-4">&pound;0</p>
-            <ul className="space-y-2.5 text-sm text-[#5E6278]">
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Starter</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-4">&pound;0</p>
+            <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFreeChannels')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterDashboard')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterAgentProposals')}</li>
@@ -182,10 +182,10 @@ export default async function OwnerInfoPage() {
             <span className="absolute -top-3 left-4 bg-[#5856D6] text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('duringYourSale')}
             </span>
-            <h3 className="text-lg font-bold text-[#0F1117] mt-2 mb-1">Sell Smart</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-1">&pound;19<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <p className="text-xs text-[#5E6278] mb-4">{t('cancelWhenDone')}</p>
-            <ul className="space-y-2.5 text-sm text-[#5E6278]">
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Sell Smart</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-1">&pound;19<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <p className="text-xs text-text-secondary mb-4">{t('cancelWhenDone')}</p>
+            <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('sellSmartEverythingInStarter')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('sellSmartViewingCalendar')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('sellSmartOnlineTour')}</li>
@@ -201,10 +201,10 @@ export default async function OwnerInfoPage() {
             <span className="absolute -top-3 left-4 bg-[#34C759] text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('yourHomeManaged')}
             </span>
-            <h3 className="text-lg font-bold text-[#0F1117] mt-2 mb-1">Home Passport</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-1">&pound;5<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <p className="text-xs text-[#5E6278] mb-4">{t('homePassportSubtitle')}</p>
-            <ul className="space-y-2.5 text-sm text-[#5E6278]">
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Home Passport</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-1">&pound;5<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <p className="text-xs text-text-secondary mb-4">{t('homePassportSubtitle')}</p>
+            <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('homePassportCleaners')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('homePassportAwayMode')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('homePassportValueTracker')}</li>
@@ -217,13 +217,13 @@ export default async function OwnerInfoPage() {
         </div>
 
         <div className="mt-6 bg-[#F5F5FA] rounded-xl p-5">
-          <p className="text-sm text-[#5E6278] leading-relaxed">
-            <span className="font-semibold text-[#0F1117]">{t('oneOffServicesLabel')}:</span>{' '}
+          <p className="text-sm text-text-secondary leading-relaxed">
+            <span className="font-semibold text-text-primary">{t('oneOffServicesLabel')}:</span>{' '}
             {t('oneOffServicesBody')}
           </p>
         </div>
 
-        <p className="text-xs text-[#5E6278] mt-4 text-center">
+        <p className="text-xs text-text-secondary mt-4 text-center">
           {t('allPlansNote')}
         </p>
       </div>
@@ -247,10 +247,10 @@ export default async function OwnerInfoPage() {
 
       {/* CTA */}
       <div className="bg-brand/5 border border-brand/20 rounded-2xl p-8 text-center">
-        <h2 className="text-xl font-bold text-[#0F1117] mb-3">
+        <h2 className="text-xl font-bold text-text-primary mb-3">
           {t('ctaTitle')}
         </h2>
-        <p className="text-sm text-[#5E6278] mb-6 max-w-lg mx-auto">
+        <p className="text-sm text-text-secondary mb-6 max-w-lg mx-auto">
           {t('ctaBody')}
         </p>
         <Link

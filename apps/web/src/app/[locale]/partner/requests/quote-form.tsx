@@ -73,7 +73,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
           <form onSubmit={handleSubmit} className="space-y-3">
             {/* Amount Input */}
             <div>
-              <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+              <label className="block text-xs font-semibold text-text-secondary mb-1">
                 {t('quoteAmountLabel')}
               </label>
               <input
@@ -90,7 +90,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
 
             {/* Message */}
             <div>
-              <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+              <label className="block text-xs font-semibold text-text-secondary mb-1">
                 {t('quoteMessageLabel')}
               </label>
               <textarea
@@ -130,7 +130,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 disabled={isLoading}
-                className="flex-1 px-3 py-2 border border-[#D8DBE5] text-[#5E6278] text-sm font-bold rounded-lg hover:bg-[#F5F5F7] transition disabled:opacity-50"
+                className="flex-1 px-3 py-2 border border-[#D8DBE5] text-text-secondary text-sm font-bold rounded-lg hover:bg-hover-bg transition disabled:opacity-50"
               >
                 {t('quoteCancel')}
               </button>

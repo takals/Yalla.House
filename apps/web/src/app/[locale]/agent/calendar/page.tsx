@@ -90,7 +90,7 @@ export default async function AgentCalendarPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold">{t('title')}</h1>
-          <p className="text-sm text-[#5E6278] mt-1">{t('subtitle')}</p>
+          <p className="text-sm text-text-secondary mt-1">{t('subtitle')}</p>
         </div>
       </div>
 

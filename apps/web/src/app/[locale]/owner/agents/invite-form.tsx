@@ -109,7 +109,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
 
       {/* Listing Dropdown */}
       <div>
-        <label htmlFor="listing_id" className="block text-sm font-semibold text-[#0F1117] mb-2">
+        <label htmlFor="listing_id" className="block text-sm font-semibold text-text-primary mb-2">
           {translations.selectListing} *
         </label>
         <select
@@ -117,7 +117,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
           value={listingId}
           onChange={e => setListingId(e.target.value)}
           disabled={isPending}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
         >
           <option value="">{translations.selectListingPlaceholder}</option>
           {listings.map(listing => (
@@ -130,7 +130,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
 
       {/* Agent Email Input */}
       <div>
-        <label htmlFor="agent_email" className="block text-sm font-semibold text-[#0F1117] mb-2">
+        <label htmlFor="agent_email" className="block text-sm font-semibold text-text-primary mb-2">
           {translations.agentEmail} *
         </label>
         <input
@@ -140,13 +140,13 @@ export function InviteAgentForm({ listings, translations }: Props) {
           onChange={e => setAgentEmail(e.target.value)}
           disabled={isPending}
           placeholder={translations.agentEmailPlaceholder}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
         />
       </div>
 
       {/* Tier Selection */}
       <div>
-        <label className="block text-sm font-semibold text-[#0F1117] mb-3">{translations.collaborationTier} *</label>
+        <label className="block text-sm font-semibold text-text-primary mb-3">{translations.collaborationTier} *</label>
         <div className="space-y-3">
           {(['advisory', 'assisted', 'managed'] as const).map(tierOption => (
             <div
@@ -154,7 +154,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
               className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                 tier === tierOption
                   ? 'border-brand bg-[rgba(255,212,0,.08)]'
-                  : 'border-[#E2E4EB] bg-surface hover:border-[#D8DBE5]'
+                  : 'border-border-default bg-surface hover:border-[#D8DBE5]'
               }`}
               onClick={() => setTier(tierOption)}
             >
@@ -168,11 +168,11 @@ export function InviteAgentForm({ listings, translations }: Props) {
                   disabled={isPending}
                   className="mr-3 w-4 h-4 accent-brand"
                 />
-                <label className="font-semibold text-[#0F1117] capitalize cursor-pointer flex-1">
+                <label className="font-semibold text-text-primary capitalize cursor-pointer flex-1">
                   {tierLabels[tierOption]}
                 </label>
               </div>
-              <p className="text-sm text-[#5E6278] ml-7">
+              <p className="text-sm text-text-secondary ml-7">
                 {tierDescriptions[tierOption]}
               </p>
             </div>
@@ -182,7 +182,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
 
       {/* Notes */}
       <div>
-        <label htmlFor="notes" className="block text-sm font-semibold text-[#0F1117] mb-2">
+        <label htmlFor="notes" className="block text-sm font-semibold text-text-primary mb-2">
           {translations.notes}
         </label>
         <textarea
@@ -192,7 +192,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
           disabled={isPending}
           placeholder={translations.notesPlaceholder}
           rows={4}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-[#0F1117] placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50 resize-none"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50 resize-none"
         />
       </div>
 
@@ -200,7 +200,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
       <button
         type="submit"
         disabled={isPending || !listingId || !agentEmail}
-        className="w-full bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed will-change-transform"
+        className="w-full bg-brand hover:bg-brand-hover text-text-primary font-bold px-6 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed will-change-transform"
       >
         {isPending ? translations.sending : translations.sendInvitation}
       </button>

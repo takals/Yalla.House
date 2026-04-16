@@ -23,9 +23,9 @@ export default async function AdminUsersPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="bg-surface rounded-card p-10 text-center max-w-sm">
-          <Lock size={32} className="mx-auto mb-2 text-[#5E6278]" />
+          <Lock size={32} className="mx-auto mb-2 text-text-secondary" />
           <p className="font-bold mb-1">{t('admin.noAccess')}</p>
-          <p className="text-sm text-[#5E6278]">{t('admin.noAccessMessage')}</p>
+          <p className="text-sm text-text-secondary">{t('admin.noAccessMessage')}</p>
         </div>
       </div>
     )
@@ -96,12 +96,12 @@ export default async function AdminUsersPage() {
     <div className="max-w-6xl">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">{at('usersTitle')}</h1>
-        <p className="text-sm text-[#5E6278] mt-0.5">{at('usersSubtitle')}</p>
+        <p className="text-sm text-text-secondary mt-0.5">{at('usersSubtitle')}</p>
       </div>
 
       <div className="bg-surface rounded-card p-4 mb-6">
         <p className="text-2xl font-bold">{totalCount}</p>
-        <p className="text-xs text-[#5E6278]">{labels.totalUsers}</p>
+        <p className="text-xs text-text-secondary">{labels.totalUsers}</p>
       </div>
 
       <UserManagement users={enrichedUsers} t={labels} />

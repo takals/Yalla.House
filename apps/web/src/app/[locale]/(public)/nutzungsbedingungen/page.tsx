@@ -17,14 +17,14 @@ export default function TermsOfServicePage() {
   const lastUpdated = '01.04.2026'
 
   return (
-    <main className="bg-[#EDEEF2]">
+    <main className="bg-bg">
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Nutzungsbedingungen
           </div>
-          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
+          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Bedingungen für die Nutzung von Yalla.House
           </h1>
           <p className="text-base text-[#656565]">
@@ -38,8 +38,8 @@ export default function TermsOfServicePage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* Geltungsbereich */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Geltungsbereich
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -53,25 +53,25 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Registrierung & Konto */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Registrierung und Konto
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Kontoerstellung</h3>
+                <h3 className="font-bold text-text-primary mb-2">Kontoerstellung</h3>
                 <p>
                   Sie müssen sich mit einer gültigen E-Mail-Adresse registrieren und ein Passwort erstellen. Sie sind verantwortlich für die Vertraulichkeit Ihrer Anmeldedaten.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Authentizität von Informationen</h3>
+                <h3 className="font-bold text-text-primary mb-2">Authentizität von Informationen</h3>
                 <p>
                   Sie versichern, dass alle bei der Registrierung bereitgestellten Informationen wahr, korrekt und aktuell sind.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Altersanforderung</h3>
+                <h3 className="font-bold text-text-primary mb-2">Altersanforderung</h3>
                 <p>
                   Sie müssen mindestens 18 Jahre alt sein, um die Plattform zu nutzen.
                 </p>
@@ -80,25 +80,25 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Leistungsbeschreibung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Leistungsbeschreibung
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Plattform-Services</h3>
+                <h3 className="font-bold text-text-primary mb-2">Plattform-Services</h3>
                 <p>
                   Yalla.House bietet eine Plattform zur Verwaltung und Veröffentlichung von Immobilienangeboten auf Portal-Plattformen wie Immoscout24 und Immowelt.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Portal-Listierung</h3>
+                <h3 className="font-bold text-text-primary mb-2">Portal-Listierung</h3>
                 <p>
                   Wir synchronisieren Ihre Angebote mit anderen Portalen, um Ihre Sichtbarkeit zu erhöhen. Keine Garantie auf Platzierung oder Verkauf.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Keine Verkaufsgarantie</h3>
+                <h3 className="font-bold text-text-primary mb-2">Keine Verkaufsgarantie</h3>
                 <p>
                   Yalla.House stellt keine Garantie dar, dass Ihre Immobilie verkauft oder vermietet wird. Wir bieten Dienstleistungen zur Unterstützung des Verkaufsprozesses, können aber nicht den Erfolg garantieren.
                 </p>
@@ -107,13 +107,13 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Preise & Zahlung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Preise und Zahlung
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Flat-Fee-Modell</h3>
+                <h3 className="font-bold text-text-primary mb-2">Flat-Fee-Modell</h3>
                 <p>
                   Yalla.House arbeitet auf Basis von pauschalen Gebühren (Flat Fees), nicht auf Provisionsbasis. Aktuelle Preise:
                 </p>
@@ -124,13 +124,13 @@ export default function TermsOfServicePage() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Zahlungsverarbeitung</h3>
+                <h3 className="font-bold text-text-primary mb-2">Zahlungsverarbeitung</h3>
                 <p>
                   Zahlungen werden über Stripe verarbeitet. Mit der Verwendung von Stripe akzeptieren Sie deren Bedingungen.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Preisänderungen</h3>
+                <h3 className="font-bold text-text-primary mb-2">Preisänderungen</h3>
                 <p>
                   Wir behalten uns das Recht vor, Preise zu ändern. Änderungen werden mindestens 30 Tage im Voraus mitgeteilt.
                 </p>
@@ -139,8 +139,8 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Pflichten des Nutzers */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Ihre Pflichten
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -158,8 +158,8 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Haftung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Haftungsbeschränkung
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -182,19 +182,19 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Kündigung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kündigung und Kontosperrung
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Kündigung durch Nutzer</h3>
+                <h3 className="font-bold text-text-primary mb-2">Kündigung durch Nutzer</h3>
                 <p>
                   Sie können Ihr Konto jederzeit über die Kontoeinstellungen oder per E-Mail unter support@yalla.house kündigen.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Sperrung durch Yalla.House</h3>
+                <h3 className="font-bold text-text-primary mb-2">Sperrung durch Yalla.House</h3>
                 <p>
                   Yalla.House behält sich das Recht vor, Konten zu sperren oder zu löschen, wenn Nutzer gegen diese Bedingungen verstoßen, verdächtige oder illegale Aktivitäten durchführen, oder zahlungsrückständig sind.
                 </p>
@@ -203,25 +203,25 @@ export default function TermsOfServicePage() {
           </div>
 
           {/* Schlussbestimmungen */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Schlussbestimmungen
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Anwendbares Recht</h3>
+                <h3 className="font-bold text-text-primary mb-2">Anwendbares Recht</h3>
                 <p>
                   Diese Bedingungen unterliegen den Gesetzen der Bundesrepublik Deutschland. Gerichtsstand ist Berlin.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Salvatorische Klausel</h3>
+                <h3 className="font-bold text-text-primary mb-2">Salvatorische Klausel</h3>
                 <p>
                   Sollte eine Bestimmung dieser Bedingungen ungültig sein, bleiben die übrigen Bestimmungen gültig.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Änderungen</h3>
+                <h3 className="font-bold text-text-primary mb-2">Änderungen</h3>
                 <p>
                   Yalla.House behält sich das Recht vor, diese Bedingungen zu ändern. Änderungen werden per E-Mail oder auf der Plattform mitgeteilt. Die weitere Nutzung gilt als Akzeptanz.
                 </p>
@@ -233,7 +233,7 @@ export default function TermsOfServicePage() {
       </section>
 
       {/* ── BACK LINK ────────────────────────────────────────────────────────── */}
-      <section className="py-12 px-4 border-t border-[#E2E4EB]">
+      <section className="py-12 px-4 border-t border-border-default">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"

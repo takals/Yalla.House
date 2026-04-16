@@ -52,7 +52,7 @@ export function ProposalActions({ assignmentId, acceptLabel, declineLabel, accep
     return (
       <div className="flex items-center gap-2 pt-2">
         <div className="w-2 h-2 rounded-full bg-red-400" />
-        <p className="text-sm font-semibold text-[#5E6278]">Declined</p>
+        <p className="text-sm font-semibold text-text-secondary">Declined</p>
       </div>
     )
   }
@@ -63,14 +63,14 @@ export function ProposalActions({ assignmentId, acceptLabel, declineLabel, accep
         <button
           onClick={handleAccept}
           disabled={status !== 'idle'}
-          className="flex-1 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50"
+          className="flex-1 bg-brand hover:bg-brand-hover text-text-primary font-bold py-2.5 rounded-xl transition-colors text-sm disabled:opacity-50"
         >
           {status === 'accepting' ? <Loader2 size={16} className="animate-spin mx-auto" /> : acceptLabel}
         </button>
         <button
           onClick={handleDecline}
           disabled={status !== 'idle'}
-          className="px-6 bg-bg hover:bg-[#D9DCE4] text-[#0F1117] font-semibold py-2.5 rounded-xl transition-colors text-sm border border-[#E2E4EB] disabled:opacity-50"
+          className="px-6 bg-bg hover:bg-hover-muted text-text-primary font-semibold py-2.5 rounded-xl transition-colors text-sm border border-border-default disabled:opacity-50"
         >
           {status === 'declining' ? <Loader2 size={16} className="animate-spin mx-auto" /> : declineLabel}
         </button>

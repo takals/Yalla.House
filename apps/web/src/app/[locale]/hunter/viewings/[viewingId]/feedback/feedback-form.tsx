@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useLocale } from 'next-intl'
 import { checkinAction, submitFeedbackAction } from './actions'
 import { MapPin, Star, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react'
 
@@ -21,6 +22,8 @@ export function FeedbackForm({
   alreadyCompleted: boolean
   translations: Record<string, string>
 }) {
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [phase, setPhase] = useState<Phase>(
     alreadyCompleted ? 'done' : checkedIn ? 'feedback' : 'checkin'
   )
@@ -66,7 +69,7 @@ export function FeedbackForm({
   }
 
   const formattedDate = scheduledAt
-    ? new Date(scheduledAt).toLocaleDateString('en-GB', {
+    ? new Date(scheduledAt).toLocaleDateString(dateLocale, {
         weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit',
       })
     : ''
@@ -77,7 +80,7 @@ export function FeedbackForm({
       <div className="bg-surface rounded-card p-6 shadow-sm mb-4 text-center">
         <h1 className="text-xl font-bold mb-1">{listingTitle}</h1>
         {formattedDate && (
-          <p className="text-sm text-[#5E6278]">{formattedDate}</p>
+          <p className="text-sm text-text-secondary">{formattedDate}</p>
         )}
       </div>
 
@@ -86,12 +89,12 @@ export function FeedbackForm({
         <div className="bg-surface rounded-card p-6 shadow-sm text-center">
           <MapPin size={40} className="text-brand mx-auto mb-3" />
           <h2 className="text-lg font-bold mb-2">{t.checkinTitle}</h2>
-          <p className="text-sm text-[#5E6278] mb-6">{t.checkinDescription}</p>
+          <p className="text-sm text-text-secondary mb-6">{t.checkinDescription}</p>
           <button
             type="button"
             onClick={handleCheckin}
             disabled={acting}
-            className="w-full text-sm font-bold px-6 py-3 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+            className="w-full text-sm font-bold px-6 py-3 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
           >
             {acting ? '...' : t.checkinButton}
           </button>
@@ -106,7 +109,7 @@ export function FeedbackForm({
 
           {/* Star rating */}
           <div className="mb-5">
-            <label className="text-sm font-semibold text-[#5E6278] mb-2 block">{t.ratingLabel}</label>
+            <label className="text-sm font-semibold text-text-secondary mb-2 block">{t.ratingLabel}</label>
             <div className="flex gap-1 justify-center">
               {[1, 2, 3, 4, 5].map(star => (
                 <button
@@ -128,7 +131,7 @@ export function FeedbackForm({
 
           {/* Interest */}
           <div className="mb-5">
-            <label className="text-sm font-semibold text-[#5E6278] mb-2 block">{t.interestLabel}</label>
+            <label className="text-sm font-semibold text-text-secondary mb-2 block">{t.interestLabel}</label>
             <div className="flex gap-3 justify-center">
               <button
                 type="button"
@@ -136,7 +139,7 @@ export function FeedbackForm({
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   interested === true
                     ? 'bg-green-100 text-green-700 ring-2 ring-green-400'
-                    : 'bg-[#F5F5FA] text-[#5E6278] hover:bg-[#E4E6EF]'
+                    : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
                 }`}
               >
                 <ThumbsUp size={16} /> {t.interested}
@@ -147,7 +150,7 @@ export function FeedbackForm({
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   interested === false
                     ? 'bg-red-100 text-red-700 ring-2 ring-red-400'
-                    : 'bg-[#F5F5FA] text-[#5E6278] hover:bg-[#E4E6EF]'
+                    : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
                 }`}
               >
                 <ThumbsDown size={16} /> {t.notInterested}
@@ -157,7 +160,7 @@ export function FeedbackForm({
 
           {/* Notes */}
           <div className="mb-5">
-            <label className="text-sm font-semibold text-[#5E6278] mb-2 block">{t.notesLabel}</label>
+            <label className="text-sm font-semibold text-text-secondary mb-2 block">{t.notesLabel}</label>
             <textarea
               value={notes}
               onChange={e => setNotes(e.target.value)}
@@ -171,7 +174,7 @@ export function FeedbackForm({
             type="button"
             onClick={handleSubmitFeedback}
             disabled={acting}
-            className="w-full text-sm font-bold px-6 py-3 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+            className="w-full text-sm font-bold px-6 py-3 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
           >
             {acting ? '...' : t.submitFeedback}
           </button>
@@ -184,7 +187,7 @@ export function FeedbackForm({
         <div className="bg-surface rounded-card p-8 shadow-sm text-center">
           <CheckCircle size={48} className="text-green-500 mx-auto mb-3" />
           <h2 className="text-lg font-bold mb-2">{t.doneTitle}</h2>
-          <p className="text-sm text-[#5E6278]">{t.doneDescription}</p>
+          <p className="text-sm text-text-secondary">{t.doneDescription}</p>
         </div>
       )}
     </div>

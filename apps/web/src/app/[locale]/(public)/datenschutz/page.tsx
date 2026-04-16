@@ -17,14 +17,14 @@ export default function DataProtectionPage() {
   const lastUpdated = '01.04.2026'
 
   return (
-    <main className="bg-[#EDEEF2]">
+    <main className="bg-bg">
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Datenschutzrichtlinie
           </div>
-          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
+          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Datenschutz bei Yalla.House
           </h1>
           <p className="text-base text-[#656565]">
@@ -38,8 +38,8 @@ export default function DataProtectionPage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* Verantwortliche Stelle */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Verantwortliche Stelle
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -56,31 +56,31 @@ export default function DataProtectionPage() {
           </div>
 
           {/* Erhobene Daten */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Welche Daten wir erheben
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Persönliche Daten</h3>
+                <h3 className="font-bold text-text-primary mb-2">Persönliche Daten</h3>
                 <p>
                   Wenn Sie sich registrieren oder ein Konto erstellen, erheben wir Ihren Namen, E-Mail-Adresse, Telefonnummer und Kontaktinformationen.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Listing-Daten</h3>
+                <h3 className="font-bold text-text-primary mb-2">Listing-Daten</h3>
                 <p>
                   Für Immobilienangebote erheben wir Beschreibungen, Fotos, Preise, Standortdaten und weitere Informationen, die Sie bereitstellen.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Nutzungsdaten</h3>
+                <h3 className="font-bold text-text-primary mb-2">Nutzungsdaten</h3>
                 <p>
                   Wir erfassen Informationen über Ihre Interaktionen mit der Plattform, einschließlich IP-Adressen, Browser-Informationen und Zugriffsmuster.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Cookies</h3>
+                <h3 className="font-bold text-text-primary mb-2">Cookies</h3>
                 <p>
                   Wir verwenden Cookies und ähnliche Technologien für Authentifizierung, Sitzungsverwaltung und Analyse. Weitere Details finden Sie in unserer Cookie-Richtlinie.
                 </p>
@@ -89,8 +89,8 @@ export default function DataProtectionPage() {
           </div>
 
           {/* Zweck der Datenverarbeitung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Zweck der Datenverarbeitung
             </h2>
             <ul className="space-y-3 text-[#656565] leading-relaxed">
@@ -122,8 +122,8 @@ export default function DataProtectionPage() {
           </div>
 
           {/* Rechtsgrundlage */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Rechtliche Grundlagen (DSGVO)
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -140,8 +140,8 @@ export default function DataProtectionPage() {
           </div>
 
           {/* Datenweitergabe */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Datenweitergabe an Dritte
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -161,8 +161,8 @@ export default function DataProtectionPage() {
           </div>
 
           {/* Ihre Rechte */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Ihre Datenschutzrechte
             </h2>
             <p className="text-[#656565] leading-relaxed mb-4">
@@ -200,8 +200,8 @@ export default function DataProtectionPage() {
           </div>
 
           {/* Kontakt & Beschwerde */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kontakt & Datenschutzbeschwerden
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -222,7 +222,7 @@ export default function DataProtectionPage() {
       </section>
 
       {/* ── BACK LINK ────────────────────────────────────────────────────────── */}
-      <section className="py-12 px-4 border-t border-[#E2E4EB]">
+      <section className="py-12 px-4 border-t border-border-default">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"

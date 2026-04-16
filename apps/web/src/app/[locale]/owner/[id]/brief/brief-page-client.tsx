@@ -56,7 +56,7 @@ export function OwnerBriefPageClient({
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
           mode === 'chat'
             ? 'bg-[#D4764E] text-white'
-            : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+            : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
         Chat with Yalla
@@ -66,7 +66,7 @@ export function OwnerBriefPageClient({
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
           mode === 'classic'
             ? 'bg-[#D4764E] text-white'
-            : 'bg-[#F5F5F7] text-[#0F1117] border border-[#E2E4EB] hover:bg-[#E2E4EB]'
+            : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
         Classic Form
@@ -102,10 +102,10 @@ export function OwnerBriefPageClient({
 
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#0F1117] mb-2">
+        <h1 className="text-3xl font-bold text-text-primary mb-2">
           {translations.pageTitle}
         </h1>
-        <p className="text-[#5E6278]">
+        <p className="text-text-secondary">
           {translations.pageDescription}
         </p>
       </div>
@@ -114,8 +114,8 @@ export function OwnerBriefPageClient({
         {/* Main column: Brief preview + assignments + form */}
         <div className="lg:col-span-2">
           {/* Brief Preview Card */}
-          <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-6 mb-8">
-            <h2 className="text-lg font-bold text-[#0F1117] mb-4 flex items-center gap-2">
+          <div className="bg-surface rounded-2xl border border-border-default p-6 mb-8">
+            <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
               <Home size={20} />
               {translations.sectionPropertySummary}
             </h2>
@@ -123,61 +123,61 @@ export function OwnerBriefPageClient({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs font-semibold text-[#5E6278] uppercase mb-1 flex items-center gap-2">
+                  <p className="text-xs font-semibold text-text-secondary uppercase mb-1 flex items-center gap-2">
                     <MapPin size={14} />
                     {translations.labelAddress}
                   </p>
-                  <p className="text-sm font-medium text-[#0F1117]">
+                  <p className="text-sm font-medium text-text-primary">
                     {listing.address_line1}
                     {listing.address_line2 && `, ${listing.address_line2}`}
                   </p>
-                  <p className="text-sm text-[#5E6278]">
+                  <p className="text-sm text-text-secondary">
                     {listing.city} {listing.postcode}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-xs font-semibold text-[#5E6278] uppercase mb-1">
+                  <p className="text-xs font-semibold text-text-secondary uppercase mb-1">
                     {translations.labelType}
                   </p>
-                  <p className="text-sm font-medium text-[#0F1117]">
+                  <p className="text-sm font-medium text-text-primary">
                     {listing.property_type || '-'}
                   </p>
                 </div>
 
                 {listing.bedrooms !== null && (
                   <div>
-                    <p className="text-xs font-semibold text-[#5E6278] uppercase mb-1">
+                    <p className="text-xs font-semibold text-text-secondary uppercase mb-1">
                       {translations.labelBedrooms}
                     </p>
-                    <p className="text-sm font-medium text-[#0F1117]">{listing.bedrooms}</p>
+                    <p className="text-sm font-medium text-text-primary">{listing.bedrooms}</p>
                   </div>
                 )}
 
                 {listing.bathrooms !== null && (
                   <div>
-                    <p className="text-xs font-semibold text-[#5E6278] uppercase mb-1">
+                    <p className="text-xs font-semibold text-text-secondary uppercase mb-1">
                       {translations.labelBathrooms}
                     </p>
-                    <p className="text-sm font-medium text-[#0F1117]">{listing.bathrooms}</p>
+                    <p className="text-sm font-medium text-text-primary">{listing.bathrooms}</p>
                   </div>
                 )}
 
                 {listing.size_sqm && (
                   <div>
-                    <p className="text-xs font-semibold text-[#5E6278] uppercase mb-1">
+                    <p className="text-xs font-semibold text-text-secondary uppercase mb-1">
                       {translations.labelSize}
                     </p>
-                    <p className="text-sm font-medium text-[#0F1117]">{listing.size_sqm} m²</p>
+                    <p className="text-sm font-medium text-text-primary">{listing.size_sqm} m²</p>
                   </div>
                 )}
 
                 {listing.sale_price && (
                   <div>
-                    <p className="text-xs font-semibold text-[#5E6278] uppercase mb-1">
+                    <p className="text-xs font-semibold text-text-secondary uppercase mb-1">
                       {translations.labelPrice}
                     </p>
-                    <p className="text-sm font-medium text-[#0F1117]">
+                    <p className="text-sm font-medium text-text-primary">
                       £{(listing.sale_price / 100).toLocaleString()}
                     </p>
                   </div>
@@ -185,29 +185,29 @@ export function OwnerBriefPageClient({
               </div>
 
               {listing.description_de && (
-                <div className="pt-4 border-t border-[#E2E4EB]">
-                  <p className="text-xs font-semibold text-[#5E6278] uppercase mb-2">
+                <div className="pt-4 border-t border-border-default">
+                  <p className="text-xs font-semibold text-text-secondary uppercase mb-2">
                     {translations.labelDescription}
                   </p>
-                  <p className="text-sm text-[#5E6278] line-clamp-3">{listing.description_de}</p>
+                  <p className="text-sm text-text-secondary line-clamp-3">{listing.description_de}</p>
                 </div>
               )}
 
               {listing.seller_situation && (
-                <div className="pt-4 border-t border-[#E2E4EB]">
-                  <p className="text-xs font-semibold text-[#5E6278] uppercase mb-2">
+                <div className="pt-4 border-t border-border-default">
+                  <p className="text-xs font-semibold text-text-secondary uppercase mb-2">
                     {translations.labelSellerSituation}
                   </p>
-                  <p className="text-sm text-[#5E6278]">{listing.seller_situation}</p>
+                  <p className="text-sm text-text-secondary">{listing.seller_situation}</p>
                 </div>
               )}
 
               {listing.preferred_completion && (
-                <div className="pt-4 border-t border-[#E2E4EB]">
-                  <p className="text-xs font-semibold text-[#5E6278] uppercase mb-2">
+                <div className="pt-4 border-t border-border-default">
+                  <p className="text-xs font-semibold text-text-secondary uppercase mb-2">
                     {translations.labelPreferredCompletion}
                   </p>
-                  <p className="text-sm text-[#5E6278]">{listing.preferred_completion}</p>
+                  <p className="text-sm text-text-secondary">{listing.preferred_completion}</p>
                 </div>
               )}
             </div>
@@ -215,8 +215,8 @@ export function OwnerBriefPageClient({
 
           {/* Existing Assignments Section */}
           {existingAssignments.length > 0 && (
-            <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-6 mb-8">
-              <h2 className="text-lg font-bold text-[#0F1117] mb-4 flex items-center gap-2">
+            <div className="bg-surface rounded-2xl border border-border-default p-6 mb-8">
+              <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                 <CheckCircle size={20} />
                 {translations.sectionCurrentAssignments}
               </h2>
@@ -227,13 +227,13 @@ export function OwnerBriefPageClient({
                   return (
                     <div
                       key={assignment.id}
-                      className="flex items-start justify-between p-4 bg-[#F8F9FA] rounded-lg border border-[#E2E4EB]"
+                      className="flex items-start justify-between p-4 bg-[#F8F9FA] rounded-lg border border-border-default"
                     >
                       <div>
-                        <p className="text-sm font-semibold text-[#0F1117]">
+                        <p className="text-sm font-semibold text-text-primary">
                           {assignment.agent?.full_name ?? translations.unknownAgent}
                         </p>
-                        <p className="text-xs text-[#5E6278]">{assignment.agent?.email}</p>
+                        <p className="text-xs text-text-secondary">{assignment.agent?.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <span
@@ -257,7 +257,7 @@ export function OwnerBriefPageClient({
                         >
                           {translations[statusKey] || assignment.status}
                         </span>
-                        <span className="text-xs font-medium text-[#5E6278]">
+                        <span className="text-xs font-medium text-text-secondary">
                           {translations[`tier${assignment.tier.charAt(0).toUpperCase()}${assignment.tier.slice(1)}`] || assignment.tier}
                         </span>
                       </div>
@@ -287,13 +287,13 @@ export function OwnerBriefPageClient({
         {/* Sidebar: Agents Grid */}
         <div className="lg:col-span-1">
           <div className="sticky top-6">
-            <h2 className="text-lg font-bold text-[#0F1117] mb-4">
+            <h2 className="text-lg font-bold text-text-primary mb-4">
               {translations.sectionAvailableAgents}
             </h2>
 
             {matchedAgents.length === 0 ? (
-              <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-6 text-center">
-                <p className="text-sm text-[#5E6278]">
+              <div className="bg-surface rounded-2xl border border-border-default p-6 text-center">
+                <p className="text-sm text-text-secondary">
                   {translations.noAgentsFound}
                 </p>
               </div>
@@ -305,13 +305,13 @@ export function OwnerBriefPageClient({
                     className={`bg-surface rounded-lg border p-4 transition-all ${
                       existingAgentIds.has(agent.id)
                         ? 'border-[#D9DCE4] opacity-60 pointer-events-none'
-                        : 'border-[#E2E4EB] hover:border-[#C8CCD6]'
+                        : 'border-border-default hover:border-[#C8CCD6]'
                     }`}
                   >
-                    <p className="text-sm font-semibold text-[#0F1117] mb-1">
+                    <p className="text-sm font-semibold text-text-primary mb-1">
                       {agent.full_name}
                     </p>
-                    <p className="text-xs text-[#5E6278] mb-2">{agent.profile?.agency_name}</p>
+                    <p className="text-xs text-text-secondary mb-2">{agent.profile?.agency_name}</p>
 
                     {agent.profile?.verified_at && (
                       <div className="flex items-center gap-1 mb-2">

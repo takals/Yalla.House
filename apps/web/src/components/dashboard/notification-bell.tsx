@@ -89,7 +89,7 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <Bell size={15} className="text-[#5E6278]" />
+        <Bell size={15} className="text-text-secondary" />
         {count > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
             {count > 99 ? '99+' : count}
@@ -98,10 +98,10 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
       </button>
 
       {open && (
-        <div role="menu" className="absolute right-0 top-10 w-80 bg-white rounded-xl border border-[#E2E4EB] shadow-lg z-50 overflow-hidden">
+        <div role="menu" className="absolute right-0 top-10 w-80 bg-white rounded-xl border border-border-default shadow-lg z-50 overflow-hidden">
           {/* Header */}
-          <div className="px-4 py-3 border-b border-[#E2E4EB] flex items-center justify-between">
-            <p className="text-sm font-bold text-[#0F1117]">{tx(t, 'notifications')}</p>
+          <div className="px-4 py-3 border-b border-border-default flex items-center justify-between">
+            <p className="text-sm font-bold text-text-primary">{tx(t, 'notifications')}</p>
             {notifications.length > 0 && (
               <button
                 onClick={markAllRead}
@@ -117,7 +117,7 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
             {notifications.length === 0 ? (
               <div className="px-4 py-8 text-center">
                 <Bell size={24} className="mx-auto mb-2 text-[#D9DCE4]" />
-                <p className="text-sm text-[#5E6278]">{tx(t, 'noNotifications')}</p>
+                <p className="text-sm text-text-secondary">{tx(t, 'noNotifications')}</p>
               </div>
             ) : (
               notifications.map(n => (
@@ -127,16 +127,16 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
                 >
                   {n.action_url ? (
                     <a href={n.action_url} className="block group">
-                      <p className="text-sm font-semibold text-[#0F1117] group-hover:text-[#D4764E] transition-colors">
+                      <p className="text-sm font-semibold text-text-primary group-hover:text-[#D4764E] transition-colors">
                         {n.title}
                       </p>
-                      {n.body && <p className="text-xs text-[#5E6278] mt-0.5 line-clamp-2">{n.body}</p>}
+                      {n.body && <p className="text-xs text-text-secondary mt-0.5 line-clamp-2">{n.body}</p>}
                       <p className="text-[10px] text-[#999] mt-1">{timeAgo(n.created_at)}</p>
                     </a>
                   ) : (
                     <div>
-                      <p className="text-sm font-semibold text-[#0F1117]">{n.title}</p>
-                      {n.body && <p className="text-xs text-[#5E6278] mt-0.5 line-clamp-2">{n.body}</p>}
+                      <p className="text-sm font-semibold text-text-primary">{n.title}</p>
+                      {n.body && <p className="text-xs text-text-secondary mt-0.5 line-clamp-2">{n.body}</p>}
                       <p className="text-[10px] text-[#999] mt-1">{timeAgo(n.created_at)}</p>
                     </div>
                   )}

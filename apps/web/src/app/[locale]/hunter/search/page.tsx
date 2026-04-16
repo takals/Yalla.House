@@ -43,7 +43,7 @@ export default async function SearchProfilePage() {
         <h1 className="text-3xl font-extrabold tracking-tight mb-3">
           Create a Search
         </h1>
-        <p className="text-[#5E6278] text-base max-w-2xl mb-6">
+        <p className="text-text-secondary text-base max-w-2xl mb-6">
           Tell us what you are looking for. Optionally let Yalla.House introduce you to
           relevant agents in your area — their replies are filtered and organised for you.
         </p>
@@ -55,7 +55,7 @@ export default async function SearchProfilePage() {
             'Agent replies scored and prioritised for you',
             'Block or dismiss any agent at any time',
           ].map(benefit => (
-            <div key={benefit} className="flex items-start gap-2 text-sm text-[#0F1117]">
+            <div key={benefit} className="flex items-start gap-2 text-sm text-text-primary">
               <Check size={14} className="text-green-600 mt-0.5 flex-shrink-0" />
               <span>{benefit}</span>
             </div>
@@ -64,8 +64,8 @@ export default async function SearchProfilePage() {
       </div>
 
       {/* How it works */}
-      <div className="bg-surface rounded-2xl p-6 mb-10 border border-[#E2E4EB]">
-        <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-5">How Agent Matching Works</p>
+      <div className="bg-surface rounded-2xl p-6 mb-10 border border-border-default">
+        <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-5">How Agent Matching Works</p>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
           {[
             { n: '1', title: 'Create your search', body: 'Set your area, budget, property type, and timeline.' },
@@ -79,7 +79,7 @@ export default async function SearchProfilePage() {
               </div>
               <div>
                 <p className="font-semibold text-sm mb-1">{step.title}</p>
-                <p className="text-xs text-[#5E6278] leading-relaxed">{step.body}</p>
+                <p className="text-xs text-text-secondary leading-relaxed">{step.body}</p>
               </div>
             </div>
           ))}
@@ -101,7 +101,7 @@ export default async function SearchProfilePage() {
               status: string
               contact_consent: { agent_outreach: boolean }[] | null
             }) => (
-              <div key={s.id} className="bg-surface rounded-xl p-4 border border-[#E2E4EB] flex items-center justify-between">
+              <div key={s.id} className="bg-surface rounded-xl p-4 border border-border-default flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
@@ -109,7 +109,7 @@ export default async function SearchProfilePage() {
                       : s.status === 'paused' ? 'bg-brand-solid-bg text-brand-badge-text'
                       : 'bg-[#F3F4F6] text-[#6B7280]'
                     }`}>{s.status}</span>
-                    <span className="text-xs text-[#5E6278] capitalize">{s.intent}</span>
+                    <span className="text-xs text-text-secondary capitalize">{s.intent}</span>
                     {s.contact_consent?.[0]?.agent_outreach && (
                       <span className="text-xs bg-[#DBEAFE] text-[#1E40AF] px-2 py-0.5 rounded-full font-medium">
                         Agent outreach on
@@ -122,7 +122,7 @@ export default async function SearchProfilePage() {
                       : 'No area set'}
                   </p>
                   {(s.budget_min || s.budget_max) && (
-                    <p className="text-xs text-[#5E6278]">
+                    <p className="text-xs text-text-secondary">
                       {s.currency} {s.budget_min ? (s.budget_min / 100).toLocaleString() : '—'}
                       {' – '}
                       {s.budget_max ? (s.budget_max / 100).toLocaleString() : '—'}

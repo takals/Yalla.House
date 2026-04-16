@@ -40,15 +40,15 @@ export function MatchFeed({ bestMatches, possibleMatches }: Props) {
   return (
     <div>
       {/* Tabs */}
-      <div className="flex border-b-2 border-[#E2E4EB] mb-4">
+      <div className="flex border-b-2 border-border-default mb-4">
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
             className={`px-5 py-2 text-sm font-bold border-b-2 -mb-0.5 transition-colors ${
               tab === t.key
-                ? 'text-[#0F1117] border-brand'
-                : 'text-[#5E6278] border-transparent hover:text-[#0F1117]'
+                ? 'text-text-primary border-brand'
+                : 'text-text-secondary border-transparent hover:text-text-primary'
             }`}
           >
             {t.label} ({t.count})
@@ -58,7 +58,7 @@ export function MatchFeed({ bestMatches, possibleMatches }: Props) {
 
       {/* Cards */}
       {active.length === 0 ? (
-        <div className="bg-surface rounded-card p-8 text-center text-sm text-[#5E6278]">
+        <div className="bg-surface rounded-card p-8 text-center text-sm text-text-secondary">
           {t('noMatches')}
         </div>
       ) : (

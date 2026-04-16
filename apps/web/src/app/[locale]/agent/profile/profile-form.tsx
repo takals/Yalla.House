@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { CheckCircle2, Check } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { saveAgentProfileAction } from './actions'
@@ -45,8 +45,8 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-brand text-[#0F1117]'
-          : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
+          ? 'bg-brand border-brand text-text-primary'
+          : 'bg-surface border-border-default text-text-secondary hover:border-[#C8CCD6]'
       }`}
     >
       {label}
@@ -56,6 +56,8 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 
 export function ProfileForm({ profile }: Props) {
   const t = useTranslations('agentDashboard')
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [state, setState] = useState<{ success?: true; error?: string } | null>(null)
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()
@@ -93,38 +95,38 @@ export function ProfileForm({ profile }: Props) {
       )}
 
       {/* Agency info */}
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <h3 className="font-bold text-base mb-5">{t('agencySection')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-[#5E6278] mb-1">{t('agencyNameLabel')} *</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1">{t('agencyNameLabel')} *</label>
             <input
               type="text"
               name="agency_name"
               required
               defaultValue={profile?.agency_name ?? ''}
               placeholder="z.B. Müller Immobilien GmbH"
-              className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+              className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-[#5E6278] mb-1">{t('licenseNumberLabel')}</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1">{t('licenseNumberLabel')}</label>
             <input
               type="text"
               name="license_number"
               defaultValue={profile?.license_number ?? ''}
               placeholder="z.B. D-XXXX-XXXXXXX-XX"
-              className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+              className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
             />
           </div>
         </div>
       </div>
 
       {/* Specialisation */}
-      <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+      <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <h3 className="font-bold text-base mb-5">{t('specializationSection')}</h3>
 
-        <p className="text-xs font-semibold text-[#5E6278] mb-3 uppercase tracking-wide">{t('focusLabel')}</p>
+        <p className="text-xs font-semibold text-text-secondary mb-3 uppercase tracking-wide">{t('focusLabel')}</p>
         <div className="flex gap-3 mb-6">
           {FOCUS_OPTIONS.map(o => (
             <button
@@ -132,7 +134,7 @@ export function ProfileForm({ profile }: Props) {
               type="button"
               onClick={() => setFocus(o.value)}
               className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                focus === o.value ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                focus === o.value ? 'bg-brand border-brand text-text-primary' : 'bg-surface border-border-default text-text-secondary'
               }`}
             >
               {o.label}
@@ -140,7 +142,7 @@ export function ProfileForm({ profile }: Props) {
           ))}
         </div>
 
-        <p className="text-xs font-semibold text-[#5E6278] mb-3 uppercase tracking-wide">{t('propertyTypesLabel')}</p>
+        <p className="text-xs font-semibold text-text-secondary mb-3 uppercase tracking-wide">{t('propertyTypesLabel')}</p>
         <div className="flex flex-wrap gap-2">
           {PROPERTY_TYPES.map(t => (
             <Chip
@@ -157,7 +159,7 @@ export function ProfileForm({ profile }: Props) {
       {profile?.verified_at ? (
         <div className="bg-green-50 border border-green-200 rounded-2xl px-5 py-4 text-sm text-green-800 flex items-center gap-2">
           <Check size={14} className="text-green-700 flex-shrink-0" />
-          <span>{t('verifiedStatus')} {new Date(profile.verified_at).toLocaleDateString('de-DE')}</span>
+          <span>{t('verifiedStatus')} {new Date(profile.verified_at).toLocaleDateString(dateLocale)}</span>
         </div>
       ) : (
         <div className="bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 text-sm text-brand-badge-text">
@@ -170,7 +172,7 @@ export function ProfileForm({ profile }: Props) {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-[#0F1117] font-bold py-3.5 rounded-2xl text-sm transition-colors"
+        className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-text-primary font-bold py-3.5 rounded-2xl text-sm transition-colors"
       >
         {isPending ? t('savingProfile') : t('saveProfile')}
       </button>

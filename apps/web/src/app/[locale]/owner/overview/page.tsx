@@ -4,7 +4,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { CalendarCheck, MessageCircle, Home, TrendingUp, ArrowUp, ArrowRight, Plus, type LucideIcon } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
 
 type Listing = Database['public']['Tables']['listings']['Row']
@@ -35,6 +35,8 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const { billing } = await searchParams
   const t = await getTranslations('ownerDash')
   const ts = await getTranslations('statusLabels')
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -125,10 +127,10 @@ export default async function OwnerDashboard({ searchParams }: Props) {
 
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-[#0F1117]">{t('pageTitle')}</h1>
+        <h1 className="text-3xl font-bold text-text-primary">{t('pageTitle')}</h1>
         <Link
           href="/owner/new"
-          className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4" />
           {t('newListing')}
@@ -136,28 +138,28 @@ export default async function OwnerDashboard({ searchParams }: Props) {
       </div>
 
       {/* Sub-nav tabs */}
-      <div className="flex gap-6 mb-8 border-b border-[#E2E4EB]">
+      <div className="flex gap-6 mb-8 border-b border-border-default">
         <Link
           href="/owner/info"
-          className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors"
+          className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors"
         >
           Info
         </Link>
         <Link
           href="/owner/overview"
-          className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-brand -mb-px"
+          className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px"
         >
           {t('pageTitle')}
         </Link>
         <Link
           href="/owner/listings"
-          className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors"
+          className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors"
         >
           {t('tabListings')}
         </Link>
         <Link
           href="/owner/inbox"
-          className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors"
+          className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors"
         >
           {t('tabInquiries')}
         </Link>
@@ -201,10 +203,10 @@ export default async function OwnerDashboard({ searchParams }: Props) {
           <SectionCard title={t('sectionMyListings')}>
             {listings.length === 0 ? (
               <div className="py-12 text-center">
-                <p className="text-[#5E6278] mb-4">{t('noListings')}</p>
+                <p className="text-text-secondary mb-4">{t('noListings')}</p>
                 <Link
                   href="/owner/new"
-                  className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   {t('createFirstListing')}
@@ -214,13 +216,13 @@ export default async function OwnerDashboard({ searchParams }: Props) {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-[#E2E4EB]">
-                      <th className="text-left py-3 px-4 font-semibold text-[#5E6278]">{t('tableProperty')}</th>
-                      <th className="text-left py-3 px-4 font-semibold text-[#5E6278]">{t('tableStatus')}</th>
-                      <th className="text-left py-3 px-4 font-semibold text-[#5E6278]">{t('tablePrice')}</th>
-                      <th className="text-center py-3 px-4 font-semibold text-[#5E6278]">{t('tableInquiries')}</th>
-                      <th className="text-center py-3 px-4 font-semibold text-[#5E6278]">{t('tableViewings')}</th>
-                      <th className="text-center py-3 px-4 font-semibold text-[#5E6278]">{t('tableOffers')}</th>
+                    <tr className="border-b border-border-default">
+                      <th className="text-left py-3 px-4 font-semibold text-text-secondary">{t('tableProperty')}</th>
+                      <th className="text-left py-3 px-4 font-semibold text-text-secondary">{t('tableStatus')}</th>
+                      <th className="text-left py-3 px-4 font-semibold text-text-secondary">{t('tablePrice')}</th>
+                      <th className="text-center py-3 px-4 font-semibold text-text-secondary">{t('tableInquiries')}</th>
+                      <th className="text-center py-3 px-4 font-semibold text-text-secondary">{t('tableViewings')}</th>
+                      <th className="text-center py-3 px-4 font-semibold text-text-secondary">{t('tableOffers')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -232,13 +234,13 @@ export default async function OwnerDashboard({ searchParams }: Props) {
                       const currency = listing.currency || 'EUR'
 
                       return (
-                        <tr key={listing.id} className="border-b border-[#E2E4EB] hover:bg-[#FAFBFC]">
+                        <tr key={listing.id} className="border-b border-border-default hover:bg-[#FAFBFC]">
                           <td className="py-3 px-4">
                             <Link href={`/owner/${listing.id}`} className="hover:opacity-75 transition-opacity">
-                              <p className="font-semibold text-[#0F1117]">
+                              <p className="font-semibold text-text-primary">
                                 {listing.title_de ?? listing.title ?? listing.place_id}
                               </p>
-                              <p className="text-xs text-[#5E6278]">
+                              <p className="text-xs text-text-secondary">
                                 {listing.postcode} {listing.city}
                               </p>
                             </Link>
@@ -246,19 +248,19 @@ export default async function OwnerDashboard({ searchParams }: Props) {
                           <td className="py-3 px-4">
                             <StatusBadge status={listing.status} t={ts} />
                           </td>
-                          <td className="py-3 px-4 text-[#0F1117]">
+                          <td className="py-3 px-4 text-text-primary">
                             {price ? (
                               <>
-                                {new Intl.NumberFormat('de-DE', { style: 'currency', currency, maximumFractionDigits: 0 }).format(fromMinorUnits(price, currency))}
+                                {new Intl.NumberFormat(dateLocale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(fromMinorUnits(price, currency))}
                                 {listing.intent === 'rent' && '/Mo'}
                               </>
                             ) : (
                               '—'
                             )}
                           </td>
-                          <td className="py-3 px-4 text-center text-[#0F1117] font-medium">{listingMessages}</td>
-                          <td className="py-3 px-4 text-center text-[#0F1117] font-medium">{listingViewings}</td>
-                          <td className="py-3 px-4 text-center text-[#0F1117] font-medium">{listingOffers}</td>
+                          <td className="py-3 px-4 text-center text-text-primary font-medium">{listingMessages}</td>
+                          <td className="py-3 px-4 text-center text-text-primary font-medium">{listingViewings}</td>
+                          <td className="py-3 px-4 text-center text-text-primary font-medium">{listingOffers}</td>
                         </tr>
                       )
                     })}
@@ -277,11 +279,11 @@ export default async function OwnerDashboard({ searchParams }: Props) {
             action={{ label: t('actionOpenCalendar'), href: '/owner/viewings' }}
           >
             {viewings.length === 0 ? (
-              <p className="text-[#5E6278] py-6">{t('noUpcomingViewings')}</p>
+              <p className="text-text-secondary py-6">{t('noUpcomingViewings')}</p>
             ) : (
               <div className="space-y-3">
                 {viewings.slice(0, 3).map(viewing => (
-                  <ViewingItem key={viewing.id} viewing={viewing} t={t} />
+                  <ViewingItem key={viewing.id} viewing={viewing} t={t} dateLocale={dateLocale} />
                 ))}
               </div>
             )}
@@ -293,20 +295,20 @@ export default async function OwnerDashboard({ searchParams }: Props) {
             action={{ label: t('actionViewAll'), href: '/owner/inbox' }}
           >
             {threads.length === 0 ? (
-              <p className="text-[#5E6278] py-6">{t('noMessages')}</p>
+              <p className="text-text-secondary py-6">{t('noMessages')}</p>
             ) : (
               <div className="space-y-3">
                 {threads.slice(0, 3).map(thread => {
                   const threadDate = new Date(thread.created_at)
-                  const dateStr = threadDate.toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })
+                  const dateStr = threadDate.toLocaleDateString(dateLocale, { day: '2-digit', month: 'short' })
 
                   return (
                     <div key={thread.id} className="flex gap-3 py-2">
-                      <div className="w-8 h-8 rounded-full bg-[#D9DCE4] flex items-center justify-center text-[#5E6278] flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-[#D9DCE4] flex items-center justify-center text-text-secondary flex-shrink-0">
                         <MessageCircle className="w-3.5 h-3.5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-[#0F1117]">
+                        <p className="text-xs font-semibold text-text-primary">
                           {thread.subject ?? t('newInquiry')}
                         </p>
                         <p className="text-xs text-[#999] truncate">{dateStr}</p>
@@ -337,13 +339,13 @@ interface StatCardProps {
 
 function StatCard({ label, value, sub, trend, trendIcon: TrendIcon, icon: Icon, highlight }: StatCardProps) {
   return (
-    <div className={`bg-surface rounded-card p-5 border border-[#E2E4EB] ${highlight ? 'ring-2 ring-brand ring-opacity-30' : ''}`}>
-      <p className="text-xs font-semibold text-[#5E6278] uppercase tracking-wider mb-3">{label}</p>
+    <div className={`bg-surface rounded-card p-5 border border-border-default ${highlight ? 'ring-2 ring-brand ring-opacity-30' : ''}`}>
+      <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">{label}</p>
       <div className="flex items-baseline justify-between">
-        <p className={`text-3xl font-bold ${highlight ? 'text-brand' : 'text-[#0F1117]'}`}>{value}</p>
+        <p className={`text-3xl font-bold ${highlight ? 'text-brand' : 'text-text-primary'}`}>{value}</p>
         {Icon && <Icon className="w-5 h-5 text-[#D9DCE4]" />}
       </div>
-      {sub && <p className="text-xs text-[#5E6278] mt-2">{sub}</p>}
+      {sub && <p className="text-xs text-text-secondary mt-2">{sub}</p>}
       {trend && (
         <div className="flex items-center gap-1 mt-2">
           {TrendIcon && <TrendIcon className="w-3 h-3 text-brand" />}
@@ -362,9 +364,9 @@ interface SectionCardProps {
 
 function SectionCard({ title, action, children }: SectionCardProps) {
   return (
-    <div className="bg-surface rounded-card border border-[#E2E4EB] overflow-hidden">
-      <div className="px-5 py-4 border-b border-[#E2E4EB] flex items-center justify-between">
-        <h3 className="font-bold text-[#0F1117]">{title}</h3>
+    <div className="bg-surface rounded-card border border-border-default overflow-hidden">
+      <div className="px-5 py-4 border-b border-border-default flex items-center justify-between">
+        <h3 className="font-bold text-text-primary">{title}</h3>
         {action && (
           <Link
             href={action.href}
@@ -379,7 +381,7 @@ function SectionCard({ title, action, children }: SectionCardProps) {
   )
 }
 
-function ViewingItem({ viewing, t }: { viewing: Viewing; t: any }) {
+function ViewingItem({ viewing, t, dateLocale }: { viewing: Viewing; t: any; dateLocale: string }) {
   const scheduledDate = new Date(viewing.scheduled_at!)
   const now = new Date()
   const daysUntil = Math.ceil((scheduledDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
@@ -388,16 +390,16 @@ function ViewingItem({ viewing, t }: { viewing: Viewing; t: any }) {
   if (daysUntil === 0) badge = t('badgeToday')
   else if (daysUntil === 1) badge = t('badgeTomorrow')
   else if (daysUntil > 1 && daysUntil <= 7) badge = t('badgeInDays', { count: daysUntil })
-  else badge = scheduledDate.toLocaleDateString('de-DE')
+  else badge = scheduledDate.toLocaleDateString(dateLocale)
 
-  const timeStr = scheduledDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+  const timeStr = scheduledDate.toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-[#FAFBFC] rounded-lg border border-[#E2E4EB]">
-      <CalendarCheck className="w-4 h-4 text-[#5E6278] flex-shrink-0" />
+    <div className="flex items-center gap-3 p-3 bg-[#FAFBFC] rounded-lg border border-border-default">
+      <CalendarCheck className="w-4 h-4 text-text-secondary flex-shrink-0" />
       <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-[#0F1117]">{t('viewingInterested')}</p>
-        <p className="text-xs text-[#5E6278]">
+        <p className="text-xs font-semibold text-text-primary">{t('viewingInterested')}</p>
+        <p className="text-xs text-text-secondary">
           {timeStr}
         </p>
       </div>

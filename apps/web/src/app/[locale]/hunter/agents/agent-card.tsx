@@ -65,7 +65,7 @@ export function AgentCard({ assignment }: Props) {
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
           <p className="font-semibold">{agency_name ?? 'Unbekannte Agentur'}</p>
-          {agent_name && <p className="text-sm text-[#5E6278]">{agent_name}</p>}
+          {agent_name && <p className="text-sm text-text-secondary">{agent_name}</p>}
           <p className="text-xs text-[#999] mt-0.5">{SCOPE_LABELS[data_scope] ?? data_scope}</p>
         </div>
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
@@ -86,14 +86,14 @@ export function AgentCard({ assignment }: Props) {
             <button
               onClick={() => update('paused')}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
             >
               Daten pausieren
             </button>
             <button
               onClick={() => update('disconnected')}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
             >
               Trennen
             </button>
@@ -103,7 +103,7 @@ export function AgentCard({ assignment }: Props) {
           <button
             onClick={() => update('active')}
             disabled={isPending}
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50"
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-text-primary transition-colors disabled:opacity-50"
           >
             Daten fortsetzen
           </button>
@@ -114,14 +114,14 @@ export function AgentCard({ assignment }: Props) {
             <button
               onClick={() => update('active')}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50 flex items-center gap-1.5"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-text-primary transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
               Annehmen <Check size={14} />
             </button>
             <button
               onClick={() => update('ignored')}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
             >
               {t('reject')}
             </button>
@@ -133,14 +133,14 @@ export function AgentCard({ assignment }: Props) {
             <button
               onClick={resend}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
             >
               Brief erneut senden
             </button>
             <button
               onClick={() => update('ignored')}
               disabled={isPending}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg text-[#5E6278] hover:text-red-600 transition-colors disabled:opacity-50"
+              className="text-xs font-semibold px-3 py-1.5 rounded-lg text-text-secondary hover:text-red-600 transition-colors disabled:opacity-50"
             >
               Ignorieren
             </button>
@@ -150,7 +150,7 @@ export function AgentCard({ assignment }: Props) {
           <button
             onClick={() => update('invited')}
             disabled={isPending}
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
+            className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
           >
             Erneut verbinden
           </button>

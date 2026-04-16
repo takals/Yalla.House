@@ -146,8 +146,8 @@ export default async function TrackingPage() {
           <ArrowLeft size={16} />
           {t('trackingBackButton')}
         </Link>
-        <h1 className="text-3xl font-bold text-[#0F1117] mb-2">{t('trackingPageTitle')}</h1>
-        <p className="text-[#5E6278]">{t('trackingPageDescription')}</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">{t('trackingPageTitle')}</h1>
+        <p className="text-text-secondary">{t('trackingPageDescription')}</p>
       </div>
 
       {/* Summary Stats */}
@@ -162,16 +162,16 @@ export default async function TrackingPage() {
             key={idx}
             className={`rounded-xl border-2 ${stat.color} p-4`}
           >
-            <p className="text-xs text-[#5E6278] font-semibold mb-1">{stat.label}</p>
-            <p className="text-2xl font-bold text-[#0F1117]">{stat.value}</p>
+            <p className="text-xs text-text-secondary font-semibold mb-1">{stat.label}</p>
+            <p className="text-2xl font-bold text-text-primary">{stat.value}</p>
           </div>
         ))}
       </div>
 
       {/* Tracking Table */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-border-default overflow-hidden">
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 bg-[#EDEEF2] px-6 py-4 text-xs font-bold text-[#5E6278] uppercase tracking-wider border-b border-[#E2E4EB]">
+        <div className="grid grid-cols-12 gap-4 bg-bg px-6 py-4 text-xs font-bold text-text-secondary uppercase tracking-wider border-b border-border-default">
           <div className="col-span-4">{t('trackingColumnAgent')}</div>
           <div className="col-span-2">{t('trackingColumnSent')}</div>
           <div className="col-span-5 flex justify-between px-2">
@@ -199,16 +199,16 @@ export default async function TrackingPage() {
         <div className="divide-y divide-[#E2E4EB]">
           {trackingData.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <p className="text-[#5E6278]">{t('noAssignmentsYet')}</p>
+              <p className="text-text-secondary">{t('noAssignmentsYet')}</p>
             </div>
           ) : (
             trackingData.map((row) => (
               <div key={row.id} className="grid grid-cols-12 gap-4 px-6 py-5 items-center hover:bg-[#FAFBFC] transition-colors">
                 <div className="col-span-4">
-                  <p className="font-semibold text-[#0F1117]">{row.agentName}</p>
-                  <p className="text-xs text-[#5E6278]">{row.sentTime}</p>
+                  <p className="font-semibold text-text-primary">{row.agentName}</p>
+                  <p className="text-xs text-text-secondary">{row.sentTime}</p>
                 </div>
-                <div className="col-span-2 text-sm text-[#5E6278]">{row.sentTime}</div>
+                <div className="col-span-2 text-sm text-text-secondary">{row.sentTime}</div>
                 <div className="col-span-5 flex justify-between px-2">
                   {renderCheckmark(row.delivered)}
                   {renderCheckmark(row.opened)}

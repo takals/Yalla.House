@@ -89,14 +89,14 @@ export default async function AgentListingPage({ params }: Props) {
       {/* Agent-view banner */}
       <div className="mb-6 bg-brand-solid-bg border border-brand/30 rounded-2xl p-4 flex items-center gap-3">
         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand flex items-center justify-center">
-          <svg className="w-4 h-4 text-[#0F1117]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-4 h-4 text-text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
           </svg>
         </div>
         <div>
-          <p className="text-sm font-bold text-[#0F1117]">{t('agentViewBanner')}</p>
-          <p className="text-xs text-[#5E6278]">{t('agentViewBannerSub')}</p>
+          <p className="text-sm font-bold text-text-primary">{t('agentViewBanner')}</p>
+          <p className="text-xs text-text-secondary">{t('agentViewBannerSub')}</p>
         </div>
       </div>
 
@@ -122,11 +122,11 @@ export default async function AgentListingPage({ params }: Props) {
           )}
 
           {/* Title + location + price */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold mb-1">{title}</h1>
-                <p className="text-[#5E6278] text-sm">{listing.postcode} {listing.city}</p>
+                <p className="text-text-secondary text-sm">{listing.postcode} {listing.city}</p>
               </div>
               <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-[#DBEAFE] text-[#1E40AF] capitalize whitespace-nowrap">
                 {listing.intent === 'both' ? 'Sale / Rent' : listing.intent}
@@ -140,14 +140,14 @@ export default async function AgentListingPage({ params }: Props) {
               {listing.intent !== 'sale' && listing.rent_price ? (
                 <p className="text-2xl font-extrabold">
                   {formatPrice(listing.rent_price)}{' '}
-                  <span className="text-sm font-normal text-[#5E6278]">/ {locale === 'de' ? 'Monat' : 'month'}</span>
+                  <span className="text-sm font-normal text-text-secondary">/ {locale === 'de' ? 'Monat' : 'month'}</span>
                 </p>
               ) : null}
             </div>
           </div>
 
           {/* Key stats */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB] grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default grid grid-cols-2 sm:grid-cols-4 gap-4">
             {listing.property_type && (
               <Stat label={t('propertyType')} value={listing.property_type.replace(/_/g, ' ')} />
             )}
@@ -176,15 +176,15 @@ export default async function AgentListingPage({ params }: Props) {
 
           {/* Description */}
           {desc && (
-            <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+            <div className="bg-surface rounded-2xl p-6 border border-border-default">
               <h2 className="text-lg font-bold mb-3">{t('description')}</h2>
-              <p className="text-[#5E6278] leading-relaxed whitespace-pre-line">{desc}</p>
+              <p className="text-text-secondary leading-relaxed whitespace-pre-line">{desc}</p>
             </div>
           )}
 
           {/* Photo gallery */}
           {photos.length > 1 && (
-            <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+            <div className="bg-surface rounded-2xl p-6 border border-border-default">
               <h2 className="text-lg font-bold mb-3">{t('photos')} ({photos.length})</h2>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                 {photos.map(photo => (
@@ -224,7 +224,7 @@ export default async function AgentListingPage({ params }: Props) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs text-[#5E6278] uppercase tracking-wide font-semibold mb-0.5">{label}</p>
+      <p className="text-xs text-text-secondary uppercase tracking-wide font-semibold mb-0.5">{label}</p>
       <p className="font-bold text-lg capitalize">{value}</p>
     </div>
   )

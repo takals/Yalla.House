@@ -141,16 +141,16 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
     setFeedback(null)
   }
 
-  const selectClass = 'w-full text-sm px-3 py-2 bg-[#EDEEF2] rounded-lg text-[#0F1117] focus:outline-none focus:ring-2 focus:ring-[#D4764E]'
-  const inputClass = 'w-full text-sm px-3 py-2 bg-[#EDEEF2] rounded-lg text-[#0F1117] placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]'
+  const selectClass = 'w-full text-sm px-3 py-2 bg-bg rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-[#D4764E]'
+  const inputClass = 'w-full text-sm px-3 py-2 bg-bg rounded-lg text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]'
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 space-y-4">
+    <div className="bg-white rounded-2xl border border-border-default p-6 space-y-4">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-3">
-          <Globe size={20} className="text-[#0F1117]" />
+          <Globe size={20} className="text-text-primary" />
           <div>
-            <h2 className="font-bold text-[#0F1117] text-base">{t.sectionListingDefaults}</h2>
+            <h2 className="font-bold text-text-primary text-base">{t.sectionListingDefaults}</h2>
             <p className="text-xs text-[#999] mt-0.5">{t.defaultsDescription}</p>
           </div>
         </div>
@@ -179,7 +179,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
           {/* Row 1: Intent + Property Type */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelIntent}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelIntent}</label>
               <select
                 value={formData.default_intent}
                 onChange={e => setFormData(d => ({ ...d, default_intent: e.target.value }))}
@@ -189,7 +189,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelPropertyType}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelPropertyType}</label>
               <select
                 value={formData.default_property_type}
                 onChange={e => setFormData(d => ({ ...d, default_property_type: e.target.value }))}
@@ -203,7 +203,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
           {/* Row 2: Currency + Price Qualifier + Rent Period */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelCurrency}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelCurrency}</label>
               <select
                 value={formData.default_currency}
                 onChange={e => setFormData(d => ({ ...d, default_currency: e.target.value }))}
@@ -213,7 +213,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelPriceQualifier}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelPriceQualifier}</label>
               <select
                 value={formData.default_price_qualifier}
                 onChange={e => setFormData(d => ({ ...d, default_price_qualifier: e.target.value }))}
@@ -223,7 +223,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelRentPeriod}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelRentPeriod}</label>
               <select
                 value={formData.default_rent_period}
                 onChange={e => setFormData(d => ({ ...d, default_rent_period: e.target.value }))}
@@ -237,7 +237,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
           {/* Row 3: City + Postcode + Region */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelCity}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelCity}</label>
               <input
                 type="text"
                 value={formData.default_city}
@@ -247,7 +247,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelPostcode}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelPostcode}</label>
               <input
                 type="text"
                 value={formData.default_postcode}
@@ -257,7 +257,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-[#5E6278] mb-1">{t.labelRegion}</label>
+              <label className="block text-xs font-medium text-text-secondary mb-1">{t.labelRegion}</label>
               <input
                 type="text"
                 value={formData.default_region}
@@ -273,14 +273,14 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4764E] text-white text-sm font-semibold hover:bg-[#BF6840] transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
               {saving ? t.saving : t.saveDefaults}
             </button>
             <button
               onClick={handleCancel}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#EDEEF2] text-[#5E6278] text-sm font-semibold hover:bg-[#D9DCE4] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-bg text-text-secondary text-sm font-semibold hover:bg-hover-muted transition-colors"
             >
               <X size={14} />
             </button>
@@ -306,8 +306,8 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
 function DisplayRow({ label, value, isLast }: { label: string; value: string; isLast?: boolean }) {
   return (
     <div className={`flex items-center justify-between py-3 ${isLast ? '' : 'border-b border-[#F0F0F0]'}`}>
-      <div className="text-sm font-semibold text-[#0F1117]">{label}</div>
-      <div className="text-sm text-[#5E6278]">{value}</div>
+      <div className="text-sm font-semibold text-text-primary">{label}</div>
+      <div className="text-sm text-text-secondary">{value}</div>
     </div>
   )
 }

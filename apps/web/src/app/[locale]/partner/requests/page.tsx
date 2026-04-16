@@ -105,24 +105,24 @@ export default async function PartnerRequestsPage({
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">{t('pageTitle')}</h1>
-        <p className="text-[#5E6278] text-sm">
+        <p className="text-text-secondary text-sm">
           {t('pageDescription')}
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-8">
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-4 border border-border-default text-center">
           <p className="text-2xl font-bold text-[#0284C7]">{available.length}</p>
-          <p className="text-xs text-[#5E6278]">{t('statAvailable')}</p>
+          <p className="text-xs text-text-secondary">{t('statAvailable')}</p>
         </div>
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-4 border border-border-default text-center">
           <p className="text-2xl font-bold text-brand">{myActive.length}</p>
-          <p className="text-xs text-[#5E6278]">{t('statActive')}</p>
+          <p className="text-xs text-text-secondary">{t('statActive')}</p>
         </div>
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-lg p-4 border border-border-default text-center">
           <p className="text-2xl font-bold text-[#16A34A]">{completed.length}</p>
-          <p className="text-xs text-[#5E6278]">{t('statCompleted')}</p>
+          <p className="text-xs text-text-secondary">{t('statCompleted')}</p>
         </div>
       </div>
 
@@ -156,7 +156,7 @@ export default async function PartnerRequestsPage({
                       </span>
                       <div>
                         <p className="text-sm font-semibold">{request.title}</p>
-                        <p className="text-xs text-[#5E6278]">{address}</p>
+                        <p className="text-xs text-text-secondary">{address}</p>
                       </div>
                     </div>
                     <span className="text-xs text-[#999]">
@@ -165,20 +165,20 @@ export default async function PartnerRequestsPage({
                   </div>
 
                   {request.description && (
-                    <p className="text-xs text-[#5E6278] bg-[#F5F5F7] rounded-lg p-2 mb-3">
+                    <p className="text-xs text-text-secondary bg-hover-bg rounded-lg p-2 mb-3">
                       {request.description}
                     </p>
                   )}
 
                   <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
                     <div>
-                      <span className="text-[#5E6278] font-semibold">
+                      <span className="text-text-secondary font-semibold">
                         {t('labelRequester')}
                       </span>{' '}
                       {requesterName}
                     </div>
                     <div>
-                      <span className="text-[#5E6278] font-semibold">
+                      <span className="text-text-secondary font-semibold">
                         {t('labelPreferredDate')}
                       </span>{' '}
                       {request.preferred_date
@@ -215,7 +215,7 @@ export default async function PartnerRequestsPage({
               return (
                 <div
                   key={request.id}
-                  className="bg-surface rounded-xl border border-[#E2E4EB] p-5 hover:shadow-md transition"
+                  className="bg-surface rounded-xl border border-border-default p-5 hover:shadow-md transition"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
@@ -227,7 +227,7 @@ export default async function PartnerRequestsPage({
                       </span>
                       <div>
                         <p className="text-sm font-semibold">{request.title}</p>
-                        <p className="text-xs text-[#5E6278]">{address}</p>
+                        <p className="text-xs text-text-secondary">{address}</p>
                       </div>
                     </div>
                     <span
@@ -240,7 +240,7 @@ export default async function PartnerRequestsPage({
 
                   <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
                     <div>
-                      <span className="text-[#5E6278] font-semibold">
+                      <span className="text-text-secondary font-semibold">
                         {t('labelMyQuote')}
                       </span>{' '}
                       {request.quoted_amount
@@ -250,7 +250,7 @@ export default async function PartnerRequestsPage({
                         : t('labelPending')}
                     </div>
                     <div>
-                      <span className="text-[#5E6278] font-semibold">
+                      <span className="text-text-secondary font-semibold">
                         {t('labelUpdated')}
                       </span>{' '}
                       {formatRelativeTime(new Date(request.updated_at), locale)}
@@ -302,13 +302,13 @@ export default async function PartnerRequestsPage({
               return (
                 <div
                   key={request.id}
-                  className="bg-surface rounded-lg border border-[#E2E4EB] p-4 flex items-center justify-between"
+                  className="bg-surface rounded-lg border border-border-default p-4 flex items-center justify-between"
                 >
                   <div>
                     <p className="text-sm font-semibold capitalize">
                       {request.category} · {request.title}
                     </p>
-                    <p className="text-xs text-[#5E6278] flex items-center gap-2">
+                    <p className="text-xs text-text-secondary flex items-center gap-2">
                       {request.rating && (
                         <>
                           <div className="flex items-center gap-1">
@@ -336,8 +336,8 @@ export default async function PartnerRequestsPage({
 
       {/* Empty state */}
       {available.length === 0 && myActive.length === 0 && completed.length === 0 && (
-        <div className="bg-surface rounded-xl p-12 text-center border border-[#E2E4EB]">
-          <p className="text-[#5E6278] font-medium mb-2">
+        <div className="bg-surface rounded-xl p-12 text-center border border-border-default">
+          <p className="text-text-secondary font-medium mb-2">
             {t('emptyTitle')}
           </p>
           <p className="text-xs text-[#999]">

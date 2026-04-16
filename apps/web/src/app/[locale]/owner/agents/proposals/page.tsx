@@ -93,13 +93,13 @@ export default async function OwnerProposalsPage({
           <ArrowLeft size={16} />
           {t('backToTracking')}
         </Link>
-        <h1 className="text-2xl font-bold text-[#0F1117] mb-1">{t('title')}</h1>
-        <p className="text-sm text-[#5E6278]">{t('subtitle')}</p>
+        <h1 className="text-2xl font-bold text-text-primary mb-1">{t('title')}</h1>
+        <p className="text-sm text-text-secondary">{t('subtitle')}</p>
       </div>
 
       {proposals.length === 0 ? (
-        <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-8 text-center">
-          <p className="text-[#5E6278]">{t('noProposals')}</p>
+        <div className="bg-surface rounded-2xl border border-border-default p-8 text-center">
+          <p className="text-text-secondary">{t('noProposals')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -108,13 +108,13 @@ export default async function OwnerProposalsPage({
             const isVerified = !!proposal.agent?.verified_at
 
             return (
-              <div key={proposal.id} className="bg-surface rounded-2xl border border-[#E2E4EB] overflow-hidden">
+              <div key={proposal.id} className="bg-surface rounded-2xl border border-border-default overflow-hidden">
                 {/* Header row */}
-                <div className="p-5 border-b border-[#E2E4EB]">
+                <div className="p-5 border-b border-border-default">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <h2 className="text-base font-bold text-[#0F1117]">
+                        <h2 className="text-base font-bold text-text-primary">
                           {proposal.agent?.agency_name ?? t('unknownAgent')}
                         </h2>
                         {isVerified && (
@@ -124,7 +124,7 @@ export default async function OwnerProposalsPage({
                         )}
                       </div>
                       {proposal.agent?.license_number && (
-                        <p className="text-xs text-[#5E6278]">
+                        <p className="text-xs text-text-secondary">
                           {t('licenseNo')} {proposal.agent.license_number}
                         </p>
                       )}
@@ -138,7 +138,7 @@ export default async function OwnerProposalsPage({
                           {t('liveUpdates')}
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#EDEEF2] text-[#5E6278] uppercase tracking-wider">
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full bg-bg text-text-secondary uppercase tracking-wider">
                           <WifiOff size={12} />
                           {t('manualUpdates')}
                         </span>
@@ -152,20 +152,20 @@ export default async function OwnerProposalsPage({
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     {/* Commission — big and bold */}
                     <div className="sm:col-span-1 bg-brand-solid-bg rounded-xl p-4 border border-brand/20">
-                      <p className="text-xs font-semibold text-[#5E6278] uppercase tracking-wider mb-1">{t('commission')}</p>
-                      <p className="text-lg font-extrabold text-[#0F1117]">{commission}</p>
+                      <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">{t('commission')}</p>
+                      <p className="text-lg font-extrabold text-text-primary">{commission}</p>
                     </div>
 
                     {/* Update style indicator */}
                     <div className="sm:col-span-2 bg-[#F5F5FA] rounded-xl p-4">
-                      <p className="text-xs font-semibold text-[#5E6278] uppercase tracking-wider mb-1">{t('updateStyle')}</p>
+                      <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">{t('updateStyle')}</p>
                       {proposal.crm_connected ? (
                         <div className="flex items-center gap-2">
                           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                          <p className="text-sm font-semibold text-[#0F1117]">{t('liveUpdatesDesc')}</p>
+                          <p className="text-sm font-semibold text-text-primary">{t('liveUpdatesDesc')}</p>
                         </div>
                       ) : (
-                        <p className="text-sm text-[#5E6278]">{t('manualUpdatesDesc')}</p>
+                        <p className="text-sm text-text-secondary">{t('manualUpdatesDesc')}</p>
                       )}
                     </div>
                   </div>
@@ -173,8 +173,8 @@ export default async function OwnerProposalsPage({
                   {/* Service overview */}
                   {serviceOverview && (
                     <div className="mb-4">
-                      <p className="text-xs font-semibold text-[#5E6278] uppercase tracking-wider mb-2">{t('serviceOverview')}</p>
-                      <p className="text-sm text-[#5E6278] leading-relaxed whitespace-pre-line">{serviceOverview}</p>
+                      <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">{t('serviceOverview')}</p>
+                      <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-line">{serviceOverview}</p>
                     </div>
                   )}
 

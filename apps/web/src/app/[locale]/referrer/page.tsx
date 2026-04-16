@@ -38,15 +38,15 @@ export default async function ReferrerDashboard() {
       <div className="max-w-3xl">
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-1">Referral Program</h1>
-          <p className="text-[#5E6278] text-sm">
+          <p className="text-text-secondary text-sm">
             You haven&apos;t joined the referral program yet.
           </p>
         </div>
 
-        <div className="bg-surface rounded-xl p-8 border border-[#E2E4EB] text-center">
+        <div className="bg-surface rounded-xl p-8 border border-border-default text-center">
           <Award className="w-12 h-12 mx-auto mb-4 text-brand" />
           <h2 className="text-lg font-bold mb-2">Earn by Referring</h2>
-          <p className="text-[#5E6278] text-sm mb-6">
+          <p className="text-text-secondary text-sm mb-6">
             Invite sellers to Yalla.House and earn commissions for each milestone they reach.
           </p>
           <Link
@@ -104,33 +104,33 @@ export default async function ReferrerDashboard() {
     <div className="max-w-4xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">Referral Dashboard</h1>
-        <p className="text-[#5E6278] text-sm">
+        <p className="text-text-secondary text-sm">
           Track your referrals and earnings.
         </p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold">{totalReferrals}</p>
-          <p className="text-xs text-[#5E6278] mt-1">Total Referrals</p>
+          <p className="text-xs text-text-secondary mt-1">Total Referrals</p>
         </div>
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold text-[#166534]">{activeReferrals}</p>
-          <p className="text-xs text-[#5E6278] mt-1">Active</p>
+          <p className="text-xs text-text-secondary mt-1">Active</p>
         </div>
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold text-[#166534]">€{(totalEarned / 100).toFixed(2)}</p>
-          <p className="text-xs text-[#5E6278] mt-1">Total Earned</p>
+          <p className="text-xs text-text-secondary mt-1">Total Earned</p>
         </div>
-        <div className="bg-surface rounded-lg p-4 border border-[#E2E4EB]">
+        <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold text-brand">€{(pendingPayout / 100).toFixed(2)}</p>
-          <p className="text-xs text-[#5E6278] mt-1">Pending Payout</p>
+          <p className="text-xs text-text-secondary mt-1">Pending Payout</p>
         </div>
       </div>
 
       {/* Referral Code Card */}
-      <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-5 mb-8">
+      <div className="bg-surface rounded-2xl border border-border-default p-5 mb-8">
         <h2 className="text-sm font-bold mb-4">Your Referral Code</h2>
         <div className="space-y-3">
           <div className="bg-brand-solid-bg rounded-lg p-4 flex items-center justify-between">
@@ -140,7 +140,7 @@ export default async function ReferrerDashboard() {
             <CopyButton code={referrer.referrer_code} />
           </div>
           <div className="bg-brand-solid-bg rounded-lg p-4">
-            <p className="text-xs text-[#5E6278] mb-2">Full Referral Link:</p>
+            <p className="text-xs text-text-secondary mb-2">Full Referral Link:</p>
             <code className="text-xs font-mono text-[#000] break-all">
               {referralLink}
             </code>
@@ -149,12 +149,12 @@ export default async function ReferrerDashboard() {
       </div>
 
       {/* Quick Share Section */}
-      <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-5 mb-8">
+      <div className="bg-surface rounded-2xl border border-border-default p-5 mb-8">
         <h2 className="text-sm font-bold mb-4">Share Your Link</h2>
         <div className="flex gap-3 flex-wrap">
           <a
             href={`mailto:?subject=Earn Money by Selling Your Property&body=Check out Yalla.House, the UK flat-fee property selling platform. No commission, no agent. Sell directly on Rightmove & Zoopla and keep every pound.%0A%0AJoin via my referral link: ${referralLink}`}
-            className="px-4 py-2 bg-[#E2E4EB] text-black text-sm font-semibold rounded-lg hover:bg-[#D9DCE4] transition"
+            className="px-4 py-2 bg-[#E2E4EB] text-black text-sm font-semibold rounded-lg hover:bg-hover-muted transition"
           >
             Email
           </a>

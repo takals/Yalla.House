@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useLocale } from 'next-intl'
 import { Search, Shield, ShieldCheck, ShieldAlert, UserCircle } from 'lucide-react'
 
 type T = Record<string, string>
@@ -87,11 +88,11 @@ export function UserManagement({ users, t }: Props) {
 
       {/* User list */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-12 text-center">
-          <p className="text-sm text-[#5E6278]">{tx(t, 'noUsers')}</p>
+        <div className="bg-white rounded-2xl border border-border-default p-12 text-center">
+          <p className="text-sm text-text-secondary">{tx(t, 'noUsers')}</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] divide-y divide-[#F0F2F5]">
+        <div className="bg-white rounded-2xl border border-border-default divide-y divide-[#F0F2F5]">
           {filtered.map(user => (
             <UserRow
               key={user.id}
@@ -114,7 +115,7 @@ function FilterBtn({ label, active, onClick }: { label: string; active: boolean;
     <button
       onClick={onClick}
       className={`text-xs font-semibold px-3 py-2 rounded-lg transition-colors ${
-        active ? 'bg-[#0F1117] text-white' : 'bg-[#F5F5FA] text-[#5E6278] hover:bg-[#E4E6EF]'
+        active ? 'bg-[#0F1117] text-white' : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
       }`}
     >
       {label}
@@ -130,8 +131,10 @@ function UserRow({
 }) {
   const [isPending, startTransition] = useTransition()
   const [message, setMessage] = useState<string | null>(null)
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
 
-  const dateStr = new Date(user.created_at).toLocaleDateString('en-GB', {
+  const dateStr = new Date(user.created_at).toLocaleDateString(dateLocale, {
     day: '2-digit', month: 'short', year: 'numeric',
   })
 
@@ -164,12 +167,12 @@ function UserRow({
   return (
     <div className="px-5 py-4">
       <div className="flex items-center gap-4 cursor-pointer" onClick={onToggle}>
-        <div className="w-8 h-8 rounded-full bg-[#EDEEF2] flex items-center justify-center flex-shrink-0">
-          <UserCircle size={16} className="text-[#5E6278]" />
+        <div className="w-8 h-8 rounded-full bg-bg flex items-center justify-center flex-shrink-0">
+          <UserCircle size={16} className="text-text-secondary" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#0F1117] truncate">{user.full_name ?? '—'}</p>
-          <p className="text-xs text-[#5E6278] truncate">{user.email}</p>
+          <p className="text-sm font-semibold text-text-primary truncate">{user.full_name ?? '—'}</p>
+          <p className="text-xs text-text-secondary truncate">{user.email}</p>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           {roles.length === 0 ? (
@@ -188,7 +191,7 @@ function UserRow({
 
       {expanded && (
         <div className="mt-4 pl-12">
-          <p className="text-xs font-semibold text-[#5E6278] mb-2">{tx(t, 'addRole')} / {tx(t, 'removeRole')}</p>
+          <p className="text-xs font-semibold text-text-secondary mb-2">{tx(t, 'addRole')} / {tx(t, 'removeRole')}</p>
           <div className="flex gap-2 flex-wrap">
             {ROLE_OPTIONS.map(role => {
               const hasRole = roles.includes(role)
@@ -201,7 +204,7 @@ function UserRow({
                   className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg transition-colors disabled:opacity-50 ${
                     hasRole
                       ? `${ROLE_BADGE_STYLES[role]} ring-2 ring-offset-1 ring-current`
-                      : 'bg-[#F5F5FA] text-[#5E6278] hover:bg-[#E4E6EF]'
+                      : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
                   }`}
                 >
                   <Icon size={12} />

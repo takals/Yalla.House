@@ -72,8 +72,8 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
         active
-          ? 'bg-brand border-brand text-[#0F1117]'
-          : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
+          ? 'bg-brand border-brand text-text-primary'
+          : 'bg-surface border-border-default text-text-secondary hover:border-[#C8CCD6]'
       }`}
     >
       {label}
@@ -175,7 +175,7 @@ export function BriefForm({ profile }: Props) {
         <div className="flex-1 min-w-0 space-y-6">
 
           {/* Step 1 — Location */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="1" title="Location — where do you want to buy or rent?" />
             <div className="flex flex-wrap gap-2">
               {AREAS.map(a => (
@@ -185,7 +185,7 @@ export function BriefForm({ profile }: Props) {
           </div>
 
           {/* Step 2 — Budget */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="2" title="Budget" />
             <div className="flex gap-3 mb-4">
               {['buy', 'rent'].map(v => (
@@ -194,7 +194,7 @@ export function BriefForm({ profile }: Props) {
                   type="button"
                   onClick={() => setIntent(v)}
                   className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                    intent === v ? 'bg-brand border-brand text-[#0F1117]' : 'bg-surface border-[#E2E4EB] text-[#5E6278]'
+                    intent === v ? 'bg-brand border-brand text-text-primary' : 'bg-surface border-border-default text-text-secondary'
                   }`}
                 >
                   {v === 'buy' ? 'Buy' : 'Rent'}
@@ -203,7 +203,7 @@ export function BriefForm({ profile }: Props) {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#5E6278] mb-1">
+                <label className="block text-xs font-medium text-text-secondary mb-1">
                   Min {intent === 'rent' ? '(£/pcm)' : '(£)'}
                 </label>
                 <input
@@ -211,11 +211,11 @@ export function BriefForm({ profile }: Props) {
                   placeholder={intent === 'rent' ? '800' : '200,000'}
                   value={budgetMin}
                   onChange={e => setBudgetMin(e.target.value)}
-                  className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+                  className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-[#5E6278] mb-1">
+                <label className="block text-xs font-medium text-text-secondary mb-1">
                   Max {intent === 'rent' ? '(£/pcm)' : '(£)'}
                 </label>
                 <input
@@ -223,21 +223,21 @@ export function BriefForm({ profile }: Props) {
                   placeholder={intent === 'rent' ? '2,000' : '525,000'}
                   value={budgetMax}
                   onChange={e => setBudgetMax(e.target.value)}
-                  className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
+                  className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"
                 />
               </div>
             </div>
           </div>
 
           {/* Step 3 — Property type + bedrooms */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="3" title="Property type" />
             <div className="flex flex-wrap gap-2 mb-5">
               {PROPERTY_TYPES.map(t => (
                 <Chip key={t.value} label={t.label} active={propertyTypes.includes(t.value)} onClick={() => setPropertyTypes(toggle(propertyTypes, t.value))} />
               ))}
             </div>
-            <p className="text-xs font-semibold text-[#5E6278] mb-3">Minimum bedrooms</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">Minimum bedrooms</p>
             <div className="flex flex-wrap gap-2">
               {BEDROOMS.map(b => (
                 <Chip key={b.value} label={b.label} active={minBeds === b.value} onClick={() => setMinBeds(b.value)} />
@@ -246,15 +246,15 @@ export function BriefForm({ profile }: Props) {
           </div>
 
           {/* Step 4 — Must-haves + dealbreakers */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="4" title="Preferences" />
-            <p className="text-xs font-semibold text-[#5E6278] mb-3">Must-haves</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">Must-haves</p>
             <div className="flex flex-wrap gap-2 mb-5">
               {MUST_HAVES.map(m => (
                 <Chip key={m} label={m} active={mustHaves.includes(m)} onClick={() => setMustHaves(toggle(mustHaves, m))} />
               ))}
             </div>
-            <p className="text-xs font-semibold text-[#5E6278] mb-3">Dealbreakers</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">Dealbreakers</p>
             <div className="flex flex-wrap gap-2">
               {DEALBREAKERS.map(d => (
                 <button
@@ -264,7 +264,7 @@ export function BriefForm({ profile }: Props) {
                   className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
                     dealbreakers.includes(d)
                       ? 'bg-red-50 border-red-300 text-red-700'
-                      : 'bg-surface border-[#E2E4EB] text-[#5E6278] hover:border-[#C8CCD6]'
+                      : 'bg-surface border-border-default text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
                   {d}
@@ -274,25 +274,25 @@ export function BriefForm({ profile }: Props) {
           </div>
 
           {/* Step 5 — Timing */}
-          <div className="bg-surface rounded-2xl p-6 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="5" title="Timing" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-[#5E6278] mb-1">Finance status</label>
+                <label className="block text-xs font-medium text-text-secondary mb-1">Finance status</label>
                 <select
                   value={financeStatus}
                   onChange={e => setFinanceStatus(e.target.value)}
-                  className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-surface"
+                  className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-surface"
                 >
                   {FINANCE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-[#5E6278] mb-1">Timeline</label>
+                <label className="block text-xs font-medium text-text-secondary mb-1">Timeline</label>
                 <select
                   value={timeline}
                   onChange={e => setTimeline(e.target.value)}
-                  className="w-full border border-[#E2E4EB] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-surface"
+                  className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-surface"
                 >
                   {TIMELINE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
@@ -304,7 +304,7 @@ export function BriefForm({ profile }: Props) {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-[#0F1117] font-bold py-4 rounded-2xl text-base transition-colors shadow-sm"
+            className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-text-primary font-bold py-4 rounded-2xl text-base transition-colors shadow-sm"
           >
             {isPending ? 'Activating…' : 'Activate My Home Brief →'}
           </button>
@@ -315,9 +315,9 @@ export function BriefForm({ profile }: Props) {
         <div className="w-full lg:w-80 lg:sticky lg:top-6 space-y-4 flex-shrink-0">
 
           {/* Brief preview */}
-          <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB]">
+          <div className="bg-surface rounded-2xl p-5 border border-border-default">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide">Your Brief</p>
+              <p className="text-xs font-bold text-text-secondary uppercase tracking-wide">Your Brief</p>
               {hasBrief && (
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-800 border border-green-200">
                   Active
@@ -385,10 +385,10 @@ export function BriefForm({ profile }: Props) {
             )}
 
             {hasBrief && (
-              <div className="mt-4 pt-4 border-t border-[#E2E4EB]">
-                <p className="text-xs font-semibold text-[#5E6278] mb-2">This brief will be shared with:</p>
+              <div className="mt-4 pt-4 border-t border-border-default">
+                <p className="text-xs font-semibold text-text-secondary mb-2">This brief will be shared with:</p>
                 {['Matching engine', 'Connected agents', 'Newsletter feeds'].map(item => (
-                  <div key={item} className="flex items-center gap-1.5 text-xs text-[#5E6278] mb-1">
+                  <div key={item} className="flex items-center gap-1.5 text-xs text-text-secondary mb-1">
                     <Check size={12} className="text-green-600 flex-shrink-0" /> {item}
                   </div>
                 ))}
@@ -397,8 +397,8 @@ export function BriefForm({ profile }: Props) {
           </div>
 
           {/* Automation toggles */}
-          <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB]">
-            <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-4">Automation Settings</p>
+          <div className="bg-surface rounded-2xl p-5 border border-border-default">
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">Automation Settings</p>
             <div className="space-y-3">
               {AUTOMATIONS.map(a => (
                 <label key={a.key} className="flex items-center gap-3 cursor-pointer">
@@ -408,22 +408,22 @@ export function BriefForm({ profile }: Props) {
                     onChange={() => toggleAutomation(a.key)}
                     className="w-4 h-4 accent-brand rounded"
                   />
-                  <span className="text-sm text-[#0F1117]">{a.label}</span>
+                  <span className="text-sm text-text-primary">{a.label}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Sample listings */}
-          <div className="bg-surface rounded-2xl p-5 border border-[#E2E4EB]">
-            <p className="text-xs font-bold text-[#5E6278] uppercase tracking-wide mb-4">
+          <div className="bg-surface rounded-2xl p-5 border border-border-default">
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">
               {hasBrief ? 'Listings we would show you' : 'Example matches'}
             </p>
             <div className="space-y-3">
               {sampleListings.map(l => (
                 <div key={l.location} className="text-sm">
                   <span className="font-bold">{l.price}</span>
-                  <span className="text-[#5E6278]"> · {l.location}</span>
+                  <span className="text-text-secondary"> · {l.location}</span>
                   <p className="text-xs text-[#999]">{l.spec}</p>
                 </div>
               ))}

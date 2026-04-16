@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { confirmViewingAction, declineViewingAction } from './actions'
 
 export interface ViewingRow {
@@ -33,8 +33,8 @@ function getStatusBadge(status: string, t: any) {
   }
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+function formatDate(iso: string, dateLocale: string): string {
+  return new Date(iso).toLocaleDateString(dateLocale, { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 export function ViewingList({
@@ -45,6 +45,8 @@ export function ViewingList({
   listingMap: Record<string, { title_de: string | null; place_id: string }>
 }) {
   const t = useTranslations('ownerDashboard')
+  const locale = useLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const [statuses, setStatuses] = useState<Map<string, string>>(() => {
     const m = new Map<string, string>()
     for (const v of initialViewings) m.set(v.id, v.status)
@@ -86,7 +88,7 @@ export function ViewingList({
   if (initialViewings.length === 0) {
     return (
       <div className="bg-surface rounded-card p-12 text-center shadow-sm">
-        <p className="text-[#5E6278]">{t('viewings.empty')}</p>
+        <p className="text-text-secondary">{t('viewings.empty')}</p>
       </div>
     )
   }
@@ -109,16 +111,16 @@ export function ViewingList({
                 {listing && (
                   <Link
                     href={`/owner/${viewing.listing_id}`}
-                    className="text-sm font-semibold text-[#0F1117] hover:underline truncate block"
+                    className="text-sm font-semibold text-text-primary hover:underline truncate block"
                   >
                     {listing.title_de ?? listing.place_id}
                   </Link>
                 )}
 
                 {/* Hunter info */}
-                <div className="mt-1 text-sm text-[#5E6278]">
+                <div className="mt-1 text-sm text-text-secondary">
                   {viewing.hunter?.full_name && (
-                    <span className="font-medium text-[#0F1117]">{viewing.hunter.full_name}</span>
+                    <span className="font-medium text-text-primary">{viewing.hunter.full_name}</span>
                   )}
                   {viewing.hunter?.full_name && ' · '}
                   <span>{viewing.hunter?.email}</span>
@@ -129,14 +131,14 @@ export function ViewingList({
 
                 {/* Notes */}
                 {viewing.hunter_notes && (
-                  <p className="mt-2 text-sm text-[#5E6278] italic">
+                  <p className="mt-2 text-sm text-text-secondary italic">
                     &ldquo;{viewing.hunter_notes}&rdquo;
                   </p>
                 )}
 
                 {/* Date */}
                 <p className="mt-2 text-xs text-[#999999]">
-                  Eingegangen: {formatDate(viewing.created_at)}
+                  Eingegangen: {formatDate(viewing.created_at, dateLocale)}
                 </p>
 
                 {/* Error */}
@@ -157,7 +159,7 @@ export function ViewingList({
                       type="button"
                       onClick={() => handleDecline(viewing.id)}
                       disabled={isActing}
-                      className="text-xs font-semibold px-3 py-1.5 bg-[#F5F5FA] hover:bg-[#E4E6EF] text-[#5E6278] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-xs font-semibold px-3 py-1.5 bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {t('viewings.decline')}
                     </button>
@@ -165,7 +167,7 @@ export function ViewingList({
                       type="button"
                       onClick={() => handleConfirm(viewing.id)}
                       disabled={isActing}
-                      className="text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isActing ? (
                         <span className="flex items-center gap-1.5">

@@ -17,14 +17,14 @@ export default function CookiePolicyPage() {
   const lastUpdated = '01.04.2026'
 
   return (
-    <main className="bg-[#EDEEF2]">
+    <main className="bg-bg">
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
             Cookie-Richtlinie
           </div>
-          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-[#0F1117] leading-[1.1] mb-4">
+          <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Cookies bei Yalla.House
           </h1>
           <p className="text-base text-[#656565]">
@@ -38,8 +38,8 @@ export default function CookiePolicyPage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           {/* Was sind Cookies */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Was sind Cookies?
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -53,8 +53,8 @@ export default function CookiePolicyPage() {
           </div>
 
           {/* Notwendige Cookies */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Notwendige Cookies
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -83,8 +83,8 @@ export default function CookiePolicyPage() {
           </div>
 
           {/* Analyse-Cookies */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Analyse-Cookies
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
@@ -112,8 +112,8 @@ export default function CookiePolicyPage() {
           </div>
 
           {/* Marketing-Cookies */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Marketing-Cookies
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -127,19 +127,19 @@ export default function CookiePolicyPage() {
           </div>
 
           {/* Cookie-Verwaltung */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Cookie-Verwaltung
             </h2>
             <div className="space-y-4 text-[#656565] leading-relaxed">
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Cookies verwalten</h3>
+                <h3 className="font-bold text-text-primary mb-2">Cookies verwalten</h3>
                 <p>
                   Sie können optionale Cookies über unser Cookie-Consent-Banner jederzeit akzeptieren oder ablehnen.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Browser-Einstellungen</h3>
+                <h3 className="font-bold text-text-primary mb-2">Browser-Einstellungen</h3>
                 <p>
                   Die meisten Browser ermöglichen es Ihnen, Cookies zu verwalten:
                 </p>
@@ -151,13 +151,13 @@ export default function CookiePolicyPage() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Drittanbieter-Cookies deaktivieren</h3>
+                <h3 className="font-bold text-text-primary mb-2">Drittanbieter-Cookies deaktivieren</h3>
                 <p>
                   In den meisten Browsern können Sie Cookies von Drittanbietern separat deaktivieren. Dies kann jedoch die Funktionalität einiger Websites beeinträchtigen.
                 </p>
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-2">Do-Not-Track</h3>
+                <h3 className="font-bold text-text-primary mb-2">Do-Not-Track</h3>
                 <p>
                   Viele Browser bieten eine &quot;Do-Not-Track&quot;-Option. Wir respektieren diese Einstellung, soweit praktisch möglich.
                 </p>
@@ -166,8 +166,8 @@ export default function CookiePolicyPage() {
           </div>
 
           {/* Kontakt */}
-          <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8">
-            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-[#0F1117] mb-4">
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Fragen zu Cookies?
             </h2>
             <div className="space-y-3 text-[#656565] leading-relaxed">
@@ -185,7 +185,7 @@ export default function CookiePolicyPage() {
       </section>
 
       {/* ── BACK LINK ────────────────────────────────────────────────────────── */}
-      <section className="py-12 px-4 border-t border-[#E2E4EB]">
+      <section className="py-12 px-4 border-t border-border-default">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/"

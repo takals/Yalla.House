@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { Lock, Zap } from 'lucide-react'
 
 const STATUS_STYLES: Record<string, string> = {
@@ -41,6 +41,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function AdminPage() {
   const t = await getTranslations()
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
 
   // Auth check
   const supabase = await createClient()
@@ -59,9 +61,9 @@ export default async function AdminPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="bg-surface rounded-card p-10 text-center max-w-sm">
-          <Lock size={32} className="mx-auto mb-2 text-[#5E6278]" />
+          <Lock size={32} className="mx-auto mb-2 text-text-secondary" />
           <p className="font-bold mb-1">{t('admin.noAccess')}</p>
-          <p className="text-sm text-[#5E6278]">{t('admin.noAccessMessage')}</p>
+          <p className="text-sm text-text-secondary">{t('admin.noAccessMessage')}</p>
         </div>
       </div>
     )
@@ -159,7 +161,7 @@ export default async function AdminPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">{t('admin.pageTitle')}</h1>
-            <p className="text-sm text-[#5E6278] mt-0.5">{t('admin.pageSubtitle')}</p>
+            <p className="text-sm text-text-secondary mt-0.5">{t('admin.pageSubtitle')}</p>
           </div>
           <span className="text-xs font-bold px-3 py-1.5 bg-brand rounded-full">{t('admin.pageTitle')}</span>
         </div>
@@ -180,7 +182,7 @@ export default async function AdminPage() {
                 <p className="text-white/50 text-sm">Search property, send link — one click</p>
               </div>
             </div>
-            <span className="text-xs font-bold px-3 py-1 bg-[#D4764E] text-white rounded-full group-hover:bg-[#BF6840] transition-colors">
+            <span className="text-xs font-bold px-3 py-1 bg-[#D4764E] text-white rounded-full group-hover:bg-brand-hover transition-colors">
               Open
             </span>
           </div>
@@ -204,7 +206,7 @@ export default async function AdminPage() {
             <h2 className="text-base font-bold mb-4">{t('admin.recentListings')}</h2>
             <div className="bg-surface rounded-card divide-y divide-[#E2E4EB]">
               {(recentListings.data ?? []).length === 0 && (
-                <p className="px-5 py-4 text-sm text-[#5E6278]">{t('admin.noListings')}</p>
+                <p className="px-5 py-4 text-sm text-text-secondary">{t('admin.noListings')}</p>
               )}
               {(recentListings.data ?? []).map((l: any) => (
                 <div key={l.id} className="px-5 py-3 flex items-center justify-between gap-3">
@@ -215,7 +217,7 @@ export default async function AdminPage() {
                     >
                       {l.title_de ?? l.place_id}
                     </Link>
-                    <p className="text-xs text-[#5E6278]">{l.city}</p>
+                    <p className="text-xs text-text-secondary">{l.city}</p>
                   </div>
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0 ${STATUS_STYLES[l.status] ?? STATUS_STYLES['draft']}`}>
                     {STATUS_LABELS[l.status] ?? l.status}
@@ -230,7 +232,7 @@ export default async function AdminPage() {
             <h2 className="text-base font-bold mb-4">{t('admin.recentViewings')}</h2>
             <div className="bg-surface rounded-card divide-y divide-[#E2E4EB]">
               {(recentViewings.data ?? []).length === 0 && (
-                <p className="px-5 py-4 text-sm text-[#5E6278]">{t('admin.noViewings')}</p>
+                <p className="px-5 py-4 text-sm text-text-secondary">{t('admin.noViewings')}</p>
               )}
               {((recentViewings as any).data ?? []).map((v: any) => (
                 <div key={v.id} className="px-5 py-3 flex items-center justify-between gap-3">
@@ -238,7 +240,7 @@ export default async function AdminPage() {
                     <p className="text-sm font-semibold truncate">
                       {v.hunter?.full_name ?? v.hunter?.email ?? '—'}
                     </p>
-                    <p className="text-xs text-[#5E6278] truncate">
+                    <p className="text-xs text-text-secondary truncate">
                       {v.listing?.title_de ?? v.listing?.city ?? '—'}
                     </p>
                   </div>
@@ -255,17 +257,17 @@ export default async function AdminPage() {
             <h2 className="text-base font-bold mb-4">{t('admin.recentUsers')}</h2>
             <div className="bg-surface rounded-card divide-y divide-[#E2E4EB]">
               {((recentUsers as any).data ?? []).length === 0 && (
-                <p className="px-5 py-4 text-sm text-[#5E6278]">{t('admin.noUsers')}</p>
+                <p className="px-5 py-4 text-sm text-text-secondary">{t('admin.noUsers')}</p>
               )}
               {((recentUsers as any).data ?? []).map((u: any) => (
                 <div key={u.id} className="px-5 py-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-sm font-semibold">{u.full_name ?? '—'}</p>
-                    <p className="text-xs text-[#5E6278]">{u.email}</p>
+                    <p className="text-xs text-text-secondary">{u.email}</p>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
                     <span className="text-xs text-[#999]">
-                      {new Date(u.created_at).toLocaleDateString('de-DE')}
+                      {new Date(u.created_at).toLocaleDateString(dateLocale)}
                     </span>
                     <span className="text-xs font-semibold px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
                       {u.country_code ?? 'DE'}

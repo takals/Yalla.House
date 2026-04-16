@@ -115,7 +115,7 @@ export default async function ThreadDetailPage({ params }: Props) {
           <ArrowLeft size={16} />
           Back to Inbox
         </Link>
-        <h1 className="text-2xl font-bold text-[#0F1117] tracking-tight">
+        <h1 className="text-2xl font-bold text-text-primary tracking-tight">
           {thread?.subject || thread?.listing?.title_de || 'Conversation'}
         </h1>
         {thread?.listing && (
@@ -126,7 +126,7 @@ export default async function ThreadDetailPage({ params }: Props) {
       </div>
 
       {/* Messages */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-border-default overflow-hidden">
         {messages.length === 0 ? (
           <div className="p-12 text-center">
             <MessageCircle size={40} className="mx-auto mb-3 text-[#D9DCE4]" />
@@ -146,12 +146,12 @@ export default async function ThreadDetailPage({ params }: Props) {
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                        isOwner ? 'bg-[#D4764E] text-white' : 'bg-[#EDEEF2] text-[#0F1117]'
+                        isOwner ? 'bg-[#D4764E] text-white' : 'bg-bg text-text-primary'
                       }`}>
                         {(msg.sender?.full_name || msg.sender?.email || '?').charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <span className="text-sm font-semibold text-[#0F1117]">
+                        <span className="text-sm font-semibold text-text-primary">
                           {isOwner ? 'You' : (msg.sender?.full_name || msg.sender?.email || 'Unknown')}
                         </span>
                         <span className={`ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded ${badge.color}`}>
@@ -162,7 +162,7 @@ export default async function ThreadDetailPage({ params }: Props) {
                     <span className="text-xs text-[#999]">{formatMessageDate(msg.sent_at)}</span>
                   </div>
                   <div className="ml-10">
-                    <p className="text-sm text-[#5E6278] leading-relaxed whitespace-pre-line">{msg.body}</p>
+                    <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-line">{msg.body}</p>
                   </div>
                 </div>
               )
@@ -171,7 +171,7 @@ export default async function ThreadDetailPage({ params }: Props) {
         )}
 
         {/* Reply Form */}
-        <div className="border-t border-[#E2E4EB] p-5 bg-[#FAFAFA]">
+        <div className="border-t border-border-default p-5 bg-[#FAFAFA]">
           <ReplyForm threadId={threadId} />
         </div>
       </div>

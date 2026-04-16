@@ -54,10 +54,10 @@ export function SettingsForm({ userProfile, ownerProfile, translations: t }: Set
   return (
     <>
       {/* Personal Information Card */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 space-y-4">
+      <div className="bg-white rounded-2xl border border-border-default p-6 space-y-4">
         <div className="flex items-center gap-3 mb-2">
-          <User size={20} className="text-[#0F1117]" />
-          <h2 className="font-bold text-[#0F1117] text-base">{t.sectionPersonal}</h2>
+          <User size={20} className="text-text-primary" />
+          <h2 className="font-bold text-text-primary text-base">{t.sectionPersonal}</h2>
         </div>
         <EditableField
           label={t.labelFullName}
@@ -84,10 +84,10 @@ export function SettingsForm({ userProfile, ownerProfile, translations: t }: Set
       </div>
 
       {/* Company Details Card */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6 space-y-4">
+      <div className="bg-white rounded-2xl border border-border-default p-6 space-y-4">
         <div className="flex items-center gap-3 mb-2">
-          <Building2 size={20} className="text-[#0F1117]" />
-          <h2 className="font-bold text-[#0F1117] text-base">{t.sectionBusiness}</h2>
+          <Building2 size={20} className="text-text-primary" />
+          <h2 className="font-bold text-text-primary text-base">{t.sectionBusiness}</h2>
         </div>
         <EditableField
           label={t.labelCompanyName}

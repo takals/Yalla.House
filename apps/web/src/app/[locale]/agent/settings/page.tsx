@@ -43,7 +43,7 @@ export default async function AgentSettingsPage() {
     <div className="max-w-2xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-1">{t('title')}</h1>
-        <p className="text-[#5E6278] text-sm">{t('subtitle')}</p>
+        <p className="text-text-secondary text-sm">{t('subtitle')}</p>
       </div>
 
       <AgentSettingsClient

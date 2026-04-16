@@ -12,33 +12,33 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
     <div className="max-w-5xl">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-3xl font-bold text-[#0F1117]">
+        <h1 className="text-3xl font-bold text-text-primary">
           {isEN ? 'Agent Dashboard' : 'Makler-Dashboard'}
         </h1>
       </div>
 
       {/* Sub-nav tabs */}
-      <div className="flex gap-6 mb-8 border-b border-[#E2E4EB]">
-        <Link href="/agent/info" className="text-sm font-semibold text-[#0F1117] pb-3 border-b-2 border-[#34C759] -mb-px">
+      <div className="flex gap-6 mb-8 border-b border-border-default">
+        <Link href="/agent/info" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-[#34C759] -mb-px">
           Info
         </Link>
-        <Link href="/agent/overview" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/agent/overview" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           Dashboard
         </Link>
-        <Link href="/agent/briefs" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/agent/briefs" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           Briefs
         </Link>
-        <Link href="/agent/assignments" className="text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] pb-3 transition-colors">
+        <Link href="/agent/assignments" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
           Assignments
         </Link>
       </div>
 
       {/* Hero intro */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8 mb-8">
-        <h2 className="text-xl font-bold text-[#0F1117] mb-3">
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-xl font-bold text-text-primary mb-3">
           {isEN ? 'Less admin. More deals.' : 'Weniger Verwaltung. Mehr Abschlüsse.'}
         </h2>
-        <p className="text-[#5E6278] leading-relaxed max-w-3xl">
+        <p className="text-text-secondary leading-relaxed max-w-3xl">
           {isEN
             ? 'You became an agent to help people find homes — not to spend half your day chasing callbacks, re-typing buyer details, and coordinating diaries over email. Yalla.House handles the boring work so you can focus on what you\'re actually good at: closing deals and building relationships.'
             : 'Sie sind Makler geworden, um Menschen bei der Wohnungssuche zu helfen — nicht um den halben Tag mit Rückrufen, dem Abtippen von Käuferdaten und der Koordination von Terminen per E-Mail zu verbringen. Yalla.House erledigt die langweilige Arbeit, damit Sie sich auf das konzentrieren können, was Sie wirklich gut können.'}
@@ -49,14 +49,14 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
       <div className="grid md:grid-cols-2 gap-5 mb-8">
 
         {/* 1: Calendar */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
             <Calendar size={22} className="text-[#34C759]" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {isEN ? 'Online calendar — no more back and forth' : 'Online-Kalender — kein Hin und Her mehr'}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {isEN
               ? 'Set your availability once. Home hunters and owners pick a slot that works for them — confirmed instantly. No more 6-email chains to book a single viewing. You see everything in one calendar: viewings, follow-ups, offer deadlines.'
               : 'Verfügbarkeit einmal festlegen. Suchende und Eigentümer wählen einen passenden Termin — sofort bestätigt. Keine 6-E-Mail-Ketten mehr für eine einzige Besichtigung.'}
@@ -64,14 +64,14 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
         </div>
 
         {/* 2: All comms in one place */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
             <MessageSquare size={22} className="text-[#34C759]" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {isEN ? 'Everything in one inbox' : 'Alles in einem Posteingang'}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {isEN
               ? 'Messages, emails, viewing reminders, document requests, offer notifications — all in one place. No more switching between your phone, email, WhatsApp, and your CRM to piece together what\'s happening with a deal. One thread per client, full history, searchable.'
               : 'Nachrichten, E-Mails, Besichtigungserinnerungen, Dokumentenanfragen, Angebotsbenachrichtigungen — alles an einem Ort. Ein Thread pro Klient, vollständiger Verlauf, durchsuchbar.'}
@@ -79,14 +79,14 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
         </div>
 
         {/* 3: Verified hunters */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
             <ShieldCheck size={22} className="text-[#34C759]" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {isEN ? 'Verified home hunters — ready to go' : 'Verifizierte Suchende — sofort startklar'}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {isEN
               ? 'Every hunter who reaches you has already filled out their Home Passport: budget, area, property type, timeline, finance status, languages. No more 20-minute onboarding calls to find out what they\'re looking for. It\'s all there before you even reply.'
               : 'Jeder Suchende, der Sie erreicht, hat bereits seinen Home Passport ausgefüllt: Budget, Gebiet, Immobilientyp, Zeitplan, Finanzstatus. Keine 20-minütigen Onboarding-Gespräche mehr.'}
@@ -94,14 +94,14 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
         </div>
 
         {/* 4: CRM sync */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
             <RefreshCw size={22} className="text-[#34C759]" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {isEN ? 'Optional CRM sync — everyone stays in the loop' : 'Optionale CRM-Synchronisierung'}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {isEN
               ? 'Connect your existing CRM and Yalla.House keeps it updated automatically. New leads, viewing outcomes, offer status — synced in real time. Owners and hunters see live progress without you having to send manual updates. Saves hours every week.'
               : 'Verbinden Sie Ihr bestehendes CRM und Yalla.House hält es automatisch aktuell. Neue Leads, Besichtigungsergebnisse, Angebotsstatus — in Echtzeit synchronisiert. Spart Stunden pro Woche.'}
@@ -109,14 +109,14 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
         </div>
 
         {/* 5: Save time */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
             <Clock size={22} className="text-[#34C759]" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {isEN ? 'Get your evenings back' : 'Holen Sie sich Ihre Abende zurück'}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {isEN
               ? 'The platform automates the work that eats your time: scheduling, status updates, document collection, follow-up reminders. Agents on similar platforms report saving 8–12 hours per week on admin alone. That\'s two extra viewings a day, or a Friday off.'
               : 'Die Plattform automatisiert die zeitfressende Arbeit: Terminplanung, Statusupdates, Dokumentensammlung, Follow-up-Erinnerungen. Ähnliche Plattformen berichten von 8–12 Stunden Zeitersparnis pro Woche.'}
@@ -124,14 +124,14 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
         </div>
 
         {/* 6: Your branding */}
-        <div className="bg-white rounded-2xl border border-[#E2E4EB] p-6">
+        <div className="bg-white rounded-2xl border border-border-default p-6">
           <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
             <Palette size={22} className="text-[#34C759]" />
           </div>
-          <h3 className="font-bold text-[#0F1117] mb-2">
+          <h3 className="font-bold text-text-primary mb-2">
             {isEN ? 'Your branding, your reputation' : 'Ihr Branding, Ihr Ruf'}
           </h3>
-          <p className="text-sm text-[#5E6278] leading-relaxed">
+          <p className="text-sm text-text-secondary leading-relaxed">
             {isEN
               ? 'Your agency name, logo, and profile are front and centre. When a hunter sees your proposal, they see you — not a generic platform. Build your reputation on Yalla.House with verified reviews, response times, and a track record that speaks for itself.'
               : 'Ihr Agenturname, Logo und Profil stehen im Mittelpunkt. Wenn ein Suchender Ihren Vorschlag sieht, sieht er Sie — nicht eine generische Plattform. Bauen Sie Ihren Ruf auf mit verifizierten Bewertungen und Reaktionszeiten.'}
@@ -140,8 +140,8 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
       </div>
 
       {/* How qualified leads reach you */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8 mb-8">
-        <h2 className="text-lg font-bold text-[#0F1117] mb-6">
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-lg font-bold text-text-primary mb-6">
           {isEN ? 'How clients find you' : 'Wie Klienten Sie finden'}
         </h2>
         <div className="space-y-6">
@@ -173,8 +173,8 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
                 {step.num}
               </div>
               <div>
-                <h3 className="font-bold text-[#0F1117] mb-1">{step.title}</h3>
-                <p className="text-sm text-[#5E6278]">{step.desc}</p>
+                <h3 className="font-bold text-text-primary mb-1">{step.title}</h3>
+                <p className="text-sm text-text-secondary">{step.desc}</p>
               </div>
             </div>
           ))}
@@ -182,11 +182,11 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
       </div>
 
       {/* Pricing */}
-      <div className="bg-white rounded-2xl border border-[#E2E4EB] p-8 mb-8">
-        <h2 className="text-lg font-bold text-[#0F1117] mb-2">
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-lg font-bold text-text-primary mb-2">
           {isEN ? 'Pricing — transparent, no surprises' : 'Preise — transparent, keine Überraschungen'}
         </h2>
-        <p className="text-sm text-[#5E6278] mb-8">
+        <p className="text-sm text-text-secondary mb-8">
           {isEN
             ? 'Start free. Upgrade when you need more.'
             : 'Kostenlos starten. Upgraden, wenn Sie mehr brauchen.'}
@@ -198,9 +198,9 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
             <span className="absolute -top-3 left-4 bg-[#34C759] text-white text-xs font-bold px-3 py-1 rounded-full">
               {isEN ? 'FREE FOREVER' : 'FÜR IMMER KOSTENLOS'}
             </span>
-            <h3 className="text-lg font-bold text-[#0F1117] mt-2 mb-1">Starter</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-4">£0<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <ul className="space-y-2.5 text-sm text-[#5E6278]">
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Starter</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-4">£0<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Agent profile with verified badge' : 'Makler-Profil mit Badge'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Receive matched search briefs' : 'Passende Suchanfragen erhalten'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Reply to up to 5 briefs/month' : 'Bis zu 5 Antworten/Monat'}</li>
@@ -212,10 +212,10 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
           </div>
 
           {/* Pro tier */}
-          <div className="rounded-xl border border-[#E2E4EB] p-6 bg-[#FAFBFC]">
-            <h3 className="text-lg font-bold text-[#0F1117] mb-1">Pro</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-4">£49<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <ul className="space-y-2.5 text-sm text-[#5E6278]">
+          <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC]">
+            <h3 className="text-lg font-bold text-text-primary mb-1">Pro</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-4">£49<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Everything in Starter' : 'Alles aus Starter'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Unlimited brief replies' : 'Unbegrenzte Antworten'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'CRM sync (Reapit, Alto, etc.)' : 'CRM-Sync (Reapit, Alto, etc.)'}</li>
@@ -226,10 +226,10 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
           </div>
 
           {/* Agency tier */}
-          <div className="rounded-xl border border-[#E2E4EB] p-6 bg-[#FAFBFC]">
-            <h3 className="text-lg font-bold text-[#0F1117] mb-1">Agency</h3>
-            <p className="text-3xl font-extrabold text-[#0F1117] mb-4">£149<span className="text-sm font-normal text-[#5E6278]">/mo</span></p>
-            <ul className="space-y-2.5 text-sm text-[#5E6278]">
+          <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC]">
+            <h3 className="text-lg font-bold text-text-primary mb-1">Agency</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-4">£149<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Everything in Pro' : 'Alles aus Pro'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Up to 10 agent seats' : 'Bis zu 10 Makler-Plätze'}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Team calendar & assignment' : 'Team-Kalender & Zuweisung'}</li>
@@ -262,10 +262,10 @@ export default async function AgentInfoPage({ params }: { params: Promise<{ loca
 
       {/* CTA */}
       <div className="bg-[#34C759]/5 border border-[#34C759]/20 rounded-2xl p-8 text-center">
-        <h2 className="text-xl font-bold text-[#0F1117] mb-3">
+        <h2 className="text-xl font-bold text-text-primary mb-3">
           {isEN ? 'Start free — upgrade when it makes sense' : 'Kostenlos starten — upgraden, wenn es Sinn macht'}
         </h2>
-        <p className="text-sm text-[#5E6278] mb-6 max-w-lg mx-auto">
+        <p className="text-sm text-text-secondary mb-6 max-w-lg mx-auto">
           {isEN
             ? 'Set up your profile in 2 minutes. Start receiving matched briefs from home hunters in your area today. No credit card, no contracts.'
             : 'Profil in 2 Minuten einrichten. Noch heute passende Anfragen erhalten. Keine Kreditkarte, keine Verträge.'}

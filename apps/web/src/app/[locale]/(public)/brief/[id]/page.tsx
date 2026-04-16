@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { Home, MapPin, Banknote, BedDouble, Calendar, ArrowRight } from 'lucide-react'
 import type { Database } from '@/types/database'
@@ -42,6 +43,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BriefLandingPage({ params }: Props) {
+  const locale = await getLocale()
+  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
 
   // Fetch the listing (owner brief) — select all, expose only safe fields in template
@@ -57,10 +60,10 @@ export default async function BriefLandingPage({ params }: Props) {
   const isRent = listing.intent === 'rent' || listing.intent === 'both'
   const price = isSale
     ? listing.sale_price
-      ? `£${(listing.sale_price / 100).toLocaleString('en-GB')}`
+      ? `£${(listing.sale_price / 100).toLocaleString(dateLocale)}`
       : 'Price on application'
     : listing.rent_price
-      ? `£${(listing.rent_price / 100).toLocaleString('en-GB')} pcm`
+      ? `£${(listing.rent_price / 100).toLocaleString(dateLocale)} pcm`
       : 'Rent on application'
 
   const intentLabel = listing.intent === 'both'
@@ -157,7 +160,7 @@ export default async function BriefLandingPage({ params }: Props) {
           {/* Date */}
           <div className="mt-6 pt-5 border-t border-white/[0.06] flex items-center gap-2 text-xs text-text-on-dark-muted">
             <Calendar size={14} />
-            Brief sent {new Date(listing.created_at).toLocaleDateString('en-GB', {
+            Brief sent {new Date(listing.created_at).toLocaleDateString(dateLocale, {
               day: 'numeric',
               month: 'long',
               year: 'numeric',

@@ -48,7 +48,7 @@ export function CheckoutButton({
         type="button"
         onClick={handleClick}
         disabled={disabled || loading}
-        className="w-full py-3 rounded-xl font-bold text-sm bg-brand hover:bg-brand-hover text-[#0F1117] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 rounded-xl font-bold text-sm bg-brand hover:bg-brand-hover text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
