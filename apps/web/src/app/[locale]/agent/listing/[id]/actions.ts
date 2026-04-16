@@ -5,15 +5,20 @@ import { requireAuth } from '@/lib/auth-guard'
 
 export async function submitProposalAction(
   listingId: string,
-  data: { commission: string; serviceOverview: string }
+  data: {
+    feeType: 'flat' | 'percentage' | 'none'
+    feeAmount: number | null
+    feeCurrency: string
+    serviceOverview: string
+  }
 ) {
   const auth = await requireAuth()
   if (!auth.authenticated) {
     return { authRequired: true }
   }
 
-  if (!data.commission.trim()) {
-    return { error: 'Please enter your commission quote.' }
+  if (data.feeType !== 'none' && (!data.feeAmount || data.feeAmount <= 0)) {
+    return { error: 'Please enter a valid fee amount.' }
   }
   if (!data.serviceOverview.trim()) {
     return { error: 'Please describe your service offering.' }
@@ -54,8 +59,10 @@ export async function submitProposalAction(
       owner_id: listing.owner_id,
       tier: 'managed',
       status: 'invited',
-      notes: `Commission: ${data.commission}\n\nService overview:\n${data.serviceOverview}`,
-      fee_type: 'quoted',
+      notes: data.serviceOverview,
+      fee_type: data.feeType,
+      fee_amount: data.feeAmount,
+      fee_currency: data.feeCurrency,
       // Full-service permissions by default
       can_edit_listing: true,
       can_manage_viewings: true,

@@ -34,7 +34,7 @@
     "toggleOwner": "I'm selling",
     "toggleHunter": "I'm searching",
     "agentLink": "I'm an agent",
-    "signIn": "Already have an account? Sign in \u2192"
+    "signIn": "Already have an account? Sign in →"
   },
   "heroHunter": {
     "headlinePrefix": "Your property ",
@@ -498,7 +498,8 @@
     "serviceOverview": "Service Overview",
     "acceptProposal": "Accept Proposal",
     "decline": "Decline",
-    "accepted": "Accepted — working on your property"
+    "accepted": "Accepted — working on your property",
+    "noFee": "No Fee"
   },
   "agentCalendar": {
     "title": "Viewing Calendar",
@@ -1397,5 +1398,35 @@
     "contactMessage": "Message",
     "contactMessagePlaceholder": "Your message to the owner…",
     "contactSendRequest": "Send request"
+  },
+  "ownerOffers": {
+    "pageTitle": "Offers",
+    "subtitle": "Review and manage all offers on your properties.",
+    "filterAll": "All",
+    "filterActive": "Active",
+    "filterResolved": "Resolved",
+    "noOffers": "No offers received yet.",
+    "amount": "Amount",
+    "from": "From",
+    "submitted": "Submitted",
+    "type": "Type",
+    "typeSale": "Sale Offer",
+    "typeRental": "Rental Application",
+    "finance": "Finance",
+    "financeCash": "Cash Buyer",
+    "financeMortgageApproved": "Mortgage Approved",
+    "financeMortgagePending": "Mortgage Pending",
+    "financeNotSpecified": "Not Specified",
+    "conditions": "Conditions",
+    "message": "Message",
+    "moveInDate": "Move-in Date",
+    "accept": "Accept",
+    "decline": "Decline",
+    "statusSubmitted": "Submitted",
+    "statusUnderReview": "Under Review",
+    "statusAccepted": "Accepted",
+    "statusDeclined": "Declined",
+    "statusWithdrawn": "Withdrawn",
+    "statusExpired": "Expired"
   }
 }

@@ -34,7 +34,7 @@
     "toggleOwner": "Ich verkaufe",
     "toggleHunter": "Ich suche",
     "agentLink": "Ich bin Makler",
-    "signIn": "Bereits ein Konto? Anmelden \u2192"
+    "signIn": "Bereits ein Konto? Anmelden →"
   },
   "heroHunter": {
     "headlinePrefix": "Ihre Immobilien",
@@ -498,7 +498,8 @@
     "serviceOverview": "Service-Übersicht",
     "acceptProposal": "Vorschlag annehmen",
     "decline": "Ablehnen",
-    "accepted": "Angenommen — arbeitet an Ihrer Immobilie"
+    "accepted": "Angenommen — arbeitet an Ihrer Immobilie",
+    "noFee": "Keine Gebühr"
   },
   "agentCalendar": {
     "title": "Besichtigungskalender",
@@ -1046,7 +1047,7 @@
       "selectPropertyType": "Bitte Typ wählen",
       "selectIntent": "Bitte Art wählen",
       "addressRequired": "Adresse erforderlich",
-      "postcodeInvalid": "Bitte g\u00fcltige Postleitzahl eingeben",
+      "postcodeInvalid": "Bitte gültige Postleitzahl eingeben",
       "cityRequired": "Stadt erforderlich",
       "constructionYearInvalid": "Baujahr muss zwischen {min} und {max} liegen",
       "titleRequired": "Titel erforderlich",
@@ -1218,8 +1219,8 @@
     },
     "step2": {
       "heading": "Wo befindet sich die Immobilie?",
-      "addressLine1": "Stra\u00dfe und Hausnummer",
-      "addressLine1Placeholder": "Musterstra\u00dfe 42",
+      "addressLine1": "Straße und Hausnummer",
+      "addressLine1Placeholder": "Musterstraße 42",
       "addressLine2": "Adresszusatz",
       "addressLine2Placeholder": "Hinterhaus, EG links",
       "postcode": "Postleitzahl",
@@ -1227,7 +1228,7 @@
       "city": "Stadt",
       "cityPlaceholder": "Berlin",
       "region": "Bundesland",
-      "regionSelectDefault": "Bundesland w\u00e4hlen"
+      "regionSelectDefault": "Bundesland wählen"
     },
     "step3": {
       "heading": "Objektdetails",
@@ -1299,7 +1300,7 @@
     },
     "validation": {
       "required": "erforderlich",
-      "postcodeInvalid": "Bitte g\u00fcltige Postleitzahl eingeben"
+      "postcodeInvalid": "Bitte gültige Postleitzahl eingeben"
     }
   },
   "partner": {
@@ -1337,7 +1338,7 @@
     "metaFallbackTitle": "Immobilie",
     "titleFallback": "Ihre Immobilie",
     "perMonth": "Monat",
-    "draftNotice": "Diese Immobilie ist nicht veröffentlicht. Schalten Sie sie auf \u201ELive\u201C, damit sie für Suchende sichtbar wird.",
+    "draftNotice": "Diese Immobilie ist nicht veröffentlicht. Schalten Sie sie auf „Live“, damit sie für Suchende sichtbar wird.",
     "statLivingSpace": "Wohnfläche",
     "statRooms": "Zimmer",
     "statBathrooms": "Badezimmer",
@@ -1397,5 +1398,35 @@
     "contactMessage": "Nachricht",
     "contactMessagePlaceholder": "Ihre Nachricht an den Eigentümer…",
     "contactSendRequest": "Anfrage senden"
+  },
+  "ownerOffers": {
+    "pageTitle": "Angebote",
+    "subtitle": "Alle Angebote für Ihre Immobilien auf einen Blick.",
+    "filterAll": "Alle",
+    "filterActive": "Aktiv",
+    "filterResolved": "Abgeschlossen",
+    "noOffers": "Noch keine Angebote eingegangen.",
+    "amount": "Betrag",
+    "from": "Von",
+    "submitted": "Eingereicht",
+    "type": "Typ",
+    "typeSale": "Kaufangebot",
+    "typeRental": "Mietbewerbung",
+    "finance": "Finanzierung",
+    "financeCash": "Barkauf",
+    "financeMortgageApproved": "Hypothek genehmigt",
+    "financeMortgagePending": "Hypothek ausstehend",
+    "financeNotSpecified": "Nicht angegeben",
+    "conditions": "Bedingungen",
+    "message": "Nachricht",
+    "moveInDate": "Einzugsdatum",
+    "accept": "Annehmen",
+    "decline": "Ablehnen",
+    "statusSubmitted": "Eingereicht",
+    "statusUnderReview": "In Prüfung",
+    "statusAccepted": "Angenommen",
+    "statusDeclined": "Abgelehnt",
+    "statusWithdrawn": "Zurückgezogen",
+    "statusExpired": "Abgelaufen"
   }
 }

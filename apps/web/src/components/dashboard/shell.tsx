@@ -6,7 +6,7 @@ import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
-  LogOut, Search, PanelLeftClose, PanelLeftOpen,
+  LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -203,6 +203,7 @@ export const ownerNav: NavItem[] = [
   { href: '/owner/info',     label: 'Dashboard',       icon: <LayoutDashboard size={15} />, exact: true },
   { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} /> },
   { href: '/owner/viewings', label: 'Viewings',    icon: <Calendar size={15} /> },
+  { href: '/owner/offers',   label: 'Offers',      icon: <Banknote size={15} /> },
   { href: '/owner/agents',   label: 'Agents',      icon: <Handshake size={15} /> },
   { href: '/owner/inbox',    label: 'Inbox',       icon: <Inbox size={15} /> },
   { href: '/owner/new',      label: 'New Listing',     icon: <Plus size={15} /> },
