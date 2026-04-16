@@ -9,6 +9,14 @@ interface OwnerProfile {
   user_id: string
   company_name: string | null
   tax_id: string | null
+  default_intent: string | null
+  default_property_type: string | null
+  default_currency: string | null
+  default_price_qualifier: string | null
+  default_rent_period: string | null
+  default_city: string | null
+  default_postcode: string | null
+  default_region: string | null
 }
 
 export default async function OwnerSettingsPage() {
