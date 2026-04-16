@@ -210,7 +210,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-xs text-text-muted mt-4 text-center">
-            No account yet? We'll create one when you sign in.
+            No account yet? We&apos;ll create one when you sign in.
           </p>
         </div>
       </div>
