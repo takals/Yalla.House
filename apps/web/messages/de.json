@@ -32,7 +32,9 @@
     "cta": "Kostenloses Dashboard erstellen",
     "ctaHunter": "Ich suche eine Immobilie",
     "toggleOwner": "Ich verkaufe",
-    "toggleHunter": "Ich suche"
+    "toggleHunter": "Ich suche",
+    "agentLink": "Ich bin Makler",
+    "signIn": "Bereits ein Konto? Anmelden \u2192"
   },
   "heroHunter": {
     "headlinePrefix": "Ihre Immobilien",

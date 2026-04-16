@@ -26,6 +26,9 @@ interface HomepageHeroProps {
   hunter: ModeContent
   toggleOwnerLabel: string
   toggleHunterLabel: string
+  signInLabel?: string
+  signInHref?: string
+  agentLabel: string
 }
 
 /* ── Component ────────────────────────────────────────────────────────────── */
@@ -35,6 +38,9 @@ export default function HomepageHero({
   hunter,
   toggleOwnerLabel,
   toggleHunterLabel,
+  signInLabel,
+  signInHref,
+  agentLabel,
 }: HomepageHeroProps) {
   const [mode, setMode] = useState<'owner' | 'hunter'>('owner')
   const [wordIndex, setWordIndex] = useState(0)
@@ -128,20 +134,30 @@ export default function HomepageHero({
               {content.subline}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <Link
-                href={content.ctaHref}
-                className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
-                style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
-              >
-                {content.cta} →
-              </Link>
-              <Link
-                href="/agent"
-                className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
-              >
-                I&apos;m an agent →
-              </Link>
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <Link
+                  href={content.ctaHref}
+                  className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
+                >
+                  {content.cta} →
+                </Link>
+                <Link
+                  href="/agent"
+                  className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
+                >
+                  {agentLabel} →
+                </Link>
+              </div>
+              {signInLabel && signInHref && (
+                <Link
+                  href={signInHref}
+                  className="text-sm text-text-on-dark-muted hover:text-brand transition-[color] duration-300"
+                >
+                  {signInLabel}
+                </Link>
+              )}
             </div>
           </div>
         </div>
