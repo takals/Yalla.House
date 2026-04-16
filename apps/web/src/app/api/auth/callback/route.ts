@@ -59,12 +59,36 @@ export async function GET(request: NextRequest) {
         { onConflict: 'id', ignoreDuplicates: false }
       )
 
-      // Determine redirect — use the resolved `next` value
+      // Determine redirect — respect explicit `next` param, otherwise
+      // route to the user's highest-priority dashboard based on roles.
       let redirectUrl = next
 
       // Safety: ensure URL is relative
       if (!redirectUrl.startsWith('/')) {
         redirectUrl = '/hunter'
+      }
+
+      // If no explicit destination was set (default /hunter fallback),
+      // query user_roles and route to the best dashboard.
+      const isDefaultRedirect = redirectUrl === '/hunter'
+      if (isDefaultRedirect) {
+        const { data: roles } = await (supabase.from('user_roles') as any)
+          .select('role')
+          .eq('user_id', data.user.id)
+          .eq('is_active', true)
+
+        if (roles && roles.length > 0) {
+          const roleSet = new Set(roles.map((r: { role: string }) => r.role))
+          // Priority: admin > agent > owner > hunter
+          if (roleSet.has('admin')) {
+            redirectUrl = '/admin'
+          } else if (roleSet.has('agent')) {
+            redirectUrl = '/agent'
+          } else if (roleSet.has('owner')) {
+            redirectUrl = '/owner'
+          }
+          // else stays /hunter (default)
+        }
       }
 
       // Clear the return cookie — it's been consumed
