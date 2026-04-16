@@ -1471,5 +1471,53 @@
     "cancelledMessage": "Diese Besichtigung wurde storniert.",
     "upcomingCount": "{count} anstehend",
     "confirmedCount": "{count} bestätigt"
+  },
+  "notif": {
+    "notifications": "Benachrichtigungen",
+    "markAllRead": "Alle gelesen",
+    "noNotifications": "Keine Benachrichtigungen"
+  },
+  "adminUsers": {
+    "usersTitle": "Benutzerverwaltung",
+    "usersSubtitle": "Benutzer anzeigen und Rollen verwalten",
+    "searchPlaceholder": "Name oder E-Mail suchen…",
+    "allRoles": "Alle",
+    "roleOwner": "Eigentümer",
+    "roleHunter": "Suchender",
+    "roleAgent": "Makler",
+    "roleAdmin": "Admin",
+    "noRoles": "Keine Rollen",
+    "addRole": "Rolle hinzufügen",
+    "removeRole": "Rolle entfernen",
+    "noUsers": "Keine Benutzer gefunden",
+    "totalUsers": "Gesamt",
+    "rolesUpdated": "Rollen aktualisiert",
+    "errorUpdatingRole": "Fehler beim Aktualisieren der Rolle"
+  },
+  "agentInbox": {
+    "title": "Posteingang",
+    "subtitle": "Nachrichten von Eigentümern und Suchenden",
+    "yourEmail": "Deine Yalla-E-Mail",
+    "emailExplainer": "Nachrichten werden an diese Adresse weitergeleitet.",
+    "noMessages": "Noch keine Nachrichten",
+    "noMessagesDesc": "Wenn Eigentümer oder Suchende dir schreiben, erscheinen die Unterhaltungen hier.",
+    "viewConversation": "Unterhaltung anzeigen"
+  },
+  "agentSettings": {
+    "title": "Einstellungen",
+    "subtitle": "Dein Profil und Kontoeinstellungen",
+    "profile": "Profil",
+    "fullName": "Vollständiger Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "saveChanges": "Speichern",
+    "saving": "Wird gespeichert…",
+    "profileSaved": "Profil gespeichert",
+    "agencyName": "Büroname",
+    "agencyAddress": "Büroadresse",
+    "dangerZone": "Gefahrenzone",
+    "deleteAccount": "Konto löschen",
+    "deleteAccountDesc": "Alle Daten werden unwiderruflich gelöscht.",
+    "delete": "Löschen"
   }
 }

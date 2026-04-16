@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_EMAIL } from '@/lib/preview-user'
+import { PREVIEW_USER_EMAIL, PREVIEW_USER_ID } from '@/lib/preview-user'
 import { DashboardShell, adminNav } from '@/components/dashboard/shell'
+import { fetchNotifications, getNotificationLabels } from '@/lib/notifications'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   robots: {
@@ -13,23 +15,25 @@ export const metadata: Metadata = {
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const userId = user?.id ?? PREVIEW_USER_ID
+  const t = await getTranslations('notif')
 
-  // Preview phase: no auth gate. Render the shell even when there's no user.
-  let fullName: string | null = null
-  if (user) {
-    const { data: profile } = await (supabase.from('users') as any)
-      .select('full_name')
-      .eq('id', user.id)
-      .maybeSingle()
-    fullName = profile?.full_name ?? null
-  }
+  const [profileResult, notifData] = await Promise.all([
+    user
+      ? (supabase.from('users') as any).select('full_name').eq('id', user.id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    fetchNotifications(supabase, userId),
+  ])
 
   return (
     <DashboardShell
       navItems={adminNav}
       section="admin"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
-      userName={fullName}
+      userName={profileResult.data?.full_name ?? null}
+      notifications={notifData.notifications}
+      unreadCount={notifData.unreadCount}
+      notificationLabels={getNotificationLabels(t)}
     >
       {children}
     </DashboardShell>
