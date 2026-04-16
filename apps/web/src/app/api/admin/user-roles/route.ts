@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     // Check if role already exists (active or inactive)
     const { data: existing } = await (service.from('user_roles') as any)
-      .select('id, is_active')
+      .select('user_id, role, is_active')
       .eq('user_id', userId)
       .eq('role', role)
       .maybeSingle()
@@ -44,8 +44,9 @@ export async function POST(request: Request) {
       // Reactivate if inactive
       if (!existing.is_active) {
         await (service.from('user_roles') as any)
-          .update({ is_active: true, updated_at: new Date().toISOString() })
-          .eq('id', existing.id)
+          .update({ is_active: true })
+          .eq('user_id', userId)
+          .eq('role', role)
       }
     } else {
       // Insert new role
@@ -54,7 +55,6 @@ export async function POST(request: Request) {
           user_id: userId,
           role,
           is_active: true,
-          assigned_by: user.id,
         })
 
       if (error) {
@@ -93,7 +93,7 @@ export async function DELETE(request: Request) {
     const service = createServiceClient()
 
     const { error } = await (service.from('user_roles') as any)
-      .update({ is_active: false, updated_at: new Date().toISOString() })
+      .update({ is_active: false })
       .eq('user_id', userId)
       .eq('role', role)
 
