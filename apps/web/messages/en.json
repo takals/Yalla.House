@@ -32,7 +32,9 @@
     "cta": "Create your free dashboard",
     "ctaHunter": "I'm looking to buy",
     "toggleOwner": "I'm selling",
-    "toggleHunter": "I'm searching"
+    "toggleHunter": "I'm searching",
+    "agentLink": "I'm an agent",
+    "signIn": "Already have an account? Sign in \u2192"
   },
   "heroHunter": {
     "headlinePrefix": "Your property ",

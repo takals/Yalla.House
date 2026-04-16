@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { Home, Search, Handshake } from 'lucide-react'
 import HomepageHero from '@/components/homepage-hero'
+import { createClient } from '@/lib/supabase/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -36,6 +37,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   const t = await getTranslations('hero')
   const th = await getTranslations('heroHunter')
   const stats = await getTranslations('stats')
@@ -54,6 +58,8 @@ export default async function HomePage() {
       <HomepageHero
         toggleOwnerLabel={t('toggleOwner')}
         toggleHunterLabel={t('toggleHunter')}
+        agentLabel={t('agentLink')}
+        {...(!user ? { signInLabel: t('signIn'), signInHref: '/auth/login' } : {})}
         owner={{
           headlinePrefix: t('headlinePrefix'),
           headlineWords: t('headlineWords').split(','),
