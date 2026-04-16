@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { Check, CheckCircle2, Banknote, Clock, Minus, Home } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { savePassportAction } from './actions'
 
@@ -32,43 +33,70 @@ interface Props {
   sampleAgents?: SampleAgent[]
 }
 
-const AREAS = ['East London', 'North London', 'South East London', 'Zone 2', 'Zone 3', 'West London', 'South West London']
-const PROPERTY_TYPES: { value: string; label: string }[] = [
-  { value: 'flat', label: 'Flat' },
-  { value: 'terraced', label: 'Terraced' },
-  { value: 'semi-detached', label: 'Semi-detached' },
-  { value: 'detached', label: 'Detached' },
-  { value: 'new_build', label: 'New build' },
-  { value: 'period', label: 'Period' },
+const AREA_KEYS = [
+  { value: 'East London', labelKey: 'areaEastLondon' },
+  { value: 'North London', labelKey: 'areaNorthLondon' },
+  { value: 'South East London', labelKey: 'areaSouthEastLondon' },
+  { value: 'Zone 2', labelKey: 'areaZone2' },
+  { value: 'Zone 3', labelKey: 'areaZone3' },
+  { value: 'West London', labelKey: 'areaWestLondon' },
+  { value: 'South West London', labelKey: 'areaSouthWestLondon' },
 ]
-const BEDROOMS = [
-  { value: 0, label: 'Studio' },
-  { value: 1, label: '1 bed' },
-  { value: 2, label: '2 beds' },
-  { value: 3, label: '3 beds' },
-  { value: 4, label: '4+ beds' },
+const PROPERTY_TYPE_KEYS: { value: string; labelKey: string }[] = [
+  { value: 'flat', labelKey: 'typeFlat' },
+  { value: 'terraced', labelKey: 'typeTerraced' },
+  { value: 'semi-detached', labelKey: 'typeSemiDetached' },
+  { value: 'detached', labelKey: 'typeDetached' },
+  { value: 'new_build', labelKey: 'typeNewBuild' },
+  { value: 'period', labelKey: 'typePeriod' },
 ]
-const MUST_HAVES = ['Balcony', 'Near station', 'Garden', 'Parking', 'EV charging', 'Period features', 'Open plan', 'Guest WC', 'Storage', 'Quiet street']
-const DEALBREAKERS = ['No auctions', 'No retirement homes', 'No ground floor', 'No top floor without lift', 'No shared ownership', 'No ex-social', 'No estate-agency only']
-const FINANCE_OPTIONS = [
-  { value: 'not_specified', label: 'Not specified' },
-  { value: 'mortgage_pending', label: 'Mortgage in progress' },
-  { value: 'mortgage_approved', label: 'Mortgage in principle' },
-  { value: 'cash', label: 'Cash buyer' },
+const BEDROOM_KEYS = [
+  { value: 0, labelKey: 'bedStudio' },
+  { value: 1, labelKey: 'bed1' },
+  { value: 2, labelKey: 'bed2' },
+  { value: 3, labelKey: 'bed3' },
+  { value: 4, labelKey: 'bed4Plus' },
 ]
-const TIMELINE_OPTIONS = [
-  { value: 'asap', label: 'As soon as possible' },
-  { value: '3m', label: '3 months' },
-  { value: '6m', label: '3–6 months' },
-  { value: '1y', label: '1 year' },
-  { value: 'flexible', label: 'Flexible' },
+const MUST_HAVE_KEYS = [
+  { value: 'Balcony', labelKey: 'mustBalcony' },
+  { value: 'Near station', labelKey: 'mustNearStation' },
+  { value: 'Garden', labelKey: 'mustGarden' },
+  { value: 'Parking', labelKey: 'mustParking' },
+  { value: 'EV charging', labelKey: 'mustEvCharging' },
+  { value: 'Period features', labelKey: 'mustPeriodFeatures' },
+  { value: 'Open plan', labelKey: 'mustOpenPlan' },
+  { value: 'Guest WC', labelKey: 'mustGuestWc' },
+  { value: 'Storage', labelKey: 'mustStorage' },
+  { value: 'Quiet street', labelKey: 'mustQuietStreet' },
 ]
-const AUTOMATIONS = [
-  { key: 'matchPortals', label: 'Match properties from portals' },
-  { key: 'connectAgents', label: 'Connect my inbox to local agents' },
-  { key: 'subscribeNewsletters', label: 'Subscribe to agent newsletters' },
-  { key: 'filterAuto', label: 'Filter listings automatically' },
-  { key: 'notifyMatches', label: 'Notify me when strong matches appear' },
+const DEALBREAKER_KEYS = [
+  { value: 'No auctions', labelKey: 'dealNoAuctions' },
+  { value: 'No retirement homes', labelKey: 'dealNoRetirement' },
+  { value: 'No ground floor', labelKey: 'dealNoGroundFloor' },
+  { value: 'No top floor without lift', labelKey: 'dealNoTopFloor' },
+  { value: 'No shared ownership', labelKey: 'dealNoSharedOwnership' },
+  { value: 'No ex-social', labelKey: 'dealNoExSocial' },
+  { value: 'No estate-agency only', labelKey: 'dealNoEstateOnly' },
+]
+const FINANCE_OPTION_KEYS = [
+  { value: 'not_specified', labelKey: 'finNotSpecified' },
+  { value: 'mortgage_pending', labelKey: 'finMortgagePending' },
+  { value: 'mortgage_approved', labelKey: 'finMortgageApproved' },
+  { value: 'cash', labelKey: 'finCash' },
+]
+const TIMELINE_OPTION_KEYS = [
+  { value: 'asap', labelKey: 'timeAsap' },
+  { value: '3m', labelKey: 'time3m' },
+  { value: '6m', labelKey: 'time6m' },
+  { value: '1y', labelKey: 'time1y' },
+  { value: 'flexible', labelKey: 'timeFlexible' },
+]
+const AUTOMATION_KEYS = [
+  { key: 'matchPortals', labelKey: 'automationMatchPortals' },
+  { key: 'connectAgents', labelKey: 'automationConnectAgents' },
+  { key: 'subscribeNewsletters', labelKey: 'automationSubscribeNewsletters' },
+  { key: 'filterAuto', labelKey: 'automationFilterAuto' },
+  { key: 'notifyMatches', labelKey: 'automationNotifyMatches' },
 ]
 
 function toggle(arr: string[], value: string): string[] {
@@ -102,22 +130,23 @@ function StepHeader({ n, title }: { n: string; title: string }) {
   )
 }
 
-function FinanceBadge({ status }: { status: string }) {
-  const styles: Record<string, { cls: string; label: string; icon: React.ReactNode }> = {
-    cash:              { cls: 'bg-brand-solid-bg text-brand-badge-text',    label: 'Cash buyer',             icon: <Banknote size={12} /> },
-    mortgage_approved: { cls: 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]', label: 'Mortgage in principle', icon: <Check size={12} /> },
-    mortgage_pending:  { cls: 'bg-[rgba(251,191,36,0.15)] text-[#FBBF24]', label: 'Mortgage in progress',  icon: <Clock size={12} /> },
-    not_specified:     { cls: 'bg-[rgba(255,255,255,0.07)] text-[rgba(255,255,255,0.4)]', label: 'Finance not specified', icon: <Minus size={12} /> },
+function FinanceBadge({ status, t }: { status: string; t: (key: string) => string }) {
+  const styles: Record<string, { cls: string; labelKey: string; icon: React.ReactNode }> = {
+    cash:              { cls: 'bg-brand-solid-bg text-brand-badge-text',    labelKey: 'areaCashBuyer',             icon: <Banknote size={12} /> },
+    mortgage_approved: { cls: 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]', labelKey: 'areaMortgageApproved', icon: <Check size={12} /> },
+    mortgage_pending:  { cls: 'bg-[rgba(251,191,36,0.15)] text-[#FBBF24]', labelKey: 'areaMortgagePending',  icon: <Clock size={12} /> },
+    not_specified:     { cls: 'bg-[rgba(255,255,255,0.07)] text-[rgba(255,255,255,0.4)]', labelKey: 'areaFinanceNotSpecified', icon: <Minus size={12} /> },
   }
-  const s = (styles[status] ?? styles.not_specified) as { cls: string; label: string; icon: React.ReactNode }
+  const s = (styles[status] ?? styles.not_specified) as { cls: string; labelKey: string; icon: React.ReactNode }
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${s.cls}`}>
-      {s.icon} {s.label}
+      {s.icon} {t(s.labelKey)}
     </span>
   )
 }
 
 export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
+  const t = useTranslations('hunterPassport')
   const [state, setState] = useState<{ success?: boolean; error?: string }>({})
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()
@@ -154,9 +183,16 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
     setAutomations(prev => ({ ...prev, [key]: !prev[key as keyof typeof prev] }))
   }
 
-  const previewBeds = BEDROOMS.find(b => b.value === minBeds)?.label ?? `${minBeds}+`
-  const previewTypes = propertyTypes.map(t => PROPERTY_TYPES.find(p => p.value === t)?.label ?? t)
-  const previewTimeline = TIMELINE_OPTIONS.find(t => t.value === timeline)?.label
+  const previewBeds = BEDROOM_KEYS.find(b => b.value === minBeds)
+    ? t(BEDROOM_KEYS.find(b => b.value === minBeds)!.labelKey)
+    : `${minBeds}+`
+  const previewTypes = propertyTypes.map(v => {
+    const found = PROPERTY_TYPE_KEYS.find(p => p.value === v)
+    return found ? t(found.labelKey) : v
+  })
+  const previewTimeline = TIMELINE_OPTION_KEYS.find(o => o.value === timeline)
+    ? t(TIMELINE_OPTION_KEYS.find(o => o.value === timeline)!.labelKey)
+    : undefined
   const hasPassport = areas.length > 0 || budgetMax !== '' || propertyTypes.length > 0
   const isVerified = financeStatus !== 'not_specified'
 
@@ -182,7 +218,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
 
       {state.success && (
         <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium flex items-center gap-2">
-          <CheckCircle2 size={16} /> Passport saved — agents can now request access.
+          <CheckCircle2 size={16} /> {t('savedSuccess')}
         </div>
       )}
       {state.error && (
@@ -198,17 +234,17 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
 
           {/* Step 1 — Location */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="1" title="Location — where do you want to buy or rent?" />
+            <StepHeader n="1" title={t('stepLocation')} />
             <div className="flex flex-wrap gap-2">
-              {AREAS.map(a => (
-                <Chip key={a} label={a} active={areas.includes(a)} onClick={() => setAreas(toggle(areas, a))} />
+              {AREA_KEYS.map(a => (
+                <Chip key={a.value} label={t(a.labelKey)} active={areas.includes(a.value)} onClick={() => setAreas(toggle(areas, a.value))} />
               ))}
             </div>
           </div>
 
           {/* Step 2 — Budget */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="2" title="Budget" />
+            <StepHeader n="2" title={t('stepBudget')} />
             <div className="flex gap-3 mb-4">
               {['buy', 'rent'].map(v => (
                 <button
@@ -219,14 +255,14 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
                     intent === v ? 'bg-brand border-brand text-text-primary' : 'bg-surface border-border-default text-text-secondary'
                   }`}
                 >
-                  {v === 'buy' ? 'Buy' : 'Rent'}
+                  {v === 'buy' ? t('labelBuy') : t('labelRent')}
                 </button>
               ))}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-text-secondary mb-1">
-                  Min {intent === 'rent' ? '(£/pcm)' : '(£)'}
+                  {t('labelMin')} {intent === 'rent' ? t('rentSuffix') : t('buySuffix')}
                 </label>
                 <input
                   type="number"
@@ -238,7 +274,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-text-secondary mb-1">
-                  Max {intent === 'rent' ? '(£/pcm)' : '(£)'}
+                  {t('labelMax')} {intent === 'rent' ? t('rentSuffix') : t('buySuffix')}
                 </label>
                 <input
                   type="number"
@@ -253,43 +289,43 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
 
           {/* Step 3 — Property type + bedrooms */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="3" title="Property type" />
+            <StepHeader n="3" title={t('stepPropertyType')} />
             <div className="flex flex-wrap gap-2 mb-5">
-              {PROPERTY_TYPES.map(t => (
-                <Chip key={t.value} label={t.label} active={propertyTypes.includes(t.value)} onClick={() => setPropertyTypes(toggle(propertyTypes, t.value))} />
+              {PROPERTY_TYPE_KEYS.map(pt => (
+                <Chip key={pt.value} label={t(pt.labelKey)} active={propertyTypes.includes(pt.value)} onClick={() => setPropertyTypes(toggle(propertyTypes, pt.value))} />
               ))}
             </div>
-            <p className="text-xs font-semibold text-text-secondary mb-3">Minimum bedrooms</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">{t('labelMinBedrooms')}</p>
             <div className="flex flex-wrap gap-2">
-              {BEDROOMS.map(b => (
-                <Chip key={b.value} label={b.label} active={minBeds === b.value} onClick={() => setMinBeds(b.value)} />
+              {BEDROOM_KEYS.map(b => (
+                <Chip key={b.value} label={t(b.labelKey)} active={minBeds === b.value} onClick={() => setMinBeds(b.value)} />
               ))}
             </div>
           </div>
 
           {/* Step 4 — Must-haves + dealbreakers */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="4" title="Preferences" />
-            <p className="text-xs font-semibold text-text-secondary mb-3">Must-haves</p>
+            <StepHeader n="4" title={t('stepPreferences')} />
+            <p className="text-xs font-semibold text-text-secondary mb-3">{t('labelMustHaves')}</p>
             <div className="flex flex-wrap gap-2 mb-5">
-              {MUST_HAVES.map(m => (
-                <Chip key={m} label={m} active={mustHaves.includes(m)} onClick={() => setMustHaves(toggle(mustHaves, m))} />
+              {MUST_HAVE_KEYS.map(m => (
+                <Chip key={m.value} label={t(m.labelKey)} active={mustHaves.includes(m.value)} onClick={() => setMustHaves(toggle(mustHaves, m.value))} />
               ))}
             </div>
-            <p className="text-xs font-semibold text-text-secondary mb-3">Dealbreakers</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">{t('labelDealbreakers')}</p>
             <div className="flex flex-wrap gap-2">
-              {DEALBREAKERS.map(d => (
+              {DEALBREAKER_KEYS.map(d => (
                 <button
-                  key={d}
+                  key={d.value}
                   type="button"
-                  onClick={() => setDealbreakers(toggle(dealbreakers, d))}
+                  onClick={() => setDealbreakers(toggle(dealbreakers, d.value))}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
-                    dealbreakers.includes(d)
+                    dealbreakers.includes(d.value)
                       ? 'bg-red-50 border-red-300 text-red-700'
                       : 'bg-surface border-border-default text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
-                  {d}
+                  {t(d.labelKey)}
                 </button>
               ))}
             </div>
@@ -297,26 +333,26 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
 
           {/* Step 5 — Timing */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="5" title="Timing" />
+            <StepHeader n="5" title={t('stepTiming')} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-text-secondary mb-1">Finance status</label>
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('labelFinanceStatus')}</label>
                 <select
                   value={financeStatus}
                   onChange={e => setFinanceStatus(e.target.value)}
                   className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-surface"
                 >
-                  {FINANCE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  {FINANCE_OPTION_KEYS.map(o => <option key={o.value} value={o.value}>{t(o.labelKey)}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-secondary mb-1">Timeline</label>
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('labelTimeline')}</label>
                 <select
                   value={timeline}
                   onChange={e => setTimeline(e.target.value)}
                   className="w-full border border-border-default rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand bg-surface"
                 >
-                  {TIMELINE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  {TIMELINE_OPTION_KEYS.map(o => <option key={o.value} value={o.value}>{t(o.labelKey)}</option>)}
                 </select>
               </div>
             </div>
@@ -328,7 +364,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
             disabled={isPending}
             className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-text-primary font-bold py-4 rounded-2xl text-base transition-colors shadow-sm"
           >
-            {isPending ? 'Saving…' : 'Save My Home Passport →'}
+            {isPending ? t('savingButton') : t('saveButton')}
           </button>
 
         </div>
@@ -349,35 +385,35 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand flex items-center gap-1">
-                <Home size={14} /> Home Passport
+                <Home size={14} /> {t('cardTitle')}
               </span>
               {isVerified ? (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.6rem] font-bold uppercase tracking-wide border"
                   style={{ color: '#4ADE80', background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.25)' }}>
-                  <Check size={10} /> Verified
+                  <Check size={10} /> {t('labelVerified')}
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.6rem] font-bold uppercase tracking-wide border"
                   style={{ color: 'rgba(255,255,255,0.4)', borderColor: 'rgba(255,255,255,0.12)' }}>
-                  Unverified
+                  {t('labelUnverified')}
                 </span>
               )}
             </div>
 
             {/* Name */}
             <p className="text-white font-extrabold text-base tracking-tight mb-4">
-              {userName ?? 'Your Name'}
+              {userName ?? t('labelYourName')}
             </p>
 
             {/* Passport rows */}
             <div className="space-y-2">
               <div className="flex gap-2 text-xs">
-                <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">Intent</span>
+                <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">{t('labelIntent')}</span>
                 <span className="text-[rgba(255,255,255,0.87)] font-bold capitalize">{intent}</span>
               </div>
               {(budgetMin !== '' || budgetMax !== '') && (
                 <div className="flex gap-2 text-xs">
-                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">Budget</span>
+                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">{t('labelBudgetRow')}</span>
                   <span className="text-[rgba(255,255,255,0.87)] font-bold">
                     {budgetMin !== '' ? `£${Number(budgetMin).toLocaleString()}` : '—'}
                     {' – '}
@@ -387,27 +423,27 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
               )}
               {areas.length > 0 && (
                 <div className="flex gap-2 text-xs">
-                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">Areas</span>
+                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">{t('labelAreas')}</span>
                   <span className="text-[rgba(255,255,255,0.87)] font-bold">{areas.slice(0, 3).join(' · ')}{areas.length > 3 ? ' …' : ''}</span>
                 </div>
               )}
               {propertyTypes.length > 0 && (
                 <div className="flex gap-2 text-xs">
-                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">Type</span>
+                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">{t('labelTypeRow')}</span>
                   <span className="text-[rgba(255,255,255,0.87)] font-bold">{previewTypes.join(' · ')}</span>
                 </div>
               )}
               <div className="flex gap-2 text-xs">
-                <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">Beds</span>
+                <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">{t('labelBeds')}</span>
                 <span className="text-[rgba(255,255,255,0.87)] font-bold">{previewBeds}+</span>
               </div>
               <div className="flex gap-2 text-xs items-start">
-                <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-1">Finance</span>
-                <FinanceBadge status={financeStatus} />
+                <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-1">{t('labelFinance')}</span>
+                <FinanceBadge status={financeStatus} t={t} />
               </div>
               {timeline !== 'flexible' && (
                 <div className="flex gap-2 text-xs">
-                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">Timeline</span>
+                  <span className="text-[rgba(255,255,255,0.38)] uppercase tracking-wider font-bold text-[0.6rem] w-14 flex-shrink-0 mt-0.5">{t('labelTimelineRow')}</span>
                   <span className="text-[rgba(255,255,255,0.87)] font-bold">{previewTimeline}</span>
                 </div>
               )}
@@ -420,16 +456,16 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
             style={{ borderColor: '#E2E4EB' }}
           >
             <p className="text-xs font-semibold text-text-secondary mb-0.5">
-              Agents with access: <span className="text-text-primary font-bold">0</span>
+              {t('agentsWithAccess', { count: 0 })}
             </p>
-            <p className="text-[0.68rem] text-[#999]">Agents request access · You approve</p>
+            <p className="text-[0.68rem] text-[#999]">{t('agentApprovalHint')}</p>
           </div>
 
           {/* Automation toggles */}
           <div className="bg-surface rounded-2xl p-5 border border-border-default">
-            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">Automation Settings</p>
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">{t('automationSettings')}</p>
             <div className="space-y-3">
-              {AUTOMATIONS.map(a => (
+              {AUTOMATION_KEYS.map(a => (
                 <label key={a.key} className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -437,13 +473,13 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
                     onChange={() => toggleAutomation(a.key)}
                     className="w-4 h-4 accent-brand rounded"
                   />
-                  <span className="text-sm text-text-primary">{a.label}</span>
+                  <span className="text-sm text-text-primary">{t(a.labelKey)}</span>
                 </label>
               ))}
             </div>
             <div className="mt-4 bg-[#F0FDF4] rounded-lg p-3 border border-[#BBF7D0]">
               <p className="text-xs text-[#166534] leading-relaxed">
-                <span className="font-bold">No spam guarantee:</span> All agent messages go to your Yalla inbox only. Your personal email stays private — you get a dedicated <span className="font-mono font-bold">@yalla.mail</span> address for all property communication.
+                <span className="font-bold">{t('noSpamTitle')}</span> {t('noSpamBody')}
               </p>
             </div>
           </div>
@@ -451,7 +487,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
           {/* Agent matches */}
           <div className="bg-surface rounded-2xl p-5 border border-border-default">
             <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">
-              {hasPassport ? 'Agents in your area' : 'Example agent matches'}
+              {hasPassport ? t('agentsInArea') : t('exampleAgentMatches')}
             </p>
             <div className="space-y-3">
               {displayAgents.slice(0, 3).map(a => (
@@ -466,7 +502,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
                       : a.focus === 'rent' ? 'bg-[#FEF3C7] text-[#92400E]'
                       : 'bg-[#DCFCE7] text-[#166534]'
                     }`}>
-                      {a.focus === 'both' ? 'Sales & Lettings' : a.focus === 'rent' ? 'Lettings' : 'Sales'}
+                      {a.focus === 'both' ? t('focusBoth') : a.focus === 'rent' ? t('focusRent') : t('focusSale')}
                     </span>
                   </div>
                 </a>
@@ -474,7 +510,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
             </div>
             {sampleAgents.length > 0 && (
               <a href="/en/agents" className="block text-xs text-brand font-semibold mt-3 hover:underline">
-                View all 17,000+ agents →
+                {t('viewAllAgents')}
               </a>
             )}
           </div>

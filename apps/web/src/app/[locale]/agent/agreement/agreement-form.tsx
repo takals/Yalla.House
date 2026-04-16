@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { signAgreementAction } from './actions'
 
 export function AgreementForm({ agencyName }: { agencyName: string }) {
+  const t = useTranslations('agentAgreement')
   const [agreed, setAgreed] = useState(false)
   const [signatoryName, setSignatoryName] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -35,7 +37,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
       {/* Agency name (read-only) */}
       {agencyName && (
         <div>
-          <label className="block text-xs font-semibold text-text-secondary mb-1">Agency</label>
+          <label className="block text-xs font-semibold text-text-secondary mb-1">{t('agencyLabel')}</label>
           <p className="text-sm font-medium">{agencyName}</p>
         </div>
       )}
@@ -43,14 +45,14 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
       {/* Signatory name */}
       <div>
         <label className="block text-xs font-semibold text-text-secondary mb-1">
-          Full name (signatory) *
+          {t('signatoryLabel')}
         </label>
         <input
           type="text"
           required
           value={signatoryName}
           onChange={e => setSignatoryName(e.target.value)}
-          placeholder="Your full legal name"
+          placeholder={t('signatoryPlaceholder')}
           className="w-full px-3 py-2 text-sm border border-border-default rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
         />
       </div>
@@ -64,8 +66,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
           className="mt-0.5 accent-brand w-4 h-4"
         />
         <span className="text-sm text-text-secondary">
-          I confirm that I have read and accept the Yalla Partner Agreement (v1.0).
-          I am authorised to sign on behalf of my agency.
+          {t('confirmText')}
         </span>
       </label>
 
@@ -84,7 +85,7 @@ export function AgreementForm({ agencyName }: { agencyName: string }) {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
         )}
-        Sign Partner Agreement
+        {t('signButton')}
       </button>
     </form>
   )

@@ -25,7 +25,7 @@ interface RawAssignment {
 }
 
 export default async function AgentHuntersPage() {
-  const t = await getTranslations('agentDash')
+  const t = await getTranslations('agentDashboard')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -80,7 +80,7 @@ export default async function AgentHuntersPage() {
         {passports.length > 0 && (
           <div className="flex items-center gap-2 text-xs text-text-secondary">
             <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
-            {passports.filter(p => p.hasPassport).length} von {passports.length} {t('withPassport')}
+            {passports.filter(p => p.hasPassport).length} {t('ofLabel')} {passports.length} {t('withPassport')}
           </div>
         )}
       </div>

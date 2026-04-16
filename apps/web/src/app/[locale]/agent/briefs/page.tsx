@@ -33,9 +33,9 @@ export default async function AgentBriefsPage() {
   return (
     <div className="max-w-3xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">Search Briefs</h1>
+        <h1 className="text-2xl font-bold mb-1">{t('pageTitle')}</h1>
         <p className="text-text-secondary text-sm">
-          Home-Hunters looking for properties in your area. Reply to connect.
+          {t('pageSubtitle')}
         </p>
       </div>
 
@@ -43,15 +43,15 @@ export default async function AgentBriefsPage() {
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-surface rounded-lg p-4 border border-border-default text-center">
           <p className="text-2xl font-bold">{briefs.length}</p>
-          <p className="text-xs text-text-secondary">Total briefs</p>
+          <p className="text-xs text-text-secondary">{t('totalBriefs')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-border-default text-center">
           <p className="text-2xl font-bold text-brand">{pending.length}</p>
-          <p className="text-xs text-text-secondary">Awaiting reply</p>
+          <p className="text-xs text-text-secondary">{t('awaitingReply')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-border-default text-center">
           <p className="text-2xl font-bold text-[#166534]">{responded.length}</p>
-          <p className="text-xs text-text-secondary">Replied</p>
+          <p className="text-xs text-text-secondary">{t('replied')}</p>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ export default async function AgentBriefsPage() {
         <div className="mb-8">
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-brand" />
-            Awaiting Your Reply ({pending.length})
+            {t('awaitingYourReply', { count: pending.length })}
           </h2>
           <div className="space-y-3">
             {pending.map((m: {
@@ -85,45 +85,45 @@ export default async function AgentBriefsPage() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-brand-solid-bg text-brand-badge-text border border-brand/30">
-                      Match {m.match_score}%
+                      {t('match', { score: m.match_score })}
                     </span>
                     <span className="text-xs text-text-secondary capitalize">{m.search.intent}</span>
                   </div>
                   <span className="text-xs text-[#999]">
-                    Expires {new Date(m.expires_at).toLocaleDateString(dateLocale)}
+                    {t('expires', { date: new Date(m.expires_at).toLocaleDateString(dateLocale) })}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 mb-3 text-sm">
                   <div>
-                    <span className="text-xs text-text-secondary font-semibold">Area:</span>{' '}
+                    <span className="text-xs text-text-secondary font-semibold">{t('labelArea')}</span>{' '}
                     {Array.isArray(m.search.areas)
                       ? m.search.areas.map(a => a.name).filter(Boolean).join(', ')
                       : '—'}
                   </div>
                   <div>
-                    <span className="text-xs text-text-secondary font-semibold">Budget:</span>{' '}
+                    <span className="text-xs text-text-secondary font-semibold">{t('labelBudget')}</span>{' '}
                     {m.search.budget_min || m.search.budget_max
                       ? `${m.search.currency} ${m.search.budget_min ? (m.search.budget_min / 100).toLocaleString() : '—'}–${m.search.budget_max ? (m.search.budget_max / 100).toLocaleString() : '—'}`
-                      : 'Flexible'}
+                      : t('budgetFlexible')}
                   </div>
                   <div>
-                    <span className="text-xs text-text-secondary font-semibold">Type:</span>{' '}
-                    {m.search.property_types?.join(', ') || 'Any'}
+                    <span className="text-xs text-text-secondary font-semibold">{t('labelType')}</span>{' '}
+                    {m.search.property_types?.join(', ') || t('typeAny')}
                   </div>
                   <div>
-                    <span className="text-xs text-text-secondary font-semibold">Beds:</span>{' '}
+                    <span className="text-xs text-text-secondary font-semibold">{t('labelBeds')}</span>{' '}
                     {m.search.bedrooms_min ?? '—'}–{m.search.bedrooms_max ?? '—'}
                   </div>
                   <div>
-                    <span className="text-xs text-text-secondary font-semibold">Timeline:</span>{' '}
+                    <span className="text-xs text-text-secondary font-semibold">{t('labelTimeline')}</span>{' '}
                     <span className="capitalize">{m.search.timeline?.replace(/_/g, ' ')}</span>
                   </div>
                 </div>
 
                 {m.search.notes && (
                   <p className="text-xs text-text-secondary bg-hover-bg rounded-lg p-2 mb-3">
-                    <span className="font-semibold">Notes:</span> {m.search.notes}
+                    <span className="font-semibold">{t('labelNotes')}</span> {m.search.notes}
                   </p>
                 )}
 
@@ -131,7 +131,7 @@ export default async function AgentBriefsPage() {
                   href={`/agent/briefs/${m.id}`}
                   className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
                 >
-                  Reply to Brief →
+                  {t('replyToBrief')}
                 </Link>
               </div>
             ))}
@@ -144,7 +144,7 @@ export default async function AgentBriefsPage() {
         <div>
           <h2 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
-            Replied ({responded.length})
+            {t('repliedCount', { count: responded.length })}
           </h2>
           <div className="space-y-2">
             {responded.map((m: {
@@ -160,9 +160,9 @@ export default async function AgentBriefsPage() {
                     {Array.isArray(m.search.areas) ? m.search.areas.map(a => a.name).filter(Boolean).join(', ') : '—'}
                   </p>
                   <p className="text-xs text-text-secondary">
-                    Match {m.match_score}%
+                    {t('match', { score: m.match_score })}
                     {m.response?.[0]?.relevance_score !== undefined && (
-                      <> · Relevance {m.response[0].relevance_score}%</>
+                      <> · {t('relevance', { score: m.response[0].relevance_score })}</>
                     )}
                     {m.response?.[0]?.priority_tier && (
                       <> · {m.response[0].priority_tier.replace(/_/g, ' ')}</>
@@ -170,7 +170,7 @@ export default async function AgentBriefsPage() {
                   </p>
                 </div>
                 <span className="text-xs font-semibold text-[#166534] bg-[#DCFCE7] px-2 py-0.5 rounded-full">
-                  Replied
+                  {t('replied')}
                 </span>
               </div>
             ))}
@@ -181,10 +181,9 @@ export default async function AgentBriefsPage() {
       {/* Empty state */}
       {briefs.length === 0 && (
         <div className="bg-surface rounded-xl p-12 text-center border border-border-default">
-          <p className="text-text-secondary font-medium mb-2">No search briefs yet</p>
+          <p className="text-text-secondary font-medium mb-2">{t('emptyTitle')}</p>
           <p className="text-xs text-[#999]">
-            When Home-Hunters in your area create a search and enable agent outreach,
-            their brief will appear here.
+            {t('emptyDescription')}
           </p>
         </div>
       )}

@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { redirect } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { type Database } from '@/types/database'
 
@@ -20,17 +20,18 @@ interface ReferralWithEvents extends ReferralWithData {
   events: ReferralEvent[]
 }
 
-const MILESTONE_CONFIG = {
-  SIGNUP: { label: 'Sign Up', amount: 0, order: 1 },
-  LISTING_DRAFT: { label: 'Listing Draft', amount: 0, order: 2 },
-  LISTING_PUBLISHED: { label: 'Listing Published', amount: 2500, order: 3 },
-  FIRST_BOOKING: { label: 'First Booking', amount: 1500, order: 4 },
-  PAID_PLAN: { label: 'Paid Plan', amount: 5000, order: 5 },
-  AGENT_ACTIVATED: { label: 'Agent Activated', amount: 3000, order: 6 },
-} as const
-
 export default async function ReferralLeadsPage() {
+  const t = await getTranslations('referrer')
   const locale = await getLocale()
+
+  const MILESTONE_CONFIG = {
+    SIGNUP: { label: t('milestoneSignUp'), amount: 0, order: 1 },
+    LISTING_DRAFT: { label: t('milestoneListingDraft'), amount: 0, order: 2 },
+    LISTING_PUBLISHED: { label: t('milestoneListingPublished'), amount: 2500, order: 3 },
+    FIRST_BOOKING: { label: t('milestoneFirstBooking'), amount: 1500, order: 4 },
+    PAID_PLAN: { label: t('milestonePaidPlan'), amount: 5000, order: 5 },
+    AGENT_ACTIVATED: { label: t('milestoneAgentActivated'), amount: 3000, order: 6 },
+  } as const
   const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -93,31 +94,31 @@ export default async function ReferralLeadsPage() {
     <div className="max-w-4xl">
       <div className="mb-8">
         <Link href="/referrer" className="text-brand text-sm font-semibold mb-3 inline-block hover:underline">
-          ← Back to Dashboard
+          {t('backToDashboard')}
         </Link>
-        <h1 className="text-2xl font-bold mb-1">Your Referrals</h1>
+        <h1 className="text-2xl font-bold mb-1">{t('yourReferrals')}</h1>
         <p className="text-text-secondary text-sm">
-          Track the progress of each referral and their earned milestones.
+          {t('trackProgress')}
         </p>
       </div>
 
       {referralsWithEvents.length === 0 ? (
         <div className="bg-surface rounded-xl p-12 text-center border border-border-default">
-          <p className="text-text-secondary font-medium mb-2">No referrals yet</p>
+          <p className="text-text-secondary font-medium mb-2">{t('noReferralsYet')}</p>
           <p className="text-xs text-[#999] mb-4">
-            Share your referral link to start earning money.
+            {t('shareToStart')}
           </p>
           <Link
             href="/referrer"
             className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
           >
-            Get Referral Link →
+            {t('getReferralLink')}
           </Link>
         </div>
       ) : (
         <div className="space-y-4">
           {referralsWithEvents.map(referral => {
-            const userName = referral.user?.full_name || 'Anonymous User'
+            const userName = referral.user?.full_name || t('anonymousUser')
             const roleLabel = referral.referred_role.charAt(0).toUpperCase() + referral.referred_role.slice(1)
 
             // Get completed milestones
@@ -148,12 +149,12 @@ export default async function ReferralLeadsPage() {
                     <div>
                       <h3 className="font-bold text-sm">{userName}</h3>
                       <p className="text-xs text-text-secondary">
-                        {roleLabel} · Joined {new Date(referral.created_at).toLocaleDateString(dateLocale)}
+                        {roleLabel} · {t('joined')} {new Date(referral.created_at).toLocaleDateString(dateLocale)}
                       </p>
                     </div>
                     {totalEarned > 0 && (
                       <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#DCFCE7] text-[#166534]">
-                        €{(totalEarned / 100).toFixed(2)} earned
+                        €{(totalEarned / 100).toFixed(2)} {t('earned')}
                       </span>
                     )}
                   </div>
@@ -161,7 +162,7 @@ export default async function ReferralLeadsPage() {
 
                 {/* Milestone Progress */}
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-text-secondary mb-3">Progress</p>
+                  <p className="text-xs font-semibold text-text-secondary mb-3">{t('progress')}</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
                     {allMilestones.map(milestone => {
                       const isCompleted = milestone.completed

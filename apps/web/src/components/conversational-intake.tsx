@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { Send, CheckCircle2, ChevronDown, ChevronUp, ChevronLeft, Zap, FileText, Mic, CheckCheck } from 'lucide-react'
 
 // ─────────────────────────────────────────────────────────────────────
@@ -74,6 +75,7 @@ export function ConversationalIntake({
   externalInput,
   translations,
 }: IntakeFlowConfig) {
+  const it = useTranslations('intake')
   const [messages, setMessages] = useState<Message[]>([])
   // Restore from localStorage if available (survives auth round-trip)
   const [formData, setFormData] = useState<Record<string, unknown>>(() => {
@@ -214,7 +216,7 @@ export function ConversationalIntake({
     if (currentStep.type === 'number') {
       const num = parseInt(trimmed, 10)
       if (isNaN(num)) {
-        setMessages(prev => [...prev, { id: String(Date.now()), role: 'yalla', content: 'Please enter a valid number.' }])
+        setMessages(prev => [...prev, { id: String(Date.now()), role: 'yalla', content: it('invalidNumber') }])
         return
       }
       answer = num
@@ -329,7 +331,7 @@ export function ConversationalIntake({
   }
 
   // Share URLs for spread-the-word
-  const shareText = 'I just set up my Home Passport on @YallaHouse \u2014 17,000+ verified agents, zero commission. Check it out!'
+  const shareText = it('shareText')
   const shareUrl = 'https://yalla.house/en/agents'
   const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`
@@ -384,7 +386,7 @@ export function ConversationalIntake({
           className="ml-4 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors bg-slate-100 text-slate-700 hover:bg-slate-200"
         >
           <FileText size={14} />
-          {briefOpen ? 'Hide Brief' : 'Review My Passport'}
+          {briefOpen ? it('hideBrief') : it('reviewMyPassport')}
           {briefOpen ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
         </button>
       </div>
@@ -499,7 +501,7 @@ export function ConversationalIntake({
                       onClick={() => setBriefOpen(true)}
                       className="px-4 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
                     >
-                      Review My Passport
+                      {it('reviewMyPassport')}
                     </button>
                     <button
                       onClick={handleSubmit}
@@ -523,11 +525,11 @@ export function ConversationalIntake({
                 </div>
                 <div className="space-y-4">
                   <div className="bg-emerald-50 rounded-2xl rounded-tl-md px-4 py-2.5 text-sm text-emerald-800 font-medium">
-                    Your Home Passport is saved! We are matching you with agents in your area now.
+                    {it('savedMessage')}
                   </div>
                   <div className="bg-white rounded-2xl rounded-tl-md px-5 py-4 border border-slate-200">
-                    <p className="text-sm font-bold text-slate-900 mb-2">Spread the word</p>
-                    <p className="text-xs text-slate-500 mb-3">Help us grow and help others find great agents commission-free.</p>
+                    <p className="text-sm font-bold text-slate-900 mb-2">{it('spreadTheWord')}</p>
+                    <p className="text-xs text-slate-500 mb-3">{it('spreadTheWordDesc')}</p>
                     <div className="flex flex-wrap gap-2">
                       <a href={twitterShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black text-white text-xs font-semibold hover:bg-gray-800 transition-colors">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -624,7 +626,7 @@ export function ConversationalIntake({
                     onClick={handleConfirmMulti}
                     className="mt-3 px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
                   >
-                    Continue with {pendingMulti.length} selected
+                    {it('continueWithCount', { count: pendingMulti.length })}
                   </button>
                 )}
               </div>
@@ -690,14 +692,14 @@ export function ConversationalIntake({
                       onClick={handleConfirmTags}
                       className="px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
                     >
-                      Continue with {Object.keys(pendingTags).length} preferences
+                      {it('continueWithPreferences', { count: Object.keys(pendingTags).length })}
                     </button>
                   ) : (
                     <button
                       onClick={() => handleAnswerSubmit([])}
                       className="px-5 py-2 rounded-xl border border-slate-200 text-sm font-medium text-slate-500 hover:bg-slate-50 transition-colors"
                     >
-                      Skip — no preferences
+                      {it('skipNoPreferences')}
                     </button>
                   )}
                 </div>

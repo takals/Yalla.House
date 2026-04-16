@@ -37,23 +37,23 @@ export default async function ReferrerDashboard() {
     return (
       <div className="max-w-3xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-1">Referral Program</h1>
+          <h1 className="text-2xl font-bold mb-1">{t('title')}</h1>
           <p className="text-text-secondary text-sm">
-            You haven&apos;t joined the referral program yet.
+            {t('notJoinedYet')}
           </p>
         </div>
 
         <div className="bg-surface rounded-xl p-8 border border-border-default text-center">
           <Award className="w-12 h-12 mx-auto mb-4 text-brand" />
-          <h2 className="text-lg font-bold mb-2">Earn by Referring</h2>
+          <h2 className="text-lg font-bold mb-2">{t('earnByReferring')}</h2>
           <p className="text-text-secondary text-sm mb-6">
-            Invite sellers to Yalla.House and earn commissions for each milestone they reach.
+            {t('inviteSellers')}
           </p>
           <Link
             href="/referrer/join"
             className="inline-block px-6 py-2 bg-brand text-black font-bold rounded-lg hover:bg-brand-hover transition"
           >
-            Join the Program →
+            {t('joinProgram')}
           </Link>
         </div>
       </div>
@@ -103,9 +103,9 @@ export default async function ReferrerDashboard() {
   return (
     <div className="max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-1">Referral Dashboard</h1>
+        <h1 className="text-2xl font-bold mb-1">{t('dashboardTitle')}</h1>
         <p className="text-text-secondary text-sm">
-          Track your referrals and earnings.
+          {t('trackReferrals')}
         </p>
       </div>
 
@@ -113,25 +113,25 @@ export default async function ReferrerDashboard() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold">{totalReferrals}</p>
-          <p className="text-xs text-text-secondary mt-1">Total Referrals</p>
+          <p className="text-xs text-text-secondary mt-1">{t('totalReferrals')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold text-[#166534]">{activeReferrals}</p>
-          <p className="text-xs text-text-secondary mt-1">Active</p>
+          <p className="text-xs text-text-secondary mt-1">{t('active')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold text-[#166534]">€{(totalEarned / 100).toFixed(2)}</p>
-          <p className="text-xs text-text-secondary mt-1">Total Earned</p>
+          <p className="text-xs text-text-secondary mt-1">{t('totalEarned')}</p>
         </div>
         <div className="bg-surface rounded-lg p-4 border border-border-default">
           <p className="text-2xl font-bold text-brand">€{(pendingPayout / 100).toFixed(2)}</p>
-          <p className="text-xs text-text-secondary mt-1">Pending Payout</p>
+          <p className="text-xs text-text-secondary mt-1">{t('pendingPayout')}</p>
         </div>
       </div>
 
       {/* Referral Code Card */}
       <div className="bg-surface rounded-2xl border border-border-default p-5 mb-8">
-        <h2 className="text-sm font-bold mb-4">Your Referral Code</h2>
+        <h2 className="text-sm font-bold mb-4">{t('yourReferralCode')}</h2>
         <div className="space-y-3">
           <div className="bg-brand-solid-bg rounded-lg p-4 flex items-center justify-between">
             <code className="font-mono text-sm font-bold text-[#000]">
@@ -140,7 +140,7 @@ export default async function ReferrerDashboard() {
             <CopyButton code={referrer.referrer_code} />
           </div>
           <div className="bg-brand-solid-bg rounded-lg p-4">
-            <p className="text-xs text-text-secondary mb-2">Full Referral Link:</p>
+            <p className="text-xs text-text-secondary mb-2">{t('fullReferralLink')}</p>
             <code className="text-xs font-mono text-[#000] break-all">
               {referralLink}
             </code>
@@ -150,30 +150,30 @@ export default async function ReferrerDashboard() {
 
       {/* Quick Share Section */}
       <div className="bg-surface rounded-2xl border border-border-default p-5 mb-8">
-        <h2 className="text-sm font-bold mb-4">Share Your Link</h2>
+        <h2 className="text-sm font-bold mb-4">{t('shareYourLink')}</h2>
         <div className="flex gap-3 flex-wrap">
           <a
-            href={`mailto:?subject=Earn Money by Selling Your Property&body=Check out Yalla.House, the UK flat-fee property selling platform. No commission, no agent. Sell directly on Rightmove & Zoopla and keep every pound.%0A%0AJoin via my referral link: ${referralLink}`}
+            href={`mailto:?subject=${encodeURIComponent(t('emailSubject'))}&body=${encodeURIComponent(t('emailBody'))}%0A%0AJoin via my referral link: ${referralLink}`}
             className="px-4 py-2 bg-[#E2E4EB] text-black text-sm font-semibold rounded-lg hover:bg-hover-muted transition"
           >
-            Email
+            {t('emailLabel')}
           </a>
-          <button
-            onClick={() => {
-              window.open(`https://twitter.com/intent/tweet?text=I'm earning money with Yalla.House's referral program&url=${encodeURIComponent(referralLink)}`, '_blank')
-            }}
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(t('emailSubject'))}&url=${encodeURIComponent(referralLink)}`}
+            target="_blank"
+            rel="noopener"
             className="px-4 py-2 bg-[#000] text-white text-sm font-semibold rounded-lg hover:bg-[#1a1a1a] transition"
           >
-            Twitter
-          </button>
-          <button
-            onClick={() => {
-              window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`, '_blank')
-            }}
+            {t('twitterLabel')}
+          </a>
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`}
+            target="_blank"
+            rel="noopener"
             className="px-4 py-2 bg-[#0A66C2] text-white text-sm font-semibold rounded-lg hover:bg-[#084ea8] transition"
           >
-            LinkedIn
-          </button>
+            {t('linkedinLabel')}
+          </a>
         </div>
       </div>
 
@@ -184,7 +184,7 @@ export default async function ReferrerDashboard() {
           className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-black font-bold rounded-lg hover:bg-brand-hover transition"
         >
           <Users className="w-4 h-4" />
-          View Referrals
+          {t('viewReferrals')}
         </Link>
       </div>
     </div>

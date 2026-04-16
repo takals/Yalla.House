@@ -22,7 +22,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
     e.preventDefault()
 
     if (!email.trim()) {
-      setError('Email is required')
+      setError(t('emailRequired'))
       return
     }
 
@@ -51,7 +51,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
 
       setSubmitted(true)
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError(t('genericError'))
       setLoading(false)
     }
   }

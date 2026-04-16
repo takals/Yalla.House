@@ -42,13 +42,13 @@ interface Listing {
 type FormErrors = Partial<Record<keyof EditPayload, string>>
 
 const PROPERTY_TYPES = [
-  { value: 'house',      label: 'Haus',       icon: 'home' },
-  { value: 'flat',       label: 'Wohnung',    icon: 'building2' },
-  { value: 'apartment',  label: 'Apartment',  icon: 'building' },
-  { value: 'villa',      label: 'Villa',      icon: 'home' },
-  { value: 'commercial', label: 'Gewerbe',    icon: 'store' },
-  { value: 'land',       label: 'Grundstück', icon: 'treepine' },
-  { value: 'other',      label: 'Sonstiges',  icon: null },
+  { value: 'house',      labelKey: 'editForm.labelHouse',       icon: 'home' },
+  { value: 'flat',       labelKey: 'editForm.labelFlat',        icon: 'building2' },
+  { value: 'apartment',  labelKey: 'editForm.labelApartment',   icon: 'building' },
+  { value: 'villa',      labelKey: 'editForm.labelVilla',       icon: 'home' },
+  { value: 'commercial', labelKey: 'editForm.labelCommercial',  icon: 'store' },
+  { value: 'land',       labelKey: 'editForm.labelLand',        icon: 'treepine' },
+  { value: 'other',      labelKey: 'editForm.labelOther',       icon: null },
 ]
 
 const ENERGY_CLASSES = ['A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -409,7 +409,7 @@ export function ListingEditForm({
             <p className="mb-2 text-xs text-red-500">{errors.property_type}</p>
           )}
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-            {PROPERTY_TYPES.map(({ value, label, icon }) => (
+            {PROPERTY_TYPES.map(({ value, labelKey, icon }) => (
               <button
                 key={value}
                 type="button"
@@ -426,7 +426,7 @@ export function ListingEditForm({
                 {icon === 'store' && <Store size={24} className="text-text-primary" />}
                 {icon === 'treepine' && <TreePine size={24} className="text-text-primary" />}
                 {icon === null && <span className="text-xs font-bold text-text-primary">···</span>}
-                <span className="text-xs font-semibold text-text-primary leading-tight">{label}</span>
+                <span className="text-xs font-semibold text-text-primary leading-tight">{t(labelKey)}</span>
               </button>
             ))}
           </div>
@@ -437,10 +437,10 @@ export function ListingEditForm({
           {errors.intent && <p className="mb-2 text-xs text-red-500">{errors.intent}</p>}
           <div className="grid grid-cols-3 gap-3">
             {[
-              { value: 'sale', label: 'Zum Verkauf' },
-              { value: 'rent', label: 'Zur Miete' },
-              { value: 'both', label: 'Verkauf & Miete' },
-            ].map(({ value, label }) => (
+              { value: 'sale', labelKey: 'editForm.intentSale' },
+              { value: 'rent', labelKey: 'editForm.intentRent' },
+              { value: 'both', labelKey: 'editForm.intentBoth' },
+            ].map(({ value, labelKey }) => (
               <button
                 key={value}
                 type="button"
@@ -451,7 +451,7 @@ export function ListingEditForm({
                     : 'border-[#E4E6EF] text-text-secondary hover:border-brand/50'
                 }`}
               >
-                {label}
+                {t(labelKey)}
               </button>
             ))}
           </div>
@@ -461,24 +461,24 @@ export function ListingEditForm({
       {/* Section 2: Adresse */}
       <Section title={t('editForm.sectionAddress')}>
         <Input
-          label="Straße und Hausnummer"
+          label={t('editForm.labelAddressLine1')}
           id="address_line1"
           required
-          placeholder="Musterstraße 42"
+          placeholder={t('editForm.placeholderAddressLine1')}
           value={form.address_line1}
           onChange={e => set('address_line1', e.target.value)}
           error={errors.address_line1}
         />
         <Input
-          label="Adresszusatz"
+          label={t('editForm.labelAddressLine2')}
           id="address_line2"
-          placeholder="Hinterhaus, EG links"
+          placeholder={t('editForm.placeholderAddressLine2')}
           value={form.address_line2}
           onChange={e => set('address_line2', e.target.value)}
         />
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Postleitzahl"
+            label={t('editForm.labelPostcode')}
             id="postcode"
             required
             placeholder="10115"
@@ -488,7 +488,7 @@ export function ListingEditForm({
             error={errors.postcode}
           />
           <Input
-            label="Stadt"
+            label={t('editForm.labelCity')}
             id="city"
             required
             placeholder="Berlin"
@@ -498,7 +498,7 @@ export function ListingEditForm({
           />
         </div>
         <Input
-          label="Bundesland"
+          label={t('editForm.labelRegion')}
           id="region"
           placeholder="Berlin"
           value={form.region}
@@ -510,7 +510,7 @@ export function ListingEditForm({
       <Section title={t('editForm.sectionDetails')}>
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Wohnfläche (m²)"
+            label={t('editForm.labelSizeSqm')}
             id="size_sqm"
             type="number"
             min="1"
@@ -519,7 +519,7 @@ export function ListingEditForm({
             onChange={e => set('size_sqm', e.target.value)}
           />
           <Input
-            label="Zimmer"
+            label={t('editForm.labelRooms')}
             id="rooms"
             type="number"
             min="0.5"
@@ -531,7 +531,7 @@ export function ListingEditForm({
         </div>
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Schlafzimmer"
+            label={t('editForm.labelBedrooms')}
             id="bedrooms"
             type="number"
             min="0"
@@ -540,7 +540,7 @@ export function ListingEditForm({
             onChange={e => set('bedrooms', e.target.value)}
           />
           <Input
-            label="Badezimmer"
+            label={t('editForm.labelBathrooms')}
             id="bathrooms"
             type="number"
             min="0"
@@ -552,7 +552,7 @@ export function ListingEditForm({
         {isFlat && (
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Etage"
+              label={t('editForm.labelFloor')}
               id="floor"
               type="number"
               min="0"
@@ -561,7 +561,7 @@ export function ListingEditForm({
               onChange={e => set('floor', e.target.value)}
             />
             <Input
-              label="Gesamte Etagen"
+              label={t('editForm.labelTotalFloors')}
               id="total_floors"
               type="number"
               min="1"
@@ -573,7 +573,7 @@ export function ListingEditForm({
         )}
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Baujahr"
+            label={t('editForm.labelConstructionYear')}
             id="construction_year"
             type="number"
             min="1800"
@@ -584,12 +584,12 @@ export function ListingEditForm({
             error={errors.construction_year}
           />
           <Select
-            label="Energieklasse"
+            label={t('editForm.labelEnergyClass')}
             id="energy_class"
             value={form.energy_class}
             onChange={e => set('energy_class', e.target.value)}
           >
-            <option value="">Keine Angabe</option>
+            <option value="">{t('editForm.optionNoInfo')}</option>
             {ENERGY_CLASSES.map(cls => (
               <option key={cls} value={cls}>{cls}</option>
             ))}
@@ -600,19 +600,19 @@ export function ListingEditForm({
       {/* Section 4: Preis & Beschreibung */}
       <Section title={t('editForm.sectionPrice')}>
         <Input
-          label="Inserat-Titel"
+          label={t('editForm.labelTitleDe')}
           id="title_de"
           required
-          placeholder="Gepflegte 3-Zimmer-Wohnung mit Balkon in Mitte"
+          placeholder={t('editForm.placeholderTitleDe')}
           value={form.title_de}
           onChange={e => set('title_de', e.target.value)}
           error={errors.title_de}
         />
-        <Field label="Beschreibung" id="description_de">
+        <Field label={t('editForm.labelDescription')} id="description_de">
           <textarea
             id="description_de"
             rows={4}
-            placeholder="Beschreiben Sie Ihre Immobilie…"
+            placeholder={t('editForm.placeholderDescription')}
             value={form.description_de}
             onChange={e => set('description_de', e.target.value)}
             className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white resize-none"
@@ -622,7 +622,7 @@ export function ListingEditForm({
         {showSale && (
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Kaufpreis (€)"
+              label={t('editForm.labelSalePrice')}
               id="sale_price"
               type="number"
               min="0"
@@ -633,14 +633,14 @@ export function ListingEditForm({
               error={errors.sale_price}
             />
             <Select
-              label="Preishinweis"
+              label={t('editForm.labelPriceQualifier')}
               id="price_qualifier"
               value={form.price_qualifier}
               onChange={e => set('price_qualifier', e.target.value)}
             >
-              <option value="">Kein Hinweis</option>
-              <option value="fixed_price">Festpreis</option>
-              <option value="vb">Verhandelbar (VB)</option>
+              <option value="">{t('editForm.optionNoHint')}</option>
+              <option value="fixed_price">{t('editForm.optionFixedPrice')}</option>
+              <option value="vb">{t('editForm.optionNegotiable')}</option>
             </Select>
           </div>
         )}
@@ -648,7 +648,7 @@ export function ListingEditForm({
         {showRent && (
           <div className="space-y-4">
             <Input
-              label="Kaltmiete pro Monat (€)"
+              label={t('editForm.labelRentPrice')}
               id="rent_price"
               type="number"
               min="0"
@@ -660,7 +660,7 @@ export function ListingEditForm({
             />
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Nebenkosten (€/Monat)"
+                label={t('editForm.labelNebenkosten')}
                 id="nebenkosten"
                 type="number"
                 min="0"
@@ -669,7 +669,7 @@ export function ListingEditForm({
                 onChange={e => set('nebenkosten', e.target.value)}
               />
               <Input
-                label="Kaution (€)"
+                label={t('editForm.labelKaution')}
                 id="kaution"
                 type="number"
                 min="0"
