@@ -8,6 +8,7 @@ import {
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
   LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye,
 } from 'lucide-react'
+import { NotificationBell } from './notification-bell'
 
 export interface NavItem {
   href: string
@@ -16,18 +17,30 @@ export interface NavItem {
   exact?: boolean
 }
 
+interface NotificationData {
+  id: string
+  title: string
+  body: string | null
+  action_url: string | null
+  status: string
+  created_at: string
+}
+
 interface Props {
   children: React.ReactNode
   navItems: NavItem[]
   section: string
   userEmail: string
   userName: string | null
+  notifications?: NotificationData[]
+  unreadCount?: number
+  notificationLabels?: Record<string, string>
 }
 
 const COLLAPSED_W = 'w-[60px]'
 const EXPANDED_W = 'w-[240px]'
 
-export function DashboardShell({ children, navItems, section, userEmail, userName }: Props) {
+export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels }: Props) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -157,7 +170,14 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         {/* Topbar */}
         <header className="h-[60px] bg-white border-b border-[#E2E4EB] flex items-center px-4 lg:px-6 gap-4 flex-shrink-0">
           <div className="flex-1" />
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            {notifications && notificationLabels && (
+              <NotificationBell
+                initialNotifications={notifications}
+                unreadCount={unreadCount ?? 0}
+                t={notificationLabels}
+              />
+            )}
             <div className="w-7 h-7 rounded-full bg-[#EDEEF2] flex items-center justify-center text-[0.7rem] font-bold text-[#5E6278]">
               {initials}
             </div>
@@ -192,12 +212,15 @@ export const agentNav: NavItem[] = [
   { href: '/agent/calendar',   label: 'Calendar',   icon: <Calendar size={15} /> },
   { href: '/agent/briefs',     label: 'Briefs',   icon: <Inbox size={15} /> },
   { href: '/agent/hunters',    label: 'Hunters', icon: <Users size={15} /> },
+  { href: '/agent/inbox',      label: 'Inbox',          icon: <Inbox size={15} /> },
   { href: '/agent/agreement',  label: 'Partner Agreement', icon: <Handshake size={15} /> },
   { href: '/agent/profile',    label: 'Profile',       icon: <UserCircle size={15} /> },
+  { href: '/agent/settings',   label: 'Settings',      icon: <Settings size={15} /> },
 ]
 
 export const adminNav: NavItem[] = [
   { href: '/admin',          label: 'Overview',         icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/admin/users',   label: 'Users',            icon: <Users size={15} /> },
 ]
 
 export const ownerNav: NavItem[] = [

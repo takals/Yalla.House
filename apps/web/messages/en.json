@@ -1471,5 +1471,53 @@
     "cancelledMessage": "This viewing has been cancelled.",
     "upcomingCount": "{count} upcoming",
     "confirmedCount": "{count} confirmed"
+  },
+  "notif": {
+    "notifications": "Notifications",
+    "markAllRead": "Mark all read",
+    "noNotifications": "No notifications"
+  },
+  "adminUsers": {
+    "usersTitle": "User Management",
+    "usersSubtitle": "View users and manage roles",
+    "searchPlaceholder": "Search name or email…",
+    "allRoles": "All",
+    "roleOwner": "Owner",
+    "roleHunter": "Hunter",
+    "roleAgent": "Agent",
+    "roleAdmin": "Admin",
+    "noRoles": "No roles",
+    "addRole": "Add role",
+    "removeRole": "Remove role",
+    "noUsers": "No users found",
+    "totalUsers": "Total",
+    "rolesUpdated": "Roles updated",
+    "errorUpdatingRole": "Error updating role"
+  },
+  "agentInbox": {
+    "title": "Inbox",
+    "subtitle": "Messages from owners and hunters",
+    "yourEmail": "Your Yalla email",
+    "emailExplainer": "Messages will be forwarded to this address.",
+    "noMessages": "No messages yet",
+    "noMessagesDesc": "When owners or hunters message you, conversations will appear here.",
+    "viewConversation": "View conversation"
+  },
+  "agentSettings": {
+    "title": "Settings",
+    "subtitle": "Your profile and account settings",
+    "profile": "Profile",
+    "fullName": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "profileSaved": "Profile saved",
+    "agencyName": "Agency name",
+    "agencyAddress": "Agency address",
+    "dangerZone": "Danger zone",
+    "deleteAccount": "Delete account",
+    "deleteAccountDesc": "All data will be permanently deleted.",
+    "delete": "Delete"
   }
 }
