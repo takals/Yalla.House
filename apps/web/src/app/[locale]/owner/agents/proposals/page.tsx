@@ -23,6 +23,9 @@ export default async function OwnerProposalsPage({
     status: string
     crm_connected: boolean
     notes: string | null
+    fee_type: string | null
+    fee_amount: number | null
+    fee_currency: string | null
     invited_at: string
     agent: {
       id: string
@@ -37,7 +40,7 @@ export default async function OwnerProposalsPage({
     const { data } = await (supabase as any)
       .from('listing_agent_assignments')
       .select(`
-        id, tier, status, crm_connected, notes, invited_at,
+        id, tier, status, crm_connected, notes, fee_type, fee_amount, fee_currency, invited_at,
         agent:agent_profiles!listing_agent_assignments_agent_id_fkey(
           user_id, agency_name, license_number, verified_at, coverage_areas
         )
@@ -50,14 +53,36 @@ export default async function OwnerProposalsPage({
     proposals = data ?? []
   }
 
-  // Parse commission and service overview from notes
-  function parseProposal(notes: string | null): { commission: string; serviceOverview: string } {
-    if (!notes) return { commission: '—', serviceOverview: '' }
-    const commMatch = notes.match(/Commission:\s*(.+?)(?:\n|$)/)
-    const serviceMatch = notes.match(/Service overview:\n([\s\S]*)/)
+  /** Format structured fee data into a display string */
+  function formatFee(feeType: string | null, feeAmount: number | null, feeCurrency: string | null): string {
+    if (!feeType || feeType === 'none') return t('noFee')
+    if (!feeAmount) return '\u2014'
+    if (feeType === 'percentage') {
+      return `${(feeAmount / 100).toFixed(1)}%`
+    }
+    // flat fee — format as currency
+    const currency = feeCurrency ?? 'GBP'
+    return new Intl.NumberFormat('en-GB', {
+      style: 'currency', currency, maximumFractionDigits: 0,
+    }).format(feeAmount / 100)
+  }
+
+  /** Parse legacy text-based proposals (fallback for pre-structured data) */
+  function parseProposal(proposal: typeof proposals[0]): { commission: string; serviceOverview: string } {
+    // Use structured fee data if available
+    if (proposal.fee_type && proposal.fee_type !== 'quoted') {
+      return {
+        commission: formatFee(proposal.fee_type, proposal.fee_amount, proposal.fee_currency),
+        serviceOverview: proposal.notes ?? '',
+      }
+    }
+    // Legacy fallback: parse from notes text
+    if (!proposal.notes) return { commission: '\u2014', serviceOverview: '' }
+    const commMatch = proposal.notes.match(/Commission:\s*(.+?)(?:\n|$)/)
+    const serviceMatch = proposal.notes.match(/Service overview:\n([\s\S]*)/)
     return {
-      commission: commMatch?.[1]?.trim() ?? '—',
-      serviceOverview: serviceMatch?.[1]?.trim() ?? notes,
+      commission: commMatch?.[1]?.trim() ?? '\u2014',
+      serviceOverview: serviceMatch?.[1]?.trim() ?? proposal.notes,
     }
   }
 
@@ -79,7 +104,7 @@ export default async function OwnerProposalsPage({
       ) : (
         <div className="space-y-4">
           {proposals.map(proposal => {
-            const { commission, serviceOverview } = parseProposal(proposal.notes)
+            const { commission, serviceOverview } = parseProposal(proposal)
             const isVerified = !!proposal.agent?.verified_at
 
             return (

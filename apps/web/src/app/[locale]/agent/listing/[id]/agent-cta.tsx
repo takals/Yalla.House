@@ -20,7 +20,9 @@ export function AgentListingCta({
   existingAssignment: AssignmentInfo | null
 }) {
   const t = useTranslations('agentDashboard')
-  const [commission, setCommission] = useState('')
+  const [feeType, setFeeType] = useState<'flat' | 'percentage' | 'none'>('percentage')
+  const [feeAmount, setFeeAmount] = useState('')
+  const [feeCurrency, setFeeCurrency] = useState('GBP')
   const [serviceOverview, setServiceOverview] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
@@ -108,8 +110,14 @@ export function AgentListingCta({
     setSubmitting(true)
     setError(null)
 
+    const parsedAmount = feeType === 'none' ? null
+      : feeType === 'percentage' ? Math.round(parseFloat(feeAmount) * 100) // store as basis points
+      : Math.round(parseFloat(feeAmount) * 100) // store as minor units (pence/cents)
+
     const result = await submitProposalAction(listingId, {
-      commission,
+      feeType,
+      feeAmount: parsedAmount,
+      feeCurrency,
       serviceOverview,
     })
 
@@ -134,20 +142,68 @@ export function AgentListingCta({
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-3">
-          {/* Commission quote */}
+          {/* Fee type */}
           <div>
-            <label className="block text-xs font-semibold text-[#5E6278] mb-1">
-              {isDE ? t('yourCommission') : 'Your commission'} *
+            <label className="block text-xs font-semibold text-[#5E6278] mb-1.5">
+              {isDE ? t('feeTypeLabel') : 'Fee structure'} *
             </label>
-            <input
-              type="text"
-              required
-              value={commission}
-              onChange={e => setCommission(e.target.value)}
-              placeholder={isDE ? t('commissionPlaceholder') : 'e.g. 1.2% + VAT or fixed fee £2,500'}
-              className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-            />
+            <div className="flex gap-2">
+              {(['percentage', 'flat', 'none'] as const).map(ft => (
+                <button
+                  key={ft}
+                  type="button"
+                  onClick={() => setFeeType(ft)}
+                  className={`flex-1 text-xs font-semibold py-2 rounded-xl border transition-colors ${
+                    feeType === ft
+                      ? 'bg-[#0F1117] text-white border-[#0F1117]'
+                      : 'bg-bg text-[#5E6278] border-[#E2E4EB] hover:border-[#D9DCE4]'
+                  }`}
+                >
+                  {ft === 'percentage' ? (isDE ? 'Prozent' : 'Percentage')
+                    : ft === 'flat' ? (isDE ? 'Pauschal' : 'Fixed Fee')
+                    : (isDE ? 'Keine' : 'No Fee')}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* Fee amount (hidden for 'none') */}
+          {feeType !== 'none' && (
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+                  {feeType === 'percentage'
+                    ? (isDE ? 'Prozentsatz (%)' : 'Rate (%)')
+                    : (isDE ? 'Betrag' : 'Amount')} *
+                </label>
+                <input
+                  type="number"
+                  required
+                  step={feeType === 'percentage' ? '0.1' : '1'}
+                  min="0"
+                  value={feeAmount}
+                  onChange={e => setFeeAmount(e.target.value)}
+                  placeholder={feeType === 'percentage' ? '1.5' : '2500'}
+                  className="w-full px-3 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                />
+              </div>
+              {feeType === 'flat' && (
+                <div className="w-24">
+                  <label className="block text-xs font-semibold text-[#5E6278] mb-1">
+                    {isDE ? 'W\u00E4hrung' : 'Currency'}
+                  </label>
+                  <select
+                    value={feeCurrency}
+                    onChange={e => setFeeCurrency(e.target.value)}
+                    className="w-full px-2 py-2 text-sm border border-[#E2E4EB] rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+                  >
+                    <option value="GBP">GBP</option>
+                    <option value="EUR">EUR</option>
+                  </select>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Service overview */}
           <div>
@@ -170,7 +226,7 @@ export function AgentListingCta({
 
           <button
             type="submit"
-            disabled={submitting || !commission.trim() || !serviceOverview.trim()}
+            disabled={submitting || (feeType !== 'none' && !feeAmount) || !serviceOverview.trim()}
             className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-[#0F1117] font-bold py-3 rounded-xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed text-sm"
           >
             {submitting && (
