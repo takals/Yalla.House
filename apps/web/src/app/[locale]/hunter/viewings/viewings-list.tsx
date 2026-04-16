@@ -1,0 +1,263 @@
+'use client'
+
+import { useState, useTransition } from 'react'
+import Link from 'next/link'
+import { Calendar, MapPin, MessageSquare, AlertCircle } from 'lucide-react'
+import { cancelViewingAction } from '../actions'
+
+interface Viewing {
+  id: string
+  listing_id: string
+  status: string
+  scheduled_at: string | null
+  hunter_notes: string | null
+  created_at: string
+  listing_title: string | null
+  listing_city: string | null
+  listing_postcode: string | null
+  place_id: string | null
+}
+
+type T = { [k: string]: string }
+
+function tx(t: T, key: string): string {
+  return t[key] ?? key
+}
+
+interface Props {
+  viewings: Viewing[]
+  t: T
+  locale: string
+}
+
+export function HunterViewingsList({ viewings, t, locale }: Props) {
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'past'>('all')
+
+  const filtered = viewings.filter(v => {
+    if (filter === 'upcoming') return ['pending', 'confirmed'].includes(v.status)
+    if (filter === 'past') return ['cancelled', 'completed', 'no_show'].includes(v.status)
+    return true
+  })
+
+  const upcomingCount = viewings.filter(v => ['pending', 'confirmed'].includes(v.status)).length
+
+  return (
+    <div>
+      {/* Filter tabs */}
+      <div className="flex gap-4 mb-6">
+        <FilterTab
+          label={tx(t, 'filterAll')}
+          count={viewings.length}
+          active={filter === 'all'}
+          onClick={() => setFilter('all')}
+        />
+        <FilterTab
+          label={tx(t, 'filterUpcoming')}
+          count={upcomingCount}
+          active={filter === 'upcoming'}
+          onClick={() => setFilter('upcoming')}
+        />
+        <FilterTab
+          label={tx(t, 'filterPast')}
+          count={viewings.length - upcomingCount}
+          active={filter === 'past'}
+          onClick={() => setFilter('past')}
+        />
+      </div>
+
+      {/* Viewings list */}
+      {filtered.length === 0 ? (
+        <div className="bg-surface rounded-2xl border border-[#E2E4EB] p-12 text-center">
+          <AlertCircle className="w-8 h-8 text-[#D9DCE4] mx-auto mb-3" />
+          <p className="text-[#5E6278] font-medium mb-4">{tx(t, 'noViewings')}</p>
+          <Link
+            href="/listings"
+            className="inline-flex items-center gap-2 bg-[#D4764E] hover:bg-[#BF6840] text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-colors"
+          >
+            {tx(t, 'browseListings')}
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map(viewing => (
+            <ViewingCard key={viewing.id} viewing={viewing} t={t} locale={locale} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function FilterTab({ label, count, active, onClick }: {
+  label: string; count: number; active: boolean; onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors ${
+        active
+          ? 'bg-[#0F1117] text-white'
+          : 'bg-transparent text-[#5E6278] hover:bg-[#F1F3F5]'
+      }`}
+    >
+      {label} <span className="ml-1 opacity-60">{count}</span>
+    </button>
+  )
+}
+
+function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: string }) {
+  const [isPending, startTransition] = useTransition()
+  const [localStatus, setLocalStatus] = useState(viewing.status)
+
+  const canCancel = ['pending', 'confirmed'].includes(localStatus)
+  const isCompleted = localStatus === 'completed'
+
+  const dateFormatter = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+
+  const requestDate = dateFormatter.format(new Date(viewing.created_at))
+  const scheduledDate = viewing.scheduled_at
+    ? new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(new Date(viewing.scheduled_at))
+    : null
+
+  function handleCancel() {
+    if (!confirm(tx(t, 'confirmCancel'))) return
+    startTransition(async () => {
+      const prev = localStatus
+      setLocalStatus('cancelled')
+      const result = await cancelViewingAction(viewing.id)
+      if ('error' in result) {
+        setLocalStatus(prev)
+      }
+    })
+  }
+
+  return (
+    <div className={`bg-surface rounded-2xl border border-[#E2E4EB] overflow-hidden ${isPending ? 'opacity-60' : ''}`}>
+      {/* Header */}
+      <div className="px-5 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-9 h-9 rounded-xl bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
+            <Calendar className="w-4 h-4 text-[#D4764E]" />
+          </div>
+          <div className="min-w-0">
+            <p className="font-bold text-[#0F1117] text-sm truncate">
+              {viewing.listing_title ?? viewing.listing_postcode ?? tx(t, 'property')}
+            </p>
+            {(viewing.listing_postcode || viewing.listing_city) && (
+              <p className="text-xs text-[#5E6278] flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                {viewing.listing_postcode} {viewing.listing_city}
+              </p>
+            )}
+          </div>
+        </div>
+        <StatusBadge status={localStatus} t={t} />
+      </div>
+
+      {/* Body */}
+      <div className="px-5 pb-4">
+        {/* Confirmation banner */}
+        {localStatus === 'confirmed' && (
+          <div className="mb-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-sm text-green-800">
+            {tx(t, 'confirmationMessage')}
+          </div>
+        )}
+
+        {localStatus === 'cancelled' && (
+          <div className="mb-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-600">
+            {tx(t, 'cancelledMessage')}
+          </div>
+        )}
+
+        {/* Date info */}
+        <div className="flex flex-wrap gap-4 mb-3 text-sm">
+          <span className="text-[#5E6278]">
+            {tx(t, 'requestedOn')}: <span className="font-medium text-[#0F1117]">{requestDate}</span>
+          </span>
+          {scheduledDate && (
+            <span className="text-[#5E6278]">
+              {tx(t, 'scheduledFor')}: <span className="font-medium text-[#0F1117]">{scheduledDate}</span>
+            </span>
+          )}
+        </div>
+
+        {/* Notes */}
+        {viewing.hunter_notes && (
+          <div className="mb-3">
+            <p className="text-xs font-semibold text-[#5E6278] mb-1 flex items-center gap-1">
+              <MessageSquare className="w-3 h-3" />
+              {tx(t, 'yourNotes')}
+            </p>
+            <p className="text-sm text-[#0F1117] bg-[#FAFBFC] rounded-lg p-3 border border-[#E2E4EB] italic">
+              {viewing.hunter_notes}
+            </p>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex items-center gap-3 pt-1">
+          {canCancel && (
+            <button
+              onClick={handleCancel}
+              disabled={isPending}
+              className="text-xs font-semibold text-[#5E6278] hover:text-red-600 transition-colors disabled:opacity-50"
+            >
+              {isPending ? tx(t, 'cancelling') : tx(t, 'withdraw')}
+            </button>
+          )}
+          {isCompleted && (
+            <Link
+              href={`/hunter/viewings/${viewing.id}/feedback`}
+              className="text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors"
+            >
+              {tx(t, 'leaveFeedback')} &rarr;
+            </Link>
+          )}
+          {viewing.place_id && (
+            <Link
+              href={`/p/${viewing.place_id}`}
+              className="text-xs font-semibold text-[#0F1117] hover:underline ml-auto"
+            >
+              {tx(t, 'viewListing')} &rarr;
+            </Link>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StatusBadge({ status, t }: { status: string; t: T }) {
+  const styles: Record<string, string> = {
+    pending: 'bg-yellow-100 text-yellow-700',
+    confirmed: 'bg-green-100 text-green-700',
+    cancelled: 'bg-gray-100 text-gray-500',
+    completed: 'bg-blue-100 text-blue-700',
+    no_show: 'bg-red-100 text-red-700',
+  }
+
+  const labels: Record<string, string> = {
+    pending: tx(t, 'statusPending'),
+    confirmed: tx(t, 'statusConfirmed'),
+    cancelled: tx(t, 'statusCancelled'),
+    completed: tx(t, 'statusCompleted'),
+    no_show: tx(t, 'statusNoShow'),
+  }
+
+  return (
+    <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${styles[status] ?? styles.pending}`}>
+      {labels[status] ?? status}
+    </span>
+  )
+}

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
-  LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote,
+  LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -179,6 +179,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 export const hunterNav: NavItem[] = [
   { href: '/hunter/info',     label: 'Dashboard',     icon: <LayoutDashboard size={15} />, exact: true },
   { href: '/hunter/search',   label: 'Search',        icon: <Search size={15} /> },
+  { href: '/hunter/viewings', label: 'Viewings',      icon: <Eye size={15} /> },
   { href: '/hunter/passport', label: 'Home Passport',icon: <ShieldCheck size={15} /> },
   { href: '/hunter/agents',   label: 'Agents',        icon: <Handshake size={15} /> },
   { href: '/hunter/inbox',    label: 'Inbox',          icon: <Inbox size={15} /> },

@@ -121,6 +121,22 @@ export default async function ViewingsPage() {
             noSlots: t('noSlots'),
             remove: t('remove'),
             fillAllFields: t('fillAllFields'),
+            quickWeek: t('quickWeek'),
+            quickWeekDesc: t('quickWeekDesc'),
+            slotDuration: t('slotDuration'),
+            minutes: t('minutes'),
+            selectDays: t('selectDays'),
+            fromTime: t('fromTime'),
+            toTime: t('toTime'),
+            generateSlots: t('generateSlots'),
+            slotsCreated: t('slotsCreated'),
+            mon: t('mon'),
+            tue: t('tue'),
+            wed: t('wed'),
+            thu: t('thu'),
+            fri: t('fri'),
+            sat: t('sat'),
+            sun: t('sun'),
           }}
         />
     </div>

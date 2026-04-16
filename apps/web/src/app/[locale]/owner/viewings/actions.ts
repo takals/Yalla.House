@@ -187,6 +187,52 @@ export async function removeOwnerSlotAction(
   return { success: true }
 }
 
+export async function addBatchSlotsAction(
+  listingId: string,
+  slots: Array<{ startsAt: string; endsAt: string }>
+): Promise<{ success: true; count: number } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) return { authRequired: true }
+
+  if (slots.length === 0) return { error: 'No slots provided' }
+  if (slots.length > 56) return { error: 'Maximum 56 slots per batch (8 per day × 7 days)' }
+
+  const supabase = await createClient()
+  const { data: listing } = await (supabase.from('listings') as any)
+    .select('id, owner_id')
+    .eq('id', listingId)
+    .eq('owner_id', auth.userId)
+    .single()
+
+  if (!listing) return { error: 'Listing not found' }
+
+  const now = new Date()
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/London'
+
+  const rows = slots
+    .filter(s => new Date(s.startsAt) > now && new Date(s.endsAt) > new Date(s.startsAt))
+    .map(s => ({
+      listing_id: listingId,
+      owner_id: auth.userId,
+      starts_at: s.startsAt,
+      ends_at: s.endsAt,
+      timezone: tz,
+      is_booked: false,
+    }))
+
+  if (rows.length === 0) return { error: 'All slots are in the past or invalid' }
+
+  const { error } = await (supabase.from('availability_slots') as any)
+    .insert(rows)
+
+  if (error) {
+    console.error('addBatchSlotsAction error:', error)
+    return { error: 'Failed to create slots' }
+  }
+
+  return { success: true, count: rows.length }
+}
+
 export async function declineViewingAction(
   viewingId: string
 ): Promise<{ success: true } | { error: string } | { authRequired: true }> {

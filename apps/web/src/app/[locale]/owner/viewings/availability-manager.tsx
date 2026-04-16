@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useAuthAction } from '@/lib/use-auth-action'
-import { addOwnerSlotAction, removeOwnerSlotAction } from './actions'
-import { Calendar, Clock, Trash2, Plus, X } from 'lucide-react'
+import { addOwnerSlotAction, removeOwnerSlotAction, addBatchSlotsAction } from './actions'
+import { Calendar, Clock, Trash2, Plus, X, Repeat } from 'lucide-react'
 
 export interface SlotRow {
   id: string
@@ -46,6 +46,14 @@ export function AvailabilityManager({
   const [date, setDate] = useState('')
   const [startTime, setStartTime] = useState('10:00')
   const [endTime, setEndTime] = useState('10:30')
+
+  // Quick Week state
+  const [showQuickWeek, setShowQuickWeek] = useState(false)
+  const [qwDays, setQwDays] = useState<Set<number>>(new Set([1, 2, 3, 4, 5])) // Mon-Fri
+  const [qwFrom, setQwFrom] = useState('09:00')
+  const [qwTo, setQwTo] = useState('17:00')
+  const [qwDuration, setQwDuration] = useState(30) // minutes
+  const [qwSuccess, setQwSuccess] = useState<string | null>(null)
 
   async function handleAdd() {
     if (!selectedListing || !date || !startTime || !endTime) {
@@ -96,6 +104,83 @@ export function AvailabilityManager({
     } else if ('error' in result) {
       setError(result.error)
     }
+  }
+
+  async function handleQuickWeek() {
+    if (!selectedListing || qwDays.size === 0) {
+      setError(t.fillAllFields ?? 'Fill all fields')
+      return
+    }
+    setError(null)
+    setQwSuccess(null)
+    setActing(s => new Set(s).add('batch'))
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const batchSlots: Array<{ startsAt: string; endsAt: string }> = []
+
+    for (let d = 0; d < 7; d++) {
+      const day = new Date(today)
+      day.setDate(today.getDate() + d + 1) // start from tomorrow
+      const dow = day.getDay() // 0=Sun, 1=Mon...
+      if (!qwDays.has(dow)) continue
+
+      const fromParts = qwFrom.split(':').map(Number)
+      const toParts = qwTo.split(':').map(Number)
+      const fromH = fromParts[0] ?? 9
+      const fromM = fromParts[1] ?? 0
+      const toH = toParts[0] ?? 17
+      const toM = toParts[1] ?? 0
+      const dayStart = fromH * 60 + fromM
+      const dayEnd = toH * 60 + toM
+
+      for (let m = dayStart; m + qwDuration <= dayEnd; m += qwDuration) {
+        const start = new Date(day)
+        start.setHours(Math.floor(m / 60), m % 60, 0, 0)
+        const end = new Date(day)
+        end.setHours(Math.floor((m + qwDuration) / 60), (m + qwDuration) % 60, 0, 0)
+        batchSlots.push({ startsAt: start.toISOString(), endsAt: end.toISOString() })
+      }
+    }
+
+    if (batchSlots.length === 0) {
+      setError('No valid slots generated')
+      setActing(s => { const n = new Set(s); n.delete('batch'); return n })
+      return
+    }
+
+    const result = await addBatchSlotsAction(selectedListing, batchSlots)
+    setActing(s => { const n = new Set(s); n.delete('batch'); return n })
+
+    if (handleAuthRequired(result)) return
+
+    if ('error' in result) {
+      setError(result.error)
+    } else if ('success' in result) {
+      setQwSuccess((t.slotsCreated ?? '{count} slots created').replace('{count}', String(result.count)))
+      setShowQuickWeek(false)
+      // Reload page to get fresh slot data
+      window.location.reload()
+    }
+  }
+
+  const DAY_LABELS = [
+    { value: 0, label: t.sun ?? 'Sun' },
+    { value: 1, label: t.mon ?? 'Mon' },
+    { value: 2, label: t.tue ?? 'Tue' },
+    { value: 3, label: t.wed ?? 'Wed' },
+    { value: 4, label: t.thu ?? 'Thu' },
+    { value: 5, label: t.fri ?? 'Fri' },
+    { value: 6, label: t.sat ?? 'Sat' },
+  ]
+
+  function toggleDay(day: number) {
+    setQwDays(prev => {
+      const next = new Set(prev)
+      if (next.has(day)) next.delete(day)
+      else next.add(day)
+      return next
+    })
   }
 
   // Group slots by date
@@ -200,6 +285,113 @@ export function AvailabilityManager({
             </div>
           </div>
           {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
+        </div>
+      )}
+
+      {/* Quick Week batch creator */}
+      {listings.length > 0 && (
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => { setShowQuickWeek(f => !f); setQwSuccess(null) }}
+            className="flex items-center gap-1.5 text-sm font-semibold text-[#5E6278] hover:text-[#0F1117] transition-colors"
+          >
+            <Repeat size={14} />
+            {t.quickWeek ?? 'Quick-fill week'}
+          </button>
+
+          {qwSuccess && (
+            <div className="mt-2 bg-green-50 border border-green-200 rounded-lg px-4 py-2.5 text-sm text-green-700 font-medium">
+              {qwSuccess}
+            </div>
+          )}
+
+          {showQuickWeek && (
+            <div className="bg-surface rounded-card p-5 shadow-sm mt-3">
+              <p className="text-xs text-[#5E6278] mb-4">{t.quickWeekDesc ?? 'Create slots for the next 7 days automatically'}</p>
+
+              {listings.length > 1 && (
+                <div className="mb-3">
+                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.selectListing}</label>
+                  <select
+                    value={selectedListing}
+                    onChange={e => setSelectedListing(e.target.value)}
+                    className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2 bg-white"
+                  >
+                    {listings.map(l => (
+                      <option key={l.id} value={l.id}>{l.title}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Day selector */}
+              <div className="mb-3">
+                <label className="text-xs font-semibold text-[#5E6278] mb-2 block">{t.selectDays ?? 'Select days'}</label>
+                <div className="flex gap-1.5">
+                  {DAY_LABELS.map(d => (
+                    <button
+                      key={d.value}
+                      type="button"
+                      onClick={() => toggleDay(d.value)}
+                      className={`w-9 h-9 rounded-lg text-xs font-bold transition-colors ${
+                        qwDays.has(d.value)
+                          ? 'bg-[#0F1117] text-white'
+                          : 'bg-[#F5F5FA] text-[#5E6278] hover:bg-[#E4E6EF]'
+                      }`}
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Time range + duration */}
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                <div>
+                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.fromTime ?? 'From'}</label>
+                  <input
+                    type="time"
+                    value={qwFrom}
+                    onChange={e => setQwFrom(e.target.value)}
+                    className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.toTime ?? 'Until'}</label>
+                  <input
+                    type="time"
+                    value={qwTo}
+                    onChange={e => setQwTo(e.target.value)}
+                    className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#5E6278] mb-1 block">{t.slotDuration ?? 'Duration'}</label>
+                  <select
+                    value={qwDuration}
+                    onChange={e => setQwDuration(Number(e.target.value))}
+                    className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2 bg-white"
+                  >
+                    <option value={15}>15 {t.minutes ?? 'min'}</option>
+                    <option value={30}>30 {t.minutes ?? 'min'}</option>
+                    <option value={45}>45 {t.minutes ?? 'min'}</option>
+                    <option value={60}>60 {t.minutes ?? 'min'}</option>
+                  </select>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleQuickWeek}
+                disabled={acting.has('batch')}
+                className="w-full text-sm font-bold px-4 py-2.5 bg-brand hover:bg-brand-hover text-[#0F1117] rounded-lg transition-colors disabled:opacity-50"
+              >
+                {acting.has('batch') ? '...' : (t.generateSlots ?? 'Create slots')}
+              </button>
+              {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
+            </div>
+          )}
         </div>
       )}
 
