@@ -1044,7 +1044,7 @@
       "selectPropertyType": "Bitte Typ wählen",
       "selectIntent": "Bitte Art wählen",
       "addressRequired": "Adresse erforderlich",
-      "postcodeInvalid": "Bitte gültige Postleitzahl eingeben (5 Ziffern)",
+      "postcodeInvalid": "Bitte g\u00fcltige Postleitzahl eingeben",
       "cityRequired": "Stadt erforderlich",
       "constructionYearInvalid": "Baujahr muss zwischen {min} und {max} liegen",
       "titleRequired": "Titel erforderlich",
@@ -1216,8 +1216,8 @@
     },
     "step2": {
       "heading": "Wo befindet sich die Immobilie?",
-      "addressLine1": "Straße und Hausnummer",
-      "addressLine1Placeholder": "Musterstraße 42",
+      "addressLine1": "Stra\u00dfe und Hausnummer",
+      "addressLine1Placeholder": "Musterstra\u00dfe 42",
       "addressLine2": "Adresszusatz",
       "addressLine2Placeholder": "Hinterhaus, EG links",
       "postcode": "Postleitzahl",
@@ -1225,7 +1225,7 @@
       "city": "Stadt",
       "cityPlaceholder": "Berlin",
       "region": "Bundesland",
-      "regionPlaceholder": "Berlin"
+      "regionSelectDefault": "Bundesland w\u00e4hlen"
     },
     "step3": {
       "heading": "Objektdetails",
@@ -1297,7 +1297,7 @@
     },
     "validation": {
       "required": "erforderlich",
-      "postcodeInvalid": "Bitte gültige Postleitzahl eingeben (5 Ziffern)"
+      "postcodeInvalid": "Bitte g\u00fcltige Postleitzahl eingeben"
     }
   },
   "partner": {

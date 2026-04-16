@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Home, Building2, Building, Store, TreePine, MapPin } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { createListingAction, type WizardPayload } from './actions'
-import { getCountryConfig } from '@/lib/country-config'
+import { countryFromLocale, countryConfigFromLocale } from '@/lib/detect-country'
 
 interface WizardFormData {
   property_type: string
@@ -161,8 +161,11 @@ function Step1({
 }
 
 function Step2({
-  form, errors, set, t,
-}: { form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; t: (key: string) => string }) {
+  form, errors, set, t, regions, postcodeLabel, postcodeMaxLength,
+}: {
+  form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; t: (key: string) => string
+  regions: Array<{ prefix: string; label: string }>; postcodeLabel: string; postcodeMaxLength: number
+}) {
   return (
     <div className="space-y-5">
       <h2 className="text-xl font-bold text-[#0F1117]">{t('step2.heading')}</h2>
@@ -187,11 +190,11 @@ function Step2({
 
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label={t('step2.postcode')}
+          label={postcodeLabel}
           id="postcode"
           required
           placeholder={t('step2.postcodePlaceholder')}
-          maxLength={5}
+          maxLength={postcodeMaxLength}
           value={form.postcode}
           onChange={e => set('postcode', e.target.value)}
           error={errors.postcode}
@@ -207,13 +210,17 @@ function Step2({
         />
       </div>
 
-      <Input
+      <Select
         label={t('step2.region')}
         id="region"
-        placeholder={t('step2.regionPlaceholder')}
         value={form.region}
         onChange={e => set('region', e.target.value)}
-      />
+      >
+        <option value="">{t('step2.regionSelectDefault')}</option>
+        {regions.map(r => (
+          <option key={r.prefix} value={r.label}>{r.label}</option>
+        ))}
+      </Select>
     </div>
   )
 }
@@ -540,10 +547,10 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
   const [serverError, setServerError] = useState('')
   const [isPending, startTransition] = useTransition()
 
-  // Derive country from locale: 'en' -> 'GB', 'de' or default -> 'DE'
-  const countryCode = locale === 'en' ? 'GB' : 'DE'
-  const countryConfig = getCountryConfig(countryCode)
-  const localeFormatting = countryCode === 'GB' ? 'en-GB' : 'de-DE'
+  // Derive country from locale (auto-detected via Accept-Language or URL)
+  const countryCode = countryFromLocale(locale)
+  const countryConfig = countryConfigFromLocale(locale)
+  const localeFormatting = countryConfig.default_locale
 
   // Build step titles and property types from translations
   const stepTitles = [
@@ -585,7 +592,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
 
     if (step === 2) {
       if (!form.address_line1.trim()) errs.address_line1 = t('validation.required')
-      if (!/^\d{5}$/.test(form.postcode.trim())) errs.postcode = t('validation.postcodeInvalid')
+      if (!countryConfig.postal_code_format.test(form.postcode.trim())) errs.postcode = t('validation.postcodeInvalid')
       if (!form.city.trim()) errs.city = t('validation.required')
     }
 
@@ -653,7 +660,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
       {/* Step card */}
       <div className="bg-surface rounded-card shadow-sm p-6">
         {step === 1 && <Step1 form={form} errors={errors} set={set} propertyTypes={propertyTypes} t={t} intentLabels={intentLabels} />}
-        {step === 2 && <Step2 form={form} errors={errors} set={set} t={t} />}
+        {step === 2 && <Step2 form={form} errors={errors} set={set} t={t} regions={countryConfig.regions} postcodeLabel={countryConfig.postal_code_label} postcodeMaxLength={countryCode === 'GB' ? 8 : 5} />}
         {step === 3 && <Step3 form={form} errors={errors} set={set} isFlat={isFlat} t={t} />}
         {step === 4 && <Step4 form={form} errors={errors} set={set} currency={countryConfig.currency} t={t} />}
         {step === 5 && <Step5 form={form} currency={countryConfig.currency} localeFormatting={localeFormatting} t={t} propertyTypes={propertyTypes} intentLabels={intentLabels} />}
