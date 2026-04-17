@@ -157,7 +157,7 @@ export default async function OwnerProposalsPage({
                     </div>
 
                     {/* Update style indicator */}
-                    <div className="sm:col-span-2 bg-[#F5F5FA] rounded-xl p-4">
+                    <div className="sm:col-span-2 bg-hover-bg rounded-xl p-4">
                       <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">{t('updateStyle')}</p>
                       {proposal.crm_connected ? (
                         <div className="flex items-center gap-2">

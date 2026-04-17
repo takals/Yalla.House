@@ -90,7 +90,7 @@ export default async function HunterInboxPage() {
         <h1 className="text-3xl font-bold text-text-primary tracking-tight">
           {t('comms.inbox')}
         </h1>
-        <p className="text-sm text-[#656565] mt-2">
+        <p className="text-sm text-text-muted mt-2">
           {t('comms.emailExplainer')}
         </p>
       </div>
@@ -102,9 +102,9 @@ export default async function HunterInboxPage() {
             <h2 className="text-sm font-semibold text-text-primary mb-1">
               {t('comms.yourYallaEmail')}
             </h2>
-            <p className="text-base font-mono text-[#D4764E]">{yallaEmail}</p>
+            <p className="text-base font-mono text-brand">{yallaEmail}</p>
           </div>
-          <div className="text-xs text-[#999] text-right max-w-xs">
+          <div className="text-xs text-text-muted text-right max-w-xs">
             {t('comms.emailExplainer')}
           </div>
         </div>
@@ -124,7 +124,7 @@ export default async function HunterInboxPage() {
                   <Link
                     key={thread.id}
                     href={`/hunter/inbox/${thread.id}`}
-                    className="block bg-white rounded-2xl border border-border-default p-6 hover:border-[#D4764E] hover:shadow-md transition-all"
+                    className="block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
@@ -132,11 +132,11 @@ export default async function HunterInboxPage() {
                           {thread.subject || 'Agent Message'}
                         </h3>
                       </div>
-                      <span className="text-xs text-[#999] whitespace-nowrap ml-2 flex-shrink-0">
+                      <span className="text-xs text-text-muted whitespace-nowrap ml-2 flex-shrink-0">
                         {formatDate(thread.last_message_at)}
                       </span>
                     </div>
-                    <div className="flex items-center text-[#999] text-sm">
+                    <div className="flex items-center text-text-muted text-sm">
                       <MessageCircle size={14} className="mr-2 flex-shrink-0" />
                       <span>View conversation</span>
                     </div>
@@ -157,7 +157,7 @@ export default async function HunterInboxPage() {
                   <Link
                     key={thread.id}
                     href={`/hunter/inbox/${thread.id}`}
-                    className="block bg-white rounded-2xl border border-border-default p-6 hover:border-[#D4764E] hover:shadow-md transition-all"
+                    className="block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
@@ -165,16 +165,16 @@ export default async function HunterInboxPage() {
                           {thread.listing?.title_de || 'Property Update'}
                         </h3>
                         {thread.listing && (
-                          <p className="text-sm text-[#656565] mb-3">
+                          <p className="text-sm text-text-muted mb-3">
                             {thread.listing.place_id}
                           </p>
                         )}
                       </div>
-                      <span className="text-xs text-[#999] whitespace-nowrap ml-2 flex-shrink-0">
+                      <span className="text-xs text-text-muted whitespace-nowrap ml-2 flex-shrink-0">
                         {formatDate(thread.last_message_at)}
                       </span>
                     </div>
-                    <div className="flex items-center text-[#999] text-sm">
+                    <div className="flex items-center text-text-muted text-sm">
                       <MessageCircle size={14} className="mr-2 flex-shrink-0" />
                       <span>View conversation</span>
                     </div>
@@ -193,7 +193,7 @@ export default async function HunterInboxPage() {
           <h3 className="text-base font-semibold text-text-primary mb-1">
             {t('comms.noMessages')}
           </h3>
-          <p className="text-sm text-[#656565] max-w-sm mx-auto">
+          <p className="text-sm text-text-muted max-w-sm mx-auto">
             When agents send you property matches or respond to your search, conversations will appear here.
           </p>
         </div>

@@ -139,7 +139,7 @@ export function FeedbackForm({
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   interested === true
                     ? 'bg-green-100 text-green-700 ring-2 ring-green-400'
-                    : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
+                    : 'bg-hover-bg text-text-secondary hover:bg-[#E4E6EF]'
                 }`}
               >
                 <ThumbsUp size={16} /> {t.interested}
@@ -150,7 +150,7 @@ export function FeedbackForm({
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                   interested === false
                     ? 'bg-red-100 text-red-700 ring-2 ring-red-400'
-                    : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
+                    : 'bg-hover-bg text-text-secondary hover:bg-[#E4E6EF]'
                 }`}
               >
                 <ThumbsDown size={16} /> {t.notInterested}

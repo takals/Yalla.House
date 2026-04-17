@@ -47,7 +47,7 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-4">
         {/* Left: owner badge + edit */}
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-[#D4764E] bg-[#D4764E]/10 px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-brand bg-brand/10 px-2 py-0.5 rounded-full">
             {t('ownerBadge')}
           </span>
           <a

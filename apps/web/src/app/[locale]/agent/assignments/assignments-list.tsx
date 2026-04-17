@@ -187,7 +187,7 @@ export default function AssignmentsList({ assignments, translations: t }: Props)
                     <div className="flex items-center gap-2 flex-wrap">
                       <TierBadge tier={a.tier} />
                       <StatusBadge status={a.status} />
-                      <span className="text-xs text-[#999]">
+                      <span className="text-xs text-text-muted">
                         {t.since} {new Date(a.created_at).toLocaleDateString(dateLocale)}
                       </span>
                     </div>
@@ -257,7 +257,7 @@ export default function AssignmentsList({ assignments, translations: t }: Props)
       {assignments.length === 0 && (
         <div className="bg-surface rounded-xl p-12 text-center border border-[#E2E4EB]">
           <p className="text-[#5E6278] font-medium mb-2">{t.noAssignments}</p>
-          <p className="text-xs text-[#999]">{t.noAssignmentsDesc}</p>
+          <p className="text-xs text-text-muted">{t.noAssignmentsDesc}</p>
         </div>
       )}
     </div>

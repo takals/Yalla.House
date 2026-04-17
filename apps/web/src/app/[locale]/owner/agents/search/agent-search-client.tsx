@@ -120,7 +120,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
               className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-lg text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
             />
           </div>
-          <button className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors">
+          <button className="px-6 py-2.5 bg-brand text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors">
             {translations.searchButton}
           </button>
         </div>
@@ -141,7 +141,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
                 }}
                 className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
                   selectedAreas.includes(area.code)
-                    ? 'bg-[#D4764E] text-white'
+                    ? 'bg-brand text-white'
                     : 'bg-bg text-text-primary hover:bg-hover-muted'
                 }`}
               >
@@ -181,8 +181,8 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
                   onClick={() => toggleAgentSelection(agent.id)}
                   className={`flex-shrink-0 ml-4 w-10 h-10 rounded-lg border-2 flex items-center justify-center transition-all ${
                     selectedAgents.includes(agent.id)
-                      ? 'bg-[#D4764E] border-[#D4764E]'
-                      : 'border-border-default hover:border-[#D4764E]'
+                      ? 'bg-brand border-brand'
+                      : 'border-border-default hover:border-brand'
                   }`}
                 >
                   {selectedAgents.includes(agent.id) && (
@@ -250,7 +250,7 @@ export function AgentSearchClient({ agents, areaChips, translations }: AgentSear
             </div>
             <button
               onClick={handleSendBrief}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors"
             >
               <Send size={16} />
               {translations.sendBriefButton}

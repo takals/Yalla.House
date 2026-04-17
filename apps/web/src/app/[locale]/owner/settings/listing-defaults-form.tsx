@@ -151,13 +151,13 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
           <Globe size={20} className="text-text-primary" />
           <div>
             <h2 className="font-bold text-text-primary text-base">{t.sectionListingDefaults}</h2>
-            <p className="text-xs text-[#999] mt-0.5">{t.defaultsDescription}</p>
+            <p className="text-xs text-text-muted mt-0.5">{t.defaultsDescription}</p>
           </div>
         </div>
         {!editing && (
           <button
             onClick={() => setEditing(true)}
-            className="text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors"
+            className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
           >
             {t.buttonEdit}
           </button>
@@ -273,7 +273,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-brand text-white text-sm font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
               {saving ? t.saving : t.saveDefaults}

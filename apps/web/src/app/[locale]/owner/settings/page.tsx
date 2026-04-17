@@ -44,7 +44,7 @@ export default async function OwnerSettingsPage() {
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-extrabold text-text-primary tracking-tight">{t('pageTitle')}</h1>
-        <p className="text-sm text-[#656565] mt-1">{t('pageDescription')}</p>
+        <p className="text-sm text-text-muted mt-1">{t('pageDescription')}</p>
       </div>
 
       {/* Personal + Business — editable via client component */}
@@ -154,7 +154,7 @@ export default async function OwnerSettingsPage() {
         <div className="flex items-center justify-between py-3">
           <div>
             <div className="text-sm font-semibold text-text-primary">{t('labelDeleteAccount')}</div>
-            <div className="text-xs text-[#999] mt-0.5">
+            <div className="text-xs text-text-muted mt-0.5">
               {t('deleteAccountWarning')}
             </div>
           </div>
@@ -192,7 +192,7 @@ function SettingsSection({ icon: Icon, title, badge, isDanger, children }: Setti
           <h2 className={`font-bold ${isDanger ? 'text-red-600' : 'text-text-primary'} text-base`}>{title}</h2>
         </div>
         {badge && (
-          <span className="text-xs font-medium text-[#999] bg-[#F0F0F0] px-2 py-1 rounded">
+          <span className="text-xs font-medium text-text-muted bg-[#F0F0F0] px-2 py-1 rounded">
             {badge}
           </span>
         )}
@@ -217,9 +217,9 @@ function SettingItem({ label, value, actionLabel, isReadOnly }: SettingItemProps
         <div className="text-sm text-text-secondary mt-0.5">{value}</div>
       </div>
       {isReadOnly ? (
-        <span className="text-xs text-[#999]">{actionLabel}</span>
+        <span className="text-xs text-text-muted">{actionLabel}</span>
       ) : (
-        <button className="text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors">
+        <button className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors">
           {actionLabel}
         </button>
       )}
@@ -238,7 +238,7 @@ function NotificationToggle({ label, description, disabled }: NotificationToggle
     <div className={`flex items-center justify-between py-3 border-b border-[#F0F0F0] last:border-b-0 ${disabled ? 'opacity-50' : ''}`}>
       <div>
         <div className="text-sm font-semibold text-text-primary">{label}</div>
-        <div className="text-xs text-[#999] mt-0.5">{description}</div>
+        <div className="text-xs text-text-muted mt-0.5">{description}</div>
       </div>
       <div className="w-10 h-6 bg-[#E2E4EB] rounded-full relative cursor-not-allowed">
         <div className="w-5 h-5 bg-white rounded-full absolute left-0.5 top-0.5 shadow-sm transition-transform" />

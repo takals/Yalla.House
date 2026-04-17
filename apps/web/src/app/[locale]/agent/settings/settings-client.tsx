@@ -65,7 +65,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
               type="email"
               value={profile.email}
               disabled
-              className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2.5 bg-[#FAFBFC] text-[#999] cursor-not-allowed"
+              className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2.5 bg-[#FAFBFC] text-text-muted cursor-not-allowed"
             />
           </div>
 
@@ -107,7 +107,7 @@ export function AgentSettingsClient({ profile, agentProfile, labels: t }: Props)
           <button
             onClick={handleSave}
             disabled={isPending}
-            className="text-sm font-bold px-5 py-2.5 bg-[#D4764E] hover:bg-brand-hover text-white rounded-lg transition-colors disabled:opacity-50"
+            className="text-sm font-bold px-5 py-2.5 bg-brand hover:bg-brand-hover text-white rounded-lg transition-colors disabled:opacity-50"
           >
             {isPending ? tx(t, 'saving') : tx(t, 'saveChanges')}
           </button>

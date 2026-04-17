@@ -142,7 +142,7 @@ export default async function TrackingPage() {
     <div className="max-w-6xl">
       {/* Header */}
       <div className="mb-8">
-        <Link href="/owner/agents" className="inline-flex items-center gap-2 text-[#D4764E] font-semibold text-sm mb-4 hover:gap-3 transition-all">
+        <Link href="/owner/agents" className="inline-flex items-center gap-2 text-brand font-semibold text-sm mb-4 hover:gap-3 transition-all">
           <ArrowLeft size={16} />
           {t('trackingBackButton')}
         </Link>

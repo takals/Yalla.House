@@ -88,7 +88,7 @@ function ReadinessBadgeRow({ badge }: { badge: ReadinessBadge }) {
       ) : (
         <button
           onClick={badge.ctaAction}
-          className="text-[10px] font-bold text-[#D4764E] hover:text-[#BF6840] whitespace-nowrap flex-shrink-0"
+          className="text-[10px] font-bold text-brand hover:text-[#BF6840] whitespace-nowrap flex-shrink-0"
         >
           {badge.ctaLabel}
         </button>
@@ -222,7 +222,7 @@ export function PassportPageClient({
         <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full pointer-events-none" style={{ background: 'rgba(212,118,78,0.1)' }} />
 
         <div className="flex items-center justify-between mb-4">
-          <span className="text-[0.6rem] font-black uppercase tracking-widest text-[#D4764E] flex items-center gap-1">
+          <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand flex items-center gap-1">
             <Home size={14} /> {translations.passportTitle ?? 'Home Passport'}
           </span>
           {isVerified ? (
@@ -284,7 +284,7 @@ export function PassportPageClient({
                   <span key={pref.slug} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                     pref.sentiment === 'need' ? 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]'
                     : pref.sentiment === 'dealbreaker' ? 'bg-[rgba(239,68,68,0.15)] text-[#EF4444]'
-                    : 'bg-[rgba(212,118,78,0.15)] text-[#D4764E]'
+                    : 'bg-[rgba(212,118,78,0.15)] text-brand'
                   }`}>
                     {label}{pref.sentiment === 'need' && ' ★'}{pref.sentiment === 'dealbreaker' && ' ✕'}
                   </span>
@@ -372,12 +372,12 @@ export function PassportPageClient({
         className="lg:hidden fixed top-[72px] left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-4 py-2 rounded-full shadow-lg transition-all active:scale-95"
         style={{ background: 'linear-gradient(135deg, #0F1117 0%, #1C1F2E 100%)' }}
       >
-        <Home size={14} className="text-[#D4764E]" />
+        <Home size={14} className="text-brand" />
         <span className="text-white text-xs font-bold">
           {hasData ? 'My Passport' : 'View Passport'}
         </span>
         {filledCount > 0 && (
-          <span className="bg-[#D4764E] text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="bg-brand text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">
             {filledCount}
           </span>
         )}

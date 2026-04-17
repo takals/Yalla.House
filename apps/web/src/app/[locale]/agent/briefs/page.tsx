@@ -89,7 +89,7 @@ export default async function AgentBriefsPage() {
                     </span>
                     <span className="text-xs text-text-secondary capitalize">{m.search.intent}</span>
                   </div>
-                  <span className="text-xs text-[#999]">
+                  <span className="text-xs text-text-muted">
                     {t('expires', { date: new Date(m.expires_at).toLocaleDateString(dateLocale) })}
                   </span>
                 </div>
@@ -182,7 +182,7 @@ export default async function AgentBriefsPage() {
       {briefs.length === 0 && (
         <div className="bg-surface rounded-xl p-12 text-center border border-border-default">
           <p className="text-text-secondary font-medium mb-2">{t('emptyTitle')}</p>
-          <p className="text-xs text-[#999]">
+          <p className="text-xs text-text-muted">
             {t('emptyDescription')}
           </p>
         </div>

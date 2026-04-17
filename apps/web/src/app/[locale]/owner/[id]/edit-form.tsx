@@ -322,7 +322,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('paused')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.pause')}
               </button>
@@ -330,7 +330,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('sold')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markSold')}
               </button>
@@ -338,7 +338,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('let')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markLet')}
               </button>
@@ -362,7 +362,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('sold')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markSold')}
               </button>
@@ -370,7 +370,7 @@ export function ListingEditForm({
                 type="button"
                 onClick={() => handleStatusChange('let')}
                 disabled={isChangingStatus}
-                className="px-4 py-2 text-sm font-semibold bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
+                className="px-4 py-2 text-sm font-semibold bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50"
               >
                 {t('editForm.markLet')}
               </button>
@@ -703,7 +703,7 @@ export function ListingEditForm({
             {t('editForm.briefDescription')}
           </p>
           {listing.brief_sent_at && (
-            <div className="flex items-center gap-2 text-xs text-text-secondary bg-[#F5F5FA] rounded-lg px-3 py-2">
+            <div className="flex items-center gap-2 text-xs text-text-secondary bg-hover-bg rounded-lg px-3 py-2">
               <svg className="w-3.5 h-3.5 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>

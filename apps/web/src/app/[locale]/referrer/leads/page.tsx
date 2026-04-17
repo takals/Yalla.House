@@ -105,7 +105,7 @@ export default async function ReferralLeadsPage() {
       {referralsWithEvents.length === 0 ? (
         <div className="bg-surface rounded-xl p-12 text-center border border-border-default">
           <p className="text-text-secondary font-medium mb-2">{t('noReferralsYet')}</p>
-          <p className="text-xs text-[#999] mb-4">
+          <p className="text-xs text-text-muted mb-4">
             {t('shareToStart')}
           </p>
           <Link

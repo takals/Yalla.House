@@ -100,6 +100,31 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 
   return (
     <div className="min-h-screen bg-bg">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'RealEstateListing',
+            name: title ?? listing.title_de ?? listing.place_id,
+            description: desc?.substring(0, 200) ?? '',
+            url: `https://yalla.house/${locale}/p/${listing.place_id}`,
+            ...(listing.sale_price || listing.rent_price ? {
+              offers: {
+                '@type': 'Offer',
+                price: (listing.sale_price ?? listing.rent_price) / 100,
+                priceCurrency: listing.currency || 'EUR',
+              }
+            } : {}),
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: listing.city,
+              postalCode: listing.postcode,
+              addressCountry: listing.country_code || 'DE',
+            },
+          })
+        }}
+      />
 
       {/* ── Owner toolbar ───────────────────────────────────────── */}
       {isOwner && (
@@ -271,7 +296,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 function StatPill({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
     <div className="flex items-center gap-2 flex-shrink-0">
-      <div className="text-[#D4764E]">{icon}</div>
+      <div className="text-brand">{icon}</div>
       <div className="leading-tight">
         <p className="font-bold text-sm text-text-primary">{value}</p>
         <p className="text-[10px] text-text-secondary uppercase tracking-wide">{label}</p>

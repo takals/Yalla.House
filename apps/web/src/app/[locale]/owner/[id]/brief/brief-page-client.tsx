@@ -55,7 +55,7 @@ export function OwnerBriefPageClient({
         onClick={() => setMode('chat')}
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
           mode === 'chat'
-            ? 'bg-[#D4764E] text-white'
+            ? 'bg-brand text-white'
             : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
@@ -65,7 +65,7 @@ export function OwnerBriefPageClient({
         onClick={() => setMode('classic')}
         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
           mode === 'classic'
-            ? 'bg-[#D4764E] text-white'
+            ? 'bg-brand text-white'
             : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >

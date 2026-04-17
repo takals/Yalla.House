@@ -141,7 +141,7 @@ export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
 
       {/* Footer actions */}
       <div className="px-5 py-4 border-t border-border-default flex items-center justify-between gap-3 flex-wrap">
-        <div className="text-xs text-[#999]">
+        <div className="text-xs text-text-muted">
           {passport.connectedAt
             ? `Verbunden seit ${new Date(passport.connectedAt).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short', year: 'numeric' })}`
             : 'Verbindungszeit unbekannt'}

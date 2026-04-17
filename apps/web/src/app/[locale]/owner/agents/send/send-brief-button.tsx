@@ -50,7 +50,7 @@ export function SendBriefButton({ listingId, agentIds, label }: SendBriefButtonP
       <button
         onClick={handleSend}
         disabled={sending}
-        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#D4764E] text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand text-white font-semibold rounded-lg hover:bg-[#C26039] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {sending ? <Loader2 size={16} className="animate-spin" /> : <Mail size={16} />}
         {sending ? 'Sending...' : label}

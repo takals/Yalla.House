@@ -458,7 +458,7 @@ export function PassportForm({ profile, userName, sampleAgents = [] }: Props) {
             <p className="text-xs font-semibold text-text-secondary mb-0.5">
               {t('agentsWithAccess', { count: 0 })}
             </p>
-            <p className="text-[0.68rem] text-[#999]">{t('agentApprovalHint')}</p>
+            <p className="text-[0.68rem] text-text-muted">{t('agentApprovalHint')}</p>
           </div>
 
           {/* Automation toggles */}

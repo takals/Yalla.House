@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface SearchFormProps {
   defaults?: {
@@ -24,6 +25,7 @@ const TIMELINES = [
 
 export function SearchForm({ defaults }: SearchFormProps) {
   const router = useRouter()
+  const t = useTranslations('searchForm')
   const [step, setStep] = useState<1 | 2>(1) // 1 = search details, 2 = consent
   const [saving, setSaving] = useState(false)
   const [searchId, setSearchId] = useState<string | null>(null)
@@ -144,7 +146,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
           <h2 className="text-lg font-bold mb-6">New Search</h2>
 
           {error && (
-            <div className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
+            <div role="alert" className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
           )}
 
           {/* Intent */}
@@ -188,7 +190,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
               {areas.map((a, i) => (
                 <span key={i} className="inline-flex items-center gap-1 bg-brand-solid-bg text-brand-badge-text text-xs font-semibold px-3 py-1 rounded-full border border-brand/30">
                   {a.name}
-                  <button type="button" onClick={() => removeArea(i)} className="text-brand-badge-text hover:text-red-600 ml-1">&times;</button>
+                  <button type="button" onClick={() => removeArea(i)} className="text-brand-badge-text hover:text-red-600 ml-1" aria-label={t('removeArea')}>&times;</button>
                 </span>
               ))}
             </div>
@@ -366,7 +368,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
         </div>
 
         {error && (
-          <div className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div role="alert" className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {/* Consent options */}

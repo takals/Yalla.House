@@ -112,15 +112,15 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     return (
       <div data-booking-slots className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border-default/60">
         <div className="flex items-center gap-2.5 mb-5">
-          <div className="w-9 h-9 rounded-xl bg-[#D4764E]/10 flex items-center justify-center">
-            <Calendar size={18} className="text-[#D4764E]" />
+          <div className="w-9 h-9 rounded-xl bg-brand/10 flex items-center justify-center">
+            <Calendar size={18} className="text-brand" />
           </div>
           <h2 className="text-xl font-bold">{t('calendarTitle')}</h2>
         </div>
         <div className="animate-pulse space-y-3">
-          <div className="h-12 bg-[#F5F5FA] rounded-xl" />
-          <div className="h-12 bg-[#F5F5FA] rounded-xl" />
-          <div className="h-12 bg-[#F5F5FA] rounded-xl" />
+          <div className="h-12 bg-hover-bg rounded-xl" />
+          <div className="h-12 bg-hover-bg rounded-xl" />
+          <div className="h-12 bg-hover-bg rounded-xl" />
         </div>
       </div>
     )
@@ -146,15 +146,15 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     <div data-booking-slots className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border-default/60">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#D4764E]/10 flex items-center justify-center">
-            <Calendar size={18} className="text-[#D4764E]" />
+          <div className="w-9 h-9 rounded-xl bg-brand/10 flex items-center justify-center">
+            <Calendar size={18} className="text-brand" />
           </div>
           <h2 className="text-xl font-bold">{t('calendarTitle')}</h2>
         </div>
         {isOwner && (
           <a
             href="/owner/viewings"
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-[#BF6840] transition-colors"
           >
             <Plus size={14} />
             {t('calendarAddSlots')}
@@ -178,11 +178,11 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
                       onClick={() => handleSlotClick(slot.id)}
                       className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold border transition-all w-full text-left ${
                         slot.id === selectedSlot
-                          ? 'bg-[#D4764E] text-white border-[#D4764E] shadow-md shadow-[#D4764E]/20'
-                          : 'bg-white text-text-primary border-border-default hover:border-[#D4764E] hover:text-[#D4764E]'
+                          ? 'bg-brand text-white border-brand shadow-md shadow-[#D4764E]/20'
+                          : 'bg-white text-text-primary border-border-default hover:border-brand hover:text-brand'
                       }`}
                     >
-                      <Clock size={13} className={slot.id === selectedSlot ? 'text-white/80' : 'text-[#999]'} />
+                      <Clock size={13} className={slot.id === selectedSlot ? 'text-white/80' : 'text-text-muted'} />
                       {formatTime(slot.starts_at, dateLocale)} – {formatTime(slot.ends_at, dateLocale)}
                     </button>
                   ))}
@@ -193,7 +193,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
 
           {/* Book / complete booking panel */}
           {selectedSlot && authenticated && !isOwner && (
-            <div className="bg-[#D4764E]/5 rounded-xl p-5 border border-[#D4764E]/15">
+            <div className="bg-brand/5 rounded-xl p-5 border border-brand/15">
               <label className="text-xs font-semibold text-text-secondary block mb-1.5">
                 {t('calendarAddNote')}
               </label>
@@ -208,7 +208,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
               <button
                 onClick={handleBook}
                 disabled={booking}
-                className="mt-3 w-full bg-[#D4764E] hover:bg-brand-hover text-white font-bold text-sm py-3.5 rounded-xl transition-colors disabled:opacity-50 shadow-md shadow-[#D4764E]/20"
+                className="mt-3 w-full bg-brand hover:bg-brand-hover text-white font-bold text-sm py-3.5 rounded-xl transition-colors disabled:opacity-50 shadow-md shadow-[#D4764E]/20"
               >
                 {booking ? t('calendarBooking') : t('calendarBookThis')}
               </button>
@@ -218,8 +218,8 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
           {/* Not authenticated — prompt to sign in (clicking a slot redirects) */}
           {!authenticated && !isOwner && !selectedSlot && (
             <div className="flex items-center gap-2 justify-center py-2">
-              <User size={14} className="text-[#999]" />
-              <p className="text-xs text-[#999]">{t('calendarSignIn')}</p>
+              <User size={14} className="text-text-muted" />
+              <p className="text-xs text-text-muted">{t('calendarSignIn')}</p>
             </div>
           )}
         </div>
@@ -237,7 +237,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
                     {day.times.map(time => (
                       <div
                         key={time}
-                        className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold border border-border-default bg-white text-[#999]"
+                        className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold border border-border-default bg-white text-text-muted"
                       >
                         <Clock size={13} />
                         {time}
@@ -261,7 +261,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
                   </p>
                   <a
                     href="/owner/viewings"
-                    className="inline-flex items-center gap-2 bg-[#D4764E] hover:bg-brand-hover text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors shadow-md shadow-[#D4764E]/20"
+                    className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors shadow-md shadow-[#D4764E]/20"
                   >
                     <Plus size={14} />
                     {t('calendarAddViewingSlots')}

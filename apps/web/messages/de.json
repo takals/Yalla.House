@@ -159,6 +159,8 @@
     "ctaTitle": "Bereit, die Kontrolle zu übernehmen?"
   },
   "listings": {
+    "metaTitle": "Immobilien zum Kauf & zur Miete | Yalla.House",
+    "metaDescription": "Durchsuchen Sie Immobilien auf Yalla.House. Suchen Sie nach Stadt, Preis und Immobilientyp, um Ihr n\u00e4chstes Zuhause oder Ihre Investition zu finden.",
     "title": "Inserate",
     "city": "Stadt / Ort",
     "propertyType": "Immobilientyp",
@@ -312,6 +314,8 @@
     "propertyMatches": "Immobilien-Matches"
   },
   "agentDiscovery": {
+    "metaTitle": "Lokale Immobilienmakler finden | Yalla.House",
+    "metaDescription": "Vergleichen Sie Makler in Ihrer Gegend und treten Sie mit ihnen in Kontakt. Durchsuchen Sie verifizierte lokale Makler auf Yalla.House und senden Sie Ihr Immobilien-Brief kostenlos.",
     "title": "Finden Sie Makler in Ihrer Nähe",
     "subtitle": "Durchsuchen Sie verifizierte lokale Makler oder geben Sie Ihre Postleitzahl ein, um zu sehen, wer Ihr Gebiet abdeckt.",
     "searchPlaceholder": "Geben Sie Ihre Postleitzahl ein (z.B. E3 2PQ)",
@@ -1195,7 +1199,11 @@
       "fileTooLarge": "\"{fileName}\" ist zu groß (max. 10 MB)",
       "uploadFailed": "Upload fehlgeschlagen: {error}",
       "empty": "Noch keine Fotos. Portale wie ImmobilienScout24 empfehlen mindestens 5 Bilder.",
-      "photoAlt": "Immobilienfoto {index}"
+      "photoAlt": "Immobilienfoto {index}",
+      "primaryBadge": "Titelbild",
+      "deletePhoto": "Foto l\u00f6schen",
+      "setPrimary": "Als Titelbild setzen",
+      "setPrimaryShort": "Als Titelbild"
     },
     "portals": {
       "notSubmitted": "Noch nicht eingereicht",
@@ -1874,5 +1882,17 @@
     "signatoryPlaceholder": "Ihr vollst\u00e4ndiger juristischer Name",
     "confirmText": "Ich best\u00e4tige, dass ich die Yalla Partner-Vereinbarung (v1.0) gelesen habe und akzeptiere. Ich bin befugt, im Namen meiner Agentur zu unterschreiben.",
     "signButton": "Partner-Vereinbarung unterzeichnen"
+  },
+  "briefForm": {
+    "stepLocation": "Standort \u2014 wo m\u00f6chtest du kaufen oder mieten?",
+    "stepBudget": "Budget",
+    "stepPropertyType": "Immobilientyp",
+    "stepPreferences": "Pr\u00e4ferenzen",
+    "stepTiming": "Zeitplanung",
+    "activating": "Wird aktiviert\u2026",
+    "activate": "Mein Suchprofil aktivieren \u2192"
+  },
+  "searchForm": {
+    "removeArea": "Bereich entfernen"
   }
 }

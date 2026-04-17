@@ -73,12 +73,12 @@ export function BookingSlots({ listingId, authenticated }: Props) {
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-border-default">
         <div className="flex items-center gap-2 mb-4">
-          <Calendar size={18} className="text-[#D4764E]" />
+          <Calendar size={18} className="text-brand" />
           <h3 className="font-bold text-sm">Available Viewing Slots</h3>
         </div>
         <div className="animate-pulse space-y-2">
-          <div className="h-10 bg-[#F5F5FA] rounded-lg" />
-          <div className="h-10 bg-[#F5F5FA] rounded-lg" />
+          <div className="h-10 bg-hover-bg rounded-lg" />
+          <div className="h-10 bg-hover-bg rounded-lg" />
         </div>
       </div>
     )
@@ -109,7 +109,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
   return (
     <div data-booking-slots className="bg-white rounded-2xl p-6 shadow-sm border border-border-default">
       <div className="flex items-center gap-2 mb-4">
-        <Calendar size={18} className="text-[#D4764E]" />
+        <Calendar size={18} className="text-brand" />
         <h3 className="font-bold text-sm">Book a Viewing</h3>
       </div>
 
@@ -125,10 +125,10 @@ export function BookingSlots({ listingId, authenticated }: Props) {
                   disabled={!authenticated}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold border transition-all ${
                     slot.id === selectedSlot
-                      ? 'bg-[#D4764E] text-white border-[#D4764E]'
+                      ? 'bg-brand text-white border-brand'
                       : authenticated
-                        ? 'bg-white text-text-primary border-border-default hover:border-[#D4764E] hover:text-[#D4764E]'
-                        : 'bg-[#F5F5FA] text-[#999] border-border-default cursor-not-allowed'
+                        ? 'bg-white text-text-primary border-border-default hover:border-brand hover:text-brand'
+                        : 'bg-hover-bg text-text-muted border-border-default cursor-not-allowed'
                   }`}
                 >
                   <Clock size={13} />
@@ -141,7 +141,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
       </div>
 
       {!authenticated && (
-        <p className="text-xs text-[#999] mt-4 text-center">
+        <p className="text-xs text-text-muted mt-4 text-center">
           Sign in to book a viewing slot
         </p>
       )}
@@ -162,7 +162,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
           <button
             onClick={handleBook}
             disabled={booking}
-            className="mt-3 w-full bg-[#D4764E] hover:bg-brand-hover text-white font-bold text-sm py-3 rounded-lg transition-colors disabled:opacity-50"
+            className="mt-3 w-full bg-brand hover:bg-brand-hover text-white font-bold text-sm py-3 rounded-lg transition-colors disabled:opacity-50"
           >
             {booking ? 'Booking...' : 'Book This Slot'}
           </button>

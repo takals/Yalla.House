@@ -1,8 +1,22 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
 import { MapPin, Shield, Home, Building2, TreePine, Hammer, Users } from 'lucide-react'
 import { AgentSearch } from './agent-search'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('agentDiscovery')
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    openGraph: {
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      type: 'website',
+    },
+  }
+}
 
 interface SearchParams {
   postcode?: string

@@ -64,7 +64,7 @@ export function UserManagement({ users, t }: Props) {
       {/* Search + filter */}
       <div className="flex gap-3 mb-6">
         <div className="flex-1 relative">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#999]" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input
             type="text"
             value={search}
@@ -115,7 +115,7 @@ function FilterBtn({ label, active, onClick }: { label: string; active: boolean;
     <button
       onClick={onClick}
       className={`text-xs font-semibold px-3 py-2 rounded-lg transition-colors ${
-        active ? 'bg-[#0F1117] text-white' : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
+        active ? 'bg-[#0F1117] text-white' : 'bg-hover-bg text-text-secondary hover:bg-[#E4E6EF]'
       }`}
     >
       {label}
@@ -166,7 +166,7 @@ function UserRow({
 
   return (
     <div className="px-5 py-4">
-      <div className="flex items-center gap-4 cursor-pointer" onClick={onToggle}>
+      <button type="button" className="flex items-center gap-4 cursor-pointer w-full text-left" onClick={onToggle} aria-expanded={expanded}>
         <div className="w-8 h-8 rounded-full bg-bg flex items-center justify-center flex-shrink-0">
           <UserCircle size={16} className="text-text-secondary" />
         </div>
@@ -176,7 +176,7 @@ function UserRow({
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           {roles.length === 0 ? (
-            <span className="text-xs text-[#999]">{tx(t, 'noRoles')}</span>
+            <span className="text-xs text-text-muted">{tx(t, 'noRoles')}</span>
           ) : (
             roles.map(r => (
               <span key={r} className={`text-xs font-semibold px-2 py-0.5 rounded-full ${ROLE_BADGE_STYLES[r] ?? 'bg-gray-100 text-gray-600'}`}>
@@ -184,10 +184,10 @@ function UserRow({
               </span>
             ))
           )}
-          <span className="text-xs text-[#999] ml-2">{dateStr}</span>
-          <span className="text-xs text-[#999]">{user.country_code ?? 'DE'}</span>
+          <span className="text-xs text-text-muted ml-2">{dateStr}</span>
+          <span className="text-xs text-text-muted">{user.country_code ?? 'DE'}</span>
         </div>
-      </div>
+      </button>
 
       {expanded && (
         <div className="mt-4 pl-12">
@@ -204,7 +204,7 @@ function UserRow({
                   className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg transition-colors disabled:opacity-50 ${
                     hasRole
                       ? `${ROLE_BADGE_STYLES[role]} ring-2 ring-offset-1 ring-current`
-                      : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
+                      : 'bg-hover-bg text-text-secondary hover:bg-[#E4E6EF]'
                   }`}
                 >
                   <Icon size={12} />
@@ -219,7 +219,7 @@ function UserRow({
             </p>
           )}
           {user.phone && (
-            <p className="text-xs text-[#999] mt-2">Phone: {user.phone}</p>
+            <p className="text-xs text-text-muted mt-2">Phone: {user.phone}</p>
           )}
         </div>
       )}

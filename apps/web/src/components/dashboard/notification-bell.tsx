@@ -84,7 +84,7 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
           setOpen(o => !o)
           if (!open && count > 0) markAllRead()
         }}
-        className="relative w-8 h-8 rounded-full bg-[#F5F5FA] hover:bg-[#E4E6EF] flex items-center justify-center transition-colors"
+        className="relative w-8 h-8 rounded-full bg-hover-bg hover:bg-[#E4E6EF] flex items-center justify-center transition-colors"
         aria-label={tx(t, 'notifications')}
         aria-expanded={open}
         aria-haspopup="true"
@@ -105,7 +105,7 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
             {notifications.length > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors"
+                className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
               >
                 {tx(t, 'markAllRead')}
               </button>
@@ -123,21 +123,22 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
               notifications.map(n => (
                 <div
                   key={n.id}
+                  role="menuitem"
                   className={`px-4 py-3 border-b border-[#F5F5FA] last:border-0 ${n.status === 'unread' ? 'bg-[#FFF9F6]' : ''}`}
                 >
                   {n.action_url ? (
                     <a href={n.action_url} className="block group">
-                      <p className="text-sm font-semibold text-text-primary group-hover:text-[#D4764E] transition-colors">
+                      <p className="text-sm font-semibold text-text-primary group-hover:text-brand transition-colors">
                         {n.title}
                       </p>
                       {n.body && <p className="text-xs text-text-secondary mt-0.5 line-clamp-2">{n.body}</p>}
-                      <p className="text-[10px] text-[#999] mt-1">{timeAgo(n.created_at)}</p>
+                      <p className="text-[10px] text-text-muted mt-1">{timeAgo(n.created_at)}</p>
                     </a>
                   ) : (
                     <div>
                       <p className="text-sm font-semibold text-text-primary">{n.title}</p>
                       {n.body && <p className="text-xs text-text-secondary mt-0.5 line-clamp-2">{n.body}</p>}
-                      <p className="text-[10px] text-[#999] mt-1">{timeAgo(n.created_at)}</p>
+                      <p className="text-[10px] text-text-muted mt-1">{timeAgo(n.created_at)}</p>
                     </div>
                   )}
                 </div>

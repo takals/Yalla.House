@@ -101,7 +101,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
         <h2 className="text-lg font-bold mb-4">Your Reply</h2>
 
         {error && (
-          <div className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div role="alert" className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {/* Message */}
@@ -115,7 +115,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
             required
             className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30"
           />
-          <p className="text-xs text-[#999] mt-1">
+          <p className="text-xs text-text-muted mt-1">
             Tip: specific, detailed replies score higher. Include property details, not just &quot;call us&quot;.
           </p>
         </div>

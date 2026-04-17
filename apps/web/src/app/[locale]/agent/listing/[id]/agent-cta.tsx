@@ -276,7 +276,7 @@ export function AgentListingCta({
         </div>
 
         {/* Benefit for the agent */}
-        <div className="bg-[#F5F5FA] rounded-xl p-3 mb-3">
+        <div className="bg-hover-bg rounded-xl p-3 mb-3">
           <p className="text-xs font-semibold text-text-primary mb-1">
             {isDE ? t('noExtraWork') : 'Zero extra work for you'}
           </p>

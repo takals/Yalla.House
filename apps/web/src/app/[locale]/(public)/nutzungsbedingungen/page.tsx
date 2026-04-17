@@ -27,7 +27,7 @@ export default function TermsOfServicePage() {
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Bedingungen für die Nutzung von Yalla.House
           </h1>
-          <p className="text-base text-[#656565]">
+          <p className="text-base text-text-muted">
             Zuletzt aktualisiert: {lastUpdated}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Geltungsbereich
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Diese Nutzungsbedingungen regeln die Nutzung der Yalla.House-Plattform (Website und Anwendung) durch alle Benutzer. Mit Zugriff auf oder Nutzung der Plattform akzeptieren Sie diese Bedingungen vollständig.
               </p>
@@ -57,7 +57,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Registrierung und Konto
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Kontoerstellung</h3>
                 <p>
@@ -84,7 +84,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Leistungsbeschreibung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Plattform-Services</h3>
                 <p>
@@ -111,7 +111,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Preise und Zahlung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Flat-Fee-Modell</h3>
                 <p>
@@ -143,7 +143,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Ihre Pflichten
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>Sie erklären sich einverstanden, die Plattform nicht zu verwenden für:</p>
               <ul className="space-y-2 ml-4">
                 <li><strong>Illegale Aktivitäten</strong> oder Verstöße gegen lokale, nationale oder internationale Gesetze</li>
@@ -162,7 +162,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Haftungsbeschränkung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 <strong>Soweit gesetzlich zulässig, haften Yalla.House und seine Betreiber nicht für indirekte, zufällige oder Folgeschäden.</strong>
               </p>
@@ -186,7 +186,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kündigung und Kontosperrung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Kündigung durch Nutzer</h3>
                 <p>
@@ -207,7 +207,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Schlussbestimmungen
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Anwendbares Recht</h3>
                 <p>

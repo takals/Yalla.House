@@ -41,7 +41,7 @@ export function EditableField({ label, value, placeholder, actionLabel, isReadOn
           <div className="text-sm font-semibold text-text-primary">{label}</div>
           <div className="text-sm text-text-secondary mt-0.5">{displayValue}</div>
         </div>
-        <span className="text-xs text-[#999]">{actionLabel}</span>
+        <span className="text-xs text-text-muted">{actionLabel}</span>
       </div>
     )
   }
@@ -67,7 +67,7 @@ export function EditableField({ label, value, placeholder, actionLabel, isReadOn
             <button
               onClick={handleSave}
               disabled={saving}
-              className="p-1.5 rounded-lg bg-[#D4764E] text-white hover:bg-brand-hover transition-colors disabled:opacity-50"
+              className="p-1.5 rounded-lg bg-brand text-white hover:bg-brand-hover transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
             </button>
@@ -85,7 +85,7 @@ export function EditableField({ label, value, placeholder, actionLabel, isReadOn
       {!editing && (
         <button
           onClick={() => setEditing(true)}
-          className="text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors"
+          className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
         >
           {actionLabel}
         </button>

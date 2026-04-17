@@ -27,7 +27,7 @@ export default function DataProtectionPage() {
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Datenschutz bei Yalla.House
           </h1>
-          <p className="text-base text-[#656565]">
+          <p className="text-base text-text-muted">
             Zuletzt aktualisiert: {lastUpdated}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Verantwortliche Stelle
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 <strong>Yalla.House GmbH</strong><br />
                 [Adresse wird ergänzt]<br />
@@ -60,7 +60,7 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Welche Daten wir erheben
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Persönliche Daten</h3>
                 <p>
@@ -93,7 +93,7 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Zweck der Datenverarbeitung
             </h2>
-            <ul className="space-y-3 text-[#656565] leading-relaxed">
+            <ul className="space-y-3 text-text-muted leading-relaxed">
               <li className="flex gap-3">
                 <span className="text-brand font-bold">•</span>
                 <span><strong>Kontoverwaltung:</strong> Kontoerstellung, Authentifizierung und Verwaltung Ihres Profils</span>
@@ -126,7 +126,7 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Rechtliche Grundlagen (DSGVO)
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Die Verarbeitung Ihrer Daten erfolgt gemäß Artikel 6 DSGVO auf folgenden Grundlagen:
               </p>
@@ -144,7 +144,7 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Datenweitergabe an Dritte
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Ihre Daten werden nur an folgende Verarbeiter weitergegeben:
               </p>
@@ -165,10 +165,10 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Ihre Datenschutzrechte
             </h2>
-            <p className="text-[#656565] leading-relaxed mb-4">
+            <p className="text-text-muted leading-relaxed mb-4">
               Sie haben folgende Rechte unter der DSGVO:
             </p>
-            <ul className="space-y-3 text-[#656565] leading-relaxed">
+            <ul className="space-y-3 text-text-muted leading-relaxed">
               <li className="flex gap-3">
                 <span className="text-brand font-bold">•</span>
                 <span><strong>Auskunftsrecht (Art. 15):</strong> Sie können jederzeit erfahren, welche Daten wir über Sie speichern</span>
@@ -194,7 +194,7 @@ export default function DataProtectionPage() {
                 <span><strong>Widerspruchsrecht (Art. 21):</strong> Sie können der Verarbeitung widersprechen</span>
               </li>
             </ul>
-            <p className="text-[#656565] leading-relaxed mt-4">
+            <p className="text-text-muted leading-relaxed mt-4">
               Kontaktieren Sie uns unter <strong>support@yalla.house</strong>, um diese Rechte auszuüben.
             </p>
           </div>
@@ -204,7 +204,7 @@ export default function DataProtectionPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kontakt & Datenschutzbeschwerden
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Für Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte kontaktieren Sie uns:
               </p>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { Check, CheckCircle2 } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { saveBriefAction } from './actions'
@@ -93,6 +94,7 @@ function StepHeader({ n, title }: { n: string; title: string }) {
 }
 
 export function BriefForm({ profile }: Props) {
+  const t = useTranslations('briefForm')
   const [state, setState] = useState<{ success?: boolean; error?: string }>({})
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()
@@ -176,7 +178,7 @@ export function BriefForm({ profile }: Props) {
 
           {/* Step 1 — Location */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="1" title="Location — where do you want to buy or rent?" />
+            <StepHeader n="1" title={t('stepLocation')} />
             <div className="flex flex-wrap gap-2">
               {AREAS.map(a => (
                 <Chip key={a} label={a} active={areas.includes(a)} onClick={() => setAreas(toggle(areas, a))} />
@@ -186,7 +188,7 @@ export function BriefForm({ profile }: Props) {
 
           {/* Step 2 — Budget */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="2" title="Budget" />
+            <StepHeader n="2" title={t('stepBudget')} />
             <div className="flex gap-3 mb-4">
               {['buy', 'rent'].map(v => (
                 <button
@@ -231,7 +233,7 @@ export function BriefForm({ profile }: Props) {
 
           {/* Step 3 — Property type + bedrooms */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="3" title="Property type" />
+            <StepHeader n="3" title={t('stepPropertyType')} />
             <div className="flex flex-wrap gap-2 mb-5">
               {PROPERTY_TYPES.map(t => (
                 <Chip key={t.value} label={t.label} active={propertyTypes.includes(t.value)} onClick={() => setPropertyTypes(toggle(propertyTypes, t.value))} />
@@ -247,7 +249,7 @@ export function BriefForm({ profile }: Props) {
 
           {/* Step 4 — Must-haves + dealbreakers */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="4" title="Preferences" />
+            <StepHeader n="4" title={t('stepPreferences')} />
             <p className="text-xs font-semibold text-text-secondary mb-3">Must-haves</p>
             <div className="flex flex-wrap gap-2 mb-5">
               {MUST_HAVES.map(m => (
@@ -275,7 +277,7 @@ export function BriefForm({ profile }: Props) {
 
           {/* Step 5 — Timing */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
-            <StepHeader n="5" title="Timing" />
+            <StepHeader n="5" title={t('stepTiming')} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-text-secondary mb-1">Finance status</label>
@@ -306,7 +308,7 @@ export function BriefForm({ profile }: Props) {
             disabled={isPending}
             className="w-full bg-brand hover:bg-brand-hover disabled:opacity-50 text-text-primary font-bold py-4 rounded-2xl text-base transition-colors shadow-sm"
           >
-            {isPending ? 'Activating…' : 'Activate My Home Brief →'}
+            {isPending ? t('activating') : t('activate')}
           </button>
 
         </div>
@@ -326,24 +328,24 @@ export function BriefForm({ profile }: Props) {
             </div>
 
             {!hasBrief ? (
-              <p className="text-sm text-[#999] italic">Fill in the form to see your brief here.</p>
+              <p className="text-sm text-text-muted italic">Fill in the form to see your brief here.</p>
             ) : (
               <div className="space-y-2 text-sm">
                 {intent && (
                   <div className="flex gap-2">
-                    <span className="text-[#999] w-20 flex-shrink-0">Looking to</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">Looking to</span>
                     <span className="font-semibold capitalize">{intent}</span>
                   </div>
                 )}
                 {areas.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-[#999] w-20 flex-shrink-0">Location</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">Location</span>
                     <span className="font-semibold">{areas.join(', ')}</span>
                   </div>
                 )}
                 {(budgetMin !== '' || budgetMax !== '') && (
                   <div className="flex gap-2">
-                    <span className="text-[#999] w-20 flex-shrink-0">Budget</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">Budget</span>
                     <span className="font-semibold">
                       {budgetMin !== '' ? `£${Number(budgetMin).toLocaleString()}` : '—'}
                       {' → '}
@@ -353,32 +355,32 @@ export function BriefForm({ profile }: Props) {
                 )}
                 {propertyTypes.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-[#999] w-20 flex-shrink-0">Type</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">Type</span>
                     <span className="font-semibold">{previewTypes.join(', ')}</span>
                   </div>
                 )}
                 <div className="flex gap-2">
-                  <span className="text-[#999] w-20 flex-shrink-0">Bedrooms</span>
+                  <span className="text-text-muted w-20 flex-shrink-0">Bedrooms</span>
                   <span className="font-semibold">{previewBeds}+</span>
                 </div>
                 {mustHaves.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-[#999] w-20 flex-shrink-0">Must-haves</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">Must-haves</span>
                     <span className="font-semibold">{mustHaves.join(' · ')}</span>
                   </div>
                 )}
                 {dealbreakers.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-[#999] w-20 flex-shrink-0">Nope</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">Nope</span>
                     <span className="font-semibold text-red-600">{dealbreakers.join(' · ')}</span>
                   </div>
                 )}
                 <div className="flex gap-2">
-                  <span className="text-[#999] w-20 flex-shrink-0">Finance</span>
+                  <span className="text-text-muted w-20 flex-shrink-0">Finance</span>
                   <span className="font-semibold">{previewFinance}</span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="text-[#999] w-20 flex-shrink-0">Timeline</span>
+                  <span className="text-text-muted w-20 flex-shrink-0">Timeline</span>
                   <span className="font-semibold">{previewTimeline}</span>
                 </div>
               </div>
@@ -424,11 +426,11 @@ export function BriefForm({ profile }: Props) {
                 <div key={l.location} className="text-sm">
                   <span className="font-bold">{l.price}</span>
                   <span className="text-text-secondary"> · {l.location}</span>
-                  <p className="text-xs text-[#999]">{l.spec}</p>
+                  <p className="text-xs text-text-muted">{l.spec}</p>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-[#999] mt-3 italic">
+            <p className="text-xs text-text-muted mt-3 italic">
               Real listings will appear once your brief is active.
             </p>
           </div>

@@ -27,7 +27,7 @@ export default function GDPRPage() {
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Unser Engagement für DSGVO-Konformität
           </h1>
-          <p className="text-base text-[#656565]">
+          <p className="text-base text-text-muted">
             Zuletzt aktualisiert: {lastUpdated}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Unser Datenschutz-Engagement
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Yalla.House ist vollständig konform mit der <strong>Datenschutz-Grundverordnung (DSGVO)</strong> der Europäischen Union. Der Schutz Ihrer Daten steht für uns an erster Stelle.
               </p>
@@ -57,7 +57,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Technische Maßnahmen
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Verschlüsselung in der Übertragung</h3>
                 <p>
@@ -96,7 +96,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Organisatorische Maßnahmen
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Zugriffsrechteverwaltung</h3>
                 <p>
@@ -135,7 +135,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Datenverarbeitung in der EU
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Alle Ihre Daten werden <strong>ausschließlich in der Europäischen Union verarbeitet und gespeichert</strong>. Es gibt keine Datenübertragungen in Länder außerhalb des EWR.
               </p>
@@ -152,7 +152,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Auftragsverarbeiter
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Folgende Auftragsverarbeiter verarbeiten Daten in unserem Auftrag:
               </p>
@@ -186,7 +186,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Datenschutzbeauftragter
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Yalla.House hat einen betrieblichen Datenschutzbeauftragten bestellt. Sie können ihn unter folgenden Kontaktdaten erreichen:
               </p>
@@ -202,7 +202,7 @@ export default function GDPRPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Meldung von Datenschutzverletzungen
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Sollten wir Kenntnis von einer Datenschutzverletzung (Data Breach) erlangen, werden wir:
               </p>

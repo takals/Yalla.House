@@ -101,7 +101,7 @@ export default async function OwnerListingsPage() {
                   {/* Status badge */}
                   <div className="flex items-center justify-between mb-2">
                     <StatusBadge status={listing.status} t={ts} />
-                    <span className="text-xs text-[#999]">{listing.place_id}</span>
+                    <span className="text-xs text-text-muted">{listing.place_id}</span>
                   </div>
 
                   {/* Title */}

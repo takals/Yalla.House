@@ -50,7 +50,7 @@ export function StickyBookingBar({ status, slotCount, listingId }: Props) {
           {!isUnderOffer && (
             <button
               onClick={scrollToBooking}
-              className="flex items-center gap-2 bg-[#D4764E] hover:bg-brand-hover text-white font-bold text-sm px-5 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold text-sm px-5 py-2 rounded-lg transition-colors"
             >
               <Calendar size={14} />
               <span className="hidden sm:inline">{t('barBookViewing')}</span>

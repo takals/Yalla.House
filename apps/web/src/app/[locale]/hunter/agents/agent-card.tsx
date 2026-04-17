@@ -66,7 +66,7 @@ export function AgentCard({ assignment }: Props) {
         <div className="min-w-0">
           <p className="font-semibold">{agency_name ?? 'Unbekannte Agentur'}</p>
           {agent_name && <p className="text-sm text-text-secondary">{agent_name}</p>}
-          <p className="text-xs text-[#999] mt-0.5">{SCOPE_LABELS[data_scope] ?? data_scope}</p>
+          <p className="text-xs text-text-muted mt-0.5">{SCOPE_LABELS[data_scope] ?? data_scope}</p>
         </div>
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
           <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${STATUS_STYLES[status] ?? STATUS_STYLES['invited']}`}>

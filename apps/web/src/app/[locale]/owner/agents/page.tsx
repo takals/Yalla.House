@@ -28,7 +28,7 @@ export default async function OwnerAgentsPage() {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 transition-colors ${
                     item.step === 2
-                      ? 'bg-[#D4764E] text-white'
+                      ? 'bg-brand text-white'
                       : 'bg-[#E2E4EB] text-text-secondary'
                   }`}
                 >
@@ -39,7 +39,7 @@ export default async function OwnerAgentsPage() {
                 </p>
               </div>
               {idx < 3 && (
-                <div className={`h-0.5 flex-1 mx-2 ${item.step < 2 ? 'bg-[#D4764E]' : 'bg-[#E2E4EB]'}`} />
+                <div className={`h-0.5 flex-1 mx-2 ${item.step < 2 ? 'bg-brand' : 'bg-[#E2E4EB]'}`} />
               )}
             </div>
           ))}
@@ -51,12 +51,12 @@ export default async function OwnerAgentsPage() {
         {/* Search Agents Card */}
         <Link href="/owner/agents/search">
           <div className="bg-white rounded-2xl border border-border-default p-6 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer h-full flex flex-col">
-            <div className="w-11 h-11 rounded-xl bg-[#D4764E]/10 flex items-center justify-center mb-4">
-              <Users size={18} className="text-[#D4764E]" />
+            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
+              <Users size={18} className="text-brand" />
             </div>
             <h3 className="font-bold text-text-primary mb-2">{t('cardSearchTitle')}</h3>
             <p className="text-sm text-text-secondary mb-4 flex-1">{t('cardSearchDesc')}</p>
-            <div className="flex items-center gap-1 text-[#D4764E] font-semibold text-sm">
+            <div className="flex items-center gap-1 text-brand font-semibold text-sm">
               {t('cardAction')}
               <ArrowRight size={14} />
             </div>
@@ -66,12 +66,12 @@ export default async function OwnerAgentsPage() {
         {/* Preview Email Card */}
         <Link href="/owner/agents/send">
           <div className="bg-white rounded-2xl border border-border-default p-6 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer h-full flex flex-col">
-            <div className="w-11 h-11 rounded-xl bg-[#D4764E]/10 flex items-center justify-center mb-4">
-              <Sparkles size={18} className="text-[#D4764E]" />
+            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
+              <Sparkles size={18} className="text-brand" />
             </div>
             <h3 className="font-bold text-text-primary mb-2">{t('cardPreviewTitle')}</h3>
             <p className="text-sm text-text-secondary mb-4 flex-1">{t('cardPreviewDesc')}</p>
-            <div className="flex items-center gap-1 text-[#D4764E] font-semibold text-sm">
+            <div className="flex items-center gap-1 text-brand font-semibold text-sm">
               {t('cardAction')}
               <ArrowRight size={14} />
             </div>
@@ -81,12 +81,12 @@ export default async function OwnerAgentsPage() {
         {/* Track Briefs Card */}
         <Link href="/owner/agents/tracking">
           <div className="bg-white rounded-2xl border border-border-default p-6 hover:-translate-y-0.5 hover:shadow-md transition-all cursor-pointer h-full flex flex-col">
-            <div className="w-11 h-11 rounded-xl bg-[#D4764E]/10 flex items-center justify-center mb-4">
-              <BarChart3 size={18} className="text-[#D4764E]" />
+            <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
+              <BarChart3 size={18} className="text-brand" />
             </div>
             <h3 className="font-bold text-text-primary mb-2">{t('cardTrackTitle')}</h3>
             <p className="text-sm text-text-secondary mb-4 flex-1">{t('cardTrackDesc')}</p>
-            <div className="flex items-center gap-1 text-[#D4764E] font-semibold text-sm">
+            <div className="flex items-center gap-1 text-brand font-semibold text-sm">
               {t('cardAction')}
               <ArrowRight size={14} />
             </div>

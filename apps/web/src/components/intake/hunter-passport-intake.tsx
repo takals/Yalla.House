@@ -172,7 +172,7 @@ export function HunterPassportIntake({
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4764E]" />
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand" />
           <p className="mt-4 text-text-secondary">Loading your profile...</p>
         </div>
       </div>
@@ -192,10 +192,10 @@ export function HunterPassportIntake({
         }}
         className={`fixed bottom-20 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-40 shadow-lg ${
           voiceEnabled && isListening
-            ? 'bg-[#D4764E] text-white ring-4 ring-[#D4764E]/30 animate-pulse'
+            ? 'bg-brand text-white ring-4 ring-[#D4764E]/30 animate-pulse'
             : voiceEnabled
-              ? 'bg-[#D4764E] text-white'
-              : 'bg-white text-slate-700 border border-slate-200 hover:border-[#D4764E] hover:bg-orange-50'
+              ? 'bg-brand text-white'
+              : 'bg-white text-slate-700 border border-slate-200 hover:border-brand hover:bg-orange-50'
         } ${!isVoiceSupported ? 'opacity-40 cursor-not-allowed' : ''}`}
         title={!isVoiceSupported ? 'Voice not supported in this browser' : voiceEnabled ? 'Voice active — tap to disable' : 'Enable voice input'}
       >

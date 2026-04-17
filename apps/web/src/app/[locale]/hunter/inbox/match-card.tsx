@@ -73,7 +73,7 @@ export function MatchCard({ match }: Props) {
           <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">
             {match.source_name}
           </span>
-          <span className="text-xs text-[#999]">
+          <span className="text-xs text-text-muted">
             {new Date(match.received_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short' })}
           </span>
         </div>

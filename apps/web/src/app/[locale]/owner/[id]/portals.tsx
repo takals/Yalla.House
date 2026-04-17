@@ -141,7 +141,7 @@ export function PortalSection({
         return (
           <div
             key={portal.id}
-            className="flex items-center justify-between gap-4 py-3 px-4 bg-[#F5F5FA] rounded-xl"
+            className="flex items-center justify-between gap-4 py-3 px-4 bg-hover-bg rounded-xl"
           >
             <div className="min-w-0">
               <p className="font-semibold text-sm text-text-primary">{portal.display_name}</p>

@@ -162,7 +162,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
         >
           Block
         </button>
-        <span className="text-xs text-[#999] ml-auto">
+        <span className="text-xs text-text-muted ml-auto">
           {new Date(reply.created_at).toLocaleDateString(dateLocale)}
         </span>
       </div>
@@ -237,7 +237,7 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
       {topMatches.length === 0 && otherReplies.length === 0 && lowRelevance.length === 0 && (
         <div className="bg-surface rounded-xl p-8 text-center border border-border-default">
           <p className="text-text-secondary font-medium mb-1">No agent replies yet</p>
-          <p className="text-xs text-[#999]">
+          <p className="text-xs text-text-muted">
             {stats.agentsContacted > 0
               ? `${stats.agentsContacted} agents have been contacted. Replies usually arrive within 24–48 hours.`
               : 'Create a search and enable agent outreach to get started.'}

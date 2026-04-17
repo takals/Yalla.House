@@ -216,7 +216,7 @@ export default async function OwnerInfoPage() {
           </div>
         </div>
 
-        <div className="mt-6 bg-[#F5F5FA] rounded-xl p-5">
+        <div className="mt-6 bg-hover-bg rounded-xl p-5">
           <p className="text-sm text-text-secondary leading-relaxed">
             <span className="font-semibold text-text-primary">{t('oneOffServicesLabel')}:</span>{' '}
             {t('oneOffServicesBody')}

@@ -159,6 +159,8 @@
     "ctaTitle": "Ready to take control?"
   },
   "listings": {
+    "metaTitle": "Properties for Sale & Rent | Yalla.House",
+    "metaDescription": "Browse properties listed on Yalla.House. Search by city, price, and property type to find your next home or investment.",
     "title": "Listings",
     "city": "City",
     "propertyType": "Property Type",
@@ -312,6 +314,8 @@
     "propertyMatches": "Property Matches"
   },
   "agentDiscovery": {
+    "metaTitle": "Find Local Estate Agents | Yalla.House",
+    "metaDescription": "Compare and connect with estate agents in your area. Browse verified local agents on Yalla.House and send your property brief for free.",
     "title": "Find Estate Agents Near You",
     "subtitle": "Browse verified local agents or enter your postcode to see who covers your area.",
     "searchPlaceholder": "Enter your postcode (e.g. E3 2PQ)",
@@ -1195,7 +1199,11 @@
       "fileTooLarge": "\"{fileName}\" is too large (max 10 MB)",
       "uploadFailed": "Upload failed: {error}",
       "empty": "No photos yet. Portals like ImmobilienScout24 recommend at least 5 images.",
-      "photoAlt": "Property photo {index}"
+      "photoAlt": "Property photo {index}",
+      "primaryBadge": "Cover photo",
+      "deletePhoto": "Delete photo",
+      "setPrimary": "Set as cover photo",
+      "setPrimaryShort": "Cover photo"
     },
     "portals": {
       "notSubmitted": "Not submitted",
@@ -1874,5 +1882,17 @@
     "signatoryPlaceholder": "Your full legal name",
     "confirmText": "I confirm that I have read and accept the Yalla Partner Agreement (v1.0). I am authorised to sign on behalf of my agency.",
     "signButton": "Sign Partner Agreement"
+  },
+  "briefForm": {
+    "stepLocation": "Location \u2014 where do you want to buy or rent?",
+    "stepBudget": "Budget",
+    "stepPropertyType": "Property type",
+    "stepPreferences": "Preferences",
+    "stepTiming": "Timing",
+    "activating": "Activating\u2026",
+    "activate": "Activate My Home Brief \u2192"
+  },
+  "searchForm": {
+    "removeArea": "Remove area"
   }
 }

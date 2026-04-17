@@ -159,7 +159,7 @@ export function ViewingList({
                       type="button"
                       onClick={() => handleDecline(viewing.id)}
                       disabled={isActing}
-                      className="text-xs font-semibold px-3 py-1.5 bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-xs font-semibold px-3 py-1.5 bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {t('viewings.decline')}
                     </button>

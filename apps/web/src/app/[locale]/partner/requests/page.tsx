@@ -159,7 +159,7 @@ export default async function PartnerRequestsPage({
                         <p className="text-xs text-text-secondary">{address}</p>
                       </div>
                     </div>
-                    <span className="text-xs text-[#999]">
+                    <span className="text-xs text-text-muted">
                       {formatRelativeTime(new Date(request.created_at), locale)}
                     </span>
                   </div>
@@ -340,7 +340,7 @@ export default async function PartnerRequestsPage({
           <p className="text-text-secondary font-medium mb-2">
             {t('emptyTitle')}
           </p>
-          <p className="text-xs text-[#999]">
+          <p className="text-xs text-text-muted">
             {t('emptyDescription')}
           </p>
         </div>

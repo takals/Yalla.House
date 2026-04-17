@@ -174,7 +174,7 @@ export default async function AdminPage() {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#D4764E] flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-brand flex items-center justify-center">
                 <Zap size={22} className="text-white" />
               </div>
               <div>
@@ -182,7 +182,7 @@ export default async function AdminPage() {
                 <p className="text-white/50 text-sm">Search property, send link — one click</p>
               </div>
             </div>
-            <span className="text-xs font-bold px-3 py-1 bg-[#D4764E] text-white rounded-full group-hover:bg-brand-hover transition-colors">
+            <span className="text-xs font-bold px-3 py-1 bg-brand text-white rounded-full group-hover:bg-brand-hover transition-colors">
               Open
             </span>
           </div>
@@ -194,7 +194,7 @@ export default async function AdminPage() {
             <div key={stat.label} className="bg-surface rounded-card p-5">
               <p className="text-3xl font-bold">{stat.value}</p>
               <p className="text-sm font-semibold mt-1">{stat.label}</p>
-              <p className="text-xs text-[#999] mt-0.5">{stat.sub}</p>
+              <p className="text-xs text-text-muted mt-0.5">{stat.sub}</p>
             </div>
           ))}
         </div>
@@ -266,7 +266,7 @@ export default async function AdminPage() {
                     <p className="text-xs text-text-secondary">{u.email}</p>
                   </div>
                   <div className="flex items-center gap-3 flex-shrink-0">
-                    <span className="text-xs text-[#999]">
+                    <span className="text-xs text-text-muted">
                       {new Date(u.created_at).toLocaleDateString(dateLocale)}
                     </span>
                     <span className="text-xs font-semibold px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">

@@ -194,7 +194,7 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
               desc: isEN ? 'References & deposit confirmed' : 'Referenzen & Kaution bestätigt',
             },
           ].map((badge, i) => (
-            <div key={i} className="bg-[#F5F5FA] rounded-xl p-4 flex items-start gap-3">
+            <div key={i} className="bg-hover-bg rounded-xl p-4 flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center flex-shrink-0 border border-border-default">
                 {badge.icon}
               </div>
@@ -258,7 +258,7 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
           </div>
         </div>
 
-        <div className="mt-6 bg-[#F5F5FA] rounded-xl p-5">
+        <div className="mt-6 bg-hover-bg rounded-xl p-5">
           <p className="text-sm text-text-secondary leading-relaxed">
             <span className="font-semibold text-text-primary">{isEN ? 'Coming soon' : 'Demnächst'}:</span>{' '}
             {isEN

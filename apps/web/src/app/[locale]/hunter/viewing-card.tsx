@@ -89,7 +89,7 @@ export function ViewingCard({ id, initialStatus, title, location, placeId, hunte
       )}
 
       <div className="flex items-center justify-between">
-        <p className="text-xs text-[#999]">{t('requestedOn')} {date}</p>
+        <p className="text-xs text-text-muted">{t('requestedOn')} {date}</p>
         <div className="flex items-center gap-3">
           {canCancel && (
             <button

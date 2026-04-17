@@ -54,13 +54,13 @@ export function ReplyForm({ threadId }: ReplyFormProps) {
         <button
           type="submit"
           disabled={!message.trim() || sending}
-          className="self-end px-4 py-3 bg-[#D4764E] text-white rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="self-end px-4 py-3 bg-brand text-white rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
         </button>
       </div>
       {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
-      <p className="text-xs text-[#999] mt-2">Press Cmd+Enter to send</p>
+      <p className="text-xs text-text-muted mt-2">Press Cmd+Enter to send</p>
     </form>
   )
 }

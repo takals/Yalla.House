@@ -27,7 +27,7 @@ export default function ImpressumPage() {
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Impressum gemäß § 5 TMG
           </h1>
-          <p className="text-base text-[#656565]">
+          <p className="text-base text-text-muted">
             Zuletzt aktualisiert: {lastUpdated}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Angaben gemäß § 5 Telemediengesetz (TMG)
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <p className="font-bold text-text-primary">Diensteanbieter:</p>
                 <p>
@@ -60,7 +60,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kontaktinformationen
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <div>
                 <p><strong>Telefon:</strong> [Telefonnummer wird ergänzt]</p>
                 <p><strong>E-Mail:</strong> support@yalla.house</p>
@@ -74,7 +74,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Vertreten durch
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <div>
                 <p className="font-bold text-text-primary">Geschäftsführer(in):</p>
                 <p>[Name wird ergänzt]</p>
@@ -87,7 +87,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Registereintrag
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <div>
                 <p><strong>Registergericht:</strong> [Registergericht wird ergänzt]</p>
                 <p><strong>Registernummer:</strong> [Handelsregisternummer wird ergänzt]</p>
@@ -100,7 +100,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Umsatzsteuer-Identifikationsnummer
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 <strong>Umsatzsteuer-ID gemäß § 27a Umsatzsteuergesetz (UStG):</strong><br />
                 [Umsatzsteuer-ID wird ergänzt]
@@ -113,7 +113,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 [Name wird ergänzt]<br />
                 [Adresse wird ergänzt]<br />
@@ -127,7 +127,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Streitschlichtung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Yalla.House ist bereit, an Streitschlichtungsverfahren teilzunehmen. Die Europäische Union hat eine Online-Plattform für die außergerichtliche Beilegung von Verbraucherbeschwerden eingerichtet:
               </p>
@@ -145,7 +145,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Haftungsausschluss
             </h2>
-            <div className="space-y-6 text-[#656565] leading-relaxed">
+            <div className="space-y-6 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-3">Haftung für Inhalte (gemäß § 7 Abs. 1 TMG)</h3>
                 <p>
@@ -192,7 +192,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Datenschutz und Cookies
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Informationen zum Datenschutz und zur Verwendung von Cookies finden Sie in unseren separaten Dokumenten:
               </p>
@@ -218,7 +218,7 @@ export default function ImpressumPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Kontakt für rechtliche Anfragen
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Für Fragen zum Impressum oder zu rechtlichen Angelegenheiten kontaktieren Sie uns:
               </p>

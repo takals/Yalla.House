@@ -27,7 +27,7 @@ export default function SecurityPage() {
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Sicherheit Ihrer Daten ist unsere Priorität
           </h1>
-          <p className="text-base text-[#656565]">
+          <p className="text-base text-text-muted">
             Zuletzt aktualisiert: {lastUpdated}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Sicherheitsarchitektur
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Yalla.House folgt einem <strong>Defense-in-Depth-Ansatz</strong> mit mehreren Sicherheitsebenen:
               </p>
@@ -60,7 +60,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Verschlüsselung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Transport Layer (TLS 1.3)</h3>
                 <p>
@@ -96,7 +96,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Zugriffskontrollen
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Rollenbasierte Zugriffskontrolle (RBAC)</h3>
                 <p>
@@ -129,7 +129,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Infrastruktur & Hosting
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">EU-Hosting</h3>
                 <p>
@@ -162,7 +162,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Regelmäßige Überprüfung & Tests
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Penetrationstests</h3>
                 <p>
@@ -201,7 +201,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Verantwortungsvolle Offenlegung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Wenn Sie eine Sicherheitslücke in Yalla.House entdecken, bitten wir Sie, diese <strong>verantwortungsvoll</strong> an uns zu berichten:
               </p>
@@ -233,7 +233,7 @@ export default function SecurityPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Bug Bounty Programm
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Yalla.House beteiligt sich an einem Bug Bounty Programm zur Anreizung der verantwortungsvollen Offenlegung von Sicherheitslücken.
               </p>

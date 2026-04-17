@@ -57,7 +57,7 @@ export default async function RespondToBriefPage({
             Match {match.match_score}%
           </span>
           <span className="text-xs text-text-secondary capitalize">{search.intent}</span>
-          <span className="text-xs text-[#999] ml-auto">
+          <span className="text-xs text-text-muted ml-auto">
             Expires {new Date(match.expires_at).toLocaleDateString(dateLocale)}
           </span>
         </div>

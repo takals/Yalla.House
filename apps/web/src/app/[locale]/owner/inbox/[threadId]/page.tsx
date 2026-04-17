@@ -96,7 +96,7 @@ export default async function ThreadDetailPage({ params }: Props) {
     })} ${time}`
   }
 
-  const defaultBadge = { label: 'Yalla', color: 'bg-[#D4764E]/10 text-[#D4764E]' }
+  const defaultBadge = { label: 'Yalla', color: 'bg-brand/10 text-brand' }
   const channelBadge: Record<string, { label: string; color: string }> = {
     in_app: defaultBadge,
     email: { label: 'Email', color: 'bg-blue-50 text-blue-600' },
@@ -110,7 +110,7 @@ export default async function ThreadDetailPage({ params }: Props) {
       <div className="mb-6">
         <Link
           href="/owner/inbox"
-          className="inline-flex items-center gap-2 text-[#D4764E] font-semibold text-sm mb-4 hover:gap-3 transition-all"
+          className="inline-flex items-center gap-2 text-brand font-semibold text-sm mb-4 hover:gap-3 transition-all"
         >
           <ArrowLeft size={16} />
           Back to Inbox
@@ -119,7 +119,7 @@ export default async function ThreadDetailPage({ params }: Props) {
           {thread?.subject || thread?.listing?.title_de || 'Conversation'}
         </h1>
         {thread?.listing && (
-          <p className="text-sm text-[#656565] mt-1">
+          <p className="text-sm text-text-muted mt-1">
             {thread.listing.address_line1}{thread.listing.city ? `, ${thread.listing.city}` : ''}
           </p>
         )}
@@ -130,7 +130,7 @@ export default async function ThreadDetailPage({ params }: Props) {
         {messages.length === 0 ? (
           <div className="p-12 text-center">
             <MessageCircle size={40} className="mx-auto mb-3 text-[#D9DCE4]" />
-            <p className="text-sm text-[#656565]">No messages yet. Start the conversation below.</p>
+            <p className="text-sm text-text-muted">No messages yet. Start the conversation below.</p>
           </div>
         ) : (
           <div className="divide-y divide-[#F0F0F0]">
@@ -146,7 +146,7 @@ export default async function ThreadDetailPage({ params }: Props) {
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                        isOwner ? 'bg-[#D4764E] text-white' : 'bg-bg text-text-primary'
+                        isOwner ? 'bg-brand text-white' : 'bg-bg text-text-primary'
                       }`}>
                         {(msg.sender?.full_name || msg.sender?.email || '?').charAt(0).toUpperCase()}
                       </div>
@@ -159,7 +159,7 @@ export default async function ThreadDetailPage({ params }: Props) {
                         </span>
                       </div>
                     </div>
-                    <span className="text-xs text-[#999]">{formatMessageDate(msg.sent_at)}</span>
+                    <span className="text-xs text-text-muted">{formatMessageDate(msg.sent_at)}</span>
                   </div>
                   <div className="ml-10">
                     <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-line">{msg.body}</p>

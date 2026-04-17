@@ -1,7 +1,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('listings')
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    openGraph: {
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+      type: 'website',
+    },
+  }
+}
 
 const PER_PAGE = 48
 

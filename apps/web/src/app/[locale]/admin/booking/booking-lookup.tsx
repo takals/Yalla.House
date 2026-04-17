@@ -113,7 +113,7 @@ export function BookingLookup() {
           <button
             onClick={handleSearch}
             disabled={searching || !query.trim()}
-            className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="px-6 py-2.5 bg-brand text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center gap-2"
           >
             {searching ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
             Search
@@ -122,13 +122,13 @@ export function BookingLookup() {
 
         {/* Quick search tips */}
         <div className="flex gap-4 mt-3">
-          <span className="text-xs text-[#999]">
+          <span className="text-xs text-text-muted">
             <span className="font-semibold">Ref:</span> yh_de_xxx
           </span>
-          <span className="text-xs text-[#999]">
+          <span className="text-xs text-text-muted">
             <span className="font-semibold">PLZ:</span> 10115
           </span>
-          <span className="text-xs text-[#999]">
+          <span className="text-xs text-text-muted">
             <span className="font-semibold">Street:</span> Friedrichstraße
           </span>
         </div>
@@ -154,14 +154,14 @@ export function BookingLookup() {
               onClick={() => { setSelectedId(result.id); setSent(false) }}
               className={`bg-white rounded-2xl border-2 p-5 cursor-pointer transition-all hover:shadow-md ${
                 selectedId === result.id
-                  ? 'border-[#D4764E] shadow-md'
+                  ? 'border-brand shadow-md'
                   : 'border-border-default'
               }`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <MapPin size={16} className="text-[#D4764E] flex-shrink-0" />
+                    <MapPin size={16} className="text-brand flex-shrink-0" />
                     <h3 className="font-bold text-text-primary truncate">
                       {result.address_line1 ?? 'Unknown address'}
                     </h3>
@@ -174,7 +174,7 @@ export function BookingLookup() {
                     {result.bedrooms && <span>{result.bedrooms} bed</span>}
                     {result.property_type && <span>{result.property_type}</span>}
                   </div>
-                  <div className="flex items-center gap-4 mt-2 text-xs text-[#999]">
+                  <div className="flex items-center gap-4 mt-2 text-xs text-text-muted">
                     <span className="font-mono">{result.place_id}</span>
                     {result.owner_name && <span>Owner: {result.owner_name}</span>}
                   </div>
@@ -213,9 +213,9 @@ export function BookingLookup() {
 
       {/* Send Link Panel */}
       {selectedId && (
-        <div className="bg-white rounded-2xl border-2 border-[#D4764E] p-6">
+        <div className="bg-white rounded-2xl border-2 border-brand p-6">
           <h3 className="font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Send size={18} className="text-[#D4764E]" />
+            <Send size={18} className="text-brand" />
             Send Property Link
           </h3>
 
@@ -256,7 +256,7 @@ export function BookingLookup() {
                   onClick={() => setChannel('sms')}
                   className={`px-4 py-2.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                     channel === 'sms'
-                      ? 'bg-[#D4764E] text-white'
+                      ? 'bg-brand text-white'
                       : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
@@ -280,7 +280,7 @@ export function BookingLookup() {
               <button
                 onClick={handleSendLink}
                 disabled={sending || !phoneNumber.trim()}
-                className="px-6 py-2.5 bg-[#D4764E] text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="px-6 py-2.5 bg-brand text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {sending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
                 Send

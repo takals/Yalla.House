@@ -311,7 +311,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
                         <p className="text-xs font-semibold text-text-primary">
                           {thread.subject ?? t('newInquiry')}
                         </p>
-                        <p className="text-xs text-[#999] truncate">{dateStr}</p>
+                        <p className="text-xs text-text-muted truncate">{dateStr}</p>
                       </div>
                     </div>
                   )

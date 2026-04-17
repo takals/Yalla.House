@@ -141,7 +141,7 @@ function OfferCard({ offer, t, locale }: { offer: Offer; t: T; locale: string })
       <div className="px-5 py-4 border-b border-border-default flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
-            <Banknote className="w-4 h-4 text-[#D4764E]" />
+            <Banknote className="w-4 h-4 text-brand" />
           </div>
           <div>
             <p className="font-bold text-text-primary text-sm">
@@ -248,7 +248,7 @@ function Detail({ icon: Icon, label, value, highlight }: {
         <Icon className="w-3 h-3" />
         {label}
       </p>
-      <p className={`text-sm font-semibold ${highlight ? 'text-[#D4764E]' : 'text-text-primary'}`}>
+      <p className={`text-sm font-semibold ${highlight ? 'text-brand' : 'text-text-primary'}`}>
         {value}
       </p>
     </div>

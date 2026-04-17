@@ -84,7 +84,7 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
           <p className="text-xs text-text-secondary mt-0.5">{t('filterAll')}</p>
         </div>
         <div className="bg-surface rounded-2xl p-4 border border-border-default">
-          <p className="text-2xl font-bold text-[#D4764E]">{upcomingCount}</p>
+          <p className="text-2xl font-bold text-brand">{upcomingCount}</p>
           <p className="text-xs text-text-secondary mt-0.5">{t('filterUpcoming')}</p>
         </div>
         <div className="bg-surface rounded-2xl p-4 border border-border-default">

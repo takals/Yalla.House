@@ -85,16 +85,16 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         <div className="h-[60px] flex items-center px-4 flex-shrink-0 gap-3">
           {!collapsed && (
             <Link href="/" className="font-extrabold text-[1.05rem] tracking-tight text-white whitespace-nowrap">
-              Yalla<span className="text-[#D4764E]">.</span>House
+              Yalla<span className="text-brand">.</span>House
             </Link>
           )}
           {!collapsed && section === 'admin' && (
-            <span className="text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-[#D4764E] rounded-sm text-text-primary">
+            <span className="text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-brand rounded-sm text-text-primary">
               Admin
             </span>
           )}
           {collapsed && (
-            <Link href="/" className="font-extrabold text-[1.1rem] tracking-tight text-[#D4764E] mx-auto">
+            <Link href="/" className="font-extrabold text-[1.1rem] tracking-tight text-brand mx-auto">
               Y
             </Link>
           )}
@@ -127,11 +127,11 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                   collapsed ? 'px-0 py-2.5 justify-center' : 'px-3 py-2.5'
                 } ${
                   active
-                    ? 'bg-[rgba(212,118,78,0.12)] text-[#D4764E]'
+                    ? 'bg-[rgba(212,118,78,0.12)] text-brand'
                     : 'text-white/40 hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
-                <span className={`flex-shrink-0 ${active ? 'text-[#D4764E]' : 'text-white/30'}`}>
+                <span className={`flex-shrink-0 ${active ? 'text-brand' : 'text-white/30'}`}>
                   {item.icon}
                 </span>
                 {!collapsed && item.label}

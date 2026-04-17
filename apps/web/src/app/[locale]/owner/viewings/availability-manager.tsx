@@ -340,7 +340,7 @@ export function AvailabilityManager({
                       className={`w-9 h-9 rounded-lg text-xs font-bold transition-colors ${
                         qwDays.has(d.value)
                           ? 'bg-[#0F1117] text-white'
-                          : 'bg-[#F5F5FA] text-text-secondary hover:bg-[#E4E6EF]'
+                          : 'bg-hover-bg text-text-secondary hover:bg-[#E4E6EF]'
                       }`}
                     >
                       {d.label}
@@ -436,7 +436,7 @@ export function AvailabilityManager({
                           type="button"
                           onClick={() => handleRemove(slot.id)}
                           disabled={acting.has(slot.id)}
-                          className="p-1 text-[#999] hover:text-red-500 transition-colors disabled:opacity-50"
+                          className="p-1 text-text-muted hover:text-red-500 transition-colors disabled:opacity-50"
                           title={t.remove}
                         >
                           <Trash2 size={14} />

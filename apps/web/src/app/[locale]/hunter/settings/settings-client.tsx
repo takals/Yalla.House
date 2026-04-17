@@ -138,7 +138,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
               type="email"
               value={profile.email}
               readOnly
-              className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-bg text-[#999] cursor-not-allowed"
+              className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-bg text-text-muted cursor-not-allowed"
             />
           </div>
           <button
@@ -179,7 +179,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
                 <div key={a.id} className="flex items-center gap-3 flex-wrap">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold">{a.agency_name ?? labels.unknownAgency}</p>
-                    {a.agent_name && <p className="text-xs text-[#999]">{a.agent_name}</p>}
+                    {a.agent_name && <p className="text-xs text-text-muted">{a.agent_name}</p>}
                   </div>
                   <div className="flex gap-2 flex-shrink-0">
                     <button
@@ -224,7 +224,7 @@ export function SettingsClient({ profile, assignments, consentLog, labels }: Pro
                       {eventLabel}
                       {ev.agent_name ? ` — ${ev.agent_name}` : ''}
                     </span>
-                    <span className="text-xs text-[#999] flex-shrink-0">
+                    <span className="text-xs text-text-muted flex-shrink-0">
                       {new Date(ev.created_at).toLocaleDateString(dateLocale, { day: '2-digit', month: 'short' })}
                     </span>
                   </div>

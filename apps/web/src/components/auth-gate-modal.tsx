@@ -74,7 +74,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-md mx-auto px-6 bg-white rounded-xl shadow-lg">
+      <div role="dialog" aria-modal="true" aria-labelledby="auth-gate-heading" className="relative w-full max-w-md mx-auto px-6 bg-white rounded-xl shadow-lg">
         {/* Close button */}
         <button
           onClick={handleClose}
@@ -93,7 +93,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
               </div>
 
               {/* Heading */}
-              <h2 className="text-xl font-bold text-text-primary mb-3 text-center">
+              <h2 id="auth-gate-heading" className="text-xl font-bold text-text-primary mb-3 text-center">
                 {t('heading')}
               </h2>
 
@@ -121,7 +121,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
 
                 {/* Error message */}
                 {error && (
-                  <p className="text-sm text-red-600 text-center">{error}</p>
+                  <p role="alert" className="text-sm text-red-600 text-center">{error}</p>
                 )}
 
                 {/* Submit button */}
@@ -144,7 +144,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
               {/* Success state */}
               <div className="text-center mb-8">
                 <div className="text-5xl mb-4">✉️</div>
-                <h2 className="text-xl font-bold text-text-primary mb-2">
+                <h2 id="auth-gate-heading" className="text-xl font-bold text-text-primary mb-2">
                   {t('checkInbox')}
                 </h2>
               </div>

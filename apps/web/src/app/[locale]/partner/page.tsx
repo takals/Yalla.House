@@ -206,7 +206,7 @@ export default async function PartnerDashboardPage({
           <p className="text-text-secondary font-medium mb-2">
             {t('partnerDash.welcomePartner')}
           </p>
-          <p className="text-xs text-[#999] mb-4">
+          <p className="text-xs text-text-muted mb-4">
             {t('partnerDash.getStarted')}
           </p>
           <div className="flex gap-2 justify-center">

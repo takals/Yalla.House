@@ -27,7 +27,7 @@ export default function CookiePolicyPage() {
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
             Cookies bei Yalla.House
           </h1>
-          <p className="text-base text-[#656565]">
+          <p className="text-base text-text-muted">
             Zuletzt aktualisiert: {lastUpdated}
           </p>
         </div>
@@ -42,7 +42,7 @@ export default function CookiePolicyPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Was sind Cookies?
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Cookies sind kleine Textdateien, die von Websites auf Ihrem Gerät (Computer, Tablet, Smartphone) gespeichert werden. Sie ermöglichen es uns, Ihre Voreinstellungen zu speichern, Ihre Sitzung zu verwalten und Ihr Browsing-Verhalten zu verfolgen.
               </p>
@@ -57,7 +57,7 @@ export default function CookiePolicyPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Notwendige Cookies
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Diese Cookies sind <strong>erforderlich</strong> für die Funktionsfähigkeit der Plattform. Sie können nicht deaktiviert werden.
               </p>
@@ -87,7 +87,7 @@ export default function CookiePolicyPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Analyse-Cookies
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <p>
                 Wir verwenden Analyse-Cookies, um zu verstehen, wie Benutzer unsere Plattform nutzen. Diese Daten werden <strong>anonymisiert</strong> und helfen uns, unsere Services zu verbessern.
               </p>
@@ -116,7 +116,7 @@ export default function CookiePolicyPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Marketing-Cookies
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Yalla.House setzt derzeit <strong>keine Marketing- oder Tracking-Cookies</strong> von Drittanbietern ein.
               </p>
@@ -131,7 +131,7 @@ export default function CookiePolicyPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Cookie-Verwaltung
             </h2>
-            <div className="space-y-4 text-[#656565] leading-relaxed">
+            <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
                 <h3 className="font-bold text-text-primary mb-2">Cookies verwalten</h3>
                 <p>
@@ -170,7 +170,7 @@ export default function CookiePolicyPage() {
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
               Fragen zu Cookies?
             </h2>
-            <div className="space-y-3 text-[#656565] leading-relaxed">
+            <div className="space-y-3 text-text-muted leading-relaxed">
               <p>
                 Wenn Sie Fragen zu unserer Cookie-Richtlinie oder zur Verwendung von Cookies haben, kontaktieren Sie uns bitte:
               </p>

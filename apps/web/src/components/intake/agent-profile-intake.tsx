@@ -119,7 +119,7 @@ export function AgentProfileIntake({
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4764E]" />
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand" />
           <p className="mt-4 text-text-secondary">Loading your profile...</p>
         </div>
       </div>
@@ -141,7 +141,7 @@ export function AgentProfileIntake({
           }}
           className={`fixed bottom-6 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-50 ${
             voiceEnabled
-              ? 'bg-[#D4764E] text-white shadow-lg'
+              ? 'bg-brand text-white shadow-lg'
               : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
           }`}
           title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
@@ -153,7 +153,7 @@ export function AgentProfileIntake({
 
       {/* Voice indicator */}
       {voiceEnabled && isListening && (
-        <div className="fixed bottom-20 right-6 bg-[#D4764E] text-white rounded-lg px-4 py-2 text-xs font-medium z-50 animate-pulse">
+        <div className="fixed bottom-20 right-6 bg-brand text-white rounded-lg px-4 py-2 text-xs font-medium z-50 animate-pulse">
           Listening...
         </div>
       )}

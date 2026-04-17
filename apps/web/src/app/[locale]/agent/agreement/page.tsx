@@ -71,7 +71,7 @@ export default async function PartnerAgreementPage() {
       </div>
 
       {/* Version notice */}
-      <p className="text-xs text-[#999] mb-4">{t('versionNotice')}</p>
+      <p className="text-xs text-text-muted mb-4">{t('versionNotice')}</p>
 
       {/* Signing form */}
       <AgreementForm agencyName={profile?.agency_name ?? ''} />

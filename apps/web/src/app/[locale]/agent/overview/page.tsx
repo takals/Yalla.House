@@ -191,7 +191,7 @@ export default async function AgentPage() {
                 <p className="font-semibold text-text-primary group-hover:text-brand transition-colors">{mod.title}</p>
                 <p className="text-sm text-text-secondary mt-0.5">{mod.subtitle}</p>
               </div>
-              <span className="text-[#999] text-lg">→</span>
+              <span className="text-text-muted text-lg">→</span>
             </Link>
           ))}
         </div>
@@ -202,7 +202,7 @@ export default async function AgentPage() {
         {assignments.length === 0 ? (
           <div className="bg-surface rounded-card p-10 text-center">
             <p className="text-text-secondary text-sm mb-2">{t('noConnections')}</p>
-            <p className="text-xs text-[#999]">{t('noConnectionsDesc')}</p>
+            <p className="text-xs text-text-muted">{t('noConnectionsDesc')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -248,7 +248,7 @@ export default async function AgentPage() {
                         )}
                       </div>
                     ) : (
-                      <p className="text-xs text-[#999]">
+                      <p className="text-xs text-text-muted">
                         {a.status === 'invited' ? t('invitationPending') : t('noPassportAccess')}
                       </p>
                     )}

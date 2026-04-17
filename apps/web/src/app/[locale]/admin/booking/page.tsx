@@ -36,7 +36,7 @@ export default async function AdminBookingPage() {
       <div className="mb-8">
         <Link
           href="/admin"
-          className="inline-flex items-center gap-2 text-[#D4764E] font-semibold text-sm mb-4 hover:gap-3 transition-all"
+          className="inline-flex items-center gap-2 text-brand font-semibold text-sm mb-4 hover:gap-3 transition-all"
         >
           <ArrowLeft size={16} />
           Back to Admin
@@ -45,7 +45,7 @@ export default async function AdminBookingPage() {
           <h1 className="text-3xl font-bold text-text-primary tracking-tight">
             Smart Booking Shortcut
           </h1>
-          <span className="text-xs font-bold px-2.5 py-1 bg-[#D4764E] text-white rounded-full">
+          <span className="text-xs font-bold px-2.5 py-1 bg-brand text-white rounded-full">
             Tier C
           </span>
         </div>
@@ -57,7 +57,7 @@ export default async function AdminBookingPage() {
 
       {/* How it works */}
       <div className="bg-[#0F1117] rounded-2xl p-6 mb-8 text-white">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#D4764E] mb-3">Call Flow</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-brand mb-3">Call Flow</p>
         <div className="grid grid-cols-4 gap-4 text-center">
           <div>
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-2 text-lg font-bold">1</div>

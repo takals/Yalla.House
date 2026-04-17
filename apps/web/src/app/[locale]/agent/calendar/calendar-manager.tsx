@@ -199,7 +199,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
 
       {/* Tab bar */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-1 bg-[#F5F5FA] rounded-lg p-1">
+        <div className="flex gap-1 bg-hover-bg rounded-lg p-1">
           <button
             onClick={() => setTab('viewings')}
             className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors ${
@@ -233,7 +233,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
         <div className="bg-surface rounded-card p-5 mb-4 border-2 border-brand">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-sm">{t.addAvailability}</h3>
-            <button onClick={() => setShowAddForm(false)} className="text-[#999] hover:text-[#333]">
+            <button onClick={() => setShowAddForm(false)} className="text-text-muted hover:text-[#333]">
               <X size={16} />
             </button>
           </div>
@@ -285,7 +285,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
           <div className="flex gap-2 justify-end">
             <button
               onClick={() => setShowAddForm(false)}
-              className="text-sm font-semibold px-4 py-2 bg-[#F5F5FA] hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors"
+              className="text-sm font-semibold px-4 py-2 bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors"
             >
               {t.cancel}
             </button>
@@ -366,7 +366,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                           <button
                             onClick={() => handleDecline(viewing.id)}
                             disabled={isActing}
-                            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-[#F5F5FA] hover:bg-red-50 text-text-secondary hover:text-red-600 rounded-lg transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-hover-bg hover:bg-red-50 text-text-secondary hover:text-red-600 rounded-lg transition-colors disabled:opacity-50"
                           >
                             <XCircle size={12} /> {t.decline}
                           </button>
@@ -412,7 +412,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                 </div>
 
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                  slot.is_booked ? 'bg-green-100 text-green-700' : 'bg-[#F5F5FA] text-text-secondary'
+                  slot.is_booked ? 'bg-green-100 text-green-700' : 'bg-hover-bg text-text-secondary'
                 }`}>
                   {slot.is_booked ? t.booked : t.available}
                 </span>
@@ -421,7 +421,7 @@ export function CalendarManager({ initialSlots, initialViewings, listingMap, lis
                   <button
                     onClick={() => handleRemoveSlot(slot.id)}
                     disabled={acting.has(slot.id)}
-                    className="text-[#999] hover:text-red-500 transition-colors disabled:opacity-50"
+                    className="text-text-muted hover:text-red-500 transition-colors disabled:opacity-50"
                   >
                     <Trash2 size={14} />
                   </button>

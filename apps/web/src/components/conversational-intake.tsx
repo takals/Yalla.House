@@ -377,7 +377,7 @@ export function ConversationalIntake({
       <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex-shrink-0">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <div className="w-full max-w-xs h-2 rounded-full bg-slate-100 overflow-hidden">
-            <div className="h-full bg-[#D4764E] transition-all duration-500" style={{ width: `${progressPct}%` }} />
+            <div className="h-full bg-brand transition-all duration-500" style={{ width: `${progressPct}%` }} />
           </div>
           <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">{completedCount}/{totalCount}</span>
         </div>
@@ -401,7 +401,7 @@ export function ConversationalIntake({
                 <button
                   onClick={handleSubmit}
                   disabled={submitting}
-                  className="px-4 py-1.5 rounded-lg bg-[#D4764E] text-white text-xs font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
+                  className="px-4 py-1.5 rounded-lg bg-brand text-white text-xs font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
                 >
                   {submitting ? 'Saving...' : translations.submitBtn}
                 </button>
@@ -414,7 +414,7 @@ export function ConversationalIntake({
                 return (
                   <div key={step.id} className={`rounded-lg p-3 border transition-all ${
                     isComplete
-                      ? 'border-[#D4764E]/30 bg-white/[0.04]'
+                      ? 'border-brand/30 bg-white/[0.04]'
                       : 'border-white/[0.06] bg-white/[0.02]'
                   }`}>
                     <div className="flex items-start justify-between gap-2">
@@ -428,10 +428,10 @@ export function ConversationalIntake({
                       </div>
                       {isComplete && (
                         <div className="flex items-center gap-1.5 flex-shrink-0">
-                          <CheckCircle2 size={14} className="text-[#D4764E]" />
+                          <CheckCircle2 size={14} className="text-brand" />
                           <button
                             onClick={() => handleEditField(step.id)}
-                            className="text-[10px] font-bold text-[#D4764E] hover:text-[#BF6840]"
+                            className="text-[10px] font-bold text-brand hover:text-[#BF6840]"
                           >
                             Edit
                           </button>
@@ -453,7 +453,7 @@ export function ConversationalIntake({
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'yalla' && (
                 <div className="flex gap-3 max-w-md">
-                  <div className="w-8 h-8 rounded-full bg-[#D4764E] flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
+                  <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
                     Y
                   </div>
                   <div className="bg-slate-100 rounded-2xl rounded-tl-md px-4 py-2.5 text-sm text-slate-900">
@@ -462,7 +462,7 @@ export function ConversationalIntake({
                 </div>
               )}
               {msg.role === 'user' && (
-                <div className="bg-[#D4764E] rounded-2xl rounded-tr-md px-4 py-2.5 text-sm text-white max-w-md">
+                <div className="bg-brand rounded-2xl rounded-tr-md px-4 py-2.5 text-sm text-white max-w-md">
                   {msg.content}
                 </div>
               )}
@@ -473,7 +473,7 @@ export function ConversationalIntake({
           {isThinking && (
             <div className="flex justify-start">
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#D4764E] flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
                   <Zap size={14} className="text-white animate-pulse" />
                 </div>
                 <div className="bg-slate-100 rounded-2xl px-4 py-3 flex gap-1.5 items-center">
@@ -506,7 +506,7 @@ export function ConversationalIntake({
                     <button
                       onClick={handleSubmit}
                       disabled={submitting}
-                      className="px-4 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-medium hover:bg-brand-hover transition-colors disabled:opacity-50"
+                      className="px-4 py-2 rounded-xl bg-brand text-white text-sm font-medium hover:bg-brand-hover transition-colors disabled:opacity-50"
                     >
                       {submitting ? 'Saving...' : translations.submitBtn}
                     </button>
@@ -520,7 +520,7 @@ export function ConversationalIntake({
           {submitted && (
             <div className="flex justify-start">
               <div className="flex gap-3 max-w-md">
-                <div className="w-8 h-8 rounded-full bg-[#D4764E] flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
                   <CheckCircle2 size={14} className="text-white" />
                 </div>
                 <div className="space-y-4">
@@ -577,7 +577,7 @@ export function ConversationalIntake({
                     <button
                       onClick={handleSelectAll}
                       disabled={isThinking}
-                      className="flex items-center gap-1 text-xs font-semibold text-[#D4764E] hover:text-[#BF6840] transition-colors disabled:opacity-40"
+                      className="flex items-center gap-1 text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors disabled:opacity-40"
                     >
                       <CheckCheck size={14} /> Select All
                     </button>
@@ -608,10 +608,10 @@ export function ConversationalIntake({
                         disabled={isThinking}
                         className={`px-4 py-2 rounded-full border text-sm font-medium transition-all whitespace-nowrap ${
                           isSelected
-                            ? 'bg-[#D4764E] border-[#D4764E] text-white shadow-sm'
+                            ? 'bg-brand border-brand text-white shadow-sm'
                             : isNoneOption
                               ? 'bg-slate-50 border-slate-300 text-slate-600 hover:border-slate-400 hover:bg-slate-100 italic'
-                              : 'bg-white border-slate-200 text-slate-700 hover:border-[#D4764E] hover:bg-orange-50'
+                              : 'bg-white border-slate-200 text-slate-700 hover:border-brand hover:bg-orange-50'
                         } disabled:opacity-40`}
                       >
                         {opt.label}
@@ -624,7 +624,7 @@ export function ConversationalIntake({
                 {isMultiStep && pendingMulti.length > 0 && !pendingMulti.includes('_none') && (
                   <button
                     onClick={handleConfirmMulti}
-                    className="mt-3 px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
+                    className="mt-3 px-5 py-2 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
                   >
                     {it('continueWithCount', { count: pendingMulti.length })}
                   </button>
@@ -646,7 +646,7 @@ export function ConversationalIntake({
                     </button>
                   ) : <span />}
                   <div className="flex items-center gap-3 text-[10px] font-semibold">
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[#D4764E]" /> Want</span>
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-brand" /> Want</span>
                     <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Need</span>
                     <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500" /> No-go</span>
                   </div>
@@ -667,12 +667,12 @@ export function ConversationalIntake({
                             disabled={isThinking}
                             className={`px-3 py-1.5 rounded-full border text-xs font-medium transition-all whitespace-nowrap select-none ${
                               sentiment === 'want'
-                                ? 'bg-[#D4764E] border-[#D4764E] text-white'
+                                ? 'bg-brand border-brand text-white'
                                 : sentiment === 'need'
                                   ? 'bg-emerald-500 border-emerald-500 text-white'
                                   : sentiment === 'dealbreaker'
                                     ? 'bg-red-500 border-red-500 text-white'
-                                    : 'bg-white border-slate-200 text-slate-600 hover:border-[#D4764E] hover:bg-orange-50'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-brand hover:bg-orange-50'
                             } disabled:opacity-40`}
                           >
                             {opt.label}
@@ -690,7 +690,7 @@ export function ConversationalIntake({
                   {Object.keys(pendingTags).length > 0 ? (
                     <button
                       onClick={handleConfirmTags}
-                      className="px-5 py-2 rounded-xl bg-[#D4764E] text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
+                      className="px-5 py-2 rounded-xl bg-brand text-white text-sm font-semibold hover:bg-brand-hover transition-colors"
                     >
                       {it('continueWithPreferences', { count: Object.keys(pendingTags).length })}
                     </button>
@@ -733,12 +733,12 @@ export function ConversationalIntake({
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSendMessage() } }}
                 placeholder={translations.placeholder}
                 disabled={isThinking}
-                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4764E]/40 focus:border-[#D4764E] disabled:opacity-40"
+                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4764E]/40 focus:border-brand disabled:opacity-40"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!input.trim() || isThinking}
-                className="w-10 h-10 rounded-xl bg-[#D4764E] text-white flex items-center justify-center hover:bg-brand-hover transition-colors disabled:opacity-40 flex-shrink-0"
+                className="w-10 h-10 rounded-xl bg-brand text-white flex items-center justify-center hover:bg-brand-hover transition-colors disabled:opacity-40 flex-shrink-0"
               >
                 <Send size={16} />
               </button>

@@ -59,7 +59,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
     <div className="max-w-6xl">
       {/* Header */}
       <div className="mb-8">
-        <Link href="/owner/agents/search" className="inline-flex items-center gap-2 text-[#D4764E] font-semibold text-sm mb-4 hover:gap-3 transition-all">
+        <Link href="/owner/agents/search" className="inline-flex items-center gap-2 text-brand font-semibold text-sm mb-4 hover:gap-3 transition-all">
           <ArrowLeft size={16} />
           {t('sendBackButton')}
         </Link>
@@ -119,7 +119,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
                 { icon: <Clock size={18} />, title: t('sendStep4Title'), desc: t('sendStep4Desc') },
               ].map((step, idx) => (
                 <div key={idx} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#D4764E]/10 flex items-center justify-center flex-shrink-0 text-[#D4764E]">
+                  <div className="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0 text-brand">
                     {step.icon}
                   </div>
                   <div className="flex-1">
@@ -142,7 +142,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
               <div className="text-center py-8">
                 <p className="text-sm text-text-secondary mb-4">{t('sendNoAgentsSelected')}</p>
                 <Link href="/owner/agents/search">
-                  <button className="text-sm font-semibold text-[#D4764E]">
+                  <button className="text-sm font-semibold text-brand">
                     {t('sendSelectAgentsLink')}
                   </button>
                 </Link>
