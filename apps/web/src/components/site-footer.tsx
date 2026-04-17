@@ -54,6 +54,15 @@ export async function SiteFooter() {
                   {t('forAgents')}
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/marketplace"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  {t('marketplace')}
+                </Link>
+              </li>
             </ul>
           </div>
 

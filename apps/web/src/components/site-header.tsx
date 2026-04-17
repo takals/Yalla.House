@@ -23,6 +23,7 @@ export async function SiteHeader() {
   const navLinks = [
     { href: '/services', label: t('services') },
     { href: '/partners', label: t('partners') },
+    { href: '/marketplace', label: t('marketplace') },
     { href: '/about', label: t('about') },
     { href: '/faq', label: t('faq') },
   ]
