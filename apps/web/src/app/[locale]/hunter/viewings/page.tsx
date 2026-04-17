@@ -30,7 +30,7 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
     const result = await (supabase.from('viewings') as any)
       .select(`
         id, listing_id, status, scheduled_at, hunter_notes, created_at,
-        listing:listings!listing_id(title, title_de, city, postcode, place_id)
+        listing:listings!listing_id(title, title_de, city, postcode, place_id, slug)
       `)
       .eq('hunter_id', userId)
       .order('created_at', { ascending: false })
@@ -51,6 +51,7 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
     listing_city: v.listing?.city ?? null,
     listing_postcode: v.listing?.postcode ?? null,
     place_id: v.listing?.place_id ?? null,
+    slug: v.listing?.slug ?? null,
   }))
 
   const upcomingCount = viewings.filter(

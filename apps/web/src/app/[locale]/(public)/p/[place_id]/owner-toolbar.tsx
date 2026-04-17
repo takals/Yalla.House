@@ -3,22 +3,35 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Pencil, Share2, Copy, Check, Mail, MessageCircle, Link2 } from 'lucide-react'
+import { ShareCardModal } from '@/components/share-card'
 
 interface Props {
   listingId: string
   placeId: string
+  slug: string | null
+  shortId: string | null
   status: string
   locale: string
+  listingTitle?: string
+  address?: string
+  price?: string | null
+  photoUrl?: string | null
 }
 
-export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
+export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale, listingTitle, address, price, photoUrl }: Props) {
   const t = useTranslations('listingPage')
   const [isLive, setIsLive] = useState(status === 'active')
   const [toggling, setToggling] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [copiedShort, setCopiedShort] = useState(false)
 
-  const publicUrl = `https://yalla.house/${locale === 'de' ? '' : 'en/'}p/${placeId}`
+  const localePrefix = locale === 'de' ? '' : 'en/'
+  // Canonical URL uses slug when available
+  const canonicalId = slug ?? placeId
+  const publicUrl = `https://yalla.house/${localePrefix}p/${canonicalId}`
+  // Short URL for compact sharing / QR codes
+  const shortUrl = shortId ? `https://yalla.house/${localePrefix}p/${shortId}` : publicUrl
 
   async function handleToggle() {
     setToggling(true)
@@ -40,6 +53,12 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
     navigator.clipboard.writeText(publicUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  function handleCopyShortLink() {
+    navigator.clipboard.writeText(shortUrl)
+    setCopiedShort(true)
+    setTimeout(() => setCopiedShort(false), 2000)
   }
 
   return (
@@ -94,6 +113,15 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
                   {copied ? <Check size={14} className="text-green-400" /> : <Link2 size={14} />}
                   {copied ? t('ownerCopied') : t('ownerCopyLink')}
                 </button>
+                {shortId && (
+                  <button
+                    onClick={handleCopyShortLink}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors text-left"
+                  >
+                    {copiedShort ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
+                    {copiedShort ? t('ownerCopied') : t('ownerCopyShortLink')}
+                  </button>
+                )}
                 <a
                   href={`https://wa.me/?text=${encodeURIComponent(t('ownerShareText') + ' ' + publicUrl)}`}
                   target="_blank"
@@ -110,6 +138,16 @@ export function OwnerToolbar({ listingId, placeId, status, locale }: Props) {
                   <Mail size={14} />
                   Email
                 </a>
+                <div className="border-t border-white/10 my-1" />
+                <ShareCardModal
+                  listingTitle={listingTitle ?? ''}
+                  address={address ?? ''}
+                  price={price ?? null}
+                  photoUrl={photoUrl ?? null}
+                  shareUrl={publicUrl}
+                  shortUrl={shortUrl}
+                  locale={locale}
+                />
               </div>
             )}
           </div>

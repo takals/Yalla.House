@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import Image from 'next/image'
@@ -9,62 +9,109 @@ import { ListingStatusBadge } from './listing-status-badge'
 import { StickyBookingBar } from './sticky-booking-bar'
 import { OwnerToolbar } from './owner-toolbar'
 import { Home, BedDouble, Bath, Building, CalendarDays } from 'lucide-react'
+import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib/resolve-listing'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
-  searchParams: Promise<{ slot?: string }>
+  searchParams: Promise<{ slot?: string; ref?: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { place_id, locale } = await params
+  const { place_id: identifier, locale } = await params
   const supabase = await createClient()
   const t = await getTranslations('listingPage')
 
-  const { data } = await (supabase as any)
-    .from('listings')
-    .select('title_de, title, description_de, description, city, postcode, listing_media(url, is_primary)')
-    .eq('place_id', place_id)
-    .in('status', ['active', 'under_offer', 'draft', 'paused'])
-    .single()
+  const resolved = await resolveListing(
+    supabase,
+    identifier,
+    'title_de, title, description_de, description, city, postcode, slug, place_id, listing_media(url, is_primary)',
+  )
 
-  if (!data) return { title: t('metaNotFound') }
+  if (!resolved) return { title: t('metaNotFound') }
+  const data = resolved.listing
 
   const title = locale === 'de'
-    ? (data.title_de ?? data.title ?? t('metaFallbackTitle'))
-    : (data.title ?? data.title_de ?? t('metaFallbackTitle'))
+    ? ((data['title_de'] as string) ?? (data['title'] as string) ?? t('metaFallbackTitle'))
+    : ((data['title'] as string) ?? (data['title_de'] as string) ?? t('metaFallbackTitle'))
 
   const description = locale === 'de'
-    ? (data.description_de ?? data.description ?? '')
-    : (data.description ?? data.description_de ?? '')
+    ? ((data['description_de'] as string) ?? (data['description'] as string) ?? '')
+    : ((data['description'] as string) ?? (data['description_de'] as string) ?? '')
 
-  const primaryPhoto = (data.listing_media as Array<{ url: string; is_primary: boolean }> | null)
+  const primaryPhoto = (data['listing_media'] as Array<{ url: string; is_primary: boolean }> | null)
     ?.find(m => m.is_primary)?.url
 
+  const canonical = canonicalListingUrl(data, locale)
+  const location = [data['postcode'], data['city']].filter(Boolean).join(' ')
+  const fullTitle = title + (location ? ` — ${location}` : '')
+
   return {
-    title,
+    title: fullTitle,
     description: description.slice(0, 155),
-    openGraph: { title, description: description.slice(0, 155), images: primaryPhoto ? [primaryPhoto] : [] },
+    alternates: { canonical },
+    openGraph: {
+      title: fullTitle,
+      description: description.slice(0, 155),
+      url: canonical,
+      type: 'website',
+      siteName: 'Yalla.House',
+      images: primaryPhoto ? [{
+        url: primaryPhoto,
+        width: 1200,
+        height: 630,
+        alt: fullTitle,
+      }] : [],
+    },
+    twitter: {
+      card: primaryPhoto ? 'summary_large_image' : 'summary',
+      title: fullTitle,
+      description: description.slice(0, 155),
+      images: primaryPhoto ? [primaryPhoto] : [],
+    },
+    robots: { index: true, follow: true },
   }
 }
 
 export default async function PropertyPage({ params, searchParams }: Props) {
-  const { place_id, locale } = await params
-  const { slot: preselectedSlotId } = await searchParams
+  const { place_id: identifier, locale } = await params
+  const { slot: preselectedSlotId, ref: refSource } = await searchParams
   const supabase = await createClient()
   const t = await getTranslations('listingPage')
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: listing } = await (supabase as any)
-    .from('listings')
-    .select(`
-      *,
-      listing_media ( id, url, thumb_url, caption_de, caption, sort_order, is_primary, type )
-    `)
-    .eq('place_id', place_id)
-    .single()
+  // Resolve listing by slug, short_id, or place_id
+  const resolved = await resolveListing(supabase, identifier)
 
-  if (!listing) notFound()
+  if (!resolved) notFound()
+
+  const listing = resolved.listing as Record<string, any>
+
+  // If accessed via short_id or place_id but listing has a slug, redirect to canonical slug URL
+  if (resolved.matched_by !== 'slug' && listing.slug) {
+    const canonical = canonicalListingPath(listing)
+    const qs = new URLSearchParams()
+    if (preselectedSlotId) qs.set('slot', preselectedSlotId)
+    if (refSource) qs.set('ref', refSource)
+    const qsStr = qs.toString()
+    redirect(`${canonical}${qsStr ? `?${qsStr}` : ''}`)
+  }
+
+  // Track ref source if present (e.g. ?ref=whatsapp, ?ref=rightmove, ?ref=qr)
+  if (refSource && listing.id) {
+    // Fire-and-forget: update inbound_leads link_clicked_at if matching lead exists
+    const { createServiceClient } = await import('@/lib/supabase/server')
+    const service = createServiceClient()
+    ;(service.from('inbound_leads') as any)
+      .update({ link_clicked_at: new Date().toISOString() })
+      .eq('listing_id', listing.id)
+      .eq('reply_channel', refSource)
+      .is('link_clicked_at', null)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .then(() => {})
+      .catch(() => {})
+  }
 
   const isOwner = !!user && listing.owner_id === user.id
   const isAuthenticated = !!user
@@ -108,7 +155,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             '@type': 'RealEstateListing',
             name: title ?? listing.title_de ?? listing.place_id,
             description: desc?.substring(0, 200) ?? '',
-            url: `https://yalla.house/${locale}/p/${listing.place_id}`,
+            url: canonicalListingUrl(listing, locale),
             ...(listing.sale_price || listing.rent_price ? {
               offers: {
                 '@type': 'Offer',
@@ -131,8 +178,14 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         <OwnerToolbar
           listingId={listing.id}
           placeId={listing.place_id}
+          slug={listing.slug ?? null}
+          shortId={listing.short_id ?? null}
           status={listing.status}
           locale={locale}
+          listingTitle={title ?? undefined}
+          address={`${listing.postcode} ${listing.city}`}
+          price={formattedSalePrice ?? formattedRentPrice ?? undefined}
+          photoUrl={primaryPhoto?.url ?? undefined}
         />
       )}
 

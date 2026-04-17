@@ -16,6 +16,7 @@ interface Viewing {
   listing_city: string | null
   listing_postcode: string | null
   place_id: string | null
+  slug: string | null
 }
 
 type T = { [k: string]: string }
@@ -226,7 +227,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
           )}
           {viewing.place_id && (
             <Link
-              href={`/p/${viewing.place_id}`}
+              href={`/p/${viewing.slug ?? viewing.place_id}`}
               className="text-xs font-semibold text-text-primary hover:underline ml-auto"
             >
               {tx(t, 'viewListing')} &rarr;

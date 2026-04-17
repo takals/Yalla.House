@@ -33,7 +33,7 @@ export default async function OwnerListingsPage() {
   if (allListings.length === 1) {
     const only = allListings[0]!
     const isPublic = only.status === 'active' || only.status === 'under_offer'
-    redirect(isPublic ? `/p/${only.place_id}` : `/owner/${only.id}`)
+    redirect(isPublic ? `/p/${only.slug ?? only.place_id}` : `/owner/${only.id}`)
   }
 
   return (
@@ -78,7 +78,7 @@ export default async function OwnerListingsPage() {
 
             // Live/under_offer listings link to the public page; others to the owner edit page
             const isPublic = listing.status === 'active' || listing.status === 'under_offer'
-            const href = isPublic ? `/p/${listing.place_id}` : `/owner/${listing.id}`
+            const href = isPublic ? `/p/${listing.slug ?? listing.place_id}` : `/owner/${listing.id}`
 
             return (
               <Link

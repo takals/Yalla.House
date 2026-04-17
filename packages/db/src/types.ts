@@ -212,9 +212,11 @@ export interface Database {
           created_at: string
           updated_at: string
           published_at: string | null
+          slug: string | null
+          short_id: string | null
         }
         Insert: Omit<Database['public']['Tables']['listings']['Row'],
-          'id' | 'place_id' | 'created_at' | 'updated_at'>
+          'id' | 'place_id' | 'slug' | 'short_id' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['listings']['Insert']>
       }
       listing_media: {

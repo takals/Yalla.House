@@ -88,7 +88,7 @@ export default async function ListingsPage({ params, searchParams }: Props) {
   )
   const dataQuery = applyFilters(
     supabase.from('listings').select(
-      'id, place_id, title_de, intent, property_type, city, postcode, size_sqm, bedrooms, sale_price, rent_price, currency, listing_media(url, is_primary, type)'
+      'id, place_id, slug, title_de, intent, property_type, city, postcode, size_sqm, bedrooms, sale_price, rent_price, currency, listing_media(url, is_primary, type)'
     ) as any
   )
     .order('created_at', { ascending: false })
@@ -102,6 +102,7 @@ export default async function ListingsPage({ params, searchParams }: Props) {
   const listings = (dataResult.data ?? []) as Array<{
     id: string
     place_id: string
+    slug: string | null
     title_de: string | null
     intent: string
     property_type: string
@@ -255,7 +256,7 @@ export default async function ListingsPage({ params, searchParams }: Props) {
                 return (
                   <Link
                     key={listing.id}
-                    href={`/p/${listing.place_id}`}
+                    href={`/p/${listing.slug ?? listing.place_id}`}
                     className="bg-surface rounded-card shadow-sm overflow-hidden hover:-translate-y-1 transition-transform block"
                   >
                     {/* Photo */}

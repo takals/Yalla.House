@@ -9,6 +9,7 @@ const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://yalla.house'
 interface SearchResult {
   id: string
   place_id: string
+  slug: string | null
   address_line1: string | null
   city: string | null
   postcode: string | null
@@ -53,7 +54,7 @@ export async function searchPropertiesAction(query: string): Promise<{
     const { data } = await (db as any)
       .from('listings')
       .select(`
-        id, place_id, address_line1, city, postcode, status, bedrooms, property_type,
+        id, place_id, slug, address_line1, city, postcode, status, bedrooms, property_type,
         owner:users!owner_id(full_name, email)
       `)
       .eq('place_id', placeId)
@@ -70,7 +71,7 @@ export async function searchPropertiesAction(query: string): Promise<{
     const { data } = await (db as any)
       .from('listings')
       .select(`
-        id, place_id, address_line1, city, postcode, status, bedrooms, property_type,
+        id, place_id, slug, address_line1, city, postcode, status, bedrooms, property_type,
         owner:users!owner_id(full_name, email)
       `)
       .like('postcode', `${trimmed}%`)
@@ -97,7 +98,7 @@ export async function searchPropertiesAction(query: string): Promise<{
     const { data } = await (db as any)
       .from('listings')
       .select(`
-        id, place_id, address_line1, city, postcode, status, bedrooms, property_type,
+        id, place_id, slug, address_line1, city, postcode, status, bedrooms, property_type,
         owner:users!owner_id(full_name, email)
       `)
       .in('id', ids)
@@ -127,6 +128,7 @@ function mapResult(row: any): SearchResult {
   return {
     id: row.id,
     place_id: row.place_id,
+    slug: row.slug ?? null,
     address_line1: row.address_line1,
     city: row.city,
     postcode: row.postcode,
@@ -159,7 +161,11 @@ export async function sendPropertyLinkAction(data: {
     return { error: 'Not authorized' }
   }
 
-  const propertyUrl = `${SITE_URL}/p/${data.placeId}`
+  // Look up slug for clean URL
+  const db2 = createServiceClient()
+  const { data: slugRow } = await (db2 as any).from('listings').select('slug').eq('place_id', data.placeId).single()
+  const identifier = slugRow?.slug ?? data.placeId
+  const propertyUrl = `${SITE_URL}/p/${identifier}`
   const message = `Hier ist die Immobilie, die Sie gesucht haben: ${propertyUrl}\nSie können dort direkt eine Besichtigung buchen.`
 
   // Log the send event

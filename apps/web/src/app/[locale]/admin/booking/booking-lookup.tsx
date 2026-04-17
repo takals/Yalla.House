@@ -10,6 +10,7 @@ import { searchPropertiesAction, sendPropertyLinkAction } from './actions'
 interface SearchResult {
   id: string
   place_id: string
+  slug: string | null
   address_line1: string | null
   city: string | null
   postcode: string | null
@@ -85,10 +86,10 @@ export function BookingLookup() {
     }
   }
 
-  function handleCopyLink(placeId: string) {
-    const url = `${siteUrl}/p/${placeId}`
+  function handleCopyLink(identifier: string) {
+    const url = `${siteUrl}/p/${identifier}`
     navigator.clipboard.writeText(url).then(() => {
-      setCopied(placeId)
+      setCopied(identifier)
       setTimeout(() => setCopied(null), 2000)
     })
   }
@@ -183,11 +184,11 @@ export function BookingLookup() {
                 <div className="flex items-center gap-2 flex-shrink-0">
                   {/* Copy link */}
                   <button
-                    onClick={e => { e.stopPropagation(); handleCopyLink(result.place_id) }}
+                    onClick={e => { e.stopPropagation(); handleCopyLink(result.slug ?? result.place_id) }}
                     className="p-2 rounded-lg bg-bg hover:bg-hover-muted transition-colors"
                     title="Copy property link"
                   >
-                    {copied === result.place_id
+                    {copied === (result.slug ?? result.place_id)
                       ? <CheckCircle2 size={16} className="text-green-600" />
                       : <Copy size={16} className="text-text-secondary" />
                     }
@@ -195,7 +196,7 @@ export function BookingLookup() {
 
                   {/* Open property page */}
                   <a
-                    href={`/p/${result.place_id}`}
+                    href={`/p/${result.slug ?? result.place_id}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={e => e.stopPropagation()}

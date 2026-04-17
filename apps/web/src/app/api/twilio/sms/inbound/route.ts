@@ -8,8 +8,10 @@ const SESSION_TTL_MINUTES = 30
 
 // Portal URL extraction rules: slug → regex to pull out the external_id
 const PORTAL_URL_PATTERNS: Array<{ slug: string; pattern: RegExp }> = [
-  { slug: 'immoscout24',  pattern: /immobilienscout24\.de\/expose\/(\d+)/i },
-  { slug: 'immowelt',     pattern: /immowelt\.de\/expose\/([a-z0-9-]+)\.html/i },
+  { slug: 'rightmove',     pattern: /rightmove\.co\.uk\/properties?\/(\d+)/i },
+  { slug: 'zoopla',        pattern: /zoopla\.co\.uk\/for-sale\/details\/(\d+)/i },
+  { slug: 'immoscout24',   pattern: /immobilienscout24\.de\/expose\/(\d+)/i },
+  { slug: 'immowelt',      pattern: /immowelt\.de\/expose\/([a-z0-9-]+)\.html/i },
 ]
 
 export async function POST(req: NextRequest) {
@@ -51,14 +53,14 @@ export async function POST(req: NextRequest) {
 
     if (chosen) {
       const { data: listing } = await (db.from('listings') as any)
-        .select('place_id')
+        .select('place_id, slug')
         .eq('id', chosen.listing_id)
         .maybeSingle()
 
       if (listing) {
         await clearSession(from)
         await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'address', listing_id: chosen.listing_id })
-        return twimlReply(successMessage(`${SITE_URL}/p/${listing.place_id}`))
+        return twimlReply(successMessage(`${SITE_URL}/p/${listing.slug ?? listing.place_id}`))
       }
     }
 
@@ -70,14 +72,14 @@ export async function POST(req: NextRequest) {
   if (refMatch) {
     const placeId = refMatch[0].replace(/-/g, '_').toLowerCase()
     const { data: listing } = await (db.from('listings') as any)
-      .select('id, place_id')
+      .select('id, place_id, slug')
       .eq('place_id', placeId)
       .eq('status', 'active')
       .maybeSingle()
 
     if (listing) {
       await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'refcode', listing_id: listing.id })
-      return twimlReply(successMessage(`${SITE_URL}/p/${listing.place_id}`))
+      return twimlReply(successMessage(`${SITE_URL}/p/${listing.slug ?? listing.place_id}`))
     }
 
     return twimlReply('Dieser Referenzcode wurde nicht gefunden. Bitte prüfen Sie den Code und versuchen Sie es erneut.')
@@ -91,7 +93,7 @@ export async function POST(req: NextRequest) {
 
       const { data: row } = await (db
         .from('listing_portal_status') as any)
-        .select('listing_id, listings(place_id)')
+        .select('listing_id, listings(place_id, slug)')
         .eq('external_id', externalId)
         .eq('portal_id', (
           await (db.from('portal_config') as any)
@@ -103,9 +105,9 @@ export async function POST(req: NextRequest) {
         .maybeSingle()
 
       if (row?.listing_id) {
-        const placeId = row.listings?.place_id
+        const identifier = row.listings?.slug ?? row.listings?.place_id
         await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'portal_url', listing_id: row.listing_id })
-        return twimlReply(successMessage(`${SITE_URL}/p/${placeId}`))
+        return twimlReply(successMessage(`${SITE_URL}/p/${identifier}`))
       }
 
       break
@@ -123,7 +125,7 @@ export async function POST(req: NextRequest) {
 
     if (matches && matches.length === 1) {
       await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'address', listing_id: matches[0].id })
-      return twimlReply(successMessage(`${SITE_URL}/p/${matches[0].place_id}`))
+      return twimlReply(successMessage(`${SITE_URL}/p/${matches[0].slug ?? matches[0].place_id}`))
     }
 
     if (matches && matches.length > 1) {
