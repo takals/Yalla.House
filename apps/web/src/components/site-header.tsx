@@ -24,6 +24,7 @@ export async function SiteHeader() {
     { href: '/services', label: t('services') },
     { href: '/partners', label: t('partners') },
     { href: '/about', label: t('about') },
+    { href: '/faq', label: t('faq') },
   ]
 
   const cta = user

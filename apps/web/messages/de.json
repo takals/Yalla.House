@@ -43,7 +43,8 @@
     "login": "Anmelden",
     "dashboard": "Dashboard",
     "signOut": "Abmelden",
-    "partners": "Partner"
+    "partners": "Partner",
+    "faq": "FAQ"
   },
   "hero": {
     "headline": "Ihr Immobilienverkauf, unter Ihrer Kontrolle.",
@@ -255,6 +256,7 @@
     "about": "\u00dcber uns",
     "services": "Leistungen & Preise",
     "contact": "Kontakt",
+    "faq": "FAQ",
     "privacyPolicy": "Datenschutz",
     "termsOfService": "Nutzungsbedingungen",
     "cookiePolicy": "Cookie-Richtlinie",
@@ -2232,5 +2234,82 @@
 
     "termsContactTitle": "Kontakt",
     "termsContactBody": "Bei Fragen zu diesen Nutzungsbedingungen kontaktieren Sie uns:"
+  },
+
+  "faq": {
+    "heroTitle": "H\u00e4ufig gestellte",
+    "heroTitleAccent": "Fragen",
+    "heroSubtitle": "Alles, was Sie \u00fcber den Verkauf, die Suche und die Partnerschaft auf Yalla.House wissen m\u00fcssen.",
+
+    "sectionOwners": "F\u00fcr Eigent\u00fcmer",
+    "sectionHunters": "F\u00fcr Suchende",
+    "sectionAgents": "F\u00fcr Makler",
+    "sectionPricing": "Preise & Zahlungen",
+    "sectionTrust": "Vertrauen & Sicherheit",
+
+    "ownerQ1": "Was genau ist Yalla.House?",
+    "ownerA1": "Yalla.House ist eine Immobilien-Technologie-Plattform \u2014 keine Maklerei. Wir geben Ihnen die Werkzeuge, um Ihre Immobilie zu inserieren, Besichtigungen zu verwalten, Makler-Vorschl\u00e4ge zu erhalten und alles \u00fcber ein Dashboard zu verfolgen. Sie entscheiden, wie viel Hilfe Sie m\u00f6chten \u2014 vom komplett eigenst\u00e4ndigen Verkauf bis zur Zusammenarbeit mit einem Propertymark-akkreditierten lokalen Makler.",
+
+    "ownerQ2": "Wie kommt meine Immobilie auf Rightmove und Zoopla?",
+    "ownerA2": "Sobald Sie Ihr Inserat auf Yalla.House fertiggestellt haben, verteilen wir es an die gro\u00dfen britischen Immobilienportale, einschlie\u00dflich Rightmove und Zoopla. Ihr Inserat erscheint neben denen traditioneller Makler \u2014 K\u00e4ufer sehen keinen Unterschied.",
+
+    "ownerQ3": "Brauche ich einen Makler zum Verkaufen?",
+    "ownerA3": "Nein. Sie k\u00f6nnen den gesamten Verkauf selbst \u00fcber Ihr Eigent\u00fcmer-Dashboard verwalten \u2014 von der Inserat-Erstellung bis zur Besichtigungsverwaltung. Wenn Sie professionelle Unterst\u00fctzung bevorzugen, k\u00f6nnen lokale Makler auf der Plattform Vorschl\u00e4ge f\u00fcr Ihre Immobilie einreichen. Sie behalten immer die Kontrolle dar\u00fcber, mit wem Sie arbeiten und wie viel Hilfe Sie annehmen.",
+
+    "ownerQ4": "Was, wenn ich nicht weiterkomme oder Hilfe brauche?",
+    "ownerA4": "Ihr Dashboard enth\u00e4lt Schritt-f\u00fcr-Schritt-Anleitungen in jeder Phase. Wenn Sie fachlichen Input m\u00f6chten, k\u00f6nnen Sie einen lokalen Makler einladen, bei bestimmten Aufgaben wie Bewertungen, Besichtigungen oder Verhandlungen zu helfen \u2014 ohne den gesamten Prozess abzugeben.",
+
+    "ownerQ5": "Kann ich auch eine Mietimmobilie inserieren?",
+    "ownerA5": "Ja. Yalla.House unterst\u00fctzt sowohl Verk\u00e4ufe als auch Vermietungen. W\u00e4hlen Sie den passenden Inseratstyp bei der Erstellung Ihrer Immobilie, und sie wird an die relevanten Portale verteilt.",
+
+    "hunterQ1": "Was ist ein Home Passport?",
+    "hunterA1": "Ihr Home Passport ist ein Profil, das uns genau sagt, wonach Sie suchen \u2014 Gebiet, Budget, Immobilientyp, Zeitrahmen und Ihre pers\u00f6nlichen Priorit\u00e4ten. Wir nutzen ihn, um Sie mit lokalen Propertymark-akkreditierten Maklern zu verbinden, die genau auf Ihre Bed\u00fcrfnisse spezialisiert sind, und um Immobilienportale in Ihrem Auftrag zu durchsuchen.",
+
+    "hunterQ2": "Sucht Yalla.House Immobilien f\u00fcr mich?",
+    "hunterA2": "Ja. Sobald Ihr Home Passport vollst\u00e4ndig ist, durchsucht Yalla.House Rightmove, Zoopla und andere gro\u00dfe britische Immobilienportale nach Inseraten, die Ihren Kriterien entsprechen. Sie sehen Treffer in Ihrem Dashboard, ohne selbst mehrere Seiten pr\u00fcfen zu m\u00fcssen.",
+
+    "hunterQ3": "Wie funktioniert die Makler-Vermittlung?",
+    "hunterA3": "Basierend auf Ihrem Home Passport \u2014 Ihre Zielgebiete, Budget und Pr\u00e4ferenzen \u2014 vermitteln wir Sie mit lokalen Maklern, die aktive Inserate und Expertise in diesen Gebieten haben. Alle Makler auf der Plattform sind Propertymark-akkreditiert, das hei\u00dft, sie werden vom britischen Berufsverband f\u00fcr Immobilienmakler reguliert.",
+
+    "hunterQ4": "Ist der Home Passport kostenlos?",
+    "hunterA4": "Ja, vollkommen kostenlos. Die Erstellung Ihres Home Passports, die Makler-Vermittlung und der Zugang zu Ihrem Dashboard kosten nichts. Es gibt keine versteckten Geb\u00fchren f\u00fcr Suchende.",
+
+    "hunterQ5": "Kann ich auch nach Mietobjekten suchen?",
+    "hunterA5": "Auf jeden Fall. Bei der Erstellung Ihres Home Passports geben Sie an, ob Sie kaufen, mieten oder beides m\u00f6chten. Ihre Treffer und Portal-Suchen werden entsprechend angepasst.",
+
+    "agentQ1": "Was bietet Yalla.House f\u00fcr Makler?",
+    "agentA1": "Yalla.House bietet Ihnen ein kostenloses SaaS-Dashboard zur Verwaltung Ihrer Pipeline, zur Beantwortung von Eigent\u00fcmer- und Suchanfragen und zum Wachstum Ihres Gesch\u00e4fts. Betrachten Sie es als ein leichtgewichtiges CRM, speziell f\u00fcr Immobilienprofis \u2014 kein weiteres Portal, das mit Ihnen um Kunden konkurriert.",
+
+    "agentQ2": "Wie erhalte ich Leads?",
+    "agentA2": "Immobilieneigent\u00fcmer k\u00f6nnen Vorschl\u00e4ge von lokalen Maklern anfordern, und Suchende werden basierend auf Ihren Abdeckungsgebieten und Ihrer Expertise mit Ihnen verbunden. Leads kommen direkt in Ihr Yalla.House-Dashboard, wo Sie antworten, den Fortschritt verfolgen und Ihre Pipeline verwalten k\u00f6nnen.",
+
+    "agentQ3": "Gibt es Kosten f\u00fcr Makler?",
+    "agentA3": "Das Dashboard ist kostenlos. Sie vereinbaren Ihre eigenen Geb\u00fchren direkt mit Ihren Kunden \u2014 Yalla.House nimmt keinen Anteil an Ihrer Provision.",
+
+    "agentQ4": "Was bedeutet Propertymark-akkreditiert?",
+    "agentA4": "Propertymark ist der f\u00fchrende britische Berufsverband f\u00fcr Immobilienmakler. Akkreditierte Makler erf\u00fcllen strenge Standards, darunter Kundengeldsicherung, Berufshaftpflichtversicherung und laufende regulatorische Compliance. Alle Makler auf Yalla.House stammen aus der akkreditierten Mitgliedschaft von Propertymark.",
+
+    "pricingQ1": "Ist es wirklich kostenlos, meine Immobilie zu inserieren?",
+    "pricingA1": "Sie k\u00f6nnen Ihr Inserat erstellen und \u00fcber Ihr Dashboard verwalten \u2014 ohne Kosten. Die Portal-Verteilung an Rightmove, Zoopla und andere gro\u00dfe Seiten ist in unseren Inseratspaketen enthalten, die ab einer Pauschalgeb\u00fchr beginnen \u2014 ohne Provision und ohne Prozentanteil am Verkaufspreis.",
+
+    "pricingQ2": "Gibt es versteckte Geb\u00fchren oder Provision?",
+    "pricingA2": "Keine Provision, niemals. Yalla.House berechnet eine transparente Pauschalgeb\u00fchr f\u00fcr die Portal-Verteilung. Es gibt keine Erfolgsgeb\u00fchren, keine prozentualen K\u00fcrzungen und keine \u00dcberraschungskosten. Sie behalten jeden Cent aus Ihrem Verkauf.",
+
+    "pricingQ3": "Welche Zahlungsmethoden akzeptieren Sie?",
+    "pricingA3": "Wir akzeptieren alle g\u00e4ngigen Kredit- und Debitkarten. Die Zahlung wird sicher \u00fcber Stripe abgewickelt, und Sie erhalten eine Quittung per E-Mail.",
+
+    "trustQ1": "Woher wei\u00df ich, dass die Makler seri\u00f6s sind?",
+    "trustA1": "Jeder Makler auf Yalla.House ist Propertymark-akkreditiert. Propertymark ist der regulierte britische Berufsverband f\u00fcr Immobilienmakler, der von seinen Mitgliedern Kundengeldsicherung, Berufshaftpflichtversicherung und die Einhaltung von Geldw\u00e4schevorschriften verlangt.",
+
+    "trustQ2": "Sind meine pers\u00f6nlichen Daten sicher?",
+    "trustA2": "Ja. Wir verwenden branchenstandard-Verschl\u00fcsselung, speichern Daten auf sicheren EU-Servern und verkaufen Ihre pers\u00f6nlichen Daten niemals an Dritte. Lesen Sie unsere vollst\u00e4ndige Datenschutzerkl\u00e4rung f\u00fcr Details zur Datenverarbeitung.",
+
+    "trustQ3": "Was passiert, wenn etwas bei meinem Verkauf schiefgeht?",
+    "trustA3": "Ihr Dashboard f\u00fchrt eine vollst\u00e4ndige Aufzeichnung aller Kommunikationen und Aktivit\u00e4ten. Wenn Sie \u00fcber die Plattform mit einem Makler arbeiten, bietet das Beschwerdeverfahren von Propertymark eine zus\u00e4tzliche Schutzebene. Sie k\u00f6nnen sich auch jederzeit an unser Support-Team wenden.",
+
+    "ctaTitle": "Noch Fragen?",
+    "ctaBody": "Unser Team ist f\u00fcr Sie da. Schreiben Sie uns und wir melden uns bei Ihnen.",
+    "ctaButton": "Support kontaktieren",
+    "ctaEmail": "support@yalla.house"
   }
 }

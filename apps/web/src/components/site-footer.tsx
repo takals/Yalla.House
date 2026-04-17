@@ -80,6 +80,15 @@ export async function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/faq"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  {t('faq')}
+                </Link>
+              </li>
+              <li>
                 <a
                   href="mailto:support@yalla.house"
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"

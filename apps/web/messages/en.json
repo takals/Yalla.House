@@ -43,7 +43,8 @@
     "login": "Sign In",
     "dashboard": "Dashboard",
     "signOut": "Sign Out",
-    "partners": "Partners"
+    "partners": "Partners",
+    "faq": "FAQ"
   },
   "hero": {
     "headline": "Your property sale, under your control.",
@@ -255,6 +256,7 @@
     "about": "About",
     "services": "Services & Pricing",
     "contact": "Contact",
+    "faq": "FAQ",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "cookiePolicy": "Cookie Policy",
@@ -2232,5 +2234,82 @@
 
     "termsContactTitle": "Contact",
     "termsContactBody": "If you have questions about these Terms of Service, contact us:"
+  },
+
+  "faq": {
+    "heroTitle": "Frequently Asked",
+    "heroTitleAccent": "Questions",
+    "heroSubtitle": "Everything you need to know about selling, searching, and partnering on Yalla.House.",
+
+    "sectionOwners": "For Property Owners",
+    "sectionHunters": "For Home Hunters",
+    "sectionAgents": "For Agents",
+    "sectionPricing": "Pricing & Payments",
+    "sectionTrust": "Trust & Safety",
+
+    "ownerQ1": "What exactly is Yalla.House?",
+    "ownerA1": "Yalla.House is a property technology platform — not an estate agency. We give you the tools to list your property, manage viewings, receive agent proposals, and track everything from one dashboard. You choose how much help you want, from selling entirely on your own to working with a Propertymark-accredited local agent.",
+
+    "ownerQ2": "How does my property get on Rightmove and Zoopla?",
+    "ownerA2": "Once you complete your listing on Yalla.House, we distribute it to the UK's major property portals including Rightmove and Zoopla. Your listing appears alongside those from traditional estate agents — buyers won't see any difference.",
+
+    "ownerQ3": "Do I need an estate agent to sell?",
+    "ownerA3": "No. You can manage the entire sale yourself through your owner dashboard — from listing creation to viewing management. If you'd prefer some professional support, local agents on the platform can submit proposals for your property. You're always in control of who you work with and how much help you accept.",
+
+    "ownerQ4": "What if I get stuck or need help during the process?",
+    "ownerA4": "Your dashboard includes step-by-step guidance at every stage. If you want expert input, you can invite a local agent to help with specific tasks like valuations, viewings, or negotiations — without handing over the whole process.",
+
+    "ownerQ5": "Can I list a rental property too?",
+    "ownerA5": "Yes. Yalla.House supports both sales and lettings. Choose the appropriate listing type when you create your property, and it will be distributed to the relevant portals.",
+
+    "hunterQ1": "What is a Home Passport?",
+    "hunterA1": "Your Home Passport is a profile that tells us exactly what you're looking for — area, budget, property type, timeline, and your personal priorities. We use it to match you with local Propertymark-accredited agents who specialise in exactly what you need, and to search property portals on your behalf.",
+
+    "hunterQ2": "Does Yalla.House search for properties on my behalf?",
+    "hunterA2": "Yes. Once your Home Passport is complete, Yalla.House searches Rightmove, Zoopla, and other major UK property portals to find listings that match your criteria. You'll see matches in your dashboard without having to check multiple sites yourself.",
+
+    "hunterQ3": "How does agent matching work?",
+    "hunterA3": "Based on your Home Passport — your target areas, budget, and preferences — we match you with local agents who have active listings and expertise in those areas. All agents on the platform are Propertymark-accredited, which means they're regulated by the UK's professional trade body for estate agents.",
+
+    "hunterQ4": "Is the Home Passport free?",
+    "hunterA4": "Yes, completely free. Creating your Home Passport, getting matched with agents, and accessing your dashboard costs nothing. There are no hidden fees for home hunters.",
+
+    "hunterQ5": "Can I search for rentals as well as properties to buy?",
+    "hunterA5": "Absolutely. When you create your Home Passport, you specify whether you're looking to buy, rent, or both. Your matches and portal searches are tailored accordingly.",
+
+    "agentQ1": "What does Yalla.House offer agents?",
+    "agentA1": "Yalla.House gives you a free SaaS dashboard to manage your pipeline, respond to owner and hunter enquiries, and grow your business. Think of it as a lightweight CRM purpose-built for property professionals — not another portal that competes with you for clients.",
+
+    "agentQ2": "How do I receive leads?",
+    "agentA2": "Property owners can invite proposals from local agents, and home hunters are matched to you based on your coverage areas and expertise. Leads arrive directly in your Yalla.House dashboard, where you can respond, track progress, and manage your pipeline.",
+
+    "agentQ3": "Is there a cost for agents?",
+    "agentA3": "The dashboard is free to use. You manage your own fee arrangements directly with clients — Yalla.House doesn't take a cut of your commission.",
+
+    "agentQ4": "What does Propertymark-accredited mean?",
+    "agentA4": "Propertymark is the UK's leading professional body for estate agents. Accredited agents meet strict standards including client money protection, professional indemnity insurance, and ongoing regulatory compliance. All agents on Yalla.House are sourced from Propertymark's accredited membership.",
+
+    "pricingQ1": "Is it really free to list my property?",
+    "pricingA1": "You can create your listing and manage it from your dashboard at no cost. Portal distribution to Rightmove, Zoopla, and other major sites is included in our listing packages, which start from a flat fee with no commission and no percentage of your sale price.",
+
+    "pricingQ2": "Are there any hidden fees or commission?",
+    "pricingA2": "No commission, ever. Yalla.House charges a transparent flat fee for portal distribution. There are no success fees, no percentage cuts, and no surprise charges. You keep every pound from your sale.",
+
+    "pricingQ3": "What payment methods do you accept?",
+    "pricingA3": "We accept all major credit and debit cards. Payment is processed securely through Stripe, and you'll receive a receipt by email.",
+
+    "trustQ1": "How do I know the agents are legitimate?",
+    "trustA1": "Every agent on Yalla.House is Propertymark-accredited. Propertymark is the UK's regulated professional body for estate agents, requiring members to carry client money protection, professional indemnity insurance, and comply with anti-money-laundering regulations.",
+
+    "trustQ2": "Is my personal data safe?",
+    "trustA2": "Yes. We use industry-standard encryption, store data on secure EU-based servers, and never sell your personal information to third parties. You can read our full Privacy Policy for details on how we handle your data.",
+
+    "trustQ3": "What happens if something goes wrong with my sale?",
+    "trustA3": "Your dashboard keeps a full record of all communications and activity. If you're working with an agent through the platform, Propertymark's complaints process provides an additional layer of protection. You can also contact our support team at any time.",
+
+    "ctaTitle": "Still have questions?",
+    "ctaBody": "Our team is here to help. Drop us a line and we'll get back to you.",
+    "ctaButton": "Contact Support",
+    "ctaEmail": "support@yalla.house"
   }
 }
