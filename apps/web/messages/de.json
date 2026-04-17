@@ -2330,7 +2330,7 @@
     "viewProfile": "Profil ansehen",
     "reviews": "{count} Bewertungen",
     "noReviews": "Noch keine Bewertungen",
-    "providers": "{count} Anbieter",
+    "providersLabel": "Anbieter",
     "noProviders": "Noch keine Anbieter in dieser Kategorie. Schauen Sie bald wieder vorbei.",
     "comingSoon": "Demnächst",
     "browseAll": "Alle Dienste durchsuchen",

@@ -2330,7 +2330,7 @@
     "viewProfile": "View Profile",
     "reviews": "{count} reviews",
     "noReviews": "No reviews yet",
-    "providers": "{count} providers",
+    "providersLabel": "providers",
     "noProviders": "No providers in this category yet. Check back soon.",
     "comingSoon": "Coming soon",
     "browseAll": "Browse all services",

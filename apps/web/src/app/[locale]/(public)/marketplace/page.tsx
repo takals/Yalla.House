@@ -100,7 +100,7 @@ export default async function MarketplacePage({ params }: { params: Promise<{ lo
     filterTransaction: t('filterTransaction'),
     filterLettings: t('filterLettings'),
     filterMoving: t('filterMoving'),
-    providers: t('providers'),
+    providersLabel: t('providersLabel'),
     noProviders: t('noProviders'),
     comingSoon: t('comingSoon'),
     requestQuote: t('requestQuote'),

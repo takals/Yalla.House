@@ -136,7 +136,7 @@ export function MarketplaceGrid({ tiers, translations: t }: Props) {
                       <div className="flex items-center justify-between">
                         {isLive ? (
                           <span className="text-xs text-text-on-dark-muted">
-                            {(t.providers ?? '').replace('{count}', String(cat.providerCount))}
+                            {cat.providerCount} {t.providersLabel}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-xs font-medium text-brand/70 bg-brand/[0.08] px-2 py-0.5 rounded-card-dark">
