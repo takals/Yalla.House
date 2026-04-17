@@ -97,7 +97,7 @@ export async function SiteFooter() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/datenschutz"
+                  href="/privacy"
                   className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
@@ -106,20 +106,20 @@ export async function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/nutzungsbedingungen"
+                  href="/terms"
                   className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  {t('termsOfUse')}
+                  {t('termsOfService')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/impressum"
+                  href="/cookies"
                   className="text-text-on-dark-muted hover:text-white transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
-                  {t('impressum')}
+                  {t('cookiePolicy')}
                 </Link>
               </li>
             </ul>

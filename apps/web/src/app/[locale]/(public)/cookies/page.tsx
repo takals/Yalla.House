@@ -1,20 +1,19 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const isEnglish = locale === 'en'
+  const t = await getTranslations({ locale, namespace: 'legal' })
 
   return {
-    title: isEnglish ? 'Cookie Policy | Yalla.House' : 'Cookie-Richtlinie | Yalla.House',
-    description: isEnglish
-      ? 'Cookie policy and preferences for Yalla.House.'
-      : 'Cookie-Richtlinie und Einstellungen für Yalla.House.',
+    title: t('cookieMetaTitle'),
+    description: t('cookieMetaDesc'),
   }
 }
 
-export default function CookiePolicyPage() {
-  const lastUpdated = '01.04.2026'
+export default async function CookiePolicyPage() {
+  const t = await getTranslations('legal')
 
   return (
     <main className="bg-bg">
@@ -22,13 +21,13 @@ export default function CookiePolicyPage() {
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-xs font-bold uppercase tracking-widest text-brand mb-4">
-            Cookie-Richtlinie
+            {t('cookieEyebrow')}
           </div>
           <h1 className="text-[clamp(2.25rem,5.5vw,3.875rem)] font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
-            Cookies bei Yalla.House
+            {t('cookieHeading')}
           </h1>
           <p className="text-base text-text-muted">
-            Zuletzt aktualisiert: {lastUpdated}
+            {t('cookieLastUpdated')}
           </p>
         </div>
       </section>
@@ -37,146 +36,128 @@ export default function CookiePolicyPage() {
       <section className="py-12 px-4">
         <div className="max-w-4xl mx-auto space-y-6">
 
-          {/* Was sind Cookies */}
+          {/* What are cookies */}
           <div className="bg-white rounded-2xl border border-border-default p-8">
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
-              Was sind Cookies?
+              {t('cookieWhatTitle')}
             </h2>
             <div className="space-y-3 text-text-muted leading-relaxed">
-              <p>
-                Cookies sind kleine Textdateien, die von Websites auf Ihrem Gerät (Computer, Tablet, Smartphone) gespeichert werden. Sie ermöglichen es uns, Ihre Voreinstellungen zu speichern, Ihre Sitzung zu verwalten und Ihr Browsing-Verhalten zu verfolgen.
-              </p>
-              <p>
-                Cookies können für verschiedene Zwecke verwendet werden: zur Authentifizierung, zur Anpassung der Benutzeroberfläche, zur Leistungsoptimierung und zur Analyse der Nutzung.
-              </p>
+              <p>{t('cookieWhatBody1')}</p>
+              <p>{t('cookieWhatBody2')}</p>
             </div>
           </div>
 
-          {/* Notwendige Cookies */}
+          {/* Strictly necessary cookies */}
           <div className="bg-white rounded-2xl border border-border-default p-8">
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
-              Notwendige Cookies
+              {t('cookieNecessaryTitle')}
             </h2>
             <div className="space-y-4 text-text-muted leading-relaxed">
-              <p>
-                Diese Cookies sind <strong>erforderlich</strong> für die Funktionsfähigkeit der Plattform. Sie können nicht deaktiviert werden.
-              </p>
+              <p>{t('cookieNecessaryIntro')}</p>
               <div className="bg-brand-solid-bg border border-brand rounded-lg p-4 space-y-3">
                 <div>
-                  <p><strong>Session Cookies</strong></p>
-                  <p className="text-sm">Ermöglichen die Verwaltung Ihrer aktiven Sitzung während Sie die Plattform nutzen.</p>
+                  <p><strong>{t('cookieNecessarySession')}</strong></p>
+                  <p className="text-sm">{t('cookieNecessarySessionDesc')}</p>
                 </div>
                 <div>
-                  <p><strong>Authentication Cookies</strong></p>
-                  <p className="text-sm">Verwalten Ihre Anmeldeinformationen und halten Ihre Sitzung sicher.</p>
+                  <p><strong>{t('cookieNecessaryAuth')}</strong></p>
+                  <p className="text-sm">{t('cookieNecessaryAuthDesc')}</p>
                 </div>
                 <div>
-                  <p><strong>CSRF Protection Cookies</strong></p>
-                  <p className="text-sm">Schützen vor Cross-Site-Request-Forgery-Angriffen.</p>
+                  <p><strong>{t('cookieNecessaryCsrf')}</strong></p>
+                  <p className="text-sm">{t('cookieNecessaryCsrfDesc')}</p>
                 </div>
                 <div>
-                  <p><strong>Cookie Preference Cookies</strong></p>
-                  <p className="text-sm">Speichern Ihre Cookie-Präferenzen, um Ihre Zustimmung zu respektieren.</p>
+                  <p><strong>{t('cookieNecessaryPref')}</strong></p>
+                  <p className="text-sm">{t('cookieNecessaryPrefDesc')}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Analyse-Cookies */}
+          {/* Analytics cookies */}
           <div className="bg-white rounded-2xl border border-border-default p-8">
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
-              Analyse-Cookies
+              {t('cookieAnalyticsTitle')}
             </h2>
             <div className="space-y-4 text-text-muted leading-relaxed">
-              <p>
-                Wir verwenden Analyse-Cookies, um zu verstehen, wie Benutzer unsere Plattform nutzen. Diese Daten werden <strong>anonymisiert</strong> und helfen uns, unsere Services zu verbessern.
-              </p>
+              <p>{t('cookieAnalyticsIntro')}</p>
               <div className="space-y-3">
                 <div>
-                  <p><strong>Nutzungsstatistiken</strong></p>
-                  <p className="text-sm">Zählen Seitenaufrufe, Absprungrate und durchschnittliche Sitzungsdauer.</p>
+                  <p><strong>{t('cookieAnalyticsUsage')}</strong></p>
+                  <p className="text-sm">{t('cookieAnalyticsUsageDesc')}</p>
                 </div>
                 <div>
-                  <p><strong>Feature-Verbrauch</strong></p>
-                  <p className="text-sm">Identifizieren die am häufigsten genutzten Features und Funktionen.</p>
+                  <p><strong>{t('cookieAnalyticsFeature')}</strong></p>
+                  <p className="text-sm">{t('cookieAnalyticsFeatureDesc')}</p>
                 </div>
                 <div>
-                  <p><strong>Fehlerberichterstattung</strong></p>
-                  <p className="text-sm">Helfen uns, technische Probleme zu erkennen und zu beheben.</p>
+                  <p><strong>{t('cookieAnalyticsError')}</strong></p>
+                  <p className="text-sm">{t('cookieAnalyticsErrorDesc')}</p>
                 </div>
               </div>
               <p className="text-sm italic">
-                Diese Cookies sind <strong>optional</strong>. Sie können sie jederzeit ablehnen oder deaktivieren.
+                {t('cookieAnalyticsOptional')}
               </p>
             </div>
           </div>
 
-          {/* Marketing-Cookies */}
+          {/* Marketing cookies */}
           <div className="bg-white rounded-2xl border border-border-default p-8">
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
-              Marketing-Cookies
+              {t('cookieMarketingTitle')}
             </h2>
             <div className="space-y-3 text-text-muted leading-relaxed">
-              <p>
-                Yalla.House setzt derzeit <strong>keine Marketing- oder Tracking-Cookies</strong> von Drittanbietern ein.
-              </p>
-              <p>
-                Wir teilen Ihre Browsing-Daten nicht mit sozialen Medien oder Werbeplattformen.
-              </p>
+              <p><strong>{t('cookieMarketingBody1')}</strong></p>
+              <p>{t('cookieMarketingBody2')}</p>
             </div>
           </div>
 
-          {/* Cookie-Verwaltung */}
+          {/* How to manage cookies */}
           <div className="bg-white rounded-2xl border border-border-default p-8">
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
-              Cookie-Verwaltung
+              {t('cookieManageTitle')}
             </h2>
             <div className="space-y-4 text-text-muted leading-relaxed">
               <div>
-                <h3 className="font-bold text-text-primary mb-2">Cookies verwalten</h3>
-                <p>
-                  Sie können optionale Cookies über unser Cookie-Consent-Banner jederzeit akzeptieren oder ablehnen.
-                </p>
+                <h3 className="font-bold text-text-primary mb-2">{t('cookieManageBanner')}</h3>
+                <p>{t('cookieManageBannerDesc')}</p>
               </div>
               <div>
-                <h3 className="font-bold text-text-primary mb-2">Browser-Einstellungen</h3>
-                <p>
-                  Die meisten Browser ermöglichen es Ihnen, Cookies zu verwalten:
-                </p>
+                <h3 className="font-bold text-text-primary mb-2">{t('cookieManageBrowser')}</h3>
+                <p>{t('cookieManageBrowserDesc')}</p>
                 <ul className="list-disc list-inside ml-2 mt-2 space-y-1">
-                  <li><strong>Chrome:</strong> Einstellungen → Datenschutz und Sicherheit → Cookies</li>
-                  <li><strong>Firefox:</strong> Einstellungen → Datenschutz → Cookies</li>
-                  <li><strong>Safari:</strong> Einstellungen → Datenschutz → Cookies-Einstellungen</li>
-                  <li><strong>Edge:</strong> Einstellungen → Datenschutz → Cookies</li>
+                  <li><strong>Chrome:</strong> {t('cookieManageChrome').replace('Chrome: ', '')}</li>
+                  <li><strong>Firefox:</strong> {t('cookieManageFirefox').replace('Firefox: ', '')}</li>
+                  <li><strong>Safari:</strong> {t('cookieManageSafari').replace('Safari: ', '')}</li>
+                  <li><strong>Edge:</strong> {t('cookieManageEdge').replace('Edge: ', '')}</li>
                 </ul>
               </div>
-              <div>
-                <h3 className="font-bold text-text-primary mb-2">Drittanbieter-Cookies deaktivieren</h3>
-                <p>
-                  In den meisten Browsern können Sie Cookies von Drittanbietern separat deaktivieren. Dies kann jedoch die Funktionalität einiger Websites beeinträchtigen.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-bold text-text-primary mb-2">Do-Not-Track</h3>
-                <p>
-                  Viele Browser bieten eine &quot;Do-Not-Track&quot;-Option. Wir respektieren diese Einstellung, soweit praktisch möglich.
-                </p>
+              <div className="bg-brand-solid-bg border border-brand rounded-lg p-4">
+                <p className="text-sm">{t('cookieManageWarning')}</p>
               </div>
             </div>
           </div>
 
-          {/* Kontakt */}
+          {/* Do Not Track */}
           <div className="bg-white rounded-2xl border border-border-default p-8">
             <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
-              Fragen zu Cookies?
+              {t('cookieDntTitle')}
             </h2>
             <div className="space-y-3 text-text-muted leading-relaxed">
-              <p>
-                Wenn Sie Fragen zu unserer Cookie-Richtlinie oder zur Verwendung von Cookies haben, kontaktieren Sie uns bitte:
-              </p>
+              <p>{t('cookieDntBody')}</p>
+            </div>
+          </div>
+
+          {/* Contact */}
+          <div className="bg-white rounded-2xl border border-border-default p-8">
+            <h2 className="text-[clamp(1.625rem,3vw,2.25rem)] font-extrabold tracking-tight text-text-primary mb-4">
+              {t('cookieContactTitle')}
+            </h2>
+            <div className="space-y-3 text-text-muted leading-relaxed">
+              <p>{t('cookieContactBody')}</p>
               <div className="bg-[#F5F5F5] rounded-lg p-4">
-                <p><strong>E-Mail:</strong> support@yalla.house</p>
-                <p><strong>Telefon:</strong> [Telefonnummer wird ergänzt]</p>
+                <p><strong>{t('cookieContactEmail')}</strong></p>
               </div>
             </div>
           </div>
@@ -191,7 +172,7 @@ export default function CookiePolicyPage() {
             href="/"
             className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors"
           >
-            ← Zurück zur Startseite
+            {t('cookieBackLink')}
           </Link>
         </div>
       </section>
