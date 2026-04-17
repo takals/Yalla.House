@@ -77,6 +77,13 @@ export interface Database {
           dealbreakers: string[] | null
           finance_status: string | null
           brief_updated_at: string | null
+          search_status: 'actively_searching' | 'thinking_about_it' | 'just_exploring' | 'need_to_sell_first' | 'waiting_for_right_one' | null
+          early_access_tier: 'none' | 'standard' | 'priority'
+          readiness_score: number
+          mortgage_verified: boolean
+          identity_verified: boolean
+          profile_complete: boolean
+          renter_ready: boolean
         }
         Insert: Database['public']['Tables']['hunter_profiles']['Row']
         Update: Partial<Database['public']['Tables']['hunter_profiles']['Row']>
@@ -214,6 +221,7 @@ export interface Database {
           published_at: string | null
           slug: string | null
           short_id: string | null
+          pre_market_opt_in: boolean
         }
         Insert: Omit<Database['public']['Tables']['listings']['Row'],
           'id' | 'place_id' | 'slug' | 'short_id' | 'created_at' | 'updated_at'>

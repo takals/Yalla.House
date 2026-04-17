@@ -18,7 +18,7 @@ export default async function PassportPage({ params }: { params: Promise<{ local
 
   const [profileResult, userResult, agentsResult] = await Promise.all([
     (supabase.from('hunter_profiles') as any)
-      .select('intent, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline, mortgage_verified, identity_verified, profile_complete, renter_ready')
+      .select('intent, search_status, budget_min, budget_max, target_areas, property_types, min_bedrooms, must_haves, dealbreakers, finance_status, timeline, mortgage_verified, identity_verified, profile_complete, renter_ready, readiness_score, early_access_tier')
       .eq('user_id', userId)
       .maybeSingle(),
     (supabase.from('users') as any)
@@ -60,6 +60,7 @@ export default async function PassportPage({ params }: { params: Promise<{ local
     voiceNotSupported: ti('voiceNotSupported'),
     // Questions
     q_intent: ti('hunterPassport.intentQ'),
+    q_search_status: ti('hunterPassport.searchStatusQ'),
     q_target_areas: ti('hunterPassport.areasQ'),
     q_budget_min: ti('hunterPassport.budgetMinQ'),
     q_budget_max: ti('hunterPassport.budgetMaxQ'),
@@ -72,6 +73,11 @@ export default async function PassportPage({ params }: { params: Promise<{ local
     // Option labels
     opt_buy: t('opt_buy'),
     opt_rent: t('opt_rent'),
+    opt_actively_searching: t('opt_actively_searching'),
+    opt_thinking_about_it: t('opt_thinking_about_it'),
+    opt_just_exploring: t('opt_just_exploring'),
+    opt_need_to_sell_first: t('opt_need_to_sell_first'),
+    opt_waiting_for_right_one: t('opt_waiting_for_right_one'),
     // Dynamic area labels — pulled from country config regions
     ...Object.fromEntries(
       countryConfig.regions.map(r => [`opt_area_${r.prefix.toLowerCase()}`, r.label])
@@ -115,11 +121,23 @@ export default async function PassportPage({ params }: { params: Promise<{ local
     opt_flexible: t('opt_flexible'),
     // Readiness badge labels
     badge_mortgage: t('opt_mortgage_approved'),
-    badge_identity: locale === 'de' ? 'Identität verifiziert' : 'Identity Verified',
-    badge_profile: locale === 'de' ? 'Profil vollständig' : 'Profile Complete',
-    badge_renter: locale === 'de' ? 'Mieter-bereit' : 'Renter Ready',
-    badge_verify: locale === 'de' ? 'Verifizieren' : 'Verify',
-    badge_complete: locale === 'de' ? 'Vervollständigen' : 'Complete',
+    badge_identity: t('badgeIdentity'),
+    badge_profile: t('badgeProfile'),
+    badge_renter: t('badgeRenter'),
+    badge_verify: t('badgeVerify'),
+    badge_complete: t('badgeComplete'),
+    // Readiness & early access
+    readiness_title: t('readinessTitle'),
+    readiness_boost_hint: t('readinessBoostHint'),
+    early_access_none: t('earlyAccessNone'),
+    early_access_standard: t('earlyAccessStandard'),
+    early_access_priority: t('earlyAccessPriority'),
+    early_access_badge: t('earlyAccessBadge'),
+    early_access_priority_badge: t('earlyAccessPriorityBadge'),
+    early_access_explainer: t('earlyAccessExplainer'),
+    early_access_priority_explainer: t('earlyAccessPriorityExplainer'),
+    // Search status labels
+    label_search_status: t('labelSearchStatus'),
   }
 
   // Format real agents for sample matches
@@ -143,6 +161,8 @@ export default async function PassportPage({ params }: { params: Promise<{ local
       currency={countryConfig.currency}
       regions={countryConfig.regions}
       readiness={readiness}
+      readinessScore={profileData?.readiness_score as number ?? 0}
+      earlyAccessTier={(profileData?.early_access_tier as string) ?? 'none'}
     />
   )
 }

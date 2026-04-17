@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
+import { fromMinorUnits } from '@yalla/integrations'
 import { ViewingCard } from '../viewing-card'
 
 interface ViewingWithListing {
@@ -49,6 +50,7 @@ export default async function HunterPage() {
   let offerCount = 0
   let agentCount = 0
   let matchCount = 0
+  let earlyAccessListings: any[] = []
   try {
     const [
       profileResult,
@@ -57,6 +59,7 @@ export default async function HunterPage() {
       offersResult,
       agentsResult,
       matchesResult,
+      earlyAccessResult,
     ] = await Promise.all([
       (supabase.from('users') as any)
         .select('full_name, email')
@@ -64,7 +67,7 @@ export default async function HunterPage() {
         .maybeSingle(),
 
       (supabase.from('hunter_profiles') as any)
-        .select('intent, timeline, brief_updated_at')
+        .select('intent, search_status, timeline, brief_updated_at, readiness_score, early_access_tier, mortgage_verified, identity_verified, profile_complete')
         .eq('user_id', userId)
         .maybeSingle(),
 
@@ -91,6 +94,14 @@ export default async function HunterPage() {
         .select('id', { count: 'exact', head: true })
         .eq('hunter_id', userId)
         .eq('status', 'new'),
+
+      // Pre-market early access listings
+      (supabase.from('listings') as any)
+        .select('id, place_id, slug, short_id, title, title_en, city, postcode, intent, sale_price, rent_price, currency, bedrooms, size_sqm, created_at')
+        .eq('pre_market_opt_in', true)
+        .in('status', ['draft', 'active'])
+        .order('created_at', { ascending: false })
+        .limit(6),
     ])
 
     profile = profileResult.data
@@ -99,6 +110,7 @@ export default async function HunterPage() {
     offerCount = offersResult.count ?? 0
     agentCount = agentsResult.count ?? 0
     matchCount = matchesResult.count ?? 0
+    earlyAccessListings = earlyAccessResult.data ?? []
   } catch (err) {
     console.error('Failed to load hunter dashboard data:', err)
   }
@@ -106,6 +118,14 @@ export default async function HunterPage() {
   const pendingViewings = viewings.filter(v => v.status === 'pending').length
   const confirmedViewings = viewings.filter(v => v.status === 'confirmed').length
   const firstName = profile?.full_name?.split(' ')[0] ?? 'dort'
+
+  const readinessScore = brief?.readiness_score ?? 0
+  const earlyAccessTier = brief?.early_access_tier ?? 'none'
+  const searchStatus = brief?.search_status ?? ''
+  const isStuck = ['thinking_about_it', 'just_exploring', 'waiting_for_right_one'].includes(searchStatus)
+
+  // Filter early access listings based on tier
+  const visibleEarlyAccess = earlyAccessTier !== 'none' ? earlyAccessListings : []
 
   const passportStatusLabel = brief
     ? brief.brief_updated_at ? t('active') : t('draft')
@@ -194,6 +214,120 @@ export default async function HunterPage() {
           </Link>
         </div>
       </div>
+
+      {/* Readiness score card */}
+      {brief && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Score ring */}
+          <div className="bg-[#0F1117] rounded-2xl p-6 flex items-center gap-5">
+            <div className="relative w-20 h-20 flex-shrink-0">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="5" />
+                <circle cx="40" cy="40" r="34" fill="none"
+                  stroke={readinessScore >= 70 ? '#4ADE80' : readinessScore >= 40 ? '#FBBF24' : 'rgba(255,255,255,0.25)'}
+                  strokeWidth="5"
+                  strokeDasharray={`${2 * Math.PI * 34}`}
+                  strokeDashoffset={`${2 * Math.PI * 34 * (1 - readinessScore / 100)}`}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-xl font-black text-white">{readinessScore}</span>
+              </div>
+            </div>
+            <div>
+              <p className="text-[0.75rem] font-semibold uppercase tracking-wider text-white/40">{t('readiness')}</p>
+              <p className="text-lg font-bold text-white mt-0.5">
+                {readinessScore >= 70 ? t('readinessHigh') : readinessScore >= 40 ? t('readinessMedium') : t('readinessLow')}
+              </p>
+              {readinessScore < 70 && (
+                <Link href="/hunter/passport" className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors mt-1 inline-block">
+                  {t('boostReadiness')} →
+                </Link>
+              )}
+            </div>
+          </div>
+
+          {/* Early access tier */}
+          <div className={`rounded-2xl p-6 flex flex-col justify-between min-h-[120px] ${
+            earlyAccessTier === 'priority' ? 'bg-gradient-to-br from-[#0F1117] to-[#2A1A10] border border-brand/20'
+            : earlyAccessTier === 'standard' ? 'bg-[#0F1117]'
+            : 'bg-white'
+          }`}>
+            <p className={`text-[0.75rem] font-semibold uppercase tracking-wider ${
+              earlyAccessTier !== 'none' ? 'text-white/40' : 'text-text-secondary'
+            }`}>{t('earlyAccess')}</p>
+            <div className="mt-2">
+              {earlyAccessTier === 'priority' && (
+                <p className="text-lg font-bold text-brand">{t('earlyAccessPriority')}</p>
+              )}
+              {earlyAccessTier === 'standard' && (
+                <p className="text-lg font-bold text-[#60A5FA]">{t('earlyAccessStandard')}</p>
+              )}
+              {earlyAccessTier === 'none' && (
+                <>
+                  <p className="text-lg font-bold text-[#C5C8D0]">{t('earlyAccessLocked')}</p>
+                  <Link href="/hunter/passport" className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors mt-1 inline-block">
+                    {t('unlockEarlyAccess')} →
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Early access listings */}
+      {visibleEarlyAccess.length > 0 && (
+        <div>
+          <p className="text-[0.7rem] font-bold uppercase tracking-widest text-text-secondary mb-3">{t('earlyAccessListings')}</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {visibleEarlyAccess.slice(0, 6).map((listing: any) => {
+              const price = listing.intent === 'sale' ? listing.sale_price : listing.rent_price
+              const cur = listing.currency || 'GBP'
+              const formatted = price
+                ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(fromMinorUnits(price, cur))
+                : null
+              return (
+                <Link
+                  key={listing.id}
+                  href={`/p/${listing.slug ?? listing.place_id}`}
+                  className="bg-white rounded-2xl p-4 hover:-translate-y-0.5 hover:shadow-lg transition-all will-change-transform border border-border-default group"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-brand/10 text-brand">
+                      {earlyAccessTier === 'priority' ? t('earlyAccessPriorityBadge') : t('earlyAccessBadge')}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-sm text-text-primary group-hover:text-brand transition-colors truncate">
+                    {locale === 'en' ? (listing.title_en ?? listing.title) : (listing.title ?? listing.title_en)}
+                  </h3>
+                  <p className="text-xs text-text-secondary mt-0.5">{listing.postcode} {listing.city}</p>
+                  {formatted && (
+                    <p className="font-bold text-text-primary mt-2">{formatted}</p>
+                  )}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Nudge for stuck/passive hunters */}
+      {isStuck && (
+        <div className="bg-gradient-to-r from-[#FFF7ED] to-[#FFF4EF] border border-brand/15 rounded-2xl p-6">
+          <p className="font-bold text-text-primary mb-1">{t('nudgeTitle')}</p>
+          <p className="text-sm text-text-secondary mb-4">{t('nudgeBody')}</p>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/hunter/passport" className="inline-flex items-center gap-1.5 bg-brand hover:bg-brand-hover text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors">
+              {t('nudgeUpdatePassport')}
+            </Link>
+            <Link href="/listings" className="inline-flex items-center gap-1.5 bg-white border border-border-default hover:border-brand/30 text-text-primary font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
+              {t('nudgeBrowse')}
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Quick-access module grid */}
       <div>

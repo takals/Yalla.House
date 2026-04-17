@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Pencil, Share2, Copy, Check, Mail, MessageCircle, Link2 } from 'lucide-react'
+import { Pencil, Share2, Copy, Check, Mail, MessageCircle, Link2, Eye } from 'lucide-react'
 import { ShareCardModal } from '@/components/share-card'
 
 interface Props {
@@ -16,15 +16,18 @@ interface Props {
   address?: string
   price?: string | null
   photoUrl?: string | null
+  preMarketOptIn?: boolean
 }
 
-export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale, listingTitle, address, price, photoUrl }: Props) {
+export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale, listingTitle, address, price, photoUrl, preMarketOptIn = false }: Props) {
   const t = useTranslations('listingPage')
   const [isLive, setIsLive] = useState(status === 'active')
   const [toggling, setToggling] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [copiedShort, setCopiedShort] = useState(false)
+  const [preMarket, setPreMarket] = useState(preMarketOptIn)
+  const [preMarketToggling, setPreMarketToggling] = useState(false)
 
   const localePrefix = locale === 'de' ? '' : 'en/'
   // Canonical URL uses slug when available
@@ -61,6 +64,20 @@ export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale
     setTimeout(() => setCopiedShort(false), 2000)
   }
 
+  async function handlePreMarketToggle() {
+    setPreMarketToggling(true)
+    const newVal = !preMarket
+    const res = await fetch('/api/listings/pre-market', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ listingId, enabled: newVal }),
+    })
+    if (res.ok) {
+      setPreMarket(newVal)
+    }
+    setPreMarketToggling(false)
+  }
+
   return (
     <div className="bg-[#0F1117] text-white">
       <div className="max-w-6xl mx-auto px-4 h-12 flex items-center justify-between gap-4">
@@ -91,6 +108,19 @@ export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale
             </div>
             <span className={isLive ? 'text-green-400' : 'text-white/40'}>
               {isLive ? 'Live' : t('ownerDraft')}
+            </span>
+          </button>
+
+          {/* Pre-market early access toggle */}
+          <button
+            onClick={handlePreMarketToggle}
+            disabled={preMarketToggling}
+            className="hidden sm:flex items-center gap-1.5 text-xs font-semibold disabled:opacity-50 transition-colors"
+            title={t('ownerPreMarketHint')}
+          >
+            <Eye size={13} className={preMarket ? 'text-brand' : 'text-white/30'} />
+            <span className={preMarket ? 'text-brand' : 'text-white/40'}>
+              {t('ownerPreMarket')}
             </span>
           </button>
 

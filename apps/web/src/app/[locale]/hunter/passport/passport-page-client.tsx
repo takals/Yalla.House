@@ -45,6 +45,8 @@ interface PassportPageClientProps {
     profile_complete: boolean
     renter_ready: boolean
   }
+  readinessScore?: number
+  earlyAccessTier?: string
 }
 
 // ─────────────────────────────────────────────────────────────────────
@@ -63,6 +65,59 @@ function FinanceBadge({ status }: { status: string }) {
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${s.cls}`}>
       {s.icon} {s.label}
     </span>
+  )
+}
+
+function ReadinessScoreRing({ score, label }: { score: number; label: string }) {
+  const radius = 28
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (score / 100) * circumference
+  const color = score >= 70 ? '#4ADE80' : score >= 40 ? '#FBBF24' : 'rgba(255,255,255,0.25)'
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="relative w-16 h-16 flex-shrink-0">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r={radius} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="4" />
+          <circle cx="32" cy="32" r={radius} fill="none" stroke={color} strokeWidth="4"
+            strokeDasharray={circumference} strokeDashoffset={offset}
+            strokeLinecap="round" className="transition-all duration-700" />
+        </svg>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-sm font-black text-white">{score}</span>
+        </div>
+      </div>
+      <div>
+        <p className="text-xs font-bold text-white/90">{label}</p>
+        <p className="text-[10px] text-white/40 font-medium">/ 100</p>
+      </div>
+    </div>
+  )
+}
+
+function EarlyAccessBadge({ tier, translations }: { tier: string; translations: Record<string, string> }) {
+  if (tier === 'none') return null
+  const isPriority = tier === 'priority'
+  return (
+    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
+      isPriority
+        ? 'border-[rgba(212,118,78,0.3)] bg-[rgba(212,118,78,0.08)]'
+        : 'border-[rgba(96,165,250,0.25)] bg-[rgba(96,165,250,0.06)]'
+    }`}>
+      <ShieldCheck size={14} className={isPriority ? 'text-brand' : 'text-[#60A5FA]'} />
+      <div>
+        <p className={`text-[11px] font-bold ${isPriority ? 'text-brand' : 'text-[#60A5FA]'}`}>
+          {isPriority
+            ? (translations.early_access_priority_badge ?? 'Priority')
+            : (translations.early_access_badge ?? 'Early Access')}
+        </p>
+        <p className="text-[9px] text-white/40">
+          {isPriority
+            ? (translations.early_access_priority_explainer ?? '24–48 hr exclusive early access')
+            : (translations.early_access_explainer ?? 'Get notified before portal launch')}
+        </p>
+      </div>
+    </div>
   )
 }
 
@@ -112,6 +167,8 @@ export function PassportPageClient({
   currency,
   regions,
   readiness,
+  readinessScore = 0,
+  earlyAccessTier = 'none',
 }: PassportPageClientProps) {
   // Live passport state — synced from chat answers
   const [passportData, setPassportData] = useState<Record<string, unknown>>(
@@ -149,6 +206,7 @@ export function PassportPageClient({
 
   // Derived display values
   const intent = (passportData.intent as string) ?? ''
+  const searchStatus = (passportData.search_status as string) ?? ''
   const areas = (passportData.target_areas as string[]) ?? []
   const budgetMin = passportData.budget_min as number | undefined
   const budgetMax = passportData.budget_max as number | undefined
@@ -183,6 +241,15 @@ export function PassportPageClient({
     if (minBeds === '4plus' || (typeof minBeds === 'number' && minBeds >= 4)) return '4+'
     return `${minBeds}`
   })()
+
+  // Search status label
+  const searchStatusLabels: Record<string, string> = {
+    actively_searching: translations.opt_actively_searching ?? 'Actively searching',
+    thinking_about_it: translations.opt_thinking_about_it ?? 'Thinking about moving',
+    just_exploring: translations.opt_just_exploring ?? 'Just exploring',
+    need_to_sell_first: translations.opt_need_to_sell_first ?? 'Need to sell first',
+    waiting_for_right_one: translations.opt_waiting_for_right_one ?? 'Waiting for the right one',
+  }
 
   // Timeline label
   const timelineLabels: Record<string, string> = {
@@ -244,7 +311,10 @@ export function PassportPageClient({
 
         <div className="space-y-2">
           {intent && (
-            <PassportRow label="Intent" value={intent === 'buy' ? (translations.opt_buy ?? 'Buy') : intent === 'rent' ? (translations.opt_rent ?? 'Rent') : intent} />
+            <PassportRow label={translations.labelIntent ?? 'Intent'} value={intent === 'buy' ? (translations.opt_buy ?? 'Buy') : intent === 'rent' ? (translations.opt_rent ?? 'Rent') : intent} />
+          )}
+          {searchStatus && (
+            <PassportRow label={translations.label_search_status ?? 'Situation'} value={searchStatusLabels[searchStatus] ?? searchStatus} />
           )}
           {(budgetMin || budgetMax) && (
             <PassportRow label="Budget" value={`${formatBudget(budgetMin)} – ${formatBudget(budgetMax)}`} />
@@ -304,13 +374,23 @@ export function PassportPageClient({
         )}
       </div>
 
-      {/* Readiness badges */}
+      {/* Readiness score + early access */}
       <div className="mb-5">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">
-          {translations.readinessTitle ?? 'Readiness'}
-        </p>
-        <div className="rounded-xl p-3 space-y-2" style={{ background: 'linear-gradient(135deg, #0F1117 0%, #1C1F2E 100%)' }}>
-          {visibleBadges.map(b => <ReadinessBadgeRow key={b.key} badge={b} />)}
+        <div className="rounded-xl p-4 space-y-4" style={{ background: 'linear-gradient(135deg, #0F1117 0%, #1C1F2E 100%)' }}>
+          <div className="flex items-center justify-between">
+            <ReadinessScoreRing score={readinessScore} label={translations.readiness_title ?? 'Move Readiness'} />
+            <EarlyAccessBadge tier={earlyAccessTier} translations={translations} />
+          </div>
+
+          {earlyAccessTier === 'none' && readinessScore < 70 && (
+            <p className="text-[10px] text-white/30 leading-relaxed">
+              {translations.readiness_boost_hint ?? 'Complete these steps to unlock priority early access'}
+            </p>
+          )}
+
+          <div className="space-y-2 pt-1">
+            {visibleBadges.map(b => <ReadinessBadgeRow key={b.key} badge={b} />)}
+          </div>
         </div>
       </div>
 

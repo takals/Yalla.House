@@ -186,6 +186,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           address={`${listing.postcode} ${listing.city}`}
           price={formattedSalePrice ?? formattedRentPrice ?? undefined}
           photoUrl={primaryPhoto?.url ?? undefined}
+          preMarketOptIn={!!listing.pre_market_opt_in}
         />
       )}
 

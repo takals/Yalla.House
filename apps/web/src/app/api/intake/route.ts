@@ -108,6 +108,7 @@ export async function POST(request: NextRequest) {
     await (supabase as any).from('hunter_profiles').upsert({
       user_id: user.id,
       intent: data.intent || null,
+      search_status: data.search_status || null,
       budget_min: budgetMin,
       budget_max: budgetMax,
       target_areas: data.target_areas || [],

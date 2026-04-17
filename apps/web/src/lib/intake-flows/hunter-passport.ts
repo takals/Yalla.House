@@ -45,6 +45,19 @@ export function getHunterPassportFlow(
       validation: { required: true },
     },
     {
+      id: 'search_status',
+      question: translations.q_search_status || "What best describes where you are right now?",
+      type: 'select',
+      options: [
+        { value: 'actively_searching', label: translations.opt_actively_searching || 'Actively searching' },
+        { value: 'thinking_about_it', label: translations.opt_thinking_about_it || 'Thinking about moving' },
+        { value: 'just_exploring', label: translations.opt_just_exploring || 'Just exploring' },
+        { value: 'need_to_sell_first', label: translations.opt_need_to_sell_first || 'Need to sell my place first' },
+        { value: 'waiting_for_right_one', label: translations.opt_waiting_for_right_one || 'Waiting for the right one' },
+      ],
+      validation: { required: true },
+    },
+    {
       id: 'target_areas',
       question: translations.q_target_areas || "Which areas interest you? Select as many as you'd like.",
       type: 'chips',
