@@ -10,19 +10,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const isEnglish = locale === 'en'
 
   return {
-    title: isEnglish ? 'Sell Your Home Commission-Free | Yalla.House' : 'Immobilie provisionsfrei verkaufen | Yalla.House',
+    title: isEnglish ? 'Property Technology Platform | Yalla.House' : 'Immobilien-Technologie-Plattform | Yalla.House',
     description: isEnglish
-      ? 'Sell your home for free without an agent. List on Rightmove & Zoopla. Keep every pound. Yalla.House makes home selling simple.'
-      : 'Verkaufen Sie Ihre Immobilie ohne Makler und behalten Sie jede Provision. Kostenlos. Einfach. Transparent.',
+      ? 'Yalla.House is a property technology platform — not an estate agency. Free dashboards for owners, home hunters, and agents. Sell your way, find your home, grow your business.'
+      : 'Yalla.House ist eine Immobilien-Technologie-Plattform. Kostenlose Dashboards f\u00fcr Eigent\u00fcmer, Suchende und Makler.',
     keywords: isEnglish
-      ? ['sell home', 'free property sale', 'commission-free', 'home selling', 'property listings']
-      : ['Immobilie verkaufen', 'provisionsfrei', 'Makler-Alternative', 'kostenlos', 'Immobilienverkauf'],
+      ? ['property platform', 'property technology', 'sell home', 'find home', 'estate agent', 'SaaS', 'commission-free']
+      : ['Immobilien-Plattform', 'PropTech', 'Immobilie verkaufen', 'provisionsfrei', 'Makler-Alternative'],
     openGraph: {
       type: 'website',
-      title: isEnglish ? 'Sell Your Home Commission-Free | Yalla.House' : 'Immobilie provisionsfrei verkaufen | Yalla.House',
+      title: isEnglish ? 'Property Technology Platform | Yalla.House' : 'Immobilien-Technologie-Plattform | Yalla.House',
       description: isEnglish
-        ? 'Sell your home for free without an agent. Keep every pound.'
-        : 'Verkaufen Sie Ihre Immobilie ohne Makler und behalten Sie jede Provision.',
+        ? 'Yalla.House is a property technology platform. Free dashboards for owners, home hunters, and agents.'
+        : 'Yalla.House ist eine Immobilien-Technologie-Plattform. Kostenlose Dashboards f\u00fcr alle.',
       url: isEnglish ? 'https://yalla.house/en' : 'https://yalla.house',
       images: [
         {
