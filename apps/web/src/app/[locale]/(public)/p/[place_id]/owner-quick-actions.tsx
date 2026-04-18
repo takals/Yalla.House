@@ -34,7 +34,7 @@ const ACTION_ITEMS = [
   { key: 'addViewingSlots', icon: CalendarPlus, href: () => '/owner/viewings' },
   { key: 'manageViewings', icon: CalendarCheck, href: () => '/owner/viewings' },
   { key: 'inviteAgents', icon: Users, href: () => '/owner/agents' },
-  { key: 'viewAnalytics', icon: BarChart3, href: (id: string) => `/owner/${id}/analytics`, comingSoon: true },
+  { key: 'viewAnalytics', icon: BarChart3, href: (id: string) => `/owner/${id}/analytics` },
 ] as const
 
 export function OwnerQuickActions({ listingId, translations: t, portalSyncs }: OwnerQuickActionsProps) {
