@@ -772,6 +772,7 @@ CREATE TABLE IF NOT EXISTS notification_log (
   status text NOT NULL CHECK (status IN ('sent','failed','bounced','delivered')) DEFAULT 'sent',
   provider_id text,
   error_detail text,
+  retries integer DEFAULT 0,
   sent_at timestamptz DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS idx_notif_log_user ON notification_log(user_id, sent_at DESC);
@@ -786,6 +787,9 @@ CREATE TABLE IF NOT EXISTS notification_preferences (
   sms_enabled boolean DEFAULT true,
   whatsapp_enabled boolean DEFAULT true,
   phone_number text,
+  phone_verified boolean DEFAULT false,
+  timezone text DEFAULT 'Europe/London',
+  push_enabled boolean DEFAULT false,
   quiet_hours_start time,
   quiet_hours_end time,
   created_at timestamptz DEFAULT now(),

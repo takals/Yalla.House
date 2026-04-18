@@ -9,6 +9,11 @@ import {
   sendViewingConfirmedWhatsApp,
   sendViewingReminderWhatsApp,
 } from '@/lib/whatsapp'
+import {
+  sendViewingConfirmedSms,
+  sendViewingReminderSms,
+  sendViewingRequestSms,
+} from '@/lib/twilio'
 
 // ─── Helper: look up user contact info ───────────────────────
 async function getUserContact(userId: string) {
@@ -34,6 +39,30 @@ async function notify(userId: string, title: string, body: string, actionUrl: st
   }).catch((e: any) => console.error('notification rpc error:', e))
 }
 
+// ─── Helper: log notification dispatch ──────────────────────
+async function logNotification(opts: {
+  userId: string
+  viewingId?: string
+  listingId?: string
+  channel: 'email' | 'sms' | 'whatsapp'
+  eventType: string
+  status: 'sent' | 'failed'
+  providerId?: string
+  errorDetail?: string
+}) {
+  const db = createServiceClient()
+  await (db.from('notification_log') as any).insert({
+    user_id: opts.userId,
+    viewing_id: opts.viewingId ?? null,
+    listing_id: opts.listingId ?? null,
+    channel: opts.channel,
+    event_type: opts.eventType,
+    status: opts.status,
+    provider_id: opts.providerId ?? null,
+    error_detail: opts.errorDetail ?? null,
+  }).catch((e: unknown) => console.error('notification log error:', e))
+}
+
 // ═══════════════════════════════════════════════════════════════
 // 1. VIEWING CONFIRMED → send confirmation + schedule reminders
 // ═══════════════════════════════════════════════════════════════
@@ -43,7 +72,7 @@ export const viewingConfirmed = inngest.createFunction(
   async ({ event, step }) => {
     const { viewingId, listingId, hunterId, ownerId, agentId, scheduledAt, listingTitle, listingCity } = event.data
 
-    // Step 1: Send confirmation to hunter (email + WhatsApp)
+    // Step 1: Send confirmation to hunter (email + WhatsApp + SMS)
     await step.run('confirm-hunter', async () => {
       const hunter = await getUserContact(hunterId)
       if (!hunter) return
@@ -51,21 +80,51 @@ export const viewingConfirmed = inngest.createFunction(
       const locale = hunter.language === 'de-DE' ? 'de-DE' : 'en-GB'
       const countryCode = locale === 'de-DE' ? 'DE' : 'GB'
 
-      await sendViewingConfirmedEmail({
-        buyerEmail: hunter.email,
-        buyerName: hunter.full_name,
-        listingTitle,
-        listingCity,
-        countryCode,
-        locale,
-      }).catch(e => console.error('confirmed email to hunter:', e))
-
-      if (hunter.phone) {
-        await sendViewingConfirmedWhatsApp({
-          buyerPhone: hunter.phone,
+      // Email
+      try {
+        const emailRes = await sendViewingConfirmedEmail({
+          buyerEmail: hunter.email,
           buyerName: hunter.full_name,
           listingTitle,
-        }).catch(e => console.error('confirmed whatsapp to hunter:', e))
+          listingCity,
+          countryCode,
+          locale,
+        })
+        await logNotification({ userId: hunterId, viewingId, listingId, channel: 'email', eventType: 'viewing_confirmed_hunter', status: 'sent', providerId: emailRes?.id })
+      } catch (e) {
+        console.error('confirmed email to hunter:', e)
+        await logNotification({ userId: hunterId, viewingId, listingId, channel: 'email', eventType: 'viewing_confirmed_hunter', status: 'failed', errorDetail: String(e) })
+      }
+
+      // WhatsApp
+      if (hunter.phone) {
+        try {
+          await sendViewingConfirmedWhatsApp({
+            buyerPhone: hunter.phone,
+            buyerName: hunter.full_name,
+            listingTitle,
+          })
+          await logNotification({ userId: hunterId, viewingId, listingId, channel: 'whatsapp', eventType: 'viewing_confirmed_hunter', status: 'sent' })
+        } catch (e) {
+          console.error('confirmed whatsapp to hunter:', e)
+          await logNotification({ userId: hunterId, viewingId, listingId, channel: 'whatsapp', eventType: 'viewing_confirmed_hunter', status: 'failed', errorDetail: String(e) })
+        }
+      }
+
+      // SMS
+      if (hunter.phone) {
+        try {
+          const smsRes = await sendViewingConfirmedSms({
+            hunterPhone: hunter.phone,
+            hunterName: hunter.full_name,
+            listingTitle,
+            scheduledAt,
+          })
+          await logNotification({ userId: hunterId, viewingId, listingId, channel: 'sms', eventType: 'viewing_confirmed_hunter', status: 'sent', providerId: smsRes?.sid })
+        } catch (e) {
+          console.error('confirmed sms to hunter:', e)
+          await logNotification({ userId: hunterId, viewingId, listingId, channel: 'sms', eventType: 'viewing_confirmed_hunter', status: 'failed', errorDetail: String(e) })
+        }
       }
 
       // In-app notification
@@ -169,24 +228,54 @@ export const viewing24hReminder = inngest.createFunction(
       const locale = hunter.language === 'de-DE' ? 'de-DE' : 'en-GB'
       const countryCode = locale === 'de-DE' ? 'DE' : 'GB'
 
-      await sendViewingReminderEmail({
-        recipientEmail: hunter.email,
-        recipientName: hunter.full_name,
-        listingTitle,
-        listingCity,
-        scheduledAt,
-        role: 'hunter',
-        countryCode,
-        locale,
-      }).catch(e => console.error('24h reminder email to hunter:', e))
-
-      if (hunter.phone) {
-        await sendViewingReminderWhatsApp({
-          recipientPhone: hunter.phone,
+      // Email
+      try {
+        const emailRes = await sendViewingReminderEmail({
+          recipientEmail: hunter.email,
           recipientName: hunter.full_name,
           listingTitle,
+          listingCity,
           scheduledAt,
-        }).catch(e => console.error('24h reminder whatsapp to hunter:', e))
+          role: 'hunter',
+          countryCode,
+          locale,
+        })
+        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_reminder_24h_hunter', status: 'sent', providerId: emailRes?.id })
+      } catch (e) {
+        console.error('24h reminder email to hunter:', e)
+        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_reminder_24h_hunter', status: 'failed', errorDetail: String(e) })
+      }
+
+      // WhatsApp
+      if (hunter.phone) {
+        try {
+          await sendViewingReminderWhatsApp({
+            recipientPhone: hunter.phone,
+            recipientName: hunter.full_name,
+            listingTitle,
+            scheduledAt,
+          })
+          await logNotification({ userId: hunterId, viewingId, channel: 'whatsapp', eventType: 'viewing_reminder_24h_hunter', status: 'sent' })
+        } catch (e) {
+          console.error('24h reminder whatsapp to hunter:', e)
+          await logNotification({ userId: hunterId, viewingId, channel: 'whatsapp', eventType: 'viewing_reminder_24h_hunter', status: 'failed', errorDetail: String(e) })
+        }
+      }
+
+      // SMS
+      if (hunter.phone) {
+        try {
+          const smsRes = await sendViewingReminderSms({
+            recipientPhone: hunter.phone,
+            recipientName: hunter.full_name,
+            listingTitle,
+            scheduledAt,
+          })
+          await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_reminder_24h_hunter', status: 'sent', providerId: smsRes?.sid })
+        } catch (e) {
+          console.error('24h reminder sms to hunter:', e)
+          await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_reminder_24h_hunter', status: 'failed', errorDetail: String(e) })
+        }
       }
 
       await notify(
@@ -262,7 +351,7 @@ export const viewing1hReminder = inngest.createFunction(
 
     if (!stillValid) return
 
-    // Short reminder to hunter — just in-app + WhatsApp
+    // Short reminder to hunter — in-app + WhatsApp + SMS
     await step.run('remind-hunter-1h', async () => {
       const hunter = await getUserContact(hunterId)
       if (!hunter) return
@@ -276,13 +365,36 @@ export const viewing1hReminder = inngest.createFunction(
         viewingId,
       )
 
+      // WhatsApp
       if (hunter.phone) {
-        await sendViewingReminderWhatsApp({
-          recipientPhone: hunter.phone,
-          recipientName: hunter.full_name,
-          listingTitle,
-          scheduledAt: event.data.scheduledAt,
-        }).catch(e => console.error('1h reminder whatsapp:', e))
+        try {
+          await sendViewingReminderWhatsApp({
+            recipientPhone: hunter.phone,
+            recipientName: hunter.full_name,
+            listingTitle,
+            scheduledAt: event.data.scheduledAt,
+          })
+          await logNotification({ userId: hunterId, viewingId, channel: 'whatsapp', eventType: 'viewing_reminder_1h_hunter', status: 'sent' })
+        } catch (e) {
+          console.error('1h reminder whatsapp:', e)
+          await logNotification({ userId: hunterId, viewingId, channel: 'whatsapp', eventType: 'viewing_reminder_1h_hunter', status: 'failed', errorDetail: String(e) })
+        }
+      }
+
+      // SMS
+      if (hunter.phone) {
+        try {
+          const smsRes = await sendViewingReminderSms({
+            recipientPhone: hunter.phone,
+            recipientName: hunter.full_name,
+            listingTitle,
+            scheduledAt: event.data.scheduledAt,
+          })
+          await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_reminder_1h_hunter', status: 'sent', providerId: smsRes?.sid })
+        } catch (e) {
+          console.error('1h reminder sms:', e)
+          await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_reminder_1h_hunter', status: 'failed', errorDetail: String(e) })
+        }
       }
     })
 
@@ -317,13 +429,36 @@ export const viewingCheckIn = inngest.createFunction(
 
       const locale = hunter.language === 'de-DE' ? 'de-DE' : 'en-GB'
 
-      await sendViewingCheckInEmail({
-        hunterEmail: hunter.email,
-        hunterName: hunter.full_name,
-        listingTitle,
-        viewingId,
-        locale,
-      }).catch(e => console.error('check-in email error:', e))
+      // Email
+      try {
+        const emailRes = await sendViewingCheckInEmail({
+          hunterEmail: hunter.email,
+          hunterName: hunter.full_name,
+          listingTitle,
+          viewingId,
+          locale,
+        })
+        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_checkin_hunter', status: 'sent', providerId: emailRes?.id })
+      } catch (e) {
+        console.error('check-in email error:', e)
+        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_checkin_hunter', status: 'failed', errorDetail: String(e) })
+      }
+
+      // SMS check-in
+      if (hunter.phone) {
+        try {
+          const smsRes = await sendViewingReminderSms({
+            recipientPhone: hunter.phone,
+            recipientName: hunter.full_name,
+            listingTitle,
+            scheduledAt: new Date().toISOString(),
+          })
+          await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_checkin_hunter', status: 'sent', providerId: smsRes?.sid })
+        } catch (e) {
+          console.error('check-in sms error:', e)
+          await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_checkin_hunter', status: 'failed', errorDetail: String(e) })
+        }
+      }
 
       await notify(
         hunterId,
@@ -364,6 +499,8 @@ export const viewingCompleted = inngest.createFunction(
         'viewing',
         viewingId,
       )
+      // Log the in-app notification dispatch
+      await logNotification({ userId: ownerId, viewingId, channel: 'email', eventType: 'viewing_completed_owner', status: 'sent' })
     })
 
     // Notify agent
