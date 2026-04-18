@@ -1750,7 +1750,10 @@
     "contactOptional": "optional",
     "contactMessage": "Nachricht",
     "contactMessagePlaceholder": "Ihre Nachricht an den Eigentümer…",
-    "contactSendRequest": "Anfrage senden"
+    "contactSendRequest": "Anfrage senden",
+    "errorNameRequired": "Name ist erforderlich.",
+    "errorInvalidEmail": "Bitte geben Sie eine g\u00fcltige E-Mail-Adresse ein.",
+    "errorRequestFailed": "Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."
   },
   "ownerOffers": {
     "pageTitle": "Angebote",

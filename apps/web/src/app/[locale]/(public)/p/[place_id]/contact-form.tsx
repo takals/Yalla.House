@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { requestViewingAction, checkAuthAction } from './actions'
 
 export function ContactCard({
@@ -10,6 +10,7 @@ export function ContactCard({
   listingId: string
 }) {
   const t = useTranslations('listingPage')
+  const locale = useLocale()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -53,13 +54,13 @@ export function ContactCard({
 
         <div className="space-y-2">
           <a
-            href={`/api/auth/callback?redirect=/p/${listingId}`}
+            href={`/auth/login?next=${encodeURIComponent(`/p/${listingId}`)}`}
             className="w-full flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold py-2.5 rounded-lg transition-colors text-sm"
           >
             {t('contactCreateAccount')}
           </a>
           <a
-            href={`/api/auth/callback?redirect=/p/${listingId}`}
+            href={`/auth/login?next=${encodeURIComponent(`/p/${listingId}`)}`}
             className="w-full flex items-center justify-center gap-2 bg-bg hover:bg-hover-muted text-text-primary font-semibold py-2.5 rounded-lg transition-colors text-sm border border-border-default"
           >
             {t('contactSignIn')}
@@ -114,7 +115,7 @@ export function ContactCard({
       email,
       ...(phone ? { phone } : {}),
       ...(message ? { message } : {}),
-    })
+    }, locale)
 
     setSubmitting(false)
 

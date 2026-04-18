@@ -1750,7 +1750,10 @@
     "contactOptional": "optional",
     "contactMessage": "Message",
     "contactMessagePlaceholder": "Your message to the owner…",
-    "contactSendRequest": "Send request"
+    "contactSendRequest": "Send request",
+    "errorNameRequired": "Name is required.",
+    "errorInvalidEmail": "Please enter a valid email address.",
+    "errorRequestFailed": "Request could not be sent. Please try again."
   },
   "ownerOffers": {
     "pageTitle": "Offers",

@@ -153,11 +153,15 @@ export async function getSlotByIdAction(
 
 export async function requestViewingAction(
   listingId: string,
-  payload: ViewingPayload
+  payload: ViewingPayload,
+  locale?: string
 ): Promise<{ success: true } | { error: string }> {
-  if (!payload.name?.trim()) return { error: 'Name ist erforderlich.' }
+  const { getTranslations } = await import('next-intl/server')
+  const t = await getTranslations({ locale: locale ?? 'de', namespace: 'listingPage' })
+
+  if (!payload.name?.trim()) return { error: t('errorNameRequired') }
   if (!payload.email?.trim() || !payload.email.includes('@')) {
-    return { error: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.' }
+    return { error: t('errorInvalidEmail') }
   }
 
   const service = createServiceClient()
@@ -181,7 +185,7 @@ export async function requestViewingAction(
 
     if (authError || !authData.user) {
       console.error('requestViewingAction auth.admin.createUser error:', authError)
-      return { error: 'Anfrage konnte nicht gesendet werden. Bitte erneut versuchen.' }
+      return { error: t('errorRequestFailed') }
     }
 
     // Insert public user record
@@ -193,7 +197,7 @@ export async function requestViewingAction(
 
     if (userInsertError) {
       console.error('requestViewingAction users insert error:', userInsertError)
-      return { error: 'Anfrage konnte nicht gesendet werden. Bitte erneut versuchen.' }
+      return { error: t('errorRequestFailed') }
     }
 
     userId = authData.user.id
@@ -210,7 +214,7 @@ export async function requestViewingAction(
 
   if (viewingError) {
     console.error('requestViewingAction viewings insert error:', viewingError)
-    return { error: 'Anfrage konnte nicht gesendet werden. Bitte erneut versuchen.' }
+    return { error: t('errorRequestFailed') }
   }
 
   // Notify owner — fire-and-forget, never blocks the response
