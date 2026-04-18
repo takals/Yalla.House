@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Plus, Home, ExternalLink } from 'lucide-react'
@@ -14,7 +13,10 @@ export default async function OwnerListingsPage() {
   const ts = await getTranslations('statusLabels')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  if (!user) {
+    redirect('/auth/login')
+  }
+  const userId = user.id
 
   let allListings: Listing[] = []
   try {

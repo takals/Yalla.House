@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getTranslations, getLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import { ActivationWizard } from './activation-wizard'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +27,7 @@ export default async function ActivatePage({ params }: Props) {
   // Fetch the listing to show details in the wizard
   const { data: listing } = await (supabase
     .from('listings') as any)
-    .select('id, title_de, title, city, postcode, property_type, intent, status, photos, owner_id')
+    .select('id, slug, place_id, title_de, title, city, postcode, property_type, intent, status, photos, owner_id')
     .eq('id', id)
     .single()
 
@@ -37,44 +37,44 @@ export default async function ActivatePage({ params }: Props) {
 
   const t = await getTranslations('activate')
 
-  // Gather translations for the client component
-  const translations = {
-    congratsTitle: t('congratsTitle'),
-    congratsSubtitle: t('congratsSubtitle'),
-    congratsBody: t('congratsBody'),
-    letsGo: t('letsGo'),
-    stepPhotos: t('stepPhotos'),
-    stepPhotosDesc: t('stepPhotosDesc'),
-    stepCalendar: t('stepCalendar'),
-    stepCalendarDesc: t('stepCalendarDesc'),
-    stepEmail: t('stepEmail'),
-    stepEmailDesc: t('stepEmailDesc'),
-    stepAgents: t('stepAgents'),
-    stepAgentsDesc: t('stepAgentsDesc'),
-    stepPortals: t('stepPortals'),
-    stepPortalsDesc: t('stepPortalsDesc'),
-    stepQR: t('stepQR'),
-    stepQRDesc: t('stepQRDesc'),
-    stepSpread: t('stepSpread'),
-    stepSpreadDesc: t('stepSpreadDesc'),
-    skipForNow: t('skipForNow'),
-    complete: t('complete'),
-    goToDashboard: t('goToDashboard'),
-    activationProgress: t('activationProgress'),
-    stepsComplete: t('stepsComplete'),
-    allDone: t('allDone'),
-    allDoneBody: t('allDoneBody'),
-    viewListing: t('viewListing'),
+  // Collect all translation keys the client component needs
+  const keys = [
+    'congratsTitle', 'congratsSubtitle', 'congratsBody', 'seeYourPage', 'skipForNow',
+    'yourPageIsReady', 'yourPageIsReadyDesc', 'toggleLive', 'toggleDraft',
+    'statusLive', 'statusDraft', 'photosLoaded', 'noPhotosYet',
+    'previewNote', 'openFullPage', 'copyLink', 'copied', 'whatsNext',
+    'pathsTitle', 'pathsSubtitle',
+    'pathShareTitle', 'pathShareDesc', 'pathShareCta',
+    'pathAgentTitle', 'pathAgentDesc', 'pathAgentCta',
+    'goToDashboard', 'back',
+    'shareTitle', 'shareSubtitle',
+    'shareWhatsapp', 'shareFacebook', 'shareTwitter', 'shareEmail',
+    'shareQR', 'sharePortals',
+    'nudgeAgentTitle', 'nudgeAgentDesc', 'nudgeAgentCta',
+    'agentTitle', 'agentSubtitle',
+    'agentStep1Title', 'agentStep1Desc', 'agentStep1Cta',
+    'agentStep2Title', 'agentStep2Desc',
+    'agentStep3Title', 'agentStep3Desc', 'agentStep3Cta',
+    'nudgeShareTitle', 'nudgeShareDesc', 'nudgeShareCta',
+  ]
+
+  const translations: Record<string, string> = {}
+  for (const key of keys) {
+    translations[key] = t(key as any)
   }
 
   const listingTitle = listing.title_de || listing.title || `${listing.postcode} ${listing.city}`
+  const listingSlug = listing.slug ?? listing.place_id ?? id
   const hasPhotos = Array.isArray(listing.photos) && listing.photos.length > 0
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
       <ActivationWizard
         listingId={id}
+        listingSlug={listingSlug}
         listingTitle={listingTitle}
+        listingCity={listing.city ?? ''}
+        listingPostcode={listing.postcode ?? ''}
         hasPhotos={hasPhotos}
         translations={translations}
         locale={locale}
