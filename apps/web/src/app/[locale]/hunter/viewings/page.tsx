@@ -29,8 +29,8 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
   try {
     const result = await (supabase.from('viewings') as any)
       .select(`
-        id, listing_id, status, scheduled_at, hunter_notes, created_at,
-        listing:listings!listing_id(title, title_de, city, postcode, place_id, slug)
+        id, listing_id, status, type, scheduled_at, hunter_notes, created_at, video_room_url,
+        listing:listings!listing_id(title, title_de, city, postcode, place_id, slug, address_line1)
       `)
       .eq('hunter_id', userId)
       .order('created_at', { ascending: false })
@@ -44,12 +44,15 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
     id: v.id,
     listing_id: v.listing_id,
     status: v.status,
+    type: v.type ?? 'in_person',
     scheduled_at: v.scheduled_at,
     hunter_notes: v.hunter_notes,
     created_at: v.created_at,
+    video_room_url: v.video_room_url ?? null,
     listing_title: v.listing?.title_de ?? v.listing?.title ?? null,
     listing_city: v.listing?.city ?? null,
     listing_postcode: v.listing?.postcode ?? null,
+    listing_address: v.listing?.address_line1 ?? null,
     place_id: v.listing?.place_id ?? null,
     slug: v.listing?.slug ?? null,
   }))
@@ -68,6 +71,8 @@ export default async function HunterViewingsPage({ params }: { params: Promise<{
     'statusPending', 'statusConfirmed', 'statusCancelled', 'statusCompleted', 'statusNoShow',
     'property', 'requestedOn', 'scheduledFor', 'yourNotes', 'withdraw', 'cancelling',
     'confirmCancel', 'viewListing', 'leaveFeedback', 'confirmationMessage', 'cancelledMessage',
+    'typeInPerson', 'typeOnline', 'typeOpenHouse', 'joinVideoCall', 'getDirections',
+    'callOpens', 'onlineViewingInfo',
   ]
   keys.forEach(k => { tRecord[k] = t(k) })
 

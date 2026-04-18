@@ -33,6 +33,7 @@ export default async function ViewingsPage() {
       (supabase.from('viewings') as any)
         .select(`
           id, listing_id, status, type, scheduled_at, hunter_notes, created_at,
+          video_room_url, feedback_hunter, feedback_owner,
           hunter:users!hunter_id(full_name, email, phone)
         `)
         .in('listing_id', listingIds)

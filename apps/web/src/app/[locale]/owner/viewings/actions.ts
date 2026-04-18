@@ -9,6 +9,7 @@ import { inngest } from '@/lib/inngest/client'
 interface ViewingWithContext {
   hunter_id: string
   listing_id: string
+  type: string | null
   scheduled_at: string | null
   hunter: { email: string; full_name: string | null; phone: string | null } | null
   listing: { owner_id: string; title_de: string | null; city: string; agent_id: string | null } | null
@@ -20,7 +21,7 @@ async function verifyViewingOwnership(viewingId: string, userId: string) {
   const { data: viewing } = await (supabase as any)
     .from('viewings')
     .select(`
-      hunter_id, listing_id, scheduled_at,
+      hunter_id, listing_id, type, scheduled_at,
       hunter:users!hunter_id(email, full_name, phone),
       listing:listings!listing_id(owner_id, title_de, city, agent_id)
     `)
@@ -46,8 +47,22 @@ export async function confirmViewingAction(
   const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId, auth.userId)
   if (authError || !supabase) return { error: authError ?? 'Not authorized' }
 
+  // Generate Jitsi Meet URL for online/virtual viewings
+  const isOnlineViewing = viewing?.type === 'online' || viewing?.type === 'virtual'
+  const videoRoomUrl = isOnlineViewing
+    ? `https://meet.jit.si/yalla-${viewing.listing_id.slice(0, 8)}-${viewingId.slice(0, 8)}`
+    : null
+
+  const updateData: Record<string, unknown> = {
+    status: 'confirmed',
+    updated_at: new Date().toISOString(),
+  }
+  if (videoRoomUrl) {
+    updateData.video_room_url = videoRoomUrl
+  }
+
   const { error } = await (supabase.from('viewings') as any)
-    .update({ status: 'confirmed', updated_at: new Date().toISOString() })
+    .update(updateData)
     .eq('id', viewingId)
 
   if (error) {
@@ -86,6 +101,7 @@ export async function confirmViewingAction(
           scheduledAt: viewing.scheduled_at,
           listingTitle: title,
           listingCity: viewing.listing.city,
+          videoRoomUrl,
         },
       }).catch(e => console.error('inngest viewing/confirmed error:', e))
     }
@@ -234,7 +250,8 @@ export async function addBatchSlotsAction(
 }
 
 export async function declineViewingAction(
-  viewingId: string
+  viewingId: string,
+  cancellationReason?: string
 ): Promise<{ success: true } | { error: string } | { authRequired: true }> {
   const auth = await requireAuth()
   if (!auth.authenticated) {
@@ -244,8 +261,17 @@ export async function declineViewingAction(
   const { error: authError, supabase, viewing } = await verifyViewingOwnership(viewingId, auth.userId)
   if (authError || !supabase) return { error: authError ?? 'Not authorized' }
 
+  const updateData: Record<string, unknown> = {
+    status: 'cancelled',
+    cancelled_by: 'owner',
+    updated_at: new Date().toISOString(),
+  }
+  if (cancellationReason?.trim()) {
+    updateData.cancellation_reason = cancellationReason.trim()
+  }
+
   const { error } = await (supabase.from('viewings') as any)
-    .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+    .update(updateData)
     .eq('id', viewingId)
 
   if (error) {

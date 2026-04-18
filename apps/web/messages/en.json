@@ -277,9 +277,11 @@
     "active": "Live",
     "paused": "Paused",
     "underOffer": "Under Offer",
+    "under_offer": "Under Offer",
     "sold": "Sold",
     "let": "Let",
-    "archived": "Archived"
+    "archived": "Archived",
+    "deleted": "Deleted"
   },
   "admin": {
     "pageTitle": "Admin",
@@ -663,7 +665,16 @@
     "thu": "Thu",
     "fri": "Fri",
     "sat": "Sat",
-    "sun": "Sun"
+    "sun": "Sun",
+    "typeInPerson": "In-Person",
+    "typeOnline": "Online",
+    "typeOpenHouse": "Open House",
+    "joinVideoCall": "Join Video Call",
+    "callNotStarted": "Call opens 5 min before viewing",
+    "cancelReason": "Reason for cancellation",
+    "hunterFeedback": "Hunter Feedback",
+    "interestLevel": "Interest Level",
+    "viewingNotes": "Notes"
   },
   "hunterFeedback": {
     "checkinTitle": "Check In",
@@ -723,7 +734,21 @@
     "listingCount": "{count} listings",
     "newListing": "New Listing",
     "noListingsCreated": "No listings created yet.",
-    "createFirstListing": "Create your first listing"
+    "createFirstListing": "Create your first listing",
+    "filterAll": "All",
+    "filterLive": "Live",
+    "filterDrafts": "Drafts",
+    "filterUnderOffer": "Under Offer",
+    "filterArchived": "Archived",
+    "selectAll": "Select all",
+    "selected": "{count} selected",
+    "archiveSelected": "Archive Selected",
+    "deleteSelected": "Delete Selected",
+    "relistSelected": "Re-list Selected",
+    "confirmDelete": "Are you sure? Deleted listings are removed after 90 days.",
+    "confirmArchive": "Archive {count} listing(s)? They will be removed from portals.",
+    "bulkSuccess": "{count} listing(s) updated",
+    "bulkError": "Some listings could not be updated"
   },
   "ownerPlans": {
     "pageTitle": "Plans & Pricing",
@@ -1852,7 +1877,14 @@
     "confirmationMessage": "The owner has confirmed your viewing request.",
     "cancelledMessage": "This viewing has been cancelled.",
     "upcomingCount": "{count} upcoming",
-    "confirmedCount": "{count} confirmed"
+    "confirmedCount": "{count} confirmed",
+    "typeInPerson": "In-Person",
+    "typeOnline": "Online",
+    "typeOpenHouse": "Open House",
+    "joinVideoCall": "Join Video Call",
+    "getDirections": "Get Directions",
+    "callOpens": "Video call opens 5 min before your viewing",
+    "onlineViewingInfo": "No download needed \u2014 opens in your browser"
   },
   "notif": {
     "notifications": "Notifications",

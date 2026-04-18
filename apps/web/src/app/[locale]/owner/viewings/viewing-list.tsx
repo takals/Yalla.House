@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
-import { ChevronDown, ChevronUp, Mail, Phone, Calendar, MessageSquare } from 'lucide-react'
+import { ChevronDown, ChevronUp, Mail, Phone, Calendar, MessageSquare, Video, Star } from 'lucide-react'
 import { confirmViewingAction, declineViewingAction } from './actions'
 
 export interface ViewingRow {
@@ -15,6 +15,9 @@ export interface ViewingRow {
   hunter_notes: string | null
   created_at: string
   hunter: { full_name: string | null; email: string; phone: string | null } | null
+  video_room_url: string | null
+  feedback_hunter: { rating?: number; interest_level?: string; notes?: string } | null
+  feedback_owner: { showed_up?: boolean; interest_level?: string; notes?: string } | null
 }
 
 function getStatusBadge(status: string, t: ReturnType<typeof useTranslations>) {
@@ -34,6 +37,28 @@ function getStatusBadge(status: string, t: ReturnType<typeof useTranslations>) {
   }
 }
 
+function getTypeBadge(type: string | undefined, t: ReturnType<typeof useTranslations>) {
+  switch (type) {
+    case 'online':
+    case 'virtual':
+      return { label: t('typeOnline'), className: 'bg-purple-100 text-purple-700' }
+    case 'open_house':
+      return { label: t('typeOpenHouse'), className: 'bg-blue-100 text-blue-700' }
+    case 'in_person':
+    default:
+      return { label: t('typeInPerson'), className: 'bg-gray-100 text-gray-600' }
+  }
+}
+
+function isVideoCallActive(scheduledAt: string | null): boolean {
+  if (!scheduledAt) return false
+  const now = Date.now()
+  const viewingTime = new Date(scheduledAt).getTime()
+  const fiveMinBefore = viewingTime - 5 * 60 * 1000
+  const oneHourAfter = viewingTime + 60 * 60 * 1000
+  return now >= fiveMinBefore && now <= oneHourAfter
+}
+
 function formatDate(iso: string, dateLocale: string): string {
   return new Date(iso).toLocaleDateString(dateLocale, { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
@@ -51,8 +76,11 @@ export function ViewingList({
   listingMap: Record<string, { title_de: string | null; place_id: string }>
 }) {
   const t = useTranslations('ownerDashboard')
+  const tv = useTranslations('ownerViewings')
   const locale = useLocale()
   const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const [declineReasons, setDeclineReasons] = useState<Map<string, string>>(new Map())
+  const [showDeclineInput, setShowDeclineInput] = useState<Set<string>>(new Set())
   const [statuses, setStatuses] = useState<Map<string, string>>(() => {
     const m = new Map<string, string>()
     for (const v of initialViewings) m.set(v.id, v.status)
@@ -86,18 +114,29 @@ export function ViewingList({
     }
   }
 
+  function initiateDecline(viewingId: string) {
+    setShowDeclineInput(prev => {
+      const next = new Set(prev)
+      next.add(viewingId)
+      return next
+    })
+  }
+
   async function handleDecline(viewingId: string) {
+    const reason = declineReasons.get(viewingId) ?? ''
     const prev = statuses.get(viewingId)
     setActing(s => new Set(s).add(viewingId))
     setStatuses(m => new Map(m).set(viewingId, 'cancelled'))
     setErrors(m => { const n = new Map(m); n.delete(viewingId); return n })
 
-    const result = await declineViewingAction(viewingId)
+    const result = await declineViewingAction(viewingId, reason || undefined)
 
     setActing(s => { const n = new Set(s); n.delete(viewingId); return n })
     if ('error' in result) {
       setStatuses(m => new Map(m).set(viewingId, prev ?? 'pending'))
       setErrors(m => new Map(m).set(viewingId, result.error))
+    } else {
+      setShowDeclineInput(prev => { const n = new Set(prev); n.delete(viewingId); return n })
     }
   }
 
@@ -114,9 +153,15 @@ export function ViewingList({
       {initialViewings.map(viewing => {
         const status = statuses.get(viewing.id) ?? viewing.status
         const badge = getStatusBadge(status, t)
+        const typeBadge = getTypeBadge(viewing.type, tv)
         const isPending = status === 'pending'
+        const isConfirmed = status === 'confirmed'
+        const isCompleted = status === 'completed'
+        const isOnline = viewing.type === 'online' || viewing.type === 'virtual'
+        const callActive = isVideoCallActive(viewing.scheduled_at)
         const isActing = acting.has(viewing.id)
         const isExpanded = expanded.has(viewing.id)
+        const isShowingDeclineInput = showDeclineInput.has(viewing.id)
         const err = errors.get(viewing.id)
         const listing = listingMap[viewing.listing_id]
 
@@ -165,7 +210,10 @@ export function ViewingList({
                 </div>
 
                 {/* Right: badge + expand indicator */}
-                <div className="flex items-center gap-2.5 flex-shrink-0">
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${typeBadge.className}`}>
+                    {typeBadge.label}
+                  </span>
                   <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
                     {badge.label}
                   </span>
@@ -216,11 +264,11 @@ export function ViewingList({
                       </div>
                       {viewing.type && (
                         <div className="flex items-center gap-2.5 text-sm">
-                          <Calendar size={14} className="text-text-muted flex-shrink-0" />
+                          <Video size={14} className="text-text-muted flex-shrink-0" />
                           <div>
                             <span className="text-xs text-text-muted">{t('viewings.type')}</span>
                             <span className="block font-medium text-text-primary">
-                              {viewing.type === 'video' ? t('viewings.typeVideo') : t('viewings.typeInPerson')}
+                              {typeBadge.label}
                             </span>
                           </div>
                         </div>
@@ -249,33 +297,119 @@ export function ViewingList({
                   </div>
                 </div>
 
+                {/* Video call button for online confirmed viewings */}
+                {isOnline && isConfirmed && viewing.video_room_url && (
+                  <div className="mt-4">
+                    {callActive ? (
+                      <a
+                        href={viewing.video_room_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={e => e.stopPropagation()}
+                        className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold px-4 py-2.5 rounded-lg text-sm transition-colors"
+                      >
+                        <Video size={16} />
+                        {tv('joinVideoCall')}
+                      </a>
+                    ) : (
+                      <p className="text-xs text-text-muted flex items-center gap-1.5">
+                        <Video size={14} />
+                        {tv('callNotStarted')}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Hunter feedback (for completed viewings) */}
+                {isCompleted && viewing.feedback_hunter && (
+                  <div className="mt-4 bg-[#F0FDF4] rounded-xl p-4 border border-green-100">
+                    <h4 className="text-xs font-bold text-text-primary uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                      <Star size={12} className="text-brand" />
+                      {tv('hunterFeedback')}
+                    </h4>
+                    <div className="space-y-1.5 text-sm">
+                      {viewing.feedback_hunter.rating != null && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-text-muted text-xs">{tv('interestLevel')}:</span>
+                          <span className="font-medium text-text-primary">
+                            {Array.from({ length: viewing.feedback_hunter.rating }, (_, i) => (
+                              <Star key={i} size={12} className="inline text-amber-400 fill-amber-400" />
+                            ))}
+                          </span>
+                        </div>
+                      )}
+                      {viewing.feedback_hunter.interest_level && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-text-muted text-xs">{tv('interestLevel')}:</span>
+                          <span className="font-medium text-text-primary capitalize">{viewing.feedback_hunter.interest_level}</span>
+                        </div>
+                      )}
+                      {viewing.feedback_hunter.notes && (
+                        <div>
+                          <span className="text-text-muted text-xs">{tv('viewingNotes')}:</span>
+                          <p className="text-text-secondary italic mt-0.5">{viewing.feedback_hunter.notes}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Actions row */}
                 {isPending && (
-                  <div className="flex justify-end gap-2 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => handleDecline(viewing.id)}
-                      disabled={isActing}
-                      className="text-xs font-semibold px-4 py-2 bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {t('viewings.decline')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleConfirm(viewing.id)}
-                      disabled={isActing}
-                      className="text-xs font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isActing ? (
-                        <span className="flex items-center gap-1.5">
-                          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                          </svg>
-                          …
-                        </span>
-                      ) : t('viewings.confirm')}
-                    </button>
+                  <div className="mt-4">
+                    {/* Decline reason input */}
+                    {isShowingDeclineInput && (
+                      <div className="mb-3">
+                        <label className="text-xs font-semibold text-text-secondary block mb-1">
+                          {tv('cancelReason')}
+                        </label>
+                        <input
+                          type="text"
+                          value={declineReasons.get(viewing.id) ?? ''}
+                          onChange={e => setDeclineReasons(m => new Map(m).set(viewing.id, e.target.value))}
+                          onClick={e => e.stopPropagation()}
+                          className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-surface text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+                          placeholder={tv('cancelReason')}
+                        />
+                      </div>
+                    )}
+                    <div className="flex justify-end gap-2">
+                      {isShowingDeclineInput ? (
+                        <button
+                          type="button"
+                          onClick={() => handleDecline(viewing.id)}
+                          disabled={isActing}
+                          className="text-xs font-semibold px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {t('viewings.decline')}
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => initiateDecline(viewing.id)}
+                          disabled={isActing}
+                          className="text-xs font-semibold px-4 py-2 bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {t('viewings.decline')}
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => handleConfirm(viewing.id)}
+                        disabled={isActing}
+                        className="text-xs font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isActing ? (
+                          <span className="flex items-center gap-1.5">
+                            <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            …
+                          </span>
+                        ) : t('viewings.confirm')}
+                      </button>
+                    </div>
                   </div>
                 )}
 

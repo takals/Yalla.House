@@ -720,3 +720,95 @@ CREATE INDEX IF NOT EXISTS idx_hcl_hunter ON hunter_consent_log(hunter_id, creat
 ALTER TABLE hunter_consent_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "hcl_own" ON hunter_consent_log
   FOR ALL USING (auth.uid() = hunter_id);
+
+-- =============================================================================
+-- LISTINGS & VIEWINGS V2 — Lifecycle, Calendar, Notifications
+-- =============================================================================
+
+-- Blackout dates for availability management
+CREATE TABLE IF NOT EXISTS blackout_dates (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id uuid NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+  owner_id uuid NOT NULL REFERENCES users(id),
+  date date NOT NULL,
+  reason text,
+  created_at timestamptz DEFAULT now(),
+  UNIQUE(listing_id, date)
+);
+ALTER TABLE blackout_dates ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "blackout_owner_all" ON blackout_dates
+  FOR ALL USING (auth.uid() = owner_id)
+  WITH CHECK (auth.uid() = owner_id);
+
+-- Notification templates (platform defaults + per-listing overrides)
+CREATE TABLE IF NOT EXISTS notification_templates (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id uuid REFERENCES listings(id) ON DELETE CASCADE,
+  event_type text NOT NULL,
+  channel text NOT NULL CHECK (channel IN ('email','sms')),
+  subject text,
+  body_template text NOT NULL,
+  is_active boolean DEFAULT true,
+  is_custom boolean DEFAULT false,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+ALTER TABLE notification_templates ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "notif_tpl_owner" ON notification_templates
+  FOR ALL USING (
+    listing_id IS NULL OR
+    auth.uid() IN (SELECT owner_id FROM listings WHERE id = notification_templates.listing_id)
+  );
+
+-- Notification delivery log (audit trail for all sent notifications)
+CREATE TABLE IF NOT EXISTS notification_log (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES users(id),
+  viewing_id uuid REFERENCES viewings(id),
+  listing_id uuid REFERENCES listings(id),
+  template_id uuid REFERENCES notification_templates(id),
+  channel text NOT NULL CHECK (channel IN ('email','sms','whatsapp','push')),
+  event_type text NOT NULL,
+  status text NOT NULL CHECK (status IN ('sent','failed','bounced','delivered')) DEFAULT 'sent',
+  provider_id text,
+  error_detail text,
+  sent_at timestamptz DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_notif_log_user ON notification_log(user_id, sent_at DESC);
+ALTER TABLE notification_log ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "notif_log_own" ON notification_log
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- Per-user notification preferences
+CREATE TABLE IF NOT EXISTS notification_preferences (
+  user_id uuid PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  email_enabled boolean DEFAULT true,
+  sms_enabled boolean DEFAULT true,
+  whatsapp_enabled boolean DEFAULT true,
+  phone_number text,
+  quiet_hours_start time,
+  quiet_hours_end time,
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now()
+);
+ALTER TABLE notification_preferences ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "notif_pref_own" ON notification_preferences
+  FOR ALL USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- Listing status change audit log
+CREATE TABLE IF NOT EXISTS listing_status_log (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  listing_id uuid NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+  from_status text,
+  to_status text NOT NULL,
+  changed_by uuid REFERENCES users(id),
+  reason text,
+  created_at timestamptz DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_status_log_listing ON listing_status_log(listing_id, created_at DESC);
+ALTER TABLE listing_status_log ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "status_log_owner" ON listing_status_log
+  FOR SELECT USING (
+    auth.uid() IN (SELECT owner_id FROM listings WHERE id = listing_status_log.listing_id)
+  );

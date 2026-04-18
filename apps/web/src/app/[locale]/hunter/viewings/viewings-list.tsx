@@ -2,19 +2,22 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { Calendar, MapPin, MessageSquare, AlertCircle } from 'lucide-react'
+import { Calendar, MapPin, MessageSquare, AlertCircle, Video, ExternalLink } from 'lucide-react'
 import { cancelViewingAction } from '../actions'
 
 interface Viewing {
   id: string
   listing_id: string
   status: string
+  type: string
   scheduled_at: string | null
   hunter_notes: string | null
   created_at: string
+  video_room_url: string | null
   listing_title: string | null
   listing_city: string | null
   listing_postcode: string | null
+  listing_address: string | null
   place_id: string | null
   slug: string | null
 }
@@ -106,12 +109,51 @@ function FilterTab({ label, count, active, onClick }: {
   )
 }
 
+function getTypeBadgeStyle(type: string) {
+  switch (type) {
+    case 'online':
+    case 'virtual':
+      return 'bg-purple-100 text-purple-700'
+    case 'open_house':
+      return 'bg-blue-100 text-blue-700'
+    case 'in_person':
+    default:
+      return 'bg-gray-100 text-gray-600'
+  }
+}
+
+function getTypeLabel(type: string, t: T): string {
+  switch (type) {
+    case 'online':
+    case 'virtual':
+      return tx(t, 'typeOnline')
+    case 'open_house':
+      return tx(t, 'typeOpenHouse')
+    case 'in_person':
+    default:
+      return tx(t, 'typeInPerson')
+  }
+}
+
+function isVideoCallActive(scheduledAt: string | null): boolean {
+  if (!scheduledAt) return false
+  const now = Date.now()
+  const viewingTime = new Date(scheduledAt).getTime()
+  const fiveMinBefore = viewingTime - 5 * 60 * 1000
+  const oneHourAfter = viewingTime + 60 * 60 * 1000
+  return now >= fiveMinBefore && now <= oneHourAfter
+}
+
 function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: string }) {
   const [isPending, startTransition] = useTransition()
   const [localStatus, setLocalStatus] = useState(viewing.status)
 
   const canCancel = ['pending', 'confirmed'].includes(localStatus)
   const isCompleted = localStatus === 'completed'
+  const isConfirmed = localStatus === 'confirmed'
+  const isOnline = viewing.type === 'online' || viewing.type === 'virtual'
+  const isInPerson = viewing.type === 'in_person' || (!viewing.type)
+  const callActive = isVideoCallActive(viewing.scheduled_at)
 
   const dateFormatter = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
     day: '2-digit',
@@ -163,7 +205,12 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
             )}
           </div>
         </div>
-        <StatusBadge status={localStatus} t={t} />
+        <div className="flex items-center gap-2">
+          <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${getTypeBadgeStyle(viewing.type)}`}>
+            {getTypeLabel(viewing.type, t)}
+          </span>
+          <StatusBadge status={localStatus} t={t} />
+        </div>
       </div>
 
       {/* Body */}
@@ -178,6 +225,50 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
         {localStatus === 'cancelled' && (
           <div className="mb-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-600">
             {tx(t, 'cancelledMessage')}
+          </div>
+        )}
+
+        {/* Video call button for online confirmed viewings */}
+        {isOnline && isConfirmed && viewing.video_room_url && (
+          <div className="mb-3 bg-purple-50 border border-purple-200 rounded-lg px-4 py-3">
+            {callActive ? (
+              <a
+                href={viewing.video_room_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold px-4 py-2.5 rounded-lg text-sm transition-colors"
+              >
+                <Video className="w-4 h-4" />
+                {tx(t, 'joinVideoCall')}
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            ) : (
+              <div>
+                <p className="text-sm font-medium text-purple-700 flex items-center gap-1.5">
+                  <Video className="w-4 h-4" />
+                  {tx(t, 'callOpens')}
+                </p>
+                <p className="text-xs text-purple-600 mt-0.5">{tx(t, 'onlineViewingInfo')}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Get directions for in-person confirmed viewings */}
+        {isInPerson && isConfirmed && viewing.listing_address && (
+          <div className="mb-3">
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                [viewing.listing_address, viewing.listing_postcode, viewing.listing_city].filter(Boolean).join(', ')
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-[#BF6840] transition-colors"
+            >
+              <MapPin className="w-4 h-4" />
+              {tx(t, 'getDirections')}
+              <ExternalLink className="w-3 h-3" />
+            </a>
           </div>
         )}
 

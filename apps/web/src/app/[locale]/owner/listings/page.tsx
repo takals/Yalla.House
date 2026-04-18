@@ -1,16 +1,23 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, Home, ExternalLink } from 'lucide-react'
-import { fromMinorUnits } from '@yalla/integrations'
-import { getTranslations } from 'next-intl/server'
+import { Plus } from 'lucide-react'
+import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
+import ListingFilters from './listing-filters'
+import ListingGrid from './listing-grid'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 
-export default async function OwnerListingsPage() {
+interface Props {
+  searchParams: Promise<{ status?: string }>
+}
+
+export default async function OwnerListingsPage({ searchParams }: Props) {
+  const { status: filterStatus } = await searchParams
   const t = await getTranslations('ownerListings')
   const ts = await getTranslations('statusLabels')
+  const locale = await getLocale()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
@@ -24,6 +31,7 @@ export default async function OwnerListingsPage() {
       .from('listings')
       .select('*')
       .eq('owner_id', userId)
+      .neq('status', 'deleted')
       .order('created_at', { ascending: false })
 
     allListings = listingsData ?? []
@@ -36,6 +44,39 @@ export default async function OwnerListingsPage() {
     const only = allListings[0]!
     const isPublic = only.status === 'active' || only.status === 'under_offer'
     redirect(isPublic ? `/p/${only.slug ?? only.place_id}` : `/owner/${only.id}`)
+  }
+
+  // Compute counts per status for filter pills
+  const counts: Record<string, number> = { all: allListings.length }
+  for (const listing of allListings) {
+    counts[listing.status] = (counts[listing.status] ?? 0) + 1
+  }
+
+  // Apply filter
+  const filteredListings =
+    filterStatus && filterStatus !== 'all'
+      ? allListings.filter((l) => l.status === filterStatus)
+      : allListings
+
+  // Build translation records for client components
+  const filterKeys = [
+    'filterAll', 'filterLive', 'filterDrafts', 'filterUnderOffer',
+    'filterArchived', 'selectAll', 'selected', 'archiveSelected',
+    'deleteSelected', 'relistSelected', 'confirmDelete', 'confirmArchive',
+    'bulkSuccess', 'bulkError',
+  ] as const
+  const translations: Record<string, string> = {}
+  for (const key of filterKeys) {
+    translations[key] = t(key)
+  }
+
+  const statusKeys = [
+    'draft', 'preview', 'active', 'paused', 'under_offer',
+    'sold', 'let', 'archived', 'deleted',
+  ] as const
+  const statusTranslations: Record<string, string> = {}
+  for (const key of statusKeys) {
+    statusTranslations[key] = ts(key)
   }
 
   return (
@@ -57,6 +98,11 @@ export default async function OwnerListingsPage() {
         </Link>
       </div>
 
+      {/* Filter pills */}
+      {allListings.length > 0 && (
+        <ListingFilters counts={counts} translations={translations} />
+      )}
+
       {/* Listings grid */}
       {allListings.length === 0 ? (
         <div className="bg-surface rounded-card border border-border-default py-16 text-center">
@@ -70,101 +116,13 @@ export default async function OwnerListingsPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {allListings.map(listing => {
-            const price = listing.intent === 'sale' ? listing.sale_price : listing.rent_price
-            const currency = listing.currency || 'EUR'
-            const formattedPrice = price
-              ? new Intl.NumberFormat('de-DE', { style: 'currency', currency, maximumFractionDigits: 0 }).format(fromMinorUnits(price, currency))
-              : null
-
-            // Live/under_offer listings link to the public page; others to the owner edit page
-            const isPublic = listing.status === 'active' || listing.status === 'under_offer'
-            const href = isPublic ? `/p/${listing.slug ?? listing.place_id}` : `/owner/${listing.id}`
-
-            return (
-              <Link
-                key={listing.id}
-                href={href}
-                className="bg-surface rounded-card border border-border-default overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all will-change-transform group relative"
-              >
-                {/* Placeholder image area */}
-                <div className="h-40 bg-bg flex items-center justify-center relative">
-                  <Home size={48} className="text-[#D9DCE4]" />
-                  {/* Public link indicator for live listings */}
-                  {isPublic && (
-                    <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm">
-                      <ExternalLink size={14} className="text-text-secondary" />
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-4">
-                  {/* Status badge */}
-                  <div className="flex items-center justify-between mb-2">
-                    <StatusBadge status={listing.status} t={ts} />
-                    <span className="text-xs text-text-muted">{listing.place_id}</span>
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="font-bold text-text-primary text-[0.9375rem] mb-1 group-hover:text-brand-dark transition-colors">
-                    {listing.title_de ?? listing.title ?? listing.place_id}
-                  </h3>
-
-                  {/* Location */}
-                  <p className="text-xs text-text-secondary mb-3">
-                    {listing.postcode} {listing.city}
-                  </p>
-
-                  {/* Meta row */}
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-text-primary">
-                      {formattedPrice ?? '—'}
-                      {listing.intent === 'rent' && formattedPrice && (
-                        <span className="text-xs font-normal text-text-secondary">/Mo</span>
-                      )}
-                    </span>
-                    <div className="flex gap-3 text-xs text-text-secondary">
-                      {listing.size_sqm && <span>{listing.size_sqm} m²</span>}
-                      {listing.bedrooms && <span>{listing.bedrooms} Zi.</span>}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
+        <ListingGrid
+          listings={filteredListings as unknown as Parameters<typeof ListingGrid>[0]['listings']}
+          translations={translations}
+          statusTranslations={statusTranslations}
+          locale={locale}
+        />
       )}
     </div>
-  )
-}
-
-function StatusBadge({ status, t }: { status: string; t: (key: string) => string }) {
-  const isLive = status === 'active'
-
-  const styles: Record<string, string> = {
-    draft: 'bg-gray-100 text-gray-600',
-    active: 'bg-green-100 text-green-700',
-    paused: 'bg-yellow-100 text-yellow-700',
-    under_offer: 'bg-blue-100 text-blue-700',
-    sold: 'bg-purple-100 text-purple-700',
-    let: 'bg-purple-100 text-purple-700',
-    archived: 'bg-gray-100 text-gray-400',
-  }
-
-  return (
-    <span
-      className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
-        styles[status] ?? styles['draft']
-      }`}
-    >
-      {isLive && (
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-        </span>
-      )}
-      {t(status) ?? status}
-    </span>
   )
 }

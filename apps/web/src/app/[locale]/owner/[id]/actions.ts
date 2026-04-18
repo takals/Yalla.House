@@ -224,9 +224,12 @@ export async function setPrimaryPhotoAction(
 
 const STATUS_TRANSITIONS: Record<string, string[]> = {
   draft:       ['active'],
-  active:      ['paused', 'sold', 'let', 'archived'],
+  active:      ['paused', 'under_offer', 'archived'],
   paused:      ['active', 'archived'],
-  under_offer: ['active', 'sold', 'let'],
+  under_offer: ['active', 'sold', 'let', 'archived'],
+  sold:        ['archived'],
+  let:         ['archived'],
+  archived:    ['active', 'deleted'],
 }
 
 export async function changeStatusAction(
@@ -241,7 +244,7 @@ export async function changeStatusAction(
   const supabase = await createClient()
   const { data: existing } = await (supabase as any)
     .from('listings')
-    .select('owner_id, status')
+    .select('owner_id, status, published_at')
     .eq('id', id)
     .single()
 
@@ -250,8 +253,25 @@ export async function changeStatusAction(
   const allowed = STATUS_TRANSITIONS[existing.status] ?? []
   if (!allowed.includes(newStatus)) return { error: 'Invalid status transition' }
 
+  const updatePayload: Record<string, unknown> = { status: newStatus }
+
+  // Set deleted_at when transitioning to 'deleted'
+  if (newStatus === 'deleted') {
+    updatePayload.deleted_at = new Date().toISOString()
+  }
+
+  // Set published_at when transitioning to 'active' (only if not already set)
+  if (newStatus === 'active' && !existing.published_at) {
+    updatePayload.published_at = new Date().toISOString()
+  }
+
+  // Clear published_at when transitioning FROM 'active'
+  if (existing.status === 'active' && newStatus !== 'active') {
+    updatePayload.published_at = null
+  }
+
   const { error } = await (supabase.from('listings') as any)
-    .update({ status: newStatus })
+    .update(updatePayload)
     .eq('id', id)
 
   if (error) {
@@ -260,6 +280,58 @@ export async function changeStatusAction(
   }
 
   return { success: true }
+}
+
+// ── Bulk status action ───────────────────────────────────────────────────────
+
+export async function bulkStatusAction(
+  listingIds: string[],
+  targetStatus: string
+): Promise<{ success: true; count: number } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+
+  if (!listingIds.length) return { error: 'No listings selected' }
+
+  const supabase = await createClient()
+
+  // Fetch all requested listings owned by this user
+  const { data: listings } = await (supabase as any)
+    .from('listings')
+    .select('id, owner_id, status, published_at')
+    .in('id', listingIds)
+    .eq('owner_id', auth.userId)
+
+  if (!listings || listings.length === 0) return { error: 'Not authorized' }
+
+  let successCount = 0
+
+  for (const listing of listings as Array<{ id: string; status: string; published_at: string | null }>) {
+    const allowed = STATUS_TRANSITIONS[listing.status] ?? []
+    if (!allowed.includes(targetStatus)) continue
+
+    const updatePayload: Record<string, unknown> = { status: targetStatus }
+
+    if (targetStatus === 'deleted') {
+      updatePayload.deleted_at = new Date().toISOString()
+    }
+    if (targetStatus === 'active' && !listing.published_at) {
+      updatePayload.published_at = new Date().toISOString()
+    }
+    if (listing.status === 'active' && targetStatus !== 'active') {
+      updatePayload.published_at = null
+    }
+
+    const { error } = await (supabase.from('listings') as any)
+      .update(updatePayload)
+      .eq('id', listing.id)
+
+    if (!error) successCount++
+  }
+
+  return { success: true, count: successCount }
 }
 
 // ── Send Brief to Agents ──────────────────────────────────────────────────────

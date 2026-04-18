@@ -277,9 +277,11 @@
     "active": "Live",
     "paused": "Pausiert",
     "underOffer": "Angebot liegt vor",
+    "under_offer": "Angebot liegt vor",
     "sold": "Verkauft",
     "let": "Vermietet",
-    "archived": "Archiviert"
+    "archived": "Archiviert",
+    "deleted": "Gel\u00f6scht"
   },
   "admin": {
     "pageTitle": "Admin",
@@ -663,7 +665,16 @@
     "thu": "Do",
     "fri": "Fr",
     "sat": "Sa",
-    "sun": "So"
+    "sun": "So",
+    "typeInPerson": "Vor Ort",
+    "typeOnline": "Online",
+    "typeOpenHouse": "Tag der offenen T\u00FCr",
+    "joinVideoCall": "Videoanruf beitreten",
+    "callNotStarted": "Anruf startet 5 Min. vor der Besichtigung",
+    "cancelReason": "Grund f\u00FCr die Absage",
+    "hunterFeedback": "Feedback des Interessenten",
+    "interestLevel": "Interessensgrad",
+    "viewingNotes": "Notizen"
   },
   "hunterFeedback": {
     "checkinTitle": "Einchecken",
@@ -723,7 +734,21 @@
     "listingCount": "{count} Inserate",
     "newListing": "Neues Inserat",
     "noListingsCreated": "Noch keine Inserate erstellt.",
-    "createFirstListing": "Erstellen Sie Ihr erstes Inserat"
+    "createFirstListing": "Erstellen Sie Ihr erstes Inserat",
+    "filterAll": "Alle",
+    "filterLive": "Live",
+    "filterDrafts": "Entw\u00fcrfe",
+    "filterUnderOffer": "Angebot liegt vor",
+    "filterArchived": "Archiviert",
+    "selectAll": "Alle ausw\u00e4hlen",
+    "selected": "{count} ausgew\u00e4hlt",
+    "archiveSelected": "Ausgew\u00e4hlte archivieren",
+    "deleteSelected": "Ausgew\u00e4hlte l\u00f6schen",
+    "relistSelected": "Erneut einstellen",
+    "confirmDelete": "Sind Sie sicher? Gel\u00f6schte Inserate werden nach 90 Tagen entfernt.",
+    "confirmArchive": "{count} Inserat(e) archivieren? Sie werden von den Portalen entfernt.",
+    "bulkSuccess": "{count} Inserat(e) aktualisiert",
+    "bulkError": "Einige Inserate konnten nicht aktualisiert werden"
   },
   "ownerPlans": {
     "pageTitle": "Tarife & Preise",
@@ -1852,7 +1877,14 @@
     "confirmationMessage": "Der Eigentümer hat deine Anfrage bestätigt.",
     "cancelledMessage": "Diese Besichtigung wurde storniert.",
     "upcomingCount": "{count} anstehend",
-    "confirmedCount": "{count} bestätigt"
+    "confirmedCount": "{count} best\u00E4tigt",
+    "typeInPerson": "Vor Ort",
+    "typeOnline": "Online",
+    "typeOpenHouse": "Tag der offenen T\u00FCr",
+    "joinVideoCall": "Videoanruf beitreten",
+    "getDirections": "Wegbeschreibung",
+    "callOpens": "Videoanruf startet 5 Min. vor deiner Besichtigung",
+    "onlineViewingInfo": "Kein Download n\u00F6tig \u2014 \u00F6ffnet sich im Browser"
   },
   "notif": {
     "notifications": "Benachrichtigungen",
