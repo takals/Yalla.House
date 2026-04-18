@@ -232,6 +232,7 @@
           <button class="tab-btn active" onclick="switchTab('owner')" id="tab-owner">Owner / Landlord</button>
           <button class="tab-btn" onclick="switchTab('hunter')" id="tab-hunter">Home Hunter</button>
           <button class="tab-btn" onclick="switchTab('agent')" id="tab-agent">Agent / Professional</button>
+          <button class="tab-btn" onclick="switchTab('partner')" id="tab-partner">Partner</button>
         </div>
       </div>
 
@@ -241,10 +242,10 @@
           <!-- Starter -->
           <div class="pricing-card">
             <div class="pricing-name">Starter</div>
-            <div class="pricing-price">&euro;199 <span>one-time</span></div>
+            <div class="pricing-price">&pound;199 <span>one-time</span></div>
             <div class="pricing-desc">Everything you need to get listed and manage your sale yourself.</div>
             <ul class="pricing-features">
-              <li>IS24 &amp; Immowelt listing</li>
+              <li>Rightmove &amp; Zoopla listing</li>
               <li>Owner dashboard</li>
               <li>Viewing calendar &amp; self-booking</li>
               <li>Enquiry inbox</li>
@@ -257,7 +258,7 @@
           <div class="pricing-card featured">
             <div class="pricing-badge">Most popular</div>
             <div class="pricing-name">Professional</div>
-            <div class="pricing-price">&euro;499 <span>one-time</span></div>
+            <div class="pricing-price">&pound;499 <span>one-time</span></div>
             <div class="pricing-desc">Professional media and portal presence to maximise your result.</div>
             <ul class="pricing-features">
               <li>Everything in Starter</li>
@@ -273,7 +274,7 @@
           <!-- Complete -->
           <div class="pricing-card">
             <div class="pricing-name">Complete</div>
-            <div class="pricing-price">&euro;899 <span>one-time</span></div>
+            <div class="pricing-price">&pound;899 <span>one-time</span></div>
             <div class="pricing-desc">Full service &mdash; everything handled, from media to legal close.</div>
             <ul class="pricing-features">
               <li>Everything in Professional</li>
@@ -303,7 +304,7 @@
               </thead>
               <tbody>
                 <tr><td>Owner dashboard</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
-                <tr><td>Portal listing (IS24 &amp; Immowelt)</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+                <tr><td>Portal listing (Rightmove &amp; Zoopla)</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
                 <tr><td>Viewing calendar &amp; self-booking</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
                 <tr><td>Enquiry inbox</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
                 <tr><td>Weekly progress reports</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
@@ -332,7 +333,7 @@
         <div style="max-width:680px;margin:0 auto;">
           <div class="pricing-card" style="max-width:100%;">
             <div class="pricing-name">Home Hunter</div>
-            <div class="pricing-price">&euro;0 <span>always free</span></div>
+            <div class="pricing-price">&pound;0 <span>always free</span></div>
             <div class="pricing-desc">Browse, save, book viewings, and track offers. No commission, no agent filtering your enquiries.</div>
             <ul class="pricing-features">
               <li>Browse all listings</li>
@@ -382,6 +383,27 @@
             <a href="mailto:support@yalla.house?subject=Agent Workspace &mdash; Yalla.House" class="btn btn-primary" style="width:100%;justify-content:center;">Contact Us About Agent Access</a>
           </div>
           <p style="text-align:center;font-size:.8rem;color:var(--text-muted);margin-top:1.25rem;">Agent workspace pricing varies by market. We&rsquo;ll discuss the right model for your region.</p>
+        </div>
+      </div>
+
+      <!-- PARTNER TAB -->
+      <div class="tab-panel" id="panel-partner">
+        <div style="max-width:680px;margin:0 auto;">
+          <div class="pricing-card" style="max-width:100%;">
+            <div class="pricing-name">Referral Partner</div>
+            <div class="pricing-price">Commission-based <span>per referral</span></div>
+            <div class="pricing-desc">Earn by referring sellers to Yalla.House. No upfront cost &mdash; you get paid when a referred listing goes live.</div>
+            <ul class="pricing-features">
+              <li>Unique referral tracking link</li>
+              <li>Partner dashboard with live stats</li>
+              <li>Commission paid per converted listing</li>
+              <li>Marketing materials &amp; co-branded assets</li>
+              <li>Tiered rewards for volume partners</li>
+              <li>Dedicated partner support channel</li>
+            </ul>
+            <a href="dashboards/dashboard.html" class="btn btn-primary" style="width:100%;justify-content:center;" onclick="event.preventDefault();showToast('Partner applications opening soon','info')">Apply to become a Partner</a>
+          </div>
+          <p style="text-align:center;font-size:.8rem;color:var(--text-muted);margin-top:1.25rem;">Partner programme launching soon. Register your interest and we&rsquo;ll be in touch.</p>
         </div>
       </div>
 
@@ -479,7 +501,7 @@
   document.querySelectorAll('.fade-up').forEach(function(el) { io.observe(el); });
 })();
 function switchTab(role) {
-  var roles = ['owner', 'hunter', 'agent'];
+  var roles = ['owner', 'hunter', 'agent', 'partner'];
   roles.forEach(function(r) {
     document.getElementById('panel-' + r).classList.toggle('active', r === role);
     document.getElementById('tab-' + r).classList.toggle('active', r === role);

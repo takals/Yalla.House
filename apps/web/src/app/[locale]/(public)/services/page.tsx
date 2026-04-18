@@ -6,6 +6,7 @@ import {
   Camera, ScanLine, FileText, Megaphone,
   CheckCircle2, ArrowRight,
 } from 'lucide-react'
+import { PricingTables } from './pricing-tables'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -220,6 +221,9 @@ export default async function ServicesPage() {
           </p>
         </div>
       </section>
+
+      {/* ── PRICING TABLES (role tabs) ─────────────────────────────────────── */}
+      <PricingTables />
 
       {/* ── COMPARISON ────────────────────────────────────────────────────────── */}
       <section className="pb-24 px-4">
