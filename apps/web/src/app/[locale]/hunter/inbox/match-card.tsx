@@ -4,6 +4,7 @@ import { useTransition, useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { Check, X } from 'lucide-react'
 import { updateMatchStatusAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Match {
   id: string
@@ -42,7 +43,7 @@ function ScoreCircle({ score }: { score: number }) {
 export function MatchCard({ match }: Props) {
   const t = useTranslations('hunterDashboard')
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [isPending, startTransition] = useTransition()
   const [dismissed, setDismissed] = useState(false)
 

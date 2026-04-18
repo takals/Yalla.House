@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { CheckCircle2, Check } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { saveAgentProfileAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface AgentProfileData {
   agency_name: string | null
@@ -57,7 +58,7 @@ function Chip({ label, active, onClick }: { label: string; active: boolean; onCl
 export function ProfileForm({ profile }: Props) {
   const t = useTranslations('agentDashboard')
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [state, setState] = useState<{ success?: true; error?: string } | null>(null)
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()

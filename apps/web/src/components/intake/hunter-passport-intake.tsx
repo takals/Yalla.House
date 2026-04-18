@@ -6,6 +6,7 @@ import { ConversationalIntake, type IntakeFlowConfig } from '@/components/conver
 import { useVoiceRecognition } from '@/hooks/use-voice-recognition'
 import { useIntakeMemory } from '@/hooks/use-intake-memory'
 import { getHunterPassportFlow } from '@/lib/intake-flows/hunter-passport'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface HunterPassportIntakeProps {
   userId: string
@@ -36,7 +37,7 @@ export function HunterPassportIntake({
   const [voiceInput, setVoiceInput] = useState('')
 
   // Voice recognition
-  const voiceLang = locale === 'de' ? 'de-DE' : 'en-GB'
+  const voiceLang = dateLocaleFromLocale(locale)
   const {
     isListening,
     isSupported: isVoiceSupported,

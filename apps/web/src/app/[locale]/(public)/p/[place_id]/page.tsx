@@ -8,6 +8,7 @@ import { ListingStatusBadge } from './listing-status-badge'
 import { StickyBookingBar } from './sticky-booking-bar'
 import { OwnerToolbar } from './owner-toolbar'
 import { Home, BedDouble, Bath, Building, CalendarDays } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 import { OwnerQuickActions } from './owner-quick-actions'
 import { PhotoGallery } from './photo-gallery'
 import { HeroPhoto } from './hero-photo'
@@ -148,7 +149,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     .sort((a, b) => a.sort_order - b.sort_order) ?? []
 
   const primaryPhoto = photos.find(p => p.is_primary) ?? photos[0]
-  const localeFmt = locale === 'de' ? 'de-DE' : 'en-GB'
+  const localeFmt = dateLocaleFromLocale(locale)
 
   // Format price
   const formattedSalePrice = listing.intent !== 'rent' && listing.sale_price

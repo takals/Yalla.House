@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 import {
   ArrowLeft,
   Users,
@@ -34,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AnalyticsPage({ params }: Props) {
   const { id, locale } = await params
   const t = await getTranslations('ownerAnalytics')
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID

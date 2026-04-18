@@ -1407,8 +1407,8 @@
       "optionFixedPrice": "Fixed price",
       "optionNegotiable": "Negotiable (OBO)",
       "labelRentPrice": "Base rent per month (€)",
-      "labelNebenkosten": "Additional costs (€/month)",
-      "labelKaution": "Deposit (€)"
+      "labelServiceCharge": "Additional costs (€/month)",
+      "labelDepositAmount": "Deposit (€)"
     }
   },
   "hunterDashboard": {
@@ -1625,10 +1625,10 @@
       "qualifierNegotiable": "Negotiable (OBO)",
       "rentPrice": "Base rent per month",
       "rentPricePlaceholder": "1200",
-      "nebenkosten": "Additional costs",
-      "nebenkostenPlaceholder": "200",
-      "kaution": "Deposit",
-      "kautionPlaceholder": "2400",
+      "serviceCharge": "Additional costs",
+      "serviceChargePlaceholder": "200",
+      "depositAmount": "Deposit",
+      "depositAmountPlaceholder": "2400",
       "descriptionHintsTitle": "What makes a great description?",
       "descriptionHint1": "Location highlights — transport links, schools, shops nearby",
       "descriptionHint2": "Key features — garden, parking, period features, recent renovation",
@@ -1665,8 +1665,8 @@
       "salePrice": "Purchase price",
       "rentPrice": "Base rent",
       "perMonth": "/month",
-      "nebenkosten": "Additional costs",
-      "kaution": "Deposit"
+      "serviceCharge": "Additional costs",
+      "depositAmount": "Deposit"
     },
     "progress": "Step {current} of {total}",
     "buttons": {

@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import { submitToPortalAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export interface PortalRow {
   id: string
@@ -56,7 +57,7 @@ export function PortalSection({
 }) {
   const t = useTranslations('ownerDashboard')
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const router = useRouter()
   const [statuses, setStatuses] = useState<StatusMap>(() => {
     const m = new Map<string, PortalStatusRow>()

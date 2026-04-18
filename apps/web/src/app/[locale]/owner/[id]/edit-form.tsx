@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { Home, Building2, Building, Store, TreePine } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 import { updateListingAction, changeStatusAction, sendBriefAction, type EditPayload } from './actions'
 import { PhotoManager, type PhotoRow } from './photos'
 import { PortalSection, type PortalRow, type PortalStatusRow } from './portals'
@@ -30,8 +31,8 @@ interface Listing {
   sale_price: number | null
   rent_price: number | null
   price_qualifier: string | null
-  nebenkosten: number | null
-  kaution: number | null
+  service_charge: number | null
+  deposit_amount: number | null
   title_de: string | null
   description_de: string | null
   country_fields: unknown
@@ -159,8 +160,8 @@ function initForm(listing: Listing): EditPayload {
     sale_price:       centsToStr(listing.sale_price),
     price_qualifier:  listing.price_qualifier ?? '',
     rent_price:       centsToStr(listing.rent_price),
-    nebenkosten:      centsToStr(listing.nebenkosten),
-    kaution:          centsToStr(listing.kaution),
+    service_charge:   centsToStr(listing.service_charge),
+    deposit_amount:   centsToStr(listing.deposit_amount),
   }
 }
 
@@ -185,7 +186,7 @@ export function ListingEditForm({
 }) {
   const t = useTranslations('ownerDashboard')
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [form, setForm] = useState<EditPayload>(() => initForm(listing))
   const [errors, setErrors] = useState<FormErrors>({})
   const [serverError, setServerError] = useState('')
@@ -667,22 +668,22 @@ export function ListingEditForm({
             />
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label={t('editForm.labelNebenkosten')}
-                id="nebenkosten"
+                label={t('editForm.labelServiceCharge')}
+                id="service_charge"
                 type="number"
                 min="0"
                 placeholder="200"
-                value={form.nebenkosten}
-                onChange={e => set('nebenkosten', e.target.value)}
+                value={form.service_charge}
+                onChange={e => set('service_charge', e.target.value)}
               />
               <Input
-                label={t('editForm.labelKaution')}
-                id="kaution"
+                label={t('editForm.labelDepositAmount')}
+                id="deposit_amount"
                 type="number"
                 min="0"
                 placeholder="2400"
-                value={form.kaution}
-                onChange={e => set('kaution', e.target.value)}
+                value={form.deposit_amount}
+                onChange={e => set('deposit_amount', e.target.value)}
               />
             </div>
           </div>

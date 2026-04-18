@@ -26,8 +26,8 @@ export interface Listing {
   sale_price?: number | null
   rent_price?: number | null
   rent_period?: string | null
-  nebenkosten?: number | null
-  kaution?: number | null
+  service_charge?: number | null
+  deposit_amount?: number | null
   currency: string
   price_qualifier?: string | null
   title?: string | null

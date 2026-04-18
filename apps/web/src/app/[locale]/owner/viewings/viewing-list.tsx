@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { ChevronDown, ChevronUp, Mail, Phone, Calendar, MessageSquare, Video, Star } from 'lucide-react'
 import { confirmViewingAction, declineViewingAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export interface ViewingRow {
   id: string
@@ -78,7 +79,7 @@ export function ViewingList({
   const t = useTranslations('ownerDashboard')
   const tv = useTranslations('ownerViewings')
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [declineReasons, setDeclineReasons] = useState<Map<string, string>>(new Map())
   const [showDeclineInput, setShowDeclineInput] = useState<Set<string>>(new Set())
   const [statuses, setStatuses] = useState<Map<string, string>>(() => {

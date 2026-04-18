@@ -188,8 +188,8 @@ CREATE TABLE listings (
   sale_price       int,
   rent_price       int,
   rent_period      text CHECK (rent_period IN ('pw','pcm','pq','pa')),
-  nebenkosten      int,               -- German: Betriebskosten/service charges
-  kaution          int,               -- German: deposit (usually 3× Kaltmiete)
+  service_charge   int,               -- additional/service charges (e.g. Nebenkosten in DE)
+  deposit_amount   int,               -- deposit (e.g. Kaution in DE)
   currency         char(3) NOT NULL DEFAULT 'EUR',
   price_qualifier  text CHECK (price_qualifier IN (
     'offers_over','guide_price','fixed_price','poa','vb'  -- 'vb' = Verhandlungsbasis (DE)

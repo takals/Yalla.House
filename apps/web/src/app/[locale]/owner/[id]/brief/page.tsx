@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Database } from '@/types/database'
 import { OwnerBriefPageClient } from './brief-page-client'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 type ListingRow = Database['public']['Tables']['listings']['Row']
 type AssignmentRow = Database['public']['Tables']['listing_agent_assignments']['Row']
@@ -110,7 +111,7 @@ export default async function OwnerBriefPage({ params }: Props) {
     })
 
   const briefSentDate = listing.brief_sent_at
-    ? new Date(listing.brief_sent_at).toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB')
+    ? new Date(listing.brief_sent_at).toLocaleDateString(dateLocaleFromLocale(locale))
     : null
 
   // Prepare translations for form component

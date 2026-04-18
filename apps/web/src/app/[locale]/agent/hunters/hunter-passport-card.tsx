@@ -4,6 +4,7 @@ import { useTransition } from 'react'
 import { useLocale } from 'next-intl'
 import { ShieldCheck, Check } from 'lucide-react'
 import { disconnectHunterAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface HunterPassport {
   assignmentId: string
@@ -39,7 +40,7 @@ const PROP_LABELS: Record<string, string> = {
 export function HunterPassportCard({ passport }: { passport: HunterPassport }) {
   const [isPending, startTransition] = useTransition()
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
 
   const name = passport.hunterName ?? passport.hunterEmail
   const finance = passport.financeStatus ? FINANCE_LABELS[passport.financeStatus] : null

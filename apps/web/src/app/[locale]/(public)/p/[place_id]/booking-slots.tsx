@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import { Calendar, Clock, Check } from 'lucide-react'
 import { fetchAvailableSlotsAction, bookSlotAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Slot {
   id: string
@@ -37,7 +38,7 @@ function groupByDay(slots: Slot[], dateLocale: string): Map<string, Slot[]> {
 
 export function BookingSlots({ listingId, authenticated }: Props) {
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [slots, setSlots] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null)

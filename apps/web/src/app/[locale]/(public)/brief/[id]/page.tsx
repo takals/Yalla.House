@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { Home, MapPin, Banknote, BedDouble, Calendar, ArrowRight } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 import type { Database } from '@/types/database'
 
 type Listing = Database['public']['Tables']['listings']['Row']
@@ -44,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BriefLandingPage({ params }: Props) {
   const locale = await getLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
 
   // Fetch the listing (owner brief) — select all, expose only safe fields in template

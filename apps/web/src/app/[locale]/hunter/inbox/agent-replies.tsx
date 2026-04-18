@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface AgentReply {
   id: string
@@ -43,7 +44,7 @@ interface AgentRepliesProps {
 function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: boolean }) {
   const router = useRouter()
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [acting, setActing] = useState(false)
   const [dismissed, setDismissed] = useState(false)
 

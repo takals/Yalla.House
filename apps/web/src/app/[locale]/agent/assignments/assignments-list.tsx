@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronDown, Check, X } from 'lucide-react'
 import type { Assignment } from './page'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Props {
   assignments: Assignment[]
@@ -14,7 +15,7 @@ interface Props {
 
 export default function AssignmentsList({ assignments, translations: t }: Props) {
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [expandPast, setExpandPast] = useState(false)
 
   const pending = assignments.filter(a => a.status === 'invited')

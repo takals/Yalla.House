@@ -33,8 +33,8 @@ const validListing = (): Listing => ({
   sale_price: 35000000, // 350,000.00 EUR in cents
   rent_price: null,
   rent_period: null,
-  nebenkosten: null,
-  kaution: null,
+  service_charge: null,
+  deposit_amount: null,
   currency: 'EUR',
   price_qualifier: null,
   title: 'Bright 3-room apartment in Mitte',
@@ -291,8 +291,8 @@ describe('ImmobilienScout24Connector', () => {
       const listing = validListing()
       listing.intent = 'rent'
       listing.rent_price = 150000 // 1500.00 EUR
-      listing.nebenkosten = 20000 // 200.00 EUR
-      listing.kaution = 450000 // 4500.00 EUR
+      listing.service_charge = 20000 // 200.00 EUR
+      listing.deposit_amount = 450000 // 4500.00 EUR
 
       const payload = connector.transformListing(listing, [])
 
@@ -626,8 +626,8 @@ describe('ImmoweltConnector', () => {
       const listing = validListing()
       listing.intent = 'rent'
       listing.rent_price = 150000
-      listing.nebenkosten = 20000
-      listing.kaution = 450000
+      listing.service_charge = 20000
+      listing.deposit_amount = 450000
 
       const payload = connector.transformListing(listing, [])
       expect(payload.coldRent).toBe(1500)

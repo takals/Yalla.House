@@ -4,6 +4,7 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { ShieldCheck, Building2, Banknote, CheckCircle, Clock } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface RawAssignment {
   id: string
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function AgentPage() {
   const t = await getTranslations('agentDashboard')
   const locale = await getLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID

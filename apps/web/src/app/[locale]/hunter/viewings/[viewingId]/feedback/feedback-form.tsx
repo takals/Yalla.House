@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useLocale } from 'next-intl'
 import { checkinAction, submitFeedbackAction } from './actions'
 import { MapPin, Star, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 type Phase = 'checkin' | 'feedback' | 'done'
 
@@ -23,7 +24,7 @@ export function FeedbackForm({
   translations: Record<string, string>
 }) {
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [phase, setPhase] = useState<Phase>(
     alreadyCompleted ? 'done' : checkedIn ? 'feedback' : 'checkin'
   )

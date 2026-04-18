@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { AgentListingCta } from './agent-cta'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Props {
   params: Promise<{ id: string; locale: string }>
@@ -78,7 +79,7 @@ export default async function AgentListingPage({ params }: Props) {
   const primaryPhoto = photos.find(p => p.is_primary) ?? photos[0]
 
   const formatPrice = (amount: number) =>
-    new Intl.NumberFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+    new Intl.NumberFormat(dateLocaleFromLocale(locale), {
       style: 'currency',
       currency: listing.currency,
       maximumFractionDigits: 0,

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Calendar, Clock, Check, Plus, User, X, Trash2, Zap } from 'lucide-react'
 import { fetchAvailableSlotsAction, bookSlotAction } from './actions'
 import { addOwnerSlotAction, addBatchSlotsAction, removeOwnerSlotAction } from '@/app/[locale]/owner/viewings/actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Slot {
   id: string
@@ -22,7 +23,7 @@ interface Props {
 }
 
 function formatDay(iso: string, locale: string): string {
-  return new Date(iso).toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
+  return new Date(iso).toLocaleDateString(dateLocaleFromLocale(locale), { weekday: 'short', day: 'numeric', month: 'short' })
 }
 
 function formatTime(iso: string, dateLocale: string): string {
@@ -88,7 +89,7 @@ function generateQuickWeekSlots(): Array<{ startsAt: string; endsAt: string }> {
 
 export function ViewingCalendar({ listingId, authenticated, isOwner, locale, placeId, preselectedSlotId }: Props) {
   const t = useTranslations('listingPage')
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [slots, setSlots] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedSlot, setSelectedSlot] = useState<string | null>(preselectedSlotId ?? null)

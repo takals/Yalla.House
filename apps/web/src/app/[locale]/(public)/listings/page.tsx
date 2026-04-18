@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('listings')
@@ -38,7 +39,7 @@ function formatPrice(
   locale: string
 ): string | null {
   if (!minor) return null
-  const formatted = new Intl.NumberFormat(locale === 'de' ? 'de-DE' : 'en-GB', {
+  const formatted = new Intl.NumberFormat(dateLocaleFromLocale(locale), {
     style: 'currency',
     currency,
     maximumFractionDigits: 0,

@@ -6,6 +6,7 @@ import { CalendarCheck, MessageCircle, Home, TrendingUp, ArrowUp, ArrowRight, Pl
 import { fromMinorUnits } from '@yalla/integrations'
 import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 type Viewing = Database['public']['Tables']['viewings']['Row']
@@ -36,7 +37,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const t = await getTranslations('ownerDash')
   const ts = await getTranslations('statusLabels')
   const locale = await getLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {

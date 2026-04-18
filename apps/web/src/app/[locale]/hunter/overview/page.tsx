@@ -5,6 +5,7 @@ import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import { fromMinorUnits } from '@yalla/integrations'
 import { ViewingCard } from '../viewing-card'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface ViewingWithListing {
   id: string
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function HunterPage() {
   const t = await getTranslations('hunterDashboard')
   const locale = await getLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID

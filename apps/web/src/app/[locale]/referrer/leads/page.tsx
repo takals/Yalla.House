@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { type Database } from '@/types/database'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 type Referrer = Database['public']['Tables']['referrers']['Row']
 type Referral = Database['public']['Tables']['referrals']['Row']
@@ -32,7 +33,7 @@ export default async function ReferralLeadsPage() {
     PAID_PLAN: { label: t('milestonePaidPlan'), amount: 5000, order: 5 },
     AGENT_ACTIVATED: { label: t('milestoneAgentActivated'), amount: 3000, order: 6 },
   } as const
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID

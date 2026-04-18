@@ -5,6 +5,7 @@ import { useLocale } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { addOwnerSlotAction, removeOwnerSlotAction, addBatchSlotsAction } from './actions'
 import { Calendar, Clock, Trash2, Plus, X, Repeat } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export interface SlotRow {
   id: string
@@ -38,7 +39,7 @@ export function AvailabilityManager({
 }) {
   const { handleAuthRequired } = useAuthAction()
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [slots, setSlots] = useState<SlotRow[]>(initialSlots)
   const [showForm, setShowForm] = useState(false)
   const [acting, setActing] = useState<Set<string>>(new Set())

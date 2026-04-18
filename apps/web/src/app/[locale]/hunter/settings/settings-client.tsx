@@ -3,6 +3,7 @@
 import { useTransition, useState } from 'react'
 import { useLocale } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 import {
   updateProfileAction,
   pauseAllSharingAction,
@@ -76,7 +77,7 @@ const EVENT_DOT: Record<string, string> = {
 
 export function SettingsClient({ profile, assignments, consentLog, labels }: Props) {
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const { handleAuthRequired } = useAuthAction()
   const [profileState, setProfileState] = useState<{ success?: true; error?: string } | null>(null)
   const [profilePending, startProfileTransition] = useTransition()

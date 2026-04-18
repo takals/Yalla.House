@@ -5,6 +5,7 @@ import { useLocale } from 'next-intl'
 import { Calendar, Clock, MapPin, User, Plus, X, Check, XCircle, Trash2 } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { addAvailabilitySlotAction, removeAvailabilitySlotAction, confirmViewingAction, declineViewingAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Slot {
   id: string
@@ -75,7 +76,7 @@ type Tab = 'viewings' | 'slots'
 export function CalendarManager({ initialSlots, initialViewings, listingMap, listingIds, translations: t }: Props) {
   const { handleAuthRequired } = useAuthAction()
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const [tab, setTab] = useState<Tab>('viewings')
   const [slots, setSlots] = useState(initialSlots)
   const [viewings, setViewings] = useState(initialViewings)

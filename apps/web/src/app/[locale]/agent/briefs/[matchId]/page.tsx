@@ -4,6 +4,7 @@ import { getTranslations, getLocale } from 'next-intl/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { ArrowLeft } from 'lucide-react'
 import { ResponseForm } from './response-form'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export default async function RespondToBriefPage({
   params,
@@ -12,7 +13,7 @@ export default async function RespondToBriefPage({
 }) {
   const t = await getTranslations('agentBriefs')
   const locale = await getLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
   const { matchId } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

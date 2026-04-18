@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { QuoteForm } from './quote-form'
 import { Star } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 function formatRelativeTime(date: Date, locale: string): string {
   const now = new Date()
@@ -183,7 +184,7 @@ export default async function PartnerRequestsPage({
                       </span>{' '}
                       {request.preferred_date
                         ? new Date(request.preferred_date).toLocaleDateString(
-                            locale === 'de' ? 'de-DE' : 'en-GB'
+                            dateLocaleFromLocale(locale)
                           )
                         : t('labelFlexible')}
                     </div>
@@ -245,7 +246,7 @@ export default async function PartnerRequestsPage({
                       </span>{' '}
                       {request.quoted_amount
                         ? `${request.currency || 'EUR'} ${(request.quoted_amount / 100).toLocaleString(
-                            locale === 'de' ? 'de-DE' : 'en-GB'
+                            dateLocaleFromLocale(locale)
                           )}`
                         : t('labelPending')}
                     </div>

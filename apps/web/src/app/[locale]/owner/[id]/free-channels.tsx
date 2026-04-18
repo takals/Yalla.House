@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { ExternalLink, Zap } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export interface FreeChannel {
   id: string
@@ -82,7 +83,7 @@ export function FreeChannelsSection({
 }) {
   const t = useTranslations('freeChannels')
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
 
   const [statuses, setStatuses] = useState<StatusMap>(() => {
     const m = new Map<string, ChannelStatus>()

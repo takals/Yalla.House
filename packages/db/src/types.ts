@@ -1178,13 +1178,13 @@ export type Database = {
           floor: number | null
           id: string
           intent: string
-          kaution: number | null
+          deposit_amount: number | null
           key_features: string[] | null
           key_features_de: string[] | null
           last_feed_at: string | null
           lat: number | null
           lng: number | null
-          nebenkosten: number | null
+          service_charge: number | null
           owner_id: string
           place_id: string
           portal_status: Json | null
@@ -1228,13 +1228,13 @@ export type Database = {
           floor?: number | null
           id?: string
           intent: string
-          kaution?: number | null
+          deposit_amount?: number | null
           key_features?: string[] | null
           key_features_de?: string[] | null
           last_feed_at?: string | null
           lat?: number | null
           lng?: number | null
-          nebenkosten?: number | null
+          service_charge?: number | null
           owner_id: string
           place_id: string
           portal_status?: Json | null
@@ -1278,13 +1278,13 @@ export type Database = {
           floor?: number | null
           id?: string
           intent?: string
-          kaution?: number | null
+          deposit_amount?: number | null
           key_features?: string[] | null
           key_features_de?: string[] | null
           last_feed_at?: string | null
           lat?: number | null
           lng?: number | null
-          nebenkosten?: number | null
+          service_charge?: number | null
           owner_id?: string
           place_id?: string
           portal_status?: Json | null

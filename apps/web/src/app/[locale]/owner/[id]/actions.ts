@@ -24,8 +24,8 @@ export interface EditPayload {
   sale_price: string
   price_qualifier: string
   rent_price: string
-  nebenkosten: string
-  kaution: string
+  service_charge: string
+  deposit_amount: string
 }
 
 export async function updateListingAction(
@@ -95,8 +95,8 @@ export async function updateListingAction(
       sale_price: toMinorUnits(payload.sale_price),
       rent_price: toMinorUnits(payload.rent_price),
       price_qualifier: (payload.price_qualifier as 'fixed_price' | 'vb' | null) || null,
-      nebenkosten: toMinorUnits(payload.nebenkosten),
-      kaution: toMinorUnits(payload.kaution),
+      service_charge: toMinorUnits(payload.service_charge),
+      deposit_amount: toMinorUnits(payload.deposit_amount),
       country_fields: countryFields,
     })
     .eq('id', id)

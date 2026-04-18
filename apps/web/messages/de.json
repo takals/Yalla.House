@@ -1407,8 +1407,8 @@
       "optionFixedPrice": "Festpreis",
       "optionNegotiable": "Verhandelbar (VB)",
       "labelRentPrice": "Kaltmiete pro Monat (€)",
-      "labelNebenkosten": "Nebenkosten (€/Monat)",
-      "labelKaution": "Kaution (€)"
+      "labelServiceCharge": "Nebenkosten (€/Monat)",
+      "labelDepositAmount": "Kaution (€)"
     }
   },
   "hunterDashboard": {
@@ -1625,10 +1625,10 @@
       "qualifierNegotiable": "Verhandelbar (VB)",
       "rentPrice": "Kaltmiete pro Monat",
       "rentPricePlaceholder": "1200",
-      "nebenkosten": "Nebenkosten",
-      "nebenkostenPlaceholder": "200",
-      "kaution": "Kaution",
-      "kautionPlaceholder": "2400",
+      "serviceCharge": "Nebenkosten",
+      "serviceChargePlaceholder": "200",
+      "depositAmount": "Kaution",
+      "depositAmountPlaceholder": "2400",
       "descriptionHintsTitle": "Was macht eine gute Beschreibung aus?",
       "descriptionHint1": "Lage-Highlights — Verkehrsanbindung, Schulen, Einkaufsmöglichkeiten",
       "descriptionHint2": "Besondere Merkmale — Garten, Stellplatz, Altbau-Charme, Renovierung",
@@ -1665,8 +1665,8 @@
       "salePrice": "Kaufpreis",
       "rentPrice": "Kaltmiete",
       "perMonth": "/Monat",
-      "nebenkosten": "Nebenkosten",
-      "kaution": "Kaution"
+      "serviceCharge": "Nebenkosten",
+      "depositAmount": "Kaution"
     },
     "progress": "Schritt {current} von {total}",
     "buttons": {

@@ -163,11 +163,11 @@ export class ImmoweltConnector implements PortalConnector {
 
       ...(isRent && listing.rent_price ? {
         coldRent: fromMinorUnits(listing.rent_price, listing.currency),
-        additionalCosts: listing.nebenkosten
-          ? fromMinorUnits(listing.nebenkosten, listing.currency)
+        additionalCosts: listing.service_charge
+          ? fromMinorUnits(listing.service_charge, listing.currency)
           : undefined,
-        deposit: listing.kaution
-          ? fromMinorUnits(listing.kaution, listing.currency)
+        deposit: listing.deposit_amount
+          ? fromMinorUnits(listing.deposit_amount, listing.currency)
           : undefined,
         currency: listing.currency,
       } : {}),

@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { ReplyForm } from './reply-form'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Message {
   id: string
@@ -83,14 +84,14 @@ export default async function ThreadDetailPage({ params }: Props) {
     yesterday.setDate(yesterday.getDate() - 1)
     const isYesterday = date.toDateString() === yesterday.toDateString()
 
-    const time = date.toLocaleTimeString(locale === 'de' ? 'de-DE' : 'en-GB', {
+    const time = date.toLocaleTimeString(dateLocaleFromLocale(locale), {
       hour: '2-digit',
       minute: '2-digit',
     })
 
     if (isToday) return `Today ${time}`
     if (isYesterday) return `Yesterday ${time}`
-    return `${date.toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', {
+    return `${date.toLocaleDateString(dateLocaleFromLocale(locale), {
       month: 'short',
       day: 'numeric',
     })} ${time}`

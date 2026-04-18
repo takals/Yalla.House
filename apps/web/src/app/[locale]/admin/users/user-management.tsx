@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useLocale } from 'next-intl'
 import { Search, Shield, ShieldCheck, ShieldAlert, UserCircle } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 type T = Record<string, string>
 function tx(t: T, key: string): string { return t[key] ?? key }
@@ -132,7 +133,7 @@ function UserRow({
   const [isPending, startTransition] = useTransition()
   const [message, setMessage] = useState<string | null>(null)
   const locale = useLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
 
   const dateStr = new Date(user.created_at).toLocaleDateString(dateLocale, {
     day: '2-digit', month: 'short', year: 'numeric',

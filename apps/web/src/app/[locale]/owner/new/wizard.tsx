@@ -27,8 +27,8 @@ interface WizardFormData {
   sale_price: string
   price_qualifier: string
   rent_price: string
-  nebenkosten: string
-  kaution: string
+  service_charge: string
+  deposit_amount: string
 }
 
 const INITIAL: WizardFormData = {
@@ -37,7 +37,7 @@ const INITIAL: WizardFormData = {
   size_sqm: '', rooms: '', bedrooms: '', bathrooms: '',
   floor: '', total_floors: '', construction_year: '', energy_class: '',
   title_de: '', description_de: '',
-  sale_price: '', price_qualifier: '', rent_price: '', nebenkosten: '', kaution: '',
+  sale_price: '', price_qualifier: '', rent_price: '', service_charge: '', deposit_amount: '',
 }
 
 type FormErrors = Partial<Record<keyof WizardFormData, string>>
@@ -650,22 +650,22 @@ function Step4({
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label={`${t('step4.nebenkosten')} (${currencySymbol})`}
-              id="nebenkosten"
+              label={`${t('step4.serviceCharge')} (${currencySymbol})`}
+              id="service_charge"
               type="number"
               min="0"
-              placeholder={t('step4.nebenkostenPlaceholder')}
-              value={form.nebenkosten}
-              onChange={e => set('nebenkosten', e.target.value)}
+              placeholder={t('step4.serviceChargePlaceholder')}
+              value={form.service_charge}
+              onChange={e => set('service_charge', e.target.value)}
             />
             <Input
-              label={`${t('step4.kaution')} (${currencySymbol})`}
-              id="kaution"
+              label={`${t('step4.depositAmount')} (${currencySymbol})`}
+              id="deposit_amount"
               type="number"
               min="0"
-              placeholder={t('step4.kautionPlaceholder')}
-              value={form.kaution}
-              onChange={e => set('kaution', e.target.value)}
+              placeholder={t('step4.depositAmountPlaceholder')}
+              value={form.deposit_amount}
+              onChange={e => set('deposit_amount', e.target.value)}
             />
           </div>
         </div>
@@ -751,11 +751,11 @@ function Step5({
         {form.rent_price && (
           <SummaryRow label={t('step5.rentPrice')} value={`${formatCurrencyValue(form.rent_price)}${t('step5.perMonth')}`} />
         )}
-        {form.nebenkosten && (
-          <SummaryRow label={t('step5.nebenkosten')} value={`${formatCurrencyValue(form.nebenkosten)}${t('step5.perMonth')}`} />
+        {form.service_charge && (
+          <SummaryRow label={t('step5.serviceCharge')} value={`${formatCurrencyValue(form.service_charge)}${t('step5.perMonth')}`} />
         )}
-        {form.kaution && (
-          <SummaryRow label={t('step5.kaution')} value={formatCurrencyValue(form.kaution)} />
+        {form.deposit_amount && (
+          <SummaryRow label={t('step5.depositAmount')} value={formatCurrencyValue(form.deposit_amount)} />
         )}
       </SummarySection>
     </div>

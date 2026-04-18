@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { Lock, Zap } from 'lucide-react'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 const STATUS_STYLES: Record<string, string> = {
   draft: 'bg-gray-100 text-gray-500',
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function AdminPage() {
   const t = await getTranslations()
   const locale = await getLocale()
-  const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
+  const dateLocale = dateLocaleFromLocale(locale)
 
   // Auth check
   const supabase = await createClient()
