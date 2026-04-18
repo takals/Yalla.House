@@ -1,8 +1,104 @@
 'use server'
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { requireAuth } from '@/lib/auth-guard'
 import { sendNewViewingRequestEmail } from '@/lib/resend'
 import { sendViewingRequestWhatsApp } from '@/lib/whatsapp'
+
+// ── Inline field update (owner editing from listing page) ────────────────────
+
+const ALLOWED_INLINE_FIELDS = new Set([
+  'title_de', 'title', 'description_de', 'description',
+  'sale_price', 'rent_price', 'bedrooms', 'bathrooms',
+  'size_sqm', 'floor', 'construction_year',
+])
+
+export async function updateListingFieldAction(
+  listingId: string,
+  field: string,
+  value: string
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) return { authRequired: true }
+
+  if (!ALLOWED_INLINE_FIELDS.has(field)) return { error: 'Field not editable' }
+
+  const supabase = await createClient()
+
+  // Verify ownership
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('owner_id')
+    .eq('id', listingId)
+    .single()
+
+  if (!listing || listing.owner_id !== auth.userId) return { error: 'Not authorized' }
+
+  // Convert value based on field type
+  let dbValue: unknown = value
+  if (['sale_price', 'rent_price'].includes(field)) {
+    const n = parseFloat(value)
+    dbValue = isNaN(n) || n <= 0 ? null : Math.round(n * 100) // store in minor units
+  } else if (['bedrooms', 'bathrooms', 'floor', 'construction_year'].includes(field)) {
+    const n = parseInt(value, 10)
+    dbValue = isNaN(n) ? null : n
+  } else if (field === 'size_sqm') {
+    const n = parseFloat(value)
+    dbValue = isNaN(n) ? null : n
+  }
+
+  // For title fields, sync both title and title_de
+  const update: Record<string, unknown> = { [field]: dbValue }
+  if (field === 'title_de') update['title'] = dbValue
+  if (field === 'title') update['title_de'] = dbValue
+
+  const { error } = await (supabase.from('listings') as any)
+    .update(update)
+    .eq('id', listingId)
+    .eq('owner_id', auth.userId)
+
+  if (error) {
+    console.error('updateListingFieldAction error:', error)
+    return { error: 'Failed to save' }
+  }
+
+  return { success: true }
+}
+
+// ── Upload photo from listing page ───────────────────────────────────────────
+
+export async function uploadPhotoAction(
+  listingId: string,
+  url: string,
+  sortOrder: number
+): Promise<{ success: true; id: string } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) return { authRequired: true }
+
+  const supabase = await createClient()
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('owner_id')
+    .eq('id', listingId)
+    .single()
+
+  if (!listing || listing.owner_id !== auth.userId) return { error: 'Not authorized' }
+
+  const { data, error } = await (supabase.from('listing_media') as any).insert({
+    listing_id: listingId,
+    type: 'photo',
+    url,
+    sort_order: sortOrder,
+    is_primary: false,
+  }).select('id').single()
+
+  if (error) {
+    console.error('uploadPhotoAction error:', error)
+    return { error: 'Failed to save photo' }
+  }
+
+  return { success: true, id: data.id }
+}
 
 export async function checkAuthAction(): Promise<{
   authenticated: boolean

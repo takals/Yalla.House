@@ -80,7 +80,7 @@ export default async function ViewingsPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <div className="bg-surface rounded-card p-4">
             <p className="text-2xl font-bold text-brand">{pendingCount}</p>
             <p className="text-xs text-text-secondary mt-0.5">{t('pending')}</p>

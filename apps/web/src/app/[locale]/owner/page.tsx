@@ -9,16 +9,25 @@ export default async function OwnerPage() {
     redirect('/auth/login?next=/owner')
   }
 
-  // Check if owner has any listings
-  const { count } = await supabase
+  // Fetch owner's listings — we need slug/place_id for single-listing redirect
+  const { data: listings } = await (supabase as any)
     .from('listings')
-    .select('id', { count: 'exact', head: true })
+    .select('id, place_id, slug, status')
     .eq('owner_id', user.id)
+    .order('created_at', { ascending: false })
 
-  // Has listings → go to listings overview. No listings → onboarding/info page.
-  if (count && count > 0) {
-    redirect('/owner/listings')
+  if (!listings || listings.length === 0) {
+    // No listings → onboarding/info page
+    redirect('/owner/info')
   }
 
-  redirect('/owner/info')
+  if (listings.length === 1) {
+    // Single listing → go straight to the listing's public page (owner view)
+    const listing = listings[0]
+    const identifier = listing.slug || listing.place_id || listing.id
+    redirect(`/p/${identifier}`)
+  }
+
+  // Multiple listings → grid overview
+  redirect('/owner/listings')
 }

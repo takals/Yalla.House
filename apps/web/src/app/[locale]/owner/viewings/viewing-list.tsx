@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
+import { ChevronDown, ChevronUp, Mail, Phone, Calendar, MessageSquare } from 'lucide-react'
 import { confirmViewingAction, declineViewingAction } from './actions'
 
 export interface ViewingRow {
@@ -16,7 +17,7 @@ export interface ViewingRow {
   hunter: { full_name: string | null; email: string; phone: string | null } | null
 }
 
-function getStatusBadge(status: string, t: any) {
+function getStatusBadge(status: string, t: ReturnType<typeof useTranslations>) {
   switch (status) {
     case 'pending':
       return { label: t('viewings.pending'), className: 'bg-yellow-100 text-yellow-700' }
@@ -37,6 +38,11 @@ function formatDate(iso: string, dateLocale: string): string {
   return new Date(iso).toLocaleDateString(dateLocale, { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
+function formatDateTime(iso: string, dateLocale: string): string {
+  const d = new Date(iso)
+  return `${d.toLocaleDateString(dateLocale, { weekday: 'short', day: 'numeric', month: 'short' })} · ${d.toLocaleTimeString(dateLocale, { hour: '2-digit', minute: '2-digit' })}`
+}
+
 export function ViewingList({
   initialViewings,
   listingMap,
@@ -54,6 +60,16 @@ export function ViewingList({
   })
   const [errors, setErrors] = useState<Map<string, string>>(new Map())
   const [acting, setActing] = useState<Set<string>>(new Set())
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
+
+  function toggleExpand(viewingId: string) {
+    setExpanded(prev => {
+      const next = new Set(prev)
+      if (next.has(viewingId)) next.delete(viewingId)
+      else next.add(viewingId)
+      return next
+    })
+  }
 
   async function handleConfirm(viewingId: string) {
     const prev = statuses.get(viewingId)
@@ -100,66 +116,147 @@ export function ViewingList({
         const badge = getStatusBadge(status, t)
         const isPending = status === 'pending'
         const isActing = acting.has(viewing.id)
+        const isExpanded = expanded.has(viewing.id)
         const err = errors.get(viewing.id)
         const listing = listingMap[viewing.listing_id]
 
         return (
-          <div key={viewing.id} className="bg-surface rounded-card p-5 shadow-sm">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                {/* Listing link */}
-                {listing && (
-                  <Link
-                    href={`/owner/${viewing.listing_id}`}
-                    className="text-sm font-semibold text-text-primary hover:underline truncate block"
-                  >
-                    {listing.title_de ?? listing.place_id}
-                  </Link>
-                )}
+          <div key={viewing.id} className="bg-surface rounded-card shadow-sm overflow-hidden">
+            {/* Clickable card header */}
+            <button
+              type="button"
+              onClick={() => toggleExpand(viewing.id)}
+              className="w-full text-left p-5 hover:bg-hover-bg/50 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  {/* Hunter name + listing */}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {viewing.hunter?.full_name && (
+                      <span className="font-bold text-text-primary">{viewing.hunter.full_name}</span>
+                    )}
+                    {!viewing.hunter?.full_name && viewing.hunter?.email && (
+                      <span className="font-bold text-text-primary">{viewing.hunter.email}</span>
+                    )}
+                    {listing && (
+                      <span className="text-xs text-text-muted">
+                        · {listing.title_de ?? listing.place_id}
+                      </span>
+                    )}
+                  </div>
 
-                {/* Hunter info */}
-                <div className="mt-1 text-sm text-text-secondary">
-                  {viewing.hunter?.full_name && (
-                    <span className="font-medium text-text-primary">{viewing.hunter.full_name}</span>
-                  )}
-                  {viewing.hunter?.full_name && ' · '}
-                  <span>{viewing.hunter?.email}</span>
-                  {viewing.hunter?.phone && (
-                    <span> · {viewing.hunter.phone}</span>
+                  {/* Scheduled date or received date */}
+                  <div className="flex items-center gap-3 mt-1.5 text-xs text-text-secondary">
+                    {viewing.scheduled_at && (
+                      <span className="flex items-center gap-1">
+                        <Calendar size={11} />
+                        {t('viewings.scheduled')}: {formatDateTime(viewing.scheduled_at, dateLocale)}
+                      </span>
+                    )}
+                    <span>{t('viewings.received')}: {formatDate(viewing.created_at, dateLocale)}</span>
+                  </div>
+
+                  {/* Notes preview */}
+                  {viewing.hunter_notes && !isExpanded && (
+                    <p className="mt-1.5 text-sm text-text-secondary truncate max-w-md italic">
+                      &ldquo;{viewing.hunter_notes}&rdquo;
+                    </p>
                   )}
                 </div>
 
-                {/* Notes */}
-                {viewing.hunter_notes && (
-                  <p className="mt-2 text-sm text-text-secondary italic">
-                    &ldquo;{viewing.hunter_notes}&rdquo;
-                  </p>
-                )}
-
-                {/* Date */}
-                <p className="mt-2 text-xs text-[#999999]">
-                  Eingegangen: {formatDate(viewing.created_at, dateLocale)}
-                </p>
-
-                {/* Error */}
-                {err && (
-                  <p className="mt-2 text-xs text-red-600">{err}</p>
-                )}
+                {/* Right: badge + expand indicator */}
+                <div className="flex items-center gap-2.5 flex-shrink-0">
+                  <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
+                    {badge.label}
+                  </span>
+                  {isExpanded ? <ChevronUp size={16} className="text-text-muted" /> : <ChevronDown size={16} className="text-text-muted" />}
+                </div>
               </div>
+            </button>
 
-              {/* Right: badge + actions */}
-              <div className="flex flex-col items-end gap-3 flex-shrink-0">
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${badge.className}`}>
-                  {badge.label}
-                </span>
+            {/* Expanded detail panel */}
+            {isExpanded && (
+              <div className="px-5 pb-5 border-t border-border-default/50">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  {/* Contact info */}
+                  <div className="bg-[#F8FAFC] rounded-xl p-4">
+                    <h4 className="text-xs font-bold text-text-primary uppercase tracking-wide mb-3">
+                      {t('viewings.contactInfo')}
+                    </h4>
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2.5 text-sm">
+                        <Mail size={14} className="text-text-muted flex-shrink-0" />
+                        <div>
+                          <span className="text-xs text-text-muted">{t('viewings.email')}</span>
+                          <a
+                            href={`mailto:${viewing.hunter?.email}`}
+                            onClick={e => e.stopPropagation()}
+                            className="block text-brand hover:underline font-medium"
+                          >
+                            {viewing.hunter?.email}
+                          </a>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2.5 text-sm">
+                        <Phone size={14} className="text-text-muted flex-shrink-0" />
+                        <div>
+                          <span className="text-xs text-text-muted">{t('viewings.phone')}</span>
+                          {viewing.hunter?.phone ? (
+                            <a
+                              href={`tel:${viewing.hunter.phone}`}
+                              onClick={e => e.stopPropagation()}
+                              className="block text-brand hover:underline font-medium"
+                            >
+                              {viewing.hunter.phone}
+                            </a>
+                          ) : (
+                            <span className="block text-text-secondary">{t('viewings.noPhone')}</span>
+                          )}
+                        </div>
+                      </div>
+                      {viewing.type && (
+                        <div className="flex items-center gap-2.5 text-sm">
+                          <Calendar size={14} className="text-text-muted flex-shrink-0" />
+                          <div>
+                            <span className="text-xs text-text-muted">{t('viewings.type')}</span>
+                            <span className="block font-medium text-text-primary">
+                              {viewing.type === 'video' ? t('viewings.typeVideo') : t('viewings.typeInPerson')}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
+                  {/* Notes + communication */}
+                  <div className="bg-[#F8FAFC] rounded-xl p-4">
+                    {viewing.hunter_notes ? (
+                      <>
+                        <h4 className="text-xs font-bold text-text-primary uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                          <MessageSquare size={12} />
+                          {t('viewings.message')}
+                        </h4>
+                        <p className="text-sm text-text-secondary italic leading-relaxed">
+                          &ldquo;{viewing.hunter_notes}&rdquo;
+                        </p>
+                      </>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-sm text-text-muted">
+                        <MessageSquare size={14} className="mr-2 opacity-40" />
+                        {t('viewings.noMessage')}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Actions row */}
                 {isPending && (
-                  <div className="flex gap-2">
+                  <div className="flex justify-end gap-2 mt-4">
                     <button
                       type="button"
                       onClick={() => handleDecline(viewing.id)}
                       disabled={isActing}
-                      className="text-xs font-semibold px-3 py-1.5 bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-xs font-semibold px-4 py-2 bg-hover-bg hover:bg-[#E4E6EF] text-text-secondary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {t('viewings.decline')}
                     </button>
@@ -167,7 +264,7 @@ export function ViewingList({
                       type="button"
                       onClick={() => handleConfirm(viewing.id)}
                       disabled={isActing}
-                      className="text-xs font-bold px-3 py-1.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="text-xs font-bold px-4 py-2 bg-brand hover:bg-brand-hover text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isActing ? (
                         <span className="flex items-center gap-1.5">
@@ -181,8 +278,13 @@ export function ViewingList({
                     </button>
                   </div>
                 )}
+
+                {/* Error */}
+                {err && (
+                  <p className="mt-3 text-xs text-red-600">{err}</p>
+                )}
               </div>
-            </div>
+            )}
           </div>
         )
       })}

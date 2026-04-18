@@ -11,6 +11,7 @@ import { Home, BedDouble, Bath, Building, CalendarDays } from 'lucide-react'
 import { OwnerQuickActions } from './owner-quick-actions'
 import { PhotoGallery } from './photo-gallery'
 import { HeroPhoto } from './hero-photo'
+import { OwnerInlineControls } from './owner-inline-controls'
 import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib/resolve-listing'
 
 interface Props {
@@ -334,13 +335,26 @@ export default async function PropertyPage({ params, searchParams }: Props) {
       {/* ═══ CONTENT: Description + Photos + Sidebar ═══ */}
       <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
         <div className="flex-1 min-w-0 space-y-4">
-          {/* Description */}
-          {desc && (
+          {/* Description — inline editable for owner */}
+          {isOwner ? (
+            <div className="bg-surface rounded-card p-6 shadow-sm">
+              <h2 className="text-lg font-bold mb-3">{t('descriptionTitle')}</h2>
+              <OwnerInlineControls
+                listingId={listing.id}
+                title={title ?? ''}
+                description={desc ?? null}
+                salePrice={listing.sale_price ?? null}
+                rentPrice={listing.rent_price ?? null}
+                currency={listing.currency ?? 'GBP'}
+                photoCount={photos.length}
+              />
+            </div>
+          ) : desc ? (
             <div className="bg-surface rounded-card p-6 shadow-sm">
               <h2 className="text-lg font-bold mb-3">{t('descriptionTitle')}</h2>
               <p className="text-text-secondary leading-relaxed whitespace-pre-line">{desc}</p>
             </div>
-          )}
+          ) : null}
 
           {/* Photo gallery with lightbox */}
           {photos.length > 1 && (
