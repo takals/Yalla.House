@@ -714,7 +714,8 @@
     "badgeTomorrow": "Morgen",
     "badgeInDays": "in {days} Tagen",
     "viewingInterested": "möchte besichtigen",
-    "newInquiry": "Neue Anfrage"
+    "newInquiry": "Neue Anfrage",
+    "statNewOffers": "{count} neue Angebote"
   },
   "ownerListings": {
     "pageTitle": "Meine Inserate",

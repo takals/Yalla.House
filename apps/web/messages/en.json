@@ -714,7 +714,8 @@
     "badgeTomorrow": "Tomorrow",
     "badgeInDays": "in {days} days",
     "viewingInterested": "interested in viewing",
-    "newInquiry": "New inquiry"
+    "newInquiry": "New inquiry",
+    "statNewOffers": "{count} new offers"
   },
   "ownerListings": {
     "pageTitle": "My Listings",
