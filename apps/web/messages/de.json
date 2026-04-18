@@ -1551,7 +1551,8 @@
       "lookupPostcode": "Adresse nachschlagen",
       "lookupLoading": "Suche läuft...",
       "selectAddress": "Wählen Sie Ihre Adresse",
-      "enterManually": "Stattdessen manuell eingeben"
+      "enterManually": "Stattdessen manuell eingeben",
+      "addressSearchPlaceholder": "Adresse eingeben..."
     },
     "step3": {
       "heading": "Objektdetails",

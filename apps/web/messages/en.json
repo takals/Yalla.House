@@ -1551,7 +1551,8 @@
       "lookupPostcode": "Look up address",
       "lookupLoading": "Looking up...",
       "selectAddress": "Select your address",
-      "enterManually": "Enter manually instead"
+      "enterManually": "Enter manually instead",
+      "addressSearchPlaceholder": "Start typing your address..."
     },
     "step3": {
       "heading": "Property Details",

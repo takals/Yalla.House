@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { Home, Building2, Building, Store, TreePine, MapPin, Crosshair, Search, Sparkles, Lightbulb } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
@@ -160,16 +160,109 @@ function Step1({
 }
 
 function Step2({
-  form, errors, set, t, postcodeLabel, postcodeMaxLength, isUK,
+  form, errors, set, t, postcodeLabel, postcodeMaxLength, isUK, countryCode,
 }: {
   form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; t: (key: string) => string
-  postcodeLabel: string; postcodeMaxLength: number; isUK: boolean
+  postcodeLabel: string; postcodeMaxLength: number; isUK: boolean; countryCode: string
 }) {
   const [locating, setLocating] = useState(false)
   const [locationError, setLocationError] = useState('')
-  const [lookingUp, setLookingUp] = useState(false)
-  const [addresses, setAddresses] = useState<Array<{ line1: string; line2: string; city: string; postcode: string }>>([])
-  const [showPicker, setShowPicker] = useState(false)
+
+  // Address autocomplete state
+  interface Suggestion {
+    display: string
+    line1: string
+    line2: string
+    city: string
+    postcode: string
+  }
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [addressQuery, setAddressQuery] = useState('')
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  // Close suggestions on click outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Debounced address autocomplete via Nominatim
+  const searchAddress = useCallback((query: string) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (query.length < 3) {
+      setSuggestions([])
+      setShowSuggestions(false)
+      return
+    }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const country = countryCode.toLowerCase()
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&countrycodes=${country}&limit=6`,
+          { headers: { 'Accept-Language': isUK ? 'en' : 'de' } }
+        )
+        const data = await res.json()
+        if (Array.isArray(data) && data.length > 0) {
+          const mapped: Suggestion[] = data.map((item: {
+            display_name: string
+            address: {
+              road?: string
+              house_number?: string
+              city?: string
+              town?: string
+              village?: string
+              suburb?: string
+              postcode?: string
+            }
+          }) => {
+            const addr = item.address
+            const road = addr.road || ''
+            const houseNum = addr.house_number || ''
+            const line1 = houseNum ? `${road} ${houseNum}`.trim() : road
+            const city = addr.city || addr.town || addr.village || ''
+            const suburb = addr.suburb || ''
+            return {
+              display: item.display_name,
+              line1,
+              line2: suburb && suburb !== city ? suburb : '',
+              city,
+              postcode: addr.postcode || '',
+            }
+          }).filter((s: Suggestion) => s.line1)
+          setSuggestions(mapped)
+          setShowSuggestions(mapped.length > 0)
+        } else {
+          setSuggestions([])
+          setShowSuggestions(false)
+        }
+      } catch {
+        // Silently fail — user can type manually
+      }
+    }, 350)
+  }, [countryCode, isUK])
+
+  function handleAddressInput(value: string) {
+    setAddressQuery(value)
+    set('address_line1', value)
+    searchAddress(value)
+  }
+
+  function selectSuggestion(s: Suggestion) {
+    set('address_line1', s.line1)
+    if (s.line2) set('address_line2', s.line2)
+    if (s.city) set('city', s.city)
+    if (s.postcode) set('postcode', s.postcode)
+    setAddressQuery(s.line1)
+    setShowSuggestions(false)
+    setSuggestions([])
+  }
 
   // Geolocation → reverse geocode to postcode
   async function handleFindLocation() {
@@ -180,7 +273,6 @@ function Step2({
         navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
       })
       const { latitude, longitude } = pos.coords
-      // Use postcodes.io for UK, nominatim for others
       if (isUK) {
         const res = await fetch(`https://api.postcodes.io/postcodes?lon=${longitude}&lat=${latitude}&limit=1`)
         const data = await res.json()
@@ -194,6 +286,13 @@ function Step2({
         if (data.address) {
           set('postcode', data.address.postcode || '')
           set('city', data.address.city || data.address.town || data.address.village || '')
+          if (data.address.road) {
+            const line1 = data.address.house_number
+              ? `${data.address.road} ${data.address.house_number}`
+              : data.address.road
+            set('address_line1', line1)
+            setAddressQuery(line1)
+          }
         }
       }
     } catch {
@@ -201,51 +300,6 @@ function Step2({
     } finally {
       setLocating(false)
     }
-  }
-
-  // UK postcode lookup → list of addresses
-  async function handlePostcodeLookup() {
-    const pc = form.postcode.trim()
-    if (!pc) return
-    setLookingUp(true)
-    setAddresses([])
-    try {
-      const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(pc)}`)
-      const data = await res.json()
-      if (data.status === 200 && data.result) {
-        // postcodes.io gives one result with area info — fill city
-        set('city', data.result.admin_district || data.result.parish || '')
-        set('postcode', data.result.postcode)
-        // Try to get addresses via a free address lookup
-        const addrRes = await fetch(`https://api.getaddress.io/find/${encodeURIComponent(pc)}?api-key=demo&expand=true`).catch(() => null)
-        if (addrRes?.ok) {
-          const addrData = await addrRes.json()
-          if (addrData.addresses?.length > 0) {
-            const mapped = addrData.addresses.slice(0, 10).map((a: { line_1: string; line_2: string; town_or_city: string }) => ({
-              line1: a.line_1 || '',
-              line2: a.line_2 || '',
-              city: a.town_or_city || data.result.admin_district || '',
-              postcode: data.result.postcode,
-            }))
-            setAddresses(mapped)
-            setShowPicker(true)
-          }
-        }
-      }
-    } catch {
-      // Silently fail — user can enter manually
-    } finally {
-      setLookingUp(false)
-    }
-  }
-
-  function selectAddress(addr: { line1: string; line2: string; city: string; postcode: string }) {
-    set('address_line1', addr.line1)
-    if (addr.line2) set('address_line2', addr.line2)
-    set('city', addr.city)
-    set('postcode', addr.postcode)
-    setShowPicker(false)
-    setAddresses([])
   }
 
   return (
@@ -267,7 +321,52 @@ function Step2({
         <p className="text-xs text-red-500">{locationError}</p>
       )}
 
-      {/* Postcode + City — clean 2-column grid */}
+      {/* Street and house number — with live autocomplete */}
+      <div className="relative" ref={wrapperRef}>
+        <Field label={t('step2.addressLine1')} id="address_line1" required error={errors.address_line1}>
+          <div className="relative">
+            <input
+              id="address_line1"
+              className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${errors.address_line1 ? 'border-red-400' : 'border-[#E4E6EF]'}`}
+              placeholder={t('step2.addressSearchPlaceholder')}
+              value={addressQuery || form.address_line1}
+              onChange={e => handleAddressInput(e.target.value)}
+              onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true) }}
+              autoComplete="off"
+            />
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
+          </div>
+        </Field>
+
+        {/* Autocomplete dropdown */}
+        {showSuggestions && suggestions.length > 0 && (
+          <div className="absolute left-0 right-0 top-full mt-1 z-20 bg-white border border-[#E4E6EF] rounded-xl shadow-lg overflow-hidden">
+            <div className="max-h-56 overflow-y-auto">
+              {suggestions.map((s, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => selectSuggestion(s)}
+                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-brand/5 border-b border-[#E4E6EF] last:border-0 transition-colors"
+                >
+                  <span className="font-medium text-text-primary">{s.line1}</span>
+                  {s.city && <span className="text-text-secondary">, {s.postcode} {s.city}</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <Input
+        label={t('step2.addressLine2')}
+        id="address_line2"
+        placeholder={t('step2.addressLine2Placeholder')}
+        value={form.address_line2}
+        onChange={e => set('address_line2', e.target.value)}
+      />
+
+      {/* Postcode + City — auto-filled from selection, editable */}
       <div className="grid grid-cols-2 gap-4">
         <Input
           label={postcodeLabel}
@@ -289,69 +388,6 @@ function Step2({
           error={errors.city}
         />
       </div>
-
-      {/* UK postcode lookup link — sits cleanly below the row */}
-      {isUK && (
-        <button
-          type="button"
-          onClick={handlePostcodeLookup}
-          disabled={lookingUp || !form.postcode.trim()}
-          className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-hover transition-colors disabled:opacity-40 -mt-2"
-        >
-          <Search size={13} />
-          {lookingUp ? t('step2.lookupLoading') : t('step2.lookupPostcode')}
-        </button>
-      )}
-
-      {/* Street and house number — with address suggestions dropdown */}
-      <div className="relative">
-        <Input
-          label={t('step2.addressLine1')}
-          id="address_line1"
-          required
-          placeholder={t('step2.addressLine1Placeholder')}
-          value={form.address_line1}
-          onChange={e => set('address_line1', e.target.value)}
-          error={errors.address_line1}
-        />
-
-        {/* Address suggestions dropdown — directly under street field */}
-        {showPicker && addresses.length > 0 && (
-          <div className="absolute left-0 right-0 top-full mt-1 z-20 bg-white border border-[#E4E6EF] rounded-xl shadow-lg overflow-hidden">
-            <p className="px-4 py-2 text-xs font-bold text-text-secondary bg-bg border-b border-[#E4E6EF]">
-              {t('step2.selectAddress')}
-            </p>
-            <div className="max-h-48 overflow-y-auto">
-              {addresses.map((addr, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => selectAddress(addr)}
-                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-brand/5 border-b border-[#E4E6EF] last:border-0 transition-colors"
-                >
-                  <span className="font-medium text-text-primary">{addr.line1}</span>
-                  {addr.line2 && <span className="text-text-secondary"> — {addr.line2}</span>}
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => { setShowPicker(false); setAddresses([]) }}
-              className="w-full text-center px-4 py-2 text-xs font-semibold text-text-secondary hover:text-brand border-t border-[#E4E6EF] transition-colors"
-            >
-              {t('step2.enterManually')}
-            </button>
-          </div>
-        )}
-      </div>
-
-      <Input
-        label={t('step2.addressLine2')}
-        id="address_line2"
-        placeholder={t('step2.addressLine2Placeholder')}
-        value={form.address_line2}
-        onChange={e => set('address_line2', e.target.value)}
-      />
     </div>
   )
 }
@@ -850,7 +886,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
       {/* Step card */}
       <div className="bg-surface rounded-card shadow-sm p-6">
         {step === 1 && <Step1 form={form} errors={errors} set={set} propertyTypes={propertyTypes} t={t} intentLabels={intentLabels} />}
-        {step === 2 && <Step2 form={form} errors={errors} set={set} t={t} postcodeLabel={countryConfig.postal_code_label} postcodeMaxLength={countryCode === 'GB' ? 8 : 5} isUK={countryCode === 'GB'} />}
+        {step === 2 && <Step2 form={form} errors={errors} set={set} t={t} postcodeLabel={countryConfig.postal_code_label} postcodeMaxLength={countryCode === 'GB' ? 8 : 5} isUK={countryCode === 'GB'} countryCode={countryCode} />}
         {step === 3 && <Step3 form={form} errors={errors} set={set} isFlat={isFlat} t={t} />}
         {step === 4 && <Step4 form={form} errors={errors} set={set} currency={countryConfig.currency} t={t} allFormData={form} />}
         {step === 5 && <Step5 form={form} currency={countryConfig.currency} localeFormatting={localeFormatting} t={t} propertyTypes={propertyTypes} intentLabels={intentLabels} />}
