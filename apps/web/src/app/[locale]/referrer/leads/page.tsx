@@ -149,7 +149,7 @@ export default async function ReferralLeadsPage() {
                     <div>
                       <h3 className="font-bold text-sm">{userName}</h3>
                       <p className="text-xs text-text-secondary">
-                        {roleLabel} · {t('joined')} {new Date(referral.created_at).toLocaleDateString(dateLocale)}
+                        {roleLabel} · {t('joined')} {new Date(referral.created_at ?? Date.now()).toLocaleDateString(dateLocale)}
                       </p>
                     </div>
                     {totalEarned > 0 && (

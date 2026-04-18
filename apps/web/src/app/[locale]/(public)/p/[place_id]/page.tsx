@@ -2,13 +2,15 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import { ContactCard } from './contact-form'
 import { ViewingCalendar } from './viewing-calendar'
 import { ListingStatusBadge } from './listing-status-badge'
 import { StickyBookingBar } from './sticky-booking-bar'
 import { OwnerToolbar } from './owner-toolbar'
 import { Home, BedDouble, Bath, Building, CalendarDays } from 'lucide-react'
+import { OwnerQuickActions } from './owner-quick-actions'
+import { PhotoGallery } from './photo-gallery'
+import { HeroPhoto } from './hero-photo'
 import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib/resolve-listing'
 
 interface Props {
@@ -119,12 +121,22 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 
   if (!isOwner && !isPublicVisible) notFound()
 
-  const { count: slotCount } = await (supabase as any)
-    .from('availability_slots')
-    .select('id', { count: 'exact', head: true })
-    .eq('listing_id', listing.id)
-    .eq('is_booked', false)
-    .gt('starts_at', new Date().toISOString())
+  const [{ count: slotCount }, { data: portalSyncsData }] = await Promise.all([
+    (supabase as any)
+      .from('availability_slots')
+      .select('id', { count: 'exact', head: true })
+      .eq('listing_id', listing.id)
+      .eq('is_booked', false)
+      .gt('starts_at', new Date().toISOString()),
+    isOwner
+      ? (supabase as any)
+          .from('portal_syncs')
+          .select('portal, status')
+          .eq('listing_id', listing.id)
+          .then((r: { data: unknown }) => r)
+          .catch(() => ({ data: null }))
+      : Promise.resolve({ data: null }),
+  ])
 
   const title  = locale === 'de' ? (listing.title_de  ?? listing.title)  : (listing.title  ?? listing.title_de)
   const desc   = locale === 'de' ? (listing.description_de ?? listing.description) : (listing.description ?? listing.description_de)
@@ -211,12 +223,22 @@ export default async function PropertyPage({ params, searchParams }: Props) {
       {/* ═══ HERO: Photo with gradient overlay + title/price ═══ */}
       <div className="relative w-full h-[55vh] min-h-[380px] bg-gray-900">
         {primaryPhoto ? (
-          <Image
-            src={primaryPhoto.url}
+          <HeroPhoto
+            photos={photos.map(p => ({
+              id: p.id,
+              url: p.url,
+              thumb_url: p.thumb_url,
+              caption_de: p.caption_de,
+              caption: p.caption,
+            }))}
+            primaryUrl={primaryPhoto.url}
             alt={title ?? 'Property photo'}
-            fill
-            className="object-cover"
-            priority
+            photoCount={photos.length}
+            translations={{
+              viewAllPhotos: t('viewAllPhotos'),
+              photoOf: t('photoOf'),
+              closeGallery: t('closeGallery'),
+            }}
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
@@ -287,6 +309,28 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         </div>
       </div>
 
+      {/* ═══ OWNER QUICK ACTIONS — collapsible section below calendar ═══ */}
+      {isOwner && (
+        <div className="max-w-6xl mx-auto px-4 pt-6">
+          <OwnerQuickActions
+            listingId={listing.id}
+            translations={{
+              quickActions: t('quickActions'),
+              editListing: t('editListing'),
+              addViewingSlots: t('addViewingSlots'),
+              manageViewings: t('manageViewings'),
+              inviteAgents: t('inviteAgents'),
+              viewAnalytics: t('viewAnalytics'),
+              portalStatus: t('portalStatus'),
+              portalStatusLive: t('portalStatusLive'),
+              portalStatusPending: t('portalStatusPending'),
+              portalStatusNone: t('portalStatusNone'),
+            }}
+            portalSyncs={portalSyncsData as Array<{ portal: string; status: string }> | undefined}
+          />
+        </div>
+      )}
+
       {/* ═══ CONTENT: Description + Photos + Sidebar ═══ */}
       <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
         <div className="flex-1 min-w-0 space-y-4">
@@ -298,50 +342,35 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             </div>
           )}
 
-          {/* Photo gallery */}
+          {/* Photo gallery with lightbox */}
           {photos.length > 1 && (
-            <div className="bg-surface rounded-card p-6 shadow-sm">
-              <h2 className="text-lg font-bold mb-3">{t('photosTitle')} ({photos.length})</h2>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                {photos.map(photo => (
-                  <div key={photo.id} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
-                    <Image
-                      src={photo.thumb_url ?? photo.url}
-                      alt={photo.caption_de ?? photo.caption ?? (title ? `${title} photo` : 'Property photo')}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+            <PhotoGallery
+              photos={photos.map(p => ({
+                id: p.id,
+                url: p.url,
+                thumb_url: p.thumb_url,
+                caption_de: p.caption_de,
+                caption: p.caption,
+              }))}
+              title={title}
+              translations={{
+                photosTitle: t('photosTitle'),
+                viewAllPhotos: t('viewAllPhotos'),
+                photoOf: t('photoOf'),
+                closeGallery: t('closeGallery'),
+              }}
+            />
           )}
         </div>
 
-        {/* Right sidebar */}
-        <div className="lg:w-80 flex-shrink-0">
-          <div className="sticky top-20 space-y-4">
-            {!isOwner && <ContactCard listingId={listing.id} />}
-            {isOwner && (
-              <div className="bg-surface rounded-card p-6 shadow-sm border border-border-default">
-                <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-3">
-                  {t('quickActions')}
-                </p>
-                <div className="space-y-2">
-                  <a href={`/owner/${listing.id}`} className="block w-full text-center bg-bg hover:bg-hover-muted text-text-primary font-semibold text-sm py-2.5 rounded-lg transition-colors">
-                    {t('editListing')}
-                  </a>
-                  <a href="/owner/viewings" className="block w-full text-center bg-bg hover:bg-hover-muted text-text-primary font-semibold text-sm py-2.5 rounded-lg transition-colors">
-                    {t('manageViewings')}
-                  </a>
-                  <a href="/owner/agents" className="block w-full text-center bg-bg hover:bg-hover-muted text-text-primary font-semibold text-sm py-2.5 rounded-lg transition-colors">
-                    {t('inviteAgents')}
-                  </a>
-                </div>
-              </div>
-            )}
+        {/* Right sidebar — visible to non-owners only */}
+        {!isOwner && (
+          <div className="lg:w-80 flex-shrink-0">
+            <div className="sticky top-20 space-y-4">
+              <ContactCard listingId={listing.id} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )

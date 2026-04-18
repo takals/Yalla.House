@@ -299,7 +299,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
             ) : (
               <div className="space-y-3">
                 {threads.slice(0, 3).map(thread => {
-                  const threadDate = new Date(thread.created_at)
+                  const threadDate = new Date(thread.created_at ?? Date.now())
                   const dateStr = threadDate.toLocaleDateString(dateLocale, { day: '2-digit', month: 'short' })
 
                   return (

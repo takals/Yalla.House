@@ -160,7 +160,7 @@ export default async function BriefLandingPage({ params }: Props) {
           {/* Date */}
           <div className="mt-6 pt-5 border-t border-white/[0.06] flex items-center gap-2 text-xs text-text-on-dark-muted">
             <Calendar size={14} />
-            Brief sent {new Date(listing.created_at).toLocaleDateString(dateLocale, {
+            Brief sent {new Date(listing.created_at ?? Date.now()).toLocaleDateString(dateLocale, {
               day: 'numeric',
               month: 'long',
               year: 'numeric',
