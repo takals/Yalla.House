@@ -2458,5 +2458,15 @@
     "nudgeShareTitle": "Vergiss nicht zu teilen!",
     "nudgeShareDesc": "Teile dein Inserat auf Social Media, um noch mehr Interessenten zu erreichen.",
     "nudgeShareCta": "Jetzt teilen"
+  },
+  "welcome": {
+    "title": "Willkommen bei Yalla.House!",
+    "subtitle": "Was f\u00fchrt dich heute hierher?",
+    "ownerTitle": "Ich verkaufe oder vermiete",
+    "ownerDesc": "Immobilie inserieren, Besichtigungen verwalten und Makler finden.",
+    "hunterTitle": "Ich suche ein Zuhause",
+    "hunterDesc": "Immobilien suchen, mit Maklern verbinden und Besichtigungen buchen.",
+    "agentTitle": "Ich bin Immobilienmakler",
+    "agentDesc": "Auftr\u00e4ge verwalten, auf Anfragen reagieren und Gesch\u00e4ft ausbauen."
   }
 }

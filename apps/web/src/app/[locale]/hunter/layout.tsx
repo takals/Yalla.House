@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_EMAIL, PREVIEW_USER_ID } from '@/lib/preview-user'
 import { DashboardShell, hunterNav } from '@/components/dashboard/shell'
 import { fetchNotifications, getNotificationLabels } from '@/lib/notifications'
+import { fetchUserRoles } from '@/lib/user-roles'
 import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
@@ -22,8 +23,8 @@ export default async function HunterLayout({ children }: { children: React.React
     getTranslations('shell'),
   ])
 
-  // Fetch profile + notifications in parallel
-  const [profileResult, notifData] = await Promise.all([
+  // Fetch profile + notifications + roles in parallel
+  const [profileResult, notifData, userRoles] = await Promise.all([
     user
       ? (supabase.from('users') as any)
           .select('full_name')
@@ -31,6 +32,7 @@ export default async function HunterLayout({ children }: { children: React.React
           .maybeSingle()
       : Promise.resolve({ data: null }),
     fetchNotifications(supabase, userId),
+    user ? fetchUserRoles(supabase, user.id) : Promise.resolve([]),
   ])
 
   const fullName = profileResult.data?.full_name ?? null
@@ -52,6 +54,7 @@ export default async function HunterLayout({ children }: { children: React.React
       unreadCount={notifData.unreadCount}
       notificationLabels={getNotificationLabels(t)}
       shellLabels={shellLabels}
+      userRoles={userRoles}
     >
       {children}
     </DashboardShell>

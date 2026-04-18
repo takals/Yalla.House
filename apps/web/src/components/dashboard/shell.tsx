@@ -26,6 +26,12 @@ interface NotificationData {
   created_at: string
 }
 
+interface RoleSwitchItem {
+  role: string
+  label: string
+  href: string
+}
+
 interface Props {
   children: React.ReactNode
   navItems: NavItem[]
@@ -36,12 +42,13 @@ interface Props {
   unreadCount?: number
   notificationLabels?: Record<string, string>
   shellLabels?: Record<string, string>
+  userRoles?: RoleSwitchItem[]
 }
 
 const COLLAPSED_W = 'w-[60px]'
 const EXPANDED_W = 'w-[240px]'
 
-export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels, shellLabels }: Props) {
+export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels, shellLabels, userRoles }: Props) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -141,6 +148,24 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
           </div>
         </nav>
 
+        {/* Role switcher */}
+        {userRoles && userRoles.length > 1 && !collapsed && (
+          <div className="px-2 pb-2 pt-2 border-t border-white/[0.07] flex-shrink-0">
+            <p className="text-[0.6rem] font-bold uppercase tracking-wider text-white/20 px-2 mb-1">
+              {shellLabels?.switchRole ?? 'Switch role'}
+            </p>
+            {userRoles.filter(r => r.role !== section).map(r => (
+              <Link
+                key={r.role}
+                href={r.href}
+                className="flex items-center gap-2 px-2 py-1.5 rounded-md text-white/40 hover:text-white hover:bg-white/[0.05] transition-colors text-[0.8rem] font-medium"
+              >
+                {r.label}
+              </Link>
+            ))}
+          </div>
+        )}
+
         {/* User footer */}
         <div className={`px-2 pb-4 pt-3 border-t border-white/[0.07] flex-shrink-0 ${collapsed ? 'flex justify-center' : ''}`}>
           {collapsed ? (
@@ -202,7 +227,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 // ── Pre-built nav configs ─────────────────────────────────────────────────────
 
 export const hunterNav: NavItem[] = [
-  { href: '/hunter/info',     label: 'Dashboard',     icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/hunter/overview', label: 'Dashboard',     icon: <LayoutDashboard size={15} />, exact: true },
   { href: '/hunter/search',   label: 'Search',        icon: <Search size={15} /> },
   { href: '/hunter/viewings', label: 'Viewings',      icon: <Eye size={15} /> },
   { href: '/hunter/passport', label: 'Home Passport',icon: <ShieldCheck size={15} /> },
@@ -212,8 +237,7 @@ export const hunterNav: NavItem[] = [
 ]
 
 export const agentNav: NavItem[] = [
-  { href: '/agent/info',       label: 'Dashboard',         icon: <LayoutDashboard size={15} />, exact: true },
-  { href: '/agent/assignments', label: 'Assignments', icon: <Building2 size={15} /> },
+  { href: '/agent/assignments', label: 'Assignments', icon: <Building2 size={15} />, exact: true },
   { href: '/agent/calendar',   label: 'Calendar',   icon: <Calendar size={15} /> },
   { href: '/agent/briefs',     label: 'Briefs',   icon: <Inbox size={15} /> },
   { href: '/agent/hunters',    label: 'Hunters', icon: <Users size={15} /> },
@@ -229,7 +253,7 @@ export const adminNav: NavItem[] = [
 ]
 
 export const ownerNav: NavItem[] = [
-  { href: '/owner/info',     label: 'Dashboard',       icon: <LayoutDashboard size={15} />, exact: true },
+  { href: '/owner/listings', label: 'Dashboard',       icon: <LayoutDashboard size={15} />, exact: true },
   { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} /> },
   { href: '/owner/viewings', label: 'Viewings',    icon: <Calendar size={15} /> },
   { href: '/owner/offers',   label: 'Offers',      icon: <Banknote size={15} /> },

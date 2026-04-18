@@ -88,6 +88,9 @@ export async function GET(request: NextRequest) {
             redirectUrl = '/owner'
           }
           // else stays /hunter (default)
+        } else {
+          // No roles at all — first-time user, show role picker
+          redirectUrl = '/auth/welcome'
         }
       }
 

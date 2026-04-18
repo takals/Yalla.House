@@ -2458,5 +2458,15 @@
     "nudgeShareTitle": "Don’t forget to share!",
     "nudgeShareDesc": "Share your listing on social media to reach even more buyers.",
     "nudgeShareCta": "Share now"
+  },
+  "welcome": {
+    "title": "Welcome to Yalla.House!",
+    "subtitle": "What brings you here today?",
+    "ownerTitle": "I'm selling or renting out",
+    "ownerDesc": "List your property, manage viewings, and find agents.",
+    "hunterTitle": "I'm looking for a home",
+    "hunterDesc": "Search properties, connect with agents, and book viewings.",
+    "agentTitle": "I'm an estate agent",
+    "agentDesc": "Manage assignments, respond to briefs, and grow your business."
   }
 }

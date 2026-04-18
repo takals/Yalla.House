@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_EMAIL, PREVIEW_USER_ID } from '@/lib/preview-user'
 import { DashboardShell, ownerNav } from '@/components/dashboard/shell'
 import { fetchNotifications, getNotificationLabels } from '@/lib/notifications'
+import { fetchUserRoles } from '@/lib/user-roles'
 import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
@@ -21,11 +22,12 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
     getTranslations('shell'),
   ])
 
-  const [profileResult, notifData] = await Promise.all([
+  const [profileResult, notifData, userRoles] = await Promise.all([
     user
       ? (supabase.from('users') as any).select('full_name').eq('id', user.id).maybeSingle()
       : Promise.resolve({ data: null }),
     fetchNotifications(supabase, userId),
+    user ? fetchUserRoles(supabase, user.id) : Promise.resolve([]),
   ])
 
   const shellLabels: Record<string, string> = {
@@ -45,6 +47,7 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
       unreadCount={notifData.unreadCount}
       notificationLabels={getNotificationLabels(t)}
       shellLabels={shellLabels}
+      userRoles={userRoles}
     >
       {children}
     </DashboardShell>

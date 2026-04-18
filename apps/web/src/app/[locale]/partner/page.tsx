@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 
@@ -12,7 +12,10 @@ export default async function PartnerDashboardPage({
   const { locale } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  if (!user) {
+    redirect('/auth/login?next=/partner')
+  }
+  const userId = user.id
 
   // Preview phase: no role gate. Render the partner dashboard for any visitor.
 
@@ -76,7 +79,7 @@ export default async function PartnerDashboardPage({
             {t('partnerDash.profileHelper')}
           </p>
           <Link
-            href={`${locale === 'de' ? '' : '/en'}/partner/profile`}
+            href="/partner/profile"
             className="inline-block px-4 py-2 bg-[#F59E0B] text-white text-sm font-bold rounded-lg hover:bg-[#D97706] transition"
           >
             {t('partnerDash.updateProfile')} →
@@ -155,7 +158,7 @@ export default async function PartnerDashboardPage({
 
         {/* Manage Profile */}
         <Link
-          href={`${locale === 'de' ? '' : '/en'}/partner/profile`}
+          href="/partner/profile"
           className="bg-surface rounded-xl p-6 border border-border-default hover:shadow-md transition block"
         >
           <div className="flex items-center justify-between mb-2">
@@ -211,7 +214,7 @@ export default async function PartnerDashboardPage({
           </p>
           <div className="flex gap-2 justify-center">
             <Link
-              href={`${locale === 'de' ? '' : '/en'}/partner/profile`}
+              href="/partner/profile"
               className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
             >
               {t('partnerDash.createProfile')}
