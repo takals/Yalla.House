@@ -32,7 +32,8 @@ interface TemplateState {
 }
 
 const VARIABLES = [
-  '{{recipientName}}',
+  '{{hunterName}}',
+  '{{ownerName}}',
   '{{listingTitle}}',
   '{{listingCity}}',
   '{{viewingDate}}',
@@ -43,6 +44,8 @@ const VARIABLES = [
 
 const SAMPLE_DATA: Record<string, string> = {
   '{{recipientName}}': 'Alex Johnson',
+  '{{hunterName}}': 'Alex Johnson',
+  '{{ownerName}}': 'Sarah Williams',
   '{{listingTitle}}': '3-bed flat in Camden',
   '{{listingCity}}': 'London',
   '{{viewingDate}}': '24 Apr 2026',
@@ -73,7 +76,11 @@ function renderPreview(template: string): string {
   for (const [variable, sample] of Object.entries(SAMPLE_DATA)) {
     result = result.replaceAll(variable, sample)
   }
-  return result
+  // Process Handlebars {{#if variable}}...{{/if}} blocks — show inner content
+  result = result.replace(/\{\{#if\s+\w+\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1')
+  // Clean up any remaining Handlebars helpers
+  result = result.replace(/\{\{else\}\}/g, '')
+  return result.trim()
 }
 
 // Group templates by eventType

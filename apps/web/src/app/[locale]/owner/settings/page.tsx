@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import { User, Building2, Bell, Globe, AlertTriangle } from 'lucide-react'
+import { User, Building2, Bell, Globe, AlertTriangle, ChevronRight, Mail, MessageSquare } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import Link from 'next/link'
 import { SettingsForm } from './settings-form'
 import { ListingDefaultsForm } from './listing-defaults-form'
 
@@ -25,7 +26,7 @@ export default async function OwnerSettingsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  const [userResult, profileResult] = await Promise.all([
+  const [userResult, profileResult, listingsResult] = await Promise.all([
     (supabase.from('users') as any)
       .select('full_name, email, phone')
       .eq('id', userId)
@@ -34,10 +35,22 @@ export default async function OwnerSettingsPage() {
       .select('company_name, tax_id, default_intent, default_property_type, default_currency, default_price_qualifier, default_rent_period, default_city, default_postcode, default_region')
       .eq('user_id', userId)
       .maybeSingle(),
+    (supabase.from('listings') as any)
+      .select('id, short_id, title, street, city, status')
+      .eq('owner_id', userId)
+      .order('created_at', { ascending: false }),
   ])
 
   const userProfile = userResult.data
   const ownerProfile = profileResult.data as OwnerProfile | null
+  const listings = (listingsResult.data ?? []) as Array<{
+    id: string
+    short_id: string | null
+    title: string | null
+    street: string | null
+    city: string | null
+    status: string | null
+  }>
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -74,27 +87,65 @@ export default async function OwnerSettingsPage() {
       />
 
       {/* Notification Preferences Card */}
-      <SettingsSection icon={Bell} title={t('sectionNotifications')} badge={t('badgeSoon')}>
-        <NotificationToggle
-          label={t('notifEmailNotifications')}
-          description={t('notifEmailNotificationsDesc')}
-          disabled
-        />
-        <NotificationToggle
-          label={t('notifBriefResponses')}
-          description={t('notifBriefResponsesDesc')}
-          disabled
-        />
-        <NotificationToggle
-          label={t('notifViewingReminders')}
-          description={t('notifViewingRemindersDesc')}
-          disabled
-        />
-        <NotificationToggle
-          label={t('notifOfferAlerts')}
-          description={t('notifOfferAlertsDesc')}
-          disabled
-        />
+      <SettingsSection icon={Bell} title={t('sectionNotifications')}>
+        <p className="text-xs text-text-muted mb-3">{t('notifDescription')}</p>
+
+        {/* Global prefs link */}
+        <Link
+          href="/settings/notifications"
+          className="flex items-center justify-between py-3 border-b border-[#F0F0F0] group hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+              <Bell size={16} className="text-[#D4764E]" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-text-primary">{t('notifGlobalPrefs')}</div>
+              <div className="text-xs text-text-muted">{t('notifGlobalPrefsDesc')}</div>
+            </div>
+          </div>
+          <ChevronRight size={16} className="text-gray-400 group-hover:text-[#D4764E] transition-colors" />
+        </Link>
+
+        {/* Per-listing template links */}
+        {listings.length > 0 && (
+          <div className="mt-3">
+            <div className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">
+              {t('notifMessageTemplates')}
+            </div>
+            {listings.map((listing) => (
+              <Link
+                key={listing.id}
+                href={`/owner/${listing.id}/settings/notifications`}
+                className="flex items-center justify-between py-3 border-b border-[#F0F0F0] last:border-b-0 group hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <Mail size={16} className="text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-text-primary">
+                      {listing.title || listing.street || listing.short_id || t('notifUntitledListing')}
+                    </div>
+                    <div className="text-xs text-text-muted">
+                      {listing.city ? `${listing.city} · ` : ''}{t('notifCustomiseTemplates')}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                    listing.status === 'live' ? 'bg-green-50 text-green-700' :
+                    listing.status === 'draft' ? 'bg-gray-100 text-gray-500' :
+                    'bg-blue-50 text-blue-700'
+                  }`}>
+                    {listing.status ?? 'draft'}
+                  </span>
+                  <ChevronRight size={16} className="text-gray-400 group-hover:text-[#D4764E] transition-colors" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </SettingsSection>
 
       {/* Listing Defaults — editable via client component */}
