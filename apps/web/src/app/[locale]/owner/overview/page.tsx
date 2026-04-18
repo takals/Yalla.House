@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { CalendarCheck, MessageCircle, Home, TrendingUp, ArrowUp, ArrowRight, Plus, type LucideIcon } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
@@ -39,7 +39,10 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const dateLocale = locale === 'de' ? 'de-DE' : 'en-GB'
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  if (!user) {
+    redirect('/auth/login')
+  }
+  const userId = user.id
 
   // Fetch listings first to get IDs for related queries
   const { data: listingsData } = await supabase

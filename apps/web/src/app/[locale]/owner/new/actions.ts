@@ -70,7 +70,7 @@ export async function createListingAction(
   if (payload.rooms) countryFields['rooms'] = parseFloat(payload.rooms)
   if (payload.energy_class) countryFields['energy_class'] = payload.energy_class
 
-  const { error } = await (supabase.from('listings') as any).insert({
+  const { data: newListing, error } = await (supabase.from('listings') as any).insert({
     owner_id: auth.userId,
     country_code: 'DE',
     currency: 'EUR',
@@ -100,12 +100,14 @@ export async function createListingAction(
     kaution: toMinorUnits(payload.kaution),
     country_fields: countryFields,
     portal_status: {},
-  })
+  }).select('id').single()
 
   if (error) {
     console.error('Listing creation error:', error)
     return { error: error.message || 'Fehler beim Speichern. Bitte versuchen Sie es erneut.' }
   }
 
-  redirect('/owner')
+  // Redirect to activation wizard instead of plain dashboard
+  const listingId = newListing?.id
+  redirect(listingId ? `/owner/${listingId}/activate` : '/owner')
 }

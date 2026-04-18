@@ -267,36 +267,18 @@ function Step2({
         <p className="text-xs text-red-500">{locationError}</p>
       )}
 
-      {/* Postcode + City row with lookup button for UK */}
+      {/* Postcode + City — clean 2-column grid */}
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="postcode" className="block text-sm font-medium text-text-primary mb-1.5">
-            {postcodeLabel}
-            <span className="text-red-500 ml-0.5">*</span>
-          </label>
-          <div className="flex gap-2">
-            <input
-              id="postcode"
-              className={`flex-1 px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${errors.postcode ? 'border-red-400' : 'border-[#E4E6EF]'}`}
-              placeholder={t('step2.postcodePlaceholder')}
-              maxLength={postcodeMaxLength}
-              value={form.postcode}
-              onChange={e => set('postcode', e.target.value)}
-            />
-            {isUK && (
-              <button
-                type="button"
-                onClick={handlePostcodeLookup}
-                disabled={lookingUp || !form.postcode.trim()}
-                className="flex items-center gap-1 px-3 py-2.5 bg-bg border border-[#E4E6EF] rounded-lg text-xs font-semibold text-text-primary hover:bg-hover-bg transition-colors disabled:opacity-40 flex-shrink-0"
-              >
-                <Search size={13} />
-                {lookingUp ? t('step2.lookupLoading') : t('step2.lookupPostcode')}
-              </button>
-            )}
-          </div>
-          {errors.postcode && <p className="mt-1 text-xs text-red-500">{errors.postcode}</p>}
-        </div>
+        <Input
+          label={postcodeLabel}
+          id="postcode"
+          required
+          placeholder={t('step2.postcodePlaceholder')}
+          maxLength={postcodeMaxLength}
+          value={form.postcode}
+          onChange={e => set('postcode', e.target.value)}
+          error={errors.postcode}
+        />
         <Input
           label={t('step2.city')}
           id="city"
@@ -308,44 +290,60 @@ function Step2({
         />
       </div>
 
-      {/* Address picker dropdown */}
-      {showPicker && addresses.length > 0 && (
-        <div className="bg-white border border-[#E4E6EF] rounded-xl shadow-lg overflow-hidden">
-          <p className="px-4 py-2 text-xs font-bold text-text-secondary bg-bg border-b border-[#E4E6EF]">
-            {t('step2.selectAddress')}
-          </p>
-          <div className="max-h-48 overflow-y-auto">
-            {addresses.map((addr, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => selectAddress(addr)}
-                className="w-full text-left px-4 py-2.5 text-sm hover:bg-brand/5 border-b border-[#E4E6EF] last:border-0 transition-colors"
-              >
-                <span className="font-medium text-text-primary">{addr.line1}</span>
-                {addr.line2 && <span className="text-text-secondary"> — {addr.line2}</span>}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={() => { setShowPicker(false); setAddresses([]) }}
-            className="w-full text-center px-4 py-2 text-xs font-semibold text-text-secondary hover:text-brand border-t border-[#E4E6EF] transition-colors"
-          >
-            {t('step2.enterManually')}
-          </button>
-        </div>
+      {/* UK postcode lookup link — sits cleanly below the row */}
+      {isUK && (
+        <button
+          type="button"
+          onClick={handlePostcodeLookup}
+          disabled={lookingUp || !form.postcode.trim()}
+          className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-hover transition-colors disabled:opacity-40 -mt-2"
+        >
+          <Search size={13} />
+          {lookingUp ? t('step2.lookupLoading') : t('step2.lookupPostcode')}
+        </button>
       )}
 
-      <Input
-        label={t('step2.addressLine1')}
-        id="address_line1"
-        required
-        placeholder={t('step2.addressLine1Placeholder')}
-        value={form.address_line1}
-        onChange={e => set('address_line1', e.target.value)}
-        error={errors.address_line1}
-      />
+      {/* Street and house number — with address suggestions dropdown */}
+      <div className="relative">
+        <Input
+          label={t('step2.addressLine1')}
+          id="address_line1"
+          required
+          placeholder={t('step2.addressLine1Placeholder')}
+          value={form.address_line1}
+          onChange={e => set('address_line1', e.target.value)}
+          error={errors.address_line1}
+        />
+
+        {/* Address suggestions dropdown — directly under street field */}
+        {showPicker && addresses.length > 0 && (
+          <div className="absolute left-0 right-0 top-full mt-1 z-20 bg-white border border-[#E4E6EF] rounded-xl shadow-lg overflow-hidden">
+            <p className="px-4 py-2 text-xs font-bold text-text-secondary bg-bg border-b border-[#E4E6EF]">
+              {t('step2.selectAddress')}
+            </p>
+            <div className="max-h-48 overflow-y-auto">
+              {addresses.map((addr, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => selectAddress(addr)}
+                  className="w-full text-left px-4 py-2.5 text-sm hover:bg-brand/5 border-b border-[#E4E6EF] last:border-0 transition-colors"
+                >
+                  <span className="font-medium text-text-primary">{addr.line1}</span>
+                  {addr.line2 && <span className="text-text-secondary"> — {addr.line2}</span>}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => { setShowPicker(false); setAddresses([]) }}
+              className="w-full text-center px-4 py-2 text-xs font-semibold text-text-secondary hover:text-brand border-t border-[#E4E6EF] transition-colors"
+            >
+              {t('step2.enterManually')}
+            </button>
+          </div>
+        )}
+      </div>
 
       <Input
         label={t('step2.addressLine2')}
