@@ -35,8 +35,8 @@ export default async function OwnerSettingsPage() {
       .select('company_name, tax_id, default_intent, default_property_type, default_currency, default_price_qualifier, default_rent_period, default_city, default_postcode, default_region')
       .eq('user_id', userId)
       .maybeSingle(),
-    (supabase.from('listings') as any)
-      .select('id, short_id, title, title_de, address_line1, city, status')
+    (supabase as any).from('listings')
+      .select('id, place_id, title, title_de, address_line1, city, status')
       .eq('owner_id', userId)
       .order('created_at', { ascending: false }),
   ])
@@ -45,7 +45,7 @@ export default async function OwnerSettingsPage() {
   const ownerProfile = profileResult.data as OwnerProfile | null
   const listings = (listingsResult.data ?? []) as Array<{
     id: string
-    short_id: string | null
+    place_id: string | null
     title: string | null
     title_de: string | null
     address_line1: string | null
@@ -126,7 +126,7 @@ export default async function OwnerSettingsPage() {
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-text-primary">
-                      {listing.title || listing.title_de || listing.address_line1 || listing.short_id || t('notifUntitledListing')}
+                      {listing.title || listing.title_de || listing.address_line1 || listing.place_id || t('notifUntitledListing')}
                     </div>
                     <div className="text-xs text-text-muted">
                       {listing.city ? `${listing.city} · ` : ''}{t('notifCustomiseTemplates')}
