@@ -3,6 +3,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
 import { redirect } from 'next/navigation'
+import { countryFromLocale } from '@/lib/detect-country'
+import { getCountryConfig } from '@/lib/country-config'
 
 export interface WizardPayload {
   property_type: string
@@ -27,6 +29,7 @@ export interface WizardPayload {
   nebenkosten: string
   kaution: string
   ownerId: string
+  locale: string
 }
 
 export async function createListingAction(
@@ -41,10 +44,14 @@ export async function createListingAction(
     return { error: 'Not authorized' }
   }
 
+  // Resolve country + currency from locale
+  const resolvedCountry = countryFromLocale(payload.locale)
+  const config = getCountryConfig(resolvedCountry)
+
   const supabase = await createClient()
   // Ensure public.users row exists (FK required by listings)
   await (supabase.from('users') as any).upsert(
-    { id: auth.userId, email: auth.email, language: 'de' },
+    { id: auth.userId, email: auth.email, language: payload.locale, country_code: resolvedCountry },
     { onConflict: 'id', ignoreDuplicates: true }
   )
 
@@ -72,8 +79,8 @@ export async function createListingAction(
 
   const { data: newListing, error } = await (supabase.from('listings') as any).insert({
     owner_id: auth.userId,
-    country_code: 'DE',
-    currency: 'EUR',
+    country_code: resolvedCountry,
+    currency: config.currency,
     status: 'draft',
     intent: payload.intent as 'sale' | 'rent' | 'both',
     property_type: payload.property_type as
@@ -104,7 +111,7 @@ export async function createListingAction(
 
   if (error) {
     console.error('Listing creation error:', error)
-    return { error: error.message || 'Fehler beim Speichern. Bitte versuchen Sie es erneut.' }
+    return { error: error.message || 'Save failed. Please try again.' }
   }
 
   // Redirect to activation wizard instead of plain dashboard

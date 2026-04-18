@@ -855,7 +855,7 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
 
   function handleSave() {
     setServerError('')
-    const payload: WizardPayload = { ...form, ownerId }
+    const payload: WizardPayload = { ...form, ownerId, locale }
     startTransition(async () => {
       const result = await createListingAction(payload)
       if (handleAuthRequired(result)) {

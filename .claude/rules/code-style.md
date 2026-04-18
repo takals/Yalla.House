@@ -1,5 +1,16 @@
 # Code Style Rules
 
+## Multi-Country Architecture — MANDATORY
+- **NEVER hardcode country codes** (`'DE'`, `'GB'`) in components, actions, or queries
+- Country resolution MUST go through `countryFromLocale(locale)` from `lib/detect-country.ts`
+- Country config MUST come from `getCountryConfig(code)` from `lib/country-config.ts`
+- Currency MUST come from `config.currency`, never `country === 'DE' ? 'EUR' : 'GBP'`
+- Portal queries MUST filter by `listing.country_code`, never a hardcoded country
+- Date locale formatting: use `dateLocaleFromLocale(locale)` from `lib/country-config.ts`
+- DB defaults: `country_code` is set at insert time from user's locale, not from schema defaults
+- New country rollout = add config to `COUNTRY_CONFIGS` + translation file + DB rows — zero code changes
+- Free channels, portals, agent sources: all driven by `country_code` lookups, never if/else branches
+
 ## Internationalisation (i18n) — MANDATORY
 - **NEVER hardcode UI strings** in any language — no inline `isDE ? 'German' : 'English'` ternaries
 - ALL user-visible text MUST go through `next-intl` translations (`getTranslations` / `useTranslations`)

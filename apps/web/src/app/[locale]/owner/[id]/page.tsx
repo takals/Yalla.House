@@ -32,9 +32,11 @@ export default async function EditListingPage({ params }: Props) {
 
   if (!listing) redirect('/owner')
 
+  const listingCountry = (listing as Record<string, unknown>).country_code as string | undefined ?? 'DE'
+
   const { data: portals } = await (supabase.from('portal_config') as any)
     .select('id, slug, display_name, min_photos')
-    .eq('country_code', 'DE')
+    .eq('country_code', listingCountry)
     .eq('is_active', true)
     .order('display_name') as { data: PortalRow[] | null }
 
@@ -53,8 +55,7 @@ export default async function EditListingPage({ params }: Props) {
   //   .select('channel_id, is_enabled, status, external_url, posted_at, expires_at, next_repost_at, repost_count, last_error')
   //   .eq('listing_id', id) as { data: ChannelStatus[] | null }
 
-  const countryCode = (listing as Record<string, unknown>).country_code as string | undefined
-
+  // Use the listing's country_code (already resolved above as listingCountry)
   const mockFreeChannelsDE: FreeChannel[] = [
     { id: 'fc-de-ebay', slug: 'ebay-kleinanzeigen', display_name: 'eBay Kleinanzeigen', country_code: 'DE', max_active: 1, listing_duration_days: 30, repost_interval_days: 30, is_default_selected: true },
     { id: 'fc-de-wggesucht', slug: 'wg-gesucht', display_name: 'WG-Gesucht', country_code: 'DE', max_active: 1, listing_duration_days: 14, repost_interval_days: 14, is_default_selected: true },
@@ -71,8 +72,7 @@ export default async function EditListingPage({ params }: Props) {
     { id: 'fc-gb-friday', slug: 'friday-ad', display_name: 'Friday-Ad', country_code: 'GB', max_active: 1, listing_duration_days: 30, repost_interval_days: 30, is_default_selected: false },
   ]
 
-  const resolvedCountry = countryCode ?? 'DE'
-  const freeChannels = resolvedCountry === 'GB' ? mockFreeChannelsGB : mockFreeChannelsDE
+  const freeChannels = listingCountry === 'GB' ? mockFreeChannelsGB : mockFreeChannelsDE
 
   // Mock channel statuses — empty for now (no posts yet)
   const channelStatuses: ChannelStatus[] = []
@@ -85,7 +85,7 @@ export default async function EditListingPage({ params }: Props) {
       portalStatuses={portalStatuses ?? []}
       freeChannels={freeChannels}
       channelStatuses={channelStatuses}
-      countryCode={resolvedCountry}
+      countryCode={listingCountry}
     />
   )
 }

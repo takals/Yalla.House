@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { fromMinorUnits } from '@yalla/integrations'
+import { getCountryConfig } from '@/lib/country-config'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { ArrowLeft, Mail, Eye, CheckCircle2, Clock, ArrowRight } from 'lucide-react'
@@ -52,7 +53,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
   }
 
   const formattedPrice = listing?.sale_price
-    ? fromMinorUnits(listing.sale_price, listing.country_code === 'DE' ? 'EUR' : 'GBP')
+    ? fromMinorUnits(listing.sale_price, getCountryConfig(listing.country_code ?? 'GB').currency)
     : null
 
   return (

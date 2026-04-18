@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import { getCountryConfig } from '@/lib/country-config'
+import { countryFromLocale } from '@/lib/detect-country'
 import { PassportPageClient } from './passport-page-client'
 
 export default async function PassportPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -12,8 +13,8 @@ export default async function PassportPage({ params }: { params: Promise<{ local
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  // Resolve country from locale
-  const countryCode = locale === 'de' ? 'DE' : 'GB'
+  // Resolve country from locale via central config
+  const countryCode = countryFromLocale(locale)
   const countryConfig = getCountryConfig(countryCode)
 
   const [profileResult, userResult, agentsResult] = await Promise.all([

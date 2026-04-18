@@ -106,6 +106,15 @@ export function getCountryConfig(countryCode: string): CountryConfig {
   return config
 }
 
+/**
+ * Map a next-intl locale slug to a full BCP-47 locale for Intl formatters.
+ * Centralises the `locale === 'de' ? 'de-DE' : 'en-GB'` pattern.
+ */
+export function dateLocaleFromLocale(locale: string): string {
+  const config = COUNTRY_CONFIGS[locale === 'de' ? 'DE' : locale === 'en' ? 'GB' : DEFAULT_COUNTRY]
+  return config?.default_locale ?? 'en-GB'
+}
+
 export function formatCurrency(
   amountMinorUnits: number,
   currency: string,
