@@ -36,7 +36,7 @@ export default async function OwnerSettingsPage() {
       .eq('user_id', userId)
       .maybeSingle(),
     (supabase.from('listings') as any)
-      .select('id, short_id, title, street, city, status')
+      .select('id, short_id, title, title_de, address_line1, city, status')
       .eq('owner_id', userId)
       .order('created_at', { ascending: false }),
   ])
@@ -47,7 +47,8 @@ export default async function OwnerSettingsPage() {
     id: string
     short_id: string | null
     title: string | null
-    street: string | null
+    title_de: string | null
+    address_line1: string | null
     city: string | null
     status: string | null
   }>
@@ -125,7 +126,7 @@ export default async function OwnerSettingsPage() {
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-text-primary">
-                      {listing.title || listing.street || listing.short_id || t('notifUntitledListing')}
+                      {listing.title || listing.title_de || listing.address_line1 || listing.short_id || t('notifUntitledListing')}
                     </div>
                     <div className="text-xs text-text-muted">
                       {listing.city ? `${listing.city} · ` : ''}{t('notifCustomiseTemplates')}
