@@ -70,7 +70,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: Camera,
       title: t.stepPhotos,
       description: t.stepPhotosDesc,
-      href: `${prefix}/owner/${listingId}/edit?tab=photos`,
+      href: `${prefix}/owner/${listingId}#photos`,
       completed: completedSteps.has('photos'),
     },
     {
@@ -78,7 +78,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: CalendarPlus,
       title: t.stepCalendar,
       description: t.stepCalendarDesc,
-      href: `${prefix}/owner/${listingId}/edit?tab=viewings`,
+      href: `${prefix}/owner/viewings`,
       completed: completedSteps.has('calendar'),
     },
     {
@@ -86,7 +86,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: Mail,
       title: t.stepEmail,
       description: t.stepEmailDesc,
-      href: `${prefix}/owner/settings?tab=email`,
+      href: `${prefix}/owner/settings`,
       completed: completedSteps.has('email'),
     },
     {
@@ -94,7 +94,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: Users,
       title: t.stepAgents,
       description: t.stepAgentsDesc,
-      href: `${prefix}/owner/${listingId}/edit?tab=agents`,
+      href: `${prefix}/owner/${listingId}/brief`,
       completed: completedSteps.has('agents'),
     },
     {
@@ -102,7 +102,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: Globe,
       title: t.stepPortals,
       description: t.stepPortalsDesc,
-      href: `${prefix}/owner/${listingId}/edit?tab=portals`,
+      href: `${prefix}/owner/${listingId}#portals`,
       completed: completedSteps.has('portals'),
     },
     {
@@ -110,7 +110,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: QrCode,
       title: t.stepQR,
       description: t.stepQRDesc,
-      href: `${prefix}/owner/${listingId}/edit?tab=share`,
+      href: `${prefix}/p/${listingId}`,
       completed: completedSteps.has('qr'),
     },
     {
@@ -118,7 +118,7 @@ export function ActivationWizard({ listingId, listingTitle, hasPhotos, translati
       icon: Share2,
       title: t.stepSpread,
       description: t.stepSpreadDesc,
-      href: `${prefix}/owner/${listingId}/edit?tab=share`,
+      href: `${prefix}/p/${listingId}`,
       completed: completedSteps.has('spread'),
     },
   ]
