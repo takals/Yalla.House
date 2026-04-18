@@ -8,6 +8,7 @@ import { useAuthAction } from '@/lib/use-auth-action'
 import { updateListingAction, changeStatusAction, sendBriefAction, type EditPayload } from './actions'
 import { PhotoManager, type PhotoRow } from './photos'
 import { PortalSection, type PortalRow, type PortalStatusRow } from './portals'
+import { FreeChannelsSection, type FreeChannel, type ChannelStatus } from './free-channels'
 
 interface Listing {
   id: string
@@ -170,11 +171,17 @@ export function ListingEditForm({
   photos,
   portals,
   portalStatuses,
+  freeChannels,
+  channelStatuses,
+  countryCode,
 }: {
   listing: Listing
   photos: PhotoRow[]
   portals: PortalRow[]
   portalStatuses: PortalStatusRow[]
+  freeChannels: FreeChannel[]
+  channelStatuses: ChannelStatus[]
+  countryCode: string
 }) {
   const t = useTranslations('ownerDashboard')
   const locale = useLocale()
@@ -696,7 +703,17 @@ export function ListingEditForm({
         />
       </Section>
 
-      {/* Section 7: Send Brief to Agents */}
+      {/* Section 7: Free Channels */}
+      <Section title={t('editForm.sectionFreeChannels')}>
+        <FreeChannelsSection
+          listingId={listing.id}
+          countryCode={countryCode}
+          channels={freeChannels}
+          channelStatuses={channelStatuses}
+        />
+      </Section>
+
+      {/* Section 8: Send Brief to Agents */}
       {(currentStatus === 'active' || currentStatus === 'draft') && (
         <Section title={t('editForm.sectionBrief')}>
           <p className="text-sm text-text-secondary leading-relaxed">
