@@ -1544,8 +1544,13 @@
       "postcodePlaceholder": "SW1A 1AA",
       "city": "City",
       "cityPlaceholder": "London",
-      "region": "Region",
-      "regionSelectDefault": "Select a region"
+      "findMyLocation": "Find my location",
+      "locating": "Locating...",
+      "locationError": "Could not detect your location. Please enter manually.",
+      "lookupPostcode": "Look up address",
+      "lookupLoading": "Looking up...",
+      "selectAddress": "Select your address",
+      "enterManually": "Enter manually instead"
     },
     "step3": {
       "heading": "Property Details",
@@ -1577,7 +1582,16 @@
       "nebenkosten": "Additional costs",
       "nebenkostenPlaceholder": "200",
       "kaution": "Deposit",
-      "kautionPlaceholder": "2400"
+      "kautionPlaceholder": "2400",
+      "descriptionHintsTitle": "What makes a great description?",
+      "descriptionHint1": "Location highlights — transport links, schools, shops nearby",
+      "descriptionHint2": "Key features — garden, parking, period features, recent renovation",
+      "descriptionHint3": "Room breakdown — what each room offers",
+      "descriptionHint4": "Lifestyle — who is this property perfect for?",
+      "descriptionHint5": "Condition & history — any recent upgrades or unique selling points",
+      "aiAssist": "Write with AI",
+      "aiAssistGenerating": "Writing...",
+      "aiAssistError": "Could not generate a description. Please try again."
     },
     "step5": {
       "heading": "Summary",

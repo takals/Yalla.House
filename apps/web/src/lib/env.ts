@@ -58,6 +58,9 @@ const serverSchema = z.object({
   UPSTASH_REDIS_REST_URL: z.string().url('Invalid Upstash Redis URL').optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
+  // Anthropic AI (description generation - OPTIONAL)
+  ANTHROPIC_API_KEY: z.string().optional(),
+
   // App configuration
   DEFAULT_LOCALE: z.enum(['de', 'en']).default('de'),
 })

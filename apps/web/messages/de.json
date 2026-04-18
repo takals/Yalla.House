@@ -1536,16 +1536,21 @@
     },
     "step2": {
       "heading": "Wo befindet sich die Immobilie?",
-      "addressLine1": "Straße und Hausnummer",
-      "addressLine1Placeholder": "Musterstraße 42",
+      "addressLine1": "Stra\u00dfe und Hausnummer",
+      "addressLine1Placeholder": "Musterstra\u00dfe 42",
       "addressLine2": "Adresszusatz",
       "addressLine2Placeholder": "Hinterhaus, EG links",
       "postcode": "Postleitzahl",
       "postcodePlaceholder": "10115",
       "city": "Stadt",
       "cityPlaceholder": "Berlin",
-      "region": "Bundesland",
-      "regionSelectDefault": "Bundesland wählen"
+      "findMyLocation": "Meinen Standort finden",
+      "locating": "Standort wird ermittelt...",
+      "locationError": "Standort konnte nicht ermittelt werden. Bitte manuell eingeben.",
+      "lookupPostcode": "Adresse nachschlagen",
+      "lookupLoading": "Suche l\u00e4uft...",
+      "selectAddress": "W\u00e4hlen Sie Ihre Adresse",
+      "enterManually": "Stattdessen manuell eingeben"
     },
     "step3": {
       "heading": "Objektdetails",
@@ -1577,7 +1582,16 @@
       "nebenkosten": "Nebenkosten",
       "nebenkostenPlaceholder": "200",
       "kaution": "Kaution",
-      "kautionPlaceholder": "2400"
+      "kautionPlaceholder": "2400",
+      "descriptionHintsTitle": "Was macht eine gute Beschreibung aus?",
+      "descriptionHint1": "Lage-Highlights \u2014 Verkehrsanbindung, Schulen, Einkaufsm\u00f6glichkeiten",
+      "descriptionHint2": "Besondere Merkmale \u2014 Garten, Stellplatz, Altbau-Charme, Renovierung",
+      "descriptionHint3": "Zimmeraufteilung \u2014 was bietet jeder Raum?",
+      "descriptionHint4": "Lebensstil \u2014 f\u00fcr wen ist diese Immobilie ideal?",
+      "descriptionHint5": "Zustand & Geschichte \u2014 k\u00fcrzliche Modernisierungen oder Besonderheiten",
+      "aiAssist": "Mit KI schreiben",
+      "aiAssistGenerating": "Schreibe...",
+      "aiAssistError": "Beschreibung konnte nicht erstellt werden. Bitte erneut versuchen."
     },
     "step5": {
       "heading": "Zusammenfassung",

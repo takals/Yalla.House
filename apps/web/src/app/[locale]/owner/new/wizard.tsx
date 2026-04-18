@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
-import { Home, Building2, Building, Store, TreePine, MapPin } from 'lucide-react'
+import { Home, Building2, Building, Store, TreePine, MapPin, Crosshair, Search, Sparkles, Lightbulb } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 import { createListingAction, type WizardPayload } from './actions'
 import { countryFromLocale, countryConfigFromLocale } from '@/lib/detect-country'
@@ -14,7 +14,6 @@ interface WizardFormData {
   address_line2: string
   postcode: string
   city: string
-  region: string
   size_sqm: string
   rooms: string
   bedrooms: string
@@ -34,7 +33,7 @@ interface WizardFormData {
 
 const INITIAL: WizardFormData = {
   property_type: '', intent: '',
-  address_line1: '', address_line2: '', postcode: '', city: '', region: '',
+  address_line1: '', address_line2: '', postcode: '', city: '',
   size_sqm: '', rooms: '', bedrooms: '', bathrooms: '',
   floor: '', total_floors: '', construction_year: '', energy_class: '',
   title_de: '', description_de: '',
@@ -161,14 +160,182 @@ function Step1({
 }
 
 function Step2({
-  form, errors, set, t, regions, postcodeLabel, postcodeMaxLength,
+  form, errors, set, t, postcodeLabel, postcodeMaxLength, isUK,
 }: {
   form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; t: (key: string) => string
-  regions: Array<{ prefix: string; label: string }>; postcodeLabel: string; postcodeMaxLength: number
+  postcodeLabel: string; postcodeMaxLength: number; isUK: boolean
 }) {
+  const [locating, setLocating] = useState(false)
+  const [locationError, setLocationError] = useState('')
+  const [lookingUp, setLookingUp] = useState(false)
+  const [addresses, setAddresses] = useState<Array<{ line1: string; line2: string; city: string; postcode: string }>>([])
+  const [showPicker, setShowPicker] = useState(false)
+
+  // Geolocation → reverse geocode to postcode
+  async function handleFindLocation() {
+    setLocating(true)
+    setLocationError('')
+    try {
+      const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 })
+      })
+      const { latitude, longitude } = pos.coords
+      // Use postcodes.io for UK, nominatim for others
+      if (isUK) {
+        const res = await fetch(`https://api.postcodes.io/postcodes?lon=${longitude}&lat=${latitude}&limit=1`)
+        const data = await res.json()
+        if (data.result?.[0]) {
+          set('postcode', data.result[0].postcode)
+          set('city', data.result[0].admin_district || data.result[0].parish || '')
+        }
+      } else {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`)
+        const data = await res.json()
+        if (data.address) {
+          set('postcode', data.address.postcode || '')
+          set('city', data.address.city || data.address.town || data.address.village || '')
+        }
+      }
+    } catch {
+      setLocationError(t('step2.locationError'))
+    } finally {
+      setLocating(false)
+    }
+  }
+
+  // UK postcode lookup → list of addresses
+  async function handlePostcodeLookup() {
+    const pc = form.postcode.trim()
+    if (!pc) return
+    setLookingUp(true)
+    setAddresses([])
+    try {
+      const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(pc)}`)
+      const data = await res.json()
+      if (data.status === 200 && data.result) {
+        // postcodes.io gives one result with area info — fill city
+        set('city', data.result.admin_district || data.result.parish || '')
+        set('postcode', data.result.postcode)
+        // Try to get addresses via a free address lookup
+        const addrRes = await fetch(`https://api.getaddress.io/find/${encodeURIComponent(pc)}?api-key=demo&expand=true`).catch(() => null)
+        if (addrRes?.ok) {
+          const addrData = await addrRes.json()
+          if (addrData.addresses?.length > 0) {
+            const mapped = addrData.addresses.slice(0, 10).map((a: { line_1: string; line_2: string; town_or_city: string }) => ({
+              line1: a.line_1 || '',
+              line2: a.line_2 || '',
+              city: a.town_or_city || data.result.admin_district || '',
+              postcode: data.result.postcode,
+            }))
+            setAddresses(mapped)
+            setShowPicker(true)
+          }
+        }
+      }
+    } catch {
+      // Silently fail — user can enter manually
+    } finally {
+      setLookingUp(false)
+    }
+  }
+
+  function selectAddress(addr: { line1: string; line2: string; city: string; postcode: string }) {
+    set('address_line1', addr.line1)
+    if (addr.line2) set('address_line2', addr.line2)
+    set('city', addr.city)
+    set('postcode', addr.postcode)
+    setShowPicker(false)
+    setAddresses([])
+  }
+
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold text-text-primary">{t('step2.heading')}</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-text-primary">{t('step2.heading')}</h2>
+        <button
+          type="button"
+          onClick={handleFindLocation}
+          disabled={locating}
+          className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-hover transition-colors disabled:opacity-50"
+        >
+          <Crosshair size={14} className={locating ? 'animate-spin' : ''} />
+          {locating ? t('step2.locating') : t('step2.findMyLocation')}
+        </button>
+      </div>
+
+      {locationError && (
+        <p className="text-xs text-red-500">{locationError}</p>
+      )}
+
+      {/* Postcode + City row with lookup button for UK */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="postcode" className="block text-sm font-medium text-text-primary mb-1.5">
+            {postcodeLabel}
+            <span className="text-red-500 ml-0.5">*</span>
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="postcode"
+              className={`flex-1 px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white ${errors.postcode ? 'border-red-400' : 'border-[#E4E6EF]'}`}
+              placeholder={t('step2.postcodePlaceholder')}
+              maxLength={postcodeMaxLength}
+              value={form.postcode}
+              onChange={e => set('postcode', e.target.value)}
+            />
+            {isUK && (
+              <button
+                type="button"
+                onClick={handlePostcodeLookup}
+                disabled={lookingUp || !form.postcode.trim()}
+                className="flex items-center gap-1 px-3 py-2.5 bg-bg border border-[#E4E6EF] rounded-lg text-xs font-semibold text-text-primary hover:bg-hover-bg transition-colors disabled:opacity-40 flex-shrink-0"
+              >
+                <Search size={13} />
+                {lookingUp ? t('step2.lookupLoading') : t('step2.lookupPostcode')}
+              </button>
+            )}
+          </div>
+          {errors.postcode && <p className="mt-1 text-xs text-red-500">{errors.postcode}</p>}
+        </div>
+        <Input
+          label={t('step2.city')}
+          id="city"
+          required
+          placeholder={t('step2.cityPlaceholder')}
+          value={form.city}
+          onChange={e => set('city', e.target.value)}
+          error={errors.city}
+        />
+      </div>
+
+      {/* Address picker dropdown */}
+      {showPicker && addresses.length > 0 && (
+        <div className="bg-white border border-[#E4E6EF] rounded-xl shadow-lg overflow-hidden">
+          <p className="px-4 py-2 text-xs font-bold text-text-secondary bg-bg border-b border-[#E4E6EF]">
+            {t('step2.selectAddress')}
+          </p>
+          <div className="max-h-48 overflow-y-auto">
+            {addresses.map((addr, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => selectAddress(addr)}
+                className="w-full text-left px-4 py-2.5 text-sm hover:bg-brand/5 border-b border-[#E4E6EF] last:border-0 transition-colors"
+              >
+                <span className="font-medium text-text-primary">{addr.line1}</span>
+                {addr.line2 && <span className="text-text-secondary"> — {addr.line2}</span>}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => { setShowPicker(false); setAddresses([]) }}
+            className="w-full text-center px-4 py-2 text-xs font-semibold text-text-secondary hover:text-brand border-t border-[#E4E6EF] transition-colors"
+          >
+            {t('step2.enterManually')}
+          </button>
+        </div>
+      )}
 
       <Input
         label={t('step2.addressLine1')}
@@ -187,40 +354,6 @@ function Step2({
         value={form.address_line2}
         onChange={e => set('address_line2', e.target.value)}
       />
-
-      <div className="grid grid-cols-2 gap-4">
-        <Input
-          label={postcodeLabel}
-          id="postcode"
-          required
-          placeholder={t('step2.postcodePlaceholder')}
-          maxLength={postcodeMaxLength}
-          value={form.postcode}
-          onChange={e => set('postcode', e.target.value)}
-          error={errors.postcode}
-        />
-        <Input
-          label={t('step2.city')}
-          id="city"
-          required
-          placeholder={t('step2.cityPlaceholder')}
-          value={form.city}
-          onChange={e => set('city', e.target.value)}
-          error={errors.city}
-        />
-      </div>
-
-      <Select
-        label={t('step2.region')}
-        id="region"
-        value={form.region}
-        onChange={e => set('region', e.target.value)}
-      >
-        <option value="">{t('step2.regionSelectDefault')}</option>
-        {regions.map(r => (
-          <option key={r.prefix} value={r.label}>{r.label}</option>
-        ))}
-      </Select>
     </div>
   )
 }
@@ -335,27 +468,51 @@ function Step3({
 }
 
 function Step4({
-  form, errors, set, currency, t,
-}: { form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; currency: string; t: (key: string) => string }) {
+  form, errors, set, currency, t, allFormData,
+}: { form: WizardFormData; errors: FormErrors; set: (k: keyof WizardFormData, v: string) => void; currency: string; t: (key: string) => string; allFormData: WizardFormData }) {
   const showSale = form.intent === 'sale' || form.intent === 'both'
   const showRent = form.intent === 'rent' || form.intent === 'both'
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState('')
 
-  // Get currency symbol from Intl formatter
   const getCurrencySymbol = () => {
     try {
-      const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: currency,
-      })
-      const parts = formatter.formatToParts(1)
-      const symbol = parts.find(p => p.type === 'currency')?.value || currency
-      return symbol
+      const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency })
+      return formatter.formatToParts(1).find(p => p.type === 'currency')?.value || currency
     } catch {
       return currency
     }
   }
-
   const currencySymbol = getCurrencySymbol()
+
+  async function handleAiAssist() {
+    setAiLoading(true)
+    setAiError('')
+    try {
+      const res = await fetch('/api/ai/description', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          property_type: allFormData.property_type,
+          intent: allFormData.intent,
+          city: allFormData.city,
+          postcode: allFormData.postcode,
+          bedrooms: allFormData.bedrooms,
+          bathrooms: allFormData.bathrooms,
+          size_sqm: allFormData.size_sqm,
+          construction_year: allFormData.construction_year,
+          title: allFormData.title_de,
+        }),
+      })
+      if (!res.ok) throw new Error('Failed')
+      const data = await res.json()
+      if (data.description) set('description_de', data.description)
+    } catch {
+      setAiError(t('step4.aiAssistError'))
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   return (
     <div className="space-y-5">
@@ -371,16 +528,52 @@ function Step4({
         error={errors.title_de}
       />
 
-      <Field label={t('step4.descriptionDe')} id="description_de">
-        <textarea
-          id="description_de"
-          rows={4}
-          placeholder={t('step4.descriptionDePlaceholder')}
-          value={form.description_de}
-          onChange={e => set('description_de', e.target.value)}
-          className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white resize-none"
-        />
-      </Field>
+      {/* Description with hints sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <div className="flex items-center justify-between mb-1.5">
+            <label htmlFor="description_de" className="block text-sm font-medium text-text-primary">
+              {t('step4.descriptionDe')}
+            </label>
+            <button
+              type="button"
+              onClick={handleAiAssist}
+              disabled={aiLoading || !form.title_de.trim()}
+              className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-hover transition-colors disabled:opacity-40"
+            >
+              <Sparkles size={13} className={aiLoading ? 'animate-pulse' : ''} />
+              {aiLoading ? t('step4.aiAssistGenerating') : t('step4.aiAssist')}
+            </button>
+          </div>
+          <textarea
+            id="description_de"
+            rows={6}
+            placeholder={t('step4.descriptionDePlaceholder')}
+            value={form.description_de}
+            onChange={e => set('description_de', e.target.value)}
+            className="w-full px-4 py-2.5 border border-[#E4E6EF] rounded-lg focus:outline-none focus:ring-2 focus:ring-brand text-text-primary bg-white resize-none"
+          />
+          {aiError && <p className="mt-1 text-xs text-red-500">{aiError}</p>}
+        </div>
+
+        {/* Hints panel */}
+        <div className="bg-[#FFF8F5] border border-brand/10 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Lightbulb size={14} className="text-brand" />
+            <p className="text-xs font-bold text-text-primary">{t('step4.descriptionHintsTitle')}</p>
+          </div>
+          <ul className="space-y-2">
+            {[1, 2, 3, 4, 5].map(n => (
+              <li key={n} className="flex items-start gap-2">
+                <span className="w-1 h-1 rounded-full bg-brand mt-1.5 flex-shrink-0" />
+                <span className="text-xs text-text-secondary leading-relaxed">
+                  {t(`step4.descriptionHint${n}`)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
 
       {showSale && (
         <div className="grid grid-cols-2 gap-4">
@@ -500,7 +693,6 @@ function Step5({
         <SummaryRow label={t('step5.addressLine1')} value={form.address_line1} />
         {form.address_line2 && <SummaryRow label={t('step5.addressLine2')} value={form.address_line2} />}
         <SummaryRow label={t('step5.postalCity')} value={`${form.postcode} ${form.city}`} />
-        {form.region && <SummaryRow label={t('step5.region')} value={form.region} />}
       </SummarySection>
 
       <SummarySection label={t('step5.propertyDetails')}>
@@ -660,9 +852,9 @@ export function ListingWizard({ ownerId, locale }: { ownerId: string; locale: st
       {/* Step card */}
       <div className="bg-surface rounded-card shadow-sm p-6">
         {step === 1 && <Step1 form={form} errors={errors} set={set} propertyTypes={propertyTypes} t={t} intentLabels={intentLabels} />}
-        {step === 2 && <Step2 form={form} errors={errors} set={set} t={t} regions={countryConfig.regions} postcodeLabel={countryConfig.postal_code_label} postcodeMaxLength={countryCode === 'GB' ? 8 : 5} />}
+        {step === 2 && <Step2 form={form} errors={errors} set={set} t={t} postcodeLabel={countryConfig.postal_code_label} postcodeMaxLength={countryCode === 'GB' ? 8 : 5} isUK={countryCode === 'GB'} />}
         {step === 3 && <Step3 form={form} errors={errors} set={set} isFlat={isFlat} t={t} />}
-        {step === 4 && <Step4 form={form} errors={errors} set={set} currency={countryConfig.currency} t={t} />}
+        {step === 4 && <Step4 form={form} errors={errors} set={set} currency={countryConfig.currency} t={t} allFormData={form} />}
         {step === 5 && <Step5 form={form} currency={countryConfig.currency} localeFormatting={localeFormatting} t={t} propertyTypes={propertyTypes} intentLabels={intentLabels} />}
       </div>
 

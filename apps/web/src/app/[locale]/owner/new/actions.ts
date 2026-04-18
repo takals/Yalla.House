@@ -11,7 +11,6 @@ export interface WizardPayload {
   address_line2: string
   postcode: string
   city: string
-  region: string
   size_sqm: string
   rooms: string
   bedrooms: string
@@ -84,7 +83,7 @@ export async function createListingAction(
     address_line2: payload.address_line2 || null,
     postcode: payload.postcode,
     city: payload.city,
-    region: payload.region || null,
+    region: null,
     title_de: payload.title_de,
     title: payload.title_de,
     description_de: payload.description_de || null,
