@@ -1,44 +1,46 @@
 # Claude Project Instructions
 
-> Yalla.House — UK flat-fee property selling platform. No commission, no agent. Sellers list directly on Rightmove & Zoopla and keep every pound.
+> Yalla.House — cross-country property platform. Flat-fee selling, no commission. Sellers list directly on portals (Rightmove, Zoopla, ImmoScout24, Immowelt) and keep every pound/euro.
+
+## ⚠️ UNIVERSAL RULE — Multi-Country Architecture
+**This is the #1 rule. Every feature MUST follow it.**
+
+- NEVER hardcode country codes (`'DE'`, `'GB'`), currencies, or market logic
+- Country resolution: `countryFromLocale(locale)` → `getCountryConfig(code)`
+- All market config lives in `lib/country-config.ts` — currencies, portals, postal formats, regions
+- All UI strings via `next-intl` — no inline language ternaries
+- New country = add config + translations + DB seed rows — zero code changes
+- Full spec: see `Yalla-Universal-Requirements.docx` and `rules/code-style.md`
 
 ## Tech Stack
-Vanilla HTML5 · CSS3 custom properties · Vanilla JS (ES5 compat) · Lucide icons v0.475.0 (CDN) · Plus Jakarta Sans (Google Fonts)
+**Production app:** Next.js 14 (App Router) · React 18 · TypeScript · Tailwind CSS · Supabase · Inngest · next-intl
+**Legacy pages:** Vanilla HTML5 · CSS3 tokens · Vanilla JS · Lucide icons (in `Website/`)
 
 ## File Structure
 ```
-Website/
-├── CLAUDE.md              ← Extended reference (full style guide)
-├── style.css              ← Single global stylesheet (all design tokens here)
-├── app.js                 ← Shared JS for owner dashboard only
-├── index.html             ← Public landing page
-├── services.html          ← Services & Pricing
-├── about.html             ← About / Mission
-├── list.html              ← Listing wizard (4-step, standalone)
-└── dashboards/
-    ├── dashboard.html     ← Owner/Seller (uses app.js)
-    ├── buyer.html         ← Home Hunter (inline script)
-    ├── admin.html         ← Yalla Admin (inline script)
-    └── agent.html         ← Field Agent (inline script)
+apps/web/                  ← Next.js production app
+├── src/app/[locale]/      ← All routes (locale-prefixed)
+│   ├── owner/             ← Owner dashboard + listing management
+│   ├── hunter/            ← Home hunter dashboard + passport
+│   ├── agent/             ← Agent dashboard
+│   └── admin/             ← Admin panel
+├── src/lib/               ← Shared utilities
+│   ├── country-config.ts  ← ⭐ Central market config (COUNTRY_CONFIGS)
+│   ├── detect-country.ts  ← Locale → country resolution
+│   └── supabase/          ← DB client
+├── messages/de.json       ← German translations (primary)
+├── messages/en.json       ← English translations
+Website/                   ← Legacy vanilla HTML pages
+├── style.css · app.js     ← Shared styles + JS
+├── index.html · services.html · about.html
+└── dashboards/            ← Legacy dashboards
 ```
-
-> Note: The `LandingPage/` directory has been archived to `_archive/LandingPage/` and is no longer part of this build.
-
-## Critical Path Rules (dashboards/)
-- Assets: `href="../style.css"`, `src="../app.js"`
-- Public pages: `href="../index.html"`, `href="../list.html"`
-- Sibling dashboards: `href="dashboard.html"` (no `../` prefix)
-- Public pages referencing dashboards: `href="dashboards/dashboard.html"`
-
-## Toast System
-`showToast(message, type)` — type is `'success'` (default), `'error'`, `'info'`
-- Defined in `app.js` for `dashboard.html`
-- **Duplicated inline** in buyer.html, admin.html, agent.html, and all 3 public pages
 
 ## Rules Index
 | File | Scope | Content |
 |---|---|---|
-| `rules/code-style.md` | All files | DO/DON'T, indentation, naming, JS style |
-| `rules/frontend/vanilla.md` | All HTML/CSS | Design tokens, typography, components |
-| `rules/dashboards.md` | `dashboards/**` | Dashboard layout, page-by-page notes |
-| `rules/public-pages.md` | Root `*.html` | Public page patterns, footer spec, brand voice |
+| `rules/code-style.md` | All files | **Multi-country rules**, i18n, DO/DON'T, naming |
+| `rules/frontend/react.md` | `apps/web/` | Next.js patterns, components, data fetching |
+| `rules/frontend/vanilla.md` | `Website/` | Design tokens, typography, components |
+| `rules/dashboards.md` | `dashboards/**` | Legacy dashboard layout |
+| `rules/public-pages.md` | Root `*.html` | Legacy public page patterns |
