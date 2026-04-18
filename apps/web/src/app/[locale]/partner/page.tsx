@@ -3,13 +3,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 
-export default async function PartnerDashboardPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
+export default async function PartnerDashboardPage() {
   const t = await getTranslations()
-  const { locale } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
@@ -137,7 +132,7 @@ export default async function PartnerDashboardPage({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         {/* View Requests */}
         <Link
-          href={`${locale === 'de' ? '' : '/en'}/partner/requests`}
+          href="/partner/requests"
           className="bg-surface rounded-xl p-6 border border-border-default hover:shadow-md transition block"
         >
           <div className="flex items-center justify-between mb-2">
@@ -151,7 +146,7 @@ export default async function PartnerDashboardPage({
           </p>
           <div className="mt-4 pt-4 border-t border-border-default">
             <span className="text-sm font-bold text-brand">
-              {activeCount} {locale === 'de' ? 'aktiv' : 'active'}
+              {activeCount} {t('partnerDash.active')}
             </span>
           </div>
         </Link>
@@ -195,7 +190,7 @@ export default async function PartnerDashboardPage({
             {t('partnerDash.activeRequestsMsg')}
           </p>
           <Link
-            href={`${locale === 'de' ? '' : '/en'}/partner/requests`}
+            href="/partner/requests"
             className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
           >
             {t('partnerDash.viewRequests')} →
@@ -220,7 +215,7 @@ export default async function PartnerDashboardPage({
               {t('partnerDash.createProfile')}
             </Link>
             <Link
-              href={`${locale === 'de' ? '' : '/en'}/partner/requests`}
+              href="/partner/requests"
               className="inline-block px-4 py-2 border border-[#D8DBE5] text-text-secondary text-sm font-bold rounded-lg hover:bg-hover-bg transition"
             >
               {t('partnerDash.browseRequestsBtn')}

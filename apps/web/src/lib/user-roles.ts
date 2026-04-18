@@ -1,5 +1,3 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-
 interface RoleSwitchItem {
   role: string
   label: string
@@ -18,8 +16,9 @@ const ROLE_CONFIG: Record<string, { label: string; href: string }> = {
  * Fetch the user's active roles and return them as RoleSwitchItems
  * for the dashboard sidebar role switcher.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchUserRoles(
-  supabase: SupabaseClient,
+  supabase: any,
   userId: string
 ): Promise<RoleSwitchItem[]> {
   const { data: roles } = await (supabase.from('user_roles') as any)

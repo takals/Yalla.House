@@ -323,7 +323,8 @@
     "welcomePartner": "Welcome to Yalla Partners",
     "getStarted": "Get started by completing your profile and browsing available service requests.",
     "createProfile": "Create Profile",
-    "browseRequestsBtn": "Browse Requests"
+    "browseRequestsBtn": "Browse Requests",
+    "active": "active"
   },
   "viewingLabels": {
     "pending": "Pending",
@@ -1864,7 +1865,8 @@
     "collapse": "Collapse",
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "switchRole": "Switch role"
   },
   "ownerInfo": {
     "pageTitle": "Owner Dashboard",
@@ -2402,7 +2404,6 @@
     "congratsBody": "Your listing is ready. See how it looks to buyers and share it with the world.",
     "seeYourPage": "See your page",
     "skipForNow": "Skip for now",
-
     "yourPageIsReady": "Your page is live!",
     "yourPageIsReadyDesc": "This is how buyers see your listing. You can toggle between Live and Draft at any time.",
     "toggleLive": "Live",
@@ -2416,21 +2417,16 @@
     "copyLink": "Copy link",
     "copied": "Copied!",
     "whatsNext": "What would you like to do next?",
-
     "pathsTitle": "Choose your next step",
     "pathsSubtitle": "You can do both — start with whichever matters most to you.",
-
     "pathShareTitle": "Share your listing",
     "pathShareDesc": "Share your listing on WhatsApp, Facebook, social media and property portals.",
     "pathShareCta": "Share now",
-
     "pathAgentTitle": "Find an agent",
     "pathAgentDesc": "Find local agents in your area and compare their offers.",
     "pathAgentCta": "Search agents",
-
     "goToDashboard": "Go to dashboard",
     "back": "Back",
-
     "shareTitle": "Share your listing",
     "shareSubtitle": "The more people see your listing, the faster you’ll find a buyer or tenant.",
     "shareWhatsapp": "Share via WhatsApp",
@@ -2439,11 +2435,9 @@
     "shareEmail": "Send via email",
     "shareQR": "QR code",
     "sharePortals": "Portals",
-
     "nudgeAgentTitle": "Want professional help?",
     "nudgeAgentDesc": "Find agents near you and compare their terms.",
     "nudgeAgentCta": "Find agents",
-
     "agentTitle": "Find an agent",
     "agentSubtitle": "Let local agents compete for your listing. You stay in control.",
     "agentStep1Title": "Search agents near you",
@@ -2454,7 +2448,6 @@
     "agentStep3Title": "Send your brief",
     "agentStep3Desc": "Send your listing to selected agents and receive their proposals.",
     "agentStep3Cta": "Create brief",
-
     "nudgeShareTitle": "Don’t forget to share!",
     "nudgeShareDesc": "Share your listing on social media to reach even more buyers.",
     "nudgeShareCta": "Share now"

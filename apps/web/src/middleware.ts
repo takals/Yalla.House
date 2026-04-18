@@ -14,7 +14,7 @@ const intlMiddleware = createIntlMiddleware({
 
 // Routes that require authentication.
 // Unauthenticated visitors are redirected to /auth/login with a ?next= param.
-const protectedPaths = ['/owner', '/hunter', '/agent', '/admin']
+const protectedPaths = ['/owner', '/hunter', '/agent', '/admin', '/partner', '/referrer']
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

@@ -253,8 +253,7 @@ export const adminNav: NavItem[] = [
 ]
 
 export const ownerNav: NavItem[] = [
-  { href: '/owner/listings', label: 'Dashboard',       icon: <LayoutDashboard size={15} />, exact: true },
-  { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} /> },
+  { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} />, exact: true },
   { href: '/owner/viewings', label: 'Viewings',    icon: <Calendar size={15} /> },
   { href: '/owner/offers',   label: 'Offers',      icon: <Banknote size={15} /> },
   { href: '/owner/agents',   label: 'Agents',      icon: <Handshake size={15} /> },

@@ -323,7 +323,8 @@
     "welcomePartner": "Willkommen bei Yalla Partners",
     "getStarted": "Beginnen Sie mit der Vervollständigung Ihres Profils und schauen Sie sich verfügbare Service-Anfragen an.",
     "createProfile": "Profil erstellen",
-    "browseRequestsBtn": "Anfragen durchsuchen"
+    "browseRequestsBtn": "Anfragen durchsuchen",
+    "active": "aktiv"
   },
   "viewingLabels": {
     "pending": "Ausstehend",
@@ -1752,7 +1753,7 @@
     "contactMessagePlaceholder": "Ihre Nachricht an den Eigentümer…",
     "contactSendRequest": "Anfrage senden",
     "errorNameRequired": "Name ist erforderlich.",
-    "errorInvalidEmail": "Bitte geben Sie eine g\u00fcltige E-Mail-Adresse ein.",
+    "errorInvalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
     "errorRequestFailed": "Anfrage konnte nicht gesendet werden. Bitte erneut versuchen."
   },
   "ownerOffers": {
@@ -1864,7 +1865,8 @@
     "collapse": "Einklappen",
     "expandSidebar": "Seitenleiste ausklappen",
     "collapseSidebar": "Seitenleiste einklappen",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "switchRole": "Rolle wechseln"
   },
   "ownerInfo": {
     "pageTitle": "Eigentümer-Dashboard",
@@ -2398,75 +2400,66 @@
   },
   "activate": {
     "congratsTitle": "Dein Inserat ist gespeichert!",
-    "congratsSubtitle": "Guter Start \u2014 jetzt machen wir es sichtbar.",
-    "congratsBody": "Dein Inserat ist bereit. Schau dir an, wie es f\u00fcr Interessenten aussieht, und teile es mit der Welt.",
+    "congratsSubtitle": "Guter Start — jetzt machen wir es sichtbar.",
+    "congratsBody": "Dein Inserat ist bereit. Schau dir an, wie es für Interessenten aussieht, und teile es mit der Welt.",
     "seeYourPage": "Deine Seite ansehen",
-    "skipForNow": "Sp\u00e4ter erledigen",
-
+    "skipForNow": "Später erledigen",
     "yourPageIsReady": "Deine Seite ist online!",
     "yourPageIsReadyDesc": "So sehen Interessenten dein Inserat. Du kannst es jederzeit zwischen Live und Entwurf umschalten.",
     "toggleLive": "Live",
     "toggleDraft": "Entwurf",
-    "statusLive": "Live \u2014 sichtbar f\u00fcr alle",
-    "statusDraft": "Entwurf \u2014 nur f\u00fcr dich sichtbar",
+    "statusLive": "Live — sichtbar für alle",
+    "statusDraft": "Entwurf — nur für dich sichtbar",
     "photosLoaded": "Fotos geladen",
     "noPhotosYet": "Noch keine Fotos",
-    "previewNote": "Dies ist eine Vorschau deiner \u00f6ffentlichen Seite",
-    "openFullPage": "Seite \u00f6ffnen",
+    "previewNote": "Dies ist eine Vorschau deiner öffentlichen Seite",
+    "openFullPage": "Seite öffnen",
     "copyLink": "Link kopieren",
     "copied": "Kopiert!",
-    "whatsNext": "Was m\u00f6chtest du als N\u00e4chstes tun?",
-
-    "pathsTitle": "W\u00e4hle deinen n\u00e4chsten Schritt",
-    "pathsSubtitle": "Du kannst beides machen \u2014 starte mit dem, was dir am wichtigsten ist.",
-
+    "whatsNext": "Was möchtest du als Nächstes tun?",
+    "pathsTitle": "Wähle deinen nächsten Schritt",
+    "pathsSubtitle": "Du kannst beides machen — starte mit dem, was dir am wichtigsten ist.",
     "pathShareTitle": "Inserat teilen",
     "pathShareDesc": "Teile dein Inserat auf WhatsApp, Facebook, Social Media und Immobilienportalen.",
     "pathShareCta": "Jetzt teilen",
-
     "pathAgentTitle": "Makler finden",
-    "pathAgentDesc": "Finde lokale Makler in deiner N\u00e4he und vergleiche ihre Angebote.",
+    "pathAgentDesc": "Finde lokale Makler in deiner Nähe und vergleiche ihre Angebote.",
     "pathAgentCta": "Makler suchen",
-
     "goToDashboard": "Zum Dashboard",
-    "back": "Zur\u00fcck",
-
+    "back": "Zurück",
     "shareTitle": "Teile dein Inserat",
-    "shareSubtitle": "Je mehr Menschen dein Inserat sehen, desto schneller findest du einen K\u00e4ufer oder Mieter.",
+    "shareSubtitle": "Je mehr Menschen dein Inserat sehen, desto schneller findest du einen Käufer oder Mieter.",
     "shareWhatsapp": "Per WhatsApp teilen",
     "shareFacebook": "Auf Facebook teilen",
     "shareTwitter": "Auf X / Twitter teilen",
     "shareEmail": "Per E-Mail senden",
     "shareQR": "QR-Code",
     "sharePortals": "Portale",
-
-    "nudgeAgentTitle": "M\u00f6chtest du professionelle Hilfe?",
-    "nudgeAgentDesc": "Finde Makler in deiner N\u00e4he und vergleiche ihre Konditionen.",
+    "nudgeAgentTitle": "Möchtest du professionelle Hilfe?",
+    "nudgeAgentDesc": "Finde Makler in deiner Nähe und vergleiche ihre Konditionen.",
     "nudgeAgentCta": "Makler finden",
-
     "agentTitle": "Finde einen Makler",
-    "agentSubtitle": "Lass lokale Makler um dein Inserat konkurrieren. Du beh\u00e4ltst die Kontrolle.",
-    "agentStep1Title": "Makler in deiner N\u00e4he suchen",
-    "agentStep1Desc": "Durchsuche unsere Datenbank mit gepr\u00fcften Maklern in deiner Region.",
+    "agentSubtitle": "Lass lokale Makler um dein Inserat konkurrieren. Du behältst die Kontrolle.",
+    "agentStep1Title": "Makler in deiner Nähe suchen",
+    "agentStep1Desc": "Durchsuche unsere Datenbank mit geprüften Maklern in deiner Region.",
     "agentStep1Cta": "Makler suchen",
     "agentStep2Title": "Angebote vergleichen",
-    "agentStep2Desc": "Vergleiche Provisionen, Bewertungen und Leistungen \u2014 bevor du dich entscheidest.",
+    "agentStep2Desc": "Vergleiche Provisionen, Bewertungen und Leistungen — bevor du dich entscheidest.",
     "agentStep3Title": "Auftrag senden",
-    "agentStep3Desc": "Sende dein Inserat an ausgew\u00e4hlte Makler und erhalte ihre Angebote.",
+    "agentStep3Desc": "Sende dein Inserat an ausgewählte Makler und erhalte ihre Angebote.",
     "agentStep3Cta": "Auftrag erstellen",
-
     "nudgeShareTitle": "Vergiss nicht zu teilen!",
     "nudgeShareDesc": "Teile dein Inserat auf Social Media, um noch mehr Interessenten zu erreichen.",
     "nudgeShareCta": "Jetzt teilen"
   },
   "welcome": {
     "title": "Willkommen bei Yalla.House!",
-    "subtitle": "Was f\u00fchrt dich heute hierher?",
+    "subtitle": "Was führt dich heute hierher?",
     "ownerTitle": "Ich verkaufe oder vermiete",
     "ownerDesc": "Immobilie inserieren, Besichtigungen verwalten und Makler finden.",
     "hunterTitle": "Ich suche ein Zuhause",
     "hunterDesc": "Immobilien suchen, mit Maklern verbinden und Besichtigungen buchen.",
     "agentTitle": "Ich bin Immobilienmakler",
-    "agentDesc": "Auftr\u00e4ge verwalten, auf Anfragen reagieren und Gesch\u00e4ft ausbauen."
+    "agentDesc": "Aufträge verwalten, auf Anfragen reagieren und Geschäft ausbauen."
   }
 }

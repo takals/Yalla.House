@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_EMAIL } from '@/lib/preview-user'
 import { DashboardShell, partnerNav } from '@/components/dashboard/shell'
+import { fetchUserRoles } from '@/lib/user-roles'
 import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
@@ -16,21 +17,19 @@ export default async function PartnerLayout({ children }: { children: React.Reac
   const { data: { user } } = await supabase.auth.getUser()
   const tShell = await getTranslations('shell')
 
-  // Preview phase: no auth gate. Render the shell even when there's no user.
-  let fullName: string | null = null
-  if (user) {
-    const { data: profile } = await (supabase.from('users') as any)
-      .select('full_name')
-      .eq('id', user.id)
-      .maybeSingle()
-    fullName = profile?.full_name ?? null
-  }
+  const [profileResult, userRoles] = await Promise.all([
+    user
+      ? (supabase.from('users') as any).select('full_name').eq('id', user.id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    user ? fetchUserRoles(supabase, user.id) : Promise.resolve([]),
+  ])
 
   const shellLabels: Record<string, string> = {
     collapse: tShell('collapse'),
     expandSidebar: tShell('expandSidebar'),
     collapseSidebar: tShell('collapseSidebar'),
     signOut: tShell('signOut'),
+    switchRole: tShell('switchRole'),
   }
 
   return (
@@ -38,8 +37,9 @@ export default async function PartnerLayout({ children }: { children: React.Reac
       navItems={partnerNav}
       section="partner"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
-      userName={fullName}
+      userName={profileResult.data?.full_name ?? null}
       shellLabels={shellLabels}
+      userRoles={userRoles}
     >
       {children}
     </DashboardShell>
