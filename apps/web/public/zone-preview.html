@@ -231,21 +231,21 @@ function Preview() {
 
       var r, g, b;
 
-      if (p <= 0.33) {
+      if (p <= 0.31) {
         /* Pure Zone 1: dark */
         r = 13; g = 13; b = 13;
-      } else if (p <= 0.52) {
-        /* Transition dark → white (19% window — 1/4 slower) */
-        var t = easeInOut((p - 0.33) / 0.19);
+      } else if (p <= 0.53) {
+        /* Transition dark → white (22% window) */
+        var t = easeInOut((p - 0.31) / 0.22);
         r = Math.round(13 + (245 - 13) * t);
         g = Math.round(13 + (245 - 13) * t);
         b = Math.round(13 + (245 - 13) * t);
-      } else if (p <= 0.67) {
+      } else if (p <= 0.65) {
         /* Pure Zone 2: white */
         r = 245; g = 245; b = 245;
-      } else if (p <= 0.86) {
-        /* Transition white → deep (19% window — 1/4 slower) */
-        var t2 = easeInOut((p - 0.67) / 0.19);
+      } else if (p <= 0.87) {
+        /* Transition white → deep (22% window) */
+        var t2 = easeInOut((p - 0.65) / 0.22);
         r = Math.round(245 + (6 - 245) * t2);
         g = Math.round(245 + (6 - 245) * t2);
         b = Math.round(245 + (10 - 245) * t2);
@@ -256,7 +256,7 @@ function Preview() {
 
       var bright = brightness(r, g, b);
       var isDark = bright < 128;
-      var zone = p < 0.42 ? 0 : p < 0.77 ? 1 : 2;
+      var zone = p < 0.42 ? 0 : p < 0.76 ? 1 : 2;
 
       setCurrent({
         bg: "rgb(" + r + "," + g + "," + b + ")",
