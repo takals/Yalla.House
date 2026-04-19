@@ -748,7 +748,10 @@
     "confirmDelete": "Are you sure? Deleted listings are removed after 90 days.",
     "confirmArchive": "Archive {count} listing(s)? They will be removed from portals.",
     "bulkSuccess": "{count} listing(s) updated",
-    "bulkError": "Some listings could not be updated"
+    "bulkError": "Some listings could not be updated",
+    "unitSqm": "m\u00B2",
+    "unitRooms": "beds",
+    "perMonth": "/mo"
   },
   "ownerPlans": {
     "pageTitle": "Plans & Pricing",

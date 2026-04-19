@@ -748,7 +748,10 @@
     "confirmDelete": "Sind Sie sicher? Gel\u00f6schte Inserate werden nach 90 Tagen entfernt.",
     "confirmArchive": "{count} Inserat(e) archivieren? Sie werden von den Portalen entfernt.",
     "bulkSuccess": "{count} Inserat(e) aktualisiert",
-    "bulkError": "Einige Inserate konnten nicht aktualisiert werden"
+    "bulkError": "Einige Inserate konnten nicht aktualisiert werden",
+    "unitSqm": "m\u00B2",
+    "unitRooms": "Zi.",
+    "perMonth": "/Mo"
   },
   "ownerPlans": {
     "pageTitle": "Tarife & Preise",

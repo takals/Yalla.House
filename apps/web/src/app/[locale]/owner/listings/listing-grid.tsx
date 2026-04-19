@@ -264,9 +264,11 @@ export default function ListingGrid({
                     </span>
                   </div>
 
-                  {/* Title */}
+                  {/* Title — locale-aware */}
                   <h3 className="font-bold text-text-primary text-[0.9375rem] mb-1 group-hover:text-brand-dark transition-colors">
-                    {listing.title_de ?? listing.title ?? listing.place_id}
+                    {locale === 'de'
+                      ? (listing.title_de ?? listing.title ?? listing.place_id)
+                      : (listing.title ?? listing.title_de ?? listing.place_id)}
                   </h3>
 
                   {/* Location */}
@@ -280,16 +282,16 @@ export default function ListingGrid({
                       {formattedPrice ?? '\u2014'}
                       {listing.intent === 'rent' && formattedPrice && (
                         <span className="text-xs font-normal text-text-secondary">
-                          /Mo
+                          {t['perMonth'] ?? '/mo'}
                         </span>
                       )}
                     </span>
                     <div className="flex gap-3 text-xs text-text-secondary">
                       {listing.size_sqm && (
-                        <span>{listing.size_sqm} m\u00B2</span>
+                        <span>{listing.size_sqm} {t['unitSqm'] ?? 'm²'}</span>
                       )}
                       {listing.bedrooms && (
-                        <span>{listing.bedrooms} Zi.</span>
+                        <span>{listing.bedrooms} {t['unitRooms'] ?? 'beds'}</span>
                       )}
                     </div>
                   </div>

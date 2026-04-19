@@ -63,7 +63,7 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
     'filterAll', 'filterLive', 'filterDrafts', 'filterUnderOffer',
     'filterArchived', 'selectAll', 'selected', 'archiveSelected',
     'deleteSelected', 'relistSelected', 'confirmDelete', 'confirmArchive',
-    'bulkSuccess', 'bulkError',
+    'bulkSuccess', 'bulkError', 'unitSqm', 'unitRooms', 'perMonth',
   ] as const
   const translations: Record<string, string> = {}
   for (const key of filterKeys) {
