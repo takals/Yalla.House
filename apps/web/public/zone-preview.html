@@ -24,7 +24,7 @@ var C = {
   brand: "#D4764E", brandHover: "#BF6840", brandDeep: "#A85A36",
 };
 
-/* ── ZONE 1 + ZONE 3 are fixed, ZONE 2 has 6 palette options ── */
+/* ── ZONE 1 + ZONE 3 are fixed, ZONE 2 has 7 palette options ── */
 var Z1 = {
   bg: "#0D0D0D", surface: "#161616", surfaceHover: "#1C1C1C",
   border: "rgba(255,255,255,0.08)", accent: "#D4764E",
@@ -109,9 +109,20 @@ var PALETTES = {
       cardIcon: "rgba(160,110,220,0.16)", dividerColor: "#A06EDC",
     }
   },
+  white: {
+    name: "Clean White", emoji: "\u2600\uFE0F", desc: "Maximum contrast \u2014 dark to light to dark",
+    z2: {
+      bg: "#F5F5F5", surface: "#FFFFFF", surfaceHover: "#FAFAFA",
+      border: "rgba(0,0,0,0.10)", accent: "#C4603A",
+      textPrimary: "#1A1A1A", textSecondary: "rgba(0,0,0,0.55)",
+      textMuted: "rgba(0,0,0,0.35)",
+      glow: "radial-gradient(ellipse at 50% 40%, rgba(212,118,78,0.08) 0%, transparent 70%)",
+      cardIcon: "rgba(212,118,78,0.10)", dividerColor: "#D4764E",
+    }
+  },
 };
 
-var PALETTE_ORDER = ["terracotta", "navy", "wine", "teal", "amber", "violet"];
+var PALETTE_ORDER = ["terracotta", "navy", "wine", "teal", "amber", "violet", "white"];
 
 /* ── SHARED COMPONENTS ───────────────────────────── */
 
@@ -364,7 +375,7 @@ function App() {
           e("span", { style: { fontSize: 12, color: "rgba(255,255,255,0.35)" } }, "Zone 1 (dark) + Zone 3 (deep) are fixed \u2014 pick the Zone 2 mood below")
         ),
         /* Palette buttons */
-        e("div", { style: { display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 8 } },
+        e("div", { style: { display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 6 } },
           PALETTE_ORDER.map(function(key) {
             var p = PALETTES[key];
             var isActive = activePalette === key;
