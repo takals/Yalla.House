@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yalla.House — Zone Transitions Mockup</title>
+<title>Yalla.House — Zone Transitions Mockup v2</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: #fff; }
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
 </style>
 </head>
 <body>
@@ -14,81 +15,129 @@ body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script>
-const e = React.createElement;
-const { useState, useEffect, useRef, useCallback } = React;
+var e = React.createElement;
+var useState = React.useState;
+var useEffect = React.useEffect;
+var useRef = React.useRef;
+var useCallback = React.useCallback;
 
-const C = {
+var C = {
   brand: "#D4764E", brandHover: "#BF6840", brandDeep: "#A85A36",
   brandLight: "rgba(212,118,78,0.10)", brandLight2: "rgba(212,118,78,0.16)",
-  brandSolidBg: "#FFF4EF", bgDark: "#0D0D0D", bgSoft: "#141414",
-  bgMuted: "#1A1A1A", bgSubtle: "#222222", surface: "#161616",
-  textPrimary: "#FFFFFF", textSecondary: "rgba(255,255,255,0.62)",
-  textMuted: "rgba(255,255,255,0.40)", borderLight: "rgba(255,255,255,0.06)",
-  border: "rgba(255,255,255,0.10)",
+  brandSolidBg: "#FFF4EF",
 };
 
-const Z = {
-  z1: { bg: "#0D0D0D", surface: "#161616", border: "rgba(255,255,255,0.06)" },
-  z2: { bg: "#12100E", surface: "#1C1714", border: "rgba(212,118,78,0.12)" },
-  z3: { bg: "#080808", surface: "#111111", border: "rgba(255,255,255,0.04)" },
+/* ── DRAMATIC ZONE PALETTES ─────────────────────────────
+   Zone 1: Cool dark — the "tech/data" feel
+   Zone 2: Warm terracotta — the "brand/story" feel (VERY visible shift)
+   Zone 3: Deep space — the "close/CTA" feel
+   ──────────────────────────────────────────────────── */
+var Z = {
+  z1: {
+    bg: "#0D0D0D",
+    surface: "#161616",
+    surfaceHover: "#1C1C1C",
+    border: "rgba(255,255,255,0.08)",
+    accent: "#D4764E",
+    textPrimary: "#FFFFFF",
+    textSecondary: "rgba(255,255,255,0.62)",
+    textMuted: "rgba(255,255,255,0.40)",
+    glow: "none",
+    cardIcon: "rgba(212,118,78,0.10)",
+  },
+  z2: {
+    bg: "#1C120B",
+    surface: "#2A1C12",
+    surfaceHover: "#33221A",
+    border: "rgba(212,118,78,0.25)",
+    accent: "#E8945A",
+    textPrimary: "#FFF5EE",
+    textSecondary: "rgba(255,235,220,0.70)",
+    textMuted: "rgba(255,220,200,0.45)",
+    glow: "radial-gradient(ellipse at 50% 40%, rgba(212,118,78,0.15) 0%, transparent 70%)",
+    cardIcon: "rgba(212,118,78,0.20)",
+  },
+  z3: {
+    bg: "#06060A",
+    surface: "#0E0E14",
+    surfaceHover: "#14141C",
+    border: "rgba(140,140,200,0.10)",
+    accent: "#D4764E",
+    textPrimary: "#E8E8F0",
+    textSecondary: "rgba(200,200,220,0.55)",
+    textMuted: "rgba(180,180,200,0.35)",
+    glow: "radial-gradient(ellipse at 50% 50%, rgba(212,118,78,0.06) 0%, transparent 60%)",
+    cardIcon: "rgba(100,100,160,0.12)",
+  },
 };
+
+/* ── SHARED COMPONENTS ───────────────────────────── */
 
 function Hero(p) {
+  var z = p.z || Z.z1;
   return e("div", { style: { padding: "80px 40px 60px", textAlign: "center" } },
     e("div", { style: { display: "flex", justifyContent: "center", gap: 8, marginBottom: 40 } },
-      e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 600, cursor: "pointer" } }, "I'm selling"),
-      e("button", { style: { background: "rgba(255,255,255,0.08)", color: C.textSecondary, border: "1px solid rgba(255,255,255,0.1)", padding: "8px 20px", borderRadius: 20, fontSize: 14, cursor: "pointer" } }, "I'm searching"),
+      e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 600, cursor: "pointer" } }, "I'm selling"),
+      e("button", { style: { background: "rgba(255,255,255,0.08)", color: z.textSecondary, border: "1px solid " + z.border, padding: "8px 20px", borderRadius: 20, fontSize: 14, cursor: "pointer" } }, "I'm searching"),
     ),
-    e("h1", { style: { fontSize: 48, fontWeight: 800, color: "#fff", lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-0.022em" } },
-      "Your property ", e("span", { style: { color: C.brand } }, "rental"), ",", e("br"), "under your control."
+    e("h1", { style: { fontSize: 48, fontWeight: 800, color: z.textPrimary, lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-0.022em" } },
+      "Your property ", e("span", { style: { color: z.accent } }, "rental"), ",", e("br"), "under your control."
     ),
-    e("p", { style: { color: C.textSecondary, fontSize: 17, maxWidth: 600, margin: "0 auto 32px", lineHeight: 1.5 } },
-      "Yalla.House is a property technology platform — not an estate agency. Get a free dashboard with market data, manage viewings, and sell your way."
+    e("p", { style: { color: z.textSecondary, fontSize: 17, maxWidth: 600, margin: "0 auto 32px", lineHeight: 1.5 } },
+      "Yalla.House is a property technology platform \u2014 not an estate agency. Get a free dashboard with market data, manage viewings, and sell your way."
     ),
     e("div", { style: { display: "flex", justifyContent: "center", gap: 16, alignItems: "center" } },
-      e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer" } }, "Create your free dashboard →"),
-      e("span", { style: { color: C.textMuted, fontSize: 14 } }, "I'm an agent →"),
+      e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer" } }, "Create your free dashboard \u2192"),
+      e("span", { style: { color: z.textMuted, fontSize: 14 } }, "I'm an agent \u2192"),
     )
   );
 }
 
 function Stats(p) {
+  var z = p.z || Z.z1;
   var stats = [
-    { v: "£5,000+", l: "Average agent commission on a UK property sale" },
+    { v: "\u00A35,000+", l: "Average agent commission on a UK property sale" },
     { v: "69%", l: "of owners want weekly updates but don't get them" },
-    { v: "£0", l: "Cost of your Yalla owner dashboard — always free" },
+    { v: "\u00A30", l: "Cost of your Yalla owner dashboard \u2014 always free" },
     { v: "2 min", l: "to create your dashboard and see your market data" },
   ];
   return e("div", { style: { padding: "40px 40px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 } },
     stats.map(function(s, i) {
-      return e("div", { key: i, style: { background: p.z.surface, border: "1px solid " + p.z.border, borderRadius: 12, padding: "24px 20px", textAlign: "center", transition: "all 0.6s ease" } },
-        e("div", { style: { fontSize: 28, fontWeight: 800, color: C.brand, marginBottom: 8 } }, s.v),
-        e("div", { style: { fontSize: 13, color: C.textSecondary, lineHeight: 1.4 } }, s.l)
+      return e("div", { key: i, style: {
+        background: z.surface, border: "1px solid " + z.border, borderRadius: 12,
+        padding: "24px 20px", textAlign: "center", transition: "all 0.8s cubic-bezier(0.16,1,0.3,1)"
+      }},
+        e("div", { style: { fontSize: 28, fontWeight: 800, color: z.accent, marginBottom: 8 } }, s.v),
+        e("div", { style: { fontSize: 13, color: z.textSecondary, lineHeight: 1.4 } }, s.l)
       );
     })
   );
 }
 
 function HowItWorks(p) {
+  var z = p.z || Z.z1;
   var steps = [
     { n: "01", t: "Create your dashboard", d: "Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale." },
-    { n: "02", t: "Sell your way", d: "List privately and manage it yourself, or send your Owner Brief to competing agents. They respond with real proposals — you compare and choose." },
+    { n: "02", t: "Sell your way", d: "List privately and manage it yourself, or send your Owner Brief to competing agents. They respond with real proposals \u2014 you compare and choose." },
     { n: "03", t: "Stay in control", d: "Track every viewing, offer, and update in real time. Whether you're selling privately or through an agent, your dashboard keeps everything in one place." },
   ];
   return e("div", { style: { padding: "60px 40px" } },
-    e("h2", { style: { fontSize: 36, fontWeight: 800, color: "#fff", textAlign: "center", marginBottom: 12 } }, "How it works"),
-    e("p", { style: { color: C.textSecondary, textAlign: "center", marginBottom: 40, fontSize: 15 } }, "Three steps. No commission. Full control."),
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.textPrimary, textAlign: "center", marginBottom: 12 } }, "How it works"),
+    e("p", { style: { color: z.textSecondary, textAlign: "center", marginBottom: 40, fontSize: 15 } }, "Three steps. No commission. Full control."),
     e("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 } },
       steps.map(function(s, i) {
-        return e("div", { key: i, style: { background: p.z.surface, border: "1px solid " + p.z.border, borderRadius: 14, padding: "28px 24px", transition: "all 0.6s ease" } },
+        return e("div", { key: i, style: {
+          background: z.surface, border: "1px solid " + z.border, borderRadius: 14,
+          padding: "28px 24px", transition: "all 0.8s cubic-bezier(0.16,1,0.3,1)"
+        }},
           e("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 } },
-            e("div", { style: { width: 40, height: 40, borderRadius: 10, background: C.brandLight, display: "flex", alignItems: "center", justifyContent: "center" } },
-              e("span", { style: { color: C.brand, fontSize: 13, fontWeight: 700 } }, "\u2B21")
+            e("div", { style: { width: 40, height: 40, borderRadius: 10, background: z.cardIcon, display: "flex", alignItems: "center", justifyContent: "center" } },
+              e("span", { style: { color: z.accent, fontSize: 13, fontWeight: 700 } }, "\u2B21")
             ),
-            e("span", { style: { fontSize: 12, fontWeight: 700, color: C.textMuted, letterSpacing: "0.08em", textTransform: "uppercase" } }, "STEP " + s.n)
+            e("span", { style: { fontSize: 12, fontWeight: 700, color: z.textMuted, letterSpacing: "0.08em", textTransform: "uppercase" } }, "STEP " + s.n)
           ),
-          e("h3", { style: { fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 12 } }, s.t),
-          e("p", { style: { fontSize: 14, color: C.textSecondary, lineHeight: 1.5, margin: 0 } }, s.d)
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.textPrimary, marginBottom: 12 } }, s.t),
+          e("p", { style: { fontSize: 14, color: z.textSecondary, lineHeight: 1.5, margin: 0 } }, s.d)
         );
       })
     )
@@ -96,18 +145,19 @@ function HowItWorks(p) {
 }
 
 function WhyYalla(p) {
+  var z = p.z || Z.z2;
   var items = [
-    { t: "You get a dashboard. Not a bill.", d: "Every other platform charges you to list. We give you a free dashboard first — market data, comparable sales, a timeline for your sale." },
+    { t: "You get a dashboard. Not a bill.", d: "Every other platform charges you to list. We give you a free dashboard first \u2014 market data, comparable sales, a timeline for your sale." },
     { t: "Your data, always.", d: "Track every viewing, every offer, every piece of feedback in one place. If you instruct an agent, they connect to your dashboard." },
     { t: "We're not agents. We're your tools.", d: "Yalla is a technology platform, not an estate agency. We don't take commission. We give you the information and connections to make the best decision." },
   ];
   return e("div", { style: { padding: "60px 40px" } },
-    e("h2", { style: { fontSize: 36, fontWeight: 800, color: "#fff", textAlign: "center", marginBottom: 48 } }, "Why Yalla?"),
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.textPrimary, textAlign: "center", marginBottom: 48 } }, "Why Yalla?"),
     e("div", { style: { maxWidth: 700, margin: "0 auto" } },
       items.map(function(item, i) {
-        return e("div", { key: i, style: { borderLeft: "3px solid " + C.brand, paddingLeft: 24, marginBottom: 36 } },
-          e("h3", { style: { fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 8 } }, item.t),
-          e("p", { style: { fontSize: 14, color: C.textSecondary, lineHeight: 1.5, margin: 0 } }, item.d)
+        return e("div", { key: i, style: { borderLeft: "3px solid " + z.accent, paddingLeft: 24, marginBottom: 36, transition: "all 0.8s ease" } },
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.textPrimary, marginBottom: 8 } }, item.t),
+          e("p", { style: { fontSize: 14, color: z.textSecondary, lineHeight: 1.5, margin: 0 } }, item.d)
         );
       })
     )
@@ -115,20 +165,24 @@ function WhyYalla(p) {
 }
 
 function ThreePaths(p) {
+  var z = p.z || Z.z2;
   var paths = [
     { icon: "\uD83C\uDFE0", t: "For Owners", sub: "Free forever. No commission.", d: "Get a free dashboard with market data and comparable sales. Sell entirely on your own, or invite agents to compete for your instruction." },
-    { icon: "\uD83D\uDD0D", t: "For Home Hunters", sub: "Find your next home.", d: "Create your Home Passport and we'll search Rightmove, Zoopla and other portals on your behalf. We match you with accredited local agents." },
-    { icon: "\uD83D\uDCCB", t: "For Agents", sub: "Win new instructions.", d: "Receive Owner Briefs from motivated sellers in your area. Respond with your proposal and win the instruction — on merit, not marketing spend." },
+    { icon: "\uD83D\uDD0D", t: "For Home Hunters", sub: "Find your next home.", d: "Create your Home Passport and we'll search portals on your behalf. We match you with accredited local agents." },
+    { icon: "\uD83D\uDCCB", t: "For Agents", sub: "Win new instructions.", d: "Receive Owner Briefs from motivated sellers in your area. Respond with your proposal and win the instruction \u2014 on merit, not marketing spend." },
   ];
   return e("div", { style: { padding: "60px 40px" } },
     e("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 } },
       paths.map(function(p2, i) {
-        return e("div", { key: i, style: { background: p.z.surface, border: "1px solid " + p.z.border, borderRadius: 14, padding: "28px 24px", transition: "all 0.6s ease" } },
-          e("div", { style: { width: 44, height: 44, borderRadius: 10, background: C.brandLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, marginBottom: 16 } }, p2.icon),
-          e("h3", { style: { fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 4 } }, p2.t),
-          e("p", { style: { fontSize: 13, color: C.brand, marginBottom: 12, fontWeight: 600 } }, p2.sub),
-          e("p", { style: { fontSize: 14, color: C.textSecondary, lineHeight: 1.5, margin: "0 0 16px" } }, p2.d),
-          e("span", { style: { color: C.brand, fontSize: 14, fontWeight: 600 } }, "Get started \u2192")
+        return e("div", { key: i, style: {
+          background: z.surface, border: "1px solid " + z.border, borderRadius: 14,
+          padding: "28px 24px", transition: "all 0.8s cubic-bezier(0.16,1,0.3,1)"
+        }},
+          e("div", { style: { width: 44, height: 44, borderRadius: 10, background: z.cardIcon, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, marginBottom: 16 } }, p2.icon),
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.textPrimary, marginBottom: 4 } }, p2.t),
+          e("p", { style: { fontSize: 13, color: z.accent, marginBottom: 12, fontWeight: 600 } }, p2.sub),
+          e("p", { style: { fontSize: 14, color: z.textSecondary, lineHeight: 1.5, margin: "0 0 16px" } }, p2.d),
+          e("span", { style: { color: z.accent, fontSize: 14, fontWeight: 600 } }, "Get started \u2192")
         );
       })
     )
@@ -136,35 +190,94 @@ function ThreePaths(p) {
 }
 
 function CTA(p) {
+  var z = p.z || Z.z3;
   return e("div", { style: { padding: "80px 40px", textAlign: "center", position: "relative", overflow: "hidden" } },
-    e("div", { style: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(212,118,78,0.08) 0%, transparent 70%)", pointerEvents: "none" } }),
-    e("h2", { style: { fontSize: 36, fontWeight: 800, color: "#fff", marginBottom: 16, position: "relative" } }, "Ready to take control", e("br"), "of your sale?"),
-    e("p", { style: { color: C.textSecondary, fontSize: 15, marginBottom: 32, position: "relative" } }, "Create your free dashboard in under two minutes."),
-    e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer", position: "relative" } }, "Create your free dashboard \u2192")
+    e("div", { style: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(212,118,78,0.12) 0%, transparent 70%)", pointerEvents: "none" } }),
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.textPrimary, marginBottom: 16, position: "relative" } }, "Ready to take control", e("br"), "of your sale?"),
+    e("p", { style: { color: z.textSecondary, fontSize: 15, marginBottom: 32, position: "relative" } }, "Create your free dashboard in under two minutes."),
+    e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer", position: "relative" } }, "Create your free dashboard \u2192")
   );
 }
 
-function GradientDivider() {
+/* ── GRADIENT DIVIDERS ──────────────────────────────── */
+
+function GradientDivider(p) {
+  var thick = p.thick || false;
+  return e("div", { style: { position: "relative", height: thick ? 6 : 3, overflow: "visible" } },
+    /* The actual line */
+    e("div", { style: {
+      height: thick ? 4 : 2,
+      background: "linear-gradient(90deg, transparent 0%, #A85A36 10%, #D4764E 30%, #E8A87C 50%, #D4764E 70%, #A85A36 90%, transparent 100%)",
+      opacity: 0.9,
+    }}),
+    /* Glow behind the line */
+    e("div", { style: {
+      position: "absolute", top: -20, left: "10%", right: "10%", height: 44,
+      background: "linear-gradient(90deg, transparent, rgba(212,118,78,0.15) 30%, rgba(212,118,78,0.25) 50%, rgba(212,118,78,0.15) 70%, transparent)",
+      filter: "blur(12px)", pointerEvents: "none",
+    }})
+  );
+}
+
+function WaveDivider(p) {
+  var from = p.from || "#0D0D0D";
+  var to = p.to || "#1C120B";
+  return e("div", { style: { position: "relative", height: 80, overflow: "hidden" } },
+    e("div", { style: {
+      position: "absolute", top: 0, left: 0, right: 0, height: 40,
+      background: from
+    }}),
+    e("div", { style: {
+      position: "absolute", bottom: 0, left: 0, right: 0, height: 40,
+      background: to
+    }}),
+    e("svg", { viewBox: "0 0 1200 80", preserveAspectRatio: "none", style: { position: "absolute", top: 0, left: 0, width: "100%", height: "100%" } },
+      e("defs", null,
+        e("linearGradient", { id: "waveGrad", x1: "0%", y1: "0%", x2: "0%", y2: "100%" },
+          e("stop", { offset: "0%", stopColor: from }),
+          e("stop", { offset: "100%", stopColor: to })
+        )
+      ),
+      e("path", { d: "M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,80 L0,80 Z", fill: to }),
+      e("path", { d: "M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,0 L0,0 Z", fill: from })
+    )
+  );
+}
+
+/* ── ZONE LABEL (shows which zone is active) ────────── */
+
+function ZoneIndicator(p) {
+  var zone = p.zone;
+  var labels = ["Zone 1 \u2014 Dark", "Zone 2 \u2014 Warm", "Zone 3 \u2014 Deep"];
+  var colors = ["rgba(255,255,255,0.15)", "rgba(212,118,78,0.25)", "rgba(140,140,200,0.15)"];
+  var textColors = ["rgba(255,255,255,0.5)", "rgba(232,148,90,0.9)", "rgba(200,200,220,0.6)"];
   return e("div", { style: {
-    height: 3,
-    background: "linear-gradient(90deg, transparent 0%, " + C.brandDeep + " 15%, " + C.brand + " 35%, #E8A87C 50%, " + C.brand + " 65%, " + C.brandDeep + " 85%, transparent 100%)",
-    opacity: 0.7,
-  }});
+    position: "sticky", top: 8, zIndex: 50, display: "flex", justifyContent: "center", pointerEvents: "none",
+  }},
+    e("div", { style: {
+      background: colors[zone], backdropFilter: "blur(8px)",
+      padding: "6px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
+      color: textColors[zone], letterSpacing: "0.05em",
+      transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)",
+      border: "1px solid " + (zone === 1 ? "rgba(212,118,78,0.3)" : "rgba(255,255,255,0.08)"),
+    }}, labels[zone])
+  );
 }
 
-// ─── STYLE A ────────────────────────────────────────
+/* ── STYLE A: Gradient line divider + instant BG shift ── */
 function StyleA() {
-  var activeZone = React.useRef(0);
+  var activeZone = useRef(0);
   var wrapperRef = useRef(null);
   var z1Ref = useRef(null);
   var z2Ref = useRef(null);
   var z3Ref = useRef(null);
-  var forceUpdate = useState(0)[1];
+  var counter = useState(0);
+  var forceUpdate = counter[1];
 
   useEffect(function() {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.2) {
           var newZone = entry.target === z1Ref.current ? 0 : entry.target === z2Ref.current ? 1 : 2;
           if (newZone !== activeZone.current) {
             activeZone.current = newZone;
@@ -172,34 +285,55 @@ function StyleA() {
           }
         }
       });
-    }, { threshold: [0.25], root: wrapperRef.current });
+    }, { threshold: [0.2], root: wrapperRef.current });
     [z1Ref, z2Ref, z3Ref].forEach(function(r) { if (r.current) obs.observe(r.current); });
     return function() { obs.disconnect(); };
   }, []);
 
-  var colors = [Z.z1.bg, Z.z2.bg, Z.z3.bg];
-  return e("div", { ref: wrapperRef, style: { background: colors[activeZone.current], transition: "background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)", overflowY: "auto", maxHeight: 650 } },
-    e("div", { ref: z1Ref }, e(Hero), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 })),
-    e(GradientDivider),
-    e("div", { ref: z2Ref }, e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 })),
-    e(GradientDivider),
-    e("div", { ref: z3Ref }, e(CTA, { z: Z.z3 }))
+  var zone = activeZone.current;
+  var zones = [Z.z1, Z.z2, Z.z3];
+  var zCurrent = zones[zone];
+
+  return e("div", { ref: wrapperRef, style: {
+    background: zCurrent.bg,
+    transition: "background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+    overflowY: "auto", maxHeight: 650, position: "relative",
+  }},
+    /* Ambient glow overlay */
+    zCurrent.glow !== "none" ? e("div", { style: {
+      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+      background: zCurrent.glow, pointerEvents: "none",
+      transition: "opacity 0.8s ease", zIndex: 1,
+    }}) : null,
+    e(ZoneIndicator, { zone: zone }),
+    e("div", { ref: z1Ref, style: { position: "relative", zIndex: 2 } },
+      e(Hero, { z: Z.z1 }), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 })
+    ),
+    e(GradientDivider, { thick: true }),
+    e("div", { ref: z2Ref, style: { position: "relative", zIndex: 2 } },
+      e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 })
+    ),
+    e(GradientDivider, { thick: true }),
+    e("div", { ref: z3Ref, style: { position: "relative", zIndex: 2 } },
+      e(CTA, { z: Z.z3 })
+    )
   );
 }
 
-// ─── STYLE B ────────────────────────────────────────
+/* ── STYLE B: Wave morph divider + BG shift ─────────── */
 function StyleB() {
-  var activeZone = React.useRef(0);
+  var activeZone = useRef(0);
   var wrapperRef = useRef(null);
   var z1Ref = useRef(null);
   var z2Ref = useRef(null);
   var z3Ref = useRef(null);
-  var forceUpdate = useState(0)[1];
+  var counter = useState(0);
+  var forceUpdate = counter[1];
 
   useEffect(function() {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.2) {
           var newZone = entry.target === z1Ref.current ? 0 : entry.target === z2Ref.current ? 1 : 2;
           if (newZone !== activeZone.current) {
             activeZone.current = newZone;
@@ -207,27 +341,46 @@ function StyleB() {
           }
         }
       });
-    }, { threshold: [0.25], root: wrapperRef.current });
+    }, { threshold: [0.2], root: wrapperRef.current });
     [z1Ref, z2Ref, z3Ref].forEach(function(r) { if (r.current) obs.observe(r.current); });
     return function() { obs.disconnect(); };
   }, []);
 
-  var colors = [Z.z1.bg, Z.z2.bg, Z.z3.bg];
-  return e("div", { ref: wrapperRef, style: { background: colors[activeZone.current], transition: "background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1)", overflowY: "auto", maxHeight: 650 } },
-    e("div", { ref: z1Ref }, e(Hero), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 })),
-    e("div", { style: { height: 60 } }),
-    e("div", { ref: z2Ref }, e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 })),
-    e("div", { style: { height: 60 } }),
-    e("div", { ref: z3Ref }, e(CTA, { z: Z.z3 }))
+  var zone = activeZone.current;
+  var zones = [Z.z1, Z.z2, Z.z3];
+  var zCurrent = zones[zone];
+
+  return e("div", { ref: wrapperRef, style: {
+    background: zCurrent.bg,
+    transition: "background-color 1s cubic-bezier(0.16, 1, 0.3, 1)",
+    overflowY: "auto", maxHeight: 650, position: "relative",
+  }},
+    zCurrent.glow !== "none" ? e("div", { style: {
+      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+      background: zCurrent.glow, pointerEvents: "none",
+      transition: "opacity 1s ease", zIndex: 1,
+    }}) : null,
+    e(ZoneIndicator, { zone: zone }),
+    e("div", { ref: z1Ref, style: { position: "relative", zIndex: 2 } },
+      e(Hero, { z: Z.z1 }), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 })
+    ),
+    e(WaveDivider, { from: Z.z1.bg, to: Z.z2.bg }),
+    e("div", { ref: z2Ref, style: { position: "relative", zIndex: 2 } },
+      e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 })
+    ),
+    e(WaveDivider, { from: Z.z2.bg, to: Z.z3.bg }),
+    e("div", { ref: z3Ref, style: { position: "relative", zIndex: 2 } },
+      e(CTA, { z: Z.z3 })
+    )
   );
 }
 
-// ─── STYLE C ────────────────────────────────────────
+/* ── STYLE C: Continuous scroll-driven interpolation ─── */
 function StyleC() {
   var containerRef = useRef(null);
-  var progress = useState(0);
-  var scrollProgress = progress[0];
-  var setScrollProgress = progress[1];
+  var state = useState({ progress: 0, zone: 0 });
+  var scrollState = state[0];
+  var setScrollState = state[1];
 
   useEffect(function() {
     var el = containerRef.current;
@@ -235,56 +388,78 @@ function StyleC() {
     function onScroll() {
       var top = el.scrollTop;
       var max = el.scrollHeight - el.clientHeight;
-      setScrollProgress(max > 0 ? top / max : 0);
+      var p = max > 0 ? top / max : 0;
+      var zone = p < 0.35 ? 0 : p < 0.75 ? 1 : 2;
+      setScrollState({ progress: p, zone: zone });
     }
     el.addEventListener("scroll", onScroll, { passive: true });
     return function() { el.removeEventListener("scroll", onScroll); };
   }, []);
 
-  var r1=13,g1=13,b1=13, r2=18,g2=16,b2=14, r3=8,g3=8,b3=8;
-  var r,g,b;
-  if (scrollProgress < 0.5) {
-    var t = scrollProgress / 0.5;
-    r = Math.round(r1+(r2-r1)*t); g = Math.round(g1+(g2-g1)*t); b = Math.round(b1+(b2-b1)*t);
+  var p = scrollState.progress;
+  /* Zone 1: rgb(13,13,13) → Zone 2: rgb(28,18,11) → Zone 3: rgb(6,6,10) */
+  var r1=13,g1=13,b1=13, r2=28,g2=18,b2=11, r3=6,g3=6,b3=10;
+  var r, g, b;
+  if (p < 0.45) {
+    var t = Math.min(p / 0.45, 1);
+    /* Ease-in-out curve */
+    t = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
+    r = Math.round(r1+(r2-r1)*t);
+    g = Math.round(g1+(g2-g1)*t);
+    b = Math.round(b1+(b2-b1)*t);
   } else {
-    var t2 = (scrollProgress-0.5)/0.5;
-    r = Math.round(r2+(r3-r2)*t2); g = Math.round(g2+(g3-g2)*t2); b = Math.round(b2+(b3-b2)*t2);
+    var t2 = Math.min((p - 0.45) / 0.55, 1);
+    t2 = t2 < 0.5 ? 2*t2*t2 : 1 - Math.pow(-2*t2+2, 2)/2;
+    r = Math.round(r2+(r3-r2)*t2);
+    g = Math.round(g2+(g3-g2)*t2);
+    b = Math.round(b2+(b3-b2)*t2);
   }
-  var glow = scrollProgress < 0.5 ? scrollProgress/0.5*0.08 : (1-(scrollProgress-0.5)/0.5)*0.08;
+
+  /* Brand glow peaks in the middle */
+  var glowIntensity = p < 0.35 ? (p / 0.35) * 0.20 : p < 0.65 ? 0.20 : (1 - (p - 0.65) / 0.35) * 0.20;
+  var glowY = 30 + p * 40;
+
+  /* Card style interpolation */
+  var zone = scrollState.zone;
+  var zones = [Z.z1, Z.z2, Z.z3];
+  var zCurrent = zones[zone];
 
   return e("div", { ref: containerRef, style: {
-    background: "radial-gradient(ellipse at 50% " + (30+scrollProgress*40) + "%, rgba(212,118,78," + glow + ") 0%, rgb(" + r + "," + g + "," + b + ") 60%)",
-    overflowY: "auto", maxHeight: 650,
+    background: "radial-gradient(ellipse 80% 60% at 50% " + glowY + "%, rgba(212,118,78," + glowIntensity.toFixed(3) + ") 0%, rgb(" + r + "," + g + "," + b + ") 70%)",
+    overflowY: "auto", maxHeight: 650, position: "relative",
   }},
-    e(Hero), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 }),
-    e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 }), e(CTA, { z: Z.z3 })
+    e(ZoneIndicator, { zone: zone }),
+    e("div", { style: { position: "relative", zIndex: 2 } },
+      e(Hero, { z: zCurrent }), e(Stats, { z: zCurrent }), e(HowItWorks, { z: zCurrent }),
+      e(WhyYalla, { z: zCurrent }), e(ThreePaths, { z: zCurrent }), e(CTA, { z: zCurrent })
+    )
   );
 }
 
-// ─── MAIN ───────────────────────────────────────────
+/* ── APP SHELL ──────────────────────────────────────── */
 function App() {
   var state = useState("A");
   var activeStyle = state[0];
   var setActiveStyle = state[1];
 
   var styles = [
-    { id: "A", label: "Gradient Line + BG Shift", desc: "Netflix-style divider line marks each zone, background transitions smoothly" },
-    { id: "B", label: "Smooth BG Shift Only", desc: "No divider — just background color gradually shifts between zones" },
-    { id: "C", label: "Scroll-Driven Continuous", desc: "Background tied to scroll position with brand glow that follows" },
+    { id: "A", label: "Gradient Line + BG Shift", desc: "Glowing brand gradient line marks each zone boundary, background shifts between zones" },
+    { id: "B", label: "Wave Morph + BG Shift", desc: "Organic wave shape blends between zone colors, no hard edge" },
+    { id: "C", label: "Continuous Scroll Blend", desc: "Background tied to scroll position \u2014 brand glow follows you, colors shift smoothly" },
   ];
 
   return e("div", { style: { minHeight: "100vh", background: "#000" } },
-    // Picker bar
-    e("div", { style: { position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.9)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "16px 24px" } },
+    /* ── Picker bar ─── */
+    e("div", { style: { position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "16px 24px" } },
       e("div", { style: { display: "flex", alignItems: "center", gap: 20, maxWidth: 1100, margin: "0 auto" } },
-        e("span", { style: { color: C.brand, fontWeight: 800, fontSize: 16, whiteSpace: "nowrap" } }, "\uD83C\uDFE0 Zone Transitions"),
+        e("span", { style: { color: C.brand, fontWeight: 800, fontSize: 16, whiteSpace: "nowrap" } }, "\uD83C\uDFE0 Zone Transitions v2"),
         e("div", { style: { display: "flex", gap: 8, flex: 1 } },
           styles.map(function(s) {
             return e("button", {
               key: s.id, onClick: function() { setActiveStyle(s.id); },
               style: {
                 flex: 1, background: activeStyle === s.id ? C.brand : "rgba(255,255,255,0.06)",
-                color: activeStyle === s.id ? "#fff" : C.textSecondary,
+                color: activeStyle === s.id ? "#fff" : "rgba(255,255,255,0.6)",
                 border: activeStyle === s.id ? "none" : "1px solid rgba(255,255,255,0.08)",
                 padding: "10px 16px", borderRadius: 8, cursor: "pointer", textAlign: "left",
                 transition: "all 0.2s ease",
@@ -297,27 +472,38 @@ function App() {
         )
       )
     ),
-    // Zone legend
-    e("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "12px 24px 0", display: "flex", gap: 24, alignItems: "center" } },
-      e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
-        e("div", { style: { width: 12, height: 12, borderRadius: 3, background: Z.z1.bg, border: "1px solid rgba(255,255,255,0.2)" } }),
-        e("span", { style: { fontSize: 11, color: C.textMuted } }, "Zone 1: Dark — Hero + Stats + How It Works")
+    /* ── Zone color legend ─── */
+    e("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "16px 24px 0", display: "flex", gap: 28, alignItems: "center" } },
+      e("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
+        e("div", { style: { width: 24, height: 24, borderRadius: 6, background: Z.z1.bg, border: "2px solid rgba(255,255,255,0.2)" } }),
+        e("div", null,
+          e("div", { style: { fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.7)" } }, "Zone 1: Dark"),
+          e("div", { style: { fontSize: 10, color: "rgba(255,255,255,0.35)" } }, "Hero + Stats + How It Works")
+        )
       ),
-      e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
-        e("div", { style: { width: 12, height: 12, borderRadius: 3, background: Z.z2.bg, border: "1px solid rgba(212,118,78,0.3)" } }),
-        e("span", { style: { fontSize: 11, color: C.textMuted } }, "Zone 2: Warm — Why Yalla + Three Paths")
+      e("div", { style: { fontSize: 16, color: "rgba(255,255,255,0.15)" } }, "\u2192"),
+      e("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
+        e("div", { style: { width: 24, height: 24, borderRadius: 6, background: Z.z2.bg, border: "2px solid rgba(212,118,78,0.4)" } }),
+        e("div", null,
+          e("div", { style: { fontSize: 12, fontWeight: 700, color: "rgba(232,148,90,0.9)" } }, "Zone 2: Warm"),
+          e("div", { style: { fontSize: 10, color: "rgba(255,255,255,0.35)" } }, "Why Yalla + Three Paths")
+        )
       ),
-      e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
-        e("div", { style: { width: 12, height: 12, borderRadius: 3, background: Z.z3.bg, border: "1px solid rgba(255,255,255,0.15)" } }),
-        e("span", { style: { fontSize: 11, color: C.textMuted } }, "Zone 3: Deep — CTA")
-      )
+      e("div", { style: { fontSize: 16, color: "rgba(255,255,255,0.15)" } }, "\u2192"),
+      e("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
+        e("div", { style: { width: 24, height: 24, borderRadius: 6, background: Z.z3.bg, border: "2px solid rgba(140,140,200,0.2)" } }),
+        e("div", null,
+          e("div", { style: { fontSize: 12, fontWeight: 700, color: "rgba(200,200,220,0.6)" } }, "Zone 3: Deep"),
+          e("div", { style: { fontSize: 10, color: "rgba(255,255,255,0.35)" } }, "CTA")
+        )
+      ),
     ),
-    // Preview viewport
-    e("div", { style: { maxWidth: 1100, margin: "16px auto 0", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" } },
-      activeStyle === "A" ? e(StyleA) : activeStyle === "B" ? e(StyleB) : e(StyleC)
+    /* ── Preview viewport ─── */
+    e("div", { style: { maxWidth: 1100, margin: "16px auto 0", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" } },
+      activeStyle === "A" ? e(StyleA, { key: "A" }) : activeStyle === "B" ? e(StyleB, { key: "B" }) : e(StyleC, { key: "C" })
     ),
-    e("div", { style: { textAlign: "center", padding: "16px 0 32px", color: C.textMuted, fontSize: 12 } },
-      "\u2195 Scroll inside the preview to see the zone transitions in action"
+    e("div", { style: { textAlign: "center", padding: "16px 0 32px", color: "rgba(255,255,255,0.35)", fontSize: 12 } },
+      "\u2195 Scroll inside the preview to see the zone transitions \u2014 watch how background, cards, and borders all change"
     )
   );
 }
