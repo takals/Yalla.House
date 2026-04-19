@@ -178,47 +178,27 @@ function CTA(p) {
   );
 }
 
-/* ── TRANSITION DIVIDERS ──────────────────────────── */
+/* ── ZONE DIVIDERS — sharp cut with brand accent line ── */
 
-/* Dark-to-light gradient fade */
-function DarkToLightDivider() {
-  return e("div", { style: { height: 120, position: "relative", overflow: "hidden" } },
-    /* Gradient from dark to light */
+function ZoneDivider(p) {
+  var topBg = p.topBg;
+  var bottomBg = p.bottomBg;
+  return e("div", { style: { height: 6, position: "relative", overflow: "visible" } },
+    /* Top half = previous zone color */
+    e("div", { style: { position: "absolute", top: 0, left: 0, right: 0, height: 3, background: topBg } }),
+    /* Bottom half = next zone color */
+    e("div", { style: { position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: bottomBg } }),
+    /* Brand accent line right at the cut */
     e("div", { style: {
-      position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-      background: "linear-gradient(180deg, " + Z1.bg + " 0%, #3A3A3A 30%, #8A8A8A 55%, #C8C8C8 75%, " + Z2.bg + " 100%)",
-    }}),
-    /* Brand accent line in the middle */
-    e("div", { style: {
-      position: "absolute", top: "45%", left: "15%", right: "15%", height: 2,
-      background: "linear-gradient(90deg, transparent, #D4764E 30%, #E8A87C 50%, #D4764E 70%, transparent)",
-      opacity: 0.6,
+      position: "absolute", top: 1, left: "10%", right: "10%", height: 3,
+      background: "linear-gradient(90deg, transparent, #A85A36 15%, #D4764E 35%, #E8A87C 50%, #D4764E 65%, #A85A36 85%, transparent)",
+      borderRadius: 2,
     }}),
     /* Glow behind the line */
     e("div", { style: {
-      position: "absolute", top: "35%", left: "10%", right: "10%", height: 40,
-      background: "linear-gradient(90deg, transparent, rgba(212,118,78,0.12) 30%, rgba(212,118,78,0.20) 50%, rgba(212,118,78,0.12) 70%, transparent)",
-      filter: "blur(16px)", pointerEvents: "none",
-    }})
-  );
-}
-
-/* Light-to-dark gradient fade */
-function LightToDarkDivider() {
-  return e("div", { style: { height: 120, position: "relative", overflow: "hidden" } },
-    e("div", { style: {
-      position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-      background: "linear-gradient(180deg, " + Z2.bg + " 0%, #C8C8C8 25%, #8A8A8A 45%, #3A3A3A 70%, " + Z3.bg + " 100%)",
-    }}),
-    e("div", { style: {
-      position: "absolute", top: "50%", left: "15%", right: "15%", height: 2,
-      background: "linear-gradient(90deg, transparent, #D4764E 30%, #E8A87C 50%, #D4764E 70%, transparent)",
-      opacity: 0.6,
-    }}),
-    e("div", { style: {
-      position: "absolute", top: "40%", left: "10%", right: "10%", height: 40,
-      background: "linear-gradient(90deg, transparent, rgba(212,118,78,0.12) 30%, rgba(212,118,78,0.20) 50%, rgba(212,118,78,0.12) 70%, transparent)",
-      filter: "blur(16px)", pointerEvents: "none",
+      position: "absolute", top: -12, left: "8%", right: "8%", height: 30,
+      background: "linear-gradient(90deg, transparent, rgba(212,118,78,0.15) 25%, rgba(212,118,78,0.30) 50%, rgba(212,118,78,0.15) 75%, transparent)",
+      filter: "blur(10px)", pointerEvents: "none",
     }})
   );
 }
@@ -287,8 +267,8 @@ function Preview() {
       e(HowItWorks, { z: Z1 })
     ),
 
-    /* ── TRANSITION: Dark → Light ─────────────── */
-    e(DarkToLightDivider),
+    /* ── CUT: Dark → Light ──────────────────────── */
+    e(ZoneDivider, { topBg: Z1.bg, bottomBg: Z2.bg }),
 
     /* ── ZONE 2: Clean White ──────────────────── */
     e("div", { ref: z2Ref, style: {
@@ -298,8 +278,8 @@ function Preview() {
       e(ThreePaths, { z: Z2 })
     ),
 
-    /* ── TRANSITION: Light → Dark ─────────────── */
-    e(LightToDarkDivider),
+    /* ── CUT: Light → Dark ──────────────────────── */
+    e(ZoneDivider, { topBg: Z2.bg, bottomBg: Z3.bg }),
 
     /* ── ZONE 3: Deep ─────────────────────────── */
     e("div", { ref: z3Ref, style: {
