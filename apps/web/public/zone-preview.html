@@ -40,9 +40,15 @@ function lerpColor(a, b, t) {
   return "rgb(" + r + "," + g + "," + bv + ")";
 }
 
-/* Ease-in-out for smoother transitions */
+/* Ease-in, slow-out — the fade into the final color is 50% gentler.
+   First half: quadratic ease-in (same as before).
+   Second half: power-1.5 ease-out, scaled so it's continuous at t=0.5. */
 function easeInOut(t) {
-  return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
+  if (t < 0.5) return 2*t*t;
+  /* u goes from 0→1 over the second half */
+  var u = (t - 0.5) / 0.5;
+  /* power 1.5 ease-out (vs power 2 before) — gentler landing */
+  return 0.5 + 0.5 * (1 - Math.pow(1 - u, 1.5));
 }
 
 /* Get brightness of a color (0-255) */
