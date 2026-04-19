@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yalla.House — Zone Transitions Mockup v3</title>
+<title>Yalla.House — Zone Transitions</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: #fff; }
@@ -20,134 +20,62 @@ var useState = React.useState;
 var useEffect = React.useEffect;
 var useRef = React.useRef;
 
-var C = {
-  brand: "#D4764E", brandHover: "#BF6840", brandDeep: "#A85A36",
+/* ── THREE ZONE PALETTES ─────────────────────────────
+   Zone 1: Dark (hero, stats, how it works)
+   Zone 2: Clean white (why yalla, three paths)
+   Zone 3: Deep dark (CTA)
+   Each zone section owns its own background so text
+   is always readable regardless of scroll position.
+   ──────────────────────────────────────────────────── */
+
+var Z1 = {
+  bg: "#0D0D0D", surface: "#161616",
+  border: "rgba(255,255,255,0.08)", accent: "#D4764E",
+  text: "#FFFFFF", textSub: "rgba(255,255,255,0.62)",
+  textMuted: "rgba(255,255,255,0.40)",
+  cardIcon: "rgba(212,118,78,0.10)",
 };
 
-/* ── ZONE 1 + ZONE 3 are fixed, ZONE 2 has 7 palette options ── */
-var Z1 = {
-  bg: "#0D0D0D", surface: "#161616", surfaceHover: "#1C1C1C",
-  border: "rgba(255,255,255,0.08)", accent: "#D4764E",
-  textPrimary: "#FFFFFF", textSecondary: "rgba(255,255,255,0.62)",
-  textMuted: "rgba(255,255,255,0.40)", glow: "none",
-  cardIcon: "rgba(212,118,78,0.10)", dividerColor: "#D4764E",
+var Z2 = {
+  bg: "#F5F5F5", surface: "#FFFFFF",
+  border: "rgba(0,0,0,0.08)", accent: "#C4603A",
+  text: "#1A1A1A", textSub: "#555555",
+  textMuted: "#888888",
+  cardIcon: "rgba(196,96,58,0.08)",
 };
 
 var Z3 = {
-  bg: "#06060A", surface: "#0E0E14", surfaceHover: "#14141C",
+  bg: "#06060A", surface: "#0E0E14",
   border: "rgba(140,140,200,0.10)", accent: "#D4764E",
-  textPrimary: "#E8E8F0", textSecondary: "rgba(200,200,220,0.55)",
+  text: "#E8E8F0", textSub: "rgba(200,200,220,0.55)",
   textMuted: "rgba(180,180,200,0.35)",
-  glow: "radial-gradient(ellipse at 50% 50%, rgba(212,118,78,0.06) 0%, transparent 60%)",
-  cardIcon: "rgba(100,100,160,0.12)", dividerColor: "#D4764E",
+  cardIcon: "rgba(100,100,160,0.12)",
 };
 
-var PALETTES = {
-  terracotta: {
-    name: "Terracotta", emoji: "\uD83E\uDEA8", desc: "Warm earthy brown (current)",
-    z2: {
-      bg: "#1C120B", surface: "#2A1C12", surfaceHover: "#33221A",
-      border: "rgba(212,118,78,0.25)", accent: "#E8945A",
-      textPrimary: "#FFF5EE", textSecondary: "rgba(255,235,220,0.70)",
-      textMuted: "rgba(255,220,200,0.45)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(212,118,78,0.15) 0%, transparent 70%)",
-      cardIcon: "rgba(212,118,78,0.20)", dividerColor: "#D4764E",
-    }
-  },
-  navy: {
-    name: "Deep Navy", emoji: "\uD83C\uDF0A", desc: "Cool, premium, tech dashboard feel",
-    z2: {
-      bg: "#0B1220", surface: "#111D30", surfaceHover: "#16243A",
-      border: "rgba(100,160,240,0.20)", accent: "#6BA4F0",
-      textPrimary: "#EEF2FF", textSecondary: "rgba(200,215,245,0.68)",
-      textMuted: "rgba(160,185,230,0.42)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(100,160,240,0.12) 0%, transparent 70%)",
-      cardIcon: "rgba(100,160,240,0.15)", dividerColor: "#6BA4F0",
-    }
-  },
-  wine: {
-    name: "Deep Wine", emoji: "\uD83C\uDF77", desc: "Rich burgundy, luxury editorial vibe",
-    z2: {
-      bg: "#1A0B14", surface: "#281420", surfaceHover: "#321A28",
-      border: "rgba(200,100,140,0.22)", accent: "#D4748C",
-      textPrimary: "#FFF0F4", textSecondary: "rgba(245,210,220,0.68)",
-      textMuted: "rgba(220,180,195,0.42)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(200,100,140,0.12) 0%, transparent 70%)",
-      cardIcon: "rgba(200,100,140,0.18)", dividerColor: "#D4748C",
-    }
-  },
-  teal: {
-    name: "Deep Teal", emoji: "\uD83E\uDEB4", desc: "Sophisticated cyan, fresh and modern",
-    z2: {
-      bg: "#0B1A1A", surface: "#122828", surfaceHover: "#183232",
-      border: "rgba(80,200,190,0.20)", accent: "#5CC8BE",
-      textPrimary: "#EEFFFE", textSecondary: "rgba(200,240,235,0.68)",
-      textMuted: "rgba(160,215,210,0.42)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(80,200,190,0.12) 0%, transparent 70%)",
-      cardIcon: "rgba(80,200,190,0.15)", dividerColor: "#5CC8BE",
-    }
-  },
-  amber: {
-    name: "Warm Amber", emoji: "\u2728", desc: "Golden champagne warmth, less muddy",
-    z2: {
-      bg: "#14110A", surface: "#201C10", surfaceHover: "#282316",
-      border: "rgba(220,180,80,0.22)", accent: "#DCB450",
-      textPrimary: "#FFFBEE", textSecondary: "rgba(245,235,200,0.68)",
-      textMuted: "rgba(220,210,170,0.42)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(220,180,80,0.12) 0%, transparent 70%)",
-      cardIcon: "rgba(220,180,80,0.16)", dividerColor: "#DCB450",
-    }
-  },
-  violet: {
-    name: "Deep Violet", emoji: "\uD83D\uDC9C", desc: "Bold and dramatic, premium feel",
-    z2: {
-      bg: "#120B1A", surface: "#1E1428", surfaceHover: "#261A32",
-      border: "rgba(160,110,220,0.22)", accent: "#A06EDC",
-      textPrimary: "#F4EEFF", textSecondary: "rgba(220,200,245,0.68)",
-      textMuted: "rgba(190,170,220,0.42)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(160,110,220,0.12) 0%, transparent 70%)",
-      cardIcon: "rgba(160,110,220,0.16)", dividerColor: "#A06EDC",
-    }
-  },
-  white: {
-    name: "Clean White", emoji: "\u2600\uFE0F", desc: "Maximum contrast \u2014 dark to light to dark",
-    z2: {
-      bg: "#F5F5F5", surface: "#FFFFFF", surfaceHover: "#FAFAFA",
-      border: "rgba(0,0,0,0.10)", accent: "#C4603A",
-      textPrimary: "#1A1A1A", textSecondary: "rgba(0,0,0,0.55)",
-      textMuted: "rgba(0,0,0,0.35)",
-      glow: "radial-gradient(ellipse at 50% 40%, rgba(212,118,78,0.08) 0%, transparent 70%)",
-      cardIcon: "rgba(212,118,78,0.10)", dividerColor: "#D4764E",
-    }
-  },
-};
-
-var PALETTE_ORDER = ["terracotta", "navy", "wine", "teal", "amber", "violet", "white"];
-
-/* ── SHARED COMPONENTS ───────────────────────────── */
+/* ── SHARED COMPONENTS (each takes a zone palette) ── */
 
 function Hero(p) {
-  var z = p.z || Z1;
+  var z = p.z;
   return e("div", { style: { padding: "80px 40px 60px", textAlign: "center" } },
     e("div", { style: { display: "flex", justifyContent: "center", gap: 8, marginBottom: 40 } },
-      e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 600, cursor: "pointer", transition: "all 0.6s ease" } }, "I'm selling"),
-      e("button", { style: { background: "rgba(255,255,255,0.08)", color: z.textSecondary, border: "1px solid " + z.border, padding: "8px 20px", borderRadius: 20, fontSize: 14, cursor: "pointer", transition: "all 0.6s ease" } }, "I'm searching"),
+      e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 600, cursor: "pointer" } }, "I'm selling"),
+      e("button", { style: { background: z === Z1 ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)", color: z.textSub, border: "1px solid " + z.border, padding: "8px 20px", borderRadius: 20, fontSize: 14, cursor: "pointer" } }, "I'm searching"),
     ),
-    e("h1", { style: { fontSize: 48, fontWeight: 800, color: z.textPrimary, lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-0.022em", transition: "color 0.6s ease" } },
-      "Your property ", e("span", { style: { color: z.accent, transition: "color 0.6s ease" } }, "rental"), ",", e("br"), "under your control."
+    e("h1", { style: { fontSize: 48, fontWeight: 800, color: z.text, lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-0.022em" } },
+      "Your property ", e("span", { style: { color: z.accent } }, "rental"), ",", e("br"), "under your control."
     ),
-    e("p", { style: { color: z.textSecondary, fontSize: 17, maxWidth: 600, margin: "0 auto 32px", lineHeight: 1.5, transition: "color 0.6s ease" } },
+    e("p", { style: { color: z.textSub, fontSize: 17, maxWidth: 600, margin: "0 auto 32px", lineHeight: 1.5 } },
       "Yalla.House is a property technology platform \u2014 not an estate agency. Get a free dashboard with market data, manage viewings, and sell your way."
     ),
     e("div", { style: { display: "flex", justifyContent: "center", gap: 16, alignItems: "center" } },
-      e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer", transition: "all 0.6s ease" } }, "Create your free dashboard \u2192"),
-      e("span", { style: { color: z.textMuted, fontSize: 14, transition: "color 0.6s ease" } }, "I'm an agent \u2192"),
+      e("button", { style: { background: z.accent, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer" } }, "Create your free dashboard \u2192"),
+      e("span", { style: { color: z.textMuted, fontSize: 14 } }, "I'm an agent \u2192"),
     )
   );
 }
 
 function Stats(p) {
-  var z = p.z || Z1;
+  var z = p.z;
   var stats = [
     { v: "\u00A35,000+", l: "Average agent commission on a UK property sale" },
     { v: "69%", l: "of owners want weekly updates but don't get them" },
@@ -158,39 +86,38 @@ function Stats(p) {
     stats.map(function(s, i) {
       return e("div", { key: i, style: {
         background: z.surface, border: "1px solid " + z.border, borderRadius: 12,
-        padding: "24px 20px", textAlign: "center", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)"
+        padding: "24px 20px", textAlign: "center",
       }},
-        e("div", { style: { fontSize: 28, fontWeight: 800, color: z.accent, marginBottom: 8, transition: "color 0.6s ease" } }, s.v),
-        e("div", { style: { fontSize: 13, color: z.textSecondary, lineHeight: 1.4, transition: "color 0.6s ease" } }, s.l)
+        e("div", { style: { fontSize: 28, fontWeight: 800, color: z.accent, marginBottom: 8 } }, s.v),
+        e("div", { style: { fontSize: 13, color: z.textSub, lineHeight: 1.4 } }, s.l)
       );
     })
   );
 }
 
 function HowItWorks(p) {
-  var z = p.z || Z1;
+  var z = p.z;
   var steps = [
     { n: "01", t: "Create your dashboard", d: "Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale." },
     { n: "02", t: "Sell your way", d: "List privately and manage it yourself, or send your Owner Brief to competing agents. They respond with real proposals \u2014 you compare and choose." },
     { n: "03", t: "Stay in control", d: "Track every viewing, offer, and update in real time. Whether you're selling privately or through an agent, your dashboard keeps everything in one place." },
   ];
   return e("div", { style: { padding: "60px 40px" } },
-    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.textPrimary, textAlign: "center", marginBottom: 12, transition: "color 0.6s ease" } }, "How it works"),
-    e("p", { style: { color: z.textSecondary, textAlign: "center", marginBottom: 40, fontSize: 15, transition: "color 0.6s ease" } }, "Three steps. No commission. Full control."),
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.text, textAlign: "center", marginBottom: 12 } }, "How it works"),
+    e("p", { style: { color: z.textSub, textAlign: "center", marginBottom: 40, fontSize: 15 } }, "Three steps. No commission. Full control."),
     e("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 } },
       steps.map(function(s, i) {
         return e("div", { key: i, style: {
-          background: z.surface, border: "1px solid " + z.border, borderRadius: 14,
-          padding: "28px 24px", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)"
+          background: z.surface, border: "1px solid " + z.border, borderRadius: 14, padding: "28px 24px",
         }},
           e("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 } },
-            e("div", { style: { width: 40, height: 40, borderRadius: 10, background: z.cardIcon, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.6s ease" } },
-              e("span", { style: { color: z.accent, fontSize: 13, fontWeight: 700, transition: "color 0.6s ease" } }, "\u2B21")
+            e("div", { style: { width: 40, height: 40, borderRadius: 10, background: z.cardIcon, display: "flex", alignItems: "center", justifyContent: "center" } },
+              e("span", { style: { color: z.accent, fontSize: 13, fontWeight: 700 } }, "\u2B21")
             ),
-            e("span", { style: { fontSize: 12, fontWeight: 700, color: z.textMuted, letterSpacing: "0.08em", textTransform: "uppercase", transition: "color 0.6s ease" } }, "STEP " + s.n)
+            e("span", { style: { fontSize: 12, fontWeight: 700, color: z.textMuted, letterSpacing: "0.08em", textTransform: "uppercase" } }, "STEP " + s.n)
           ),
-          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.textPrimary, marginBottom: 12, transition: "color 0.6s ease" } }, s.t),
-          e("p", { style: { fontSize: 14, color: z.textSecondary, lineHeight: 1.5, margin: 0, transition: "color 0.6s ease" } }, s.d)
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.text, marginBottom: 12 } }, s.t),
+          e("p", { style: { fontSize: 14, color: z.textSub, lineHeight: 1.5, margin: 0 } }, s.d)
         );
       })
     )
@@ -205,12 +132,12 @@ function WhyYalla(p) {
     { t: "We're not agents. We're your tools.", d: "Yalla is a technology platform, not an estate agency. We don't take commission. We give you the information and connections to make the best decision." },
   ];
   return e("div", { style: { padding: "60px 40px" } },
-    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.textPrimary, textAlign: "center", marginBottom: 48, transition: "color 0.6s ease" } }, "Why Yalla?"),
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.text, textAlign: "center", marginBottom: 48 } }, "Why Yalla?"),
     e("div", { style: { maxWidth: 700, margin: "0 auto" } },
       items.map(function(item, i) {
-        return e("div", { key: i, style: { borderLeft: "3px solid " + z.accent, paddingLeft: 24, marginBottom: 36, transition: "all 0.6s ease" } },
-          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.textPrimary, marginBottom: 8, transition: "color 0.6s ease" } }, item.t),
-          e("p", { style: { fontSize: 14, color: z.textSecondary, lineHeight: 1.5, margin: 0, transition: "color 0.6s ease" } }, item.d)
+        return e("div", { key: i, style: { borderLeft: "3px solid " + z.accent, paddingLeft: 24, marginBottom: 36 } },
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.text, marginBottom: 8 } }, item.t),
+          e("p", { style: { fontSize: 14, color: z.textSub, lineHeight: 1.5, margin: 0 } }, item.d)
         );
       })
     )
@@ -228,14 +155,13 @@ function ThreePaths(p) {
     e("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 } },
       paths.map(function(p2, i) {
         return e("div", { key: i, style: {
-          background: z.surface, border: "1px solid " + z.border, borderRadius: 14,
-          padding: "28px 24px", transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)"
+          background: z.surface, border: "1px solid " + z.border, borderRadius: 14, padding: "28px 24px",
         }},
-          e("div", { style: { width: 44, height: 44, borderRadius: 10, background: z.cardIcon, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, marginBottom: 16, transition: "all 0.6s ease" } }, p2.icon),
-          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.textPrimary, marginBottom: 4, transition: "color 0.6s ease" } }, p2.t),
-          e("p", { style: { fontSize: 13, color: z.accent, marginBottom: 12, fontWeight: 600, transition: "color 0.6s ease" } }, p2.sub),
-          e("p", { style: { fontSize: 14, color: z.textSecondary, lineHeight: 1.5, margin: "0 0 16px", transition: "color 0.6s ease" } }, p2.d),
-          e("span", { style: { color: z.accent, fontSize: 14, fontWeight: 600, transition: "color 0.6s ease" } }, "Get started \u2192")
+          e("div", { style: { width: 44, height: 44, borderRadius: 10, background: z.cardIcon, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, marginBottom: 16 } }, p2.icon),
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: z.text, marginBottom: 4 } }, p2.t),
+          e("p", { style: { fontSize: 13, color: z.accent, marginBottom: 12, fontWeight: 600 } }, p2.sub),
+          e("p", { style: { fontSize: 14, color: z.textSub, lineHeight: 1.5, margin: "0 0 16px" } }, p2.d),
+          e("span", { style: { color: z.accent, fontSize: 14, fontWeight: 600 } }, "Get started \u2192")
         );
       })
     )
@@ -243,33 +169,56 @@ function ThreePaths(p) {
 }
 
 function CTA(p) {
-  var z = p.z || Z3;
+  var z = p.z;
   return e("div", { style: { padding: "80px 40px", textAlign: "center", position: "relative", overflow: "hidden" } },
     e("div", { style: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(212,118,78,0.12) 0%, transparent 70%)", pointerEvents: "none" } }),
-    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.textPrimary, marginBottom: 16, position: "relative", transition: "color 0.6s ease" } }, "Ready to take control", e("br"), "of your sale?"),
-    e("p", { style: { color: z.textSecondary, fontSize: 15, marginBottom: 32, position: "relative", transition: "color 0.6s ease" } }, "Create your free dashboard in under two minutes."),
-    e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer", position: "relative" } }, "Create your free dashboard \u2192")
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: z.text, marginBottom: 16, position: "relative" } }, "Ready to take control", e("br"), "of your sale?"),
+    e("p", { style: { color: z.textSub, fontSize: 15, marginBottom: 32, position: "relative" } }, "Create your free dashboard in under two minutes."),
+    e("button", { style: { background: "#D4764E", color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer", position: "relative" } }, "Create your free dashboard \u2192")
   );
 }
 
-/* ── GRADIENT DIVIDER (color adapts to palette) ──── */
-function GradientDivider(p) {
-  var color = p.color || "#D4764E";
-  var r = parseInt(color.slice(1,3),16);
-  var g = parseInt(color.slice(3,5),16);
-  var b = parseInt(color.slice(5,7),16);
-  var deep = "rgb(" + Math.round(r*0.7) + "," + Math.round(g*0.7) + "," + Math.round(b*0.7) + ")";
-  var light = "rgb(" + Math.min(255,Math.round(r*1.2)) + "," + Math.min(255,Math.round(g*1.2)) + "," + Math.min(255,Math.round(b*1.2)) + ")";
-  return e("div", { style: { position: "relative", height: 6, overflow: "visible" } },
+/* ── TRANSITION DIVIDERS ──────────────────────────── */
+
+/* Dark-to-light gradient fade */
+function DarkToLightDivider() {
+  return e("div", { style: { height: 120, position: "relative", overflow: "hidden" } },
+    /* Gradient from dark to light */
     e("div", { style: {
-      height: 3,
-      background: "linear-gradient(90deg, transparent 0%, " + deep + " 10%, " + color + " 30%, " + light + " 50%, " + color + " 70%, " + deep + " 90%, transparent 100%)",
-      opacity: 0.9, transition: "all 0.6s ease",
+      position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+      background: "linear-gradient(180deg, " + Z1.bg + " 0%, #3A3A3A 30%, #8A8A8A 55%, #C8C8C8 75%, " + Z2.bg + " 100%)",
+    }}),
+    /* Brand accent line in the middle */
+    e("div", { style: {
+      position: "absolute", top: "45%", left: "15%", right: "15%", height: 2,
+      background: "linear-gradient(90deg, transparent, #D4764E 30%, #E8A87C 50%, #D4764E 70%, transparent)",
+      opacity: 0.6,
+    }}),
+    /* Glow behind the line */
+    e("div", { style: {
+      position: "absolute", top: "35%", left: "10%", right: "10%", height: 40,
+      background: "linear-gradient(90deg, transparent, rgba(212,118,78,0.12) 30%, rgba(212,118,78,0.20) 50%, rgba(212,118,78,0.12) 70%, transparent)",
+      filter: "blur(16px)", pointerEvents: "none",
+    }})
+  );
+}
+
+/* Light-to-dark gradient fade */
+function LightToDarkDivider() {
+  return e("div", { style: { height: 120, position: "relative", overflow: "hidden" } },
+    e("div", { style: {
+      position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+      background: "linear-gradient(180deg, " + Z2.bg + " 0%, #C8C8C8 25%, #8A8A8A 45%, #3A3A3A 70%, " + Z3.bg + " 100%)",
     }}),
     e("div", { style: {
-      position: "absolute", top: -20, left: "10%", right: "10%", height: 44,
-      background: "linear-gradient(90deg, transparent, rgba(" + r + "," + g + "," + b + ",0.15) 30%, rgba(" + r + "," + g + "," + b + ",0.25) 50%, rgba(" + r + "," + g + "," + b + ",0.15) 70%, transparent)",
-      filter: "blur(12px)", pointerEvents: "none", transition: "all 0.6s ease",
+      position: "absolute", top: "50%", left: "15%", right: "15%", height: 2,
+      background: "linear-gradient(90deg, transparent, #D4764E 30%, #E8A87C 50%, #D4764E 70%, transparent)",
+      opacity: 0.6,
+    }}),
+    e("div", { style: {
+      position: "absolute", top: "40%", left: "10%", right: "10%", height: 40,
+      background: "linear-gradient(90deg, transparent, rgba(212,118,78,0.12) 30%, rgba(212,118,78,0.20) 50%, rgba(212,118,78,0.12) 70%, transparent)",
+      filter: "blur(16px)", pointerEvents: "none",
     }})
   );
 }
@@ -277,27 +226,25 @@ function GradientDivider(p) {
 /* ── ZONE INDICATOR ──────────────────────────────── */
 function ZoneIndicator(p) {
   var zone = p.zone;
-  var z2 = p.z2;
-  var labels = ["Zone 1 \u2014 Dark", "Zone 2 \u2014 " + p.paletteName, "Zone 3 \u2014 Deep"];
-  var colors = ["rgba(255,255,255,0.12)", z2.border, "rgba(140,140,200,0.12)"];
-  var textColors = ["rgba(255,255,255,0.5)", z2.accent, "rgba(200,200,220,0.6)"];
+  var labels = ["Zone 1 \u2014 Dark", "Zone 2 \u2014 Light", "Zone 3 \u2014 Deep"];
+  var bgs = ["rgba(255,255,255,0.12)", "rgba(0,0,0,0.06)", "rgba(255,255,255,0.12)"];
+  var borders = ["rgba(255,255,255,0.15)", "rgba(0,0,0,0.12)", "rgba(255,255,255,0.12)"];
+  var colors = ["rgba(255,255,255,0.55)", "#C4603A", "rgba(200,200,220,0.6)"];
   return e("div", { style: {
     position: "sticky", top: 8, zIndex: 50, display: "flex", justifyContent: "center", pointerEvents: "none",
   }},
     e("div", { style: {
-      background: colors[zone], backdropFilter: "blur(8px)",
+      background: bgs[zone], backdropFilter: "blur(8px)",
       padding: "6px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700,
-      color: textColors[zone], letterSpacing: "0.05em",
+      color: colors[zone], letterSpacing: "0.05em",
       transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
-      border: "1px solid " + (zone === 1 ? z2.border : "rgba(255,255,255,0.08)"),
+      border: "1px solid " + borders[zone],
     }}, labels[zone])
   );
 }
 
-/* ── MAIN PREVIEW (Style A only — focus on palette comparison) ── */
-function Preview(p) {
-  var z2 = p.z2;
-  var paletteName = p.paletteName;
+/* ── MAIN PREVIEW ──────────────────────────────────── */
+function Preview() {
   var activeZone = useRef(0);
   var wrapperRef = useRef(null);
   var z1Ref = useRef(null);
@@ -307,16 +254,9 @@ function Preview(p) {
   var forceUpdate = counter[1];
 
   useEffect(function() {
-    /* Reset scroll when palette changes */
-    if (wrapperRef.current) wrapperRef.current.scrollTop = 0;
-    activeZone.current = 0;
-    forceUpdate(function(n) { return n + 1; });
-  }, [paletteName]);
-
-  useEffect(function() {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.2) {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.15) {
           var newZone = entry.target === z1Ref.current ? 0 : entry.target === z2Ref.current ? 1 : 2;
           if (newZone !== activeZone.current) {
             activeZone.current = newZone;
@@ -324,35 +264,47 @@ function Preview(p) {
           }
         }
       });
-    }, { threshold: [0.2], root: wrapperRef.current });
+    }, { threshold: [0.15], root: wrapperRef.current });
     [z1Ref, z2Ref, z3Ref].forEach(function(r) { if (r.current) obs.observe(r.current); });
     return function() { obs.disconnect(); };
-  }, [paletteName]);
+  }, []);
 
   var zone = activeZone.current;
-  var zones = [Z1, z2, Z3];
-  var zCurrent = zones[zone];
 
   return e("div", { ref: wrapperRef, style: {
-    background: zCurrent.bg,
-    transition: "background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1)",
-    overflowY: "auto", maxHeight: 620, position: "relative",
+    overflowY: "auto", maxHeight: 650, position: "relative",
+    /* No wrapper background transition — each zone owns its own bg */
+    background: "#000",
   }},
-    zCurrent.glow && zCurrent.glow !== "none" ? e("div", { style: {
-      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-      background: zCurrent.glow, pointerEvents: "none",
-      transition: "opacity 0.7s ease", zIndex: 1,
-    }}) : null,
-    e(ZoneIndicator, { zone: zone, z2: z2, paletteName: paletteName }),
-    e("div", { ref: z1Ref, style: { position: "relative", zIndex: 2 } },
-      e(Hero, { z: Z1 }), e(Stats, { z: Z1 }), e(HowItWorks, { z: Z1 })
+    e(ZoneIndicator, { zone: zone }),
+
+    /* ── ZONE 1: Dark ─────────────────────────── */
+    e("div", { ref: z1Ref, style: {
+      background: Z1.bg, position: "relative", zIndex: 2,
+    }},
+      e(Hero, { z: Z1 }),
+      e(Stats, { z: Z1 }),
+      e(HowItWorks, { z: Z1 })
     ),
-    e(GradientDivider, { color: z2.dividerColor }),
-    e("div", { ref: z2Ref, style: { position: "relative", zIndex: 2 } },
-      e(WhyYalla, { z: z2 }), e(ThreePaths, { z: z2 })
+
+    /* ── TRANSITION: Dark → Light ─────────────── */
+    e(DarkToLightDivider),
+
+    /* ── ZONE 2: Clean White ──────────────────── */
+    e("div", { ref: z2Ref, style: {
+      background: Z2.bg, position: "relative", zIndex: 2,
+    }},
+      e(WhyYalla, { z: Z2 }),
+      e(ThreePaths, { z: Z2 })
     ),
-    e(GradientDivider, { color: C.brand }),
-    e("div", { ref: z3Ref, style: { position: "relative", zIndex: 2 } },
+
+    /* ── TRANSITION: Light → Dark ─────────────── */
+    e(LightToDarkDivider),
+
+    /* ── ZONE 3: Deep ─────────────────────────── */
+    e("div", { ref: z3Ref, style: {
+      background: Z3.bg, position: "relative", zIndex: 2,
+    }},
       e(CTA, { z: Z3 })
     )
   );
@@ -360,81 +312,35 @@ function Preview(p) {
 
 /* ── APP SHELL ──────────────────────────────────────── */
 function App() {
-  var state = useState("navy");
-  var activePalette = state[0];
-  var setActivePalette = state[1];
-
-  var pal = PALETTES[activePalette];
-
   return e("div", { style: { minHeight: "100vh", background: "#000" } },
     /* ── Header ─── */
     e("div", { style: { position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "14px 24px" } },
-      e("div", { style: { maxWidth: 1100, margin: "0 auto" } },
-        e("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 } },
-          e("span", { style: { color: C.brand, fontWeight: 800, fontSize: 16 } }, "\uD83C\uDFE0 Zone Palette Picker"),
-          e("span", { style: { fontSize: 12, color: "rgba(255,255,255,0.35)" } }, "Zone 1 (dark) + Zone 3 (deep) are fixed \u2014 pick the Zone 2 mood below")
-        ),
-        /* Palette buttons */
-        e("div", { style: { display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 6 } },
-          PALETTE_ORDER.map(function(key) {
-            var p = PALETTES[key];
-            var isActive = activePalette === key;
-            var z2 = p.z2;
-            return e("button", {
-              key: key, onClick: function() { setActivePalette(key); },
-              style: {
-                background: isActive ? z2.surface : "rgba(255,255,255,0.04)",
-                border: isActive ? "2px solid " + z2.accent : "1px solid rgba(255,255,255,0.08)",
-                padding: "10px 12px", borderRadius: 10, cursor: "pointer", textAlign: "left",
-                transition: "all 0.25s ease", position: "relative", overflow: "hidden",
-              }
-            },
-              /* Color preview swatch */
-              e("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 6 } },
-                e("div", { style: { width: 20, height: 20, borderRadius: 5, background: z2.bg, border: "2px solid " + z2.accent, flexShrink: 0 } }),
-                e("span", { style: { fontSize: 13, fontWeight: 700, color: isActive ? z2.accent : "rgba(255,255,255,0.6)" } }, p.emoji + " " + p.name)
-              ),
-              e("div", { style: { fontSize: 10, color: isActive ? z2.textSecondary : "rgba(255,255,255,0.3)", lineHeight: 1.3 } }, p.desc),
-              /* Active indicator dot */
-              isActive ? e("div", { style: { position: "absolute", top: 4, right: 4, width: 6, height: 6, borderRadius: 3, background: z2.accent } }) : null
-            );
-          })
+      e("div", { style: { maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" } },
+        e("span", { style: { color: "#D4764E", fontWeight: 800, fontSize: 16 } }, "\uD83C\uDFE0 Zone Transitions \u2014 Dark \u2192 White \u2192 Deep"),
+        e("div", { style: { display: "flex", gap: 12, alignItems: "center" } },
+          e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+            e("div", { style: { width: 28, height: 16, borderRadius: 4, background: Z1.bg, border: "1px solid rgba(255,255,255,0.2)" } }),
+            e("span", { style: { fontSize: 11, color: "rgba(255,255,255,0.4)" } }, "Dark")
+          ),
+          e("span", { style: { color: "rgba(255,255,255,0.15)" } }, "\u2192"),
+          e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+            e("div", { style: { width: 28, height: 16, borderRadius: 4, background: Z2.bg, border: "1px solid rgba(0,0,0,0.15)" } }),
+            e("span", { style: { fontSize: 11, color: "rgba(255,255,255,0.4)" } }, "White")
+          ),
+          e("span", { style: { color: "rgba(255,255,255,0.15)" } }, "\u2192"),
+          e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+            e("div", { style: { width: 28, height: 16, borderRadius: 4, background: Z3.bg, border: "1px solid rgba(140,140,200,0.2)" } }),
+            e("span", { style: { fontSize: 11, color: "rgba(255,255,255,0.4)" } }, "Deep")
+          ),
         )
       )
     ),
-    /* ── Color swatches row ─── */
-    e("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "14px 24px 0", display: "flex", gap: 20, alignItems: "center" } },
-      /* Zone 1 swatch */
-      e("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
-        e("div", { style: { width: 32, height: 20, borderRadius: 4, background: Z1.bg, border: "1px solid rgba(255,255,255,0.2)" } }),
-        e("span", { style: { fontSize: 11, color: "rgba(255,255,255,0.4)" } }, "Z1: #0D0D0D")
-      ),
-      e("span", { style: { color: "rgba(255,255,255,0.12)", fontSize: 14 } }, "\u2192"),
-      /* Zone 2 swatch — animated */
-      e("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
-        e("div", { style: { width: 32, height: 20, borderRadius: 4, background: pal.z2.bg, border: "2px solid " + pal.z2.accent, transition: "all 0.4s ease" } }),
-        e("span", { style: { fontSize: 11, color: pal.z2.accent, fontWeight: 600, transition: "color 0.4s ease" } }, "Z2: " + pal.z2.bg)
-      ),
-      e("span", { style: { color: "rgba(255,255,255,0.12)", fontSize: 14 } }, "\u2192"),
-      /* Zone 3 swatch */
-      e("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
-        e("div", { style: { width: 32, height: 20, borderRadius: 4, background: Z3.bg, border: "1px solid rgba(140,140,200,0.2)" } }),
-        e("span", { style: { fontSize: 11, color: "rgba(255,255,255,0.4)" } }, "Z3: #06060A")
-      ),
-      /* Surface + accent preview */
-      e("div", { style: { marginLeft: "auto", display: "flex", gap: 8, alignItems: "center" } },
-        e("div", { style: { width: 20, height: 20, borderRadius: 4, background: pal.z2.surface, border: "1px solid " + pal.z2.border, transition: "all 0.4s ease" } }),
-        e("span", { style: { fontSize: 10, color: "rgba(255,255,255,0.3)" } }, "surface"),
-        e("div", { style: { width: 20, height: 20, borderRadius: 4, background: pal.z2.accent, transition: "all 0.4s ease" } }),
-        e("span", { style: { fontSize: 10, color: "rgba(255,255,255,0.3)" } }, "accent"),
-      ),
-    ),
     /* ── Preview viewport ─── */
-    e("div", { style: { maxWidth: 1100, margin: "14px auto 0", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" } },
-      e(Preview, { key: activePalette, z2: pal.z2, paletteName: pal.name })
+    e("div", { style: { maxWidth: 1100, margin: "16px auto 0", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" } },
+      e(Preview)
     ),
     e("div", { style: { textAlign: "center", padding: "14px 0 28px", color: "rgba(255,255,255,0.3)", fontSize: 12 } },
-      "\u2195 Scroll inside the preview to see the zone transition \u2014 click a palette above to compare"
+      "\u2195 Scroll inside the preview \u2014 watch the dark-to-white-to-dark transition"
     )
   );
 }
