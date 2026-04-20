@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { requireAgreement } from '@/lib/agreements'
 
 export default async function HunterPage() {
   const supabase = await createClient()
@@ -8,6 +9,9 @@ export default async function HunterPage() {
   if (!user) {
     redirect('/auth/login?next=/hunter')
   }
+
+  // Agreement gate — redirects to /hunter/agreement if not signed
+  await requireAgreement(user.id, 'hunter')
 
   // Check if hunter has created a passport (hunter_profiles row with intent set)
   const { data: profile } = await (supabase as any)

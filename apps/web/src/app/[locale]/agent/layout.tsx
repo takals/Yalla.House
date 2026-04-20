@@ -34,6 +34,7 @@ export default async function AgentLayout({ children }: { children: React.ReactN
   }
 
   const userId = user.id
+
   const [t, tShell] = await Promise.all([
     getTranslations('notif'),
     getTranslations('shell'),

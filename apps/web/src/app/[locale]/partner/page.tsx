@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
+import { requireAgreement } from '@/lib/agreements'
 
 export default async function PartnerDashboardPage() {
   const t = await getTranslations()
@@ -12,7 +13,8 @@ export default async function PartnerDashboardPage() {
   }
   const userId = user.id
 
-  // Preview phase: no role gate. Render the partner dashboard for any visitor.
+  // Agreement gate — redirects to /partner/agreement if not signed
+  await requireAgreement(userId, 'partner')
 
   // Fetch active requests count
   const { data: activeRequests } = await (supabase as any)
