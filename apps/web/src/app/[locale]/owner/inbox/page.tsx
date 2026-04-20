@@ -1,154 +1,153 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import Link from 'next/link'
-import { MessageCircle } from 'lucide-react'
 import { getTranslations, getLocale } from 'next-intl/server'
-import { dateLocaleFromLocale } from '@/lib/country-config'
-
-interface ThreadWithData {
-  id: string
-  subject: string | null
-  last_message_at: string | null
-  listing_id: string | null
-  listing?: {
-    title_de: string | null
-    place_id: string
-  } | null
-}
+import { InboxWorkspace } from './inbox-workspace'
 
 export default async function OwnerInboxPage() {
-  const t = await getTranslations()
+  const t = await getTranslations('comms')
   const locale = await getLocale()
-  const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  // Fetch all message threads where this owner is a participant
-  let threads: ThreadWithData[] = []
+  // Fetch all threads where this owner is a participant, with related data
+  let rawThreads: Array<Record<string, unknown>> = []
   try {
     const { data } = await (supabase as any)
       .from('message_threads')
       .select(`
         id, subject, last_message_at, listing_id,
         thread_participants!inner(user_id),
-        listing:listings(title_de, place_id)
+        listing:listings(title_de, title_en, place_id)
       `)
       .eq('thread_participants.user_id', userId)
       .order('last_message_at', { ascending: false })
       .limit(50)
 
-    threads = (data ?? []).map((thread: any) => ({
-      id: thread.id,
-      subject: thread.subject,
-      last_message_at: thread.last_message_at,
-      listing_id: thread.listing_id,
-      listing: thread.listing ? {
-        title_de: thread.listing.title_de,
-        place_id: thread.listing.place_id,
-      } : null,
-    }))
+    rawThreads = data ?? []
   } catch (error) {
-    console.error('Failed to fetch message threads:', error)
+    console.error('Failed to fetch threads:', error)
   }
 
-  // Generate Yalla email address
-  // For MVP, use listing place_id if available, otherwise use user ID
-  const yallaEmail = `owner-${userId.slice(0, 8)}@mail.yalla.house`
+  // For each thread, fetch messages and identify the contact (non-owner participant)
+  const threads = await Promise.all(
+    rawThreads.map(async (thread: Record<string, unknown>) => {
+      const threadId = thread.id as string
+      const listing = thread.listing as Record<string, unknown> | null
 
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return ''
-    const date = new Date(dateStr)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    const diffHours = Math.floor(diffMins / 60)
-    const diffDays = Math.floor(diffHours / 24)
+      // Fetch all messages for this thread
+      const { data: messagesData } = await (supabase as any)
+        .from('messages')
+        .select('id, body, channel, sent_at, sender_id')
+        .eq('thread_id', threadId)
+        .order('sent_at', { ascending: true })
+        .limit(200)
 
-    if (diffMins < 1) return 'just now'
-    if (diffMins < 60) return `${diffMins}m ago`
-    if (diffHours < 24) return `${diffHours}h ago`
-    if (diffDays < 7) return `${diffDays}d ago`
+      const messages = (messagesData ?? []) as Array<{
+        id: string; body: string; channel: string; sent_at: string; sender_id: string | null
+      }>
 
-    return date.toLocaleDateString(dateLocale, {
-      month: 'short',
-      day: 'numeric',
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+      // Find the other participant(s) — the contact
+      const { data: participants } = await (supabase as any)
+        .from('thread_participants')
+        .select('user_id')
+        .eq('thread_id', threadId)
+
+      const contactUserId = (participants ?? [])
+        .map((p: Record<string, unknown>) => p.user_id as string)
+        .find((uid: string) => uid !== userId)
+
+      // Fetch contact profile + hunter profile if available
+      let contact = null
+      if (contactUserId) {
+        const { data: contactUser } = await (supabase as any)
+          .from('users')
+          .select('id, full_name, email, avatar_url, role')
+          .eq('id', contactUserId)
+          .maybeSingle()
+
+        if (contactUser) {
+          let hunterProfile = null
+          // Try to fetch hunter profile for buyer intelligence
+          const { data: hp } = await (supabase as any)
+            .from('hunter_profiles')
+            .select('budget_min, budget_max, intent, timeline, mortgage_verified, identity_verified, finance_status')
+            .eq('user_id', contactUserId)
+            .maybeSingle()
+
+          if (hp) hunterProfile = hp
+
+          contact = {
+            id: contactUser.id,
+            full_name: contactUser.full_name,
+            email: contactUser.email,
+            avatar_url: contactUser.avatar_url,
+            role: contactUser.role === 'agent' ? 'agent' as const
+              : hunterProfile ? 'hunter' as const
+              : 'unknown' as const,
+            hunter_profile: hunterProfile,
+          }
+        }
+      }
+
+      // Determine last message details
+      const lastMsg = messages.length > 0 ? messages[messages.length - 1] : null
+      const hasOwnerReply = messages.some(m => m.sender_id === userId)
+
+      const listingTitle = listing
+        ? (locale === 'en'
+          ? ((listing.title_en as string | null) ?? (listing.title_de as string | null))
+          : (listing.title_de as string | null))
+        : null
+
+      return {
+        id: threadId,
+        subject: thread.subject as string | null,
+        last_message_at: thread.last_message_at as string | null,
+        listing_id: thread.listing_id as string | null,
+        listing_title: listingTitle,
+        listing_place_id: listing?.place_id as string | null ?? null,
+        is_starred: false,
+        is_archived: false,
+        is_blocked: false,
+        last_message_body: lastMsg?.body ?? null,
+        last_message_channel: lastMsg?.channel ?? null,
+        last_message_sender_id: lastMsg?.sender_id ?? null,
+        contact,
+        messages,
+        has_owner_reply: hasOwnerReply,
+      }
     })
+  )
+
+  // Build translations record for client component
+  const keys = [
+    'inbox', 'subtitle', 'noMessages', 'noMessagesDesc',
+    'all', 'unread', 'starred', 'archived',
+    'searchPlaceholder', 'you', 'justNow', 'minutesAgo', 'hoursAgo', 'daysAgo',
+    'contactInfo', 'buyerProfile', 'noContactSelected', 'noContactSelectedDesc',
+    'sourceWhatsApp', 'sourceEmail', 'sourceInApp', 'sourceSms',
+    'mortgageApproved', 'cashBuyer', 'firstTimeBuyer', 'chainFree',
+    'readyToMove', 'preApproved', 'budget', 'timeline', 'intent',
+    'intentBuy', 'intentRent', 'intentBoth',
+    'timelineAsap', 'timeline3m', 'timeline6m', 'timeline1y', 'timelineFlexible',
+    'star', 'unstar', 'archive', 'unarchive', 'block', 'unblock',
+    'reply', 'typeReply', 'send', 'sendHint', 'viewListing',
+    'contactSince', 'lastActive', 'awaiting', 'replied',
+    'agent', 'hunter', 'unknown', 'blockedLabel', 'archivedLabel', 'starredLabel',
+  ] as const
+
+  const translations: Record<string, string> = {}
+  for (const key of keys) {
+    translations[key] = t(key)
   }
 
   return (
-    <div className="max-w-4xl">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-text-primary tracking-tight">
-          {t('comms.inbox')}
-        </h1>
-        <p className="text-sm text-text-muted mt-2">
-          {t('comms.emailExplainer')}
-        </p>
-      </div>
-
-      {/* Yalla Email Address Card */}
-      <div className="bg-white rounded-2xl border border-border-default p-6 mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-sm font-semibold text-text-primary mb-1">
-              {t('comms.yourYallaEmail')}
-            </h2>
-            <p className="text-base font-mono text-brand">{yallaEmail}</p>
-          </div>
-          <div className="text-xs text-text-muted text-right max-w-xs">
-            {t('comms.emailExplainer')}
-          </div>
-        </div>
-      </div>
-
-      {/* Message Threads List */}
-      {threads.length > 0 ? (
-        <div className="space-y-4">
-          {threads.map((thread) => (
-            <Link
-              key={thread.id}
-              href={`/owner/inbox/${thread.id}`}
-              className="block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-text-primary text-base mb-1 truncate">
-                    {thread.subject || (thread.listing?.title_de || 'Message Thread')}
-                  </h3>
-                  {thread.listing && (
-                    <p className="text-sm text-text-muted mb-3">
-                      {thread.listing.title_de} · {thread.listing.place_id}
-                    </p>
-                  )}
-                </div>
-                <span className="text-xs text-text-muted whitespace-nowrap ml-2 flex-shrink-0">
-                  {formatDate(thread.last_message_at)}
-                </span>
-              </div>
-              <div className="flex items-center text-text-muted text-sm">
-                <MessageCircle size={14} className="mr-2 flex-shrink-0" />
-                <span>View conversation</span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="bg-white rounded-2xl border border-border-default p-12 text-center">
-          <MessageCircle
-            size={48}
-            className="mx-auto mb-4 text-[#D9DCE4]"
-          />
-          <h3 className="text-base font-semibold text-text-primary mb-1">
-            {t('comms.noMessages')}
-          </h3>
-          <p className="text-sm text-text-muted max-w-sm mx-auto">
-            {t('comms.noMessagesDesc')}
-          </p>
-        </div>
-      )}
-    </div>
+    <InboxWorkspace
+      threads={threads}
+      userId={userId}
+      locale={locale}
+      translations={translations}
+    />
   )
 }
