@@ -78,7 +78,7 @@ export function PricingTables() {
                   ))}
                 </ul>
                 <Link
-                  href="/owner"
+                  href="/owner/info"
                   className="block text-center bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm border border-white/[0.08]"
                 >
                   {t('ownerStarterCta')}
@@ -102,7 +102,7 @@ export function PricingTables() {
                   ))}
                 </ul>
                 <Link
-                  href="/owner"
+                  href="/owner/info"
                   className="block text-center bg-brand hover:bg-brand-hover text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm shadow-lg shadow-[#D4764E]/20"
                 >
                   {t('ownerProCta')}
@@ -123,7 +123,7 @@ export function PricingTables() {
                   ))}
                 </ul>
                 <Link
-                  href="/owner"
+                  href="/owner/info"
                   className="block text-center bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm border border-white/[0.08]"
                 >
                   {t('ownerCompleteCta')}
@@ -158,7 +158,7 @@ export function PricingTables() {
                 ))}
               </ul>
               <Link
-                href="/hunter"
+                href="/hunter/info"
                 className="block text-center bg-brand hover:bg-brand-hover text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm"
               >
                 {t('hunterCta')}

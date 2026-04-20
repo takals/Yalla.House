@@ -111,7 +111,7 @@ export default async function AboutPage() {
                 <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-5">
                   {t('ownerBody')}
                 </p>
-                <Link href="/owner" className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:gap-2.5 transition-all">
+                <Link href="/owner/info" className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:gap-2.5 transition-all">
                   {t('ownerCta')} <ArrowRight size={14} />
                 </Link>
               </div>
@@ -128,7 +128,7 @@ export default async function AboutPage() {
                 <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-5">
                   {t('hunterBody')}
                 </p>
-                <Link href="/hunter" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5856D6] hover:gap-2.5 transition-all">
+                <Link href="/hunter/info" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5856D6] hover:gap-2.5 transition-all">
                   {t('hunterCta')} <ArrowRight size={14} />
                 </Link>
               </div>
@@ -145,7 +145,7 @@ export default async function AboutPage() {
                 <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-5">
                   {t('agentBody')}
                 </p>
-                <Link href="/agent" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#34C759] hover:gap-2.5 transition-all">
+                <Link href="/agent/info" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#34C759] hover:gap-2.5 transition-all">
                   {t('agentCta')} <ArrowRight size={14} />
                 </Link>
               </div>
@@ -210,12 +210,12 @@ export default async function AboutPage() {
           <h2 className="text-title-1 text-white leading-tight mb-6">{t('ctaTitle')}</h2>
           <p className="text-lede text-white/50 mb-10 max-w-xl mx-auto">{t('ctaBody')}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/owner">
+            <Link href="/owner/info">
               <button className="px-8 py-4 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all duration-300">
                 {t('ctaOwner')}
               </button>
             </Link>
-            <Link href="/agents">
+            <Link href="/agent/info">
               <button className="px-8 py-4 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300">
                 {t('ctaAgent')}
               </button>

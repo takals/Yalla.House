@@ -189,7 +189,7 @@ export default async function BriefLandingPage({ params }: Props) {
               <ArrowRight size={18} />
             </Link>
             <Link
-              href="/agent"
+              href="/agent/info"
               className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
             >
               Learn about Yalla for agents →

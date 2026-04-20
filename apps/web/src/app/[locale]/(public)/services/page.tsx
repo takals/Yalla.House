@@ -92,7 +92,7 @@ export default async function ServicesPage() {
               ))}
             </div>
             <Link
-              href="/owner"
+              href="/owner/info"
               className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-6 py-3 rounded-lg transition-[background-color] duration-300 text-sm mt-8"
             >
               {t('dashboardCta')} →
@@ -292,14 +292,14 @@ export default async function ServicesPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/owner"
+              href="/owner/info"
               className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
               style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
             >
               {t('ctaCta')} →
             </Link>
             <Link
-              href="/agent"
+              href="/agent/info"
               className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
             >
               {t('ctaAgentLink')} →

@@ -29,7 +29,7 @@ export async function SiteFooter() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/owner"
+                  href="/owner/info"
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
@@ -38,7 +38,7 @@ export async function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/hunter"
+                  href="/hunter/info"
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
@@ -47,7 +47,7 @@ export async function SiteFooter() {
               </li>
               <li>
                 <Link
-                  href="/agent"
+                  href="/agent/info"
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
                 >
