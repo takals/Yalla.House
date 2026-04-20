@@ -1,8 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
-import { Calendar, Clock, Check, Plus, User, X, Trash2, Zap } from 'lucide-react'
+import {
+  Calendar, Clock, Check, Plus, User, X, Trash2,
+  ChevronLeft, ChevronRight, MessageCircle, Bell,
+  MapPin, UserCheck, Star, Repeat, Users, Video, Home,
+  Send,
+} from 'lucide-react'
 import { fetchAvailableSlotsAction, bookSlotAction } from './actions'
 import { addOwnerSlotAction, addBatchSlotsAction, removeOwnerSlotAction } from '@/app/[locale]/owner/viewings/actions'
 import { dateLocaleFromLocale } from '@/lib/country-config'
@@ -21,6 +26,8 @@ interface Props {
   placeId: string
   preselectedSlotId?: string
 }
+
+/* ── Date helpers ────────────────────────────────────────────── */
 
 function formatDay(iso: string, locale: string): string {
   return new Date(iso).toLocaleDateString(dateLocaleFromLocale(locale), { weekday: 'short', day: 'numeric', month: 'short' })
@@ -41,55 +48,104 @@ function groupByDay(slots: Slot[], dateLocale: string): Map<string, Slot[]> {
   return groups
 }
 
-function generateMockSlots(dateLocale: string): { day: string; times: string[] }[] {
-  const now = new Date()
-  const days: { day: string; times: string[] }[] = []
-  for (var i = 1; i <= 7; i++) {
-    const d = new Date(now)
-    d.setDate(d.getDate() + i)
-    if (d.getDay() === 0) continue
-    days.push({
-      day: d.toLocaleDateString(dateLocale, { weekday: 'short', day: 'numeric', month: 'short' }),
-      times: ['10:00 – 10:30', '11:00 – 11:30', '14:00 – 14:30', '15:30 – 16:00'],
-    })
+function isSameDay(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
+
+function toDateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+/* ── Month calendar grid builder ─────────────────────────────── */
+
+function getMonthDays(year: number, month: number): Date[][] {
+  const first = new Date(year, month, 1)
+  const startDay = first.getDay() === 0 ? 6 : first.getDay() - 1 // Monday start
+  const last = new Date(year, month + 1, 0)
+  const totalDays = last.getDate()
+
+  const weeks: Date[][] = []
+  let week: Date[] = []
+
+  // Pad leading days from previous month
+  for (let i = startDay - 1; i >= 0; i--) {
+    const d = new Date(year, month, -i)
+    week.push(d)
   }
-  return days.slice(0, 5)
-}
 
-function getDefaultDate(): string {
-  const d = new Date()
-  d.setDate(d.getDate() + 1)
-  return d.toISOString().split('T')[0] ?? ''
-}
-
-function generateQuickWeekSlots(): Array<{ startsAt: string; endsAt: string }> {
-  const slots: Array<{ startsAt: string; endsAt: string }> = []
-  const now = new Date()
-  const times = [
-    { h: 10, m: 0, eh: 10, em: 30 },
-    { h: 11, m: 0, eh: 11, em: 30 },
-    { h: 14, m: 0, eh: 14, em: 30 },
-    { h: 15, m: 30, eh: 16, em: 0 },
-  ]
-
-  for (var i = 1; i <= 7; i++) {
-    const d = new Date(now)
-    d.setDate(d.getDate() + i)
-    if (d.getDay() === 0 || d.getDay() === 6) continue
-    for (const t of times) {
-      const start = new Date(d)
-      start.setHours(t.h, t.m, 0, 0)
-      const end = new Date(d)
-      end.setHours(t.eh, t.em, 0, 0)
-      slots.push({ startsAt: start.toISOString(), endsAt: end.toISOString() })
+  for (let d = 1; d <= totalDays; d++) {
+    week.push(new Date(year, month, d))
+    if (week.length === 7) {
+      weeks.push(week)
+      week = []
     }
   }
-  return slots
+
+  // Pad trailing days
+  if (week.length > 0) {
+    let nextDay = 1
+    while (week.length < 7) {
+      week.push(new Date(year, month + 1, nextDay++))
+    }
+    weeks.push(week)
+  }
+
+  return weeks
 }
+
+/* ── WhatsApp Flow Timeline ──────────────────────────────────── */
+
+function WhatsAppFlow({ t }: { t: (key: string) => string }) {
+  const steps = [
+    { icon: Send, label: t('waFlowBooked'), desc: t('waFlowBookedDesc'), color: 'bg-brand' },
+    { icon: Bell, label: t('waFlowReminder24h'), desc: t('waFlowReminder24hDesc'), color: 'bg-amber-500' },
+    { icon: UserCheck, label: t('waFlowConfirmed'), desc: t('waFlowConfirmedDesc'), color: 'bg-green-500' },
+    { icon: MapPin, label: t('waFlowDayOf'), desc: t('waFlowDayOfDesc'), color: 'bg-blue-500' },
+    { icon: Home, label: t('waFlowArrived'), desc: t('waFlowArrivedDesc'), color: 'bg-purple-500' },
+    { icon: Star, label: t('waFlowFollowUp'), desc: t('waFlowFollowUpDesc'), color: 'bg-emerald-500' },
+  ]
+
+  return (
+    <div className="space-y-0">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center">
+          <MessageCircle size={14} className="text-green-600" />
+        </div>
+        <h3 className="text-sm font-bold text-text-primary">{t('waFlowTitle')}</h3>
+      </div>
+      <div className="relative">
+        {steps.map((step, i) => {
+          const Icon = step.icon
+          return (
+            <div key={i} className="flex gap-3 relative">
+              {/* Vertical line */}
+              {i < steps.length - 1 && (
+                <div className="absolute left-[13px] top-[28px] w-[2px] h-[calc(100%-8px)] bg-border-default" />
+              )}
+              {/* Dot */}
+              <div className={`w-[28px] h-[28px] rounded-full ${step.color} flex items-center justify-center flex-shrink-0 relative z-10`}>
+                <Icon size={13} className="text-white" />
+              </div>
+              {/* Content */}
+              <div className={`pb-5 ${i === steps.length - 1 ? 'pb-0' : ''}`}>
+                <p className="text-xs font-bold text-text-primary leading-tight">{step.label}</p>
+                <p className="text-[11px] text-text-secondary mt-0.5 leading-snug">{step.desc}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/* ── Main Component ──────────────────────────────────────────── */
 
 export function ViewingCalendar({ listingId, authenticated, isOwner, locale, placeId, preselectedSlotId }: Props) {
   const t = useTranslations('listingPage')
   const dateLocale = dateLocaleFromLocale(locale)
+
+  // Slot data
   const [slots, setSlots] = useState<Slot[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedSlot, setSelectedSlot] = useState<string | null>(preselectedSlotId ?? null)
@@ -98,16 +154,26 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
   const [booked, setBooked] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Inline scheduler state (owner only)
+  // Owner calendar state
+  const today = useMemo(() => new Date(), [])
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth())
+  const [currentYear, setCurrentYear] = useState(today.getFullYear())
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showScheduler, setShowScheduler] = useState(false)
-  const [slotDate, setSlotDate] = useState(getDefaultDate)
+
+  // Slot creation form
   const [slotStartTime, setSlotStartTime] = useState('10:00')
-  const [slotEndTime, setSlotEndTime] = useState('10:30')
+  const [slotDuration, setSlotDuration] = useState<30 | 60>(30)
+  const [slotType, setSlotType] = useState<'in_person' | 'online'>('in_person')
+  const [slotGroupType, setSlotGroupType] = useState<'single' | 'group'>('single')
+  const [slotRecurring, setSlotRecurring] = useState(false)
+  const [slotRecurringWeeks, setSlotRecurringWeeks] = useState(4)
   const [addingSlot, setAddingSlot] = useState(false)
   const [slotSuccess, setSlotSuccess] = useState<string | null>(null)
-  const [addingBatch, setAddingBatch] = useState(false)
   const [removingSlot, setRemovingSlot] = useState<string | null>(null)
-  const [dismissed, setDismissed] = useState(false)
+
+  // Pending new slots (shown in list before saving)
+  const [pendingSlots, setPendingSlots] = useState<Array<{ time: string; duration: number; type: string; group: string }>>([])
 
   useEffect(() => {
     fetchAvailableSlotsAction(listingId).then(result => {
@@ -119,10 +185,58 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     })
   }, [listingId, preselectedSlotId])
 
-  function refreshSlots() {
-    fetchAvailableSlotsAction(listingId).then(result => {
-      setSlots(result.slots)
-    })
+  const refreshSlots = useCallback(() => {
+    fetchAvailableSlotsAction(listingId).then(result => setSlots(result.slots))
+  }, [listingId])
+
+  // Dates that have existing slots
+  const slotDates = useMemo(() => {
+    const dates = new Set<string>()
+    for (const slot of slots) {
+      dates.add(toDateKey(new Date(slot.starts_at)))
+    }
+    return dates
+  }, [slots])
+
+  // Slots for selected date
+  const slotsForDate = useMemo(() => {
+    if (!selectedDate) return []
+    return slots.filter(s => isSameDay(new Date(s.starts_at), selectedDate))
+  }, [slots, selectedDate])
+
+  const weeks = useMemo(() => getMonthDays(currentYear, currentMonth), [currentYear, currentMonth])
+
+  const weekdayLabels = useMemo(() => {
+    const days: string[] = []
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(2024, 0, i + 1) // Jan 1 2024 = Monday
+      days.push(d.toLocaleDateString(dateLocale, { weekday: 'narrow' }))
+    }
+    return days
+  }, [dateLocale])
+
+  function prevMonth() {
+    if (currentMonth === 0) {
+      setCurrentMonth(11)
+      setCurrentYear(y => y - 1)
+    } else {
+      setCurrentMonth(m => m - 1)
+    }
+  }
+
+  function nextMonth() {
+    if (currentMonth === 11) {
+      setCurrentMonth(0)
+      setCurrentYear(y => y + 1)
+    } else {
+      setCurrentMonth(m => m + 1)
+    }
+  }
+
+  function handleDateClick(date: Date) {
+    if (date < today && !isSameDay(date, today)) return
+    setSelectedDate(date)
+    if (isOwner) setShowScheduler(true)
   }
 
   function handleSlotClick(slotId: string) {
@@ -152,47 +266,66 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     }
   }
 
+  function computeEndTime(startTime: string, durationMin: number): string {
+    const [h, m] = startTime.split(':').map(Number)
+    const totalMin = (h ?? 10) * 60 + (m ?? 0) + durationMin
+    const endH = Math.floor(totalMin / 60) % 24
+    const endM = totalMin % 60
+    return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`
+  }
+
   async function handleAddSlot() {
+    if (!selectedDate) return
     setAddingSlot(true)
     setError(null)
     setSlotSuccess(null)
-    const startsAt = new Date(`${slotDate}T${slotStartTime}:00`).toISOString()
-    const endsAt = new Date(`${slotDate}T${slotEndTime}:00`).toISOString()
-    const result = await addOwnerSlotAction(listingId, startsAt, endsAt)
-    setAddingSlot(false)
-    if ('error' in result) {
-      setError(result.error)
+
+    const dateStr = toDateKey(selectedDate)
+    const endTime = computeEndTime(slotStartTime, slotDuration)
+
+    if (slotRecurring) {
+      // Create slots for multiple weeks
+      const batchSlots: Array<{ startsAt: string; endsAt: string }> = []
+      for (let w = 0; w < slotRecurringWeeks; w++) {
+        const d = new Date(selectedDate)
+        d.setDate(d.getDate() + w * 7)
+        const dayStr = toDateKey(d)
+        batchSlots.push({
+          startsAt: new Date(`${dayStr}T${slotStartTime}:00`).toISOString(),
+          endsAt: new Date(`${dayStr}T${endTime}:00`).toISOString(),
+        })
+      }
+      const result = await addBatchSlotsAction(listingId, batchSlots)
+      setAddingSlot(false)
+      if ('error' in result) {
+        setError(result.error)
+      } else if ('count' in result) {
+        setSlotSuccess(t('calendarBatchAdded', { count: result.count }))
+        refreshSlots()
+        advanceStartTime(endTime)
+        setTimeout(() => setSlotSuccess(null), 3000)
+      }
     } else {
-      setSlotSuccess(t('calendarSlotAdded'))
-      refreshSlots()
-      // Advance start time for next quick add
-      const parts = slotEndTime.split(':').map(Number)
-      const h = parts[0] ?? 10
-      const m = parts[1] ?? 0
-      const nextH = m >= 30 ? h + 1 : h
-      const nextM = m >= 30 ? '00' : '30'
-      const nextEndH = nextM === '30' ? nextH : nextH + 1
-      const nextEndM = nextM === '30' ? '00' : '30'
-      setSlotStartTime(`${String(nextH).padStart(2, '0')}:${nextM}`)
-      setSlotEndTime(`${String(nextEndH).padStart(2, '0')}:${nextEndM}`)
-      setTimeout(() => setSlotSuccess(null), 2500)
+      const startsAt = new Date(`${dateStr}T${slotStartTime}:00`).toISOString()
+      const endsAt = new Date(`${dateStr}T${endTime}:00`).toISOString()
+      const result = await addOwnerSlotAction(listingId, startsAt, endsAt)
+      setAddingSlot(false)
+      if ('error' in result) {
+        setError(result.error)
+      } else {
+        setSlotSuccess(t('calendarSlotAdded'))
+        refreshSlots()
+        advanceStartTime(endTime)
+        setTimeout(() => setSlotSuccess(null), 2500)
+      }
     }
   }
 
-  async function handleQuickWeek() {
-    setAddingBatch(true)
-    setError(null)
-    setSlotSuccess(null)
-    const weekSlots = generateQuickWeekSlots()
-    const result = await addBatchSlotsAction(listingId, weekSlots)
-    setAddingBatch(false)
-    if ('error' in result) {
-      setError(result.error)
-    } else if ('count' in result) {
-      setSlotSuccess(t('calendarBatchAdded', { count: result.count }))
-      refreshSlots()
-      setTimeout(() => setSlotSuccess(null), 3000)
-    }
+  function advanceStartTime(endTime: string) {
+    const [h, m] = endTime.split(':').map(Number)
+    const nextH = (m ?? 0) >= 30 ? (h ?? 10) + 1 : (h ?? 10)
+    const nextM = (m ?? 0) >= 30 ? '00' : '30'
+    setSlotStartTime(`${String(nextH).padStart(2, '0')}:${nextM}`)
   }
 
   async function handleRemoveSlot(slotId: string) {
@@ -207,9 +340,9 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
   }
 
   const hasSlots = slots.length > 0
-  const grouped = hasSlots ? groupByDay(slots, dateLocale) : null
-  const mockDays = !hasSlots && !loading ? generateMockSlots(dateLocale) : []
+  const monthLabel = new Date(currentYear, currentMonth).toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })
 
+  /* ── Loading state ────────────────────────────────────────── */
   if (loading) {
     return (
       <div data-booking-slots className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border-default/60">
@@ -228,6 +361,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     )
   }
 
+  /* ── Booking success state ────────────────────────────────── */
   if (booked) {
     return (
       <div data-booking-slots className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-green-200">
@@ -244,97 +378,11 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     )
   }
 
-  // ── Inline Slot Scheduler (owner only) ──────────────────────
-  const schedulerPanel = showScheduler && isOwner && (
-    <div className="mt-5 bg-[#FAFBFC] rounded-xl border border-border-default/60 p-5">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
-          <Plus size={14} className="text-brand" />
-          {t('calendarScheduleTitle')}
-        </h3>
-        <button
-          onClick={() => setShowScheduler(false)}
-          className="text-text-muted hover:text-text-primary transition-colors"
-        >
-          <X size={16} />
-        </button>
-      </div>
-
-      {/* Single slot form */}
-      <div className="flex flex-wrap gap-3 items-end">
-        <div className="flex-1 min-w-[140px]">
-          <label className="text-xs font-semibold text-text-secondary block mb-1">{t('calendarDate')}</label>
-          <input
-            type="date"
-            value={slotDate}
-            onChange={e => setSlotDate(e.target.value)}
-            min={new Date().toISOString().split('T')[0] ?? ''}
-            className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
-          />
-        </div>
-        <div className="w-[100px]">
-          <label className="text-xs font-semibold text-text-secondary block mb-1">{t('calendarStartTime')}</label>
-          <input
-            type="time"
-            value={slotStartTime}
-            onChange={e => setSlotStartTime(e.target.value)}
-            className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
-          />
-        </div>
-        <div className="w-[100px]">
-          <label className="text-xs font-semibold text-text-secondary block mb-1">{t('calendarEndTime')}</label>
-          <input
-            type="time"
-            value={slotEndTime}
-            onChange={e => setSlotEndTime(e.target.value)}
-            className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
-          />
-        </div>
-        <button
-          onClick={handleAddSlot}
-          disabled={addingSlot}
-          className="bg-brand hover:bg-brand-hover text-white font-bold text-sm px-4 py-2 rounded-lg transition-colors disabled:opacity-50 shadow-sm"
-        >
-          {addingSlot ? t('calendarAdding') : t('calendarAddSlot')}
-        </button>
-      </div>
-
-      {/* Quick week shortcut */}
-      <div className="mt-4 pt-4 border-t border-border-default/50">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Zap size={14} className="text-amber-500" />
-            <div>
-              <p className="text-sm font-semibold text-text-primary">{t('calendarQuickWeek')}</p>
-              <p className="text-xs text-text-secondary">{t('calendarQuickWeekDesc')}</p>
-            </div>
-          </div>
-          <button
-            onClick={handleQuickWeek}
-            disabled={addingBatch}
-            className="text-sm font-semibold text-brand hover:text-[#BF6840] transition-colors disabled:opacity-50"
-          >
-            {addingBatch ? t('calendarAddingBatch') : t('calendarAddWeekSlots')}
-          </button>
-        </div>
-      </div>
-
-      {/* Feedback messages */}
-      {slotSuccess && (
-        <div className="mt-3 flex items-center gap-2 text-sm text-green-700 bg-green-50 px-3 py-2 rounded-lg">
-          <Check size={14} />
-          {slotSuccess}
-        </div>
-      )}
-      {error && (
-        <p className="mt-3 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
-      )}
-    </div>
-  )
-
+  /* ── Main calendar UI ─────────────────────────────────────── */
   return (
-    <div data-booking-slots className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-border-default/60">
-      <div className="flex items-center justify-between mb-6">
+    <div data-booking-slots id="viewing-calendar" className="bg-white rounded-2xl shadow-sm border border-border-default/60 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 pt-6 pb-4">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-brand/10 flex items-center justify-center">
             <Calendar size={18} className="text-brand" />
@@ -352,26 +400,96 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
         )}
       </div>
 
-      {/* Inline scheduler for owner */}
-      {schedulerPanel}
+      {/* Two-column layout */}
+      <div className="flex flex-col lg:flex-row">
+        {/* ── LEFT: Calendar + Slots ─────────────────────────── */}
+        <div className={`flex-1 px-6 pb-6 ${isOwner ? 'lg:border-r lg:border-border-default/60' : ''}`}>
+          {/* Month calendar grid */}
+          <div className="mb-5">
+            {/* Month nav */}
+            <div className="flex items-center justify-between mb-3">
+              <button
+                onClick={prevMonth}
+                className="p-1.5 rounded-lg hover:bg-hover-bg transition-colors text-text-secondary"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <p className="text-sm font-bold text-text-primary capitalize">{monthLabel}</p>
+              <button
+                onClick={nextMonth}
+                className="p-1.5 rounded-lg hover:bg-hover-bg transition-colors text-text-secondary"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
 
-      {/* Real slots — 7-day week-at-a-glance grid */}
-      {hasSlots && grouped && (
-        <div className={`space-y-5 ${showScheduler ? 'mt-5' : ''}`}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from(grouped.entries()).map(([day, daySlots]) => (
-              <div key={day} className="bg-[#FAFBFC] rounded-xl p-4 border border-border-default/50">
-                <p className="text-xs font-bold text-text-primary mb-3 uppercase tracking-wide">
-                  {daySlots[0] ? formatDay(daySlots[0].starts_at, locale) : day}
+            {/* Weekday headers */}
+            <div className="grid grid-cols-7 gap-1 mb-1">
+              {weekdayLabels.map((d, i) => (
+                <div key={i} className="text-center text-[10px] font-bold text-text-muted uppercase py-1">
+                  {d}
+                </div>
+              ))}
+            </div>
+
+            {/* Day cells */}
+            <div className="grid grid-cols-7 gap-1">
+              {weeks.flat().map((date, i) => {
+                const isCurrentMonth = date.getMonth() === currentMonth
+                const isToday = isSameDay(date, today)
+                const isPast = date < today && !isToday
+                const isSelected = selectedDate && isSameDay(date, selectedDate)
+                const hasSlot = slotDates.has(toDateKey(date))
+                const key = toDateKey(date)
+
+                return (
+                  <button
+                    key={`${key}-${i}`}
+                    onClick={() => handleDateClick(date)}
+                    disabled={isPast || !isCurrentMonth}
+                    className={`
+                      relative aspect-square flex items-center justify-center rounded-lg text-xs font-semibold transition-all
+                      ${!isCurrentMonth ? 'text-text-muted/30 cursor-default' : ''}
+                      ${isPast && isCurrentMonth ? 'text-text-muted/40 cursor-default' : ''}
+                      ${isCurrentMonth && !isPast && !isSelected ? 'hover:bg-hover-bg text-text-primary cursor-pointer' : ''}
+                      ${isSelected ? 'bg-brand text-white shadow-md shadow-brand/20' : ''}
+                      ${isToday && !isSelected ? 'ring-2 ring-brand/30 ring-inset' : ''}
+                    `}
+                  >
+                    {date.getDate()}
+                    {hasSlot && !isSelected && isCurrentMonth && (
+                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand" />
+                    )}
+                    {hasSlot && isSelected && (
+                      <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/70" />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* ── Selected date slot list ─────────────────────── */}
+          {selectedDate && (
+            <div className="bg-[#FAFBFC] rounded-xl border border-border-default/60 p-4">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-bold text-text-primary uppercase tracking-wide">
+                  {selectedDate.toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long' })}
                 </p>
-                <div className="flex flex-col gap-1.5">
-                  {daySlots.map(slot => (
-                    <div key={slot.id} className="flex items-center gap-1">
+                <span className="text-[10px] font-semibold text-text-muted">
+                  {slotsForDate.length} {slotsForDate.length === 1 ? t('calendarSlotSingular') : t('calendarSlotPlural')}
+                </span>
+              </div>
+
+              {slotsForDate.length > 0 ? (
+                <div className="space-y-1.5">
+                  {slotsForDate.map(slot => (
+                    <div key={slot.id} className="flex items-center gap-1.5">
                       <button
                         onClick={() => handleSlotClick(slot.id)}
                         className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold border transition-all flex-1 text-left ${
                           slot.id === selectedSlot
-                            ? 'bg-brand text-white border-brand shadow-md shadow-[#D4764E]/20'
+                            ? 'bg-brand text-white border-brand shadow-md shadow-brand/20'
                             : isOwner
                               ? 'bg-white text-text-primary border-border-default'
                               : 'bg-white text-text-primary border-border-default hover:border-brand hover:text-brand'
@@ -397,118 +515,210 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
                     </div>
                   ))}
                 </div>
-              </div>
-            ))}
-          </div>
+              ) : (
+                <p className="text-xs text-text-muted py-2">
+                  {isOwner ? t('calendarNoSlotsDate') : t('calendarNoSlotsDateHunter')}
+                </p>
+              )}
 
-          {/* Book / complete booking panel */}
-          {selectedSlot && authenticated && !isOwner && (
-            <div className="bg-brand/5 rounded-xl p-5 border border-brand/15">
-              <label className="text-xs font-semibold text-text-secondary block mb-1.5">
-                {t('calendarAddNote')}
-              </label>
-              <textarea
-                value={notes}
-                onChange={e => setNotes(e.target.value)}
-                placeholder={t('calendarNotePlaceholder')}
-                rows={2}
-                className="w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#D4764E]/30 resize-none"
-              />
-              {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
-              <button
-                onClick={handleBook}
-                disabled={booking}
-                className="mt-3 w-full bg-brand hover:bg-brand-hover text-white font-bold text-sm py-3.5 rounded-xl transition-colors disabled:opacity-50 shadow-md shadow-[#D4764E]/20"
-              >
-                {booking ? t('calendarBooking') : t('calendarBookThis')}
-              </button>
+              {/* Owner: Inline slot form below date slots */}
+              {isOwner && showScheduler && (
+                <div className="mt-4 pt-4 border-t border-border-default/50">
+                  <p className="text-xs font-bold text-text-primary mb-3 flex items-center gap-1.5">
+                    <Plus size={12} className="text-brand" />
+                    {t('calendarAddSlotForDate')}
+                  </p>
+
+                  {/* Time + Duration row */}
+                  <div className="flex flex-wrap gap-2 items-end mb-3">
+                    <div className="w-[100px]">
+                      <label className="text-[10px] font-semibold text-text-secondary block mb-1">{t('calendarStartTime')}</label>
+                      <input
+                        type="time"
+                        value={slotStartTime}
+                        onChange={e => setSlotStartTime(e.target.value)}
+                        className="w-full border border-border-default rounded-lg px-2.5 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                      />
+                    </div>
+                    <div className="w-[90px]">
+                      <label className="text-[10px] font-semibold text-text-secondary block mb-1">{t('calendarDuration')}</label>
+                      <select
+                        value={slotDuration}
+                        onChange={e => setSlotDuration(Number(e.target.value) as 30 | 60)}
+                        className="w-full border border-border-default rounded-lg px-2.5 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                      >
+                        <option value={30}>30 min</option>
+                        <option value={60}>60 min</option>
+                      </select>
+                    </div>
+                    <div className="text-xs font-semibold text-text-secondary py-2">
+                      → {computeEndTime(slotStartTime, slotDuration)}
+                    </div>
+                  </div>
+
+                  {/* Type chips */}
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <button
+                      onClick={() => setSlotType('in_person')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                        slotType === 'in_person'
+                          ? 'bg-brand/10 border-brand/30 text-brand'
+                          : 'bg-white border-border-default text-text-secondary hover:border-brand/20'
+                      }`}
+                    >
+                      <Home size={12} />
+                      {t('calendarInPerson')}
+                    </button>
+                    <button
+                      onClick={() => setSlotType('online')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                        slotType === 'online'
+                          ? 'bg-purple-50 border-purple-200 text-purple-700'
+                          : 'bg-white border-border-default text-text-secondary hover:border-purple-200'
+                      }`}
+                    >
+                      <Video size={12} />
+                      {t('calendarOnline')}
+                    </button>
+                    <button
+                      onClick={() => setSlotGroupType(slotGroupType === 'single' ? 'group' : 'single')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                        slotGroupType === 'group'
+                          ? 'bg-blue-50 border-blue-200 text-blue-700'
+                          : 'bg-white border-border-default text-text-secondary hover:border-blue-200'
+                      }`}
+                    >
+                      <Users size={12} />
+                      {slotGroupType === 'group' ? t('calendarGroupViewing') : t('calendarSingleViewing')}
+                    </button>
+                  </div>
+
+                  {/* Recurring toggle */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <button
+                      onClick={() => setSlotRecurring(!slotRecurring)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                        slotRecurring
+                          ? 'bg-amber-50 border-amber-200 text-amber-700'
+                          : 'bg-white border-border-default text-text-secondary hover:border-amber-200'
+                      }`}
+                    >
+                      <Repeat size={12} />
+                      {t('calendarRecurring')}
+                    </button>
+                    {slotRecurring && (
+                      <select
+                        value={slotRecurringWeeks}
+                        onChange={e => setSlotRecurringWeeks(Number(e.target.value))}
+                        className="border border-border-default rounded-lg px-2 py-1 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-brand/30"
+                      >
+                        <option value={2}>2 {t('calendarWeeks')}</option>
+                        <option value={4}>4 {t('calendarWeeks')}</option>
+                        <option value={6}>6 {t('calendarWeeks')}</option>
+                        <option value={8}>8 {t('calendarWeeks')}</option>
+                      </select>
+                    )}
+                  </div>
+
+                  {/* Add button */}
+                  <button
+                    onClick={handleAddSlot}
+                    disabled={addingSlot}
+                    className="w-full bg-brand hover:bg-brand-hover text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-colors disabled:opacity-50 shadow-sm shadow-brand/20"
+                  >
+                    {addingSlot ? t('calendarAdding') : slotRecurring
+                      ? t('calendarAddRecurring', { weeks: slotRecurringWeeks })
+                      : t('calendarAddSlot')
+                    }
+                  </button>
+
+                  {/* Feedback */}
+                  {slotSuccess && (
+                    <div className="mt-2 flex items-center gap-2 text-xs text-green-700 bg-green-50 px-3 py-2 rounded-lg">
+                      <Check size={12} />
+                      {slotSuccess}
+                    </div>
+                  )}
+                  {error && (
+                    <p className="mt-2 text-xs text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Hunter: Booking panel */}
+              {selectedSlot && authenticated && !isOwner && (
+                <div className="mt-4 pt-4 border-t border-border-default/50">
+                  <label className="text-xs font-semibold text-text-secondary block mb-1.5">
+                    {t('calendarAddNote')}
+                  </label>
+                  <textarea
+                    value={notes}
+                    onChange={e => setNotes(e.target.value)}
+                    placeholder={t('calendarNotePlaceholder')}
+                    rows={2}
+                    className="w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand/30 resize-none"
+                  />
+                  {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
+                  <button
+                    onClick={handleBook}
+                    disabled={booking}
+                    className="mt-3 w-full bg-brand hover:bg-brand-hover text-white font-bold text-sm py-3 rounded-xl transition-colors disabled:opacity-50 shadow-md shadow-brand/20"
+                  >
+                    {booking ? t('calendarBooking') : t('calendarBookThis')}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Not authenticated — prompt to sign in (clicking a slot redirects) */}
-          {!authenticated && !isOwner && !selectedSlot && (
-            <div className="flex items-center gap-2 justify-center py-2">
+          {/* No date selected — prompt */}
+          {!selectedDate && !hasSlots && (
+            <div className="text-center py-8">
+              <p className="text-sm font-semibold text-text-primary mb-1">
+                {isOwner ? t('calendarNoSlotsOwner') : t('calendarComingSoon')}
+              </p>
+              <p className="text-xs text-text-secondary">
+                {isOwner ? t('calendarNoSlotsOwnerDesc') : t('calendarComingSoonDesc')}
+              </p>
+              {isOwner && (
+                <button
+                  onClick={() => {
+                    setSelectedDate(today)
+                    setShowScheduler(true)
+                  }}
+                  className="mt-3 inline-flex items-center gap-1.5 bg-brand hover:bg-brand-hover text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors shadow-md shadow-brand/20"
+                >
+                  <Plus size={14} />
+                  {t('calendarAddViewingSlots')}
+                </button>
+              )}
+            </div>
+          )}
+
+          {!selectedDate && hasSlots && (
+            <div className="text-center py-4">
+              <p className="text-xs text-text-muted">
+                {isOwner ? t('calendarSelectDateOwner') : t('calendarSelectDate')}
+              </p>
+            </div>
+          )}
+
+          {/* Not authenticated prompt */}
+          {!authenticated && !isOwner && !selectedSlot && hasSlots && (
+            <div className="flex items-center gap-2 justify-center py-3 mt-2">
               <User size={14} className="text-text-muted" />
               <p className="text-xs text-text-muted">{t('calendarSignIn')}</p>
             </div>
           )}
         </div>
-      )}
 
-      {/* Empty state with greyed-out mock slots */}
-      {!hasSlots && !dismissed && (
-        <div className="relative">
-          <div className="pointer-events-none select-none">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mockDays.map(day => (
-                <div key={day.day} className="bg-gray-100/70 rounded-xl p-4 border border-gray-200/80">
-                  <p className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide">{day.day}</p>
-                  <div className="flex flex-col gap-1.5">
-                    {day.times.map(time => (
-                      <div
-                        key={time}
-                        className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold border border-gray-200 bg-gray-50 text-gray-300"
-                      >
-                        <Clock size={13} />
-                        {time}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-[10px] text-gray-300 font-medium mt-2 text-center uppercase tracking-wider">{t('calendarMockLabel')}</p>
-                </div>
-              ))}
-            </div>
+        {/* ── RIGHT: WhatsApp Flow (owner only) ──────────────── */}
+        {isOwner && (
+          <div className="lg:w-[300px] flex-shrink-0 px-6 pb-6 pt-2 lg:pt-0">
+            <WhatsAppFlow t={t} />
           </div>
-
-          {!showScheduler && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-white/95 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-xl border border-border-default text-center max-w-sm">
-                {isOwner ? (
-                  <>
-                    <p className="font-bold text-text-primary mb-1.5">
-                      {t('calendarNoSlotsOwner')}
-                    </p>
-                    <p className="text-sm text-text-secondary mb-4">
-                      {t('calendarNoSlotsOwnerDesc')}
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      <button
-                        onClick={() => setShowScheduler(true)}
-                        className="inline-flex items-center justify-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors shadow-md shadow-[#D4764E]/20"
-                      >
-                        <Plus size={14} />
-                        {t('calendarAddViewingSlots')}
-                      </button>
-                      <button
-                        onClick={() => setDismissed(true)}
-                        className="text-sm text-text-muted hover:text-text-secondary transition-colors py-1"
-                      >
-                        {t('calendarLater')}
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="font-bold text-text-primary mb-1.5">
-                      {t('calendarComingSoon')}
-                    </p>
-                    <p className="text-sm text-text-secondary">
-                      {t('calendarComingSoonDesc')}
-                    </p>
-                  </>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Dismissed empty state — just show the scheduler panel above if owner opens it */}
-      {!hasSlots && dismissed && !showScheduler && (
-        <div className="text-center py-6">
-          <p className="text-sm text-text-muted">{t('calendarNoSlotsOwnerDesc')}</p>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

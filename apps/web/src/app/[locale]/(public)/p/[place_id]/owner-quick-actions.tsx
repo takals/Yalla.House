@@ -30,13 +30,20 @@ interface OwnerQuickActionsProps {
   portalSyncs?: Array<{ portal: string; status: string }>
 }
 
-const ACTION_ITEMS = [
+type ActionItem = {
+  key: string
+  icon: typeof Pencil
+  href?: (id: string) => string
+  scrollTo?: string
+}
+
+const ACTION_ITEMS: ActionItem[] = [
   { key: 'propertyDetails', icon: Pencil, href: (id: string) => `/owner/${id}` },
-  { key: 'addViewingSlots', icon: CalendarPlus, href: () => '/owner/viewings' },
+  { key: 'addViewingSlots', icon: CalendarPlus, scrollTo: 'viewing-calendar' },
   { key: 'manageViewings', icon: CalendarCheck, href: () => '/owner/viewings' },
   { key: 'inviteAgents', icon: Users, href: () => '/owner/agents' },
   { key: 'viewAnalytics', icon: BarChart3, href: (id: string) => `/owner/${id}/analytics` },
-] as const
+]
 
 export function OwnerQuickActions({ listingId, translations: t, portalSyncs }: OwnerQuickActionsProps) {
   const [isOpen, setIsOpen] = useState(true)
@@ -69,25 +76,24 @@ export function OwnerQuickActions({ listingId, translations: t, portalSyncs }: O
             {ACTION_ITEMS.map(item => {
               const Icon = item.icon
               const label = t[item.key as keyof typeof t]
-              const href = item.href(listingId)
-              const isComingSoon = 'comingSoon' in item && item.comingSoon
 
-              if (isComingSoon) {
+              // Scroll-to action (e.g. "Add viewing slots" scrolls to calendar)
+              if (item.scrollTo) {
                 return (
-                  <div
+                  <button
                     key={item.key}
-                    className="relative flex flex-col items-center gap-2 p-4 rounded-xl bg-bg border border-border-default opacity-50 cursor-default"
+                    onClick={() => document.getElementById(item.scrollTo!)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl bg-bg hover:bg-hover-bg border border-border-default hover:border-brand/30 transition-all group"
                   >
-                    <Icon size={20} className="text-text-secondary" />
-                    <span className="text-xs font-semibold text-text-secondary text-center leading-tight">
+                    <Icon size={20} className="text-text-secondary group-hover:text-brand transition-colors" />
+                    <span className="text-xs font-semibold text-text-primary text-center leading-tight">
                       {label}
                     </span>
-                    <span className="absolute -top-1.5 -right-1.5 text-[9px] font-bold bg-brand/10 text-brand px-1.5 py-0.5 rounded-full">
-                      Soon
-                    </span>
-                  </div>
+                  </button>
                 )
               }
+
+              const href = item.href ? item.href(listingId) : '#'
 
               return (
                 <Link

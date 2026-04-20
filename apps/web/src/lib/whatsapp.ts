@@ -8,7 +8,9 @@
  *   1. yalla_new_viewing_request  — params: {{1}} ownerName, {{2}} listingTitle, {{3}} buyerName, {{4}} buyerPhone
  *   2. yalla_viewing_confirmed    — params: {{1}} buyerName, {{2}} listingTitle
  *   3. yalla_viewing_declined     — params: {{1}} buyerName, {{2}} listingTitle
- *   4. yalla_viewing_reminder     — params: {{1}} recipientName, {{2}} listingTitle, {{3}} scheduledDate
+ *   4. yalla_viewing_day_of       — params: {{1}} buyerName, {{2}} listingTitle, {{3}} time, {{4}} address
+ *   5. yalla_viewing_follow_up    — params: {{1}} buyerName, {{2}} listingTitle
+ *   6. yalla_viewing_reminder     — params: {{1}} recipientName, {{2}} listingTitle, {{3}} scheduledDate
  */
 
 const API_KEY = process.env['WHATSAPP_API_KEY']
@@ -126,7 +128,48 @@ export async function sendViewingDeclinedWhatsApp(opts: {
   }
 }
 
-// ── Notification 4: Viewing reminder → hunter/owner ──────────────────────────
+// ── Notification 4: Day-of address → hunter ──────────────────────────────────
+
+export async function sendViewingDayOfWhatsApp(opts: {
+  buyerPhone: string
+  buyerName: string | null
+  listingTitle: string
+  address: string
+  scheduledTime: string
+}): Promise<void> {
+  try {
+    const time = new Date(opts.scheduledTime).toLocaleTimeString('de-DE', {
+      hour: '2-digit', minute: '2-digit',
+    })
+    await sendTemplate(opts.buyerPhone, 'yalla_viewing_day_of', [
+      opts.buyerName?.split(' ')[0] ?? 'Interessent',
+      opts.listingTitle,
+      time,
+      opts.address,
+    ])
+  } catch (err) {
+    console.error('sendViewingDayOfWhatsApp failed:', err)
+  }
+}
+
+// ── Notification 5: Follow-up feedback → hunter ──────────────────────────────
+
+export async function sendViewingFollowUpWhatsApp(opts: {
+  buyerPhone: string
+  buyerName: string | null
+  listingTitle: string
+}): Promise<void> {
+  try {
+    await sendTemplate(opts.buyerPhone, 'yalla_viewing_follow_up', [
+      opts.buyerName?.split(' ')[0] ?? 'Interessent',
+      opts.listingTitle,
+    ])
+  } catch (err) {
+    console.error('sendViewingFollowUpWhatsApp failed:', err)
+  }
+}
+
+// ── Notification 6: Viewing reminder → hunter/owner ──────────────────────────
 
 export async function sendViewingReminderWhatsApp(opts: {
   recipientPhone: string

@@ -9,6 +9,8 @@ import {
 import {
   sendViewingConfirmedWhatsApp,
   sendViewingReminderWhatsApp,
+  sendViewingDayOfWhatsApp,
+  sendViewingFollowUpWhatsApp,
 } from '@/lib/whatsapp'
 import {
   sendViewingConfirmedSms,
@@ -189,7 +191,43 @@ export const viewingConfirmed = inngest.createFunction(
       })
     }
 
-    // Step 6: Schedule check-in request (15 min after viewing)
+    // Step 6: Schedule day-of address message (morning of viewing, 8am)
+    const viewingDate = new Date(viewingTime)
+    viewingDate.setHours(8, 0, 0, 0)
+    if (viewingDate > now) {
+      await step.sleepUntil('wait-day-of', viewingDate)
+      await step.run('send-day-of-address', async () => {
+        // Check still confirmed
+        const db = createServiceClient()
+        const { data: v } = await (db.from('viewings') as any)
+          .select('status, listing:listings!listing_id(street, city, postcode)')
+          .eq('id', viewingId)
+          .single()
+        if (v?.status !== 'confirmed') return
+
+        const hunter = await getUserContact(hunterId)
+        if (!hunter?.phone) return
+
+        const listing = v.listing as { street?: string; city?: string; postcode?: string } | null
+        const address = [listing?.street, listing?.postcode, listing?.city].filter(Boolean).join(', ')
+
+        try {
+          await sendViewingDayOfWhatsApp({
+            buyerPhone: hunter.phone,
+            buyerName: hunter.full_name,
+            listingTitle,
+            address: address || listingCity,
+            scheduledTime: scheduledAt,
+          })
+          await logNotification({ userId: hunterId, viewingId, listingId, channel: 'whatsapp', eventType: 'viewing_day_of_hunter', status: 'sent' })
+        } catch (e) {
+          console.error('day-of whatsapp error:', e)
+          await logNotification({ userId: hunterId, viewingId, listingId, channel: 'whatsapp', eventType: 'viewing_day_of_hunter', status: 'failed', errorDetail: String(e) })
+        }
+      })
+    }
+
+    // Step 7: Schedule check-in request (15 min after viewing)
     const checkInTime = new Date(viewingTime.getTime() + 15 * 60 * 1000)
     if (checkInTime > now) {
       await step.sleepUntil('wait-checkin', checkInTime)
@@ -460,6 +498,21 @@ export const viewingCheckIn = inngest.createFunction(
         } catch (e) {
           console.error('check-in sms error:', e)
           await logNotification({ userId: hunterId, viewingId, channel: 'sms', eventType: 'viewing_checkin_hunter', status: 'failed', errorDetail: String(e) })
+        }
+      }
+
+      // WhatsApp follow-up
+      if (hunter.phone) {
+        try {
+          await sendViewingFollowUpWhatsApp({
+            buyerPhone: hunter.phone,
+            buyerName: hunter.full_name,
+            listingTitle,
+          })
+          await logNotification({ userId: hunterId, viewingId, channel: 'whatsapp', eventType: 'viewing_followup_hunter', status: 'sent' })
+        } catch (e) {
+          console.error('follow-up whatsapp error:', e)
+          await logNotification({ userId: hunterId, viewingId, channel: 'whatsapp', eventType: 'viewing_followup_hunter', status: 'failed', errorDetail: String(e) })
         }
       }
 
