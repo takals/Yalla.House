@@ -16,12 +16,18 @@ const intlMiddleware = createIntlMiddleware({
 // Unauthenticated visitors are redirected to /auth/login with a ?next= param.
 const protectedPaths = ['/owner', '/hunter', '/agent', '/admin', '/partner', '/referrer', '/settings']
 
+// Public info pages that live under protected prefixes but need no auth.
+// These are purely informational (benefits, pricing, how-it-works) — visitors
+// should be able to explore before being asked to create an account.
+const publicExceptions = ['/owner/info', '/hunter/info', '/agent/info']
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Check if the path (stripped of locale prefix) is protected
   const pathnameWithoutLocale = pathname.replace(/^\/(de|en)/, '')
-  const isProtected = protectedPaths.some(p => pathnameWithoutLocale.startsWith(p))
+  const isException = publicExceptions.some(p => pathnameWithoutLocale === p || pathnameWithoutLocale === p + '/')
+  const isProtected = !isException && protectedPaths.some(p => pathnameWithoutLocale.startsWith(p))
 
   // Apply i18n middleware first
   const intlResponse = intlMiddleware(request)

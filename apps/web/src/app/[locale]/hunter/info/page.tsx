@@ -3,45 +3,27 @@ import {
   Eye, Handshake, Check, X, BadgeCheck, Home, Heart, Bell,
 } from 'lucide-react'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
-export default async function HunterInfoPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params
-  const isEN = locale === 'en'
+export default async function HunterInfoPage() {
+  const t = await getTranslations('hunterInfo')
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-extrabold tracking-tight text-text-primary">
-          {isEN ? 'Home Hunter' : 'Suchenden-Dashboard'}
+          {t('pageTitle')}
         </h1>
-      </div>
-
-      {/* Sub-nav tabs */}
-      <div className="flex gap-6 border-b border-border-default -mt-2">
-        <Link href="/hunter/info" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-[#5856D6] -mb-px">
-          Info
-        </Link>
-        <Link href="/hunter/overview" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-          Dashboard
-        </Link>
-        <Link href="/hunter/passport" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-          Passport
-        </Link>
-        <Link href="/hunter/inbox" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-          Inbox
-        </Link>
       </div>
 
       {/* Hero — outcome-focused */}
       <div className="bg-white rounded-2xl border border-border-default p-8">
         <h2 className="text-xl font-bold text-text-primary mb-3">
-          {isEN ? 'Stop scrolling. Start finding.' : 'Aufhören zu scrollen. Anfangen zu finden.'}
+          {t('heroTitle')}
         </h2>
         <p className="text-text-secondary leading-relaxed max-w-3xl">
-          {isEN
-            ? 'Most platforms make you trawl through hundreds of listings, then cold-call agents who don\'t pick up. Yalla.House works differently: you create your Home Passport once — what you\'re looking for, your budget, your timeline — and local agents who specialise in exactly that come to you with relevant properties. No scrolling, no chasing. You pick who to work with.'
-            : 'Die meisten Plattformen zwingen Sie, durch Hunderte von Anzeigen zu scrollen und Makler kalt anzurufen. Yalla.House funktioniert anders: Sie erstellen einmal Ihren Home Passport und lokale Makler kommen mit relevanten Immobilien zu Ihnen. Kein Scrollen, kein Hinterherlaufen.'}
+          {t('heroBody')}
         </p>
       </div>
 
@@ -53,15 +35,13 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
           </div>
           <div>
             <h3 className="text-lg font-bold text-text-primary mb-2">
-              {isEN ? 'Your Home Passport is the centre of everything' : 'Ihr Home Passport steht im Mittelpunkt'}
+              {t('passportTitle')}
             </h3>
             <p className="text-sm text-text-secondary leading-relaxed mb-4">
-              {isEN
-                ? 'Your passport is a structured profile of what you need: areas, budget, property type, bedrooms, timeline, languages, and any specific requirements. Fill it out once, and it powers everything — agent matching, property alerts, search filters, and your readiness badges.'
-                : 'Ihr Passport ist ein strukturiertes Profil Ihrer Anforderungen. Einmal ausfüllen und alles wird angetrieben — Makler-Matching, Immobilien-Benachrichtigungen, Suchfilter und Ihre Bereitschafts-Badges.'}
+              {t('passportBody')}
             </p>
             <Link href="/hunter/passport" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5856D6] hover:gap-2.5 transition-all">
-              {isEN ? 'Create your passport' : 'Passport erstellen'} <ArrowRight size={14} />
+              {t('passportCta')} <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -76,12 +56,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
             <Users size={22} className="text-[#5856D6]" />
           </div>
           <h3 className="font-bold text-text-primary mb-2">
-            {isEN ? 'Agents come to you' : 'Makler kommen zu Ihnen'}
+            {t('benefit1Title')}
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed">
-            {isEN
-              ? 'When you save your passport, agents in your target area see your brief and reply with relevant properties. You review all replies and pick who to work with — like getting proposals instead of making cold calls.'
-              : 'Wenn Sie Ihren Passport speichern, sehen Makler in Ihrem Zielgebiet Ihre Anfrage und antworten mit relevanten Immobilien. Sie wählen, mit wem Sie arbeiten möchten.'}
+            {t('benefit1Body')}
           </p>
         </div>
 
@@ -91,12 +69,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
             <Search size={22} className="text-[#5856D6]" />
           </div>
           <h3 className="font-bold text-text-primary mb-2">
-            {isEN ? 'Search across all listings' : 'Alle Angebote durchsuchen'}
+            {t('benefit2Title')}
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed">
-            {isEN
-              ? 'Browse properties from free advertising channels and our partner agents in one place. Filter by location, price, type, and features. Save searches and get notified when new matches appear. See comparable prices in the area to know if a property is fairly priced.'
-              : 'Immobilien aus kostenlosen Kanälen und unseren Partner-Maklern an einem Ort durchsuchen. Filtern, Suchen speichern und benachrichtigt werden.'}
+            {t('benefit2Body')}
           </p>
         </div>
 
@@ -106,12 +82,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
             <MapPin size={22} className="text-[#5856D6]" />
           </div>
           <h3 className="font-bold text-text-primary mb-2">
-            {isEN ? '17,000+ registered UK agents' : '17.000+ registrierte UK-Makler'}
+            {t('benefit3Title')}
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed">
-            {isEN
-              ? 'Our agent directory covers 100+ UK postcode areas, sourced from professional registries including Propertymark, NAEA, and ARLA. Each agent has a profile with their coverage areas and specialisms. We\'re expanding to Germany, France, and the Netherlands next.'
-              : 'Unser Makler-Verzeichnis deckt über 100 UK-Postleitzahlgebiete ab. Jeder Makler hat ein Profil. Wir expandieren als Nächstes nach Deutschland, Frankreich und die Niederlande.'}
+            {t('benefit3Body')}
           </p>
         </div>
 
@@ -121,12 +95,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
             <MessageSquare size={22} className="text-[#5856D6]" />
           </div>
           <h3 className="font-bold text-text-primary mb-2">
-            {isEN ? 'All conversations in one inbox' : 'Alle Gespräche in einem Posteingang'}
+            {t('benefit4Title')}
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed">
-            {isEN
-              ? 'Messages from agents, property alerts, viewing confirmations, and document requests — all in one threaded inbox. No more juggling email, WhatsApp, and phone calls across five different agents.'
-              : 'Nachrichten von Maklern, Immobilien-Benachrichtigungen, Besichtigungsbestätigungen — alles in einem Posteingang.'}
+            {t('benefit4Body')}
           </p>
         </div>
 
@@ -136,12 +108,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
             <Heart size={22} className="text-[#5856D6]" />
           </div>
           <h3 className="font-bold text-text-primary mb-2">
-            {isEN ? 'Search your way' : 'Suchen Sie auf Ihre Art'}
+            {t('benefit5Title')}
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed">
-            {isEN
-              ? 'Beyond bedrooms and budget: search by accessibility needs (wheelchair accessible, step-free), soundproofing, EV charging, pet-friendly, garden size — requirements that matter to you but most platforms ignore. Coming soon: team up with others on a shared home search.'
-              : 'Über Schlafzimmer und Budget hinaus: Suchen Sie nach Barrierefreiheit, Schalldämmung, E-Ladestationen, Haustierfreundlichkeit — Anforderungen, die Ihnen wichtig sind.'}
+            {t('benefit5Body')}
           </p>
         </div>
 
@@ -151,12 +121,10 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
             <Zap size={22} className="text-[#5856D6]" />
           </div>
           <h3 className="font-bold text-text-primary mb-2">
-            {isEN ? 'Free to search and connect' : 'Kostenlos suchen und verbinden'}
+            {t('benefit6Title')}
           </h3>
           <p className="text-sm text-text-secondary leading-relaxed">
-            {isEN
-              ? 'Creating your passport, getting matched with agents, browsing listings, and messaging are all free. You only pay if you want premium features like instant alerts or priority matching.'
-              : 'Passport erstellen, mit Maklern verbunden werden, Angebote durchsuchen und Nachrichten sind kostenlos. Sie zahlen nur für Premium-Features.'}
+            {t('benefit6Body')}
           </p>
         </div>
       </div>
@@ -164,34 +132,32 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
       {/* Readiness badges */}
       <div className="bg-white rounded-2xl border border-border-default p-8">
         <h2 className="text-lg font-bold text-text-primary mb-2">
-          {isEN ? 'Readiness badges — stand out to agents' : 'Bereitschafts-Badges — fallen Sie Maklern auf'}
+          {t('readinessTitle')}
         </h2>
         <p className="text-sm text-text-secondary mb-6">
-          {isEN
-            ? 'Agents prioritise serious hunters. Earn badges on your profile to show you\'re ready to move — and get faster, better responses.'
-            : 'Makler priorisieren ernsthafte Suchende. Verdienen Sie Badges, um zu zeigen, dass Sie bereit sind.'}
+          {t('readinessSubtitle')}
         </p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
               icon: <BadgeCheck size={20} className="text-[#5856D6]" />,
-              label: isEN ? 'Mortgage in Principle' : 'Hypothekengrundsatz',
-              desc: isEN ? 'Proof you can afford it' : 'Nachweis der Finanzierung',
+              label: t('badgeLabel1'),
+              desc: t('badgeDesc1'),
             },
             {
               icon: <ShieldCheck size={20} className="text-[#34C759]" />,
-              label: isEN ? 'Identity Verified' : 'Identität verifiziert',
-              desc: isEN ? 'ID check completed' : 'Ausweiskontrolle abgeschlossen',
+              label: t('badgeLabel2'),
+              desc: t('badgeDesc2'),
             },
             {
               icon: <Home size={20} className="text-brand" />,
-              label: isEN ? 'Profile Complete' : 'Profil vollständig',
-              desc: isEN ? 'Passport fully filled out' : 'Passport vollständig ausgefüllt',
+              label: t('badgeLabel3'),
+              desc: t('badgeDesc3'),
             },
             {
               icon: <Check size={20} className="text-[#FF9500]" />,
-              label: isEN ? 'Renter Ready' : 'Mieter-bereit',
-              desc: isEN ? 'References & deposit confirmed' : 'Referenzen & Kaution bestätigt',
+              label: t('badgeLabel4'),
+              desc: t('badgeDesc4'),
             },
           ].map((badge, i) => (
             <div key={i} className="bg-hover-bg rounded-xl p-4 flex items-start gap-3">
@@ -206,64 +172,58 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
           ))}
         </div>
         <p className="text-xs text-text-secondary mt-4">
-          {isEN
-            ? 'Badges are optional. Need a mortgage in principle? We can connect you with a broker — at no cost to you.'
-            : 'Badges sind optional. Benötigen Sie eine Hypothekengrundsatzgenehmigung? Wir verbinden Sie kostenlos mit einem Berater.'}
+          {t('readinessNote')}
         </p>
       </div>
 
       {/* Pricing */}
       <div className="bg-white rounded-2xl border border-border-default p-8">
         <h2 className="text-lg font-bold text-text-primary mb-2">
-          {isEN ? 'Pricing' : 'Preise'}
+          {t('pricingTitle')}
         </h2>
         <p className="text-sm text-text-secondary mb-8">
-          {isEN
-            ? 'Search for free. Pay for speed.'
-            : 'Kostenlos suchen. Für Geschwindigkeit zahlen.'}
+          {t('pricingSubtitle')}
         </p>
 
         <div className="grid md:grid-cols-2 gap-5">
           {/* Free */}
           <div className="rounded-xl border-2 border-[#5856D6] p-6 relative">
             <span className="absolute -top-3 left-4 bg-[#5856D6] text-white text-xs font-bold px-3 py-1 rounded-full">
-              {isEN ? 'FREE FOREVER' : 'FÜR IMMER KOSTENLOS'}
+              {t('freeTierBadge')}
             </span>
-            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Home Hunter</h3>
-            <p className="text-3xl font-extrabold text-text-primary mb-4">£0</p>
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">{t('freeTierName')}</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-4">{t('freeTierPrice')}</p>
             <ul className="space-y-2.5 text-sm text-text-secondary">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Home Passport & agent matching' : 'Home Passport & Makler-Matching'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Browse all listings' : 'Alle Angebote durchsuchen'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Inbox & messaging' : 'Posteingang & Nachrichten'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Save up to 3 searches' : 'Bis zu 3 Suchen speichern'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Readiness badges' : 'Bereitschafts-Badges'}</li>
-              <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {isEN ? 'Instant new-listing alerts' : 'Sofortige Benachrichtigungen'}</li>
-              <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {isEN ? 'Area price reports' : 'Gebiets-Preisberichte'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('freeTierFeature1')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('freeTierFeature2')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('freeTierFeature3')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('freeTierFeature4')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('freeTierFeature5')}</li>
+              <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {t('freeTierExclude1')}</li>
+              <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {t('freeTierExclude2')}</li>
             </ul>
           </div>
 
           {/* Pro */}
           <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC]">
-            <h3 className="text-lg font-bold text-text-primary mb-1">Hunter Pro</h3>
-            <p className="text-3xl font-extrabold text-text-primary mb-1">£9<span className="text-sm font-normal text-text-secondary">/mo</span></p>
-            <p className="text-xs text-text-secondary mb-4">{isEN ? 'cancel anytime' : 'jederzeit kündbar'}</p>
+            <h3 className="text-lg font-bold text-text-primary mb-1">{t('proTierName')}</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-1">{t('proTierPrice')}<span className="text-sm font-normal text-text-secondary">{t('proTierPricePeriod')}</span></p>
+            <p className="text-xs text-text-secondary mb-4">{t('proTierSubtitle')}</p>
             <ul className="space-y-2.5 text-sm text-text-secondary">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Everything in free' : 'Alles aus der kostenlosen Version'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Instant alerts when new listings match' : 'Sofortige Benachrichtigungen bei neuen Treffern'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Unlimited saved searches' : 'Unbegrenzte gespeicherte Suchen'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Area price reports & comparables' : 'Gebiets-Preisberichte & Vergleichsdaten'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Priority agent matching' : 'Bevorzugtes Makler-Matching'}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {isEN ? 'Viewing scheduler' : 'Besichtigungsplaner'}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proTierFeature1')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proTierFeature2')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proTierFeature3')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proTierFeature4')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proTierFeature5')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proTierFeature6')}</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-6 bg-hover-bg rounded-xl p-5">
           <p className="text-sm text-text-secondary leading-relaxed">
-            <span className="font-semibold text-text-primary">{isEN ? 'Coming soon' : 'Demnächst'}:</span>{' '}
-            {isEN
-              ? 'Shared home search — team up with friends or housemates to hunt together (beta). Living community matching for co-living and house shares.'
-              : 'Gemeinsame Wohnungssuche — suchen Sie zusammen mit Freunden oder Mitbewohnern (Beta). Wohngemeinschafts-Matching.'}
+            <span className="font-semibold text-text-primary">{t('comingSoonLabel')}:</span>{' '}
+            {t('comingSoonBody')}
           </p>
         </div>
       </div>
@@ -271,18 +231,16 @@ export default async function HunterInfoPage({ params }: { params: Promise<{ loc
       {/* CTA */}
       <div className="bg-[#5856D6]/5 border border-[#5856D6]/20 rounded-2xl p-8 text-center">
         <h2 className="text-xl font-bold text-text-primary mb-3">
-          {isEN ? 'Create your Home Passport' : 'Erstellen Sie Ihren Home Passport'}
+          {t('ctaTitle')}
         </h2>
         <p className="text-sm text-text-secondary mb-6 max-w-lg mx-auto">
-          {isEN
-            ? 'Tell us what you\'re looking for. Takes 2 minutes. Agents start matching within hours.'
-            : 'Sagen Sie uns, was Sie suchen. Dauert 2 Minuten. Makler beginnen innerhalb von Stunden mit dem Matching.'}
+          {t('ctaBody')}
         </p>
         <Link
           href="/hunter/passport"
           className="inline-flex items-center gap-2 px-6 py-3 bg-[#5856D6] hover:bg-[#4B49B8] text-white font-semibold rounded-lg transition-colors"
         >
-          {isEN ? 'Start your passport' : 'Passport starten'} <ArrowRight size={16} />
+          {t('ctaButton')} <ArrowRight size={16} />
         </Link>
       </div>
     </div>

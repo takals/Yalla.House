@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export default async function OwnerInfoPage() {
   const t = await getTranslations('ownerInfo')
-  const tDash = await getTranslations('ownerDash')
+
 
   return (
     <div className="max-w-5xl">
@@ -16,22 +16,6 @@ export default async function OwnerInfoPage() {
         <h1 className="text-3xl font-bold text-text-primary">
           {t('pageTitle')}
         </h1>
-      </div>
-
-      {/* Sub-nav tabs */}
-      <div className="flex gap-6 mb-8 border-b border-border-default">
-        <Link href="/owner/info" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px">
-          {t('tabInfo')}
-        </Link>
-        <Link href="/owner/overview" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-          {tDash('pageTitle')}
-        </Link>
-        <Link href="/owner/listings" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-          {tDash('tabListings')}
-        </Link>
-        <Link href="/owner/inbox" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-          {tDash('tabInquiries')}
-        </Link>
       </div>
 
       {/* Hero intro */}
@@ -165,8 +149,8 @@ export default async function OwnerInfoPage() {
             <span className="absolute -top-3 left-4 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('freeForever')}
             </span>
-            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Starter</h3>
-            <p className="text-3xl font-extrabold text-text-primary mb-4">&pound;0</p>
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">{t('starterName')}</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-4">{t('starterPrice')}</p>
             <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFreeChannels')}</li>
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterDashboard')}</li>
@@ -182,8 +166,8 @@ export default async function OwnerInfoPage() {
             <span className="absolute -top-3 left-4 bg-[#5856D6] text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('duringYourSale')}
             </span>
-            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Sell Smart</h3>
-            <p className="text-3xl font-extrabold text-text-primary mb-1">&pound;19<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">{t('sellSmartName')}</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-1">{t('sellSmartPrice')}<span className="text-sm font-normal text-text-secondary">{t('perMonth')}</span></p>
             <p className="text-xs text-text-secondary mb-4">{t('cancelWhenDone')}</p>
             <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('sellSmartEverythingInStarter')}</li>
@@ -201,8 +185,8 @@ export default async function OwnerInfoPage() {
             <span className="absolute -top-3 left-4 bg-[#34C759] text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('yourHomeManaged')}
             </span>
-            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">Home Passport</h3>
-            <p className="text-3xl font-extrabold text-text-primary mb-1">&pound;5<span className="text-sm font-normal text-text-secondary">/mo</span></p>
+            <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">{t('homePassportName')}</h3>
+            <p className="text-3xl font-extrabold text-text-primary mb-1">{t('homePassportPrice')}<span className="text-sm font-normal text-text-secondary">{t('perMonth')}</span></p>
             <p className="text-xs text-text-secondary mb-4">{t('homePassportSubtitle')}</p>
             <ul className="space-y-2.5 text-sm text-text-secondary">
               <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('homePassportCleaners')}</li>

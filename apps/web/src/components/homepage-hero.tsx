@@ -143,7 +143,7 @@ export default function HomepageHero({
                   {content.cta} →
                 </Link>
                 <Link
-                  href="/agent"
+                  href="/agent/info"
                   className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
                 >
                   {agentLabel} →

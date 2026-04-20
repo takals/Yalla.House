@@ -66,7 +66,7 @@ export default async function HomePage() {
           headlineSuffix: t('headlineSuffix'),
           subline: t('subline'),
           cta: t('cta'),
-          ctaHref: '/owner',
+          ctaHref: '/owner/info',
           stats: [
             { value: stats('stat1Value'), label: stats('stat1Label') },
             { value: stats('stat2Value'), label: stats('stat2Label') },
@@ -134,7 +134,7 @@ export default async function HomePage() {
                 {paths('ownerBody')}
               </p>
               <Link
-                href="/owner"
+                href="/owner/info"
                 className="text-sm font-semibold text-brand hover:text-brand-hover transition-[color] duration-300"
               >
                 {paths('ownerCta')} →
@@ -170,7 +170,7 @@ export default async function HomePage() {
                 {paths('agentBody')}
               </p>
               <Link
-                href="/agent"
+                href="/agent/info"
                 className="text-sm font-semibold text-brand hover:text-brand-hover transition-[color] duration-300"
               >
                 {paths('agentCta')} →
@@ -198,14 +198,14 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/owner"
+              href="/owner/info"
               className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
               style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
             >
               {cta('cta')} →
             </Link>
             <Link
-              href="/agent"
+              href="/agent/info"
               className="text-text-on-dark-secondary hover:text-white font-medium transition-[color] duration-300 text-sm"
             >
               {cta('agentLink')} →

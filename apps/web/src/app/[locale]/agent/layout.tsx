@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_EMAIL, PREVIEW_USER_ID } from '@/lib/preview-user'
+import { PREVIEW_USER_EMAIL } from '@/lib/preview-user'
 import { DashboardShell, agentNav } from '@/components/dashboard/shell'
+import { SiteHeader } from '@/components/site-header'
+import { SiteFooter } from '@/components/site-footer'
 import { fetchNotifications, getNotificationLabels } from '@/lib/notifications'
 import { fetchUserRoles } from '@/lib/user-roles'
 import { getTranslations } from 'next-intl/server'
@@ -16,18 +18,31 @@ export const metadata: Metadata = {
 export default async function AgentLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+
+  // Public info pages: middleware only allows unauthenticated access to /agent/info,
+  // so if there's no user here it must be the info page — render with public layout
+  if (!user) {
+    return (
+      <div className="bg-bg min-h-screen">
+        <SiteHeader />
+        <div className="max-w-6xl mx-auto px-4 py-12 pt-28">
+          {children}
+        </div>
+        <SiteFooter />
+      </div>
+    )
+  }
+
+  const userId = user.id
   const [t, tShell] = await Promise.all([
     getTranslations('notif'),
     getTranslations('shell'),
   ])
 
   const [profileResult, notifData, userRoles] = await Promise.all([
-    user
-      ? (supabase.from('users') as any).select('full_name').eq('id', user.id).maybeSingle()
-      : Promise.resolve({ data: null }),
+    (supabase.from('users') as any).select('full_name').eq('id', userId).maybeSingle(),
     fetchNotifications(supabase, userId),
-    user ? fetchUserRoles(supabase, user.id) : Promise.resolve([]),
+    fetchUserRoles(supabase, userId),
   ])
 
   const shellLabels: Record<string, string> = {
