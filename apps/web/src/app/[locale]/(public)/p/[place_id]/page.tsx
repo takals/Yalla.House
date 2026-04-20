@@ -5,15 +5,20 @@ import type { Metadata } from 'next'
 import { ContactCard } from './contact-form'
 import { ViewingCalendar } from './viewing-calendar'
 import { ListingStatusBadge } from './listing-status-badge'
-import { StickyBookingBar } from './sticky-booking-bar'
 import { OwnerToolbar } from './owner-toolbar'
-import { Home, BedDouble, Bath, Building, CalendarDays } from 'lucide-react'
+import {
+  Home, BedDouble, Bath, Building, CalendarDays,
+  MapPin, FileText, Zap, ArrowLeft, Eye,
+} from 'lucide-react'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 import { OwnerQuickActions } from './owner-quick-actions'
 import { PhotoGallery } from './photo-gallery'
 import { HeroPhoto } from './hero-photo'
 import { OwnerInlineControls } from './owner-inline-controls'
 import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib/resolve-listing'
+import { ListingCtaBox } from './listing-cta-box'
+import { KeyFactsGrid } from './key-facts-grid'
+import { ListingActionsBar } from './listing-actions-bar'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -103,7 +108,6 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 
   // Track ref source if present (e.g. ?ref=whatsapp, ?ref=rightmove, ?ref=qr)
   if (refSource && listing.id) {
-    // Fire-and-forget: update inbound_leads link_clicked_at if matching lead exists
     const { createServiceClient } = await import('@/lib/supabase/server')
     const service = createServiceClient()
     ;(service.from('inbound_leads') as any)
@@ -151,13 +155,50 @@ export default async function PropertyPage({ params, searchParams }: Props) {
   const primaryPhoto = photos.find(p => p.is_primary) ?? photos[0]
   const localeFmt = dateLocaleFromLocale(locale)
 
-  // Format price
+  // Format prices
   const formattedSalePrice = listing.intent !== 'rent' && listing.sale_price
     ? new Intl.NumberFormat(localeFmt, { style: 'currency', currency: listing.currency, maximumFractionDigits: 0 }).format(listing.sale_price / 100)
     : null
   const formattedRentPrice = listing.intent !== 'sale' && listing.rent_price
     ? new Intl.NumberFormat(localeFmt, { style: 'currency', currency: listing.currency, maximumFractionDigits: 0 }).format(listing.rent_price / 100)
     : null
+
+  // Determine if listing is essentially empty (show example placeholder)
+  const hasContent = !!(title || desc || photos.length > 0 || listing.sale_price || listing.rent_price)
+  const showExample = isOwner && !hasContent
+
+  // Build translation record for client components
+  const ctaTranslations: Record<string, string> = {
+    perMonth: t('perMonth'),
+    ctaBookViewing: t('ctaBookViewing'),
+    ctaMessageOwner: t('ctaMessageOwner'),
+    ctaSlotsAvailable: t('ctaSlotsAvailable'),
+    ctaNoSlots: t('ctaNoSlots'),
+    barUnderOffer: t('barUnderOffer'),
+    contactPrivacy: t('contactPrivacy'),
+    shareProperty: t('shareProperty'),
+    downloadBrochure: t('downloadBrochure'),
+    exportForAgent: t('exportForAgent'),
+  }
+
+  const factTranslations: Record<string, string> = {
+    factPropertyType: t('factPropertyType'),
+    factBedrooms: t('factBedrooms'),
+    factBathrooms: t('factBathrooms'),
+    factLivingSpace: t('factLivingSpace'),
+    factFloor: t('factFloor'),
+    factBuiltYear: t('factBuiltYear'),
+    factParking: t('factParking'),
+    factGarden: t('factGarden'),
+    factEnergyRating: t('factEnergyRating'),
+    factAvailableFrom: t('factAvailableFrom'),
+    factTypeFlat: t('factTypeFlat'),
+    factTypeHouse: t('factTypeHouse'),
+    factTypeStudio: t('factTypeStudio'),
+    factTypeBungalow: t('factTypeBungalow'),
+    factYes: t('factYes'),
+    factNo: t('factNo'),
+  }
 
   return (
     <div className="min-h-screen bg-bg">
@@ -204,15 +245,6 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         />
       )}
 
-      {/* ── Sticky booking bar (hunters) ────────────────────────── */}
-      {!isOwner && isPublicVisible && (
-        <StickyBookingBar
-          status={listing.status}
-          slotCount={slotCount ?? 0}
-          listingId={listing.id}
-        />
-      )}
-
       {/* ── Draft notice ────────────────────────────────────────── */}
       {isOwner && !isPublicVisible && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center">
@@ -222,8 +254,8 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         </div>
       )}
 
-      {/* ═══ HERO: Photo with gradient overlay + title/price ═══ */}
-      <div className="relative w-full h-[55vh] min-h-[380px] bg-gray-900">
+      {/* ═══ HERO: Full-width photo with gradient overlay ═══ */}
+      <div className={`relative w-full h-[55vh] min-h-[380px] ${showExample ? 'grayscale opacity-60' : ''} bg-gray-900`}>
         {primaryPhoto ? (
           <HeroPhoto
             photos={photos.map(p => ({
@@ -243,177 +275,282 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+            <Home size={64} className="text-gray-600" />
+          </div>
         )}
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
 
         {/* Status badge */}
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 z-10">
           <ListingStatusBadge status={listing.status} />
         </div>
 
-        {/* Title + price on overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
-              {title ?? t('titleFallback')}
-            </h1>
-            <p className="text-white/70 text-sm md:text-base mb-3">
-              {listing.postcode} {listing.city}
-            </p>
-            <div className="flex items-baseline gap-3 flex-wrap">
-              {formattedSalePrice && (
-                <span className="text-2xl md:text-3xl font-extrabold text-white">{formattedSalePrice}</span>
-              )}
-              {formattedRentPrice && (
-                <span className="text-2xl md:text-3xl font-extrabold text-white">
-                  {formattedRentPrice} <span className="text-lg font-medium text-white/60">/ {t('perMonth')}</span>
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ═══ KEY STATS BAR ═══ */}
-      <div className="bg-surface border-b border-border-default">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-6 overflow-x-auto">
-          {listing.size_sqm ? (
-            <StatPill icon={<Home size={15} />} value={`${listing.size_sqm} m²`} label={t('statLivingSpace')} />
-          ) : null}
-          {listing.bedrooms ? (
-            <StatPill icon={<BedDouble size={15} />} value={String(listing.bedrooms)} label={t('statRooms')} />
-          ) : null}
-          {listing.bathrooms ? (
-            <StatPill icon={<Bath size={15} />} value={String(listing.bathrooms)} label={t('statBathrooms')} />
-          ) : null}
-          {listing.floor != null ? (
-            <StatPill icon={<Building size={15} />} value={String(listing.floor)} label={t('statFloor')} />
-          ) : null}
-          {listing.construction_year ? (
-            <StatPill icon={<CalendarDays size={15} />} value={String(listing.construction_year)} label={t('statBuilt')} />
-          ) : null}
-        </div>
-      </div>
-
-      {/* ═══ CALENDAR HERO — The main conversion section ═══ */}
-      <div className="bg-[#FAFBFC] border-b border-border-default">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          {isOwner ? (
-            <div className="bg-surface rounded-xl border border-border-default p-8 text-center">
-              <CalendarDays size={40} className="mx-auto mb-3 text-brand" />
-              <h2 className="text-xl font-bold text-text-primary mb-2">{t('calendarTitle')}</h2>
-              <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto">{t('calendarOwnerCta')}</p>
-              <a
-                href="/owner/calendar"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand-hover transition-colors"
-              >
-                <CalendarDays size={16} />
-                {t('calendarManageSlots')}
-              </a>
-            </div>
-          ) : (
-            <ViewingCalendar
-              listingId={listing.id}
-              authenticated={isAuthenticated}
-              isOwner={false}
-              locale={locale}
-              placeId={listing.place_id}
-              preselectedSlotId={preselectedSlotId}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* ═══ OWNER QUICK ACTIONS — collapsible section below calendar ═══ */}
-      {isOwner && (
-        <div className="max-w-6xl mx-auto px-4 pt-6">
-          <OwnerQuickActions
-            listingId={listing.id}
-            translations={{
-              quickActions: t('quickActions'),
-              editListing: t('editListing'),
-              propertyDetails: t('propertyDetails'),
-              addViewingSlots: t('addViewingSlots'),
-              manageViewings: t('manageViewings'),
-              inviteAgents: t('inviteAgents'),
-              viewAnalytics: t('viewAnalytics'),
-              portalStatus: t('portalStatus'),
-              portalStatusLive: t('portalStatusLive'),
-              portalStatusPending: t('portalStatusPending'),
-              portalStatusNone: t('portalStatusNone'),
-            }}
-            portalSyncs={portalSyncsData as Array<{ portal: string; status: string }> | undefined}
-          />
-        </div>
-      )}
-
-      {/* ═══ CONTENT: Description + Photos + Sidebar ═══ */}
-      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
-        <div className="flex-1 min-w-0 space-y-4">
-          {/* Description — inline editable for owner */}
-          {isOwner ? (
-            <div id="owner-editing" className="bg-surface rounded-card p-6 shadow-sm">
-              <h2 className="text-lg font-bold mb-3">{t('descriptionTitle')}</h2>
-              <OwnerInlineControls
-                listingId={listing.id}
-                title={title ?? ''}
-                description={desc ?? null}
-                salePrice={listing.sale_price ?? null}
-                rentPrice={listing.rent_price ?? null}
-                currency={listing.currency ?? 'GBP'}
-                photoCount={photos.length}
-              />
-            </div>
-          ) : desc ? (
-            <div className="bg-surface rounded-card p-6 shadow-sm">
-              <h2 className="text-lg font-bold mb-3">{t('descriptionTitle')}</h2>
-              <p className="text-text-secondary leading-relaxed whitespace-pre-line">{desc}</p>
-            </div>
-          ) : null}
-
-          {/* Photo gallery with lightbox */}
-          {photos.length > 1 && (
-            <PhotoGallery
-              photos={photos.map(p => ({
-                id: p.id,
-                url: p.url,
-                thumb_url: p.thumb_url,
-                caption_de: p.caption_de,
-                caption: p.caption,
-              }))}
-              title={title}
-              translations={{
-                photosTitle: t('photosTitle'),
-                viewAllPhotos: t('viewAllPhotos'),
-                photoOf: t('photoOf'),
-                closeGallery: t('closeGallery'),
-              }}
-            />
-          )}
-        </div>
-
-        {/* Right sidebar — visible to non-owners only */}
-        {!isOwner && (
-          <div className="lg:w-80 flex-shrink-0">
-            <div className="sticky top-20 space-y-4">
-              <ContactCard listingId={listing.id} />
-            </div>
+        {/* Example badge for empty listings */}
+        {showExample && (
+          <div className="absolute top-4 right-4 z-10">
+            <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full">
+              <Eye size={12} />
+              {t('exampleBadge')}
+            </span>
           </div>
         )}
-      </div>
-    </div>
-  )
-}
 
-function StatPill({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
-  return (
-    <div className="flex items-center gap-2 flex-shrink-0">
-      <div className="text-brand">{icon}</div>
-      <div className="leading-tight">
-        <p className="font-bold text-sm text-text-primary">{value}</p>
-        <p className="text-[10px] text-text-secondary uppercase tracking-wide">{label}</p>
+        {/* Title + location on overlay */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 pointer-events-none z-10">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
+              {showExample ? t('exampleTitle') : (title ?? t('titleFallback'))}
+            </h1>
+            <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
+              <MapPin size={14} className="flex-shrink-0" />
+              <span>{showExample ? t('exampleLocation') : `${listing.postcode} ${listing.city}`}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ PRICE BAR + ACTIONS ═══ */}
+      <div className="bg-surface border-b border-border-default">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+          {/* Left: Price */}
+          <div className="flex items-baseline gap-3 flex-wrap">
+            {showExample ? (
+              <span className="text-2xl font-extrabold text-text-primary opacity-50">{t('examplePrice')}</span>
+            ) : (
+              <>
+                {formattedSalePrice && (
+                  <span className="text-2xl font-extrabold text-text-primary">{formattedSalePrice}</span>
+                )}
+                {formattedRentPrice && (
+                  <span className="text-2xl font-extrabold text-text-primary">
+                    {formattedRentPrice} <span className="text-sm font-medium text-text-secondary">/ {t('perMonth')}</span>
+                  </span>
+                )}
+                {!formattedSalePrice && !formattedRentPrice && (
+                  <span className="text-lg font-bold text-text-secondary">{t('titleFallback')}</span>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Right: Share / Brochure */}
+          {!isOwner && (
+            <ListingActionsBar
+              slug={listing.slug ?? null}
+              placeId={listing.place_id}
+              translations={ctaTranslations}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* ═══ MAIN CONTENT — Two column: content + CTA sidebar ═══ */}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* ── Left column: Structured sections ── */}
+          <div className="flex-1 min-w-0 space-y-8">
+
+            {/* §1 KEY FACTS */}
+            <section>
+              <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                <Home size={18} className="text-brand" />
+                {t('sectionKeyFacts')}
+              </h2>
+              <KeyFactsGrid listing={listing} translations={factTranslations} />
+            </section>
+
+            {/* §2 DESCRIPTION */}
+            <section>
+              <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                <FileText size={18} className="text-brand" />
+                {t('sectionDescription')}
+              </h2>
+              {isOwner ? (
+                <div className="bg-surface rounded-xl border border-border-default p-6">
+                  <OwnerInlineControls
+                    listingId={listing.id}
+                    title={title ?? ''}
+                    description={desc ?? null}
+                    salePrice={listing.sale_price ?? null}
+                    rentPrice={listing.rent_price ?? null}
+                    currency={listing.currency ?? 'GBP'}
+                    photoCount={photos.length}
+                  />
+                </div>
+              ) : showExample ? (
+                <div className="bg-surface rounded-xl border border-border-default p-6 opacity-50">
+                  <p className="text-text-secondary leading-relaxed">{t('exampleDescription')}</p>
+                </div>
+              ) : desc ? (
+                <div className="bg-surface rounded-xl border border-border-default p-6">
+                  <p className="text-text-secondary leading-relaxed whitespace-pre-line">{desc}</p>
+                </div>
+              ) : null}
+            </section>
+
+            {/* §3 PHOTO GALLERY */}
+            {photos.length > 1 && (
+              <section>
+                <PhotoGallery
+                  photos={photos.map(p => ({
+                    id: p.id,
+                    url: p.url,
+                    thumb_url: p.thumb_url,
+                    caption_de: p.caption_de,
+                    caption: p.caption,
+                  }))}
+                  title={title}
+                  translations={{
+                    photosTitle: t('sectionPhotos'),
+                    viewAllPhotos: t('viewAllPhotos'),
+                    photoOf: t('photoOf'),
+                    closeGallery: t('closeGallery'),
+                  }}
+                />
+              </section>
+            )}
+
+            {/* §4 LOCATION */}
+            {(listing.city || listing.postcode) && (
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <MapPin size={18} className="text-brand" />
+                  {t('sectionLocation')}
+                </h2>
+                <div className="bg-surface rounded-xl border border-border-default p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
+                      <MapPin size={18} className="text-brand" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-text-primary">{listing.postcode} {listing.city}</p>
+                      {listing.street && (
+                        <p className="text-sm text-text-secondary">{listing.street}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* §5 FLOOR PLAN — owner upload placeholder */}
+            {isOwner && (
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <FileText size={18} className="text-brand" />
+                  {t('sectionFloorPlan')}
+                </h2>
+                <div className="bg-surface rounded-xl border border-dashed border-border-default p-8 text-center">
+                  <FileText size={32} className="mx-auto mb-3 text-text-secondary" />
+                  <p className="text-sm text-text-secondary mb-4">{t('noFloorPlan')}</p>
+                  <button className="inline-flex items-center gap-2 px-4 py-2 bg-bg hover:bg-hover-muted text-text-primary text-sm font-semibold rounded-lg border border-border-default transition-colors">
+                    {t('uploadFloorPlan')}
+                  </button>
+                </div>
+              </section>
+            )}
+
+            {/* §6 ENERGY CERTIFICATE — owner upload placeholder */}
+            {isOwner && (
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <Zap size={18} className="text-brand" />
+                  {t('sectionEpc')}
+                </h2>
+                <div className="bg-surface rounded-xl border border-dashed border-border-default p-8 text-center">
+                  <Zap size={32} className="mx-auto mb-3 text-text-secondary" />
+                  <p className="text-sm text-text-secondary mb-4">{t('noEpc')}</p>
+                  <button className="inline-flex items-center gap-2 px-4 py-2 bg-bg hover:bg-hover-muted text-text-primary text-sm font-semibold rounded-lg border border-border-default transition-colors">
+                    {t('uploadEpc')}
+                  </button>
+                </div>
+              </section>
+            )}
+
+            {/* §7 VIEWING CALENDAR */}
+            <section>
+              <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                <CalendarDays size={18} className="text-brand" />
+                {t('calendarTitle')}
+              </h2>
+              {isOwner ? (
+                <div className="bg-surface rounded-xl border border-border-default p-8 text-center">
+                  <CalendarDays size={40} className="mx-auto mb-3 text-brand" />
+                  <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto">{t('calendarOwnerCta')}</p>
+                  <a
+                    href="/owner/calendar"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand-hover transition-colors"
+                  >
+                    <CalendarDays size={16} />
+                    {t('calendarManageSlots')}
+                  </a>
+                </div>
+              ) : (
+                <ViewingCalendar
+                  listingId={listing.id}
+                  authenticated={isAuthenticated}
+                  isOwner={false}
+                  locale={locale}
+                  placeId={listing.place_id}
+                  preselectedSlotId={preselectedSlotId}
+                />
+              )}
+            </section>
+
+            {/* §8 CONTACT FORM (for hunters, below calendar) */}
+            {!isOwner && (
+              <section id="contact-section">
+                <ContactCard listingId={listing.id} />
+              </section>
+            )}
+          </div>
+
+          {/* ── Right column: CTA box + Owner tools ── */}
+          <div className="lg:w-[340px] flex-shrink-0">
+            <div className="sticky top-20 space-y-6">
+              {/* CTA box for hunters */}
+              {!isOwner && (
+                <ListingCtaBox
+                  listingId={listing.id}
+                  placeId={listing.place_id}
+                  slotCount={slotCount ?? 0}
+                  status={listing.status}
+                  salePrice={formattedSalePrice}
+                  rentPrice={formattedRentPrice}
+                  translations={ctaTranslations}
+                />
+              )}
+
+              {/* Owner quick actions */}
+              {isOwner && (
+                <OwnerQuickActions
+                  listingId={listing.id}
+                  translations={{
+                    quickActions: t('quickActions'),
+                    editListing: t('editListing'),
+                    propertyDetails: t('propertyDetails'),
+                    addViewingSlots: t('addViewingSlots'),
+                    manageViewings: t('manageViewings'),
+                    inviteAgents: t('inviteAgents'),
+                    viewAnalytics: t('viewAnalytics'),
+                    portalStatus: t('portalStatus'),
+                    portalStatusLive: t('portalStatusLive'),
+                    portalStatusPending: t('portalStatusPending'),
+                    portalStatusNone: t('portalStatusNone'),
+                  }}
+                  portalSyncs={portalSyncsData as Array<{ portal: string; status: string }> | undefined}
+                />
+              )}
+
+              {/* Listed by Yalla.House */}
+              <div className="text-center text-xs text-text-secondary pt-4 border-t border-border-default">
+                <p>{t('listedBy')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
