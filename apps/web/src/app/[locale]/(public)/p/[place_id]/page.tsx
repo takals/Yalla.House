@@ -353,6 +353,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             <ListingActionsBar
               slug={listing.slug ?? null}
               placeId={listing.place_id}
+              title={title ?? t('titleFallback')}
               translations={ctaTranslations}
             />
           )}
