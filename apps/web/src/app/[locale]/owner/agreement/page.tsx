@@ -2,11 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { AgreementPage } from '@/components/agreement-page'
-import {
-  checkAgreementStatus,
-  getAgreementVersion,
-  AGREEMENT_SECTIONS,
-} from '@/lib/agreements'
+import { checkAgreementStatus } from '@/lib/agreements'
+import { getAgreementVersion, AGREEMENT_SECTIONS } from '@/lib/agreement-config'
 import { countryFromLocale } from '@/lib/detect-country'
 
 export default async function OwnerAgreementRoute() {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { AGREEMENT_SECTIONS, AGREEMENT_NAMESPACES, type AgreementType } from '@/lib/agreements'
+import { AGREEMENT_SECTIONS, AGREEMENT_NAMESPACES, type AgreementType } from '@/lib/agreement-config'
 
 /**
  * GET /api/agreements/pdf?type=agent_partner&locale=en

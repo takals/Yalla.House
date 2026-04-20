@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useAuthAction } from '@/lib/use-auth-action'
-import { signAgreement, type AgreementType } from '@/lib/agreements'
+import { signAgreement } from '@/lib/agreements'
+import type { AgreementType } from '@/lib/agreement-config'
 import { FileDown } from 'lucide-react'
 
 interface AgreementSection {

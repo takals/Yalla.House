@@ -3,11 +3,8 @@ import { redirect } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { AgreementPage } from '@/components/agreement-page'
-import {
-  checkAgreementStatus,
-  getAgreementVersion,
-  AGREEMENT_SECTIONS,
-} from '@/lib/agreements'
+import { checkAgreementStatus } from '@/lib/agreements'
+import { getAgreementVersion, AGREEMENT_SECTIONS } from '@/lib/agreement-config'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getCountryConfig } from '@/lib/country-config'
 
