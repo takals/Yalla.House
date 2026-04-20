@@ -300,14 +300,29 @@ export default async function PropertyPage({ params, searchParams }: Props) {
       {/* ═══ CALENDAR HERO — The main conversion section ═══ */}
       <div className="bg-[#FAFBFC] border-b border-border-default">
         <div className="max-w-6xl mx-auto px-4 py-8">
-          <ViewingCalendar
-            listingId={listing.id}
-            authenticated={isAuthenticated}
-            isOwner={isOwner}
-            locale={locale}
-            placeId={listing.place_id}
-            preselectedSlotId={preselectedSlotId}
-          />
+          {isOwner ? (
+            <div className="bg-surface rounded-xl border border-border-default p-8 text-center">
+              <CalendarDays size={40} className="mx-auto mb-3 text-brand" />
+              <h2 className="text-xl font-bold text-text-primary mb-2">{t('calendarTitle')}</h2>
+              <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto">{t('calendarOwnerCta')}</p>
+              <a
+                href="/owner/calendar"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand-hover transition-colors"
+              >
+                <CalendarDays size={16} />
+                {t('calendarManageSlots')}
+              </a>
+            </div>
+          ) : (
+            <ViewingCalendar
+              listingId={listing.id}
+              authenticated={isAuthenticated}
+              isOwner={false}
+              locale={locale}
+              placeId={listing.place_id}
+              preselectedSlotId={preselectedSlotId}
+            />
+          )}
         </div>
       </div>
 

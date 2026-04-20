@@ -683,6 +683,21 @@
     "interestLevel": "Interessensgrad",
     "viewingNotes": "Notizen"
   },
+  "ownerCalendar": {
+    "title": "Kalender",
+    "subtitle": "Verwalte Besichtigungstermine f\u00fcr all deine Inserate",
+    "upcomingSlots": "Angebotene Termine",
+    "noSlots": "Noch keine Termine",
+    "noSlotsDesc": "W\u00e4hle ein Datum im Kalender, um Besichtigungstermine anzubieten.",
+    "noListings": "Noch keine Inserate",
+    "noListingsDesc": "Erstelle zuerst ein Inserat, um Besichtigungstermine anzubieten.",
+    "allListings": "Alle Inserate",
+    "slotsAvailable": "Termine verf\u00fcgbar",
+    "booked": "Gebucht",
+    "free": "Frei",
+    "addFirstSlot": "Ersten Termin hinzuf\u00fcgen",
+    "viewProperty": "Inserat ansehen"
+  },
   "hunterFeedback": {
     "checkinTitle": "Einchecken",
     "checkinDescription": "Bestätige, dass du bei der Besichtigung bist.",
@@ -1851,6 +1866,8 @@
     "calendarAddRecurring": "F\u00fcr {weeks} Wochen hinzuf\u00fcgen",
     "calendarSelectDate": "W\u00e4hlen Sie ein Datum, um verf\u00fcgbare Termine zu sehen",
     "calendarSelectDateOwner": "W\u00e4hlen Sie ein Datum, um Termine zu verwalten oder hinzuzuf\u00fcgen",
+    "calendarOwnerCta": "Verwalte deine Besichtigungstermine zentral \u00fcber den Kalender in deinem Dashboard.",
+    "calendarManageSlots": "Termine verwalten",
     "waFlowTitle": "WhatsApp-Automatisierung",
     "waFlowBooked": "Besichtigung gebucht",
     "waFlowBookedDesc": "Sofortige Best\u00e4tigung an Sie und den Interessenten per WhatsApp.",

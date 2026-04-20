@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
-  LayoutDashboard, Home, Building2, Plus, Calendar, Star,
+  LayoutDashboard, Home, Building2, Plus, Calendar, CalendarDays, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
   LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye,
 } from 'lucide-react'
@@ -254,6 +254,7 @@ export const adminNav: NavItem[] = [
 
 export const ownerNav: NavItem[] = [
   { href: '/owner/listings', label: 'Listings',    icon: <Home size={15} />, exact: true },
+  { href: '/owner/calendar', label: 'Calendar',    icon: <CalendarDays size={15} /> },
   { href: '/owner/viewings', label: 'Viewings',    icon: <Calendar size={15} /> },
   { href: '/owner/offers',   label: 'Offers',      icon: <Banknote size={15} /> },
   { href: '/owner/agents',   label: 'Agents',      icon: <Handshake size={15} /> },

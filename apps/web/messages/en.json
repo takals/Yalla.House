@@ -683,6 +683,21 @@
     "interestLevel": "Interest Level",
     "viewingNotes": "Notes"
   },
+  "ownerCalendar": {
+    "title": "Calendar",
+    "subtitle": "Manage viewing slots across all your listings",
+    "upcomingSlots": "Offered Viewing Slots",
+    "noSlots": "No slots yet",
+    "noSlotsDesc": "Select a date on the calendar to offer viewing slots.",
+    "noListings": "No listings yet",
+    "noListingsDesc": "Create a listing first to start offering viewing slots.",
+    "allListings": "All Listings",
+    "slotsAvailable": "slots available",
+    "booked": "Booked",
+    "free": "Free",
+    "addFirstSlot": "Add your first slot",
+    "viewProperty": "View property"
+  },
   "hunterFeedback": {
     "checkinTitle": "Check In",
     "checkinDescription": "Confirm you're at the property viewing.",
@@ -1851,6 +1866,8 @@
     "calendarAddRecurring": "Add for {weeks} weeks",
     "calendarSelectDate": "Select a date to see available slots",
     "calendarSelectDateOwner": "Select a date to manage or add viewing slots",
+    "calendarOwnerCta": "Manage all your viewing slots from the Calendar in your dashboard.",
+    "calendarManageSlots": "Manage Slots",
     "waFlowTitle": "WhatsApp Automation",
     "waFlowBooked": "Viewing booked",
     "waFlowBookedDesc": "Instant confirmation sent to you and the buyer via WhatsApp.",

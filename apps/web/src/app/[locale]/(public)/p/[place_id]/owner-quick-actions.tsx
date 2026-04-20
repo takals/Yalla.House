@@ -39,7 +39,7 @@ type ActionItem = {
 
 const ACTION_ITEMS: ActionItem[] = [
   { key: 'propertyDetails', icon: Pencil, href: (id: string) => `/owner/${id}` },
-  { key: 'addViewingSlots', icon: CalendarPlus, scrollTo: 'viewing-calendar' },
+  { key: 'addViewingSlots', icon: CalendarPlus, href: () => '/owner/calendar' },
   { key: 'manageViewings', icon: CalendarCheck, href: () => '/owner/viewings' },
   { key: 'inviteAgents', icon: Users, href: () => '/owner/agents' },
   { key: 'viewAnalytics', icon: BarChart3, href: (id: string) => `/owner/${id}/analytics` },
