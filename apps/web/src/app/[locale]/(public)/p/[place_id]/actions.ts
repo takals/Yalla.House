@@ -100,6 +100,41 @@ export async function uploadPhotoAction(
   return { success: true, id: data.id }
 }
 
+// ── Upload document (floor plan / EPC) from listing page ────────────────────
+
+export async function uploadDocumentAction(
+  listingId: string,
+  url: string,
+  type: 'floor_plan' | 'epc'
+): Promise<{ success: true; id: string } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) return { authRequired: true }
+
+  const supabase = await createClient()
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('owner_id')
+    .eq('id', listingId)
+    .single()
+
+  if (!listing || listing.owner_id !== auth.userId) return { error: 'Not authorized' }
+
+  const { data, error } = await (supabase.from('listing_media') as any).insert({
+    listing_id: listingId,
+    type,
+    url,
+    sort_order: 0,
+    is_primary: false,
+  }).select('id').single()
+
+  if (error) {
+    console.error('uploadDocumentAction error:', error)
+    return { error: 'Failed to save document' }
+  }
+
+  return { success: true, id: data.id }
+}
+
 export async function checkAuthAction(): Promise<{
   authenticated: boolean
   userName: string | null

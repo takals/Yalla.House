@@ -19,6 +19,7 @@ import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib
 import { ListingCtaBox } from './listing-cta-box'
 import { KeyFactsGrid } from './key-facts-grid'
 import { ListingActionsBar } from './listing-actions-bar'
+import { DocumentUploadSection } from './document-upload-section'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -153,6 +154,12 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     .sort((a, b) => a.sort_order - b.sort_order) ?? []
 
   const primaryPhoto = photos.find(p => p.is_primary) ?? photos[0]
+
+  // Extract floor plan and EPC documents
+  const allMedia = (listing.listing_media as Array<{ id: string; url: string; type: string }> | null) ?? []
+  const floorPlanMedia = allMedia.find(m => m.type === 'floor_plan')
+  const epcMedia = allMedia.find(m => m.type === 'epc')
+
   const localeFmt = dateLocaleFromLocale(locale)
 
   // Format prices
@@ -179,6 +186,12 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     shareProperty: t('shareProperty'),
     downloadBrochure: t('downloadBrochure'),
     exportForAgent: t('exportForAgent'),
+    noFloorPlan: t('noFloorPlan'),
+    noEpc: t('noEpc'),
+    uploadFloorPlan: t('uploadFloorPlan'),
+    uploadEpc: t('uploadEpc'),
+    sectionFloorPlan: t('sectionFloorPlan'),
+    sectionEpc: t('sectionEpc'),
   }
 
   const factTranslations: Record<string, string> = {
@@ -435,37 +448,47 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               </section>
             )}
 
-            {/* §5 FLOOR PLAN — owner upload placeholder */}
-            {isOwner && (
+            {/* §5 FLOOR PLAN — interactive upload for owners, display for hunters */}
+            {(isOwner || floorPlanMedia) && (
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                   <FileText size={18} className="text-brand" />
                   {t('sectionFloorPlan')}
                 </h2>
-                <div className="bg-surface rounded-xl border border-dashed border-border-default p-8 text-center">
-                  <FileText size={32} className="mx-auto mb-3 text-text-secondary" />
-                  <p className="text-sm text-text-secondary mb-4">{t('noFloorPlan')}</p>
-                  <button className="inline-flex items-center gap-2 px-4 py-2 bg-bg hover:bg-hover-muted text-text-primary text-sm font-semibold rounded-lg border border-border-default transition-colors">
-                    {t('uploadFloorPlan')}
-                  </button>
-                </div>
+                {isOwner ? (
+                  <DocumentUploadSection
+                    listingId={listing.id}
+                    type="floor_plan"
+                    existingUrl={floorPlanMedia?.url ?? null}
+                    translations={ctaTranslations}
+                  />
+                ) : floorPlanMedia ? (
+                  <div className="bg-surface rounded-xl border border-border-default overflow-hidden">
+                    <img src={floorPlanMedia.url} alt={t('sectionFloorPlan')} className="w-full max-h-[500px] object-contain bg-gray-50" />
+                  </div>
+                ) : null}
               </section>
             )}
 
-            {/* §6 ENERGY CERTIFICATE — owner upload placeholder */}
-            {isOwner && (
+            {/* §6 ENERGY CERTIFICATE — interactive upload for owners, display for hunters */}
+            {(isOwner || epcMedia) && (
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                   <Zap size={18} className="text-brand" />
                   {t('sectionEpc')}
                 </h2>
-                <div className="bg-surface rounded-xl border border-dashed border-border-default p-8 text-center">
-                  <Zap size={32} className="mx-auto mb-3 text-text-secondary" />
-                  <p className="text-sm text-text-secondary mb-4">{t('noEpc')}</p>
-                  <button className="inline-flex items-center gap-2 px-4 py-2 bg-bg hover:bg-hover-muted text-text-primary text-sm font-semibold rounded-lg border border-border-default transition-colors">
-                    {t('uploadEpc')}
-                  </button>
-                </div>
+                {isOwner ? (
+                  <DocumentUploadSection
+                    listingId={listing.id}
+                    type="epc"
+                    existingUrl={epcMedia?.url ?? null}
+                    translations={ctaTranslations}
+                  />
+                ) : epcMedia ? (
+                  <div className="bg-surface rounded-xl border border-border-default overflow-hidden">
+                    <img src={epcMedia.url} alt={t('sectionEpc')} className="w-full max-h-[500px] object-contain bg-gray-50" />
+                  </div>
+                ) : null}
               </section>
             )}
 
