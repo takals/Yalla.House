@@ -760,7 +760,17 @@
     "bulkError": "Some listings could not be updated",
     "unitSqm": "m²",
     "unitRooms": "beds",
-    "perMonth": "/mo"
+    "perMonth": "/mo",
+    "exampleBadge": "Example",
+    "exampleTitle": "Charming 3-Bed Victorian Terrace with Garden",
+    "exampleLocation": "N1 2AB London",
+    "examplePrice": "\u00a3575,000",
+    "exampleSize": "95",
+    "exampleBeds": "3",
+    "exampleHint": "This is what a completed listing looks like. Create yours to get started.",
+    "createYourListing": "Create Your Listing",
+    "viewListing": "View Listing",
+    "propertyDetails": "Property Details"
   },
   "ownerPlans": {
     "pageTitle": "Plans & Pricing",
@@ -1751,6 +1761,7 @@
     "photosTitle": "Photos",
     "quickActions": "Quick Actions",
     "editListing": "Edit listing details",
+    "propertyDetails": "Property Details",
     "addViewingSlots": "Add viewing slots",
     "manageViewings": "Manage viewings",
     "inviteAgents": "Invite agents",

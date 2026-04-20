@@ -319,6 +319,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             translations={{
               quickActions: t('quickActions'),
               editListing: t('editListing'),
+              propertyDetails: t('propertyDetails'),
               addViewingSlots: t('addViewingSlots'),
               manageViewings: t('manageViewings'),
               inviteAgents: t('inviteAgents'),
@@ -338,7 +339,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         <div className="flex-1 min-w-0 space-y-4">
           {/* Description — inline editable for owner */}
           {isOwner ? (
-            <div className="bg-surface rounded-card p-6 shadow-sm">
+            <div id="owner-editing" className="bg-surface rounded-card p-6 shadow-sm">
               <h2 className="text-lg font-bold mb-3">{t('descriptionTitle')}</h2>
               <OwnerInlineControls
                 listingId={listing.id}

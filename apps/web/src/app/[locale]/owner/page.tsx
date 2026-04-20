@@ -21,8 +21,8 @@ export default async function OwnerPage() {
     .order('created_at', { ascending: false })
 
   if (!listings || listings.length === 0) {
-    // No listings → onboarding/info page
-    redirect('/owner/info')
+    // No listings → listings page with example card
+    redirect('/owner/listings')
   }
 
   if (listings.length === 1) {

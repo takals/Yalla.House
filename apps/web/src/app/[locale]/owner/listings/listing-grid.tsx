@@ -217,9 +217,9 @@ export default function ListingGrid({
         {listings.map((listing) => {
           const isPublic =
             listing.status === 'active' || listing.status === 'under_offer'
-          const href = isPublic
-            ? `/p/${listing.slug ?? listing.place_id}`
-            : `/owner/${listing.id}`
+          // Always go to listing page — owners see inline editing there
+          const identifier = listing.slug ?? listing.place_id
+          const href = identifier ? `/p/${identifier}` : `/owner/${listing.id}`
           const formattedPrice = formatPrice(listing)
           const isSelected = selected.has(listing.id)
 

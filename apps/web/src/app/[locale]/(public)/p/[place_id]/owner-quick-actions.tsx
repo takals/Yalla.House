@@ -17,6 +17,7 @@ interface OwnerQuickActionsProps {
   translations: {
     quickActions: string
     editListing: string
+    propertyDetails: string
     addViewingSlots: string
     manageViewings: string
     inviteAgents: string
@@ -30,7 +31,7 @@ interface OwnerQuickActionsProps {
 }
 
 const ACTION_ITEMS = [
-  { key: 'editListing', icon: Pencil, href: (id: string) => `/owner/${id}` },
+  { key: 'propertyDetails', icon: Pencil, href: (id: string) => `/owner/${id}` },
   { key: 'addViewingSlots', icon: CalendarPlus, href: () => '/owner/viewings' },
   { key: 'manageViewings', icon: CalendarCheck, href: () => '/owner/viewings' },
   { key: 'inviteAgents', icon: Users, href: () => '/owner/agents' },

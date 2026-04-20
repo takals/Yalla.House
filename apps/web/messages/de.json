@@ -760,7 +760,17 @@
     "bulkError": "Einige Inserate konnten nicht aktualisiert werden",
     "unitSqm": "m²",
     "unitRooms": "Zi.",
-    "perMonth": "/Mo"
+    "perMonth": "/Mo",
+    "exampleBadge": "Beispiel",
+    "exampleTitle": "Charmantes 3-Zimmer-Reihenhaus mit Garten",
+    "exampleLocation": "10115 Berlin",
+    "examplePrice": "\u20ac485.000",
+    "exampleSize": "95",
+    "exampleBeds": "3",
+    "exampleHint": "So sieht ein fertiges Inserat aus. Erstellen Sie jetzt Ihr eigenes.",
+    "createYourListing": "Inserat erstellen",
+    "viewListing": "Inserat ansehen",
+    "propertyDetails": "Objektdetails"
   },
   "ownerPlans": {
     "pageTitle": "Tarife & Preise",
@@ -1751,7 +1761,8 @@
     "photosTitle": "Fotos",
     "quickActions": "Schnellaktionen",
     "editListing": "Listing-Details bearbeiten",
-    "addViewingSlots": "Besichtigungstermine hinzufügen",
+    "propertyDetails": "Objektdetails",
+    "addViewingSlots": "Besichtigungstermine hinzuf\u00fcgen",
     "manageViewings": "Termine verwalten",
     "inviteAgents": "Makler einladen",
     "viewAnalytics": "Analysen ansehen",

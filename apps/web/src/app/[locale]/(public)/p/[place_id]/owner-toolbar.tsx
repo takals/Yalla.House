@@ -86,13 +86,13 @@ export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale
           <span className="text-[10px] font-bold uppercase tracking-wider text-brand bg-brand/10 px-2 py-0.5 rounded-full">
             {t('ownerBadge')}
           </span>
-          <a
-            href={`/owner/${listingId}`}
+          <button
+            onClick={() => document.getElementById('owner-editing')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
             className="flex items-center gap-1.5 text-xs font-semibold text-white/50 hover:text-white transition-colors"
           >
             <Pencil size={12} />
             {t('ownerEdit')}
-          </a>
+          </button>
         </div>
 
         {/* Right: toggle + share */}
