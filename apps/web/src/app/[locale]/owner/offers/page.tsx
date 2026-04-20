@@ -4,15 +4,12 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import { OffersClient } from './offers-client'
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const isEnglish = locale === 'en'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('ownerOffers')
 
   return {
-    title: isEnglish ? 'Offers | Yalla.House' : 'Angebote | Yalla.House',
-    description: isEnglish
-      ? 'Review and manage offers on your properties.'
-      : 'Angebote f\u00FCr Ihre Immobilien pr\u00FCfen und verwalten.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     robots: { index: false, follow: false },
   }
 }

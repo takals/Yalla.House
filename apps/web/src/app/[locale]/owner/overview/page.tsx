@@ -16,15 +16,12 @@ interface Props {
   searchParams: Promise<{ billing?: string }>
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const isEnglish = locale === 'en'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('ownerDash')
 
   return {
-    title: isEnglish ? 'Owner Dashboard | Yalla.House' : 'Eigentümer-Dashboard | Yalla.House',
-    description: isEnglish
-      ? 'Manage your property sale. Track viewings, offers, and agent proposals.'
-      : 'Verwalten Sie Ihren Immobilienverkauf. Verfolgen Sie Besichtigungen, Angebote und Makler-Vorschläge.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     robots: {
       index: false,
       follow: false,

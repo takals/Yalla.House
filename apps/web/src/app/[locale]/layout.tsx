@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import { getMessages, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { AuthGateProvider } from '@/components/auth-gate-provider'
 import '../globals.css'
@@ -12,11 +12,10 @@ type LocaleParam = (typeof locales)[number]
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const isEnglish = locale === 'en'
+  const t = await getTranslations('meta')
 
-  const baseTitle = isEnglish ? 'Yalla.House — Sell Your Property in Germany. Commission-free.' : 'Yalla.House — Immobilie selbst verkaufen'
-  const baseDescription = isEnglish
-    ? 'Sell your property in Germany without an agent. Free. Commission-free. List on ImmoScout24 and Immowelt.'
-    : 'Verkaufen Sie Ihre Immobilie ohne Makler. Kostenlos. Behalten Sie jede Provision.'
+  const baseTitle = t('siteTitle')
+  const baseDescription = t('siteDescription')
 
   return {
     title: {

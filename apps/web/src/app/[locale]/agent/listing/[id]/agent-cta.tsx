@@ -12,11 +12,9 @@ interface AssignmentInfo {
 
 export function AgentListingCta({
   listingId,
-  locale,
   existingAssignment,
 }: {
   listingId: string
-  locale: string
   existingAssignment: AssignmentInfo | null
 }) {
   const t = useTranslations('agentDashboard')
@@ -27,8 +25,6 @@ export function AgentListingCta({
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  const isDE = locale === 'de'
 
   // Already has an active/accepted assignment
   if (existingAssignment && ['accepted', 'active'].includes(existingAssignment.status)) {
@@ -42,7 +38,7 @@ export function AgentListingCta({
           </div>
           <div>
             <p className="font-bold text-sm text-text-primary">
-              {isDE ? t('workingOnProperty') : 'You\'re working on this property'}
+              {t('workingOnProperty')}
             </p>
             <p className="text-xs text-text-secondary mt-0.5">
               Status: {existingAssignment.status}
@@ -53,7 +49,7 @@ export function AgentListingCta({
           href={`/agent/assignments/${existingAssignment.id}`}
           className="block text-center bg-brand hover:bg-brand-hover text-text-primary font-bold py-2.5 rounded-xl transition-colors text-sm"
         >
-          {isDE ? t('viewAssignment') : 'View Assignment'}
+          {t('viewAssignment')}
         </a>
       </div>
     )
@@ -71,10 +67,10 @@ export function AgentListingCta({
           </div>
           <div>
             <p className="font-bold text-sm text-text-primary">
-              {isDE ? t('proposalSubmitted') : 'Proposal submitted'}
+              {t('proposalSubmitted')}
             </p>
             <p className="text-xs text-text-secondary mt-0.5">
-              {isDE ? t('awaitingOwnerResponse') : 'Awaiting owner response'}
+              {t('awaitingOwnerResponse')}
             </p>
           </div>
         </div>
@@ -94,10 +90,10 @@ export function AgentListingCta({
           </div>
           <div>
             <p className="font-bold text-sm text-text-primary">
-              {isDE ? t('proposalSent') : 'Proposal sent!'}
+              {t('proposalSent')}
             </p>
             <p className="text-xs text-text-secondary mt-0.5">
-              {isDE ? t('ownerReviewingProposal') : 'The owner will review your proposal in their dashboard.'}
+              {t('ownerReviewingProposal')}
             </p>
           </div>
         </div>
@@ -135,17 +131,17 @@ export function AgentListingCta({
       {/* Respond via Yalla card */}
       <div className="bg-surface rounded-2xl p-6 border border-border-default">
         <h2 className="text-lg font-bold text-text-primary mb-1">
-          {isDE ? t('respondViaYalla') : 'Respond via Yalla'}
+          {t('respondViaYalla')}
         </h2>
         <p className="text-xs text-text-secondary mb-4">
-          {isDE ? t('respondViaYallaDesc') : 'The owner compares proposals side by side. Quote your commission and pitch your service.'}
+          {t('respondViaYallaDesc')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {/* Fee type */}
           <div>
             <label className="block text-xs font-semibold text-text-secondary mb-1.5">
-              {isDE ? t('feeTypeLabel') : 'Fee structure'} *
+              {t('feeTypeLabel')} *
             </label>
             <div className="flex gap-2">
               {(['percentage', 'flat', 'none'] as const).map(ft => (
@@ -159,9 +155,9 @@ export function AgentListingCta({
                       : 'bg-bg text-text-secondary border-border-default hover:border-[#D9DCE4]'
                   }`}
                 >
-                  {ft === 'percentage' ? (isDE ? 'Prozent' : 'Percentage')
-                    : ft === 'flat' ? (isDE ? 'Pauschal' : 'Fixed Fee')
-                    : (isDE ? 'Keine' : 'No Fee')}
+                  {ft === 'percentage' ? t('feeTypePercentage')
+                    : ft === 'flat' ? t('feeTypeFlat')
+                    : t('feeTypeNoFee')}
                 </button>
               ))}
             </div>
@@ -173,8 +169,8 @@ export function AgentListingCta({
               <div className="flex-1">
                 <label className="block text-xs font-semibold text-text-secondary mb-1">
                   {feeType === 'percentage'
-                    ? (isDE ? 'Prozentsatz (%)' : 'Rate (%)')
-                    : (isDE ? 'Betrag' : 'Amount')} *
+                    ? t('rateLabel')
+                    : t('amountLabel')} *
                 </label>
                 <input
                   type="number"
@@ -190,7 +186,7 @@ export function AgentListingCta({
               {feeType === 'flat' && (
                 <div className="w-24">
                   <label className="block text-xs font-semibold text-text-secondary mb-1">
-                    {isDE ? 'W\u00E4hrung' : 'Currency'}
+                    {t('currencyLabel')}
                   </label>
                   <select
                     value={feeCurrency}
@@ -208,14 +204,14 @@ export function AgentListingCta({
           {/* Service overview */}
           <div>
             <label className="block text-xs font-semibold text-text-secondary mb-1">
-              {isDE ? t('yourServiceOverview') : 'Your service overview'} *
+              {t('yourServiceOverview')} *
             </label>
             <textarea
               rows={5}
               value={serviceOverview}
               onChange={e => setServiceOverview(e.target.value)}
               required
-              placeholder={isDE ? t('serviceOverviewPlaceholder') : 'Introduce yourself — local experience, portal coverage, marketing plan, timeline…'}
+              placeholder={t('serviceOverviewPlaceholder')}
               className="w-full px-3 py-2 text-sm border border-border-default rounded-xl bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent resize-none"
             />
           </div>
@@ -235,7 +231,7 @@ export function AgentListingCta({
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
             )}
-            {isDE ? t('sendProposal') : 'Send Proposal'}
+            {t('sendProposal')}
           </button>
         </form>
       </div>
@@ -247,17 +243,17 @@ export function AgentListingCta({
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           <h3 className="text-sm font-bold text-text-primary">
-            {isDE ? t('downloadListingData') : 'Download listing data'}
+            {t('downloadListingData')}
           </h3>
         </div>
         <p className="text-xs text-text-secondary mb-3">
-          {isDE ? t('downloadListingDataDesc') : 'CSV file ready to import into your CRM (Reapit, Alto, Jupix, etc.)'}
+          {t('downloadListingDataDesc')}
         </p>
         <a
           href={`/api/agent/listings/${listingId}?format=csv`}
           className="block text-center bg-bg hover:bg-hover-muted text-text-primary font-bold py-2 rounded-xl transition-colors text-sm border border-border-default"
         >
-          {isDE ? t('downloadCSV') : 'Download CSV'}
+          {t('downloadCSV')}
         </a>
       </div>
 
@@ -268,30 +264,30 @@ export function AgentListingCta({
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
           <h3 className="text-sm font-bold text-text-primary">
-            {isDE ? t('connectCRM') : 'Connect your CRM'}
+            {t('connectCRM')}
           </h3>
           <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#166534] uppercase tracking-wider">
-            {isDE ? t('recommended') : 'Recommended'}
+            {t('recommended')}
           </span>
         </div>
 
         {/* Benefit for the agent */}
         <div className="bg-hover-bg rounded-xl p-3 mb-3">
           <p className="text-xs font-semibold text-text-primary mb-1">
-            {isDE ? t('noExtraWork') : 'Zero extra work for you'}
+            {t('noExtraWork')}
           </p>
           <p className="text-xs text-text-secondary">
-            {isDE ? t('autoSync') : 'Every viewing, offer, and status change in your CRM flows automatically to the owner\'s dashboard — no manual reporting needed.'}
+            {t('autoSync')}
           </p>
         </div>
 
         {/* Benefit for getting chosen */}
         <div className="bg-brand-solid-bg rounded-xl p-3 mb-3 border border-brand/20">
           <p className="text-xs font-semibold text-text-primary mb-1">
-            {isDE ? t('standOut') : 'Stand out in the selection'}
+            {t('standOut')}
           </p>
           <p className="text-xs text-text-secondary">
-            {isDE ? t('liveUpdatesBadge') : 'Your proposal gets a "Live Updates" badge. Owners prefer agents who work transparently — it can offset a higher commission.'}
+            {t('liveUpdatesBadge')}
           </p>
         </div>
 
@@ -301,7 +297,7 @@ export function AgentListingCta({
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
           <p className="text-xs text-text-secondary">
-            {isDE ? t('privacyAssurance') : 'We only see status changes for Yalla properties — never your full client book or other listings.'}
+            {t('privacyAssurance')}
           </p>
         </div>
 
@@ -309,7 +305,7 @@ export function AgentListingCta({
           href="/agent/agreement"
           className="block text-center bg-brand hover:bg-brand-hover text-text-primary font-bold py-2.5 rounded-xl transition-colors text-sm"
         >
-          {isDE ? t('connectCRMButton') : 'Connect CRM & enable live updates'}
+          {t('connectCRMButton')}
         </a>
       </div>
     </div>

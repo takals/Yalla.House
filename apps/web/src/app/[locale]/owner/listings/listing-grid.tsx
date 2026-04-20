@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Home, ExternalLink, Archive, Trash2, RotateCcw } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
 import { bulkStatusAction } from '../[id]/actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Listing {
   id: string
@@ -132,7 +133,7 @@ export default function ListingGrid({
     const price = listing.intent === 'sale' ? listing.sale_price : listing.rent_price
     const currency = listing.currency || 'EUR'
     if (!price) return null
-    return new Intl.NumberFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+    return new Intl.NumberFormat(dateLocaleFromLocale(locale), {
       style: 'currency',
       currency,
       maximumFractionDigits: 0,

@@ -158,7 +158,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
               </p>
 
               <p className="text-xs text-text-muted text-center">
-                {locale === 'en' ? t('didNotReceiveEN') : t('didNotReceiveDE')}
+                {t('didNotReceive')}
                 {' '}
                 <button
                   onClick={() => {
@@ -167,7 +167,7 @@ export function AuthGateModal({ open, onClose, locale = 'de' }: AuthGateModalPro
                   }}
                   className="text-brand hover:text-brand-hover font-semibold"
                 >
-                  {locale === 'en' ? t('tryAnotherEmailEN') : t('tryAnotherEmailDE')}
+                  {t('tryAnotherEmail')}
                 </button>
               </p>
             </>

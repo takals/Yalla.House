@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { Check, X, Clock, Banknote, Home, User, Calendar, AlertCircle } from 'lucide-react'
 import { updateOfferStatusAction } from './actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Offer {
   id: string
@@ -113,14 +114,14 @@ function OfferCard({ offer, t, locale }: { offer: Offer; t: T; locale: string })
 
   const isActionable = ['submitted', 'under_review'].includes(localStatus)
   const amount = offer.amount
-    ? new Intl.NumberFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+    ? new Intl.NumberFormat(dateLocaleFromLocale(locale), {
         style: 'currency',
         currency: offer.currency || 'EUR',
         maximumFractionDigits: 0,
       }).format(offer.amount / 100)
     : null
 
-  const dateStr = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+  const dateStr = new Intl.DateTimeFormat(dateLocaleFromLocale(locale), {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -206,7 +207,7 @@ function OfferCard({ offer, t, locale }: { offer: Offer; t: T; locale: string })
             <p className="text-xs font-semibold text-text-secondary mb-1">{tx(t, 'moveInDate')}</p>
             <p className="text-sm text-text-primary flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-text-secondary" />
-              {new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+              {new Intl.DateTimeFormat(dateLocaleFromLocale(locale), {
                 day: '2-digit', month: 'long', year: 'numeric',
               }).format(new Date(offer.move_in_date))}
             </p>

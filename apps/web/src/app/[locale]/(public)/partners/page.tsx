@@ -8,19 +8,17 @@ import {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
-  const isEnglish = locale === 'en'
+  const t = await getTranslations({ locale, namespace: 'partners' })
 
   return {
-    title: isEnglish ? 'Partner with Yalla.House' : 'Partner werden | Yalla.House',
-    description: isEnglish
-      ? 'Join the Yalla.House partner network. Estate agents, photographers, conveyancers, and service providers — grow your business with qualified leads.'
-      : 'Werden Sie Teil des Yalla.House Partner-Netzwerks. Makler, Fotografen, Notare und Dienstleister — wachsen Sie mit qualifizierten Leads.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
   }
 }
 
 export default async function PartnersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const isEN = locale === 'en'
+  const t = await getTranslations({ locale, namespace: 'partners' })
 
   return (
     <main className="bg-page-dark min-h-screen">
@@ -40,30 +38,24 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand/10 rounded-full mb-8">
             <Handshake size={16} className="text-brand" />
             <span className="text-xs font-bold text-brand uppercase tracking-wider">
-              {isEN ? 'Partner Programme' : 'Partner-Programm'}
+              {t('badge')}
             </span>
           </div>
           <h1 className="fade-up text-display text-white">
-            {isEN ? (
-              <>Grow your business with{' '}<span className="text-brand">Yalla.House</span></>
-            ) : (
-              <>Wachsen Sie mit{' '}<span className="text-brand">Yalla.House</span></>
-            )}
+            {t('heroTitle')}{' '}<span className="text-brand">Yalla.House</span>
           </h1>
           <p className="fade-up-d1 mt-6 text-lede text-text-on-dark-secondary max-w-2xl mx-auto">
-            {isEN
-              ? 'Join a network of 17,000+ verified agents and service providers. Get matched with serious clients in your area — no cold calling required.'
-              : 'Treten Sie einem Netzwerk von über 17.000 verifizierten Maklern und Dienstleistern bei. Werden Sie mit ernsthaften Klienten in Ihrer Region verbunden.'}
+            {t('heroSubtitle')}
           </p>
           <div className="fade-up-d2 mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/login?next=/agent">
               <button className="px-8 py-4 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all duration-300">
-                {isEN ? 'Join as an Agent' : 'Als Makler beitreten'}
+                {t('joinAsAgent')}
               </button>
             </Link>
             <Link href="/auth/login?next=/partner">
               <button className="px-8 py-4 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300">
-                {isEN ? 'Join as a Service Provider' : 'Als Dienstleister beitreten'}
+                {t('joinAsProvider')}
               </button>
             </Link>
           </div>
@@ -74,10 +66,10 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
       <section className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand mb-6 text-center">
-            {isEN ? 'Who can partner with us' : 'Wer kann Partner werden'}
+            {t('whoCanPartner')}
           </p>
           <h2 className="text-title-1 text-white leading-tight text-center mb-16">
-            {isEN ? 'Four partner tracks. One platform.' : 'Vier Partner-Wege. Eine Plattform.'}
+            {t('fourTracks')}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -89,25 +81,23 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white mb-2">
-                    {isEN ? 'Estate Agents' : 'Immobilienmakler'}
+                    {t('estateAgents')}
                   </h3>
                   <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-4">
-                    {isEN
-                      ? 'Receive search briefs from matched home hunters. Compete on quality and service, not on who shouts the loudest. Get live CRM updates when clients are connected.'
-                      : 'Erhalten Sie Suchanfragen von passenden Suchenden. Konkurrieren Sie mit Qualität und Service. Erhalten Sie Live-CRM-Updates.'}
+                    {t('estateAgentsDesc')}
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Qualified leads matched to your area' : 'Qualifizierte Leads in Ihrem Gebiet'}
+                      {t('estateAgentsBullet1')}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Agent profile with verified badge' : 'Makler-Profil mit Verifizierungsbadge'}
+                      {t('estateAgentsBullet2')}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Free to join — pay nothing until you close' : 'Kostenloser Beitritt — zahlen Sie erst beim Abschluss'}
+                      {t('estateAgentsBullet3')}
                     </li>
                   </ul>
                 </div>
@@ -122,21 +112,19 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white mb-2">
-                    {isEN ? 'Photographers & Videographers' : 'Fotografen & Videografen'}
+                    {t('photographers')}
                   </h3>
                   <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-4">
-                    {isEN
-                      ? 'Owners need professional photos and virtual tours. Get booked directly through the platform for property shoots in your area.'
-                      : 'Eigentümer brauchen professionelle Fotos und virtuelle Touren. Werden Sie direkt über die Plattform für Immobilien-Shoots gebucht.'}
+                    {t('photographersDesc')}
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Direct bookings from property owners' : 'Direktbuchungen von Eigentümern'}
+                      {t('photographersBullet1')}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Set your own rates and availability' : 'Eigene Preise und Verfügbarkeit festlegen'}
+                      {t('photographersBullet2')}
                     </li>
                   </ul>
                 </div>
@@ -151,21 +139,19 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white mb-2">
-                    {isEN ? 'Solicitors & Conveyancers' : 'Anwälte & Notare'}
+                    {t('solicitors')}
                   </h3>
                   <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-4">
-                    {isEN
-                      ? 'Sellers and buyers need legal support. Get connected to clients at the right stage of their property journey — when they actually need you.'
-                      : 'Verkäufer und Käufer brauchen rechtliche Unterstützung. Werden Sie zum richtigen Zeitpunkt mit Klienten verbunden.'}
+                    {t('solicitorsDesc')}
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Warm referrals at point of sale' : 'Qualifizierte Empfehlungen beim Verkauf'}
+                      {t('solicitorsBullet1')}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Profile visibility to all platform users' : 'Profil-Sichtbarkeit für alle Nutzer'}
+                      {t('solicitorsBullet2')}
                     </li>
                   </ul>
                 </div>
@@ -180,21 +166,19 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white mb-2">
-                    {isEN ? 'Referral Partners' : 'Empfehlungspartner'}
+                    {t('referralPartners')}
                   </h3>
                   <p className="text-sm text-text-on-dark-secondary leading-relaxed mb-4">
-                    {isEN
-                      ? 'Know someone selling or buying? Refer them to Yalla.House and earn a referral fee when they list or transact through the platform.'
-                      : 'Kennen Sie jemanden, der verkauft oder kauft? Empfehlen Sie Yalla.House und verdienen Sie eine Empfehlungsprämie.'}
+                    {t('referralPartnersDesc')}
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Earn per successful referral' : 'Verdienen Sie pro erfolgreicher Empfehlung'}
+                      {t('referralPartnersBullet1')}
                     </li>
                     <li className="flex items-center gap-2 text-sm text-text-on-dark-secondary">
                       <Check size={14} className="text-[#34C759] flex-shrink-0" />
-                      {isEN ? 'Track referrals from your dashboard' : 'Empfehlungen über Ihr Dashboard verfolgen'}
+                      {t('referralPartnersBullet2')}
                     </li>
                   </ul>
                 </div>
@@ -208,34 +192,28 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand mb-6 text-center">
-            {isEN ? 'How it works for agents' : 'So funktioniert es für Makler'}
+            {t('howItWorksEyebrow')}
           </p>
           <h2 className="text-title-1 text-white leading-tight text-center mb-16">
-            {isEN ? 'From sign-up to first client.' : 'Von der Anmeldung zum ersten Klienten.'}
+            {t('howItWorksTitle')}
           </h2>
 
           <div className="space-y-8">
             {[
               {
                 num: '1',
-                title: isEN ? 'Create your agent profile' : 'Erstellen Sie Ihr Makler-Profil',
-                desc: isEN
-                  ? 'Set your coverage areas, specialisms, and service tiers. We verify your details against professional registries.'
-                  : 'Legen Sie Ihre Gebiete, Spezialisierungen und Service-Level fest. Wir verifizieren Ihre Daten.',
+                title: t('step1Title'),
+                desc: t('step1Desc'),
               },
               {
                 num: '2',
-                title: isEN ? 'Get matched with search briefs' : 'Werden Sie mit Suchanfragen verbunden',
-                desc: isEN
-                  ? 'When a home hunter saves a search in your area, you\'ll see their brief — budget, property type, timeline, preferences. No guessing.'
-                  : 'Wenn ein Suchender in Ihrem Gebiet eine Suche speichert, sehen Sie die Anfrage — Budget, Immobilientyp, Zeitplan, Präferenzen.',
+                title: t('step2Title'),
+                desc: t('step2Desc'),
               },
               {
                 num: '3',
-                title: isEN ? 'Reply and connect' : 'Antworten und verbinden',
-                desc: isEN
-                  ? 'Send a proposal with relevant properties or your service pitch. The hunter reviews all proposals and picks the best fit. You compete on quality.'
-                  : 'Senden Sie einen Vorschlag mit relevanten Immobilien. Der Suchende prüft alle Vorschläge und wählt den besten. Sie konkurrieren mit Qualität.',
+                title: t('step3Title'),
+                desc: t('step3Desc'),
               },
             ].map((step) => (
               <div key={step.num} className="flex gap-6 items-start">
@@ -260,19 +238,19 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
               <div className="text-center">
                 <div className="text-3xl font-extrabold text-brand mb-2">17,000+</div>
                 <p className="text-sm text-text-on-dark-secondary">
-                  {isEN ? 'Agents already on the platform' : 'Makler bereits auf der Plattform'}
+                  {t('statAgents')}
                 </p>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-extrabold text-brand mb-2">100+</div>
                 <p className="text-sm text-text-on-dark-secondary">
-                  {isEN ? 'UK postcode areas covered' : 'PLZ-Gebiete abgedeckt'}
+                  {t('statAreas')}
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-extrabold text-brand mb-2">£0</div>
+                <div className="text-3xl font-extrabold text-brand mb-2">{'\u00a3'}0</div>
                 <p className="text-sm text-text-on-dark-secondary">
-                  {isEN ? 'To join — free forever for agents' : 'Kostenlos beitreten — für immer kostenlos'}
+                  {t('statCost')}
                 </p>
               </div>
             </div>
@@ -287,16 +265,14 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="text-title-1 text-white leading-tight mb-6">
-            {isEN ? 'Ready to grow your business?' : 'Bereit, Ihr Geschäft zu vergrößern?'}
+            {t('ctaTitle')}
           </h2>
           <p className="text-lede text-white/50 mb-10 max-w-xl mx-auto">
-            {isEN
-              ? 'Join Yalla.House and start receiving qualified leads in your area. Free to join, no contracts, no lock-ins.'
-              : 'Treten Sie Yalla.House bei und erhalten Sie qualifizierte Leads in Ihrer Region. Kostenlos, keine Verträge, keine Bindung.'}
+            {t('ctaBody')}
           </p>
           <Link href="/auth/login?next=/agent">
             <button className="px-10 py-4 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all duration-300 text-lg">
-              {isEN ? 'Get started free' : 'Kostenlos starten'}
+              {t('ctaButton')}
             </button>
           </Link>
         </div>

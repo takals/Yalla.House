@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { Calendar, MapPin, MessageSquare, AlertCircle, Video, ExternalLink } from 'lucide-react'
 import { cancelViewingAction } from '../actions'
+import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Viewing {
   id: string
@@ -155,7 +156,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
   const isInPerson = viewing.type === 'in_person' || (!viewing.type)
   const callActive = isVideoCallActive(viewing.scheduled_at)
 
-  const dateFormatter = new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+  const dateFormatter = new Intl.DateTimeFormat(dateLocaleFromLocale(locale), {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -163,7 +164,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
 
   const requestDate = dateFormatter.format(new Date(viewing.created_at))
   const scheduledDate = viewing.scheduled_at
-    ? new Intl.DateTimeFormat(locale === 'en' ? 'en-GB' : 'de-DE', {
+    ? new Intl.DateTimeFormat(dateLocaleFromLocale(locale), {
         weekday: 'short',
         day: '2-digit',
         month: 'short',

@@ -141,7 +141,7 @@ export default async function AgentListingPage({ params }: Props) {
               {listing.intent !== 'sale' && listing.rent_price ? (
                 <p className="text-2xl font-extrabold">
                   {formatPrice(listing.rent_price)}{' '}
-                  <span className="text-sm font-normal text-text-secondary">/ {locale === 'de' ? 'Monat' : 'month'}</span>
+                  <span className="text-sm font-normal text-text-secondary">/ {t('perMonth')}</span>
                 </p>
               ) : null}
             </div>
@@ -208,7 +208,6 @@ export default async function AgentListingPage({ params }: Props) {
           <div className="sticky top-6">
             <AgentListingCta
               listingId={listing.id}
-              locale={locale}
               existingAssignment={existingAssignment ? {
                 id: existingAssignment.id,
                 status: existingAssignment.status,

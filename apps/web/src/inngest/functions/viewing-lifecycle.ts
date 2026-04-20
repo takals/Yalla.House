@@ -1,5 +1,6 @@
 import { inngest } from '@/lib/inngest/client'
 import { createServiceClient } from '@/lib/supabase/server'
+import { countryFromLocale } from '@/lib/detect-country'
 import {
   sendViewingConfirmedEmail,
   sendViewingReminderEmail,
@@ -77,8 +78,9 @@ export const viewingConfirmed = inngest.createFunction(
       const hunter = await getUserContact(hunterId)
       if (!hunter) return
 
-      const locale = hunter.language === 'de-DE' ? 'de-DE' : 'en-GB'
-      const countryCode = locale === 'de-DE' ? 'DE' : 'GB'
+      const shortLocale = hunter.language?.startsWith('de') ? 'de' : 'en'
+      const locale = shortLocale === 'de' ? 'de-DE' : 'en-GB'
+      const countryCode = countryFromLocale(shortLocale)
 
       // Email
       try {
@@ -225,8 +227,9 @@ export const viewing24hReminder = inngest.createFunction(
       const hunter = await getUserContact(hunterId)
       if (!hunter) return
 
-      const locale = hunter.language === 'de-DE' ? 'de-DE' : 'en-GB'
-      const countryCode = locale === 'de-DE' ? 'DE' : 'GB'
+      const shortLocale = hunter.language?.startsWith('de') ? 'de' : 'en'
+      const locale = shortLocale === 'de' ? 'de-DE' : 'en-GB'
+      const countryCode = countryFromLocale(shortLocale)
 
       // Email
       try {

@@ -24,15 +24,12 @@ const VIEWING_STYLES: Record<string, string> = {
   no_show: 'bg-red-50 text-red-600',
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const isEnglish = locale === 'en'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('admin')
 
   return {
-    title: isEnglish ? 'Admin Dashboard | Yalla.House' : 'Admin-Dashboard | Yalla.House',
-    description: isEnglish
-      ? 'Manage the Yalla platform and monitor system activity.'
-      : 'Verwalten Sie die Yalla-Plattform und überwachen Sie das System.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     robots: {
       index: false,
       follow: false,

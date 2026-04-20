@@ -149,7 +149,7 @@ export default async function ListingsPage({ params, searchParams }: Props) {
               type="text"
               name="city"
               defaultValue={city ?? ''}
-              placeholder={locale === 'de' ? 'z.B. Berlin' : 'e.g. Berlin'}
+              placeholder={t('cityPlaceholder')}
               className="px-3 py-2 text-sm border border-[#E2E4EB] rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
             />
           </div>

@@ -5,31 +5,23 @@ import { Home, Search, Handshake } from 'lucide-react'
 import HomepageHero from '@/components/homepage-hero'
 import { createClient } from '@/lib/supabase/server'
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const isEnglish = locale === 'en'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('hero')
 
   return {
-    title: isEnglish ? 'Property Technology Platform | Yalla.House' : 'Immobilien-Technologie-Plattform | Yalla.House',
-    description: isEnglish
-      ? 'Yalla.House is a property technology platform — not an estate agency. Free dashboards for owners, home hunters, and agents. Sell your way, find your home, grow your business.'
-      : 'Yalla.House ist eine Immobilien-Technologie-Plattform. Kostenlose Dashboards f\u00fcr Eigent\u00fcmer, Suchende und Makler.',
-    keywords: isEnglish
-      ? ['property platform', 'property technology', 'sell home', 'find home', 'estate agent', 'SaaS', 'commission-free']
-      : ['Immobilien-Plattform', 'PropTech', 'Immobilie verkaufen', 'provisionsfrei', 'Makler-Alternative'],
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    keywords: t('metaKeywords').split(','),
     openGraph: {
       type: 'website',
-      title: isEnglish ? 'Property Technology Platform | Yalla.House' : 'Immobilien-Technologie-Plattform | Yalla.House',
-      description: isEnglish
-        ? 'Yalla.House is a property technology platform. Free dashboards for owners, home hunters, and agents.'
-        : 'Yalla.House ist eine Immobilien-Technologie-Plattform. Kostenlose Dashboards f\u00fcr alle.',
-      url: isEnglish ? 'https://yalla.house/en' : 'https://yalla.house',
+      title: t('metaTitle'),
+      description: t('metaDescription'),
       images: [
         {
           url: '/og-image.png',
           width: 1200,
           height: 630,
-          alt: 'Yalla.House - Commission-Free Property Selling',
+          alt: 'Yalla.House',
         },
       ],
     },

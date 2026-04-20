@@ -24,16 +24,12 @@ interface RawAssignment {
   } | null
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agentDashboard')
-  const isEnglish = locale === 'en'
 
   return {
-    title: isEnglish ? 'Agent Dashboard | Yalla.House' : 'Makler-Dashboard | Yalla.House',
-    description: isEnglish
-      ? 'Manage your listings, viewings, and communication with owners.'
-      : t('pageDescription'),
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     robots: {
       index: false,
       follow: false,

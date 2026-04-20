@@ -4,15 +4,12 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import { HunterViewingsList } from './viewings-list'
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const isEnglish = locale === 'en'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('hunterViewings')
 
   return {
-    title: isEnglish ? 'Viewings | Yalla.House' : 'Besichtigungen | Yalla.House',
-    description: isEnglish
-      ? 'Track your property viewing requests and confirmed appointments.'
-      : 'Verfolge deine Besichtigungsanfragen und best\u00E4tigten Termine.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     robots: { index: false, follow: false },
   }
 }

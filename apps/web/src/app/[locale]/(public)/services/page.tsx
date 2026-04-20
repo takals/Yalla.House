@@ -8,22 +8,16 @@ import {
 } from 'lucide-react'
 import { PricingTables } from './pricing-tables'
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const isEnglish = locale === 'en'
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('services')
 
   return {
-    title: isEnglish ? 'Services & Pricing | Yalla.House' : 'Dienstleistungen & Preise | Yalla.House',
-    description: isEnglish
-      ? 'Solutions for owners, home hunters, and agents. Free dashboards and comprehensive marketing tools.'
-      : 'Lösungen für Eigentümer, Suchende und Makler. Kostenlose Dashboards und umfangreiche Marketingtools.',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     openGraph: {
       type: 'website',
-      title: isEnglish ? 'Services & Pricing | Yalla.House' : 'Dienstleistungen & Preise | Yalla.House',
-      description: isEnglish
-        ? 'Solutions for owners, home hunters, and agents. Free dashboards and comprehensive marketing tools.'
-        : 'Lösungen für Eigentümer, Suchende und Makler. Kostenlose Dashboards und umfangreiche Marketingtools.',
-      url: isEnglish ? 'https://yalla.house/en/services' : 'https://yalla.house/services',
+      title: t('metaTitle'),
+      description: t('metaDescription'),
       images: [
         {
           url: '/og-image.png',

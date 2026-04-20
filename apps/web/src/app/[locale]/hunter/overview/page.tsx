@@ -20,16 +20,12 @@ interface ViewingWithListing {
   } | null
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('hunterDashboard')
-  const isEnglish = locale === 'en'
 
   return {
-    title: isEnglish ? 'Home Hunter Dashboard | Yalla.House' : 'Suchenden-Dashboard | Yalla.House',
-    description: isEnglish
-      ? 'Find your next home. Browse available properties and view new listings.'
-      : t('pageDescription'),
+    title: t('metaTitle'),
+    description: t('metaDescription'),
     robots: {
       index: false,
       follow: false,
