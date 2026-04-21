@@ -20,6 +20,7 @@ import { ListingCtaBox } from './listing-cta-box'
 import { KeyFactsGrid } from './key-facts-grid'
 import { ListingActionsBar } from './listing-actions-bar'
 import { DocumentUploadSection } from './document-upload-section'
+import { HeroEditButton } from './hero-edit-button'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -170,9 +171,11 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     ? new Intl.NumberFormat(localeFmt, { style: 'currency', currency: listing.currency, maximumFractionDigits: 0 }).format(listing.rent_price / 100)
     : null
 
-  // Determine if listing is essentially empty (show example placeholder)
-  const hasContent = !!(title || desc || photos.length > 0 || listing.sale_price || listing.rent_price)
-  const showExample = isOwner && !hasContent
+  // Per-section empty checks — each section independently shows greyed-out placeholders
+  const hasPhotos = photos.length > 0
+  const hasDescription = !!desc
+  const hasPrice = !!(listing.sale_price || listing.rent_price)
+  const hasKeyFacts = !!(listing.property_type || listing.bedrooms || listing.bathrooms || listing.size_sqm)
 
   // Build translation record for client components
   const ctaTranslations: Record<string, string> = {
@@ -268,8 +271,8 @@ export default async function PropertyPage({ params, searchParams }: Props) {
       )}
 
       {/* ═══ HERO: Full-width photo with gradient overlay ═══ */}
-      <div className={`relative w-full h-[55vh] min-h-[380px] ${showExample ? 'grayscale opacity-60' : ''} bg-gray-900`}>
-        {primaryPhoto ? (
+      <div className={`relative w-full h-[55vh] min-h-[380px] bg-gray-900`}>
+        {hasPhotos ? (
           <HeroPhoto
             photos={photos.map(p => ({
               id: p.id,
@@ -278,7 +281,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               caption_de: p.caption_de,
               caption: p.caption,
             }))}
-            primaryUrl={primaryPhoto.url}
+            primaryUrl={primaryPhoto!.url}
             alt={title ?? 'Property photo'}
             photoCount={photos.length}
             translations={{
@@ -288,8 +291,15 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-            <Home size={64} className="text-gray-600" />
+          /* Greyed-out placeholder hero — shows example property grid */
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 grayscale opacity-60">
+            <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-1 p-1">
+              <div className="col-span-2 row-span-2 bg-gray-400 rounded-lg flex items-center justify-center">
+                <Home size={64} className="text-gray-500/60" />
+              </div>
+              <div className="bg-gray-350 rounded-lg" style={{ backgroundColor: '#C0C0C0' }} />
+              <div className="bg-gray-350 rounded-lg" style={{ backgroundColor: '#B0B0B0' }} />
+            </div>
           </div>
         )}
         {/* Gradient overlay */}
@@ -300,8 +310,13 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           <ListingStatusBadge status={listing.status} />
         </div>
 
-        {/* Example badge for empty listings */}
-        {showExample && (
+        {/* Owner: Edit Photos button on hero */}
+        {isOwner && (
+          <HeroEditButton hasPhotos={hasPhotos} translations={{ heroUploadPhotos: t('heroUploadPhotos'), heroChangePhotos: t('heroChangePhotos') }} listingId={listing.id} photoCount={photos.length} />
+        )}
+
+        {/* Example badge when owner has no photos */}
+        {isOwner && !hasPhotos && (
           <div className="absolute top-4 right-4 z-10">
             <span className="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full">
               <Eye size={12} />
@@ -314,11 +329,11 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 pointer-events-none z-10">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">
-              {showExample ? t('exampleTitle') : (title ?? t('titleFallback'))}
+              {title ?? t('titleFallback')}
             </h1>
             <div className="flex items-center gap-2 text-white/70 text-sm md:text-base">
               <MapPin size={14} className="flex-shrink-0" />
-              <span>{showExample ? t('exampleLocation') : `${listing.postcode} ${listing.city}`}</span>
+              <span>{`${listing.postcode} ${listing.city}`}</span>
             </div>
           </div>
         </div>
@@ -329,22 +344,18 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
           {/* Left: Price */}
           <div className="flex items-baseline gap-3 flex-wrap">
-            {showExample ? (
-              <span className="text-2xl font-extrabold text-text-primary opacity-50">{t('examplePrice')}</span>
-            ) : (
-              <>
-                {formattedSalePrice && (
-                  <span className="text-2xl font-extrabold text-text-primary">{formattedSalePrice}</span>
-                )}
-                {formattedRentPrice && (
-                  <span className="text-2xl font-extrabold text-text-primary">
-                    {formattedRentPrice} <span className="text-sm font-medium text-text-secondary">/ {t('perMonth')}</span>
-                  </span>
-                )}
-                {!formattedSalePrice && !formattedRentPrice && (
-                  <span className="text-lg font-bold text-text-secondary">{t('titleFallback')}</span>
-                )}
-              </>
+            {formattedSalePrice && (
+              <span className="text-2xl font-extrabold text-text-primary">{formattedSalePrice}</span>
+            )}
+            {formattedRentPrice && (
+              <span className="text-2xl font-extrabold text-text-primary">
+                {formattedRentPrice} <span className="text-sm font-medium text-text-secondary">/ {t('perMonth')}</span>
+              </span>
+            )}
+            {!formattedSalePrice && !formattedRentPrice && (
+              <span className={`text-2xl font-extrabold ${isOwner ? 'text-text-muted' : 'text-text-secondary'}`}>
+                {isOwner ? t('examplePrice') : t('titleFallback')}
+              </span>
             )}
           </div>
 
@@ -372,7 +383,29 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 <Home size={18} className="text-brand" />
                 {t('sectionKeyFacts')}
               </h2>
-              <KeyFactsGrid listing={listing} translations={factTranslations} />
+              {hasKeyFacts ? (
+                <KeyFactsGrid listing={listing} translations={factTranslations} />
+              ) : (
+                /* Greyed-out placeholder key facts grid */
+                <div className="bg-surface rounded-xl border border-border-default p-6 opacity-40">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {[t('factPropertyType'), t('factBedrooms'), t('factBathrooms'), t('factLivingSpace'), t('factFloor'), t('factBuiltYear')].map((label) => (
+                      <div key={label} className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0">
+                          <Building size={16} className="text-gray-400" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-text-muted">{label}</p>
+                          <div className="h-4 w-16 bg-gray-200 rounded mt-1" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {isOwner && (
+                    <p className="text-xs text-brand mt-4 text-center font-medium">{t('placeholderEditHint')}</p>
+                  )}
+                </div>
+              )}
             </section>
 
             {/* §2 DESCRIPTION */}
@@ -392,20 +425,30 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                     currency={listing.currency ?? 'GBP'}
                     photoCount={photos.length}
                   />
-                </div>
-              ) : showExample ? (
-                <div className="bg-surface rounded-xl border border-border-default p-6 opacity-50">
-                  <p className="text-text-secondary leading-relaxed">{t('exampleDescription')}</p>
+                  {!hasDescription && (
+                    <p className="text-xs text-brand mt-3 font-medium">{t('placeholderAddDescription')}</p>
+                  )}
                 </div>
               ) : desc ? (
                 <div className="bg-surface rounded-xl border border-border-default p-6">
                   <p className="text-text-secondary leading-relaxed whitespace-pre-line">{desc}</p>
                 </div>
-              ) : null}
+              ) : (
+                /* Greyed-out placeholder description for non-owners */
+                <div className="bg-surface rounded-xl border border-border-default p-6 opacity-40">
+                  <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-full" />
+                    <div className="h-4 bg-gray-200 rounded w-5/6" />
+                    <div className="h-4 bg-gray-200 rounded w-4/6" />
+                    <div className="h-4 bg-gray-200 rounded w-full" />
+                    <div className="h-4 bg-gray-200 rounded w-3/6" />
+                  </div>
+                </div>
+              )}
             </section>
 
             {/* §3 PHOTO GALLERY */}
-            {photos.length > 1 && (
+            {photos.length > 1 ? (
               <section>
                 <PhotoGallery
                   photos={photos.map(p => ({
@@ -423,6 +466,24 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                     closeGallery: t('closeGallery'),
                   }}
                 />
+              </section>
+            ) : (
+              /* Greyed-out photo gallery placeholders */
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <Home size={18} className="text-brand" />
+                  {t('sectionPhotos')}
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 opacity-40">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="aspect-[4/3] bg-gray-200 rounded-xl flex items-center justify-center">
+                      <Home size={24} className="text-gray-400" />
+                    </div>
+                  ))}
+                </div>
+                {isOwner && (
+                  <p className="text-xs text-brand mt-3 text-center font-medium">{t('placeholderUploadPhotos')}</p>
+                )}
               </section>
             )}
 
