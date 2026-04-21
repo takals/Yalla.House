@@ -291,19 +291,19 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             }}
           />
         ) : (
-          /* Greyed-out placeholder hero — shows example property grid */
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 grayscale opacity-60">
-            <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-1 p-1">
-              <div className="col-span-2 row-span-2 bg-gray-400 rounded-lg flex items-center justify-center">
-                <Home size={64} className="text-gray-500/60" />
+          /* Greyed-out placeholder hero — shows example property photo grid layout */
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-800">
+            <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-1.5 p-2">
+              <div className="col-span-2 row-span-2 bg-gray-600 rounded-lg flex items-center justify-center">
+                <Home size={64} className="text-gray-500/50" />
               </div>
-              <div className="bg-gray-350 rounded-lg" style={{ backgroundColor: '#C0C0C0' }} />
-              <div className="bg-gray-350 rounded-lg" style={{ backgroundColor: '#B0B0B0' }} />
+              <div className="bg-gray-600 rounded-lg" />
+              <div className="bg-gray-650 rounded-lg" style={{ backgroundColor: '#4B5563' }} />
             </div>
           </div>
         )}
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+        {/* Gradient overlay — heavier when real photos, lighter for placeholder */}
+        <div className={`absolute inset-0 pointer-events-none ${hasPhotos ? 'bg-gradient-to-t from-black/80 via-black/30 to-transparent' : 'bg-gradient-to-t from-black/60 via-transparent to-transparent'}`} />
 
         {/* Status badge */}
         <div className="absolute top-4 left-4 z-10">
