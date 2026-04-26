@@ -7,7 +7,7 @@ import { uploadDocumentAction } from './actions'
 
 interface Props {
   listingId: string
-  type: 'floor_plan' | 'epc'
+  type: 'floorplan' | 'energy_cert'
   existingUrl: string | null
   translations: Record<string, string>
 }
@@ -22,9 +22,9 @@ export function DocumentUploadSection({ listingId, type, existingUrl, translatio
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(existingUrl)
   const [error, setError] = useState<string | null>(null)
 
-  const Icon = type === 'floor_plan' ? FileText : Zap
-  const emptyLabel = type === 'floor_plan' ? tr(t, 'noFloorPlan') : tr(t, 'noEpc')
-  const uploadLabel = type === 'floor_plan' ? tr(t, 'uploadFloorPlan') : tr(t, 'uploadEpc')
+  const Icon = type === 'floorplan' ? FileText : Zap
+  const emptyLabel = type === 'floorplan' ? tr(t, 'noFloorPlan') : tr(t, 'noEpc')
+  const uploadLabel = type === 'floorplan' ? tr(t, 'uploadFloorPlan') : tr(t, 'uploadEpc')
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -37,7 +37,7 @@ export function DocumentUploadSection({ listingId, type, existingUrl, translatio
     if (!file) return
 
     if (file.size > 10 * 1024 * 1024) {
-      setError('File too large (max 10 MB)')
+      setError(tr(t, 'fileTooLarge'))
       return
     }
 
@@ -86,7 +86,7 @@ export function DocumentUploadSection({ listingId, type, existingUrl, translatio
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-text-primary">
-                {type === 'floor_plan' ? tr(t, 'sectionFloorPlan') : tr(t, 'sectionEpc')}
+                {type === 'floorplan' ? tr(t, 'sectionFloorPlan') : tr(t, 'sectionEpc')}
               </p>
               <a
                 href={uploadedUrl}
@@ -94,14 +94,14 @@ export function DocumentUploadSection({ listingId, type, existingUrl, translatio
                 rel="noopener noreferrer"
                 className="text-xs text-brand hover:text-brand-hover transition-colors"
               >
-                View document
+                {tr(t, 'viewDocument')}
               </a>
             </div>
             <button
               onClick={() => fileInputRef.current?.click()}
               className="text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors"
             >
-              Replace
+              {tr(t, 'replace')}
             </button>
           </div>
         )}
@@ -128,7 +128,7 @@ export function DocumentUploadSection({ listingId, type, existingUrl, translatio
         <Icon size={32} className="mx-auto mb-3 text-text-secondary" />
       )}
       <p className="text-sm text-text-secondary mb-4">
-        {uploading ? 'Uploading...' : emptyLabel}
+        {uploading ? tr(t, 'uploading') : emptyLabel}
       </p>
       {!uploading && (
         <span className="inline-flex items-center gap-2 px-4 py-2 bg-bg hover:bg-hover-muted text-text-primary text-sm font-semibold rounded-lg border border-border-default transition-colors">

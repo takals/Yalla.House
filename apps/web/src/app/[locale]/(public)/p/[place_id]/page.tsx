@@ -158,8 +158,8 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 
   // Extract floor plan and EPC documents
   const allMedia = (listing.listing_media as Array<{ id: string; url: string; type: string }> | null) ?? []
-  const floorPlanMedia = allMedia.find(m => m.type === 'floor_plan')
-  const epcMedia = allMedia.find(m => m.type === 'epc')
+  const floorPlanMedia = allMedia.find(m => m.type === 'floorplan')
+  const epcMedia = allMedia.find(m => m.type === 'energy_cert')
 
   const localeFmt = dateLocaleFromLocale(locale)
 
@@ -195,6 +195,10 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     uploadEpc: t('uploadEpc'),
     sectionFloorPlan: t('sectionFloorPlan'),
     sectionEpc: t('sectionEpc'),
+    fileTooLarge: t('fileTooLarge'),
+    uploading: t('uploading'),
+    viewDocument: t('viewDocument'),
+    replace: t('replace'),
   }
 
   const factTranslations: Record<string, string> = {
@@ -459,11 +463,16 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                     caption: p.caption,
                   }))}
                   title={title}
+                  isOwner={isOwner}
+                  listingId={listing.id}
+                  heroPhotoId={primaryPhoto?.id ?? null}
                   translations={{
                     photosTitle: t('sectionPhotos'),
                     viewAllPhotos: t('viewAllPhotos'),
                     photoOf: t('photoOf'),
                     closeGallery: t('closeGallery'),
+                    setAsHero: t('setAsHero'),
+                    currentHero: t('currentHero'),
                   }}
                 />
               </section>
@@ -520,7 +529,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 {isOwner ? (
                   <DocumentUploadSection
                     listingId={listing.id}
-                    type="floor_plan"
+                    type="floorplan"
                     existingUrl={floorPlanMedia?.url ?? null}
                     translations={ctaTranslations}
                   />
@@ -542,7 +551,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 {isOwner ? (
                   <DocumentUploadSection
                     listingId={listing.id}
-                    type="epc"
+                    type="energy_cert"
                     existingUrl={epcMedia?.url ?? null}
                     translations={ctaTranslations}
                   />

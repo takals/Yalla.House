@@ -105,7 +105,7 @@ export async function uploadPhotoAction(
 export async function uploadDocumentAction(
   listingId: string,
   url: string,
-  type: 'floor_plan' | 'epc'
+  type: 'floorplan' | 'energy_cert'
 ): Promise<{ success: true; id: string } | { error: string } | { authRequired: true }> {
   const auth = await requireAuth()
   if (!auth.authenticated) return { authRequired: true }
@@ -133,6 +133,49 @@ export async function uploadDocumentAction(
   }
 
   return { success: true, id: data.id }
+}
+
+// ── Set hero photo (owner picks which photo is the header) ──────────────────
+
+export async function setHeroPhotoAction(
+  listingId: string,
+  mediaId: string
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) return { authRequired: true }
+
+  const supabase = await createClient()
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('owner_id')
+    .eq('id', listingId)
+    .single()
+
+  if (!listing || listing.owner_id !== auth.userId) return { error: 'Not authorized' }
+
+  // Clear all primary flags for this listing's photos
+  const { error: clearError } = await (supabase.from('listing_media') as any)
+    .update({ is_primary: false })
+    .eq('listing_id', listingId)
+    .eq('type', 'photo')
+
+  if (clearError) {
+    console.error('setHeroPhotoAction clear error:', clearError)
+    return { error: 'Failed to update hero photo' }
+  }
+
+  // Set the selected photo as primary
+  const { error: setError } = await (supabase.from('listing_media') as any)
+    .update({ is_primary: true })
+    .eq('id', mediaId)
+    .eq('listing_id', listingId)
+
+  if (setError) {
+    console.error('setHeroPhotoAction set error:', setError)
+    return { error: 'Failed to update hero photo' }
+  }
+
+  return { success: true }
 }
 
 export async function checkAuthAction(): Promise<{
