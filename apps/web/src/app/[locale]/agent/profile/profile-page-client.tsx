@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ProfileForm } from './profile-form'
 import { AgentProfileIntake } from '@/components/intake/agent-profile-intake'
 
@@ -19,6 +20,7 @@ export function AgentProfilePageClient({
   pageTitle,
   pageDescription,
 }: AgentProfilePageClientProps) {
+  const t = useTranslations('agentDashboard')
   const [mode, setMode] = useState<'classic' | 'chat'>('chat')
 
   const modeToggle = (
@@ -31,7 +33,7 @@ export function AgentProfilePageClient({
             : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
-        Chat with Yalla
+        {t('chatWithYalla')}
       </button>
       <button
         onClick={() => setMode('classic')}
@@ -41,7 +43,7 @@ export function AgentProfilePageClient({
             : 'bg-hover-bg text-text-primary border border-border-default hover:bg-[#E2E4EB]'
         }`}
       >
-        Classic Form
+        {t('classicForm')}
       </button>
     </div>
   )

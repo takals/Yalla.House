@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 
 interface ProposalFormProps {
@@ -14,6 +15,7 @@ export function ProposalForm({
   listingIntent,
 }: ProposalFormProps) {
   const router = useRouter()
+  const t = useTranslations('agentProposal')
   const [feeType, setFeeType] = useState<'flat' | 'percentage' | 'none'>('none')
   const [feeAmount, setFeeAmount] = useState('')
   const [message, setMessage] = useState('')
@@ -79,10 +81,10 @@ export function ProposalForm({
       >
         <p className="text-sm font-semibold text-[#166534] flex items-center gap-2">
           <Check size={18} />
-          Proposal sent! The owner will review your response.
+          {t('proposalSentSuccess')}
         </p>
         <p className="text-xs text-[#059669] mt-1">
-          Redirecting you back to briefs...
+          {t('redirectingToBriefs')}
         </p>
       </div>
     )
@@ -94,7 +96,7 @@ export function ProposalForm({
       className="bg-surface rounded-2xl border border-border-default p-6"
     >
       <h3 className="font-semibold text-text-primary mb-4">
-        Submit Your Proposal
+        {t('submitProposal')}
       </h3>
 
       {/* Error state */}
@@ -113,7 +115,7 @@ export function ProposalForm({
 
       {/* Fee structure */}
       <div className="mb-6">
-        <p className="text-sm font-medium text-text-primary mb-3">Fee Structure</p>
+        <p className="text-sm font-medium text-text-primary mb-3">{t('feeStructure')}</p>
         <div className="space-y-2">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -126,7 +128,7 @@ export function ProposalForm({
               }}
               className="w-4 h-4"
             />
-            <span className="text-sm text-text-primary">To Be Discussed (TBD)</span>
+            <span className="text-sm text-text-primary">{t('feeTBD')}</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -136,7 +138,7 @@ export function ProposalForm({
               onChange={(e) => setFeeType(e.target.value as 'flat')}
               className="w-4 h-4"
             />
-            <span className="text-sm text-text-primary">Flat Fee</span>
+            <span className="text-sm text-text-primary">{t('feeFlat')}</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
@@ -146,7 +148,7 @@ export function ProposalForm({
               onChange={(e) => setFeeType(e.target.value as 'percentage')}
               className="w-4 h-4"
             />
-            <span className="text-sm text-text-primary">Percentage Fee</span>
+            <span className="text-sm text-text-primary">{t('feePercentage')}</span>
           </label>
         </div>
       </div>
@@ -155,14 +157,14 @@ export function ProposalForm({
       {feeType !== 'none' && (
         <div className="mb-6">
           <label className="block text-sm font-medium text-text-primary mb-2">
-            {feeType === 'flat' ? 'Fee Amount (£)' : 'Fee Amount (%)'}
+            {feeType === 'flat' ? t('feeAmountFlat') : t('feeAmountPct')}
           </label>
           <input
             type="number"
             value={feeAmount}
             onChange={(e) => setFeeAmount(e.target.value)}
             placeholder={
-              feeType === 'flat' ? 'e.g. 5000' : 'e.g. 5'
+              feeType === 'flat' ? t('placeholderFlat') : t('placeholderPct')
             }
             className="w-full px-4 py-2.5 rounded-lg border border-border-default text-sm focus:outline-none focus:border-brand"
             style={{
@@ -176,12 +178,12 @@ export function ProposalForm({
       {/* Message to owner */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-text-primary mb-2">
-          Message to Owner
+          {t('messageToOwner')}
         </label>
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Introduce yourself and explain why you're the right fit for this property. Minimum 50 characters."
+          placeholder={t('messagePlaceholder')}
           rows={5}
           className="w-full px-4 py-3 rounded-lg border border-border-default text-sm focus:outline-none focus:border-brand font-sans"
           style={{
@@ -199,8 +201,8 @@ export function ProposalForm({
                 : '#5E6278',
           }}
         >
-          {messageLength} / 50 characters{' '}
-          {messageLength < 50 && message.length > 0 && '(minimum required)'}
+          {t('charCount', { count: messageLength })}{' '}
+          {messageLength < 50 && message.length > 0 && t('charMinimum')}
         </p>
       </div>
 
@@ -215,7 +217,7 @@ export function ProposalForm({
           cursor: isValid && !submitting ? 'pointer' : 'not-allowed',
         }}
       >
-        {submitting ? 'Sending Proposal...' : 'Send Proposal'}
+        {submitting ? t('sendingProposal') : t('sendProposal')}
       </button>
     </form>
   )

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 
 interface Property {
@@ -14,6 +15,7 @@ interface Property {
 
 export function ResponseForm({ matchId }: { matchId: string }) {
   const router = useRouter()
+  const t = useTranslations('agentResponse')
   const [message, setMessage] = useState('')
   const [properties, setProperties] = useState<Property[]>([
     { title: '', price: '', url: '', beds: '', area: '' },
@@ -86,10 +88,9 @@ export function ResponseForm({ matchId }: { matchId: string }) {
         <div className="w-12 h-12 rounded-full bg-[#22C55E] text-white flex items-center justify-center mx-auto mb-3">
           <Check size={24} />
         </div>
-        <h2 className="text-lg font-bold text-[#166534] mb-1">Response Sent</h2>
+        <h2 className="text-lg font-bold text-[#166534] mb-1">{t('responseSent')}</h2>
         <p className="text-sm text-[#166534]/80">
-          Your reply has been submitted and will be scored for relevance.
-          Redirecting to briefs...
+          {t('responseSentDesc')}
         </p>
       </div>
     )
@@ -98,7 +99,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="bg-surface rounded-2xl p-6 border border-border-default">
-        <h2 className="text-lg font-bold mb-4">Your Reply</h2>
+        <h2 className="text-lg font-bold mb-4">{t('yourReply')}</h2>
 
         {error && (
           <div role="alert" className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
@@ -106,33 +107,33 @@ export function ResponseForm({ matchId }: { matchId: string }) {
 
         {/* Message */}
         <div className="mb-5">
-          <label className="block text-sm font-semibold mb-2">Message to Home-Hunter</label>
+          <label className="block text-sm font-semibold mb-2">{t('messageToHunter')}</label>
           <textarea
             value={message}
             onChange={e => setMessage(e.target.value)}
-            placeholder="Introduce yourself and explain why your suggestions are a good fit..."
+            placeholder={t('messagePlaceholder')}
             rows={4}
             required
             className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30"
           />
           <p className="text-xs text-text-muted mt-1">
-            Tip: specific, detailed replies score higher. Include property details, not just &quot;call us&quot;.
+            {t('tipText')}
           </p>
         </div>
 
         {/* Property suggestions */}
         <div className="mb-5">
           <label className="block text-sm font-semibold mb-2">
-            Property Suggestions ({properties.length}/5)
+            {t('propertySuggestions', { count: properties.length, max: 5 })}
           </label>
           <div className="space-y-3">
             {properties.map((p, idx) => (
               <div key={idx} className="bg-hover-bg rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-text-secondary">Property {idx + 1}</span>
+                  <span className="text-xs font-bold text-text-secondary">{t('propertyN', { n: idx + 1 })}</span>
                   {properties.length > 1 && (
                     <button type="button" onClick={() => removeProperty(idx)} className="text-xs text-[#991B1B] hover:underline">
-                      Remove
+                      {t('remove')}
                     </button>
                   )}
                 </div>
@@ -142,7 +143,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
                       type="text"
                       value={p.title}
                       onChange={e => updateProperty(idx, 'title', e.target.value)}
-                      placeholder="Property title / address"
+                      placeholder={t('placeholderTitle')}
                       className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
                     />
                   </div>
@@ -150,28 +151,28 @@ export function ResponseForm({ matchId }: { matchId: string }) {
                     type="number"
                     value={p.price}
                     onChange={e => updateProperty(idx, 'price', e.target.value)}
-                    placeholder="Price (e.g. 350000)"
+                    placeholder={t('placeholderPrice')}
                     className="px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
                   />
                   <input
                     type="number"
                     value={p.beds}
                     onChange={e => updateProperty(idx, 'beds', e.target.value)}
-                    placeholder="Bedrooms"
+                    placeholder={t('placeholderBeds')}
                     className="px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
                   />
                   <input
                     type="text"
                     value={p.area}
                     onChange={e => updateProperty(idx, 'area', e.target.value)}
-                    placeholder="Area / postcode"
+                    placeholder={t('placeholderArea')}
                     className="px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
                   />
                   <input
                     type="url"
                     value={p.url}
                     onChange={e => updateProperty(idx, 'url', e.target.value)}
-                    placeholder="Listing URL (optional)"
+                    placeholder={t('placeholderUrl')}
                     className="px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
                   />
                 </div>
@@ -184,7 +185,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
               onClick={addProperty}
               className="mt-2 text-sm font-semibold text-text-secondary hover:text-text-primary transition"
             >
-              + Add another property
+              {t('addProperty')}
             </button>
           )}
         </div>
@@ -192,10 +193,8 @@ export function ResponseForm({ matchId }: { matchId: string }) {
         {/* Privacy notice */}
         <div className="bg-hover-bg rounded-lg p-3 mb-5">
           <p className="text-xs text-text-secondary">
-            <span className="font-semibold text-text-primary">Note: </span>
-            Your reply goes through Yalla.House. The Home-Hunter&apos;s contact details are not
-            shared. Phone numbers in your message will be redacted unless the hunter
-            has enabled phone contact.
+            <span className="font-semibold text-text-primary">{t('noteLabel')} </span>
+            {t('privacyText')}
           </p>
         </div>
 
@@ -204,7 +203,7 @@ export function ResponseForm({ matchId }: { matchId: string }) {
           disabled={saving || !message.trim()}
           className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {saving ? 'Submitting...' : 'Submit Reply'}
+          {saving ? t('submitting') : t('submitReply')}
         </button>
       </div>
     </form>

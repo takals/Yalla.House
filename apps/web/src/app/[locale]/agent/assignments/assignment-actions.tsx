@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface AssignmentActionsProps {
   assignmentId: string
@@ -13,6 +14,7 @@ export default function AssignmentActions({
   status,
 }: AssignmentActionsProps) {
   const router = useRouter()
+  const t = useTranslations('agentAssignments')
   const [loading, setLoading] = useState(false)
   const [actionType, setActionType] = useState<'accept' | 'decline' | null>(null)
 
@@ -61,14 +63,14 @@ export default function AssignmentActions({
         disabled={loading}
         className="flex-1 px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover disabled:opacity-50 transition"
       >
-        {loading && actionType === 'accept' ? 'Accepting...' : 'Accept'}
+        {loading && actionType === 'accept' ? t('accepting') : t('accept')}
       </button>
       <button
         onClick={() => handleAction('decline')}
         disabled={loading}
         className="flex-1 px-4 py-2 bg-[#F3F4F6] text-[#374151] text-sm font-bold rounded-lg border border-[#E5E7EB] hover:bg-[#E5E7EB] disabled:opacity-50 transition"
       >
-        {loading && actionType === 'decline' ? 'Declining...' : 'Decline'}
+        {loading && actionType === 'decline' ? t('declining') : t('decline')}
       </button>
     </>
   )

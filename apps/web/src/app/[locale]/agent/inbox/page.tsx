@@ -63,10 +63,10 @@ export default async function AgentInboxPage() {
     const diffHours = Math.floor(diffMins / 60)
     const diffDays = Math.floor(diffHours / 24)
 
-    if (diffMins < 1) return 'just now'
-    if (diffMins < 60) return `${diffMins}m ago`
-    if (diffHours < 24) return `${diffHours}h ago`
-    if (diffDays < 7) return `${diffDays}d ago`
+    if (diffMins < 1) return t('justNow')
+    if (diffMins < 60) return t('minutesAgo', { count: diffMins })
+    if (diffHours < 24) return t('hoursAgo', { count: diffHours })
+    if (diffDays < 7) return t('daysAgo', { count: diffDays })
 
     return date.toLocaleDateString(dateLocale, {
       month: 'short',
@@ -104,7 +104,7 @@ export default async function AgentInboxPage() {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-text-primary text-base mb-1 truncate">
-                    {thread.subject ?? thread.listing?.title_de ?? 'Message'}
+                    {thread.subject ?? thread.listing?.title_de ?? t('messageFallback')}
                   </h3>
                   {thread.listing && (
                     <p className="text-sm text-text-muted">{thread.listing.place_id}</p>

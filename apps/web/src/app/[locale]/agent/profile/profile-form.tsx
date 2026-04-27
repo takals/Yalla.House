@@ -20,20 +20,9 @@ interface Props {
   profile: AgentProfileData | null
 }
 
-const PROPERTY_TYPES: { value: string; label: string }[] = [
-  { value: 'flat', label: 'Wohnung' },
-  { value: 'terraced', label: 'Reihenhaus' },
-  { value: 'semi-detached', label: 'Doppelhaushälfte' },
-  { value: 'detached', label: 'Freistehendes Haus' },
-  { value: 'new_build', label: 'Neubau' },
-  { value: 'commercial', label: 'Gewerbe' },
-]
+const PROPERTY_TYPE_KEYS = ['flat', 'terraced', 'semi-detached', 'detached', 'new_build', 'commercial'] as const
 
-const FOCUS_OPTIONS = [
-  { value: 'sale', label: 'Kauf' },
-  { value: 'rent', label: 'Miete' },
-  { value: 'both', label: 'Beides' },
-]
+const FOCUS_KEYS = ['sale', 'rent', 'both'] as const
 
 function toggle(arr: string[], value: string): string[] {
   return arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value]
@@ -129,28 +118,28 @@ export function ProfileForm({ profile }: Props) {
 
         <p className="text-xs font-semibold text-text-secondary mb-3 uppercase tracking-wide">{t('focusLabel')}</p>
         <div className="flex gap-3 mb-6">
-          {FOCUS_OPTIONS.map(o => (
+          {FOCUS_KEYS.map(key => (
             <button
-              key={o.value}
+              key={key}
               type="button"
-              onClick={() => setFocus(o.value)}
+              onClick={() => setFocus(key)}
               className={`px-4 py-1.5 rounded-full text-sm font-semibold border transition-colors ${
-                focus === o.value ? 'bg-brand border-brand text-text-primary' : 'bg-surface border-border-default text-text-secondary'
+                focus === key ? 'bg-brand border-brand text-text-primary' : 'bg-surface border-border-default text-text-secondary'
               }`}
             >
-              {o.label}
+              {t(`focus_${key}`)}
             </button>
           ))}
         </div>
 
         <p className="text-xs font-semibold text-text-secondary mb-3 uppercase tracking-wide">{t('propertyTypesLabel')}</p>
         <div className="flex flex-wrap gap-2">
-          {PROPERTY_TYPES.map(t => (
+          {PROPERTY_TYPE_KEYS.map(key => (
             <Chip
-              key={t.value}
-              label={t.label}
-              active={propertyTypes.includes(t.value)}
-              onClick={() => setPropertyTypes(toggle(propertyTypes, t.value))}
+              key={key}
+              label={t(`prop_${key}`)}
+              active={propertyTypes.includes(key)}
+              onClick={() => setPropertyTypes(toggle(propertyTypes, key))}
             />
           ))}
         </div>

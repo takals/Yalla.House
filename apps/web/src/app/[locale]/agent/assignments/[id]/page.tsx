@@ -67,7 +67,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
 
   const listing = assignment.listing
   const owner = assignment.owner
-  const ownerFirstName = owner?.full_name?.split(' ')[0] ?? 'Owner'
+  const ownerFirstName = owner?.full_name?.split(' ')[0] ?? t('ownerLabel')
 
   // Find primary photo
   const primaryPhoto = listing?.listing_media?.find(
@@ -88,38 +88,41 @@ export default async function AssignmentDetailPage({ params }: Props) {
       }).format(fromMinorUnits(price, currency))
     : null
 
+  const TIER_STYLES: Record<string, { bg: string; text: string }> = {
+    advisory: { bg: '#DBEAFE', text: '#1E40AF' },
+    assisted: { bg: '#FFF5EE', text: '#8B4513' },
+    managed: { bg: '#DCFCE7', text: '#166534' },
+  }
+
   const TierBadge = ({ tier }: { tier: string }) => {
-    const config: Record<string, { bg: string; text: string; label: string }> = {
-      advisory: { bg: '#DBEAFE', text: '#1E40AF', label: 'Advisory' },
-      assisted: { bg: '#FFF5EE', text: '#8B4513', label: 'Assisted' },
-      managed: { bg: '#DCFCE7', text: '#166534', label: 'Managed' },
-    }
-    const c = config[tier] || config.advisory
+    const c = TIER_STYLES[tier] || TIER_STYLES.advisory
     return (
       <span
         className="text-xs font-bold px-2 py-0.5 rounded-full"
         style={{ backgroundColor: c?.bg || '#FEE2E2', color: c?.text || '#991B1B' }}
       >
-        {c?.label || 'Unknown'}
+        {t(`tier${tier.charAt(0).toUpperCase()}${tier.slice(1)}`)}
       </span>
     )
   }
 
+  const STATUS_STYLES: Record<string, { bg: string; text: string }> = {
+    invited: { bg: '#FFF5EE', text: '#8B4513' },
+    accepted: { bg: '#DCFCE7', text: '#166534' },
+    active: { bg: '#DCFCE7', text: '#166534' },
+    revoked: { bg: '#FEE2E2', text: '#991B1B' },
+    paused: { bg: '#E5E7EB', text: '#4B5563' },
+  }
+
   const StatusBadge = ({ status }: { status: string }) => {
-    const config: Record<string, { bg: string; text: string; label: string }> = {
-      invited: { bg: '#FFF5EE', text: '#8B4513', label: 'Invitation Pending' },
-      accepted: { bg: '#DCFCE7', text: '#166534', label: 'Active' },
-      active: { bg: '#DCFCE7', text: '#166534', label: 'Active' },
-      revoked: { bg: '#FEE2E2', text: '#991B1B', label: 'Revoked' },
-      paused: { bg: '#E5E7EB', text: '#4B5563', label: 'Paused' },
-    }
-    const c = config[status] || config.accepted
+    const statusKey = status === 'accepted' ? 'active' : status
+    const c = STATUS_STYLES[status] || STATUS_STYLES.accepted
     return (
       <span
         className="text-xs font-bold px-2 py-0.5 rounded-full"
         style={{ backgroundColor: c?.bg || '#DCFCE7', color: c?.text || '#166534' }}
       >
-        {c?.label || 'Unknown'}
+        {t(`status${statusKey.charAt(0).toUpperCase()}${statusKey.slice(1)}`)}
       </span>
     )
   }
@@ -136,10 +139,10 @@ export default async function AssignmentDetailPage({ params }: Props) {
     can_message_buyers: boolean
   }) => {
     const permissions = [
-      { label: 'Edit Listing', value: can_edit_listing },
-      { label: 'Manage Viewings', value: can_manage_viewings },
-      { label: 'Negotiate', value: can_negotiate },
-      { label: 'Message Buyers', value: can_message_buyers },
+      { label: t('permEditListing'), value: can_edit_listing },
+      { label: t('permManageViewings'), value: can_manage_viewings },
+      { label: t('permNegotiate'), value: can_negotiate },
+      { label: t('permMessageBuyers'), value: can_message_buyers },
     ]
 
     return (
@@ -174,7 +177,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
         className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:text-brand-dark mb-6 transition-colors"
       >
         <ChevronLeft size={16} />
-        Back to Briefs
+        {t('backToBriefs')}
       </Link>
 
       {/* Status banner if not invited */}
@@ -205,9 +208,9 @@ export default async function AssignmentDetailPage({ params }: Props) {
             {assignment.status === 'accepted' || assignment.status === 'active'
               ? <>
                   <Check size={16} className="inline mr-2" />
-                  You&apos;ve accepted this brief
+                  {t('acceptedBrief')}
                 </>
-              : `This brief has been ${assignment.status}`}
+              : t('briefStatusMessage', { status: assignment.status })}
           </p>
         </div>
       )}
@@ -247,25 +250,25 @@ export default async function AssignmentDetailPage({ params }: Props) {
           {/* Key details grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-border-default">
             <div>
-              <p className="text-xs text-text-secondary mb-1">Property Type</p>
+              <p className="text-xs text-text-secondary mb-1">{t('propertyTypeLabel')}</p>
               <p className="font-semibold text-text-primary">
                 {listing?.property_type}
               </p>
             </div>
             <div>
-              <p className="text-xs text-text-secondary mb-1">Bedrooms</p>
+              <p className="text-xs text-text-secondary mb-1">{t('bedroomsLabel')}</p>
               <p className="font-semibold text-text-primary">
                 {listing?.bedrooms}
               </p>
             </div>
             <div>
-              <p className="text-xs text-text-secondary mb-1">Bathrooms</p>
+              <p className="text-xs text-text-secondary mb-1">{t('bathroomsLabel')}</p>
               <p className="font-semibold text-text-primary">
                 {listing?.bathrooms}
               </p>
             </div>
             <div>
-              <p className="text-xs text-text-secondary mb-1">Size</p>
+              <p className="text-xs text-text-secondary mb-1">{t('sizeLabel')}</p>
               <p className="font-semibold text-text-primary">
                 {listing?.size_sqm} m²
               </p>
@@ -275,12 +278,12 @@ export default async function AssignmentDetailPage({ params }: Props) {
           {/* Price */}
           <div className="mb-6">
             <p className="text-xs text-text-secondary mb-1">
-              {listing?.intent === 'sale' ? 'Sale Price' : 'Monthly Rent'}
+              {listing?.intent === 'sale' ? t('salePriceLabel') : t('monthlyRentLabel')}
             </p>
             <p className="text-3xl font-bold text-brand">
               {formattedPrice || '—'}
               {listing?.intent === 'rent' && formattedPrice && (
-                <span className="text-sm font-normal text-text-secondary">/mo</span>
+                <span className="text-sm font-normal text-text-secondary">{t('rentSuffix')}</span>
               )}
             </p>
           </div>
@@ -288,7 +291,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
           {/* Description */}
           {listing?.description_de && (
             <div className="mb-6">
-              <h3 className="font-semibold text-text-primary mb-2">Description</h3>
+              <h3 className="font-semibold text-text-primary mb-2">{t('descriptionLabel')}</h3>
               <p className="text-sm text-text-secondary leading-relaxed">
                 {listing.description_de}
               </p>
@@ -299,7 +302,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {listing?.seller_situation && (
               <div>
-                <p className="text-xs text-text-secondary mb-1">Seller Situation</p>
+                <p className="text-xs text-text-secondary mb-1">{t('sellerSituation')}</p>
                 <p className="text-sm font-medium text-text-primary">
                   {listing.seller_situation}
                 </p>
@@ -308,7 +311,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
             {listing?.preferred_completion && (
               <div>
                 <p className="text-xs text-text-secondary mb-1">
-                  Preferred Completion
+                  {t('preferredCompletion')}
                 </p>
                 <p className="text-sm font-medium text-text-primary">
                   {listing.preferred_completion}
@@ -323,16 +326,16 @@ export default async function AssignmentDetailPage({ params }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         {/* Assignment details */}
         <div className="bg-surface rounded-2xl border border-border-default p-6">
-          <h3 className="font-semibold text-text-primary mb-4">Assignment Details</h3>
+          <h3 className="font-semibold text-text-primary mb-4">{t('assignmentDetails')}</h3>
 
           <div className="space-y-4">
             <div>
-              <p className="text-xs text-text-secondary mb-1">Service Tier</p>
+              <p className="text-xs text-text-secondary mb-1">{t('serviceTier')}</p>
               <TierBadge tier={assignment.tier} />
             </div>
 
             <div>
-              <p className="text-xs text-text-secondary mb-2">Your Permissions</p>
+              <p className="text-xs text-text-secondary mb-2">{t('yourPermissions')}</p>
               <PermissionGrid
                 can_edit_listing={assignment.can_edit_listing}
                 can_manage_viewings={assignment.can_manage_viewings}
@@ -345,12 +348,12 @@ export default async function AssignmentDetailPage({ params }: Props) {
 
         {/* Owner info */}
         <div className="bg-surface rounded-2xl border border-border-default p-6">
-          <h3 className="font-semibold text-text-primary mb-4">Owner</h3>
+          <h3 className="font-semibold text-text-primary mb-4">{t('ownerLabel')}</h3>
           <div>
             <p className="text-sm text-text-primary font-medium mb-1">
               {ownerFirstName}
             </p>
-            <p className="text-xs text-text-secondary">Property owner</p>
+            <p className="text-xs text-text-secondary">{t('propertyOwner')}</p>
           </div>
         </div>
       </div>

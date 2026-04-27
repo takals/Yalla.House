@@ -41,7 +41,7 @@ export function AgentListingCta({
               {t('workingOnProperty')}
             </p>
             <p className="text-xs text-text-secondary mt-0.5">
-              Status: {existingAssignment.status}
+              {t('statusLabel')}: {t(`status${existingAssignment.status.charAt(0).toUpperCase()}${existingAssignment.status.slice(1)}`)}
             </p>
           </div>
         </div>

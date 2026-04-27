@@ -130,16 +130,16 @@ export default async function AgentPage() {
         {/* Sub-nav tabs */}
         <div className="flex gap-6 mb-8 border-b border-border-default">
           <Link href="/agent/info" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-            Info
+            {t('tabInfo')}
           </Link>
           <Link href="/agent/overview" className="text-sm font-semibold text-text-primary pb-3 border-b-2 border-brand -mb-px">
-            Dashboard
+            {t('tabDashboard')}
           </Link>
           <Link href="/agent/briefs" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-            Briefs
+            {t('tabBriefs')}
           </Link>
           <Link href="/agent/assignments" className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors">
-            Assignments
+            {t('tabAssignments')}
           </Link>
         </div>
 
