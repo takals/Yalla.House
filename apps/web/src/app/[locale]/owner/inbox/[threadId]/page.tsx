@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { ReplyForm } from './reply-form'
+import { getTranslations } from 'next-intl/server'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 
 interface Message {
@@ -24,6 +25,7 @@ interface Props {
 
 export default async function ThreadDetailPage({ params }: Props) {
   const { threadId, locale } = await params
+  const t = await getTranslations('comms')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -89,20 +91,20 @@ export default async function ThreadDetailPage({ params }: Props) {
       minute: '2-digit',
     })
 
-    if (isToday) return `Today ${time}`
-    if (isYesterday) return `Yesterday ${time}`
+    if (isToday) return `${t('today')} ${time}`
+    if (isYesterday) return `${t('yesterday')} ${time}`
     return `${date.toLocaleDateString(dateLocaleFromLocale(locale), {
       month: 'short',
       day: 'numeric',
     })} ${time}`
   }
 
-  const defaultBadge = { label: 'Yalla', color: 'bg-brand/10 text-brand' }
+  const defaultBadge = { label: t('sourceInApp'), color: 'bg-brand/10 text-brand' }
   const channelBadge: Record<string, { label: string; color: string }> = {
     in_app: defaultBadge,
-    email: { label: 'Email', color: 'bg-blue-50 text-blue-600' },
-    whatsapp: { label: 'WhatsApp', color: 'bg-green-50 text-green-600' },
-    sms: { label: 'SMS', color: 'bg-purple-50 text-purple-600' },
+    email: { label: t('sourceEmail'), color: 'bg-blue-50 text-blue-600' },
+    whatsapp: { label: t('sourceWhatsApp'), color: 'bg-green-50 text-green-600' },
+    sms: { label: t('sourceSms'), color: 'bg-purple-50 text-purple-600' },
   }
 
   return (
@@ -114,10 +116,10 @@ export default async function ThreadDetailPage({ params }: Props) {
           className="inline-flex items-center gap-2 text-brand font-semibold text-sm mb-4 hover:gap-3 transition-all"
         >
           <ArrowLeft size={16} />
-          Back to Inbox
+          {t('backToInbox')}
         </Link>
         <h1 className="text-2xl font-bold text-text-primary tracking-tight">
-          {thread?.subject || thread?.listing?.title_de || 'Conversation'}
+          {thread?.subject || thread?.listing?.title_de || t('conversation')}
         </h1>
         {thread?.listing && (
           <p className="text-sm text-text-muted mt-1">
@@ -131,7 +133,7 @@ export default async function ThreadDetailPage({ params }: Props) {
         {messages.length === 0 ? (
           <div className="p-12 text-center">
             <MessageCircle size={40} className="mx-auto mb-3 text-[#D9DCE4]" />
-            <p className="text-sm text-text-muted">No messages yet. Start the conversation below.</p>
+            <p className="text-sm text-text-muted">{t('noMessagesYet')}</p>
           </div>
         ) : (
           <div className="divide-y divide-[#F0F0F0]">
@@ -153,7 +155,7 @@ export default async function ThreadDetailPage({ params }: Props) {
                       </div>
                       <div>
                         <span className="text-sm font-semibold text-text-primary">
-                          {isOwner ? 'You' : (msg.sender?.full_name || msg.sender?.email || 'Unknown')}
+                          {isOwner ? t('you') : (msg.sender?.full_name || msg.sender?.email || t('unknown'))}
                         </span>
                         <span className={`ml-2 text-[10px] font-bold px-1.5 py-0.5 rounded ${badge.color}`}>
                           {badge.label}

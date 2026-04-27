@@ -72,16 +72,16 @@ export default async function AgentSearchPage() {
 
       return {
         id: agent.id,
-        name: profile.agency_name || agent.full_name || 'Agent',
+        name: profile.agency_name || agent.full_name || t('agentFallback'),
         verified: !!profile.verified_at,
         matchScore,
         rating: 4.0 + Math.round(Math.random() * 10) / 10,
-        responseTime: '< 24 hours',
+        responseTime: t('responseTimeFast'),
         coverage: coveragePrefixes,
         propertyTypes: profile.property_types ?? [],
         description: profile.focus
-          ? `Specialising in ${profile.focus}`
-          : 'Local property agent',
+          ? t('specialisingIn', { focus: profile.focus })
+          : t('localAgent'),
       }
     })
     .filter(Boolean)

@@ -22,6 +22,7 @@ interface OwnerProfile {
 
 export default async function OwnerSettingsPage() {
   const t = await getTranslations('ownerSettings')
+  const ts = await getTranslations('statusLabels')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -139,7 +140,7 @@ export default async function OwnerSettingsPage() {
                     listing.status === 'draft' ? 'bg-gray-100 text-gray-500' :
                     'bg-blue-50 text-blue-700'
                   }`}>
-                    {listing.status ?? 'draft'}
+                    {ts(listing.status ?? 'draft')}
                   </span>
                   <ChevronRight size={16} className="text-gray-400 group-hover:text-[#D4764E] transition-colors" />
                 </div>

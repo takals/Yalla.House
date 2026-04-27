@@ -15,7 +15,7 @@ interface Assignment {
   } | null
 }
 
-function formatTimeAgo(isoDate: string): string {
+function formatTimeAgo(isoDate: string, t: (key: string, values?: any) => string): string {
   const now = new Date()
   const date = new Date(isoDate)
   const diffMs = now.getTime() - date.getTime()
@@ -23,20 +23,21 @@ function formatTimeAgo(isoDate: string): string {
   const diffHours = Math.floor(diffMs / 3600000)
   const diffDays = Math.floor(diffMs / 86400000)
 
-  if (diffMins < 1) return 'just now'
-  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+  if (diffMins < 1) return t('justNow')
+  if (diffMins < 60) return t('minutesAgo', { count: diffMins })
+  if (diffHours < 24) return t('hoursAgo', { count: diffHours })
+  if (diffDays < 7) return t('daysAgo', { count: diffDays })
 
   const weeks = Math.floor(diffDays / 7)
-  if (weeks < 4) return `${weeks} week${weeks > 1 ? 's' : ''} ago`
+  if (weeks < 4) return t('weeksAgo', { count: weeks })
 
   const months = Math.floor(diffDays / 30)
-  return `${months} month${months > 1 ? 's' : ''} ago`
+  return t('monthsAgo', { count: months })
 }
 
 export default async function TrackingPage() {
   const t = await getTranslations('ownerAgents')
+  const tc = await getTranslations('comms')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -72,13 +73,13 @@ export default async function TrackingPage() {
     }
 
     const responseTime = isResponded && (assignment.accepted_at || assignment.revoked_at)
-      ? formatTimeAgo(assignment.accepted_at || assignment.revoked_at!)
+      ? formatTimeAgo(assignment.accepted_at || assignment.revoked_at!, tc)
       : null
 
     return {
       id: assignment.id,
-      agentName: assignment.agent?.agency_name || 'Unknown Agent',
-      sentTime: formatTimeAgo(assignment.invited_at),
+      agentName: assignment.agent?.agency_name || t('unknownAgent'),
+      sentTime: formatTimeAgo(assignment.invited_at, tc),
       status,
       delivered: isDelivered,
       opened: isOpened,
@@ -177,19 +178,19 @@ export default async function TrackingPage() {
           <div className="col-span-5 flex justify-between px-2">
             <div className="flex items-center gap-2" title={t('trackingColumnDelivered')}>
               <Mail size={14} />
-              <span className="hidden sm:inline">Delivered</span>
+              <span className="hidden sm:inline">{t('trackingColumnDelivered')}</span>
             </div>
             <div className="flex items-center gap-2" title={t('trackingColumnOpened')}>
               <Eye size={14} />
-              <span className="hidden sm:inline">Opened</span>
+              <span className="hidden sm:inline">{t('trackingColumnOpened')}</span>
             </div>
             <div className="flex items-center gap-2" title={t('trackingColumnClicked')}>
               <MousePointerClick size={14} />
-              <span className="hidden sm:inline">Clicked</span>
+              <span className="hidden sm:inline">{t('trackingColumnClicked')}</span>
             </div>
             <div className="flex items-center gap-2" title={t('trackingColumnResponded')}>
               <MessageSquare size={14} />
-              <span className="hidden sm:inline">Replied</span>
+              <span className="hidden sm:inline">{t('trackingColumnResponded')}</span>
             </div>
           </div>
           <div className="col-span-1">{t('trackingColumnStatus')}</div>

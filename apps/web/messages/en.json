@@ -409,7 +409,12 @@
     "agentMessage": "Agent Message",
     "propertyUpdate": "Property Update",
     "viewConversation": "View conversation",
-    "noMessagesHunterDesc": "When agents send you property matches or respond to your search, conversations will appear here."
+    "noMessagesHunterDesc": "When agents send you property matches or respond to your search, conversations will appear here.",
+    "weeksAgo": "{count}w ago",
+    "monthsAgo": "{count}mo ago",
+    "backToInbox": "Back to Inbox",
+    "conversation": "Conversation",
+    "noMessagesYet": "No messages yet. Start the conversation below."
   },
   "agentDiscovery": {
     "metaTitle": "Find Local Estate Agents | Yalla.House",
@@ -513,7 +518,15 @@
     "trackingInfoTitle": "How Tracking Works",
     "trackingInfoText": "We track whether agents have opened your brief and clicked through to view details. When they respond with a proposal, you'll see it here.",
     "trackingTipLabel": "Pro Tip",
-    "trackingTipText": "Compare responses carefully — the fastest response isn't always the best deal. Look at commission rates, marketing plans, and portal coverage."
+    "trackingTipText": "Compare responses carefully — the fastest response isn't always the best deal. Look at commission rates, marketing plans, and portal coverage.",
+    "unknownAgent": "Unknown Agent",
+    "agentFallback": "Agent",
+    "responseTimeFast": "< 24 hours",
+    "specialisingIn": "Specialising in {focus}",
+    "localAgent": "Local property agent",
+    "bedroomsCount": "{count} bedrooms",
+    "priceLabel": "Price",
+    "noListingFound": "No listing found. Create a listing first."
   },
   "services": {
     "heroTag": "Services & Pricing",
@@ -790,7 +803,9 @@
     "statThisWeek": "This week",
     "statThisWeekCount": "this week",
     "statWithOffers": "with offers",
+    "tabInfo": "Info",
     "tabListings": "Listings",
+    "rentSuffix": "/mo",
     "tabInquiries": "Inquiries",
     "sectionMyListings": "My Listings",
     "sectionUpcomingViewings": "Upcoming Viewings",
@@ -2889,7 +2904,12 @@
     "timeOnMarket": "Time on market",
     "days": "days",
     "listedSince": "Listed since",
-    "noData": "No data available yet"
+    "noData": "No data available yet",
+    "sourceWhatsApp": "WhatsApp",
+    "sourceSms": "SMS",
+    "sourceEmail": "Email",
+    "sourceWebsite": "Website",
+    "sourceOther": "Other"
   },
   "activate": {
     "congratsTitle": "Your listing is saved!",

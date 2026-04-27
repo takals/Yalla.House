@@ -409,7 +409,12 @@
     "agentMessage": "Makler-Nachricht",
     "propertyUpdate": "Immobilien-Update",
     "viewConversation": "Unterhaltung ansehen",
-    "noMessagesHunterDesc": "Wenn Makler dir Immobilien-Matches senden oder auf deine Suche antworten, erscheinen die Unterhaltungen hier."
+    "noMessagesHunterDesc": "Wenn Makler dir Immobilien-Matches senden oder auf deine Suche antworten, erscheinen die Unterhaltungen hier.",
+    "weeksAgo": "vor {count} Wo.",
+    "monthsAgo": "vor {count} Mon.",
+    "backToInbox": "Zur\u00fcck zum Posteingang",
+    "conversation": "Unterhaltung",
+    "noMessagesYet": "Noch keine Nachrichten. Starte die Unterhaltung unten."
   },
   "agentDiscovery": {
     "metaTitle": "Lokale Immobilienmakler finden | Yalla.House",
@@ -619,7 +624,15 @@
     "trackingInfoTitle": "So funktioniert das Tracking",
     "trackingInfoText": "Wir verfolgen, ob Makler deinen Brief geöffnet und angeklickt haben. Wenn sie mit einem Angebot antworten, siehst du es hier.",
     "trackingTipLabel": "Profi-Tipp",
-    "trackingTipText": "Vergleiche Antworten sorgfältig — die schnellste Antwort ist nicht immer das beste Angebot. Achte auf Provisionsätze, Marketingpläne und Portal-Abdeckung."
+    "trackingTipText": "Vergleiche Antworten sorgfältig — die schnellste Antwort ist nicht immer das beste Angebot. Achte auf Provisionsätze, Marketingpläne und Portal-Abdeckung.",
+    "unknownAgent": "Unbekannter Makler",
+    "agentFallback": "Makler",
+    "responseTimeFast": "< 24 Stunden",
+    "specialisingIn": "Spezialisiert auf {focus}",
+    "localAgent": "Lokaler Immobilienmakler",
+    "bedroomsCount": "{count} Schlafzimmer",
+    "priceLabel": "Preis",
+    "noListingFound": "Kein Inserat gefunden. Erstelle zuerst ein Inserat."
   },
   "partnerAgreement": {
     "title": "Yalla Partnervereinbarung",
@@ -790,7 +803,9 @@
     "statThisWeek": "Diese Woche",
     "statThisWeekCount": "diese Woche",
     "statWithOffers": "mit Angeboten",
+    "tabInfo": "Info",
     "tabListings": "Inserate",
+    "rentSuffix": "/Mon.",
     "tabInquiries": "Anfragen",
     "sectionMyListings": "Meine Inserate",
     "sectionUpcomingViewings": "Anstehende Besichtigungen",
@@ -2889,7 +2904,12 @@
     "timeOnMarket": "Zeit am Markt",
     "days": "Tage",
     "listedSince": "Gelistet seit",
-    "noData": "Noch keine Daten verfügbar"
+    "noData": "Noch keine Daten verfügbar",
+    "sourceWhatsApp": "WhatsApp",
+    "sourceSms": "SMS",
+    "sourceEmail": "E-Mail",
+    "sourceWebsite": "Webseite",
+    "sourceOther": "Sonstiges"
   },
   "activate": {
     "congratsTitle": "Dein Inserat ist gespeichert!",

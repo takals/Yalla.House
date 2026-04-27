@@ -47,7 +47,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
 
     selectedAgents = (agentsData ?? []).map((agent: any) => ({
       id: agent.id,
-      name: agent.agent_profiles?.[0]?.agency_name || agent.full_name || 'Agent',
+      name: agent.agent_profiles?.[0]?.agency_name || agent.full_name || t('agentFallback'),
       contact: agent.email || '',
     }))
   }
@@ -84,7 +84,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
                 <div className="grid grid-cols-2 gap-4 py-4 border-y border-border-default">
                   <div>
                     <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefBedrooms')}</p>
-                    <p className="font-semibold text-text-primary">{listing.bedrooms ?? '—'} bedrooms</p>
+                    <p className="font-semibold text-text-primary">{listing.bedrooms ? t('bedroomsCount', { count: listing.bedrooms }) : '—'}</p>
                   </div>
                   <div>
                     <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefProperty')}</p>
@@ -99,13 +99,13 @@ export default async function SendBriefPage({ searchParams }: Props) {
                 )}
                 {formattedPrice && (
                   <div>
-                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">Price</p>
+                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('priceLabel')}</p>
                     <p className="font-bold text-lg text-text-primary">{formattedPrice}</p>
                   </div>
                 )}
               </div>
             ) : (
-              <p className="text-sm text-text-secondary">No listing found. Create a listing first.</p>
+              <p className="text-sm text-text-secondary">{t('noListingFound')}</p>
             )}
           </div>
 

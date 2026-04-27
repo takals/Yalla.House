@@ -26,8 +26,9 @@ interface Props {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('ownerAnalytics')
   return {
-    title: 'Analytics | Yalla.House',
+    title: `${t('title')} | Yalla.House`,
     robots: { index: false, follow: false },
   }
 }
@@ -103,15 +104,18 @@ export default async function AnalyticsPage({ params }: Props) {
   const agentsAccepted = agentsList.filter(a => a.status === 'accepted' || a.accepted_at).length
   const agentsRevoked = agentsList.filter(a => a.status === 'revoked' || a.revoked_at).length
 
-  // Lead source breakdown
+  // Lead source breakdown — use translation keys for display labels
+  const sourceKeyMap: Record<string, string> = {
+    whatsapp: 'sourceWhatsApp',
+    sms: 'sourceSms',
+    email: 'sourceEmail',
+    web: 'sourceWebsite',
+    other: 'sourceOther',
+  }
   const sourceMap: Record<string, number> = {}
   for (const lead of leadsList) {
     const src = lead.reply_channel ?? lead.channel ?? 'other'
-    const key = src === 'whatsapp' ? 'WhatsApp'
-      : src === 'sms' ? 'SMS'
-      : src === 'email' ? 'Email'
-      : src === 'web' ? 'Website'
-      : 'Other'
+    const key = sourceKeyMap[src] ?? 'sourceOther'
     sourceMap[key] = (sourceMap[key] ?? 0) + 1
   }
   const sourceEntries = Object.entries(sourceMap).sort((a, b) => b[1] - a[1])
@@ -148,19 +152,19 @@ export default async function AnalyticsPage({ params }: Props) {
     : `/p/${listing.place_id}`
 
   const SOURCE_ICONS: Record<string, typeof MessageCircle> = {
-    WhatsApp: MessageCircle,
-    SMS: Smartphone,
-    Email: Mail,
-    Website: Globe,
-    Other: MoreHorizontal,
+    sourceWhatsApp: MessageCircle,
+    sourceSms: Smartphone,
+    sourceEmail: Mail,
+    sourceWebsite: Globe,
+    sourceOther: MoreHorizontal,
   }
 
   const SOURCE_COLORS: Record<string, string> = {
-    WhatsApp: 'bg-green-500',
-    SMS: 'bg-blue-500',
-    Email: 'bg-purple-500',
-    Website: 'bg-brand',
-    Other: 'bg-gray-400',
+    sourceWhatsApp: 'bg-green-500',
+    sourceSms: 'bg-blue-500',
+    sourceEmail: 'bg-purple-500',
+    sourceWebsite: 'bg-brand',
+    sourceOther: 'bg-gray-400',
   }
 
   return (
@@ -207,7 +211,7 @@ export default async function AnalyticsPage({ params }: Props) {
                       <div className="w-8 flex justify-center">
                         <Icon size={16} className="text-text-secondary" />
                       </div>
-                      <span className="text-xs font-semibold text-text-primary w-20">{source}</span>
+                      <span className="text-xs font-semibold text-text-primary w-20">{t(source)}</span>
                       <div className="flex-1 h-6 bg-bg rounded-full overflow-hidden">
                         <div
                           className={`h-full ${barColor} rounded-full transition-all`}

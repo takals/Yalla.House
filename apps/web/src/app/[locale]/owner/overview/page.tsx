@@ -144,7 +144,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
           href="/owner/info"
           className="text-sm font-semibold text-text-secondary hover:text-text-primary pb-3 transition-colors"
         >
-          Info
+          {t('tabInfo')}
         </Link>
         <Link
           href="/owner/overview"
@@ -253,7 +253,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
                             {price ? (
                               <>
                                 {new Intl.NumberFormat(dateLocale, { style: 'currency', currency, maximumFractionDigits: 0 }).format(fromMinorUnits(price, currency))}
-                                {listing.intent === 'rent' && '/Mo'}
+                                {listing.intent === 'rent' && t('rentSuffix')}
                               </>
                             ) : (
                               '—'
