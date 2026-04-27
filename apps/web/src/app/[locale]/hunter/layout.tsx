@@ -57,9 +57,19 @@ export default async function HunterLayout({ children }: { children: React.React
     switchRole: tShell('switchRole'),
   }
 
+  const navLabels: Record<string, string> = {
+    navDashboard: tShell('navDashboard'),
+    navSearch: tShell('navSearch'),
+    navViewings: tShell('navViewings'),
+    navPassport: tShell('navPassport'),
+    navAgents: tShell('navAgents'),
+    navInbox: tShell('navInbox'),
+    navSettings: tShell('navSettings'),
+  }
+
   return (
     <DashboardShell
-      navItems={hunterNav}
+      navItems={hunterNav(navLabels)}
       section="hunter"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
       userName={fullName}

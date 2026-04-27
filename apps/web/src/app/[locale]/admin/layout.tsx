@@ -38,9 +38,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     switchRole: tShell('switchRole'),
   }
 
+  const navLabels: Record<string, string> = {
+    navOverview: tShell('navOverview'),
+    navUsers: tShell('navUsers'),
+  }
+
   return (
     <DashboardShell
-      navItems={adminNav}
+      navItems={adminNav(navLabels)}
       section="admin"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
       userName={profileResult.data?.full_name ?? null}

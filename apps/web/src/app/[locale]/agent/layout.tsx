@@ -54,9 +54,20 @@ export default async function AgentLayout({ children }: { children: React.ReactN
     switchRole: tShell('switchRole'),
   }
 
+  const navLabels: Record<string, string> = {
+    navAssignments: tShell('navAssignments'),
+    navCalendar: tShell('navCalendar'),
+    navBriefs: tShell('navBriefs'),
+    navHunters: tShell('navHunters'),
+    navInbox: tShell('navInbox'),
+    navPartnerAgreement: tShell('navPartnerAgreement'),
+    navProfile: tShell('navProfile'),
+    navSettings: tShell('navSettings'),
+  }
+
   return (
     <DashboardShell
-      navItems={agentNav}
+      navItems={agentNav(navLabels)}
       section="agent"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
       userName={profileResult.data?.full_name ?? null}

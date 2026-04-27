@@ -32,9 +32,14 @@ export default async function PartnerLayout({ children }: { children: React.Reac
     switchRole: tShell('switchRole'),
   }
 
+  const navLabels: Record<string, string> = {
+    navDashboard: tShell('navDashboard'),
+    navRequests: tShell('navRequests'),
+  }
+
   return (
     <DashboardShell
-      navItems={partnerNav}
+      navItems={partnerNav(navLabels)}
       section="partner"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
       userName={profileResult.data?.full_name ?? null}

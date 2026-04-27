@@ -53,9 +53,21 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
     switchRole: tShell('switchRole'),
   }
 
+  const navLabels: Record<string, string> = {
+    navListings: tShell('navListings'),
+    navCalendar: tShell('navCalendar'),
+    navViewings: tShell('navViewings'),
+    navOffers: tShell('navOffers'),
+    navAgents: tShell('navAgents'),
+    navInbox: tShell('navInbox'),
+    navNewListing: tShell('navNewListing'),
+    navPlans: tShell('navPlans'),
+    navSettings: tShell('navSettings'),
+  }
+
   return (
     <DashboardShell
-      navItems={ownerNav}
+      navItems={ownerNav(navLabels)}
       section="owner"
       userEmail={user?.email ?? PREVIEW_USER_EMAIL}
       userName={profileResult.data?.full_name ?? null}
