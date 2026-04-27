@@ -24,6 +24,8 @@ interface Translations {
   sending: string
   successMessage: string
   errorTitle: string
+  errorInviteFailed: string
+  errorGeneric: string
 }
 
 interface Props {
@@ -75,7 +77,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
 
         if (!response.ok) {
           const error = await response.json()
-          setState({ error: error.message || 'Failed to invite agent' })
+          setState({ error: error.message || translations.errorInviteFailed })
           return
         }
 
@@ -88,7 +90,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
         // Reset success message after 3 seconds
         setTimeout(() => setState({}), 3000)
       } catch (err) {
-        setState({ error: err instanceof Error ? err.message : 'An error occurred' })
+        setState({ error: err instanceof Error ? err.message : translations.errorGeneric })
       }
     })
   }

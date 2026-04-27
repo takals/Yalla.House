@@ -5,6 +5,7 @@ import { QuoteForm } from './quote-form'
 import { Star } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { dateLocaleFromLocale } from '@/lib/country-config'
+import { countryConfigFromLocale } from '@/lib/detect-country'
 
 function formatRelativeTime(date: Date, locale: string): string {
   const now = new Date()
@@ -57,13 +58,22 @@ const categoryColors: Record<string, { bg: string; text: string; dot: string }> 
   drone: { bg: '#DBEAFE', text: '#1E40AF', dot: '#0284C7' },
 }
 
-const statusConfig: Record<string, { label: string; bg: string; text: string }> = {
-  pending: { label: 'Open', bg: '#FFF5EE', text: '#8B4513' },
-  quoted: { label: 'Quoted', bg: '#DBEAFE', text: '#1E40AF' },
-  accepted: { label: 'Accepted', bg: '#DCFCE7', text: '#166534' },
-  in_progress: { label: 'In Progress', bg: '#FEF3C7', text: '#92400E' },
-  completed: { label: 'Completed', bg: '#F3F4F6', text: '#374151' },
-  cancelled: { label: 'Cancelled', bg: '#F3F4F6', text: '#6B7280' },
+const statusColors: Record<string, { bg: string; text: string }> = {
+  pending: { bg: '#FFF5EE', text: '#8B4513' },
+  quoted: { bg: '#DBEAFE', text: '#1E40AF' },
+  accepted: { bg: '#DCFCE7', text: '#166534' },
+  in_progress: { bg: '#FEF3C7', text: '#92400E' },
+  completed: { bg: '#F3F4F6', text: '#374151' },
+  cancelled: { bg: '#F3F4F6', text: '#6B7280' },
+}
+
+const statusTranslationKeys: Record<string, string> = {
+  pending: 'statusOpen',
+  quoted: 'statusQuoted',
+  accepted: 'statusAccepted',
+  in_progress: 'statusInProgress',
+  completed: 'statusCompleted',
+  cancelled: 'statusCancelled',
 }
 
 export default async function PartnerRequestsPage({
@@ -73,6 +83,7 @@ export default async function PartnerRequestsPage({
 }) {
   const { locale } = await params
   const t = await getTranslations('partner')
+  const countryConfig = countryConfigFromLocale(locale)
   const supabase = await createClient()
   const { data: { user }, error: authErr } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
@@ -140,7 +151,7 @@ export default async function PartnerRequestsPage({
               const address = request.listings
                 ? `${request.listings.address_line1}, ${request.listings.city}, ${request.listings.postcode}`
                 : request.title
-              const requesterName = request.requester?.full_name || 'Unknown'
+              const requesterName = request.requester?.full_name || t('unknown')
 
               return (
                 <div
@@ -190,7 +201,7 @@ export default async function PartnerRequestsPage({
                     </div>
                   </div>
 
-                  <QuoteForm requestId={request.id} category={request.category} />
+                  <QuoteForm requestId={request.id} category={request.category} currency={countryConfig.currency} />
                 </div>
               )
             })}
@@ -207,7 +218,8 @@ export default async function PartnerRequestsPage({
           </h2>
           <div className="space-y-3">
             {myActive.map((request) => {
-              const statusInfo = statusConfig[request.status] || statusConfig.pending
+              const statusStyle = statusColors[request.status] || statusColors.pending
+              const statusLabel = t(statusTranslationKeys[request.status] || 'unknown')
               const colors = categoryColors[request.category] || categoryColors.photography
               const address = request.listings
                 ? `${request.listings.address_line1}, ${request.listings.city}`
@@ -233,9 +245,9 @@ export default async function PartnerRequestsPage({
                     </div>
                     <span
                       className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: statusInfo?.bg || '#F3F4F6', color: statusInfo?.text || '#374151' }}
+                      style={{ backgroundColor: statusStyle?.bg || '#F3F4F6', color: statusStyle?.text || '#374151' }}
                     >
-                      {statusInfo?.label || 'Unknown'}
+                      {statusLabel}
                     </span>
                   </div>
 
@@ -245,9 +257,10 @@ export default async function PartnerRequestsPage({
                         {t('labelMyQuote')}
                       </span>{' '}
                       {request.quoted_amount
-                        ? `${request.currency || 'EUR'} ${(request.quoted_amount / 100).toLocaleString(
-                            dateLocaleFromLocale(locale)
-                          )}`
+                        ? new Intl.NumberFormat(dateLocaleFromLocale(locale), {
+                            style: 'currency',
+                            currency: request.currency || countryConfig.currency,
+                          }).format(request.quoted_amount / 100)
                         : t('labelPending')}
                     </div>
                     <div>
@@ -297,7 +310,8 @@ export default async function PartnerRequestsPage({
           </h2>
           <div className="space-y-2">
             {completed.map((request) => {
-              const statusInfo = statusConfig[request.status] || statusConfig.pending
+              const statusStyle = statusColors[request.status] || statusColors.pending
+              const statusLabel = t(statusTranslationKeys[request.status] || 'unknown')
               const colors = categoryColors[request.category] || categoryColors.photography
 
               return (
@@ -324,9 +338,9 @@ export default async function PartnerRequestsPage({
                   </div>
                   <span
                     className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: statusInfo?.bg || '#F3F4F6', color: statusInfo?.text || '#374151' }}
+                    style={{ backgroundColor: statusStyle?.bg || '#F3F4F6', color: statusStyle?.text || '#374151' }}
                   >
-                    {statusInfo?.label || 'Unknown'}
+                    {statusLabel}
                   </span>
                 </div>
               )

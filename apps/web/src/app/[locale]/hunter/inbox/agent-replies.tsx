@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 
@@ -44,6 +44,7 @@ interface AgentRepliesProps {
 function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: boolean }) {
   const router = useRouter()
   const locale = useLocale()
+  const t = useTranslations('hunterInbox')
   const dateLocale = dateLocaleFromLocale(locale)
   const [acting, setActing] = useState(false)
   const [dismissed, setDismissed] = useState(false)
@@ -99,9 +100,9 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
             : reply.priority_tier === 'other' ? 'bg-[#DBEAFE] text-[#1E40AF]'
             : 'bg-[#F3F4F6] text-[#6B7280]'
           }`}>
-            {reply.priority_tier === 'top_match' ? 'Top Match'
-            : reply.priority_tier === 'other' ? 'Other'
-            : 'Low'}
+            {reply.priority_tier === 'top_match' ? t('topMatch')
+            : reply.priority_tier === 'other' ? t('otherMatch')
+            : t('lowMatch')}
           </span>
         </div>
       </div>
@@ -115,12 +116,12 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
       {expanded && properties.length > 0 && (
         <div className="mb-3 space-y-2">
           <p className="text-xs font-semibold text-text-secondary uppercase tracking-wide">
-            {properties.length} propert{properties.length === 1 ? 'y' : 'ies'} suggested
+            {t('propertiesSuggested', { count: properties.length })}
           </p>
           {properties.map((p, i) => (
             <div key={i} className="bg-hover-bg rounded-lg p-3 flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold">{p.title ?? 'Property'}</p>
+                <p className="text-sm font-semibold">{p.title ?? t('propertyFallback')}</p>
                 <p className="text-xs text-text-secondary">
                   {p.beds && `${p.beds} bed · `}
                   {p.area && `${p.area} · `}
@@ -130,7 +131,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
               {p.url && (
                 <a href={p.url} target="_blank" rel="noopener noreferrer"
                    className="text-xs font-semibold text-brand hover:underline">
-                  View →
+                  {t('viewLink')}
                 </a>
               )}
             </div>
@@ -146,7 +147,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
             disabled={acting}
             className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#DCFCE7] text-[#166534] hover:bg-[#BBF7D0] transition"
           >
-            Promote
+            {t('promote')}
           </button>
         )}
         <button
@@ -154,14 +155,14 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
           disabled={acting}
           className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#F3F4F6] text-[#6B7280] hover:bg-[#E5E7EB] transition"
         >
-          Dismiss
+          {t('dismiss')}
         </button>
         <button
           onClick={() => handleAction('blocked')}
           disabled={acting}
           className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#FEE2E2] text-[#991B1B] hover:bg-[#FECACA] transition"
         >
-          Block
+          {t('block')}
         </button>
         <span className="text-xs text-text-muted ml-auto">
           {new Date(reply.created_at).toLocaleDateString(dateLocale)}
@@ -172,6 +173,7 @@ function ReplyCard({ reply, expanded = false }: { reply: AgentReply; expanded?: 
 }
 
 export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: AgentRepliesProps) {
+  const t = useTranslations('hunterInbox')
   const [showLow, setShowLow] = useState(false)
 
   return (
@@ -179,10 +181,10 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
       {/* Stats bar */}
       <div className="grid grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Active searches', value: stats.totalSearches, color: 'text-text-primary' },
-          { label: 'Agents contacted', value: stats.agentsContacted, color: 'text-[#1E40AF]' },
-          { label: 'Replies received', value: stats.repliesReceived, color: 'text-[#166534]' },
-          { label: 'Top matches', value: stats.topMatchCount, color: 'text-brand' },
+          { label: t('activeSearches'), value: stats.totalSearches, color: 'text-text-primary' },
+          { label: t('agentsContacted'), value: stats.agentsContacted, color: 'text-[#1E40AF]' },
+          { label: t('repliesReceived'), value: stats.repliesReceived, color: 'text-[#166534]' },
+          { label: t('topMatches'), value: stats.topMatchCount, color: 'text-brand' },
         ].map(s => (
           <div key={s.label} className="bg-surface rounded-lg p-3 border border-border-default text-center">
             <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
@@ -196,7 +198,7 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
         <div className="mb-6">
           <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#22C55E]" />
-            Top Matches ({topMatches.length})
+            {t('topMatchesHeading')} ({topMatches.length})
           </h3>
           <div className="space-y-3">
             {topMatches.map(r => <ReplyCard key={r.id} reply={r} expanded />)}
@@ -209,7 +211,7 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
         <div className="mb-6">
           <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#3B82F6]" />
-            Other Replies ({otherReplies.length})
+            {t('otherRepliesHeading')} ({otherReplies.length})
           </h3>
           <div className="space-y-2">
             {otherReplies.map(r => <ReplyCard key={r.id} reply={r} />)}
@@ -224,7 +226,7 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
             onClick={() => setShowLow(!showLow)}
             className="text-sm font-semibold text-text-secondary hover:text-text-primary transition mb-3"
           >
-            {showLow ? '▾' : '▸'} More replies ({lowRelevance.length})
+            {showLow ? '\u25BE' : '\u25B8'} {t('moreReplies')} ({lowRelevance.length})
           </button>
           {showLow && (
             <div className="space-y-2">
@@ -237,11 +239,11 @@ export function AgentReplies({ topMatches, otherReplies, lowRelevance, stats }: 
       {/* Empty state */}
       {topMatches.length === 0 && otherReplies.length === 0 && lowRelevance.length === 0 && (
         <div className="bg-surface rounded-xl p-8 text-center border border-border-default">
-          <p className="text-text-secondary font-medium mb-1">No agent replies yet</p>
+          <p className="text-text-secondary font-medium mb-1">{t('noRepliesYet')}</p>
           <p className="text-xs text-text-muted">
             {stats.agentsContacted > 0
-              ? `${stats.agentsContacted} agents have been contacted. Replies usually arrive within 24–48 hours.`
-              : 'Create a search and enable agent outreach to get started.'}
+              ? t('agentsContactedDesc', { count: stats.agentsContacted })
+              : t('noSearchesYet')}
           </p>
         </div>
       )}

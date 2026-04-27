@@ -55,6 +55,7 @@ interface Props {
     savedDefaults: string
     buttonEdit: string
     notSet: string
+    errorLoginRequired: string
   }
 }
 
@@ -120,7 +121,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
     setSaving(false)
 
     if (handleAuthRequired(result)) {
-      setFeedback({ type: 'error', message: 'Please log in to save changes' })
+      setFeedback({ type: 'error', message: t.errorLoginRequired })
       return
     }
 

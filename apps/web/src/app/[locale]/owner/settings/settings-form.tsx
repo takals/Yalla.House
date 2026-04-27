@@ -27,6 +27,7 @@ interface SettingsFormProps {
     buttonEdit: string
     buttonAdd: string
     notSet: string
+    errorLoginRequired: string
   }
 }
 
@@ -35,19 +36,19 @@ export function SettingsForm({ userProfile, ownerProfile, translations: t }: Set
 
   const createSaveHandler = (action: (data: any) => Promise<any>) => async (value: string) => {
     const result = await action({ full_name: value } as any)
-    if (handleAuthRequired(result)) return { error: 'Please log in to save changes' }
+    if (handleAuthRequired(result)) return { error: t.errorLoginRequired }
     return result
   }
 
   const updateUserWithAuth = async (data: any) => {
     const result = await updateUserProfileAction(data)
-    if (handleAuthRequired(result)) return { error: 'Please log in to save changes' }
+    if (handleAuthRequired(result)) return { error: t.errorLoginRequired }
     return result
   }
 
   const updateOwnerWithAuth = async (data: any) => {
     const result = await updateOwnerProfileAction(data)
-    if (handleAuthRequired(result)) return { error: 'Please log in to save changes' }
+    if (handleAuthRequired(result)) return { error: t.errorLoginRequired }
     return result
   }
 

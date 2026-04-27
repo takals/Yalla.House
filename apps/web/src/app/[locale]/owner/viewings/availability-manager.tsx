@@ -61,7 +61,7 @@ export function AvailabilityManager({
 
   async function handleAdd() {
     if (!selectedListing || !date || !startTime || !endTime) {
-      setError(t.fillAllFields ?? 'Alle Felder ausfüllen')
+      setError(t.fillAllFields)
       return
     }
     setError(null)
@@ -112,7 +112,7 @@ export function AvailabilityManager({
 
   async function handleQuickWeek() {
     if (!selectedListing || qwDays.size === 0) {
-      setError(t.fillAllFields ?? 'Fill all fields')
+      setError(t.fillAllFields)
       return
     }
     setError(null)
@@ -148,7 +148,7 @@ export function AvailabilityManager({
     }
 
     if (batchSlots.length === 0) {
-      setError('No valid slots generated')
+      setError(t.noValidSlots)
       setActing(s => { const n = new Set(s); n.delete('batch'); return n })
       return
     }
@@ -161,7 +161,7 @@ export function AvailabilityManager({
     if ('error' in result) {
       setError(result.error)
     } else if ('success' in result) {
-      setQwSuccess((t.slotsCreated ?? '{count} slots created').replace('{count}', String(result.count)))
+      setQwSuccess(t.slotsCreated.replace('{count}', String(result.count)))
       setShowQuickWeek(false)
       // Reload page to get fresh slot data
       window.location.reload()
@@ -169,13 +169,13 @@ export function AvailabilityManager({
   }
 
   const DAY_LABELS = [
-    { value: 0, label: t.sun ?? 'Sun' },
-    { value: 1, label: t.mon ?? 'Mon' },
-    { value: 2, label: t.tue ?? 'Tue' },
-    { value: 3, label: t.wed ?? 'Wed' },
-    { value: 4, label: t.thu ?? 'Thu' },
-    { value: 5, label: t.fri ?? 'Fri' },
-    { value: 6, label: t.sat ?? 'Sat' },
+    { value: 0, label: t.sun },
+    { value: 1, label: t.mon },
+    { value: 2, label: t.tue },
+    { value: 3, label: t.wed },
+    { value: 4, label: t.thu },
+    { value: 5, label: t.fri },
+    { value: 6, label: t.sat },
   ]
 
   function toggleDay(day: number) {
@@ -301,7 +301,7 @@ export function AvailabilityManager({
             className="flex items-center gap-1.5 text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors"
           >
             <Repeat size={14} />
-            {t.quickWeek ?? 'Quick-fill week'}
+            {t.quickWeek}
           </button>
 
           {qwSuccess && (
@@ -312,7 +312,7 @@ export function AvailabilityManager({
 
           {showQuickWeek && (
             <div className="bg-surface rounded-card p-5 shadow-sm mt-3">
-              <p className="text-xs text-text-secondary mb-4">{t.quickWeekDesc ?? 'Create slots for the next 7 days automatically'}</p>
+              <p className="text-xs text-text-secondary mb-4">{t.quickWeekDesc}</p>
 
               {listings.length > 1 && (
                 <div className="mb-3">
@@ -331,7 +331,7 @@ export function AvailabilityManager({
 
               {/* Day selector */}
               <div className="mb-3">
-                <label className="text-xs font-semibold text-text-secondary mb-2 block">{t.selectDays ?? 'Select days'}</label>
+                <label className="text-xs font-semibold text-text-secondary mb-2 block">{t.selectDays}</label>
                 <div className="flex gap-1.5">
                   {DAY_LABELS.map(d => (
                     <button
@@ -353,7 +353,7 @@ export function AvailabilityManager({
               {/* Time range + duration */}
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div>
-                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.fromTime ?? 'From'}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.fromTime}</label>
                   <input
                     type="time"
                     value={qwFrom}
@@ -362,7 +362,7 @@ export function AvailabilityManager({
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.toTime ?? 'Until'}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.toTime}</label>
                   <input
                     type="time"
                     value={qwTo}
@@ -371,16 +371,16 @@ export function AvailabilityManager({
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.slotDuration ?? 'Duration'}</label>
+                  <label className="text-xs font-semibold text-text-secondary mb-1 block">{t.slotDuration}</label>
                   <select
                     value={qwDuration}
                     onChange={e => setQwDuration(Number(e.target.value))}
                     className="w-full text-sm border border-[#D8DBE5] rounded-lg px-3 py-2 bg-white"
                   >
-                    <option value={15}>15 {t.minutes ?? 'min'}</option>
-                    <option value={30}>30 {t.minutes ?? 'min'}</option>
-                    <option value={45}>45 {t.minutes ?? 'min'}</option>
-                    <option value={60}>60 {t.minutes ?? 'min'}</option>
+                    <option value={15}>15 {t.minutes}</option>
+                    <option value={30}>30 {t.minutes}</option>
+                    <option value={45}>45 {t.minutes}</option>
+                    <option value={60}>60 {t.minutes}</option>
                   </select>
                 </div>
               </div>
@@ -391,7 +391,7 @@ export function AvailabilityManager({
                 disabled={acting.has('batch')}
                 className="w-full text-sm font-bold px-4 py-2.5 bg-brand hover:bg-brand-hover text-text-primary rounded-lg transition-colors disabled:opacity-50"
               >
-                {acting.has('batch') ? '...' : (t.generateSlots ?? 'Create slots')}
+                {acting.has('batch') ? '...' : t.generateSlots}
               </button>
               {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
             </div>

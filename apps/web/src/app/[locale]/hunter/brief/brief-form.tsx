@@ -24,43 +24,6 @@ interface Props {
 }
 
 const AREAS = ['East London', 'North London', 'South East London', 'Zone 2', 'Zone 3', 'West London', 'South West London']
-const PROPERTY_TYPES: { value: string; label: string }[] = [
-  { value: 'flat', label: 'Flat' },
-  { value: 'terraced', label: 'Terraced' },
-  { value: 'semi-detached', label: 'Semi-detached' },
-  { value: 'detached', label: 'Detached' },
-  { value: 'new_build', label: 'New build' },
-  { value: 'period', label: 'Period' },
-]
-const BEDROOMS = [
-  { value: 0, label: 'Studio' },
-  { value: 1, label: '1 bed' },
-  { value: 2, label: '2 beds' },
-  { value: 3, label: '3 beds' },
-  { value: 4, label: '4+ beds' },
-]
-const MUST_HAVES = ['Balcony', 'Near station', 'Garden', 'Parking', 'EV charging', 'Period features', 'Open plan', 'Guest WC', 'Storage', 'Quiet street']
-const DEALBREAKERS = ['No auctions', 'No retirement homes', 'No ground floor', 'No top floor without lift', 'No shared ownership', 'No ex-social', 'No estate-agency only']
-const FINANCE_OPTIONS = [
-  { value: 'not_specified', label: 'Not specified' },
-  { value: 'mortgage_pending', label: 'Mortgage in progress' },
-  { value: 'mortgage_approved', label: 'Mortgage in principle' },
-  { value: 'cash', label: 'Cash buyer' },
-]
-const TIMELINE_OPTIONS = [
-  { value: 'asap', label: 'As soon as possible' },
-  { value: '3m', label: '3 months' },
-  { value: '6m', label: '3–6 months' },
-  { value: '1y', label: '1 year' },
-  { value: 'flexible', label: 'Flexible' },
-]
-const AUTOMATIONS = [
-  { key: 'matchPortals', label: 'Match properties from portals' },
-  { key: 'connectAgents', label: 'Connect my inbox to local agents' },
-  { key: 'subscribeNewsletters', label: 'Subscribe to agent newsletters' },
-  { key: 'filterAuto', label: 'Filter listings automatically' },
-  { key: 'notifyMatches', label: 'Notify me when strong matches appear' },
-]
 
 function toggle(arr: string[], value: string): string[] {
   return arr.includes(value) ? arr.filter(v => v !== value) : [...arr, value]
@@ -94,10 +57,73 @@ function StepHeader({ n, title }: { n: string; title: string }) {
 }
 
 export function BriefForm({ profile }: Props) {
-  const t = useTranslations('briefForm')
+  const t = useTranslations('hunterBrief')
   const [state, setState] = useState<{ success?: boolean; error?: string }>({})
   const [isPending, startTransition] = useTransition()
   const { handleAuthRequired } = useAuthAction()
+
+  // Arrays inside the component so they can access t()
+  const PROPERTY_TYPES: { value: string; label: string }[] = [
+    { value: 'flat', label: t('prop_flat') },
+    { value: 'terraced', label: t('prop_terraced') },
+    { value: 'semi-detached', label: t('prop_semiDetached') },
+    { value: 'detached', label: t('prop_detached') },
+    { value: 'new_build', label: t('prop_newBuild') },
+    { value: 'period', label: t('prop_period') },
+  ]
+  const BEDROOMS = [
+    { value: 0, label: t('beds_studio') },
+    { value: 1, label: t('beds_1') },
+    { value: 2, label: t('beds_2') },
+    { value: 3, label: t('beds_3') },
+    { value: 4, label: t('beds_4plus') },
+  ]
+  const MUST_HAVES = [
+    { value: 'Balcony', label: t('mh_balcony') },
+    { value: 'Near station', label: t('mh_nearStation') },
+    { value: 'Garden', label: t('mh_garden') },
+    { value: 'Parking', label: t('mh_parking') },
+    { value: 'EV charging', label: t('mh_evCharging') },
+    { value: 'Period features', label: t('mh_periodFeatures') },
+    { value: 'Open plan', label: t('mh_openPlan') },
+    { value: 'Guest WC', label: t('mh_guestWc') },
+    { value: 'Storage', label: t('mh_storage') },
+    { value: 'Quiet street', label: t('mh_quietStreet') },
+  ]
+  const DEALBREAKERS = [
+    { value: 'No auctions', label: t('db_noAuctions') },
+    { value: 'No retirement homes', label: t('db_noRetirement') },
+    { value: 'No ground floor', label: t('db_noGroundFloor') },
+    { value: 'No top floor without lift', label: t('db_noTopFloorNoLift') },
+    { value: 'No shared ownership', label: t('db_noSharedOwnership') },
+    { value: 'No ex-social', label: t('db_noExSocial') },
+    { value: 'No estate-agency only', label: t('db_noEstateAgencyOnly') },
+  ]
+  const FINANCE_OPTIONS = [
+    { value: 'not_specified', label: t('fin_notSpecified') },
+    { value: 'mortgage_pending', label: t('fin_mortgagePending') },
+    { value: 'mortgage_approved', label: t('fin_mortgageApproved') },
+    { value: 'cash', label: t('fin_cash') },
+  ]
+  const TIMELINE_OPTIONS = [
+    { value: 'asap', label: t('time_asap') },
+    { value: '3m', label: t('time_3m') },
+    { value: '6m', label: t('time_6m') },
+    { value: '1y', label: t('time_1y') },
+    { value: 'flexible', label: t('time_flexible') },
+  ]
+  const AUTOMATIONS = [
+    { key: 'matchPortals', label: t('auto_matchPortals') },
+    { key: 'connectAgents', label: t('auto_connectAgents') },
+    { key: 'subscribeNewsletters', label: t('auto_subscribeNewsletters') },
+    { key: 'filterAuto', label: t('auto_filterAuto') },
+    { key: 'notifyMatches', label: t('auto_notifyMatches') },
+  ]
+  const SHARING_TARGETS = [
+    t('share_matchingEngine'),
+    t('share_connectedAgents'),
+    t('share_newsletterFeeds'),
+  ]
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -134,9 +160,9 @@ export function BriefForm({ profile }: Props) {
 
   // Derive preview text
   const previewBeds = BEDROOMS.find(b => b.value === minBeds)?.label ?? `${minBeds}+`
-  const previewTypes = propertyTypes.map(t => PROPERTY_TYPES.find(p => p.value === t)?.label ?? t)
+  const previewTypes = propertyTypes.map(v => PROPERTY_TYPES.find(p => p.value === v)?.label ?? v)
   const previewFinance = FINANCE_OPTIONS.find(f => f.value === financeStatus)?.label
-  const previewTimeline = TIMELINE_OPTIONS.find(t => t.value === timeline)?.label
+  const previewTimeline = TIMELINE_OPTIONS.find(tl => tl.value === timeline)?.label
   const hasBrief = areas.length > 0 || budgetMax !== '' || propertyTypes.length > 0
 
   // Sample listings matching brief (illustrative)
@@ -162,7 +188,7 @@ export function BriefForm({ profile }: Props) {
 
       {state.success && (
         <div className="mb-6 bg-green-50 border border-green-200 rounded-xl px-5 py-4 text-sm text-green-800 font-medium flex items-center gap-2">
-          <CheckCircle2 size={16} /> Brief activated — the system is now working for you.
+          <CheckCircle2 size={16} /> {t('successMessage')}
         </div>
       )}
       {state.error && (
@@ -199,14 +225,14 @@ export function BriefForm({ profile }: Props) {
                     intent === v ? 'bg-brand border-brand text-text-primary' : 'bg-surface border-border-default text-text-secondary'
                   }`}
                 >
-                  {v === 'buy' ? 'Buy' : 'Rent'}
+                  {v === 'buy' ? t('intentBuy') : t('intentRent')}
                 </button>
               ))}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-text-secondary mb-1">
-                  Min {intent === 'rent' ? '(£/pcm)' : '(£)'}
+                  {intent === 'rent' ? t('budgetMinRent', { currency: t('currency') }) : t('budgetMinBuy', { currency: t('currency') })}
                 </label>
                 <input
                   type="number"
@@ -218,7 +244,7 @@ export function BriefForm({ profile }: Props) {
               </div>
               <div>
                 <label className="block text-xs font-medium text-text-secondary mb-1">
-                  Max {intent === 'rent' ? '(£/pcm)' : '(£)'}
+                  {intent === 'rent' ? t('budgetMaxRent', { currency: t('currency') }) : t('budgetMaxBuy', { currency: t('currency') })}
                 </label>
                 <input
                   type="number"
@@ -235,11 +261,11 @@ export function BriefForm({ profile }: Props) {
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="3" title={t('stepPropertyType')} />
             <div className="flex flex-wrap gap-2 mb-5">
-              {PROPERTY_TYPES.map(t => (
-                <Chip key={t.value} label={t.label} active={propertyTypes.includes(t.value)} onClick={() => setPropertyTypes(toggle(propertyTypes, t.value))} />
+              {PROPERTY_TYPES.map(pt => (
+                <Chip key={pt.value} label={pt.label} active={propertyTypes.includes(pt.value)} onClick={() => setPropertyTypes(toggle(propertyTypes, pt.value))} />
               ))}
             </div>
-            <p className="text-xs font-semibold text-text-secondary mb-3">Minimum bedrooms</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">{t('minBedrooms')}</p>
             <div className="flex flex-wrap gap-2">
               {BEDROOMS.map(b => (
                 <Chip key={b.value} label={b.label} active={minBeds === b.value} onClick={() => setMinBeds(b.value)} />
@@ -250,26 +276,26 @@ export function BriefForm({ profile }: Props) {
           {/* Step 4 — Must-haves + dealbreakers */}
           <div className="bg-surface rounded-2xl p-6 border border-border-default">
             <StepHeader n="4" title={t('stepPreferences')} />
-            <p className="text-xs font-semibold text-text-secondary mb-3">Must-haves</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">{t('mustHavesLabel')}</p>
             <div className="flex flex-wrap gap-2 mb-5">
               {MUST_HAVES.map(m => (
-                <Chip key={m} label={m} active={mustHaves.includes(m)} onClick={() => setMustHaves(toggle(mustHaves, m))} />
+                <Chip key={m.value} label={m.label} active={mustHaves.includes(m.value)} onClick={() => setMustHaves(toggle(mustHaves, m.value))} />
               ))}
             </div>
-            <p className="text-xs font-semibold text-text-secondary mb-3">Dealbreakers</p>
+            <p className="text-xs font-semibold text-text-secondary mb-3">{t('dealbreakersLabel')}</p>
             <div className="flex flex-wrap gap-2">
               {DEALBREAKERS.map(d => (
                 <button
-                  key={d}
+                  key={d.value}
                   type="button"
-                  onClick={() => setDealbreakers(toggle(dealbreakers, d))}
+                  onClick={() => setDealbreakers(toggle(dealbreakers, d.value))}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors select-none ${
-                    dealbreakers.includes(d)
+                    dealbreakers.includes(d.value)
                       ? 'bg-red-50 border-red-300 text-red-700'
                       : 'bg-surface border-border-default text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
-                  {d}
+                  {d.label}
                 </button>
               ))}
             </div>
@@ -280,7 +306,7 @@ export function BriefForm({ profile }: Props) {
             <StepHeader n="5" title={t('stepTiming')} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-text-secondary mb-1">Finance status</label>
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('financeStatusLabel')}</label>
                 <select
                   value={financeStatus}
                   onChange={e => setFinanceStatus(e.target.value)}
@@ -290,7 +316,7 @@ export function BriefForm({ profile }: Props) {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-text-secondary mb-1">Timeline</label>
+                <label className="block text-xs font-medium text-text-secondary mb-1">{t('timelineLabel')}</label>
                 <select
                   value={timeline}
                   onChange={e => setTimeline(e.target.value)}
@@ -319,68 +345,68 @@ export function BriefForm({ profile }: Props) {
           {/* Brief preview */}
           <div className="bg-surface rounded-2xl p-5 border border-border-default">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-xs font-bold text-text-secondary uppercase tracking-wide">Your Brief</p>
+              <p className="text-xs font-bold text-text-secondary uppercase tracking-wide">{t('yourBrief')}</p>
               {hasBrief && (
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-800 border border-green-200">
-                  Active
+                  {t('active')}
                 </span>
               )}
             </div>
 
             {!hasBrief ? (
-              <p className="text-sm text-text-muted italic">Fill in the form to see your brief here.</p>
+              <p className="text-sm text-text-muted italic">{t('emptyBrief')}</p>
             ) : (
               <div className="space-y-2 text-sm">
                 {intent && (
                   <div className="flex gap-2">
-                    <span className="text-text-muted w-20 flex-shrink-0">Looking to</span>
-                    <span className="font-semibold capitalize">{intent}</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">{t('previewLookingTo')}</span>
+                    <span className="font-semibold capitalize">{intent === 'buy' ? t('intentBuy') : t('intentRent')}</span>
                   </div>
                 )}
                 {areas.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-text-muted w-20 flex-shrink-0">Location</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">{t('previewLocation')}</span>
                     <span className="font-semibold">{areas.join(', ')}</span>
                   </div>
                 )}
                 {(budgetMin !== '' || budgetMax !== '') && (
                   <div className="flex gap-2">
-                    <span className="text-text-muted w-20 flex-shrink-0">Budget</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">{t('previewBudget')}</span>
                     <span className="font-semibold">
-                      {budgetMin !== '' ? `£${Number(budgetMin).toLocaleString()}` : '—'}
-                      {' → '}
-                      {budgetMax !== '' ? `£${Number(budgetMax).toLocaleString()}` : '—'}
+                      {budgetMin !== '' ? `${t('currency')}${Number(budgetMin).toLocaleString()}` : '\u2014'}
+                      {' \u2192 '}
+                      {budgetMax !== '' ? `${t('currency')}${Number(budgetMax).toLocaleString()}` : '\u2014'}
                     </span>
                   </div>
                 )}
                 {propertyTypes.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-text-muted w-20 flex-shrink-0">Type</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">{t('previewType')}</span>
                     <span className="font-semibold">{previewTypes.join(', ')}</span>
                   </div>
                 )}
                 <div className="flex gap-2">
-                  <span className="text-text-muted w-20 flex-shrink-0">Bedrooms</span>
+                  <span className="text-text-muted w-20 flex-shrink-0">{t('previewBedrooms')}</span>
                   <span className="font-semibold">{previewBeds}+</span>
                 </div>
                 {mustHaves.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-text-muted w-20 flex-shrink-0">Must-haves</span>
-                    <span className="font-semibold">{mustHaves.join(' · ')}</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">{t('mustHavesLabel')}</span>
+                    <span className="font-semibold">{mustHaves.map(v => MUST_HAVES.find(m => m.value === v)?.label ?? v).join(' \u00b7 ')}</span>
                   </div>
                 )}
                 {dealbreakers.length > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-text-muted w-20 flex-shrink-0">Nope</span>
-                    <span className="font-semibold text-red-600">{dealbreakers.join(' · ')}</span>
+                    <span className="text-text-muted w-20 flex-shrink-0">{t('previewNope')}</span>
+                    <span className="font-semibold text-red-600">{dealbreakers.map(v => DEALBREAKERS.find(d => d.value === v)?.label ?? v).join(' \u00b7 ')}</span>
                   </div>
                 )}
                 <div className="flex gap-2">
-                  <span className="text-text-muted w-20 flex-shrink-0">Finance</span>
+                  <span className="text-text-muted w-20 flex-shrink-0">{t('previewFinance')}</span>
                   <span className="font-semibold">{previewFinance}</span>
                 </div>
                 <div className="flex gap-2">
-                  <span className="text-text-muted w-20 flex-shrink-0">Timeline</span>
+                  <span className="text-text-muted w-20 flex-shrink-0">{t('previewTimeline')}</span>
                   <span className="font-semibold">{previewTimeline}</span>
                 </div>
               </div>
@@ -388,8 +414,8 @@ export function BriefForm({ profile }: Props) {
 
             {hasBrief && (
               <div className="mt-4 pt-4 border-t border-border-default">
-                <p className="text-xs font-semibold text-text-secondary mb-2">This brief will be shared with:</p>
-                {['Matching engine', 'Connected agents', 'Newsletter feeds'].map(item => (
+                <p className="text-xs font-semibold text-text-secondary mb-2">{t('sharedWith')}</p>
+                {SHARING_TARGETS.map(item => (
                   <div key={item} className="flex items-center gap-1.5 text-xs text-text-secondary mb-1">
                     <Check size={12} className="text-green-600 flex-shrink-0" /> {item}
                   </div>
@@ -400,7 +426,7 @@ export function BriefForm({ profile }: Props) {
 
           {/* Automation toggles */}
           <div className="bg-surface rounded-2xl p-5 border border-border-default">
-            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">Automation Settings</p>
+            <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">{t('automationSettings')}</p>
             <div className="space-y-3">
               {AUTOMATIONS.map(a => (
                 <label key={a.key} className="flex items-center gap-3 cursor-pointer">
@@ -419,7 +445,7 @@ export function BriefForm({ profile }: Props) {
           {/* Sample listings */}
           <div className="bg-surface rounded-2xl p-5 border border-border-default">
             <p className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-4">
-              {hasBrief ? 'Listings we would show you' : 'Example matches'}
+              {hasBrief ? t('listingsWeWouldShow') : t('exampleMatches')}
             </p>
             <div className="space-y-3">
               {sampleListings.map(l => (
@@ -431,7 +457,7 @@ export function BriefForm({ profile }: Props) {
               ))}
             </div>
             <p className="text-xs text-text-muted mt-3 italic">
-              Real listings will appear once your brief is active.
+              {t('realListingsNote')}
             </p>
           </div>
 

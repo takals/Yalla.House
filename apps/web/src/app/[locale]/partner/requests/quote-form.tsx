@@ -6,9 +6,10 @@ import { useTranslations } from 'next-intl'
 interface QuoteFormProps {
   requestId: string
   category: string
+  currency: string
 }
 
-export function QuoteForm({ requestId, category }: QuoteFormProps) {
+export function QuoteForm({ requestId, category, currency }: QuoteFormProps) {
   const t = useTranslations('partner')
   const [isOpen, setIsOpen] = useState(false)
   const [amount, setAmount] = useState('')
@@ -35,7 +36,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: Math.round(parseFloat(amount) * 100),
-          currency: 'EUR',
+          currency,
           message: message || null,
         }),
       })
@@ -74,7 +75,7 @@ export function QuoteForm({ requestId, category }: QuoteFormProps) {
             {/* Amount Input */}
             <div>
               <label className="block text-xs font-semibold text-text-secondary mb-1">
-                {t('quoteAmountLabel')}
+                {t('quoteAmountLabel', { currency })}
               </label>
               <input
                 type="number"

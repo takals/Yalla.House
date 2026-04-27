@@ -85,6 +85,7 @@ export default async function OwnerSettingsPage() {
           buttonEdit: t('buttonEdit'),
           buttonAdd: t('buttonAdd'),
           notSet: t('notSet'),
+          errorLoginRequired: t('errorLoginRequired'),
         }}
       />
 
@@ -199,6 +200,7 @@ export default async function OwnerSettingsPage() {
           savedDefaults: t('savedDefaults'),
           buttonEdit: t('buttonEdit'),
           notSet: t('notSet'),
+          errorLoginRequired: t('errorLoginRequired'),
         }}
       />
 

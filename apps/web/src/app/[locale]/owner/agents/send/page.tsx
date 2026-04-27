@@ -176,6 +176,11 @@ export default async function SendBriefPage({ searchParams }: Props) {
                       listingId={listing.id}
                       agentIds={selectedAgents.map(a => a.id)}
                       label={t('sendBriefNow')}
+                      translations={{
+                        sending: t('sending'),
+                        errorSendFailed: t('errorSendFailed'),
+                        errorGeneric: t('errorGeneric'),
+                      }}
                     />
                   )}
                 </div>

@@ -46,6 +46,7 @@ function ScopeLabels(t: any): Record<string, string> {
 
 export function AgentCard({ assignment }: Props) {
   const t = useTranslations('hunterDashboard')
+  const ta = useTranslations('hunterAgents')
   const STATUS_LABELS = StatusLabels(t)
   const SCOPE_LABELS = ScopeLabels(t)
   const [isPending, startTransition] = useTransition()
@@ -64,7 +65,7 @@ export function AgentCard({ assignment }: Props) {
     <div className={`bg-surface rounded-card p-5 ${status === 'ignored' ? 'opacity-60' : ''}`}>
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
-          <p className="font-semibold">{agency_name ?? 'Unbekannte Agentur'}</p>
+          <p className="font-semibold">{agency_name ?? ta('unknownAgency')}</p>
           {agent_name && <p className="text-sm text-text-secondary">{agent_name}</p>}
           <p className="text-xs text-text-muted mt-0.5">{SCOPE_LABELS[data_scope] ?? data_scope}</p>
         </div>
@@ -88,14 +89,14 @@ export function AgentCard({ assignment }: Props) {
               disabled={isPending}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
             >
-              Daten pausieren
+              {ta('pauseData')}
             </button>
             <button
               onClick={() => update('disconnected')}
               disabled={isPending}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:text-red-600 hover:border-red-200 transition-colors disabled:opacity-50"
             >
-              Trennen
+              {ta('disconnect')}
             </button>
           </>
         )}
@@ -105,7 +106,7 @@ export function AgentCard({ assignment }: Props) {
             disabled={isPending}
             className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-text-primary transition-colors disabled:opacity-50"
           >
-            Daten fortsetzen
+            {ta('resumeData')}
           </button>
         )}
         {/* Agent invited the hunter → hunter accepts or declines */}
@@ -116,7 +117,7 @@ export function AgentCard({ assignment }: Props) {
               disabled={isPending}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-hover text-text-primary transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
-              Annehmen <Check size={14} />
+              {ta('accept')} <Check size={14} />
             </button>
             <button
               onClick={() => update('ignored')}
@@ -135,14 +136,14 @@ export function AgentCard({ assignment }: Props) {
               disabled={isPending}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
             >
-              Brief erneut senden
+              {ta('resendBrief')}
             </button>
             <button
               onClick={() => update('ignored')}
               disabled={isPending}
               className="text-xs font-semibold px-3 py-1.5 rounded-lg text-text-secondary hover:text-red-600 transition-colors disabled:opacity-50"
             >
-              Ignorieren
+              {ta('ignore')}
             </button>
           </>
         )}
@@ -152,7 +153,7 @@ export function AgentCard({ assignment }: Props) {
             disabled={isPending}
             className="text-xs font-semibold px-3 py-1.5 rounded-lg border border-border-default text-text-secondary hover:border-[#C8CCD6] transition-colors disabled:opacity-50"
           >
-            Erneut verbinden
+            {ta('reconnect')}
           </button>
         )}
       </div>

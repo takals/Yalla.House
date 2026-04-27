@@ -131,6 +131,7 @@ export default async function ViewingsPage() {
             toTime: t('toTime'),
             generateSlots: t('generateSlots'),
             slotsCreated: t('slotsCreated'),
+            noValidSlots: t('noValidSlots'),
             mon: t('mon'),
             tue: t('tue'),
             wed: t('wed'),
