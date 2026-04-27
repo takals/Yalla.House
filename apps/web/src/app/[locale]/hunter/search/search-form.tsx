@@ -15,13 +15,14 @@ interface SearchFormProps {
   }
 }
 
-const PROPERTY_TYPES = ['apartment', 'house', 'villa', 'land', 'commercial']
-const TIMELINES = [
-  { value: 'immediate', label: 'Immediate' },
-  { value: '1_3_months', label: '1–3 months' },
-  { value: '3_6_months', label: '3–6 months' },
-  { value: 'flexible', label: 'Flexible' },
-]
+const PROPERTY_TYPES = ['apartment', 'house', 'villa', 'land', 'commercial'] as const
+const TIMELINE_VALUES = ['immediate', '1_3_months', '3_6_months', 'flexible'] as const
+const TIMELINE_KEYS: Record<string, string> = {
+  immediate: 'immediate',
+  '1_3_months': 'months1_3',
+  '3_6_months': 'months3_6',
+  flexible: 'flexible',
+}
 
 export function SearchForm({ defaults }: SearchFormProps) {
   const router = useRouter()
@@ -97,14 +98,14 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error ?? 'Failed to create search')
+        throw new Error(data.error ?? t('errorCreateSearch'))
       }
 
       const data = await res.json()
       setSearchId(data.id)
       setStep(2)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      setError(err instanceof Error ? err.message : t('errorGeneric'))
     } finally {
       setSaving(false)
     }
@@ -125,14 +126,14 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.error ?? 'Failed to save consent')
+        throw new Error(data.error ?? t('errorSaveConsent'))
       }
 
       // Success — redirect to inbox
       router.push('/hunter/inbox')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      setError(err instanceof Error ? err.message : t('errorGeneric'))
     } finally {
       setSaving(false)
     }
@@ -143,7 +144,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
     return (
       <form onSubmit={handleSubmitSearch}>
         <div className="bg-surface rounded-2xl p-6 border border-border-default">
-          <h2 className="text-lg font-bold mb-6">New Search</h2>
+          <h2 className="text-lg font-bold mb-6">{t('newSearch')}</h2>
 
           {error && (
             <div role="alert" className="bg-[#FEE2E2] text-[#991B1B] text-sm p-3 rounded-lg mb-4">{error}</div>
@@ -151,7 +152,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Intent */}
           <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2">Looking to</label>
+            <label className="block text-sm font-semibold mb-2">{t('lookingTo')}</label>
             <div className="flex gap-2">
               {['buy', 'rent'].map(v => (
                 <button
@@ -164,7 +165,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
                       : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
-                  {v === 'buy' ? 'Buy' : 'Rent'}
+                  {v === 'buy' ? t('buy') : t('rent')}
                 </button>
               ))}
             </div>
@@ -172,18 +173,18 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Areas */}
           <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2">Target areas</label>
+            <label className="block text-sm font-semibold mb-2">{t('targetAreas')}</label>
             <div className="flex gap-2 mb-2">
               <input
                 type="text"
                 value={areaInput}
                 onChange={e => setAreaInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addArea())}
-                placeholder="City, district, or postcode"
+                placeholder={t('areaPlaceholder')}
                 className="flex-1 px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm focus:outline-none focus:ring-2 focus:ring-brand/30"
               />
               <button type="button" onClick={addArea} className="px-4 py-2 bg-bg rounded-lg text-sm font-semibold hover:bg-hover-muted transition">
-                Add
+                {t('add')}
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -198,7 +199,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Radius */}
           <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2">Radius: {radiusKm} km</label>
+            <label className="block text-sm font-semibold mb-2">{t('radius', { km: radiusKm })}</label>
             <input
               type="range"
               min={1}
@@ -212,7 +213,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
           {/* Budget */}
           <div className="mb-5 grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold mb-1 text-text-secondary">Currency</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">{t('currency')}</label>
               <select
                 value={currency}
                 onChange={e => setCurrency(e.target.value)}
@@ -223,22 +224,22 @@ export function SearchForm({ defaults }: SearchFormProps) {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1 text-text-secondary">Min budget</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">{t('minBudget')}</label>
               <input
                 type="number"
                 value={budgetMin}
                 onChange={e => setBudgetMin(e.target.value)}
-                placeholder="e.g. 200000"
+                placeholder={t('budgetPlaceholder')}
                 className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1 text-text-secondary">Max budget</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">{t('maxBudget')}</label>
               <input
                 type="number"
                 value={budgetMax}
                 onChange={e => setBudgetMax(e.target.value)}
-                placeholder="e.g. 500000"
+                placeholder={t('budgetPlaceholder')}
                 className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
               />
             </div>
@@ -246,20 +247,20 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Property types */}
           <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2">Property type</label>
+            <label className="block text-sm font-semibold mb-2">{t('propertyType')}</label>
             <div className="flex flex-wrap gap-2">
-              {PROPERTY_TYPES.map(t => (
+              {PROPERTY_TYPES.map(pt => (
                 <button
-                  key={t}
+                  key={pt}
                   type="button"
-                  onClick={() => toggleType(t)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition capitalize ${
-                    propertyTypes.includes(t)
+                  onClick={() => toggleType(pt)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition ${
+                    propertyTypes.includes(pt)
                       ? 'bg-brand border-brand text-black'
                       : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
-                  {t}
+                  {t(pt)}
                 </button>
               ))}
             </div>
@@ -268,16 +269,16 @@ export function SearchForm({ defaults }: SearchFormProps) {
           {/* Bedrooms */}
           <div className="mb-5 grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold mb-1 text-text-secondary">Min bedrooms</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">{t('minBedrooms')}</label>
               <select value={bedroomsMin} onChange={e => setBedroomsMin(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm">
-                <option value="">Any</option>
+                <option value="">{t('any')}</option>
                 {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold mb-1 text-text-secondary">Max bedrooms</label>
+              <label className="block text-xs font-semibold mb-1 text-text-secondary">{t('maxBedrooms')}</label>
               <select value={bedroomsMax} onChange={e => setBedroomsMax(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm">
-                <option value="">Any</option>
+                <option value="">{t('any')}</option>
                 {[1, 2, 3, 4, 5, 6].map(n => <option key={n} value={n}>{n}+</option>)}
               </select>
             </div>
@@ -285,20 +286,20 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Timeline */}
           <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2">Timeline</label>
+            <label className="block text-sm font-semibold mb-2">{t('timelineLabel')}</label>
             <div className="flex flex-wrap gap-2">
-              {TIMELINES.map(t => (
+              {TIMELINE_VALUES.map(tv => (
                 <button
-                  key={t.value}
+                  key={tv}
                   type="button"
-                  onClick={() => setTimeline(t.value)}
+                  onClick={() => setTimeline(tv)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition ${
-                    timeline === t.value
+                    timeline === tv
                       ? 'bg-brand border-brand text-black'
                       : 'bg-white border-[#D8DBE5] text-text-secondary hover:border-[#C8CCD6]'
                   }`}
                 >
-                  {t.label}
+                  {t(TIMELINE_KEYS[tv])}
                 </button>
               ))}
             </div>
@@ -306,11 +307,11 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Notes */}
           <div className="mb-5">
-            <label className="block text-sm font-semibold mb-2">Notes / Preferences</label>
+            <label className="block text-sm font-semibold mb-2">{t('notesLabel')}</label>
             <textarea
               value={notes}
               onChange={e => setNotes(e.target.value)}
-              placeholder="Near a park, high ceilings, family-friendly, modern kitchen, wheelchair accessible..."
+              placeholder={t('notesPlaceholder')}
               rows={3}
               className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand/30"
             />
@@ -318,7 +319,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
 
           {/* Languages */}
           <div className="mb-6">
-            <label className="block text-sm font-semibold mb-2">Communication languages</label>
+            <label className="block text-sm font-semibold mb-2">{t('languagesLabel')}</label>
             <div className="flex flex-wrap gap-2">
               {['en', 'de', 'ar', 'tr', 'fr', 'es'].map(l => (
                 <button
@@ -345,7 +346,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
             disabled={saving || areas.length === 0}
             className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-brand-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {saving ? 'Saving...' : 'Save Search & Continue'}
+            {saving ? t('saving') : t('saveAndContinue')}
           </button>
         </div>
       </form>
@@ -360,10 +361,9 @@ export function SearchForm({ defaults }: SearchFormProps) {
           <div className="w-16 h-16 rounded-full bg-brand-solid-bg border-2 border-brand flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl">🤝</span>
           </div>
-          <h2 className="text-xl font-bold mb-2">Agent Outreach</h2>
+          <h2 className="text-xl font-bold mb-2">{t('agentOutreachTitle')}</h2>
           <p className="text-text-secondary text-sm max-w-md mx-auto">
-            Would you like Yalla.House to share your search with relevant
-            real estate agents in your area?
+            {t('agentOutreachDesc')}
           </p>
         </div>
 
@@ -389,8 +389,8 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 {agentOutreach && <div className="w-2 h-2 rounded-full bg-black" />}
               </div>
               <div>
-                <p className="font-semibold text-sm">Yes, introduce me to relevant agents</p>
-                <p className="text-xs text-text-secondary mt-0.5">Recommended — all matching agents in your area will receive your search brief</p>
+                <p className="font-semibold text-sm">{t('consentYes')}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{t('consentYesDesc')}</p>
               </div>
             </div>
           </button>
@@ -411,8 +411,8 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 {!agentOutreach && <div className="w-2 h-2 rounded-full bg-black" />}
               </div>
               <div>
-                <p className="font-semibold text-sm">No, I only want to use Yalla.House directly</p>
-                <p className="text-xs text-text-secondary mt-0.5">You can enable this later from settings</p>
+                <p className="font-semibold text-sm">{t('consentNo')}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{t('consentNoDesc')}</p>
               </div>
             </div>
           </button>
@@ -429,8 +429,8 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 className="w-4 h-4 accent-brand rounded"
               />
               <div>
-                <p className="text-sm font-medium">Allow matched agents to call me by phone</p>
-                <p className="text-xs text-text-secondary">Unchecked by default — phone numbers are redacted otherwise</p>
+                <p className="text-sm font-medium">{t('phoneConsent')}</p>
+                <p className="text-xs text-text-secondary">{t('phoneConsentDesc')}</p>
               </div>
             </label>
           </div>
@@ -439,10 +439,8 @@ export function SearchForm({ defaults }: SearchFormProps) {
         {/* Privacy note */}
         <div className="bg-hover-bg rounded-lg p-3 mb-6">
           <p className="text-xs text-text-secondary leading-relaxed">
-            <span className="font-semibold text-text-primary">Privacy: </span>
-            Your name, email, and phone number are never shared with agents.
-            They only receive your search criteria. All agent communication
-            goes through Yalla.House. You can revoke consent at any time.
+            <span className="font-semibold text-text-primary">{t('privacyTitle')}</span>
+            {t('privacyBody')}
           </p>
         </div>
 
@@ -451,7 +449,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
           disabled={saving}
           className="w-full py-3 bg-brand text-black font-bold rounded-xl hover:bg-brand-hover transition disabled:opacity-50"
         >
-          {saving ? 'Saving...' : agentOutreach ? 'Save & Start Matching' : 'Save & Continue'}
+          {saving ? t('saving') : agentOutreach ? t('saveAndMatch') : t('saveAndFinish')}
         </button>
       </div>
     </form>

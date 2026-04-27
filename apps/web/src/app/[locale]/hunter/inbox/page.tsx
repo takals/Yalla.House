@@ -18,7 +18,7 @@ interface ThreadWithData {
 }
 
 export default async function HunterInboxPage() {
-  const t = await getTranslations()
+  const t = await getTranslations('comms')
   const locale = await getLocale()
   const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
@@ -68,10 +68,10 @@ export default async function HunterInboxPage() {
     const diffHours = Math.floor(diffMins / 60)
     const diffDays = Math.floor(diffHours / 24)
 
-    if (diffMins < 1) return 'just now'
-    if (diffMins < 60) return `${diffMins}m ago`
-    if (diffHours < 24) return `${diffHours}h ago`
-    if (diffDays < 7) return `${diffDays}d ago`
+    if (diffMins < 1) return t('justNow')
+    if (diffMins < 60) return t('minutesAgo', { count: diffMins })
+    if (diffHours < 24) return t('hoursAgo', { count: diffHours })
+    if (diffDays < 7) return t('daysAgo', { count: diffDays })
 
     return date.toLocaleDateString(dateLocale, {
       month: 'short',
@@ -81,18 +81,18 @@ export default async function HunterInboxPage() {
   }
 
   // Separate threads into agent conversations and property matches
-  const agentThreads = threads.filter(t => t.subject && t.subject.includes('agent'))
-  const propertyThreads = threads.filter(t => t.listing_id && !t.subject?.includes('agent'))
+  const agentThreads = threads.filter(th => th.subject && th.subject.includes('agent'))
+  const propertyThreads = threads.filter(th => th.listing_id && !th.subject?.includes('agent'))
 
   return (
     <div className="max-w-4xl">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-text-primary tracking-tight">
-          {t('comms.inbox')}
+          {t('inbox')}
         </h1>
         <p className="text-sm text-text-muted mt-2">
-          {t('comms.emailExplainer')}
+          {t('emailExplainer')}
         </p>
       </div>
 
@@ -101,12 +101,12 @@ export default async function HunterInboxPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-sm font-semibold text-text-primary mb-1">
-              {t('comms.yourYallaEmail')}
+              {t('yourYallaEmail')}
             </h2>
             <p className="text-base font-mono text-brand">{yallaEmail}</p>
           </div>
           <div className="text-xs text-text-muted text-right max-w-xs">
-            {t('comms.emailExplainer')}
+            {t('emailExplainer')}
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@ export default async function HunterInboxPage() {
           {agentThreads.length > 0 && (
             <div>
               <h2 className="text-lg font-semibold text-text-primary mb-4">
-                Agent Conversations
+                {t('agentConversations')}
               </h2>
               <div className="space-y-4">
                 {agentThreads.map((thread) => (
@@ -130,7 +130,7 @@ export default async function HunterInboxPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-text-primary text-base mb-1 truncate">
-                          {thread.subject || 'Agent Message'}
+                          {thread.subject || t('agentMessage')}
                         </h3>
                       </div>
                       <span className="text-xs text-text-muted whitespace-nowrap ml-2 flex-shrink-0">
@@ -139,7 +139,7 @@ export default async function HunterInboxPage() {
                     </div>
                     <div className="flex items-center text-text-muted text-sm">
                       <MessageCircle size={14} className="mr-2 flex-shrink-0" />
-                      <span>View conversation</span>
+                      <span>{t('viewConversation')}</span>
                     </div>
                   </Link>
                 ))}
@@ -151,7 +151,7 @@ export default async function HunterInboxPage() {
           {propertyThreads.length > 0 && (
             <div>
               <h2 className="text-lg font-semibold text-text-primary mb-4">
-                Property Matches
+                {t('propertyMatches')}
               </h2>
               <div className="space-y-4">
                 {propertyThreads.map((thread) => (
@@ -163,7 +163,7 @@ export default async function HunterInboxPage() {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-text-primary text-base mb-1 truncate">
-                          {thread.listing?.title_de || 'Property Update'}
+                          {thread.listing?.title_de || t('propertyUpdate')}
                         </h3>
                         {thread.listing && (
                           <p className="text-sm text-text-muted mb-3">
@@ -177,7 +177,7 @@ export default async function HunterInboxPage() {
                     </div>
                     <div className="flex items-center text-text-muted text-sm">
                       <MessageCircle size={14} className="mr-2 flex-shrink-0" />
-                      <span>View conversation</span>
+                      <span>{t('viewConversation')}</span>
                     </div>
                   </Link>
                 ))}
@@ -192,10 +192,10 @@ export default async function HunterInboxPage() {
             className="mx-auto mb-4 text-[#D9DCE4]"
           />
           <h3 className="text-base font-semibold text-text-primary mb-1">
-            {t('comms.noMessages')}
+            {t('noMessages')}
           </h3>
           <p className="text-sm text-text-muted max-w-sm mx-auto">
-            When agents send you property matches or respond to your search, conversations will appear here.
+            {t('noMessagesHunterDesc')}
           </p>
         </div>
       )}
