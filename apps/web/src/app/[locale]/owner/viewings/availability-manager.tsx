@@ -61,7 +61,7 @@ export function AvailabilityManager({
 
   async function handleAdd() {
     if (!selectedListing || !date || !startTime || !endTime) {
-      setError(t.fillAllFields)
+      setError(t.fillAllFields ?? null)
       return
     }
     setError(null)
@@ -112,7 +112,7 @@ export function AvailabilityManager({
 
   async function handleQuickWeek() {
     if (!selectedListing || qwDays.size === 0) {
-      setError(t.fillAllFields)
+      setError(t.fillAllFields ?? null)
       return
     }
     setError(null)
@@ -148,7 +148,7 @@ export function AvailabilityManager({
     }
 
     if (batchSlots.length === 0) {
-      setError(t.noValidSlots)
+      setError(t.noValidSlots ?? null)
       setActing(s => { const n = new Set(s); n.delete('batch'); return n })
       return
     }
@@ -161,7 +161,7 @@ export function AvailabilityManager({
     if ('error' in result) {
       setError(result.error)
     } else if ('success' in result) {
-      setQwSuccess(t.slotsCreated.replace('{count}', String(result.count)))
+      setQwSuccess((t.slotsCreated ?? '').replace('{count}', String(result.count)))
       setShowQuickWeek(false)
       // Reload page to get fresh slot data
       window.location.reload()

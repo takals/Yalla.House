@@ -86,7 +86,7 @@ export const viewingConfirmed = inngest.createFunction(
 
       // Email
       try {
-        const emailRes = await sendViewingConfirmedEmail({
+        await sendViewingConfirmedEmail({
           buyerEmail: hunter.email,
           buyerName: hunter.full_name,
           listingTitle,
@@ -94,7 +94,7 @@ export const viewingConfirmed = inngest.createFunction(
           countryCode,
           locale,
         })
-        await logNotification({ userId: hunterId, viewingId, listingId, channel: 'email', eventType: 'viewing_confirmed_hunter', status: 'sent', providerId: emailRes?.id })
+        await logNotification({ userId: hunterId, viewingId, listingId, channel: 'email', eventType: 'viewing_confirmed_hunter', status: 'sent' })
       } catch (e) {
         console.error('confirmed email to hunter:', e)
         await logNotification({ userId: hunterId, viewingId, listingId, channel: 'email', eventType: 'viewing_confirmed_hunter', status: 'failed', errorDetail: String(e) })
@@ -271,7 +271,7 @@ export const viewing24hReminder = inngest.createFunction(
 
       // Email
       try {
-        const emailRes = await sendViewingReminderEmail({
+        await sendViewingReminderEmail({
           recipientEmail: hunter.email,
           recipientName: hunter.full_name,
           listingTitle,
@@ -281,7 +281,7 @@ export const viewing24hReminder = inngest.createFunction(
           countryCode,
           locale,
         })
-        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_reminder_24h_hunter', status: 'sent', providerId: emailRes?.id })
+        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_reminder_24h_hunter', status: 'sent' })
       } catch (e) {
         console.error('24h reminder email to hunter:', e)
         await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_reminder_24h_hunter', status: 'failed', errorDetail: String(e) })
@@ -472,14 +472,14 @@ export const viewingCheckIn = inngest.createFunction(
 
       // Email
       try {
-        const emailRes = await sendViewingCheckInEmail({
+        await sendViewingCheckInEmail({
           hunterEmail: hunter.email,
           hunterName: hunter.full_name,
           listingTitle,
           viewingId,
           locale,
         })
-        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_checkin_hunter', status: 'sent', providerId: emailRes?.id })
+        await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_checkin_hunter', status: 'sent' })
       } catch (e) {
         console.error('check-in email error:', e)
         await logNotification({ userId: hunterId, viewingId, channel: 'email', eventType: 'viewing_checkin_hunter', status: 'failed', errorDetail: String(e) })

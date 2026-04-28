@@ -42,14 +42,19 @@ export default async function AnalyticsPage({ params }: Props) {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   // Verify ownership
-  const { data: listing } = await supabase
+  const { data: listingRaw } = await supabase
     .from('listings')
     .select('id, place_id, slug, status, created_at, title_de, title')
     .eq('id', id)
     .eq('owner_id', userId)
     .single()
 
-  if (!listing) redirect('/owner')
+  if (!listingRaw) redirect('/owner')
+
+  const listing = listingRaw as unknown as {
+    id: string; place_id: string; slug: string | null; status: string;
+    created_at: string | null; title_de: string | null; title: string | null
+  }
 
   // Parallel fetch all analytics data
   const [
