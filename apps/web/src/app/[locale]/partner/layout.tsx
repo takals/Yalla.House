@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_EMAIL } from '@/lib/preview-user'
-import { DashboardShell, partnerNav } from '@/components/dashboard/shell'
+import { DashboardShell } from '@/components/dashboard/shell'
+import { partnerNav } from '@/components/dashboard/nav-items'
 import { fetchUserRoles } from '@/lib/user-roles'
 import { getTranslations } from 'next-intl/server'
 
