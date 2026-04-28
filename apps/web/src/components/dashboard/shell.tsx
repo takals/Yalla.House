@@ -45,14 +45,11 @@ interface Props {
   userRoles?: RoleSwitchItem[]
 }
 
-const SIDEBAR_W = 280
-
 export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels, shellLabels, userRoles }: Props) {
   const pathname = usePathname()
   const router = useRouter()
 
   // Desktop: collapsed/expanded toggle. Mobile: open/closed overlay.
-  const [isDesktop, setIsDesktop] = useState(false)
   const [collapsed, setCollapsed] = useState(true)   // desktop only
   const [mobileOpen, setMobileOpen] = useState(false) // mobile only
 
@@ -64,14 +61,13 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
   const sidebarRef = useRef<HTMLElement>(null)
   const mainRef = useRef<HTMLDivElement>(null)
 
-  // Detect desktop vs mobile
+  // Track isDesktop for swipe gesture logic only (not for rendering)
+  const isDesktopRef = useRef(false)
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)')
-    setIsDesktop(mq.matches)
-    setCollapsed(!mq.matches)
+    isDesktopRef.current = mq.matches
     const handler = (e: MediaQueryListEvent) => {
-      setIsDesktop(e.matches)
-      setCollapsed(!e.matches)
+      isDesktopRef.current = e.matches
       if (e.matches) setMobileOpen(false)
     }
     mq.addEventListener('change', handler)
@@ -85,14 +81,14 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
   // Swipe gesture — open sidebar by swiping right from left edge
   const handleTouchStart = useCallback((e: TouchEvent) => {
-    if (isDesktop) return
+    if (isDesktopRef.current) return
     const touch = e.touches[0]
     touchStartX.current = touch.clientX
     touchStartY.current = touch.clientY
     touchCurrentX.current = touch.clientX
     // Only start tracking if touch begins near left edge (within 30px) or sidebar is open
     isSwiping.current = touch.clientX < 30 || mobileOpen
-  }, [isDesktop, mobileOpen])
+  }, [mobileOpen])
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isSwiping.current) return
@@ -138,78 +134,82 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
   const initials = (userName ?? userEmail).slice(0, 2).toUpperCase()
 
-  // On mobile the sidebar is always "expanded" (shows labels), just positioned off-screen
-  const showLabels = isDesktop ? !collapsed : true
-
   return (
     <div className="flex h-screen bg-bg overflow-hidden">
 
-      {/* ── Mobile backdrop ──────────────────────── */}
-      {!isDesktop && (
-        <div
-          className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-200 ${
-            mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-          onClick={() => setMobileOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      {/* ── Mobile backdrop — hidden on lg: via CSS ── */}
+      <div
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-200 lg:hidden ${
+          mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+      />
 
       {/* ── Sidebar ──────────────────────────────── */}
+      {/* Mobile: fixed overlay, off-screen by default, slides in when mobileOpen */}
+      {/* Desktop (lg:): static sidebar, collapsed (60px) or expanded (240px) */}
       <aside
         ref={sidebarRef}
-        style={isDesktop ? undefined : { width: SIDEBAR_W }}
-        className={
-          isDesktop
-            ? `${collapsed ? 'w-[60px]' : 'w-[240px]'} bg-[#0F1117] flex flex-col flex-shrink-0 transition-[width] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden`
-            : `fixed inset-y-0 left-0 z-50 bg-[#0F1117] flex flex-col transition-transform duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                mobileOpen ? 'translate-x-0' : '-translate-x-full'
-              }`
-        }
+        className={[
+          'bg-[#0F1117] flex flex-col overflow-hidden',
+          // Mobile: fixed overlay sidebar
+          'fixed inset-y-0 left-0 z-50 w-[280px] transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full',
+          // Desktop: static sidebar, override mobile positioning
+          'lg:static lg:z-auto lg:translate-x-0 lg:flex-shrink-0 lg:transition-[width] lg:duration-200',
+          collapsed ? 'lg:w-[60px]' : 'lg:w-[240px]',
+        ].join(' ')}
       >
 
         {/* Logo row */}
         <div className="h-[60px] flex items-center px-4 flex-shrink-0 gap-3">
-          {showLabels && (
-            <Link href="/" className="font-extrabold text-[1.05rem] tracking-tight text-white whitespace-nowrap">
+          {/* Full logo: always on mobile, only when expanded on desktop */}
+          <Link href="/" className="font-extrabold text-[1.05rem] tracking-tight text-white whitespace-nowrap lg:hidden">
+            Yalla<span className="text-brand">.</span>House
+          </Link>
+          {!collapsed && (
+            <Link href="/" className="font-extrabold text-[1.05rem] tracking-tight text-white whitespace-nowrap hidden lg:inline">
               Yalla<span className="text-brand">.</span>House
             </Link>
           )}
-          {showLabels && section === 'admin' && (
-            <span className="text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-brand rounded-sm text-text-primary">
+          {section === 'admin' && (
+            <span className={`text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-brand rounded-sm text-text-primary ${collapsed ? 'hidden lg:hidden' : 'hidden lg:inline'}`}>
               Admin
             </span>
           )}
-          {isDesktop && collapsed && (
-            <Link href="/" className="font-extrabold text-[1.1rem] tracking-tight text-brand mx-auto">
+          {section === 'admin' && (
+            <span className="text-[0.6rem] font-black uppercase tracking-wider px-1.5 py-0.5 bg-brand rounded-sm text-text-primary lg:hidden">
+              Admin
+            </span>
+          )}
+          {/* Collapsed logo — desktop only */}
+          {collapsed && (
+            <Link href="/" className="font-extrabold text-[1.1rem] tracking-tight text-brand mx-auto hidden lg:inline">
               Y
             </Link>
           )}
           {/* Mobile close button */}
-          {!isDesktop && (
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="ml-auto p-1 rounded-md text-white/40 hover:text-white/80 transition-colors"
-              aria-label="Close menu"
-            >
-              <X size={20} />
-            </button>
-          )}
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="ml-auto p-1 rounded-md text-white/40 hover:text-white/80 transition-colors lg:hidden"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        {/* Desktop toggle (hidden on mobile) */}
-        {isDesktop && (
-          <button
-            onClick={() => setCollapsed(c => !c)}
-            className="mx-3 mb-2 flex items-center justify-center gap-2 px-2 py-1.5 rounded-md text-white/30 hover:text-white/70 hover:bg-white/[0.05] transition-colors"
-            title={collapsed ? (shellLabels?.expandSidebar ?? 'Expand sidebar') : (shellLabels?.collapseSidebar ?? 'Collapse sidebar')}
-            aria-expanded={!collapsed}
-            aria-controls="sidebar-nav"
-          >
-            {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
-            {!collapsed && <span className="text-xs font-medium">{shellLabels?.collapse ?? 'Collapse'}</span>}
-          </button>
-        )}
+        {/* Desktop toggle (hidden on mobile via lg:flex) */}
+        <button
+          onClick={() => setCollapsed(c => !c)}
+          className="mx-3 mb-2 items-center justify-center gap-2 px-2 py-1.5 rounded-md text-white/30 hover:text-white/70 hover:bg-white/[0.05] transition-colors hidden lg:flex"
+          title={collapsed ? (shellLabels?.expandSidebar ?? 'Expand sidebar') : (shellLabels?.collapseSidebar ?? 'Collapse sidebar')}
+          aria-expanded={!collapsed}
+          aria-controls="sidebar-nav"
+        >
+          {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+          {!collapsed && <span className="text-xs font-medium">{shellLabels?.collapse ?? 'Collapse'}</span>}
+        </button>
 
         {/* Nav */}
         <nav aria-label="Dashboard navigation" role="navigation" className="flex-1 py-1 px-2 overflow-y-auto overflow-x-hidden">
@@ -220,10 +220,9 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
               <Link
                 key={item.href}
                 href={item.href}
-                title={isDesktop && collapsed ? item.label : undefined}
                 style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1), color 0.15s cubic-bezier(0.16,1,0.3,1)' }}
-                className={`flex items-center gap-3 rounded-[8px] text-[0.875rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden ${
-                  isDesktop && collapsed ? 'px-0 py-2.5 justify-center' : 'px-3 py-2.5'
+                className={`flex items-center gap-3 rounded-[8px] text-[0.875rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden px-3 py-2.5 ${
+                  collapsed ? 'lg:px-0 lg:py-2.5 lg:justify-center' : ''
                 } ${
                   active
                     ? 'bg-[rgba(212,118,78,0.12)] text-brand'
@@ -233,16 +232,18 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 <span className={`flex-shrink-0 ${active ? 'text-brand' : 'text-white/30'}`}>
                   {item.icon}
                 </span>
-                {showLabels && item.label}
+                {/* Label: always on mobile, conditionally on desktop */}
+                <span className="lg:hidden">{item.label}</span>
+                {!collapsed && <span className="hidden lg:inline">{item.label}</span>}
               </Link>
             )
           })}
           </div>
         </nav>
 
-        {/* Role switcher */}
-        {userRoles && userRoles.length > 1 && showLabels && (
-          <div className="px-2 pb-2 pt-2 border-t border-white/[0.07] flex-shrink-0">
+        {/* Role switcher — hidden when desktop collapsed */}
+        {userRoles && userRoles.length > 1 && (
+          <div className={`px-2 pb-2 pt-2 border-t border-white/[0.07] flex-shrink-0 ${collapsed ? 'lg:hidden' : ''}`}>
             <p className="text-[0.6rem] font-bold uppercase tracking-wider text-white/20 px-2 mb-1">
               {shellLabels?.switchRole ?? 'Switch role'}
             </p>
@@ -259,32 +260,31 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         )}
 
         {/* User footer */}
-        <div className={`px-2 pb-4 pt-3 border-t border-white/[0.07] flex-shrink-0 ${isDesktop && collapsed ? 'flex justify-center' : ''}`}>
-          {isDesktop && collapsed ? (
+        <div className="px-2 pb-4 pt-3 border-t border-white/[0.07] flex-shrink-0">
+          {/* Desktop collapsed — just initials */}
+          <div className={`items-center justify-center hidden ${collapsed ? 'lg:flex' : ''}`}>
             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70">
               {initials}
             </div>
-          ) : (
-            <div className="flex items-center gap-3 px-2 py-2">
-              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70 flex-shrink-0">
-                {initials}
-              </div>
-              {showLabels && (
-                <div className="flex-1 min-w-0">
-                  <p className="text-[0.8125rem] font-semibold truncate text-white/80">
-                    {userName ?? userEmail}
-                  </p>
-                  <button
-                    onClick={handleSignOut}
-                    className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
-                  >
-                    <LogOut size={10} />
-                    {shellLabels?.signOut ?? 'Sign out'}
-                  </button>
-                </div>
-              )}
+          </div>
+          {/* Mobile (always) + desktop expanded */}
+          <div className={`flex items-center gap-3 px-2 py-2 ${collapsed ? 'lg:hidden' : ''}`}>
+            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70 flex-shrink-0">
+              {initials}
             </div>
-          )}
+            <div className="flex-1 min-w-0">
+              <p className="text-[0.8125rem] font-semibold truncate text-white/80">
+                {userName ?? userEmail}
+              </p>
+              <button
+                onClick={handleSignOut}
+                className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <LogOut size={10} />
+                {shellLabels?.signOut ?? 'Sign out'}
+              </button>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -293,16 +293,14 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
         {/* Topbar */}
         <header className="h-[60px] bg-white border-b border-border-default flex items-center px-4 lg:px-6 gap-4 flex-shrink-0">
-          {/* Mobile hamburger */}
-          {!isDesktop && (
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="p-1.5 -ml-1 rounded-lg text-text-secondary hover:bg-bg transition-colors lg:hidden"
-              aria-label={shellLabels?.openMenu ?? 'Open menu'}
-            >
-              <Menu size={22} />
-            </button>
-          )}
+          {/* Mobile hamburger — CSS-hidden on lg: */}
+          <button
+            onClick={() => setMobileOpen(true)}
+            className="p-1.5 -ml-1 rounded-lg text-text-secondary hover:bg-bg transition-colors lg:hidden"
+            aria-label={shellLabels?.openMenu ?? 'Open menu'}
+          >
+            <Menu size={22} />
+          </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
             {notifications && notificationLabels && (
