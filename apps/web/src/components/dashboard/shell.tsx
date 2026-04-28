@@ -7,13 +7,21 @@ import {
   LayoutDashboard, Home, Building2, Plus, Calendar, CalendarDays, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
   LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye, Menu, X,
+  type LucideIcon,
 } from 'lucide-react'
 import { NotificationBell } from './notification-bell'
+
+// Icon map — lets server components pass a string key instead of JSX
+const iconMap: Record<string, LucideIcon> = {
+  LayoutDashboard, Home, Building2, Plus, Calendar, CalendarDays, Star,
+  ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
+  Search, Banknote, Eye,
+}
 
 export interface NavItem {
   href: string
   label: string
-  icon: React.ReactNode
+  icon: string  // key into iconMap — serializable across server/client boundary
   exact?: boolean
 }
 
@@ -233,7 +241,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 }`}
               >
                 <span className={`flex-shrink-0 ${active ? 'text-brand' : 'text-white/30'}`}>
-                  {item.icon}
+                  {(() => { const Icon = iconMap[item.icon]; return Icon ? <Icon size={15} /> : null })()}
                 </span>
                 {/* Label: always on mobile, conditionally on desktop */}
                 <span className="lg:hidden">{item.label}</span>
@@ -338,53 +346,53 @@ function l(t: Record<string, string>, key: string): string {
 
 export function hunterNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/hunter/overview', label: l(t, 'navDashboard'),  icon: <LayoutDashboard size={15} />, exact: true },
-    { href: '/hunter/search',   label: l(t, 'navSearch'),     icon: <Search size={15} /> },
-    { href: '/hunter/viewings', label: l(t, 'navViewings'),   icon: <Eye size={15} /> },
-    { href: '/hunter/passport', label: l(t, 'navPassport'),   icon: <ShieldCheck size={15} /> },
-    { href: '/hunter/agents',   label: l(t, 'navAgents'),     icon: <Handshake size={15} /> },
-    { href: '/hunter/inbox',    label: l(t, 'navInbox'),      icon: <Inbox size={15} /> },
-    { href: '/hunter/settings', label: l(t, 'navSettings'),   icon: <Settings size={15} /> },
+    { href: '/hunter/overview', label: l(t, 'navDashboard'),  icon: 'LayoutDashboard', exact: true },
+    { href: '/hunter/search',   label: l(t, 'navSearch'),     icon: 'Search' },
+    { href: '/hunter/viewings', label: l(t, 'navViewings'),   icon: 'Eye' },
+    { href: '/hunter/passport', label: l(t, 'navPassport'),   icon: 'ShieldCheck' },
+    { href: '/hunter/agents',   label: l(t, 'navAgents'),     icon: 'Handshake' },
+    { href: '/hunter/inbox',    label: l(t, 'navInbox'),      icon: 'Inbox' },
+    { href: '/hunter/settings', label: l(t, 'navSettings'),   icon: 'Settings' },
   ]
 }
 
 export function agentNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/agent/assignments', label: l(t, 'navAssignments'),     icon: <Building2 size={15} />, exact: true },
-    { href: '/agent/calendar',   label: l(t, 'navCalendar'),         icon: <Calendar size={15} /> },
-    { href: '/agent/briefs',     label: l(t, 'navBriefs'),           icon: <Inbox size={15} /> },
-    { href: '/agent/hunters',    label: l(t, 'navHunters'),          icon: <Users size={15} /> },
-    { href: '/agent/inbox',      label: l(t, 'navInbox'),            icon: <Inbox size={15} /> },
-    { href: '/agent/agreement',  label: l(t, 'navPartnerAgreement'), icon: <Handshake size={15} /> },
-    { href: '/agent/profile',    label: l(t, 'navProfile'),          icon: <UserCircle size={15} /> },
-    { href: '/agent/settings',   label: l(t, 'navSettings'),         icon: <Settings size={15} /> },
+    { href: '/agent/assignments', label: l(t, 'navAssignments'),     icon: 'Building2', exact: true },
+    { href: '/agent/calendar',   label: l(t, 'navCalendar'),         icon: 'Calendar' },
+    { href: '/agent/briefs',     label: l(t, 'navBriefs'),           icon: 'Inbox' },
+    { href: '/agent/hunters',    label: l(t, 'navHunters'),          icon: 'Users' },
+    { href: '/agent/inbox',      label: l(t, 'navInbox'),            icon: 'Inbox' },
+    { href: '/agent/agreement',  label: l(t, 'navPartnerAgreement'), icon: 'Handshake' },
+    { href: '/agent/profile',    label: l(t, 'navProfile'),          icon: 'UserCircle' },
+    { href: '/agent/settings',   label: l(t, 'navSettings'),         icon: 'Settings' },
   ]
 }
 
 export function adminNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/admin',        label: l(t, 'navOverview'), icon: <LayoutDashboard size={15} />, exact: true },
-    { href: '/admin/users',  label: l(t, 'navUsers'),    icon: <Users size={15} /> },
+    { href: '/admin',        label: l(t, 'navOverview'), icon: 'LayoutDashboard', exact: true },
+    { href: '/admin/users',  label: l(t, 'navUsers'),    icon: 'Users' },
   ]
 }
 
 export function ownerNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/owner/listings', label: l(t, 'navListings'),   icon: <Home size={15} />, exact: true },
-    { href: '/owner/calendar', label: l(t, 'navCalendar'),   icon: <CalendarDays size={15} /> },
-    { href: '/owner/viewings', label: l(t, 'navViewings'),   icon: <Calendar size={15} /> },
-    { href: '/owner/offers',   label: l(t, 'navOffers'),     icon: <Banknote size={15} /> },
-    { href: '/owner/agents',   label: l(t, 'navAgents'),     icon: <Handshake size={15} /> },
-    { href: '/owner/inbox',    label: l(t, 'navInbox'),      icon: <Inbox size={15} /> },
-    { href: '/owner/new',      label: l(t, 'navNewListing'), icon: <Plus size={15} /> },
-    { href: '/owner/plans',    label: l(t, 'navPlans'),      icon: <Star size={15} /> },
-    { href: '/owner/settings', label: l(t, 'navSettings'),   icon: <Settings size={15} /> },
+    { href: '/owner/listings', label: l(t, 'navListings'),   icon: 'Home', exact: true },
+    { href: '/owner/calendar', label: l(t, 'navCalendar'),   icon: 'CalendarDays' },
+    { href: '/owner/viewings', label: l(t, 'navViewings'),   icon: 'Calendar' },
+    { href: '/owner/offers',   label: l(t, 'navOffers'),     icon: 'Banknote' },
+    { href: '/owner/agents',   label: l(t, 'navAgents'),     icon: 'Handshake' },
+    { href: '/owner/inbox',    label: l(t, 'navInbox'),      icon: 'Inbox' },
+    { href: '/owner/new',      label: l(t, 'navNewListing'), icon: 'Plus' },
+    { href: '/owner/plans',    label: l(t, 'navPlans'),      icon: 'Star' },
+    { href: '/owner/settings', label: l(t, 'navSettings'),   icon: 'Settings' },
   ]
 }
 
 export function partnerNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/partner',          label: l(t, 'navDashboard'), icon: <LayoutDashboard size={15} />, exact: true },
-    { href: '/partner/requests', label: l(t, 'navRequests'),  icon: <Inbox size={15} /> },
+    { href: '/partner',          label: l(t, 'navDashboard'), icon: 'LayoutDashboard', exact: true },
+    { href: '/partner/requests', label: l(t, 'navRequests'),  icon: 'Inbox' },
   ]
 }
