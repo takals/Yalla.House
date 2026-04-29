@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { User, Building2, Bell, Globe, AlertTriangle, ChevronRight, Mail, MessageSquare } from 'lucide-react'
+import { Bell, AlertTriangle, ChevronRight, Mail } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { SettingsForm } from './settings-form'
@@ -232,12 +232,15 @@ export default async function OwnerSettingsPage() {
               {t('deleteAccountWarning')}
             </div>
           </div>
-          <button
-            disabled
-            className="px-4 py-2 text-sm font-semibold text-red-600 border border-red-200 rounded-lg bg-red-50 hover:bg-red-50 cursor-not-allowed opacity-60"
-          >
-            {t('buttonDelete')}
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">{t('comingSoon')}</span>
+            <button
+              disabled
+              className="px-4 py-2 text-sm font-semibold text-red-600 border border-red-200 rounded-lg bg-red-50 cursor-not-allowed opacity-60"
+            >
+              {t('buttonDelete')}
+            </button>
+          </div>
         </div>
       </SettingsSection>
     </div>
@@ -276,47 +279,3 @@ function SettingsSection({ icon: Icon, title, badge, isDanger, children }: Setti
   )
 }
 
-interface SettingItemProps {
-  label: string
-  value: string
-  actionLabel: string
-  isReadOnly?: boolean
-}
-
-function SettingItem({ label, value, actionLabel, isReadOnly }: SettingItemProps) {
-  return (
-    <div className="flex items-center justify-between py-3 border-b border-[#F0F0F0] last:border-b-0">
-      <div className="flex-1">
-        <div className="text-sm font-semibold text-text-primary">{label}</div>
-        <div className="text-sm text-text-secondary mt-0.5">{value}</div>
-      </div>
-      {isReadOnly ? (
-        <span className="text-xs text-text-muted">{actionLabel}</span>
-      ) : (
-        <button className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors">
-          {actionLabel}
-        </button>
-      )}
-    </div>
-  )
-}
-
-interface NotificationToggleProps {
-  label: string
-  description: string
-  disabled?: boolean
-}
-
-function NotificationToggle({ label, description, disabled }: NotificationToggleProps) {
-  return (
-    <div className={`flex items-center justify-between py-3 border-b border-[#F0F0F0] last:border-b-0 ${disabled ? 'opacity-50' : ''}`}>
-      <div>
-        <div className="text-sm font-semibold text-text-primary">{label}</div>
-        <div className="text-xs text-text-muted mt-0.5">{description}</div>
-      </div>
-      <div className="w-10 h-6 bg-[#E2E4EB] rounded-full relative cursor-not-allowed">
-        <div className="w-5 h-5 bg-white rounded-full absolute left-0.5 top-0.5 shadow-sm transition-transform" />
-      </div>
-    </div>
-  )
-}

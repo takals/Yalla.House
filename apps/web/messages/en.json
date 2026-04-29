@@ -970,7 +970,8 @@
     "savedDefaults": "Listing defaults saved.",
     "saveDefaults": "Save defaults",
     "saving": "Saving…",
-    "errorLoginRequired": "Please log in to save changes"
+    "errorLoginRequired": "Please log in to save changes",
+    "comingSoon": "Coming soon"
   },
   "ownerError": {
     "title": "Something went wrong",

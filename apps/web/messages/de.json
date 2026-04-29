@@ -970,7 +970,8 @@
     "savedDefaults": "Inserats-Standardwerte gespeichert.",
     "saveDefaults": "Standardwerte speichern",
     "saving": "Wird gespeichert…",
-    "errorLoginRequired": "Bitte melden Sie sich an, um Änderungen zu speichern"
+    "errorLoginRequired": "Bitte melden Sie sich an, um Änderungen zu speichern",
+    "comingSoon": "Demnächst"
   },
   "ownerError": {
     "title": "Etwas ist schiefgelaufen",
