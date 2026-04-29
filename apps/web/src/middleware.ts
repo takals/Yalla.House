@@ -14,12 +14,14 @@ const intlMiddleware = createIntlMiddleware({
 
 // Routes that require authentication.
 // Unauthenticated visitors are redirected to /auth/login with a ?next= param.
-const protectedPaths = ['/owner', '/hunter', '/agent', '/admin', '/partner', '/referrer', '/settings']
+// Routes that require authentication.
+// Owner routes are intentionally NOT protected — guests can explore the dashboard
+// and only see a sign-in prompt when they try to save, publish, or take a
+// persistent action. This follows the "explore first, sign in to save" principle.
+const protectedPaths = ['/hunter', '/agent', '/admin', '/partner', '/referrer', '/settings']
 
 // Public info pages that live under protected prefixes but need no auth.
-// These are purely informational (benefits, pricing, how-it-works) — visitors
-// should be able to explore before being asked to create an account.
-const publicExceptions = ['/owner/info', '/hunter/info', '/agent/info']
+const publicExceptions = ['/hunter/info', '/agent/info']
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

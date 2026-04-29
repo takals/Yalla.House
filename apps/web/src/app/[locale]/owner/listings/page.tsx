@@ -20,33 +20,32 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
   const locale = await getLocale()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    redirect('/auth/login')
-  }
-  const userId = user.id
+  const userId = user?.id ?? null
 
   let allListings: Listing[] = []
-  try {
-    const { data: listingsData } = await supabase
-      .from('listings')
-      .select('*')
-      .eq('owner_id', userId)
-      .neq('status', 'deleted')
-      .order('created_at', { ascending: false })
+  if (userId) {
+    try {
+      const { data: listingsData } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('owner_id', userId)
+        .neq('status', 'deleted')
+        .order('created_at', { ascending: false })
 
-    allListings = listingsData ?? []
-  } catch (err) {
-    console.error('Failed to load owner listings data:', err)
-  }
+      allListings = listingsData ?? []
+    } catch (err) {
+      console.error('Failed to load owner listings data:', err)
+    }
 
-  // Single listing shortcut: if owner has exactly 1 listing, go straight to it
-  if (allListings.length === 1) {
-    const only = allListings[0]!
-    const identifier = only.slug ?? only.place_id
-    if (identifier) {
-      redirect(`/p/${identifier}`)
-    } else {
-      redirect(`/owner/${only.id}`)
+    // Single listing shortcut: if owner has exactly 1 listing, go straight to it
+    if (allListings.length === 1) {
+      const only = allListings[0]!
+      const identifier = only.slug ?? only.place_id
+      if (identifier) {
+        redirect(`/p/${identifier}`)
+      } else {
+        redirect(`/owner/${only.id}`)
+      }
     }
   }
 

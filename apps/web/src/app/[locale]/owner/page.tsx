@@ -6,8 +6,10 @@ export default async function OwnerPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Guest visitors: send to listings page where they see the example card
+  // and can explore the dashboard freely before signing in.
   if (!user) {
-    redirect('/auth/login?next=/owner')
+    redirect('/owner/listings')
   }
 
   // Agreement gate — redirects to /owner/agreement if not signed
@@ -21,17 +23,14 @@ export default async function OwnerPage() {
     .order('created_at', { ascending: false })
 
   if (!listings || listings.length === 0) {
-    // No listings → listings page with example card
     redirect('/owner/listings')
   }
 
   if (listings.length === 1) {
-    // Single listing → go straight to the listing's public page (owner view)
     const listing = listings[0]
     const identifier = listing.slug || listing.place_id || listing.id
     redirect(`/p/${identifier}`)
   }
 
-  // Multiple listings → grid overview
   redirect('/owner/listings')
 }

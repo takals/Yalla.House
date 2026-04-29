@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { CalendarCheck, MessageCircle, Home, TrendingUp, ArrowUp, ArrowRight, Plus, type LucideIcon } from 'lucide-react'
 import { fromMinorUnits } from '@yalla/integrations'
@@ -37,72 +36,68 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    redirect('/auth/login')
-  }
-  const userId = user.id
+  const userId = user?.id ?? null
 
-  // Fetch listings first to get IDs for related queries
-  const { data: listingsData } = await supabase
-    .from('listings')
-    .select('*')
-    .eq('owner_id', userId)
-    .order('created_at', { ascending: false })
-    .limit(50)
-
-  const listings: Listing[] = listingsData ?? []
-  const listingIds = listings.map(l => l.id)
-
-  // Parallel fetch: viewings, offers, messages, billing
+  // Fetch data only for authenticated users — guests see empty state
+  let listings: Listing[] = []
   let viewings: Viewing[] = []
   let offersCount = 0
   let threads: MessageThread[] = []
   let hasPaidPlan = false
-  try {
-    const [viewingsResult, offersResult, threadsResult, billingResult] = await Promise.all([
-      // Viewings for this owner's listings
-      listingIds.length > 0
-        ? supabase
-            .from('viewings')
-            .select('*')
-            .in('listing_id', listingIds)
-            .in('status', ['pending', 'confirmed'])
-            .order('scheduled_at', { ascending: true })
-            .limit(5)
-        : Promise.resolve({ data: null as Viewing[] | null, count: null }),
 
-      // Offers count
-      listingIds.length > 0
-        ? supabase
-            .from('offers')
-            .select('*', { count: 'exact', head: true })
-            .in('listing_id', listingIds)
-        : Promise.resolve({ data: null, count: 0 }),
+  if (userId) {
+    const { data: listingsData } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('owner_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(50)
 
-      // Messages — use message_threads linked to this owner's listings
-      listingIds.length > 0
-        ? supabase
-            .from('message_threads')
-            .select('*')
-            .in('listing_id', listingIds)
-            .order('created_at', { ascending: false })
-            .limit(10)
-        : Promise.resolve({ data: null as MessageThread[] | null, count: null }),
+    listings = listingsData ?? []
+    const listingIds = listings.map(l => l.id)
 
-      // Billing status
-      supabase
-        .from('billing_records')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .eq('status', 'paid'),
-    ])
+    try {
+      const [viewingsResult, offersResult, threadsResult, billingResult] = await Promise.all([
+        listingIds.length > 0
+          ? supabase
+              .from('viewings')
+              .select('*')
+              .in('listing_id', listingIds)
+              .in('status', ['pending', 'confirmed'])
+              .order('scheduled_at', { ascending: true })
+              .limit(5)
+          : Promise.resolve({ data: null as Viewing[] | null, count: null }),
 
-    viewings = (viewingsResult.data ?? []).filter(v => v.scheduled_at !== null)
-    offersCount = offersResult.count ?? 0
-    threads = threadsResult.data ?? []
-    hasPaidPlan = (billingResult.count ?? 0) > 0
-  } catch (err) {
-    console.error('Failed to load owner dashboard data:', err)
+        listingIds.length > 0
+          ? supabase
+              .from('offers')
+              .select('*', { count: 'exact', head: true })
+              .in('listing_id', listingIds)
+          : Promise.resolve({ data: null, count: 0 }),
+
+        listingIds.length > 0
+          ? supabase
+              .from('message_threads')
+              .select('*')
+              .in('listing_id', listingIds)
+              .order('created_at', { ascending: false })
+              .limit(10)
+          : Promise.resolve({ data: null as MessageThread[] | null, count: null }),
+
+        supabase
+          .from('billing_records')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', userId)
+          .eq('status', 'paid'),
+      ])
+
+      viewings = (viewingsResult.data ?? []).filter(v => v.scheduled_at !== null)
+      offersCount = offersResult.count ?? 0
+      threads = threadsResult.data ?? []
+      hasPaidPlan = (billingResult.count ?? 0) > 0
+    } catch (err) {
+      console.error('Failed to load owner dashboard data:', err)
+    }
   }
 
   // Calculate stats
