@@ -6,6 +6,7 @@ import { fromMinorUnits } from '@yalla/integrations'
 import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
 import { dateLocaleFromLocale } from '@/lib/country-config'
+import { OwnerDemoContent } from '@/components/owner-demo-content'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 type Viewing = Database['public']['Tables']['viewings']['Row']
@@ -32,6 +33,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const { billing } = await searchParams
   const t = await getTranslations('ownerDash')
   const ts = await getTranslations('statusLabels')
+  const td = await getTranslations('ownerDemo')
   const locale = await getLocale()
   const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
@@ -100,6 +102,19 @@ export default async function OwnerDashboard({ searchParams }: Props) {
     }
   }
 
+  // Demo translations for guest/empty state
+  const demoKeys = [
+    'demoBadge', 'overviewHint', 'statusLive', 'statusDraft',
+    'demoTitle1', 'demoTitle2', 'demoLocation1', 'demoLocation2',
+    'demoPrice1', 'demoPrice2', 'statListings', 'statInquiries',
+    'statViewings', 'statOffers', 'statWithOffers', 'statThisWeek',
+    'stat2ThisWeek', 'statNewOffer', 'sectionListings',
+  ] as const
+  const demoTranslations: Record<string, string> = {}
+  for (const key of demoKeys) {
+    demoTranslations[key] = td(key)
+  }
+
   // Calculate stats
   const activeListingsCount = listings.filter(l => l.status === 'active').length
   const enquiriesCount = threads.length
@@ -161,6 +176,10 @@ export default async function OwnerDashboard({ searchParams }: Props) {
         </Link>
       </div>
 
+      {listings.length === 0 ? (
+        <OwnerDemoContent section="overview" t={demoTranslations} />
+      ) : (
+      <>
       {/* Stat cards row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard
@@ -317,6 +336,8 @@ export default async function OwnerDashboard({ searchParams }: Props) {
           </SectionCard>
         </div>
       </div>
+      </>
+      )}
     </div>
   )
 }

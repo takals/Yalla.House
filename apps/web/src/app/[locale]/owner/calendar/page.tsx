@@ -1,14 +1,30 @@
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { OwnerCalendarView } from './owner-calendar-view'
+import { OwnerDemoContent } from '@/components/owner-demo-content'
 
 export default async function OwnerCalendarPage() {
   const t = await getTranslations('ownerCalendar')
+  const td = await getTranslations('ownerDemo')
   const locale = await getLocale()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const userId = user?.id ?? null
+
+  // Guest → show demo content
+  if (!userId) {
+    const demoKeys = [
+      'demoBadge', 'calendarHint', 'slotAvailable', 'slotBooked',
+    ] as const
+    const demoT: Record<string, string> = {}
+    for (const key of demoKeys) demoT[key] = td(key)
+
+    return (
+      <div className="max-w-6xl">
+        <OwnerDemoContent section="calendar" t={demoT} />
+      </div>
+    )
+  }
 
   // Fetch owner's listings
   const { data: myListings } = await (supabase as any)

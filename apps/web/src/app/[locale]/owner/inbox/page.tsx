@@ -1,14 +1,33 @@
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { InboxWorkspace } from './inbox-workspace'
+import { OwnerDemoContent } from '@/components/owner-demo-content'
 
 export default async function OwnerInboxPage() {
   const t = await getTranslations('comms')
+  const td = await getTranslations('ownerDemo')
   const locale = await getLocale()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const userId = user?.id ?? null
+
+  // Guest → show demo content
+  if (!userId) {
+    const demoKeys = [
+      'demoBadge', 'inboxHint',
+      'inboxSubject1', 'inboxSubject2', 'inboxSubject3', 'inboxSubject4',
+      'inboxPreview1', 'inboxPreview2', 'inboxPreview3', 'inboxPreview4',
+      'inboxTime1', 'inboxTime2', 'inboxTime3', 'inboxTime4',
+    ] as const
+    const demoT: Record<string, string> = {}
+    for (const key of demoKeys) demoT[key] = td(key)
+
+    return (
+      <div className="max-w-5xl">
+        <OwnerDemoContent section="inbox" t={demoT} />
+      </div>
+    )
+  }
 
   // Fetch all threads where this owner is a participant, with related data
   let rawThreads: Array<Record<string, unknown>> = []

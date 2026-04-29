@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import { OffersClient } from './offers-client'
+import { OwnerDemoContent } from '@/components/owner-demo-content'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('ownerOffers')
@@ -17,9 +17,31 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function OwnerOffersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const t = await getTranslations('ownerOffers')
+  const td = await getTranslations('ownerDemo')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const userId = user?.id ?? null
+
+  // Guest → show demo content
+  if (!userId) {
+    const demoKeys = [
+      'demoBadge', 'offersHint', 'demoTitle1', 'statusPending',
+      'offerAmount1', 'offerAmount2', 'offerCondition1', 'offerCondition2',
+      'offerAccept', 'offerCounter', 'offerDecline',
+    ] as const
+    const demoT: Record<string, string> = {}
+    for (const key of demoKeys) demoT[key] = td(key)
+
+    return (
+      <div className="max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-text-primary mb-1">{t('pageTitle')}</h1>
+          <p className="text-text-secondary text-sm">{t('subtitle')}</p>
+        </div>
+        <OwnerDemoContent section="offers" t={demoT} />
+      </div>
+    )
+  }
 
   // Get owner's listing IDs and fetch offers with related data
   let offers: any[] = []

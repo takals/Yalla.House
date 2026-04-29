@@ -1,15 +1,37 @@
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { ViewingList, type ViewingRow } from './viewing-list'
 import { AvailabilityManager, type SlotRow } from './availability-manager'
+import { OwnerDemoContent } from '@/components/owner-demo-content'
 
 export default async function ViewingsPage() {
   const t = await getTranslations('ownerViewings')
+  const td = await getTranslations('ownerDemo')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const userId = user?.id ?? null
+
+  // Guest → show demo content
+  if (!userId) {
+    const demoKeys = [
+      'demoBadge', 'viewingsHint', 'demoTitle1', 'demoTitle2',
+      'demoDate1', 'demoDate2', 'demoDate3', 'typeInPerson', 'typeVideo',
+      'viewingsPending', 'viewingsConfirmed', 'viewingsSlots', 'viewingsBooked',
+      'statusConfirmed', 'statusPending',
+    ] as const
+    const demoT: Record<string, string> = {}
+    for (const key of demoKeys) demoT[key] = td(key)
+
+    return (
+      <div className="max-w-5xl">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold">{t('title')}</h1>
+        </div>
+        <OwnerDemoContent section="viewings" t={demoT} />
+      </div>
+    )
+  }
 
   // Step 1: get all listing IDs for this owner
   const { data: myListings } = await (supabase as any)

@@ -1,10 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { User, Building2, Bell, Globe, AlertTriangle, ChevronRight, Mail, MessageSquare } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { SettingsForm } from './settings-form'
 import { ListingDefaultsForm } from './listing-defaults-form'
+import { OwnerDemoContent } from '@/components/owner-demo-content'
 
 interface OwnerProfile {
   user_id: string
@@ -23,9 +23,28 @@ interface OwnerProfile {
 export default async function OwnerSettingsPage() {
   const t = await getTranslations('ownerSettings')
   const ts = await getTranslations('statusLabels')
+  const td = await getTranslations('ownerDemo')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  const userId = user?.id ?? PREVIEW_USER_ID
+  const userId = user?.id ?? null
+
+  // Guest → show demo content
+  if (!userId) {
+    const demoKeys = [
+      'demoBadge', 'settingsHint', 'settingsProfile', 'settingsPhone',
+      'settingsLanguage', 'settingsNotifications',
+      'settingsNotifInquiry', 'settingsNotifViewing', 'settingsNotifOffer',
+    ] as const
+    const demoT: Record<string, string> = {}
+    for (const key of demoKeys) demoT[key] = td(key)
+
+    return (
+      <div className="max-w-4xl">
+        <h1 className="text-3xl font-bold text-text-primary mb-6">{t('pageTitle')}</h1>
+        <OwnerDemoContent section="settings" t={demoT} />
+      </div>
+    )
+  }
 
   const [userResult, profileResult, listingsResult] = await Promise.all([
     (supabase.from('users') as any)
