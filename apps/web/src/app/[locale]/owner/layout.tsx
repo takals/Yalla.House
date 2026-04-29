@@ -20,31 +20,7 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Public info pages: middleware only allows unauthenticated access to /owner/info,
-  // so if there's no user here it must be the info page — render with public layout
-  if (!user) {
-    return (
-      <div className="bg-bg min-h-screen">
-        <SiteHeader />
-        <div className="max-w-6xl mx-auto px-4 py-12 pt-28">
-          {children}
-        </div>
-        <SiteFooter />
-      </div>
-    )
-  }
-
-  const userId = user.id
-  const [t, tShell] = await Promise.all([
-    getTranslations('notif'),
-    getTranslations('shell'),
-  ])
-
-  const [profileResult, notifData, userRoles] = await Promise.all([
-    (supabase.from('users') as any).select('full_name').eq('id', userId).maybeSingle(),
-    fetchNotifications(supabase, userId),
-    fetchUserRoles(supabase, userId),
-  ])
+  const tShell = await getTranslations('shell')
 
   const shellLabels: Record<string, string> = {
     collapse: tShell('collapse'),
@@ -65,6 +41,31 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
     navPlans: tShell('navPlans'),
     navSettings: tShell('navSettings'),
   }
+
+  // Always render inside DashboardShell — even for unauthenticated visitors
+  // on /owner/info so the page feels like a real dashboard workspace
+  if (!user) {
+    return (
+      <DashboardShell
+        navItems={ownerNav(navLabels)}
+        section="owner"
+        userEmail=""
+        userName={null}
+        shellLabels={shellLabels}
+      >
+        {children}
+      </DashboardShell>
+    )
+  }
+
+  const userId = user.id
+  const t = await getTranslations('notif')
+
+  const [profileResult, notifData, userRoles] = await Promise.all([
+    (supabase.from('users') as any).select('full_name').eq('id', userId).maybeSingle(),
+    fetchNotifications(supabase, userId),
+    fetchUserRoles(supabase, userId),
+  ])
 
   return (
     <DashboardShell
