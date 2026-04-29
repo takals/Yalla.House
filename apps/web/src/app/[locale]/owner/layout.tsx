@@ -26,6 +26,9 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
     expandSidebar: tShell('expandSidebar'),
     collapseSidebar: tShell('collapseSidebar'),
     signOut: tShell('signOut'),
+    signIn: tShell('signIn'),
+    openSidebar: tShell('openSidebar'),
+    closeSidebar: tShell('closeSidebar'),
     switchRole: tShell('switchRole'),
   }
 

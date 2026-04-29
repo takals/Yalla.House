@@ -6,7 +6,8 @@ import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, CalendarDays, Star,
   ShieldCheck, Handshake, Inbox, Settings, Users, UserCircle,
-  LogOut, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye,
+  LogOut, LogIn, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye,
+  Menu, X,
   type LucideIcon,
 } from 'lucide-react'
 import { NotificationBell } from './notification-bell'
@@ -54,8 +55,11 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
   const router = useRouter()
 
   // Desktop only: collapsed (60px icons) or expanded (240px icons + labels)
-  // Mobile/tablet: always collapsed (60px icon strip)
+  // Mobile/tablet: always collapsed (60px icon strip), toggleable via hamburger
   const [expanded, setExpanded] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  const isGuest = !userEmail
 
   async function handleSignOut() {
     try {
@@ -71,18 +75,31 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
     return pathname.includes(item.href)
   }
 
-  const initials = (userName ?? userEmail).slice(0, 2).toUpperCase()
+  const initials = isGuest ? '?' : (userName ?? userEmail).slice(0, 2).toUpperCase()
 
   return (
     <div className="flex h-screen bg-bg overflow-hidden">
 
-      {/* ── Sidebar — always visible ───────────────────────── */}
-      {/* All screens: static 60px icon strip                   */}
+      {/* ── Mobile overlay backdrop ─────────────────────────── */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* ── Sidebar ────────────────────────────────────────── */}
+      {/* Mobile: hidden by default, slides in as overlay       */}
       {/* Desktop (lg:): toggleable between 60px and 240px      */}
       <aside
         className={[
           'bg-[#0F1117] flex flex-col overflow-hidden flex-shrink-0',
-          'w-[60px] transition-[width] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          // Mobile: fixed overlay drawer
+          'fixed inset-y-0 left-0 z-50 w-[240px] transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full',
+          // Desktop: static sidebar in flex layout
+          'lg:static lg:translate-x-0 lg:z-auto',
+          'lg:transition-[width] lg:duration-200',
           expanded ? 'lg:w-[240px]' : 'lg:w-[60px]',
         ].join(' ')}
       >
@@ -131,13 +148,14 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 key={item.href}
                 href={item.href}
                 title={item.label}
+                onClick={() => setMobileOpen(false)}
                 style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1), color 0.15s cubic-bezier(0.16,1,0.3,1)' }}
                 className={[
                   'flex items-center rounded-[8px] text-[0.875rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
-                  // Collapsed: centered icon, no label
-                  'justify-center px-0 py-2.5',
-                  // Expanded (desktop only): left-aligned with gap
-                  expanded ? 'lg:justify-start lg:px-3 lg:gap-3' : '',
+                  // Mobile (inside drawer): always show labels
+                  'justify-start px-3 py-2.5 gap-3',
+                  // Desktop collapsed: centered icon, no label
+                  expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
                   active
                     ? 'bg-[rgba(212,118,78,0.12)] text-brand'
                     : 'text-white/40 hover:text-white hover:bg-white/[0.05]',
@@ -146,8 +164,8 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 <span className={`flex-shrink-0 ${active ? 'text-brand' : 'text-white/30'}`}>
                   {(() => { const Icon = iconMap[item.icon]; return Icon ? <Icon size={15} /> : null })()}
                 </span>
-                {/* Label only visible when expanded on desktop */}
-                {expanded && <span className="hidden lg:inline">{item.label}</span>}
+                {/* Label: always visible on mobile drawer, desktop only when expanded */}
+                <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </Link>
             )
           })}
@@ -174,32 +192,43 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
         {/* User footer */}
         <div className="px-2 pb-4 pt-3 border-t border-white/[0.07] flex-shrink-0">
-          {/* Collapsed (all screens): just initials */}
-          <div className={`flex items-center justify-center ${expanded ? 'lg:hidden' : ''}`}>
+          {/* Collapsed (desktop): just initials */}
+          <div className={`items-center justify-center hidden ${expanded ? '' : 'lg:flex'}`}>
             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70">
-              {initials}
+              {isGuest ? <UserCircle size={16} /> : initials}
             </div>
           </div>
-          {/* Expanded (desktop only): name + sign out */}
-          {expanded && (
-            <div className="hidden lg:flex items-center gap-3 px-2 py-2">
-              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70 flex-shrink-0">
-                {initials}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[0.8125rem] font-semibold truncate text-white/80">
-                  {userName ?? userEmail}
-                </p>
-                <button
-                  onClick={handleSignOut}
-                  className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
-                >
-                  <LogOut size={10} />
-                  {shellLabels?.signOut ?? 'Sign out'}
-                </button>
-              </div>
+          {/* Expanded: name + sign out / sign in — visible in mobile drawer and desktop expanded */}
+          <div className={`flex items-center gap-3 px-2 py-2 ${expanded ? '' : 'lg:hidden'}`}>
+            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70 flex-shrink-0">
+              {isGuest ? <UserCircle size={16} /> : initials}
             </div>
-          )}
+            <div className="flex-1 min-w-0">
+              {isGuest ? (
+                <Link
+                  href="/auth/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="text-[0.8125rem] font-semibold text-brand hover:text-brand-hover transition-colors flex items-center gap-1.5"
+                >
+                  <LogIn size={12} />
+                  {shellLabels?.signIn ?? 'Sign in'}
+                </Link>
+              ) : (
+                <>
+                  <p className="text-[0.8125rem] font-semibold truncate text-white/80">
+                    {userName ?? userEmail}
+                  </p>
+                  <button
+                    onClick={handleSignOut}
+                    className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <LogOut size={10} />
+                    {shellLabels?.signOut ?? 'Sign out'}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -208,6 +237,14 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
         {/* Topbar */}
         <header className="h-[60px] bg-white border-b border-border-default flex items-center px-4 lg:px-6 gap-4 flex-shrink-0">
+          {/* Mobile hamburger — hidden on desktop */}
+          <button
+            onClick={() => setMobileOpen(o => !o)}
+            className="lg:hidden flex items-center justify-center w-8 h-8 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg transition-colors"
+            aria-label={mobileOpen ? (shellLabels?.closeSidebar ?? 'Close menu') : (shellLabels?.openSidebar ?? 'Open menu')}
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
             {notifications && notificationLabels && (
@@ -220,7 +257,14 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
             <div className="w-7 h-7 rounded-full bg-bg flex items-center justify-center text-[0.7rem] font-bold text-text-secondary">
               {initials}
             </div>
-            <span className="hidden sm:inline text-[0.8125rem] font-semibold text-text-primary">{userName ?? userEmail}</span>
+            {!isGuest && (
+              <span className="hidden sm:inline text-[0.8125rem] font-semibold text-text-primary">{userName ?? userEmail}</span>
+            )}
+            {isGuest && (
+              <Link href="/auth/login" className="hidden sm:inline text-[0.8125rem] font-semibold text-brand hover:text-brand-hover transition-colors">
+                {shellLabels?.signIn ?? 'Sign in'}
+              </Link>
+            )}
           </div>
         </header>
 

@@ -2372,6 +2372,9 @@
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
     "signOut": "Sign out",
+    "signIn": "Sign in",
+    "openSidebar": "Open menu",
+    "closeSidebar": "Close menu",
     "switchRole": "Switch role",
     "navDashboard": "Dashboard",
     "navSearch": "Search",
@@ -3680,6 +3683,9 @@
     "settingsNotifications": "Notifications",
     "settingsNotifInquiry": "New enquiries",
     "settingsNotifViewing": "Viewing appointments",
-    "settingsNotifOffer": "New offers"
+    "settingsNotifOffer": "New offers",
+    "ctaTitle": "Ready to list your property?",
+    "ctaDescription": "Create a free account to list your home on major property portals. No commission, no hidden fees.",
+    "ctaButton": "Get started free"
   }
 }

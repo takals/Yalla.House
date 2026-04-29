@@ -26,6 +26,9 @@ export default async function HunterLayout({ children }: { children: React.React
     expandSidebar: tShell('expandSidebar'),
     collapseSidebar: tShell('collapseSidebar'),
     signOut: tShell('signOut'),
+    signIn: tShell('signIn'),
+    openSidebar: tShell('openSidebar'),
+    closeSidebar: tShell('closeSidebar'),
     switchRole: tShell('switchRole'),
   }
 

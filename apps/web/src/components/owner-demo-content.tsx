@@ -1,10 +1,12 @@
 'use client'
 
+import Link from 'next/link'
 import { DemoSection, DemoCard } from './demo-content'
 import {
   Home, CalendarDays, Eye, MessageCircle, Banknote,
   Users, Clock, CheckCircle2, MapPin, BedDouble, Maximize,
   Star, TrendingUp, Send, Phone, Mail, Camera, ArrowRight,
+  Sparkles,
 } from 'lucide-react'
 
 interface OwnerDemoProps {
@@ -45,6 +47,7 @@ export function OwnerDemoContent({ section, t }: OwnerDemoProps) {
 // ═══════════════════════════════════════════════════════════════════════════
 function DemoListings({ t }: { t: Record<string, string> }) {
   return (
+    <>
     <DemoSection badge={t.demoBadge} hint={t.listingsHint}>
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Example listing 1 — Live */}
@@ -105,6 +108,22 @@ function DemoListings({ t }: { t: Record<string, string> }) {
         </div>
       </div>
     </DemoSection>
+
+    {/* Sign-up CTA — friendly, non-blocking prompt */}
+    <div className="mt-6 bg-gradient-to-br from-brand/[0.06] to-brand/[0.02] rounded-xl border border-brand/15 p-6 text-center">
+      <div className="w-12 h-12 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-3">
+        <Sparkles size={22} className="text-brand" />
+      </div>
+      <h3 className="text-lg font-bold text-text-primary mb-1">{t.ctaTitle}</h3>
+      <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto leading-relaxed">{t.ctaDescription}</p>
+      <Link
+        href="/auth/login"
+        className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold px-6 py-3 rounded-xl transition-all will-change-transform hover:-translate-y-0.5 hover:shadow-lg text-[0.9375rem]"
+      >
+        {t.ctaButton} <ArrowRight size={16} />
+      </Link>
+    </div>
+  </>
   )
 }
 

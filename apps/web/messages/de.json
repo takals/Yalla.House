@@ -2372,6 +2372,9 @@
     "expandSidebar": "Seitenleiste ausklappen",
     "collapseSidebar": "Seitenleiste einklappen",
     "signOut": "Abmelden",
+    "signIn": "Anmelden",
+    "openSidebar": "Menü öffnen",
+    "closeSidebar": "Menü schließen",
     "switchRole": "Rolle wechseln",
     "navDashboard": "Dashboard",
     "navSearch": "Suche",
@@ -3680,6 +3683,9 @@
     "settingsNotifications": "Benachrichtigungen",
     "settingsNotifInquiry": "Neue Anfragen",
     "settingsNotifViewing": "Besichtigungstermine",
-    "settingsNotifOffer": "Neue Angebote"
+    "settingsNotifOffer": "Neue Angebote",
+    "ctaTitle": "Bereit, Ihre Immobilie zu inserieren?",
+    "ctaDescription": "Erstellen Sie ein kostenloses Konto und inserieren Sie auf den wichtigsten Immobilienportalen. Keine Provision, keine versteckten Kosten.",
+    "ctaButton": "Kostenlos starten"
   }
 }

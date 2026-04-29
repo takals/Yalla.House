@@ -58,7 +58,7 @@ export default async function HomePage() {
           headlineSuffix: t('headlineSuffix'),
           subline: t('subline'),
           cta: t('cta'),
-          ctaHref: '/owner/info',
+          ctaHref: '/owner/listings',
           stats: [
             { value: stats('stat1Value'), label: stats('stat1Label') },
             { value: stats('stat2Value'), label: stats('stat2Label') },
@@ -190,7 +190,7 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/owner/info"
+              href="/owner/listings"
               className="inline-flex items-center bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
               style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
             >

@@ -30,6 +30,9 @@ export default async function PartnerLayout({ children }: { children: React.Reac
     expandSidebar: tShell('expandSidebar'),
     collapseSidebar: tShell('collapseSidebar'),
     signOut: tShell('signOut'),
+    signIn: tShell('signIn'),
+    openSidebar: tShell('openSidebar'),
+    closeSidebar: tShell('closeSidebar'),
     switchRole: tShell('switchRole'),
   }
 
