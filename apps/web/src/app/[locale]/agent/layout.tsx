@@ -3,8 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_EMAIL } from '@/lib/preview-user'
 import { DashboardShell } from '@/components/dashboard/shell'
 import { agentNav } from '@/components/dashboard/nav-items'
-import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
+
 import { fetchNotifications, getNotificationLabels } from '@/lib/notifications'
 import { fetchUserRoles } from '@/lib/user-roles'
 import { getTranslations } from 'next-intl/server'
@@ -20,32 +19,7 @@ export default async function AgentLayout({ children }: { children: React.ReactN
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Public info pages: middleware only allows unauthenticated access to /agent/info,
-  // so if there's no user here it must be the info page — render with public layout
-  if (!user) {
-    return (
-      <div className="bg-bg min-h-screen">
-        <SiteHeader />
-        <div className="max-w-6xl mx-auto px-4 py-12 pt-28">
-          {children}
-        </div>
-        <SiteFooter />
-      </div>
-    )
-  }
-
-  const userId = user.id
-
-  const [t, tShell] = await Promise.all([
-    getTranslations('notif'),
-    getTranslations('shell'),
-  ])
-
-  const [profileResult, notifData, userRoles] = await Promise.all([
-    (supabase.from('users') as any).select('full_name').eq('id', userId).maybeSingle(),
-    fetchNotifications(supabase, userId),
-    fetchUserRoles(supabase, userId),
-  ])
+  const tShell = await getTranslations('shell')
 
   const shellLabels: Record<string, string> = {
     collapse: tShell('collapse'),
@@ -65,6 +39,30 @@ export default async function AgentLayout({ children }: { children: React.ReactN
     navProfile: tShell('navProfile'),
     navSettings: tShell('navSettings'),
   }
+
+  if (!user) {
+    return (
+      <DashboardShell
+        navItems={agentNav(navLabels)}
+        section="agent"
+        userEmail=""
+        userName={null}
+        shellLabels={shellLabels}
+      >
+        {children}
+      </DashboardShell>
+    )
+  }
+
+  const userId = user.id
+
+  const t = await getTranslations('notif')
+
+  const [profileResult, notifData, userRoles] = await Promise.all([
+    (supabase.from('users') as any).select('full_name').eq('id', userId).maybeSingle(),
+    fetchNotifications(supabase, userId),
+    fetchUserRoles(supabase, userId),
+  ])
 
   return (
     <DashboardShell
