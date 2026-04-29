@@ -92,6 +92,7 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
     'demoBadge', 'listingsHint', 'statusLive', 'statusDraft',
     'demoId1', 'demoId2', 'demoTitle1', 'demoTitle2',
     'demoLocation1', 'demoLocation2', 'demoPrice1', 'demoPrice2',
+    'ctaTitle', 'ctaDescription', 'ctaButton',
   ] as const
   const demoTranslations: Record<string, string> = {}
   for (const key of demoKeys) {
