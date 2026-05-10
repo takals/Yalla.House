@@ -4,8 +4,8 @@ import { fromMinorUnits } from '@yalla/integrations'
 import { getCountryConfig } from '@/lib/country-config'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
-import { ArrowLeft, Mail, Eye, CheckCircle2, Clock, ArrowRight } from 'lucide-react'
-import { SendBriefButton } from './send-brief-button'
+import { ArrowLeft, Mail, Eye, CheckCircle2, Clock, Shield } from 'lucide-react'
+import { SendBriefClient } from './send-brief-client'
 
 interface Props {
   searchParams: Promise<{ agents?: string; listing?: string }>
@@ -13,48 +13,98 @@ interface Props {
 
 export default async function SendBriefPage({ searchParams }: Props) {
   const { agents: agentIds, listing: listingId } = await searchParams
-  const t = await getTranslations('ownerAgents')
+  const t = await getTranslations('ownerAgentInvite')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
+  const isAuthenticated = !!user
 
-  // Fetch owner's listing (use provided listingId or most recent)
-  let listingQuery = (supabase as any)
+  // Fetch owner's listings for the listing picker
+  const { data: listingsData } = await (supabase as any)
     .from('listings')
-    .select('id, address_line1, city, postcode, bedrooms, property_type, description_de, sale_price, country_code')
+    .select('id, address_line1, city, postcode, bedrooms, property_type, sale_price, country_code')
     .eq('owner_id', userId)
     .order('created_at', { ascending: false })
+    .limit(20)
 
-  if (listingId) {
-    listingQuery = listingQuery.eq('id', listingId)
-  }
+  const listings = (listingsData ?? []) as Array<{
+    id: string
+    address_line1: string | null
+    city: string | null
+    postcode: string | null
+    bedrooms: number | null
+    property_type: string | null
+    sale_price: number | null
+    country_code: string | null
+  }>
 
-  const { data: listingData } = await listingQuery.limit(1).single()
-  const listing = listingData as any
+  // Pre-select listing if provided
+  const selectedListing = listingId
+    ? listings.find(l => l.id === listingId) ?? listings[0]
+    : listings[0]
 
-  // Fetch selected agents from Supabase
-  const selectedAgentIds = agentIds?.split(',').filter(Boolean) || []
-  let selectedAgents: Array<{ id: string; name: string; contact: string }> = []
+  // Fetch selected agents from agent_profiles
+  const selectedAgentIds = agentIds?.split(',').filter(Boolean) ?? []
+  let selectedAgents: Array<{
+    id: string
+    agencyName: string
+    email: string | null
+    phone: string | null
+    postcode: string | null
+    verifiedAt: string | null
+  }> = []
 
   if (selectedAgentIds.length > 0) {
     const { data: agentsData } = await (supabase as any)
-      .from('users')
-      .select(`
-        id, full_name, email,
-        agent_profiles!inner(agency_name)
-      `)
-      .in('id', selectedAgentIds)
+      .from('agent_profiles')
+      .select('user_id, agency_name, email, phone, postcode, verified_at')
+      .in('user_id', selectedAgentIds)
 
-    selectedAgents = (agentsData ?? []).map((agent: any) => ({
-      id: agent.id,
-      name: agent.agent_profiles?.[0]?.agency_name || agent.full_name || t('agentFallback'),
-      contact: agent.email || '',
+    selectedAgents = (agentsData ?? []).map((a: any) => ({
+      id: a.user_id,
+      agencyName: a.agency_name ?? 'Unknown Agency',
+      email: a.email,
+      phone: a.phone,
+      postcode: a.postcode,
+      verifiedAt: a.verified_at,
     }))
   }
 
-  const formattedPrice = listing?.sale_price
-    ? fromMinorUnits(listing.sale_price, getCountryConfig(listing.country_code ?? 'GB').currency)
-    : null
+  // Build translations record for client component
+  const tKeys = [
+    'pageTitle', 'pageDescription', 'backButton',
+    'propertyBriefTitle', 'address', 'bedrooms', 'bedroomsCount',
+    'propertyType', 'description', 'price', 'noListingFound',
+    'selectListing', 'selectListingHint',
+    'tierTitle', 'tierAdvisory', 'tierAdvisoryDesc',
+    'tierAssisted', 'tierAssistedDesc', 'tierManaged', 'tierManagedDesc',
+    'notesTitle', 'notesPlaceholder',
+    'whatNextTitle', 'step1Title', 'step1Desc',
+    'step2Title', 'step2Desc', 'step3Title', 'step3Desc',
+    'step4Title', 'step4Desc',
+    'selectedAgentsTitle', 'noAgentsSelected', 'selectAgentsLink',
+    'addMoreAgents', 'sendBriefNow', 'sending', 'sent',
+    'errorSendFailed', 'errorGeneric', 'errorAuthRequired',
+    'infoLabel', 'infoText', 'verified',
+    'successTitle', 'successDesc', 'viewTracking',
+    'signInRequired', 'signInDesc',
+  ] as const
+
+  const translations: Record<string, string> = {}
+  for (const key of tKeys) {
+    translations[key] = t(key)
+  }
+
+  // Format listings for client
+  const formattedListings = listings.map(l => ({
+    id: l.id,
+    label: [l.address_line1, l.city, l.postcode].filter(Boolean).join(', '),
+    price: l.sale_price
+      ? String(fromMinorUnits(l.sale_price, getCountryConfig(l.country_code ?? 'GB').currency))
+      : null,
+    bedrooms: l.bedrooms,
+    propertyType: l.property_type,
+  }))
 
   return (
     <div className="max-w-6xl">
@@ -62,62 +112,23 @@ export default async function SendBriefPage({ searchParams }: Props) {
       <div className="mb-8">
         <Link href="/owner/agents/search" className="inline-flex items-center gap-2 text-brand font-semibold text-sm mb-4 hover:gap-3 transition-all">
           <ArrowLeft size={16} />
-          {t('sendBackButton')}
+          {translations.backButton}
         </Link>
-        <h1 className="text-3xl font-bold text-text-primary mb-2">{t('sendPageTitle')}</h1>
-        <p className="text-text-secondary">{t('sendPageDescription')}</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">{translations.pageTitle}</h1>
+        <p className="text-text-secondary">{translations.pageDescription}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Property Brief */}
+        {/* Left Column: What Happens Next */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Property Brief Card */}
           <div className="bg-white rounded-2xl border border-border-default p-6">
-            <h2 className="font-bold text-text-primary mb-4">{t('briefPropertyTitle')}</h2>
-            {listing ? (
-              <div className="space-y-4">
-                <div>
-                  <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefAddress')}</p>
-                  <p className="font-semibold text-text-primary">{listing.address_line1}</p>
-                  <p className="text-sm text-text-secondary">{listing.city}{listing.postcode ? `, ${listing.postcode}` : ''}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 py-4 border-y border-border-default">
-                  <div>
-                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefBedrooms')}</p>
-                    <p className="font-semibold text-text-primary">{listing.bedrooms ? t('bedroomsCount', { count: listing.bedrooms }) : '—'}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefProperty')}</p>
-                    <p className="font-semibold text-text-primary">{listing.property_type ?? '—'}</p>
-                  </div>
-                </div>
-                {listing.description_de && (
-                  <div>
-                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('briefDescription')}</p>
-                    <p className="text-sm text-text-secondary">{listing.description_de}</p>
-                  </div>
-                )}
-                {formattedPrice && (
-                  <div>
-                    <p className="text-xs text-text-secondary font-semibold uppercase tracking-wider mb-1">{t('priceLabel')}</p>
-                    <p className="font-bold text-lg text-text-primary">{formattedPrice}</p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-sm text-text-secondary">{t('noListingFound')}</p>
-            )}
-          </div>
-
-          {/* What Happens Next */}
-          <div className="bg-white rounded-2xl border border-border-default p-6">
-            <h2 className="font-bold text-text-primary mb-6">{t('sendWhatNextTitle')}</h2>
+            <h2 className="font-bold text-text-primary mb-6">{translations.whatNextTitle}</h2>
             <div className="space-y-4">
               {[
-                { icon: <Mail size={18} />, title: t('sendStep1Title'), desc: t('sendStep1Desc') },
-                { icon: <Eye size={18} />, title: t('sendStep2Title'), desc: t('sendStep2Desc') },
-                { icon: <CheckCircle2 size={18} />, title: t('sendStep3Title'), desc: t('sendStep3Desc') },
-                { icon: <Clock size={18} />, title: t('sendStep4Title'), desc: t('sendStep4Desc') },
+                { icon: <Mail size={18} />, title: translations.step1Title, desc: translations.step1Desc },
+                { icon: <Eye size={18} />, title: translations.step2Title, desc: translations.step2Desc },
+                { icon: <CheckCircle2 size={18} />, title: translations.step3Title, desc: translations.step3Desc },
+                { icon: <Clock size={18} />, title: translations.step4Title, desc: translations.step4Desc },
               ].map((step, idx) => (
                 <div key={idx} className="flex gap-4">
                   <div className="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0 text-brand">
@@ -131,68 +142,23 @@ export default async function SendBriefPage({ searchParams }: Props) {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Right Column: Selected Agents & Actions */}
-        <div className="space-y-6">
-          {/* Selected Agents Card */}
-          <div className="bg-white rounded-2xl border border-border-default p-6 sticky top-8">
-            <h2 className="font-bold text-text-primary mb-4">{t('sendSelectedAgentsTitle')}</h2>
-
-            {selectedAgents.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-sm text-text-secondary mb-4">{t('sendNoAgentsSelected')}</p>
-                <Link href="/owner/agents/search">
-                  <button className="text-sm font-semibold text-brand">
-                    {t('sendSelectAgentsLink')}
-                  </button>
-                </Link>
-              </div>
-            ) : (
-              <>
-                <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
-                  {selectedAgents.map((agent) => (
-                    <div key={agent.id} className="bg-bg rounded-lg p-3">
-                      <p className="font-semibold text-sm text-text-primary">{agent.name}</p>
-                      <p className="text-xs text-text-secondary">{agent.contact}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <Link href="/owner/agents/search">
-                  <button className="w-full text-sm font-semibold text-text-secondary py-2 mb-4 hover:text-text-primary transition-colors flex items-center justify-center gap-2">
-                    <ArrowRight size={14} />
-                    {t('sendAddMoreAgents')}
-                  </button>
-                </Link>
-
-                <div className="space-y-3">
-                  <button className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-border-default text-text-primary font-semibold rounded-lg hover:bg-bg transition-colors">
-                    <Eye size={16} />
-                    {t('sendPreviewEmail')}
-                  </button>
-                  {listing && (
-                    <SendBriefButton
-                      listingId={listing.id}
-                      agentIds={selectedAgents.map(a => a.id)}
-                      label={t('sendBriefNow')}
-                      translations={{
-                        sending: t('sending'),
-                        errorSendFailed: t('errorSendFailed'),
-                        errorGeneric: t('errorGeneric'),
-                      }}
-                    />
-                  )}
-                </div>
-              </>
-            )}
-          </div>
 
           {/* Info Card */}
           <div className="bg-green-50 rounded-2xl border border-green-200 p-6">
-            <p className="text-xs text-green-700 font-semibold uppercase tracking-wider mb-2">{t('sendInfoLabel')}</p>
-            <p className="text-sm text-green-700">{t('sendInfoText')}</p>
+            <p className="text-xs text-green-700 font-semibold uppercase tracking-wider mb-2">{translations.infoLabel}</p>
+            <p className="text-sm text-green-700">{translations.infoText}</p>
           </div>
+        </div>
+
+        {/* Right Column: Agent list + controls */}
+        <div>
+          <SendBriefClient
+            agents={selectedAgents}
+            listings={formattedListings}
+            selectedListingId={selectedListing?.id ?? null}
+            isAuthenticated={isAuthenticated}
+            translations={translations}
+          />
         </div>
       </div>
     </div>
