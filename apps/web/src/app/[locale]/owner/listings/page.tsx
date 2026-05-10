@@ -6,7 +6,7 @@ import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
 import ListingFilters from './listing-filters'
 import ListingGrid from './listing-grid'
-import { OwnerDemoContent } from '@/components/owner-demo-content'
+import { OwnerExampleDashboard } from '@/components/owner-example-dashboard'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 
@@ -18,7 +18,7 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
   const { status: filterStatus } = await searchParams
   const t = await getTranslations('ownerListings')
   const ts = await getTranslations('statusLabels')
-  const td = await getTranslations('ownerDemo')
+  const tEx = await getTranslations('ownerExampleDashboard')
   const locale = await getLocale()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -50,6 +50,47 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
       }
     }
   }
+
+  // ─── 0 listings: immersive example property dashboard ────────────
+  if (allListings.length === 0) {
+    // Build translation record for the example dashboard client component
+    const exKeys = [
+      'exBadge', 'exBannerHint', 'exStartListing',
+      'exStatusLive', 'exPropertyTitle', 'exPropertyLocation', 'exPropertyPrice',
+      'exListedDate', 'exBeds', 'exBaths', 'exSize', 'exParking', 'exType', 'exPropertyType',
+      'exStatViews', 'exStatEnquiries', 'exStatViewings', 'exStatOffers', 'exStatSaved',
+      'exStatUpcoming', 'exStatNew', 'exStatThisWeek',
+      'exSectionActivity', 'exLast7Days',
+      'exActOffer', 'exActOfferDesc', 'exActViewing', 'exActViewingDesc',
+      'exActMessage', 'exActMessageDesc', 'exActMilestone', 'exActMilestoneDesc',
+      'exAct2hAgo', 'exAct5hAgo', 'exActYesterday',
+      'exSectionViewings', 'exViewAll', 'exViewDate1', 'exViewDate2', 'exViewDate3',
+      'exViewInPerson', 'exViewVideo', 'exViewConfirmed', 'exViewPending',
+      'exSectionOffers', 'exOfferActive', 'exOfferMortgage', 'exOfferCash', 'exOfferStrong',
+      'exOfferAmount1', 'exOfferNote1', 'exOfferAmount2', 'exOfferNote2',
+      'exOfferAccept', 'exOfferCounter', 'exOfferDecline',
+      'exSectionMessages', 'exMsgSubject1', 'exMsgPreview1',
+      'exMsgSubject2', 'exMsgPreview2', 'exMsgSubject3', 'exMsgPreview3',
+      'exSectionStatus', 'exStatusHealthy', 'exStatusHealthyDesc',
+      'exPortals', 'exPortalLive', 'exPortalPending', 'exPreview', 'exShare',
+      'exSectionPassport', 'exPassPhotos', 'exPassDescription', 'exPassFloorPlan',
+      'exPassEpc', 'exPassDocuments',
+      'exSectionTasks', 'exTaskRespond', 'exTaskUploadEpc', 'exTaskConfirmViewing',
+      'exTaskAddPhotos', 'exTaskSetAvailability',
+      'exSectionAnalytics', 'exAnalytics4WeeksAgo', 'exAnalyticsToday',
+      'exAnalyticsClickRate', 'exAnalyticsMin', 'exAnalyticsAvgTime',
+      'exSectionTips', 'exTip1', 'exTip2', 'exTip3',
+      'exCtaTitle', 'exCtaDesc', 'exCtaButton',
+    ] as const
+    const exTranslations: Record<string, string> = {}
+    for (const key of exKeys) {
+      exTranslations[key] = tEx(key)
+    }
+
+    return <OwnerExampleDashboard t={exTranslations} locale={locale} />
+  }
+
+  // ─── 2+ listings: grid view with filters ─────────────────────────
 
   // Compute counts per status for filter pills
   const counts: Record<string, number> = { all: allListings.length }
@@ -87,18 +128,6 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
     statusTranslations[key] = ts(key)
   }
 
-  // Demo translations for guest/empty state
-  const demoKeys = [
-    'demoBadge', 'listingsHint', 'statusLive', 'statusDraft',
-    'demoId1', 'demoId2', 'demoTitle1', 'demoTitle2',
-    'demoLocation1', 'demoLocation2', 'demoPrice1', 'demoPrice2',
-    'ctaTitle', 'ctaDescription', 'ctaButton',
-  ] as const
-  const demoTranslations: Record<string, string> = {}
-  for (const key of demoKeys) {
-    demoTranslations[key] = td(key)
-  }
-
   return (
     <div className="max-w-7xl">
       {/* Header */}
@@ -106,9 +135,7 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
         <div>
           <h1 className="text-3xl font-bold text-text-primary">{t('pageTitle')}</h1>
           <p className="text-sm text-text-secondary mt-1">
-            {allListings.length > 0
-              ? t('listingCount', { count: allListings.length })
-              : t('noListingsCreated')}
+            {t('listingCount', { count: allListings.length })}
           </p>
         </div>
         <Link
@@ -120,22 +147,16 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
         </Link>
       </div>
 
-      {/* Filter pills — only when there are real listings */}
-      {allListings.length > 0 && (
-        <ListingFilters counts={counts} translations={translations} />
-      )}
+      {/* Filter pills */}
+      <ListingFilters counts={counts} translations={translations} />
 
-      {/* Content */}
-      {allListings.length === 0 ? (
-        <OwnerDemoContent section="listings" t={demoTranslations} />
-      ) : (
-        <ListingGrid
-          listings={filteredListings as unknown as Parameters<typeof ListingGrid>[0]['listings']}
-          translations={translations}
-          statusTranslations={statusTranslations}
-          locale={locale}
-        />
-      )}
+      {/* Listing grid */}
+      <ListingGrid
+        listings={filteredListings as unknown as Parameters<typeof ListingGrid>[0]['listings']}
+        translations={translations}
+        statusTranslations={statusTranslations}
+        locale={locale}
+      />
     </div>
   )
 }
