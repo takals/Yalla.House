@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { sendTieredAgentInviteEmail, type AgentInviteTier } from '@/lib/resend'
+import { getCountryConfig } from '@/lib/country-config'
 
 /**
  * POST /api/agents/invite
@@ -83,6 +85,86 @@ export async function POST(request: NextRequest) {
       { error: insertError.message },
       { status: 500 }
     )
+  }
+
+  // --- Send tier-specific emails for each created invite ---
+  // Only send if we have a listing and invites were created
+  if (listingId && invites && invites.length > 0) {
+    try {
+      // Fetch listing details for the email
+      const { data: listingData } = await (supabase as any)
+        .from('listings')
+        .select('address_line1, city, postcode, property_type, sale_price, currency, country_code, status, preferred_completion, seller_situation')
+        .eq('id', listingId)
+        .single()
+
+      // Fetch owner name
+      const { data: ownerData } = await (supabase as any)
+        .from('users')
+        .select('full_name')
+        .eq('id', user.id)
+        .single()
+
+      // Count total agents invited to this listing (for competitor count)
+      const { count: totalInvited } = await (supabase as any)
+        .from('agent_invites')
+        .select('id', { count: 'exact', head: true })
+        .eq('listing_id', listingId)
+
+      if (listingData) {
+        const countryCode = listingData.country_code ?? 'GB'
+        const config = getCountryConfig(countryCode)
+        const locale = countryCode === 'DE' ? 'de-DE' as const : 'en-GB' as const
+
+        // Build address string
+        const addressParts = [listingData.address_line1, listingData.city, listingData.postcode].filter(Boolean)
+        const address = addressParts.join(', ')
+
+        // Map agent profile IDs to their email/name for sending
+        const profileMap = new Map<string, { email: string; agency_name: string }>(
+          (profiles as Array<{ user_id: string; email: string; agency_name: string }>)
+            .map(p => [p.user_id, { email: p.email, agency_name: p.agency_name }])
+        )
+
+        // Send emails in parallel (fire-and-forget, don't block the response)
+        const emailPromises = (invites as Array<{ agent_profile_id: string; tier: string }>).map(async (invite) => {
+          const profile = profileMap.get(invite.agent_profile_id)
+          if (!profile?.email) return
+
+          await sendTieredAgentInviteEmail({
+            agentEmail: profile.email,
+            agentName: profile.agency_name,
+            ownerName: ownerData?.full_name ?? null,
+            tier: invite.tier as AgentInviteTier,
+            listingId,
+            address,
+            city: listingData.city ?? '',
+            postcode: listingData.postcode ?? '',
+            propertyType: listingData.property_type ?? 'other',
+            askingPrice: listingData.sale_price ?? null,
+            currency: listingData.currency ?? config.currency,
+            timeline: listingData.preferred_completion ?? listingData.seller_situation ?? null,
+            listingStatus: listingData.status ?? 'draft',
+            competitorCount: totalInvited ?? 0,
+            countryCode,
+            locale,
+          })
+        })
+
+        // Update invite status to 'sent' for invites where email was dispatched
+        await Promise.allSettled(emailPromises)
+
+        // Mark invites as sent
+        const inviteIds = (invites as Array<{ id: string }>).map(i => i.id)
+        await (supabase as any)
+          .from('agent_invites')
+          .update({ status: 'sent', sent_at: new Date().toISOString() })
+          .in('id', inviteIds)
+      }
+    } catch (emailErr) {
+      // Don't fail the invite creation if emails fail
+      console.error('Failed to send agent invite emails:', emailErr)
+    }
   }
 
   return NextResponse.json(

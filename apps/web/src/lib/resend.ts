@@ -118,6 +118,100 @@ const EMAIL_TRANSLATIONS = {
     assignmentTerms: 'Terms',
     assignmentDashboard: 'View Assignment',
     assignmentFooter: 'You\'re in control — cancel anytime.',
+    // Tiered agent invite translations
+    tieredInviteSubject: (tier: string, city: string) => {
+      const labels: Record<string, string> = {
+        advisory: `Advisory collaboration opportunity — property in ${city}`,
+        assisted: `Assisted collaboration opportunity — property in ${city}`,
+        managed: `Full-service instruction opportunity — property in ${city}`,
+      }
+      return labels[tier] ?? `Collaboration opportunity — property in ${city}`
+    },
+    tieredInviteGreeting: (name: string) => name ? `Hi ${name},` : 'Hi,',
+    // Advisory
+    advisoryIntro: (ownerName: string) =>
+      `${ownerName} has invited you to provide expert advisory support for the sale of their property through Yalla.House.`,
+    advisoryScope: 'The owner is looking for guidance with:',
+    advisoryScopeItems: [
+      'pricing strategy and market positioning,',
+      'marketing recommendations,',
+      'and negotiation advice when offers come in.',
+    ],
+    advisoryOwnerNote: 'The owner will manage viewings, buyer enquiries, and day-to-day communication directly.',
+    // Assisted
+    assistedIntro: (ownerName: string) =>
+      `${ownerName} has invited you to collaborate on the sale of their property through Yalla.House using the Assisted collaboration model.`,
+    assistedScope: 'The owner is looking for support with:',
+    assistedScopeItems: [
+      'managing buyer enquiries,',
+      'coordinating viewings,',
+      'and handling day-to-day communication,',
+    ],
+    assistedOwnerNote: 'while retaining control over negotiation and final decision-making.',
+    // Managed
+    managedIntro: (ownerName: string) =>
+      `${ownerName} has invited you to discuss a full-service sales collaboration through Yalla.House regarding the sale of their property.`,
+    managedScope: 'The owner is currently exploring agent-led support for:',
+    managedScopeItems: [
+      'buyer communication,',
+      'viewings,',
+      'negotiation,',
+      'and overall transaction management.',
+    ],
+    managedAgentActions: 'You can now:',
+    managedAgentActionItems: [
+      'review the property,',
+      'communicate directly with the owner,',
+      'discuss instruction structure,',
+      'and manage collaboration through the workspace.',
+    ],
+    managedMultiAgent: 'The owner may be speaking with multiple agents before deciding how they would like to proceed.',
+    // Shared tiered invite labels
+    tieredPropertyOverview: 'Property Overview',
+    tieredAddress: 'Address',
+    tieredEstimatedValue: 'Estimated Value',
+    tieredPropertyType: 'Property Type',
+    tieredSellerTimeline: 'Seller Timeline',
+    tieredViewingReadiness: 'Viewing Readiness',
+    tieredListingStatus: 'Listing Status',
+    tieredReady: 'Ready',
+    tieredPreparing: 'Preparing',
+    tieredWorkspaceIntro: 'The property workspace is already active within Yalla.House and includes:',
+    tieredWorkspaceItems: [
+      'the live property listing,',
+      'media and property information,',
+      'seller availability,',
+      'buyer activity tracking,',
+      'and structured communication tools.',
+    ],
+    tieredManagedWorkspaceIntro: 'A shared collaboration workspace has already been prepared within Yalla.House, including:',
+    tieredManagedWorkspaceItems: [
+      'the live property listing,',
+      'property details and media,',
+      'seller onboarding information,',
+      'activity tracking,',
+      'and communication history.',
+    ],
+    tieredTransparency: 'This allows both sides to collaborate transparently while keeping the process organised for the owner and interested buyers.',
+    tieredCompetitorCount: (count: number) =>
+      `You are currently one of ${count} agent${count === 1 ? '' : 's'} invited to participate.`,
+    tieredCta: 'Open Listing & Collaboration Workspace',
+    tieredSignoff: 'Best regards,',
+    tieredTeam: 'The Yalla.House Team',
+    tieredFooter: (postcode: string) =>
+      `You're receiving this because you cover the ${postcode} area. If this isn't relevant, simply ignore this email.`,
+    // Timeline/status labels
+    timelineAsap: 'As soon as possible',
+    timelineWithin3: 'Within 3 months',
+    timelineWithin6: 'Within 6 months',
+    timelineFlexible: 'Flexible',
+    timelineNotSet: 'To be discussed',
+    statusDraft: 'Preparing',
+    statusPreview: 'Preparing',
+    statusActive: 'Live',
+    statusPaused: 'Paused',
+    statusUnderOffer: 'Under Offer',
+    statusLaunchingSoon: 'Launching Soon',
   },
   'de-DE': {
     ownerBriefSubject: 'Neuer Eigentümer-Brief',
@@ -224,6 +318,100 @@ const EMAIL_TRANSLATIONS = {
     assignmentTerms: 'Bedingungen',
     assignmentDashboard: 'Beauftragung anzeigen',
     assignmentFooter: 'Du hast die Kontrolle — du kannst jederzeit kündigen.',
+    // Tiered agent invite translations
+    tieredInviteSubject: (tier: string, city: string) => {
+      const labels: Record<string, string> = {
+        advisory: `Beratungs-Kooperation — Immobilie in ${city}`,
+        assisted: `Unterstützte Kooperation — Immobilie in ${city}`,
+        managed: `Vollservice-Beauftragung — Immobilie in ${city}`,
+      }
+      return labels[tier] ?? `Kooperationsmöglichkeit — Immobilie in ${city}`
+    },
+    tieredInviteGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
+    // Advisory
+    advisoryIntro: (ownerName: string) =>
+      `${ownerName} hat Sie eingeladen, beratende Unterstützung beim Verkauf der Immobilie über Yalla.House zu leisten.`,
+    advisoryScope: 'Der Eigentümer sucht Unterstützung bei:',
+    advisoryScopeItems: [
+      'Preisstrategie und Marktpositionierung,',
+      'Marketingempfehlungen,',
+      'und Verhandlungsberatung bei eingehenden Angeboten.',
+    ],
+    advisoryOwnerNote: 'Der Eigentümer wird Besichtigungen, Käuferanfragen und die alltägliche Kommunikation selbst verwalten.',
+    // Assisted
+    assistedIntro: (ownerName: string) =>
+      `${ownerName} hat Sie eingeladen, beim Verkauf der Immobilie über Yalla.House im Modell „Unterstützte Zusammenarbeit“ mitzuwirken.`,
+    assistedScope: 'Der Eigentümer sucht Unterstützung bei:',
+    assistedScopeItems: [
+      'der Verwaltung von Käuferanfragen,',
+      'der Koordination von Besichtigungen,',
+      'und der alltäglichen Kommunikation,',
+    ],
+    assistedOwnerNote: 'wobei die Kontrolle über Verhandlung und Endentscheidung beim Eigentümer verbleibt.',
+    // Managed
+    managedIntro: (ownerName: string) =>
+      `${ownerName} hat Sie eingeladen, eine Vollservice-Zusammenarbeit beim Verkauf der Immobilie über Yalla.House zu besprechen.`,
+    managedScope: 'Der Eigentümer sucht eine maklergestützte Betreuung für:',
+    managedScopeItems: [
+      'Käuferkommunikation,',
+      'Besichtigungen,',
+      'Verhandlungen,',
+      'und das gesamte Transaktionsmanagement.',
+    ],
+    managedAgentActions: 'Sie können jetzt:',
+    managedAgentActionItems: [
+      'die Immobilie prüfen,',
+      'direkt mit dem Eigentümer kommunizieren,',
+      'die Beauftragungsstruktur besprechen,',
+      'und die Zusammenarbeit über den Workspace verwalten.',
+    ],
+    managedMultiAgent: 'Der Eigentümer spricht möglicherweise mit mehreren Maklern, bevor eine Entscheidung getroffen wird.',
+    // Shared tiered invite labels
+    tieredPropertyOverview: 'Immobilienübersicht',
+    tieredAddress: 'Adresse',
+    tieredEstimatedValue: 'Geschätzter Wert',
+    tieredPropertyType: 'Immobilientyp',
+    tieredSellerTimeline: 'Verkäufer-Zeitrahmen',
+    tieredViewingReadiness: 'Besichtigungsbereitschaft',
+    tieredListingStatus: 'Inseratsstatus',
+    tieredReady: 'Bereit',
+    tieredPreparing: 'In Vorbereitung',
+    tieredWorkspaceIntro: 'Der Immobilien-Workspace ist bereits aktiv auf Yalla.House und umfasst:',
+    tieredWorkspaceItems: [
+      'das aktuelle Immobilieninserat,',
+      'Medien und Immobilieninformationen,',
+      'Verfügbarkeit des Verkäufers,',
+      'Käuferaktivitätsverfolgung,',
+      'und strukturierte Kommunikationstools.',
+    ],
+    tieredManagedWorkspaceIntro: 'Ein gemeinsamer Kooperations-Workspace wurde bereits auf Yalla.House vorbereitet, einschließlich:',
+    tieredManagedWorkspaceItems: [
+      'das aktuelle Immobilieninserat,',
+      'Immobiliendetails und Medien,',
+      'Onboarding-Informationen des Verkäufers,',
+      'Aktivitätsverfolgung,',
+      'und Kommunikationsverlauf.',
+    ],
+    tieredTransparency: 'Dies ermöglicht beiden Seiten eine transparente Zusammenarbeit und hält den Prozess für den Eigentümer und interessierte Käufer organisiert.',
+    tieredCompetitorCount: (count: number) =>
+      `Sie sind derzeit einer von ${count} eingeladenen Makler${count === 1 ? '' : 'n'}.`,
+    tieredCta: 'Inserat & Kooperations-Workspace öffnen',
+    tieredSignoff: 'Mit freundlichen Grüßen,',
+    tieredTeam: 'Das Yalla.House Team',
+    tieredFooter: (postcode: string) =>
+      `Sie erhalten diese E-Mail, weil Sie das Gebiet ${postcode} abdecken. Falls dies nicht relevant ist, ignorieren Sie diese E-Mail einfach.`,
+    // Timeline/status labels
+    timelineAsap: 'So bald wie möglich',
+    timelineWithin3: 'Innerhalb von 3 Monaten',
+    timelineWithin6: 'Innerhalb von 6 Monaten',
+    timelineFlexible: 'Flexibel',
+    timelineNotSet: 'Noch zu besprechen',
+    statusDraft: 'In Vorbereitung',
+    statusPreview: 'In Vorbereitung',
+    statusActive: 'Live',
+    statusPaused: 'Pausiert',
+    statusUnderOffer: 'Unter Angebot',
+    statusLaunchingSoon: 'Start in Kürze',
   },
 }
 
@@ -647,6 +835,192 @@ export async function sendAgentInviteEmail(opts: {
   } catch (err) {
     const error = err instanceof Error ? err.message : 'Failed to send email'
     console.error('sendAgentInviteEmail failed:', error)
+    return { success: false, error }
+  }
+}
+
+export type AgentInviteTier = 'advisory' | 'assisted' | 'managed'
+
+export async function sendTieredAgentInviteEmail(opts: {
+  agentEmail: string
+  agentName: string | null
+  ownerName: string | null
+  tier: AgentInviteTier
+  listingId: string
+  address: string
+  city: string
+  postcode: string
+  propertyType: string
+  askingPrice: number | null
+  currency: string
+  timeline: string | null
+  listingStatus: string
+  competitorCount: number
+  countryCode?: string
+  locale?: EmailLocale
+}): Promise<{ success: boolean; error?: string }> {
+  const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
+  const locale = opts.locale ?? 'en-GB'
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
+  const config = getCountryConfig(countryCode)
+
+  const agentFirstName = opts.agentName?.split(' ')[0] ?? ''
+  const greeting = t.tieredInviteGreeting(agentFirstName)
+  const ownerDisplay = opts.ownerName ?? (locale === 'en-GB' ? 'A property owner' : 'Ein Immobilieneigentümer')
+
+  // Resolve type label
+  const typeLabels: Record<string, Record<string, string>> = {
+    'en-GB': { house: 'House', flat: 'Flat', apartment: 'Apartment', villa: 'Villa', commercial: 'Commercial', land: 'Land', other: 'Property' },
+    'de-DE': { house: 'Haus', flat: 'Wohnung', apartment: 'Apartment', villa: 'Villa', commercial: 'Gewerbe', land: 'Grundstück', other: 'Immobilie' },
+  }
+  const typeLabel = ((typeLabels[locale] ?? typeLabels['en-GB']) ?? {})[opts.propertyType] ?? (locale === 'en-GB' ? 'Property' : 'Immobilie')
+
+  // Resolve price
+  const priceValue = opts.askingPrice
+    ? formatCurrency(opts.askingPrice, opts.currency || config.currency, locale)
+    : t.priceOnApplication
+
+  // Resolve timeline label
+  const timelineLabels: Record<string, string> = {
+    asap: t.timelineAsap,
+    within_3_months: t.timelineWithin3,
+    within_6_months: t.timelineWithin6,
+    flexible: t.timelineFlexible,
+  }
+  const timelineLabel = opts.timeline
+    ? (timelineLabels[opts.timeline] ?? opts.timeline)
+    : t.timelineNotSet
+
+  // Resolve listing status label
+  const statusLabels: Record<string, string> = {
+    draft: t.statusDraft,
+    preview: t.statusPreview,
+    active: t.statusActive,
+    paused: t.statusPaused,
+    under_offer: t.statusUnderOffer,
+  }
+  const statusLabel = statusLabels[opts.listingStatus] ?? t.statusLaunchingSoon
+
+  // Viewing readiness: active/under_offer = Ready, otherwise Preparing
+  const viewingReady = opts.listingStatus === 'active' || opts.listingStatus === 'under_offer'
+  const viewingLabel = viewingReady ? t.tieredReady : t.tieredPreparing
+
+  // Build tier-specific intro + scope section
+  let introHtml = ''
+  let scopeHtml = ''
+  let workspaceHtml = ''
+  let postScopeHtml = ''
+
+  const buildList = (items: string[]) =>
+    items.map(item => `<li style="margin-bottom:4px;">${item}</li>`).join('')
+
+  if (opts.tier === 'advisory') {
+    introHtml = `<p style="margin:0 0 16px;font-size:15px;color:#5E6278;">${t.advisoryIntro(ownerDisplay)}</p>`
+    scopeHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.advisoryScope}</p>
+      <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.advisoryScopeItems)}
+      </ul>
+      <p style="margin:0 0 24px;font-size:14px;color:#999;font-style:italic;">${t.advisoryOwnerNote}</p>`
+    workspaceHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.tieredWorkspaceIntro}</p>
+      <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.tieredWorkspaceItems)}
+      </ul>
+      <p style="margin:0 0 24px;font-size:14px;color:#5E6278;">${t.tieredTransparency}</p>`
+  } else if (opts.tier === 'assisted') {
+    introHtml = `<p style="margin:0 0 16px;font-size:15px;color:#5E6278;">${t.assistedIntro(ownerDisplay)}</p>`
+    scopeHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.assistedScope}</p>
+      <ul style="margin:0 0 8px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.assistedScopeItems)}
+      </ul>
+      <p style="margin:0 0 24px;font-size:14px;color:#5E6278;">${t.assistedOwnerNote}</p>`
+    workspaceHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.tieredWorkspaceIntro}</p>
+      <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.tieredWorkspaceItems)}
+      </ul>
+      <p style="margin:0 0 24px;font-size:14px;color:#5E6278;">${t.tieredTransparency}</p>`
+  } else {
+    // managed
+    introHtml = `<p style="margin:0 0 16px;font-size:15px;color:#5E6278;">${t.managedIntro(ownerDisplay)}</p>`
+    scopeHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.managedScope}</p>
+      <ul style="margin:0 0 24px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.managedScopeItems)}
+      </ul>`
+    workspaceHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.tieredManagedWorkspaceIntro}</p>
+      <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.tieredManagedWorkspaceItems)}
+      </ul>`
+    postScopeHtml = `
+      <p style="margin:0 0 8px;font-size:15px;color:#5E6278;">${t.managedAgentActions}</p>
+      <ul style="margin:0 0 16px;padding-left:20px;font-size:14px;color:#5E6278;line-height:1.7;">
+        ${buildList(t.managedAgentActionItems)}
+      </ul>
+      <p style="margin:0 0 24px;font-size:14px;color:#999;font-style:italic;">${t.managedMultiAgent}</p>`
+  }
+
+  // Property overview card — Advisory/Assisted show Viewing Readiness, Managed shows Listing Status
+  const lastRow = opts.tier === 'managed'
+    ? `<tr><td style="padding:6px 0;color:#5E6278;font-size:14px;">${t.tieredListingStatus}</td><td style="padding:6px 0 6px 16px;font-size:14px;font-weight:600;">${statusLabel}</td></tr>`
+    : `<tr><td style="padding:6px 0;color:#5E6278;font-size:14px;">${t.tieredViewingReadiness}</td><td style="padding:6px 0 6px 16px;font-size:14px;font-weight:600;">${viewingLabel}</td></tr>`
+
+  const propertyCard = `
+    <div style="background:#F5F5FA;border-radius:10px;padding:20px;margin-bottom:24px;">
+      <h3 style="margin:0 0 12px;font-size:14px;font-weight:700;color:#0F1117;text-transform:uppercase;letter-spacing:.04em;">
+        ${t.tieredPropertyOverview}
+      </h3>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:6px 0;color:#5E6278;font-size:14px;">${t.tieredAddress}</td><td style="padding:6px 0 6px 16px;font-size:14px;font-weight:600;">${opts.address}</td></tr>
+        <tr><td style="padding:6px 0;color:#5E6278;font-size:14px;">${t.tieredEstimatedValue}</td><td style="padding:6px 0 6px 16px;font-size:14px;font-weight:600;">${priceValue}</td></tr>
+        <tr><td style="padding:6px 0;color:#5E6278;font-size:14px;">${t.tieredPropertyType}</td><td style="padding:6px 0 6px 16px;font-size:14px;font-weight:600;">${typeLabel}</td></tr>
+        <tr><td style="padding:6px 0;color:#5E6278;font-size:14px;">${t.tieredSellerTimeline}</td><td style="padding:6px 0 6px 16px;font-size:14px;font-weight:600;">${timelineLabel}</td></tr>
+        ${lastRow}
+      </table>
+    </div>`
+
+  // Competitor count line
+  const competitorLine = opts.competitorCount > 0
+    ? `<p style="margin:0 0 24px;font-size:14px;color:#D4764E;font-weight:600;">${t.tieredCompetitorCount(opts.competitorCount)}</p>`
+    : ''
+
+  const workspaceUrl = `${BASE_URL}/agent/briefs/${opts.listingId}`
+
+  const html = emailWrapper(`
+    <p style="margin:0 0 12px;font-size:16px;color:#0F1117;">${greeting}</p>
+    ${introHtml}
+    ${scopeHtml}
+    ${propertyCard}
+    ${workspaceHtml}
+    ${postScopeHtml}
+    ${competitorLine}
+
+    <div style="text-align:center;margin:24px 0;">
+      ${ctaButton(t.tieredCta, workspaceUrl)}
+    </div>
+
+    <p style="margin:24px 0 4px;font-size:15px;color:#5E6278;">${t.tieredSignoff}</p>
+    <p style="margin:0 0 24px;font-size:15px;font-weight:600;color:#0F1117;">${t.tieredTeam}</p>
+
+    <p style="margin:0;font-size:13px;color:#999;">
+      ${t.tieredFooter(opts.postcode)}
+    </p>
+  `, countryCode)
+
+  try {
+    await getResend().emails.send({
+      from: FROM,
+      to: opts.agentEmail,
+      subject: t.tieredInviteSubject(opts.tier, opts.city || opts.postcode),
+      html,
+    })
+    return { success: true }
+  } catch (err) {
+    const error = err instanceof Error ? err.message : 'Failed to send tiered invite email'
+    console.error('sendTieredAgentInviteEmail failed:', error)
     return { success: false, error }
   }
 }
