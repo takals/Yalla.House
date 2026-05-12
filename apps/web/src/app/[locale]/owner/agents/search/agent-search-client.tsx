@@ -4,8 +4,8 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Search, MapPin, Shield, Phone, Mail, Globe, Building2, Copy,
-  CheckCircle2, Send, AlertCircle, Loader2, ChevronDown, ChevronUp,
-  ExternalLink, UserPlus,
+  CheckCircle2, AlertCircle, Loader2, ChevronDown, ChevronUp,
+  ExternalLink, UserPlus, ArrowRight,
 } from 'lucide-react'
 
 interface Agent {
@@ -101,10 +101,20 @@ export function AgentSearchClient({ translations: t }: Props) {
     })
   }
 
-  const handleSendBrief = () => {
+  const handleReviewBrief = () => {
     const ids = Array.from(selectedAgents).join(',')
     router.push(`/owner/agents/send?agents=${ids}`)
   }
+
+  const toggleSelectAll = () => {
+    if (selectedAgents.size === agents.length) {
+      setSelectedAgents(new Set())
+    } else {
+      setSelectedAgents(new Set(agents.map(a => a.id)))
+    }
+  }
+
+  const allSelected = agents.length > 0 && selectedAgents.size === agents.length
 
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text)
@@ -241,7 +251,7 @@ export function AgentSearchClient({ translations: t }: Props) {
       {/* ── Results ─────────────────────────────────────────────────── */}
       {searched && !loading && agents.length > 0 && (
         <>
-          {/* Result count */}
+          {/* Result count + Select All */}
           <div className="flex items-center justify-between">
             <p className="text-sm text-text-secondary">
               <span className="font-bold text-text-primary">{agents.length}</span>{' '}
@@ -252,6 +262,17 @@ export function AgentSearchClient({ translations: t }: Props) {
                 </span>
               )}
             </p>
+            <button
+              onClick={toggleSelectAll}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-hover transition-colors"
+            >
+              <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                allSelected ? 'bg-brand border-brand' : 'border-border-default hover:border-brand'
+              }`}>
+                {allSelected && <CheckCircle2 size={12} className="text-white" />}
+              </div>
+              {allSelected ? (t.deselectAll ?? 'Deselect all') : (t.selectAll ?? 'Select all')}
+            </button>
           </div>
 
           {/* Agent cards */}
@@ -454,11 +475,11 @@ export function AgentSearchClient({ translations: t }: Props) {
               </span>
             </div>
             <button
-              onClick={handleSendBrief}
+              onClick={handleReviewBrief}
               className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand text-white font-bold rounded-xl hover:bg-brand-hover transition-colors text-sm"
             >
-              <Send size={16} />
-              {t.sendBriefButton}
+              <ArrowRight size={16} />
+              {t.reviewBriefButton ?? 'Review Brief'}
             </button>
           </div>
         </div>
