@@ -491,8 +491,8 @@ const EMAIL_TRANSLATIONS = {
   },
 }
 
-type EmailLocale = 'en-GB' | 'de-DE'
-type EmailAudience = 'agent' | 'owner' | 'hunter' | 'general'
+export type EmailLocale = 'en-GB' | 'de-DE'
+export type EmailAudience = 'agent' | 'owner' | 'hunter' | 'general'
 
 // Inline SVG icons for email — renders in all major clients
 const EMAIL_ICONS = {
@@ -574,7 +574,7 @@ function emailBenefitSection(locale: EmailLocale, audience: EmailAudience): stri
     </div>`
 }
 
-function emailWrapper(content: string, countryCode: string = DEFAULT_COUNTRY, audience: EmailAudience = 'general', locale: EmailLocale = 'en-GB'): string {
+export function emailWrapper(content: string, countryCode: string = DEFAULT_COUNTRY, audience: EmailAudience = 'general', locale: EmailLocale = 'en-GB'): string {
   const config = getCountryConfig(countryCode)
   const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
   const benefitHtml = emailBenefitSection(locale, audience)
