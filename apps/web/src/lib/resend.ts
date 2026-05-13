@@ -212,6 +212,44 @@ const EMAIL_TRANSLATIONS = {
     statusPaused: 'Paused',
     statusUnderOffer: 'Under Offer',
     statusLaunchingSoon: 'Launching Soon',
+    // Benefit section translations
+    benefitHeadingAgent: 'Why agents love Yalla.House',
+    benefitHeadingOwner: 'Why owners choose Yalla.House',
+    benefitHeadingHunter: 'Why hunters use Yalla.House',
+    benefitCtaAgent: 'See full agent benefits',
+    benefitCtaOwner: 'See full owner benefits',
+    benefitCtaHunter: 'See full hunter benefits',
+    // Agent benefits
+    benefitAgent1Title: 'Pre-qualified sellers',
+    benefitAgent1Desc: 'Every brief comes from a motivated owner ready to sell.',
+    benefitAgent2Title: 'Zero cost, no lock-in',
+    benefitAgent2Desc: 'No subscription, no tie-in. You only pay when you win.',
+    benefitAgent3Title: 'Your collaboration workspace',
+    benefitAgent3Desc: 'Manage briefs, proposals and clients in one dashboard.',
+    benefitAgent4Title: 'Win on service quality',
+    benefitAgent4Desc: 'Compete on merit, not marketing spend.',
+    // Owner benefits
+    benefitOwner1Title: 'List on top portals',
+    benefitOwner1Desc: 'Your property on Rightmove, Zoopla and more — directly.',
+    benefitOwner2Title: 'Keep every pound',
+    benefitOwner2Desc: 'Flat fee, no commission. The savings are yours.',
+    benefitOwner3Title: 'Your property dashboard',
+    benefitOwner3Desc: 'Track viewings, offers and interest in real time.',
+    benefitOwner4Title: 'Choose your support level',
+    benefitOwner4Desc: 'From DIY to full agent support — you decide.',
+    // Hunter benefits
+    benefitHunter1Title: 'Smart property matching',
+    benefitHunter1Desc: 'Set your criteria once, get matched automatically.',
+    benefitHunter2Title: 'Direct owner access',
+    benefitHunter2Desc: 'Book viewings and communicate without middlemen.',
+    benefitHunter3Title: 'Your search passport',
+    benefitHunter3Desc: 'One profile, shared with agents who have what you want.',
+    benefitHunter4Title: 'Free to use, always',
+    benefitHunter4Desc: 'No fees, no subscriptions. Just find your home.',
+    // Nav footer
+    navServices: 'Services & Pricing',
+    navAbout: 'About',
+    navFaq: 'FAQ',
   },
   'de-DE': {
     ownerBriefSubject: 'Neuer Eigentümer-Brief',
@@ -412,13 +450,134 @@ const EMAIL_TRANSLATIONS = {
     statusPaused: 'Pausiert',
     statusUnderOffer: 'Unter Angebot',
     statusLaunchingSoon: 'Start in Kürze',
+    // Benefit section translations
+    benefitHeadingAgent: 'Warum Makler Yalla.House lieben',
+    benefitHeadingOwner: 'Warum Eigentümer Yalla.House wählen',
+    benefitHeadingHunter: 'Warum Suchende Yalla.House nutzen',
+    benefitCtaAgent: 'Alle Makler-Vorteile ansehen',
+    benefitCtaOwner: 'Alle Eigentümer-Vorteile ansehen',
+    benefitCtaHunter: 'Alle Suchenden-Vorteile ansehen',
+    // Agent benefits
+    benefitAgent1Title: 'Vorqualifizierte Verkäufer',
+    benefitAgent1Desc: 'Jeder Brief kommt von einem motivierten Eigentümer.',
+    benefitAgent2Title: 'Keine Kosten, keine Bindung',
+    benefitAgent2Desc: 'Kein Abo, keine Bindung. Sie zahlen nur bei Erfolg.',
+    benefitAgent3Title: 'Ihr Kooperations-Workspace',
+    benefitAgent3Desc: 'Briefe, Angebote und Kunden in einem Dashboard.',
+    benefitAgent4Title: 'Gewinnen durch Qualität',
+    benefitAgent4Desc: 'Konkurrieren Sie durch Service, nicht durch Werbebudget.',
+    // Owner benefits
+    benefitOwner1Title: 'Auf Top-Portalen inserieren',
+    benefitOwner1Desc: 'Ihre Immobilie auf ImmoScout24, Immowelt und mehr.',
+    benefitOwner2Title: 'Jeden Euro behalten',
+    benefitOwner2Desc: 'Festpreis, keine Provision. Die Ersparnis gehört Ihnen.',
+    benefitOwner3Title: 'Ihr Immobilien-Dashboard',
+    benefitOwner3Desc: 'Besichtigungen, Angebote und Interesse in Echtzeit.',
+    benefitOwner4Title: 'Unterstützung nach Wahl',
+    benefitOwner4Desc: 'Von Selbstverkauf bis Makler-Service — Sie entscheiden.',
+    // Hunter benefits
+    benefitHunter1Title: 'Intelligentes Matching',
+    benefitHunter1Desc: 'Kriterien einmal festlegen, automatisch Treffer erhalten.',
+    benefitHunter2Title: 'Direkter Eigentümer-Kontakt',
+    benefitHunter2Desc: 'Besichtigungen buchen und kommunizieren ohne Umwege.',
+    benefitHunter3Title: 'Ihr Such-Pass',
+    benefitHunter3Desc: 'Ein Profil, geteilt mit Maklern die passende Objekte haben.',
+    benefitHunter4Title: 'Immer kostenlos',
+    benefitHunter4Desc: 'Keine Gebühren, kein Abo. Finden Sie Ihr Zuhause.',
+    // Nav footer
+    navServices: 'Services & Preise',
+    navAbout: 'Über uns',
+    navFaq: 'FAQ',
   },
 }
 
 type EmailLocale = 'en-GB' | 'de-DE'
+type EmailAudience = 'agent' | 'owner' | 'hunter' | 'general'
 
-function emailWrapper(content: string, countryCode: string = DEFAULT_COUNTRY): string {
+// Inline SVG icons for email — renders in all major clients
+const EMAIL_ICONS = {
+  users: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  currency: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>`,
+  dashboard: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
+  check: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+}
+
+function emailBenefitRow(icon: string, title: string, desc: string): string {
+  return `<tr>
+    <td style="padding:8px 12px 8px 0;vertical-align:top;width:48px;">
+      <div style="width:36px;height:36px;background:#FFF4EF;border-radius:8px;text-align:center;line-height:36px;">
+        ${icon}
+      </div>
+    </td>
+    <td style="padding:8px 0;vertical-align:top;">
+      <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#0F1117;">${title}</p>
+      <p style="margin:0;font-size:12px;color:#5E6278;line-height:1.4;">${desc}</p>
+    </td>
+  </tr>`
+}
+
+function emailBenefitSection(locale: EmailLocale, audience: EmailAudience): string {
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
+
+  const configs: Record<string, { heading: string; cta: string; ctaUrl: string; benefits: Array<{ icon: string; title: string; desc: string }> }> = {
+    agent: {
+      heading: t.benefitHeadingAgent,
+      cta: t.benefitCtaAgent,
+      ctaUrl: `${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}agent/info`,
+      benefits: [
+        { icon: EMAIL_ICONS.users, title: t.benefitAgent1Title, desc: t.benefitAgent1Desc },
+        { icon: EMAIL_ICONS.currency, title: t.benefitAgent2Title, desc: t.benefitAgent2Desc },
+        { icon: EMAIL_ICONS.dashboard, title: t.benefitAgent3Title, desc: t.benefitAgent3Desc },
+        { icon: EMAIL_ICONS.check, title: t.benefitAgent4Title, desc: t.benefitAgent4Desc },
+      ],
+    },
+    owner: {
+      heading: t.benefitHeadingOwner,
+      cta: t.benefitCtaOwner,
+      ctaUrl: `${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}owner/info`,
+      benefits: [
+        { icon: EMAIL_ICONS.users, title: t.benefitOwner1Title, desc: t.benefitOwner1Desc },
+        { icon: EMAIL_ICONS.currency, title: t.benefitOwner2Title, desc: t.benefitOwner2Desc },
+        { icon: EMAIL_ICONS.dashboard, title: t.benefitOwner3Title, desc: t.benefitOwner3Desc },
+        { icon: EMAIL_ICONS.check, title: t.benefitOwner4Title, desc: t.benefitOwner4Desc },
+      ],
+    },
+    hunter: {
+      heading: t.benefitHeadingHunter,
+      cta: t.benefitCtaHunter,
+      ctaUrl: `${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}hunter/info`,
+      benefits: [
+        { icon: EMAIL_ICONS.users, title: t.benefitHunter1Title, desc: t.benefitHunter1Desc },
+        { icon: EMAIL_ICONS.currency, title: t.benefitHunter2Title, desc: t.benefitHunter2Desc },
+        { icon: EMAIL_ICONS.dashboard, title: t.benefitHunter3Title, desc: t.benefitHunter3Desc },
+        { icon: EMAIL_ICONS.check, title: t.benefitHunter4Title, desc: t.benefitHunter4Desc },
+      ],
+    },
+  }
+
+  const cfg = configs[audience]
+  if (!cfg) return ''
+
+  return `
+    <div style="border-top:1px solid #E2E4EB;padding:24px 0 0;">
+      <p style="margin:0 0 16px;font-size:13px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;">
+        ${cfg.heading}
+      </p>
+      <table style="width:100%;border-collapse:collapse;">
+        ${cfg.benefits.map(b => emailBenefitRow(b.icon, b.title, b.desc)).join('')}
+      </table>
+      <div style="text-align:center;margin-top:16px;">
+        <a href="${cfg.ctaUrl}" style="display:inline-block;padding:8px 20px;border:1px solid #D4764E;color:#D4764E;font-size:13px;font-weight:600;text-decoration:none;border-radius:8px;">
+          ${cfg.cta} &rarr;
+        </a>
+      </div>
+    </div>`
+}
+
+function emailWrapper(content: string, countryCode: string = DEFAULT_COUNTRY, audience: EmailAudience = 'general', locale: EmailLocale = 'en-GB'): string {
   const config = getCountryConfig(countryCode)
+  const t = EMAIL_TRANSLATIONS[locale] ?? EMAIL_TRANSLATIONS['en-GB']
+  const benefitHtml = emailBenefitSection(locale, audience)
 
   return `<!DOCTYPE html>
 <html lang="${config.default_locale}">
@@ -426,13 +585,32 @@ function emailWrapper(content: string, countryCode: string = DEFAULT_COUNTRY): s
 <body style="margin:0;padding:0;background:#EDEEF2;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
   <div style="max-width:560px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);">
     <div style="background:#D4764E;padding:20px 32px;">
-      <span style="font-size:20px;font-weight:800;color:#0F1117;letter-spacing:-.02em;">Yalla.House</span>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="vertical-align:middle;">
+            <span style="font-size:22px;font-weight:800;color:#ffffff;letter-spacing:-.02em;">Yalla.House</span>
+          </td>
+          <td style="vertical-align:middle;text-align:right;">
+            <span style="font-size:10px;font-weight:600;color:rgba(255,255,255,.75);text-transform:uppercase;letter-spacing:.08em;">Property Collaboration</span>
+          </td>
+        </tr>
+      </table>
     </div>
     <div style="padding:32px;">
       ${content}
     </div>
-    <div style="padding:20px 32px;background:#F5F5FA;border-top:1px solid #E2E4EB;">
-      <p style="margin:0;font-size:12px;color:#999;">
+    ${benefitHtml ? `<div style="padding:0 32px 24px;">${benefitHtml}</div>` : ''}
+    <div style="padding:16px 32px;background:#F5F5FA;border-top:1px solid #E2E4EB;text-align:center;">
+      <p style="margin:0 0 8px;font-size:12px;color:#D4764E;">
+        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}services" style="color:#D4764E;text-decoration:none;">${t.navServices}</a>
+        &nbsp;&middot;&nbsp;
+        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}about" style="color:#D4764E;text-decoration:none;">${t.navAbout}</a>
+        &nbsp;&middot;&nbsp;
+        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}faq" style="color:#D4764E;text-decoration:none;">${t.navFaq}</a>
+        &nbsp;&middot;&nbsp;
+        <a href="${BASE_URL}" style="color:#D4764E;text-decoration:none;font-weight:600;">yalla.house</a>
+      </p>
+      <p style="margin:0;font-size:11px;color:#999;">
         ${config.legal_entity} &mdash; ${config.legal_tagline}
       </p>
     </div>
@@ -514,7 +692,7 @@ export async function sendOwnerBriefEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.ownerBriefFooter(opts.city, opts.postcode)}
     </p>
-  `, countryCode)
+  `, countryCode, 'agent', locale)
 
   try {
     await getResend().emails.send({
@@ -605,7 +783,7 @@ export async function sendHunterBriefEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.hunterBriefFooter}
     </p>
-  `, countryCode)
+  `, countryCode, 'agent', locale)
 
   try {
     await getResend().emails.send({
@@ -664,7 +842,7 @@ export async function sendNewViewingRequestEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.newViewingFooter}
     </p>
-  `, countryCode)
+  `, countryCode, 'owner', locale)
 
   try {
     await getResend().emails.send({
@@ -706,7 +884,7 @@ export async function sendViewingConfirmedEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.viewingConfirmedFooter}
     </p>
-  `, countryCode)
+  `, countryCode, 'hunter', locale)
 
   try {
     await getResend().emails.send({
@@ -743,7 +921,7 @@ export async function sendViewingDeclinedEmail(opts: {
     </p>
 
     ${ctaButton(t.viewingDeclinedCta, `${BASE_URL}/listings`)}
-  `, countryCode)
+  `, countryCode, 'hunter', locale)
 
   try {
     await getResend().emails.send({
@@ -822,7 +1000,7 @@ export async function sendAgentInviteEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.agentInviteFooter(opts.listingPostcode)}
     </p>
-  `, countryCode)
+  `, countryCode, 'agent', locale)
 
   try {
     await getResend().emails.send({
@@ -1008,7 +1186,7 @@ export async function sendTieredAgentInviteEmail(opts: {
     <p style="margin:0;font-size:13px;color:#999;">
       ${t.tieredFooter(opts.postcode)}
     </p>
-  `, countryCode)
+  `, countryCode, 'agent', locale)
 
   try {
     await getResend().emails.send({
@@ -1061,7 +1239,7 @@ export async function sendViewingReminderEmail(opts: {
     </p>
 
     ${ctaButton(t.viewingReminderCta, dashboardUrl)}
-  `, countryCode)
+  `, countryCode, opts.role, locale)
 
   try {
     await getResend().emails.send({
@@ -1099,7 +1277,7 @@ export async function sendViewingCheckInEmail(opts: {
     </p>
 
     ${ctaButton(t.viewingCheckInCta, `${BASE_URL}/hunter/viewings/${opts.viewingId}/feedback`)}
-  `, countryCode)
+  `, countryCode, 'hunter', locale)
 
   try {
     await getResend().emails.send({
@@ -1158,7 +1336,7 @@ export async function sendWelcomeEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.welcomeFooter}
     </p>
-  `, countryCode)
+  `, countryCode, opts.userRole, locale)
 
   try {
     await getResend().emails.send({
@@ -1228,7 +1406,7 @@ export async function sendAssignmentAcceptedEmail(opts: {
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.assignmentFooter}
     </p>
-  `, countryCode)
+  `, countryCode, 'owner', locale)
 
   try {
     await getResend().emails.send({
