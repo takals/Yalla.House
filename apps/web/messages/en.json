@@ -3957,6 +3957,24 @@
     "saving": "Saving...",
     "saved": "Saved",
     "newWorkspace": "Start your property workspace",
-    "newWorkspaceDesc": "Create a draft and build your listing at your own pace. No rush — publish when you're ready."
+    "newWorkspaceDesc": "Create a draft and build your listing at your own pace. No rush — publish when you're ready.",
+    "addressLine1Label": "Street address",
+    "cityLabel": "City",
+    "postcodeLabel": "Postcode",
+    "typeHouse": "House",
+    "typeFlat": "Flat",
+    "typeApartment": "Apartment",
+    "typeVilla": "Villa",
+    "typeCommercial": "Commercial",
+    "typeLand": "Land",
+    "typeOther": "Other",
+    "photoUploading": "Uploading…",
+    "photoDeleteConfirm": "Delete this photo?",
+    "setPrimary": "Set as cover",
+    "primaryBadge": "Cover",
+    "docUploaded": "Uploaded",
+    "docReplace": "Replace",
+    "dropHint": "Drop files here",
+    "currencyLabel": "Currency"
   }
 }

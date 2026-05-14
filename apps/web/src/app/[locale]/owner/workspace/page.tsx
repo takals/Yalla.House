@@ -1,7 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { countryFromLocale } from '@/lib/detect-country'
+import { getCountryConfig } from '@/lib/country-config'
 import { PropertyWorkspace } from './workspace-client'
 
 export default async function WorkspacePage() {
@@ -9,6 +11,9 @@ export default async function WorkspacePage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
+  const locale = await getLocale()
+  const resolvedCountry = countryFromLocale(locale)
+  const config = getCountryConfig(resolvedCountry)
   const t = await getTranslations('workspace')
 
   // Fetch user's most recent draft listing (if any)
@@ -70,6 +75,24 @@ export default async function WorkspacePage() {
     saved: t('saved'),
     newWorkspace: t('newWorkspace'),
     newWorkspaceDesc: t('newWorkspaceDesc'),
+    addressLine1Label: t('addressLine1Label'),
+    cityLabel: t('cityLabel'),
+    postcodeLabel: t('postcodeLabel'),
+    typeHouse: t('typeHouse'),
+    typeFlat: t('typeFlat'),
+    typeApartment: t('typeApartment'),
+    typeVilla: t('typeVilla'),
+    typeCommercial: t('typeCommercial'),
+    typeLand: t('typeLand'),
+    typeOther: t('typeOther'),
+    photoUploading: t('photoUploading'),
+    photoDeleteConfirm: t('photoDeleteConfirm'),
+    setPrimary: t('setPrimary'),
+    primaryBadge: t('primaryBadge'),
+    docUploaded: t('docUploaded'),
+    docReplace: t('docReplace'),
+    dropHint: t('dropHint'),
+    currencyLabel: t('currencyLabel'),
   }
 
   return (
@@ -77,6 +100,8 @@ export default async function WorkspacePage() {
       listing={listing}
       labels={labels}
       isGuest={!user}
+      countryCode={resolvedCountry}
+      currency={config.currency}
     />
   )
 }
