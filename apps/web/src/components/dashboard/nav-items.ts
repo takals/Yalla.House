@@ -47,15 +47,15 @@ export function adminNav(t: Record<string, string>): NavItem[] {
 
 export function ownerNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/owner/listings', label: l(t, 'navListings'),   icon: 'Home', exact: true },
-    { href: '/owner/calendar', label: l(t, 'navCalendar'),   icon: 'CalendarDays' },
-    { href: '/owner/viewings', label: l(t, 'navViewings'),   icon: 'Calendar' },
-    { href: '/owner/offers',   label: l(t, 'navOffers'),     icon: 'Banknote' },
-    { href: '/owner/agents',   label: l(t, 'navAgents'),     icon: 'Handshake' },
-    { href: '/owner/inbox',    label: l(t, 'navInbox'),      icon: 'Inbox' },
-    { href: '/owner/new',      label: l(t, 'navNewListing'), icon: 'Plus' },
-    { href: '/owner/plans',    label: l(t, 'navPlans'),      icon: 'Star' },
-    { href: '/owner/settings', label: l(t, 'navSettings'),   icon: 'Settings' },
+    { href: '/owner/listings',  label: l(t, 'navListings'),   icon: 'Home', exact: true },
+    { href: '/owner/workspace', label: l(t, 'navWorkspace'),  icon: 'Plus' },
+    { href: '/owner/calendar',  label: l(t, 'navCalendar'),   icon: 'CalendarDays' },
+    { href: '/owner/viewings',  label: l(t, 'navViewings'),   icon: 'Calendar' },
+    { href: '/owner/offers',    label: l(t, 'navOffers'),     icon: 'Banknote' },
+    { href: '/owner/agents',    label: l(t, 'navAgents'),     icon: 'Handshake' },
+    { href: '/owner/inbox',     label: l(t, 'navInbox'),      icon: 'Inbox' },
+    { href: '/owner/plans',     label: l(t, 'navPlans'),      icon: 'Star' },
+    { href: '/owner/settings',  label: l(t, 'navSettings'),   icon: 'Settings' },
   ]
 }
 

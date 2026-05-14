@@ -34,6 +34,7 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
 
   const navLabels: Record<string, string> = {
     navListings: tShell('navListings'),
+    navWorkspace: tShell('navWorkspace'),
     navCalendar: tShell('navCalendar'),
     navViewings: tShell('navViewings'),
     navOffers: tShell('navOffers'),

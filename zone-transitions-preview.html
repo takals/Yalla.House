@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yalla.House — Zone Transitions Mockup</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: #000; color: #fff; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const e = React.createElement;
+const { useState, useEffect, useRef, useCallback } = React;
+
+const C = {
+  brand: "#D4764E", brandHover: "#BF6840", brandDeep: "#A85A36",
+  brandLight: "rgba(212,118,78,0.10)", brandLight2: "rgba(212,118,78,0.16)",
+  brandSolidBg: "#FFF4EF", bgDark: "#0D0D0D", bgSoft: "#141414",
+  bgMuted: "#1A1A1A", bgSubtle: "#222222", surface: "#161616",
+  textPrimary: "#FFFFFF", textSecondary: "rgba(255,255,255,0.62)",
+  textMuted: "rgba(255,255,255,0.40)", borderLight: "rgba(255,255,255,0.06)",
+  border: "rgba(255,255,255,0.10)",
+};
+
+const Z = {
+  z1: { bg: "#0D0D0D", surface: "#161616", border: "rgba(255,255,255,0.06)" },
+  z2: { bg: "#12100E", surface: "#1C1714", border: "rgba(212,118,78,0.12)" },
+  z3: { bg: "#080808", surface: "#111111", border: "rgba(255,255,255,0.04)" },
+};
+
+function Hero(p) {
+  return e("div", { style: { padding: "80px 40px 60px", textAlign: "center" } },
+    e("div", { style: { display: "flex", justifyContent: "center", gap: 8, marginBottom: 40 } },
+      e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "8px 20px", borderRadius: 20, fontSize: 14, fontWeight: 600, cursor: "pointer" } }, "I'm selling"),
+      e("button", { style: { background: "rgba(255,255,255,0.08)", color: C.textSecondary, border: "1px solid rgba(255,255,255,0.1)", padding: "8px 20px", borderRadius: 20, fontSize: 14, cursor: "pointer" } }, "I'm searching"),
+    ),
+    e("h1", { style: { fontSize: 48, fontWeight: 800, color: "#fff", lineHeight: 1.1, margin: "0 0 20px", letterSpacing: "-0.022em" } },
+      "Your property ", e("span", { style: { color: C.brand } }, "rental"), ",", e("br"), "under your control."
+    ),
+    e("p", { style: { color: C.textSecondary, fontSize: 17, maxWidth: 600, margin: "0 auto 32px", lineHeight: 1.5 } },
+      "Yalla.House is a property technology platform — not an estate agency. Get a free dashboard with market data, manage viewings, and sell your way."
+    ),
+    e("div", { style: { display: "flex", justifyContent: "center", gap: 16, alignItems: "center" } },
+      e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer" } }, "Create your free dashboard →"),
+      e("span", { style: { color: C.textMuted, fontSize: 14 } }, "I'm an agent →"),
+    )
+  );
+}
+
+function Stats(p) {
+  var stats = [
+    { v: "£5,000+", l: "Average agent commission on a UK property sale" },
+    { v: "69%", l: "of owners want weekly updates but don't get them" },
+    { v: "£0", l: "Cost of your Yalla owner dashboard — always free" },
+    { v: "2 min", l: "to create your dashboard and see your market data" },
+  ];
+  return e("div", { style: { padding: "40px 40px", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 } },
+    stats.map(function(s, i) {
+      return e("div", { key: i, style: { background: p.z.surface, border: "1px solid " + p.z.border, borderRadius: 12, padding: "24px 20px", textAlign: "center", transition: "all 0.6s ease" } },
+        e("div", { style: { fontSize: 28, fontWeight: 800, color: C.brand, marginBottom: 8 } }, s.v),
+        e("div", { style: { fontSize: 13, color: C.textSecondary, lineHeight: 1.4 } }, s.l)
+      );
+    })
+  );
+}
+
+function HowItWorks(p) {
+  var steps = [
+    { n: "01", t: "Create your dashboard", d: "Enter your address and get a free owner dashboard with local market data, comparable sales, and a timeline for your sale." },
+    { n: "02", t: "Sell your way", d: "List privately and manage it yourself, or send your Owner Brief to competing agents. They respond with real proposals — you compare and choose." },
+    { n: "03", t: "Stay in control", d: "Track every viewing, offer, and update in real time. Whether you're selling privately or through an agent, your dashboard keeps everything in one place." },
+  ];
+  return e("div", { style: { padding: "60px 40px" } },
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: "#fff", textAlign: "center", marginBottom: 12 } }, "How it works"),
+    e("p", { style: { color: C.textSecondary, textAlign: "center", marginBottom: 40, fontSize: 15 } }, "Three steps. No commission. Full control."),
+    e("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 } },
+      steps.map(function(s, i) {
+        return e("div", { key: i, style: { background: p.z.surface, border: "1px solid " + p.z.border, borderRadius: 14, padding: "28px 24px", transition: "all 0.6s ease" } },
+          e("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 16 } },
+            e("div", { style: { width: 40, height: 40, borderRadius: 10, background: C.brandLight, display: "flex", alignItems: "center", justifyContent: "center" } },
+              e("span", { style: { color: C.brand, fontSize: 13, fontWeight: 700 } }, "\u2B21")
+            ),
+            e("span", { style: { fontSize: 12, fontWeight: 700, color: C.textMuted, letterSpacing: "0.08em", textTransform: "uppercase" } }, "STEP " + s.n)
+          ),
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 12 } }, s.t),
+          e("p", { style: { fontSize: 14, color: C.textSecondary, lineHeight: 1.5, margin: 0 } }, s.d)
+        );
+      })
+    )
+  );
+}
+
+function WhyYalla(p) {
+  var items = [
+    { t: "You get a dashboard. Not a bill.", d: "Every other platform charges you to list. We give you a free dashboard first — market data, comparable sales, a timeline for your sale." },
+    { t: "Your data, always.", d: "Track every viewing, every offer, every piece of feedback in one place. If you instruct an agent, they connect to your dashboard." },
+    { t: "We're not agents. We're your tools.", d: "Yalla is a technology platform, not an estate agency. We don't take commission. We give you the information and connections to make the best decision." },
+  ];
+  return e("div", { style: { padding: "60px 40px" } },
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: "#fff", textAlign: "center", marginBottom: 48 } }, "Why Yalla?"),
+    e("div", { style: { maxWidth: 700, margin: "0 auto" } },
+      items.map(function(item, i) {
+        return e("div", { key: i, style: { borderLeft: "3px solid " + C.brand, paddingLeft: 24, marginBottom: 36 } },
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 8 } }, item.t),
+          e("p", { style: { fontSize: 14, color: C.textSecondary, lineHeight: 1.5, margin: 0 } }, item.d)
+        );
+      })
+    )
+  );
+}
+
+function ThreePaths(p) {
+  var paths = [
+    { icon: "\uD83C\uDFE0", t: "For Owners", sub: "Free forever. No commission.", d: "Get a free dashboard with market data and comparable sales. Sell entirely on your own, or invite agents to compete for your instruction." },
+    { icon: "\uD83D\uDD0D", t: "For Home Hunters", sub: "Find your next home.", d: "Create your Home Passport and we'll search Rightmove, Zoopla and other portals on your behalf. We match you with accredited local agents." },
+    { icon: "\uD83D\uDCCB", t: "For Agents", sub: "Win new instructions.", d: "Receive Owner Briefs from motivated sellers in your area. Respond with your proposal and win the instruction — on merit, not marketing spend." },
+  ];
+  return e("div", { style: { padding: "60px 40px" } },
+    e("div", { style: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 } },
+      paths.map(function(p2, i) {
+        return e("div", { key: i, style: { background: p.z.surface, border: "1px solid " + p.z.border, borderRadius: 14, padding: "28px 24px", transition: "all 0.6s ease" } },
+          e("div", { style: { width: 44, height: 44, borderRadius: 10, background: C.brandLight, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, marginBottom: 16 } }, p2.icon),
+          e("h3", { style: { fontSize: 17, fontWeight: 700, color: "#fff", marginBottom: 4 } }, p2.t),
+          e("p", { style: { fontSize: 13, color: C.brand, marginBottom: 12, fontWeight: 600 } }, p2.sub),
+          e("p", { style: { fontSize: 14, color: C.textSecondary, lineHeight: 1.5, margin: "0 0 16px" } }, p2.d),
+          e("span", { style: { color: C.brand, fontSize: 14, fontWeight: 600 } }, "Get started \u2192")
+        );
+      })
+    )
+  );
+}
+
+function CTA(p) {
+  return e("div", { style: { padding: "80px 40px", textAlign: "center", position: "relative", overflow: "hidden" } },
+    e("div", { style: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(212,118,78,0.08) 0%, transparent 70%)", pointerEvents: "none" } }),
+    e("h2", { style: { fontSize: 36, fontWeight: 800, color: "#fff", marginBottom: 16, position: "relative" } }, "Ready to take control", e("br"), "of your sale?"),
+    e("p", { style: { color: C.textSecondary, fontSize: 15, marginBottom: 32, position: "relative" } }, "Create your free dashboard in under two minutes."),
+    e("button", { style: { background: C.brand, color: "#fff", border: "none", padding: "14px 28px", borderRadius: 8, fontSize: 15, fontWeight: 600, cursor: "pointer", position: "relative" } }, "Create your free dashboard \u2192")
+  );
+}
+
+function GradientDivider() {
+  return e("div", { style: {
+    height: 3,
+    background: "linear-gradient(90deg, transparent 0%, " + C.brandDeep + " 15%, " + C.brand + " 35%, #E8A87C 50%, " + C.brand + " 65%, " + C.brandDeep + " 85%, transparent 100%)",
+    opacity: 0.7,
+  }});
+}
+
+// ─── STYLE A ────────────────────────────────────────
+function StyleA() {
+  var activeZone = React.useRef(0);
+  var wrapperRef = useRef(null);
+  var z1Ref = useRef(null);
+  var z2Ref = useRef(null);
+  var z3Ref = useRef(null);
+  var forceUpdate = useState(0)[1];
+
+  useEffect(function() {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+          var newZone = entry.target === z1Ref.current ? 0 : entry.target === z2Ref.current ? 1 : 2;
+          if (newZone !== activeZone.current) {
+            activeZone.current = newZone;
+            forceUpdate(function(n) { return n + 1; });
+          }
+        }
+      });
+    }, { threshold: [0.25], root: wrapperRef.current });
+    [z1Ref, z2Ref, z3Ref].forEach(function(r) { if (r.current) obs.observe(r.current); });
+    return function() { obs.disconnect(); };
+  }, []);
+
+  var colors = [Z.z1.bg, Z.z2.bg, Z.z3.bg];
+  return e("div", { ref: wrapperRef, style: { background: colors[activeZone.current], transition: "background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1)", overflowY: "auto", maxHeight: 650 } },
+    e("div", { ref: z1Ref }, e(Hero), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 })),
+    e(GradientDivider),
+    e("div", { ref: z2Ref }, e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 })),
+    e(GradientDivider),
+    e("div", { ref: z3Ref }, e(CTA, { z: Z.z3 }))
+  );
+}
+
+// ─── STYLE B ────────────────────────────────────────
+function StyleB() {
+  var activeZone = React.useRef(0);
+  var wrapperRef = useRef(null);
+  var z1Ref = useRef(null);
+  var z2Ref = useRef(null);
+  var z3Ref = useRef(null);
+  var forceUpdate = useState(0)[1];
+
+  useEffect(function() {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.25) {
+          var newZone = entry.target === z1Ref.current ? 0 : entry.target === z2Ref.current ? 1 : 2;
+          if (newZone !== activeZone.current) {
+            activeZone.current = newZone;
+            forceUpdate(function(n) { return n + 1; });
+          }
+        }
+      });
+    }, { threshold: [0.25], root: wrapperRef.current });
+    [z1Ref, z2Ref, z3Ref].forEach(function(r) { if (r.current) obs.observe(r.current); });
+    return function() { obs.disconnect(); };
+  }, []);
+
+  var colors = [Z.z1.bg, Z.z2.bg, Z.z3.bg];
+  return e("div", { ref: wrapperRef, style: { background: colors[activeZone.current], transition: "background-color 1.2s cubic-bezier(0.16, 1, 0.3, 1)", overflowY: "auto", maxHeight: 650 } },
+    e("div", { ref: z1Ref }, e(Hero), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 })),
+    e("div", { style: { height: 60 } }),
+    e("div", { ref: z2Ref }, e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 })),
+    e("div", { style: { height: 60 } }),
+    e("div", { ref: z3Ref }, e(CTA, { z: Z.z3 }))
+  );
+}
+
+// ─── STYLE C ────────────────────────────────────────
+function StyleC() {
+  var containerRef = useRef(null);
+  var progress = useState(0);
+  var scrollProgress = progress[0];
+  var setScrollProgress = progress[1];
+
+  useEffect(function() {
+    var el = containerRef.current;
+    if (!el) return;
+    function onScroll() {
+      var top = el.scrollTop;
+      var max = el.scrollHeight - el.clientHeight;
+      setScrollProgress(max > 0 ? top / max : 0);
+    }
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return function() { el.removeEventListener("scroll", onScroll); };
+  }, []);
+
+  var r1=13,g1=13,b1=13, r2=18,g2=16,b2=14, r3=8,g3=8,b3=8;
+  var r,g,b;
+  if (scrollProgress < 0.5) {
+    var t = scrollProgress / 0.5;
+    r = Math.round(r1+(r2-r1)*t); g = Math.round(g1+(g2-g1)*t); b = Math.round(b1+(b2-b1)*t);
+  } else {
+    var t2 = (scrollProgress-0.5)/0.5;
+    r = Math.round(r2+(r3-r2)*t2); g = Math.round(g2+(g3-g2)*t2); b = Math.round(b2+(b3-b2)*t2);
+  }
+  var glow = scrollProgress < 0.5 ? scrollProgress/0.5*0.08 : (1-(scrollProgress-0.5)/0.5)*0.08;
+
+  return e("div", { ref: containerRef, style: {
+    background: "radial-gradient(ellipse at 50% " + (30+scrollProgress*40) + "%, rgba(212,118,78," + glow + ") 0%, rgb(" + r + "," + g + "," + b + ") 60%)",
+    overflowY: "auto", maxHeight: 650,
+  }},
+    e(Hero), e(Stats, { z: Z.z1 }), e(HowItWorks, { z: Z.z1 }),
+    e(WhyYalla, { z: Z.z2 }), e(ThreePaths, { z: Z.z2 }), e(CTA, { z: Z.z3 })
+  );
+}
+
+// ─── MAIN ───────────────────────────────────────────
+function App() {
+  var state = useState("A");
+  var activeStyle = state[0];
+  var setActiveStyle = state[1];
+
+  var styles = [
+    { id: "A", label: "Gradient Line + BG Shift", desc: "Netflix-style divider line marks each zone, background transitions smoothly" },
+    { id: "B", label: "Smooth BG Shift Only", desc: "No divider — just background color gradually shifts between zones" },
+    { id: "C", label: "Scroll-Driven Continuous", desc: "Background tied to scroll position with brand glow that follows" },
+  ];
+
+  return e("div", { style: { minHeight: "100vh", background: "#000" } },
+    // Picker bar
+    e("div", { style: { position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.9)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "16px 24px" } },
+      e("div", { style: { display: "flex", alignItems: "center", gap: 20, maxWidth: 1100, margin: "0 auto" } },
+        e("span", { style: { color: C.brand, fontWeight: 800, fontSize: 16, whiteSpace: "nowrap" } }, "\uD83C\uDFE0 Zone Transitions"),
+        e("div", { style: { display: "flex", gap: 8, flex: 1 } },
+          styles.map(function(s) {
+            return e("button", {
+              key: s.id, onClick: function() { setActiveStyle(s.id); },
+              style: {
+                flex: 1, background: activeStyle === s.id ? C.brand : "rgba(255,255,255,0.06)",
+                color: activeStyle === s.id ? "#fff" : C.textSecondary,
+                border: activeStyle === s.id ? "none" : "1px solid rgba(255,255,255,0.08)",
+                padding: "10px 16px", borderRadius: 8, cursor: "pointer", textAlign: "left",
+                transition: "all 0.2s ease",
+              }
+            },
+              e("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 2 } }, "Style " + s.id + ": " + s.label),
+              e("div", { style: { fontSize: 11, opacity: 0.7, lineHeight: 1.3 } }, s.desc)
+            );
+          })
+        )
+      )
+    ),
+    // Zone legend
+    e("div", { style: { maxWidth: 1100, margin: "0 auto", padding: "12px 24px 0", display: "flex", gap: 24, alignItems: "center" } },
+      e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+        e("div", { style: { width: 12, height: 12, borderRadius: 3, background: Z.z1.bg, border: "1px solid rgba(255,255,255,0.2)" } }),
+        e("span", { style: { fontSize: 11, color: C.textMuted } }, "Zone 1: Dark — Hero + Stats + How It Works")
+      ),
+      e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+        e("div", { style: { width: 12, height: 12, borderRadius: 3, background: Z.z2.bg, border: "1px solid rgba(212,118,78,0.3)" } }),
+        e("span", { style: { fontSize: 11, color: C.textMuted } }, "Zone 2: Warm — Why Yalla + Three Paths")
+      ),
+      e("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+        e("div", { style: { width: 12, height: 12, borderRadius: 3, background: Z.z3.bg, border: "1px solid rgba(255,255,255,0.15)" } }),
+        e("span", { style: { fontSize: 11, color: C.textMuted } }, "Zone 3: Deep — CTA")
+      )
+    ),
+    // Preview viewport
+    e("div", { style: { maxWidth: 1100, margin: "16px auto 0", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)" } },
+      activeStyle === "A" ? e(StyleA) : activeStyle === "B" ? e(StyleB) : e(StyleC)
+    ),
+    e("div", { style: { textAlign: "center", padding: "16px 0 32px", color: C.textMuted, fontSize: 12 } },
+      "\u2195 Scroll inside the preview to see the zone transitions in action"
+    )
+  );
+}
+
+ReactDOM.render(e(App), document.getElementById("root"));
+</script>
+</body>
+</html>
