@@ -56,8 +56,8 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
     // Build translation record for the example dashboard client component
     const exKeys = [
       'exBadge', 'exBannerHint', 'exStartListing',
-      'exStatusLive', 'exPropertyTitle', 'exPropertyLocation', 'exPropertyPrice',
-      'exListedDate', 'exBeds', 'exBaths', 'exSize', 'exParking', 'exType', 'exPropertyType',
+      'exStatusDraft', 'exPropertyTitle', 'exPropertyLocation', 'exPropertyPrice',
+      'exListedDate', 'exBeds', 'exBaths', 'exSize', 'exSizeValue', 'exParking', 'exType', 'exPropertyType',
       'exStatViews', 'exStatEnquiries', 'exStatViewings', 'exStatOffers', 'exStatSaved',
       'exStatUpcoming', 'exStatNew', 'exStatThisWeek',
       'exSectionActivity', 'exLast7Days',

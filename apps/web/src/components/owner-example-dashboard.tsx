@@ -15,21 +15,21 @@ interface ExampleDashboardProps {
   locale: string
 }
 
-// ─── Example property photos (Unsplash, free to use) ─────────────────────
+// ─── Property photos ─────────────────────────────────────────────────────
 const PHOTOS = {
-  hero: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=500&fit=crop&q=80',
-  interior1: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=300&fit=crop&q=80',
-  interior2: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop&q=80',
-  interior3: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&h=300&fit=crop&q=80',
-  kitchen: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop&q=80',
+  hero: '/images/example/yoxley-hero.jpeg',
+  interior1: '/images/example/yoxley-interior1.jpeg',
+  interior2: '/images/example/yoxley-interior2.jpeg',
+  interior3: '/images/example/yoxley-interior3.jpeg',
+  kitchen: '/images/example/yoxley-kitchen.jpeg',
 }
 
 export function OwnerExampleDashboard({ t, locale }: ExampleDashboardProps) {
   return (
     <div className="max-w-7xl space-y-6">
-      {/* ── Example banner ── */}
-      <div className="bg-gradient-to-r from-brand/[0.08] to-brand/[0.02] rounded-xl border border-brand/15 px-5 py-3 flex items-center gap-3">
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-brand bg-brand/10 px-2.5 py-1 rounded-full whitespace-nowrap">
+      {/* ── Draft banner ── */}
+      <div className="bg-gradient-to-r from-amber-500/[0.08] to-amber-500/[0.02] rounded-xl border border-amber-500/15 px-5 py-3 flex items-center gap-3">
+        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-600 bg-amber-500/10 px-2.5 py-1 rounded-full whitespace-nowrap">
           {t.exBadge}
         </span>
         <span className="text-sm text-text-secondary flex-1">{t.exBannerHint}</span>
@@ -84,31 +84,31 @@ function HeroSection({ t }: { t: Record<string, string> }) {
         {/* Main photo — full width on mobile, spans 2 cols + 2 rows on md+ */}
         <div className="col-span-2 row-span-2 relative overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PHOTOS.hero} alt="" className="w-full h-full object-cover" />
+          <img src={PHOTOS.hero} alt="" className="w-full h-full object-cover grayscale-[40%] opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           <div className="absolute bottom-4 left-4 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-green-500 text-white">
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              {t.exStatusLive}
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-amber-500 text-white">
+              <Circle size={8} fill="white" />
+              {t.exStatusDraft}
             </span>
           </div>
         </div>
         {/* Small photos — hidden on mobile, visible on md+ */}
         <div className="overflow-hidden hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PHOTOS.interior1} alt="" className="w-full h-full object-cover" />
+          <img src={PHOTOS.interior1} alt="" className="w-full h-full object-cover grayscale-[40%] opacity-90" />
         </div>
         <div className="overflow-hidden hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PHOTOS.interior2} alt="" className="w-full h-full object-cover" />
+          <img src={PHOTOS.interior2} alt="" className="w-full h-full object-cover grayscale-[40%] opacity-90" />
         </div>
         <div className="overflow-hidden hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PHOTOS.interior3} alt="" className="w-full h-full object-cover" />
+          <img src={PHOTOS.interior3} alt="" className="w-full h-full object-cover grayscale-[40%] opacity-90" />
         </div>
         <div className="overflow-hidden relative hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PHOTOS.kitchen} alt="" className="w-full h-full object-cover" />
+          <img src={PHOTOS.kitchen} alt="" className="w-full h-full object-cover grayscale-[40%] opacity-90" />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <span className="flex items-center gap-1.5 text-white text-sm font-bold">
               <Camera size={16} /> +12
@@ -134,10 +134,10 @@ function HeroSection({ t }: { t: Record<string, string> }) {
 
         {/* Property specs */}
         <div className="flex flex-wrap gap-6 mt-4 pt-4 border-t border-border-default">
-          <Spec icon={BedDouble} label={t.exBeds} value="4" />
-          <Spec icon={Bath} label={t.exBaths} value="2" />
-          <Spec icon={Maximize} label={t.exSize} value="145 m²" />
-          <Spec icon={Car} label={t.exParking} value="2" />
+          <Spec icon={BedDouble} label={t.exBeds} value="5" />
+          <Spec icon={Bath} label={t.exBaths} value="3" />
+          <Spec icon={Maximize} label={t.exSize} value={t.exSizeValue} />
+          <Spec icon={Car} label={t.exParking} value="1" />
           <Spec icon={Home} label={t.exType} value={t.exPropertyType} />
         </div>
       </div>
