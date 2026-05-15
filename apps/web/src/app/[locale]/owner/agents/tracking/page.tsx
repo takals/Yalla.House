@@ -6,11 +6,12 @@ import { ArrowLeft, Mail, Eye, MousePointerClick, MessageSquare, CheckCircle2, C
 
 interface Assignment {
   id: string
-  status: 'invited' | 'accepted' | 'active' | 'paused' | 'revoked'
-  invited_at: string
-  accepted_at: string | null
-  revoked_at: string | null
-  agent: {
+  status: string
+  created_at: string
+  sent_at: string | null
+  responded_at: string | null
+  tier: string | null
+  agent_profiles: {
     agency_name: string | null
   } | null
 }
@@ -42,44 +43,44 @@ export default async function TrackingPage() {
   const { data: { user } } = await supabase.auth.getUser()
   const userId = user?.id ?? PREVIEW_USER_ID
 
-  // Fetch all assignments for this owner's listings
+  // Fetch all invites this owner has sent
   let assignments: Assignment[] = []
 
   const { data } = await (supabase as any)
-    .from('listing_agent_assignments')
+    .from('agent_invites')
     .select(`
-      id, status, invited_at, accepted_at, revoked_at,
-      agent:agent_profiles!listing_agent_assignments_agent_id_fkey(
-        agency_name
-      )
+      id, status, created_at, sent_at, responded_at, tier,
+      agent_profiles(agency_name)
     `)
     .eq('owner_id', userId)
-    .order('invited_at', { ascending: false })
+    .order('created_at', { ascending: false })
 
   assignments = data ?? []
 
-  // Calculate tracking states based on assignment status and timestamps
+  // Calculate tracking states based on invite status and timestamps
   const trackingData = assignments.map(assignment => {
-    const isDelivered = !!assignment.invited_at
-    const isOpened = !!assignment.accepted_at || !!assignment.revoked_at
-    const isClicked = !!assignment.accepted_at || !!assignment.revoked_at
-    const isResponded = !!assignment.accepted_at || !!assignment.revoked_at
+    const isDelivered = assignment.status === 'sent' || assignment.status === 'opened' || assignment.status === 'responded' || assignment.status === 'accepted' || assignment.status === 'declined'
+    const isOpened = assignment.status === 'opened' || assignment.status === 'responded' || assignment.status === 'accepted' || assignment.status === 'declined'
+    const isClicked = isOpened
+    const isResponded = assignment.status === 'responded' || assignment.status === 'accepted' || assignment.status === 'declined'
 
-    let status = 'delivered'
+    let status = 'draft'
     if (isResponded) {
-      status = assignment.status === 'revoked' ? 'declined' : 'accepted'
-    } else if (isOpened) {
-      status = 'opened'
+      status = assignment.status === 'declined' ? 'declined' : 'accepted'
+    } else if (isDelivered) {
+      status = 'delivered'
     }
 
-    const responseTime = isResponded && (assignment.accepted_at || assignment.revoked_at)
-      ? formatTimeAgo(assignment.accepted_at || assignment.revoked_at!, tc)
+    const responseTime = isResponded && assignment.responded_at
+      ? formatTimeAgo(assignment.responded_at, tc)
       : null
 
     return {
       id: assignment.id,
-      agentName: assignment.agent?.agency_name || t('unknownAgent'),
-      sentTime: formatTimeAgo(assignment.invited_at, tc),
+      agentName: assignment.agent_profiles?.agency_name || t('unknownAgent'),
+      sentTime: assignment.sent_at
+        ? formatTimeAgo(assignment.sent_at, tc)
+        : formatTimeAgo(assignment.created_at, tc),
       status,
       delivered: isDelivered,
       opened: isOpened,

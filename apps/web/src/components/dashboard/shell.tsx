@@ -240,10 +240,10 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
           {/* Mobile hamburger — hidden on desktop */}
           <button
             onClick={() => setMobileOpen(o => !o)}
-            className="lg:hidden flex items-center justify-center w-8 h-8 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg transition-colors"
+            className="lg:hidden flex items-center justify-center w-9 h-9 rounded-lg bg-brand/10 text-brand hover:bg-brand/20 transition-colors"
             aria-label={mobileOpen ? (shellLabels?.closeSidebar ?? 'Close menu') : (shellLabels?.openSidebar ?? 'Open menu')}
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">

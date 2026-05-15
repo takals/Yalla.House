@@ -79,9 +79,9 @@ export function OwnerExampleDashboard({ t, locale }: ExampleDashboardProps) {
 function HeroSection({ t }: { t: Record<string, string> }) {
   return (
     <div className="bg-surface rounded-xl border border-border-default overflow-hidden">
-      {/* Photo gallery grid */}
-      <div className="grid grid-cols-4 grid-rows-2 gap-1 h-[320px]">
-        {/* Main photo — spans 2 cols + 2 rows */}
+      {/* Photo gallery grid — single hero on mobile, 4-col grid on md+ */}
+      <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-1 h-[200px] md:h-[320px]">
+        {/* Main photo — full width on mobile, spans 2 cols + 2 rows on md+ */}
         <div className="col-span-2 row-span-2 relative overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PHOTOS.hero} alt="" className="w-full h-full object-cover" />
@@ -93,20 +93,20 @@ function HeroSection({ t }: { t: Record<string, string> }) {
             </span>
           </div>
         </div>
-        {/* Small photos */}
-        <div className="overflow-hidden">
+        {/* Small photos — hidden on mobile, visible on md+ */}
+        <div className="overflow-hidden hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PHOTOS.interior1} alt="" className="w-full h-full object-cover" />
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PHOTOS.interior2} alt="" className="w-full h-full object-cover" />
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PHOTOS.interior3} alt="" className="w-full h-full object-cover" />
         </div>
-        <div className="overflow-hidden relative">
+        <div className="overflow-hidden relative hidden md:block">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PHOTOS.kitchen} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">

@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
   const { data: districtAgents } = await (supabase as any)
     .from('agent_profiles')
     .select(AGENT_SELECT)
-    .like('postcode', `${parsed.outcode}%`)
+    .ilike('postcode', `${parsed.outcode}%`)
     .order('verified_at', { ascending: false, nullsFirst: false })
     .limit(limit)
 
@@ -118,7 +118,7 @@ export async function GET(request: NextRequest) {
     const { data: areaAgents } = await (supabase as any)
       .from('agent_profiles')
       .select(AGENT_SELECT)
-      .like('postcode', `${parsed.area}%`)
+      .ilike('postcode', `${parsed.area}%`)
       .order('verified_at', { ascending: false, nullsFirst: false })
       .limit(limit)
 
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
     const { data: coverageAgents } = await (supabase as any)
       .from('agent_profiles')
       .select(AGENT_SELECT)
-      .or(`postcode.like.${parsed.area}%`)
+      .or(`postcode.ilike.${parsed.area}%`)
       .order('verified_at', { ascending: false, nullsFirst: false })
       .limit(limit)
 
