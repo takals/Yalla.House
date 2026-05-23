@@ -207,6 +207,11 @@ interface ViewingPayload {
   email: string
   phone?: string
   message?: string
+  buyerStatus?: string
+  intent?: string
+  timeline?: string
+  budgetMin?: number
+  budgetMax?: number
 }
 
 export async function fetchAvailableSlotsAction(
@@ -430,6 +435,74 @@ export async function requestViewingAction(
     }
   } catch (e) {
     console.error('requestViewingAction notify error:', e)
+  }
+
+  // Seed hunter profile (passport) — fire-and-forget
+  try {
+    await seedHunterProfileAction(userId, payload, locale)
+  } catch (e) {
+    console.error('requestViewingAction seedProfile error:', e)
+  }
+
+  return { success: true }
+}
+
+// ── Seed Hunter Profile (passport foundation) ──────────────────────────────
+
+export async function seedHunterProfileAction(
+  userId: string,
+  payload: ViewingPayload,
+  locale?: string
+): Promise<{ success: true } | { error: string }> {
+  const service = createServiceClient()
+
+  // Check if profile already exists
+  const { data: existing } = await (service.from('hunter_profiles') as any)
+    .select('id')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  const profileData: Record<string, unknown> = {}
+  if (payload.intent) profileData.intent = payload.intent
+  if (payload.timeline) profileData.timeline = payload.timeline
+  if (payload.budgetMin) profileData.budget_min = payload.budgetMin
+  if (payload.budgetMax) profileData.budget_max = payload.budgetMax
+  if (payload.buyerStatus) profileData.buyer_status = payload.buyerStatus
+  if (payload.phone) profileData.phone = payload.phone
+
+  // Nothing to seed
+  if (Object.keys(profileData).length === 0) return { success: true }
+
+  if (existing) {
+    // Update only fields that are currently null (don't overwrite)
+    const updates: Record<string, unknown> = {}
+    const { data: current } = await (service.from('hunter_profiles') as any)
+      .select('intent, timeline, budget_min, budget_max, buyer_status, phone')
+      .eq('user_id', userId)
+      .single()
+
+    if (current) {
+      for (const [key, val] of Object.entries(profileData)) {
+        if (current[key] == null && val != null) {
+          updates[key] = val
+        }
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      await (service.from('hunter_profiles') as any)
+        .update(updates)
+        .eq('user_id', userId)
+    }
+  } else {
+    // Create new profile with country from locale
+    const { countryFromLocale } = await import('@/lib/detect-country')
+    const countryCode = countryFromLocale(locale ?? 'de')
+    await (service.from('hunter_profiles') as any).insert({
+      user_id: userId,
+      country_code: countryCode,
+      ...profileData,
+    })
   }
 
   return { success: true }
