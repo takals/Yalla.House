@@ -47,7 +47,7 @@ export function OwnerExampleAnalytics({ t, locale }: ExampleAnalyticsProps) {
         <h2 className="text-xl font-bold text-text-primary mb-2">{t.exCtaTitle}</h2>
         <p className="text-sm text-text-secondary mb-6 max-w-lg mx-auto leading-relaxed">{t.exCtaDesc}</p>
         <Link
-          href="/owner/new"
+          href="/owner/workspace"
           className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold px-7 py-3.5 rounded-xl transition-all will-change-transform hover:-translate-y-0.5 hover:shadow-lg text-[0.9375rem]"
         >
           {t.exCtaButton} <ArrowRight size={16} />

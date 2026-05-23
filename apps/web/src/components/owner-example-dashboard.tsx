@@ -33,7 +33,7 @@ export function OwnerExampleDashboard({ t, locale }: ExampleDashboardProps) {
         </span>
         <span className="text-sm text-text-secondary flex-1">{t.exBannerHint}</span>
         <Link
-          href="/owner/new"
+          href="/owner/workspace"
           className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
         >
           {t.exGoLive} <ArrowRight size={14} />
@@ -499,7 +499,7 @@ function CtaSection({ t }: { t: Record<string, string> }) {
       <h2 className="text-xl font-bold text-text-primary mb-2">{t.exCtaTitle}</h2>
       <p className="text-sm text-text-secondary mb-6 max-w-lg mx-auto leading-relaxed">{t.exCtaDesc}</p>
       <Link
-        href="/owner/new"
+        href="/owner/workspace"
         className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold px-7 py-3.5 rounded-xl transition-all will-change-transform hover:-translate-y-0.5 hover:shadow-lg text-[0.9375rem]"
       >
         {t.exCtaButton} <ArrowRight size={16} />

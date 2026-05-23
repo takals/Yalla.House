@@ -158,7 +158,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-text-primary">{t('pageTitle')}</h1>
         <Link
-          href="/owner/new"
+          href="/owner/workspace"
           className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
               <div className="py-12 text-center">
                 <p className="text-text-secondary mb-4">{t('noListings')}</p>
                 <Link
-                  href="/owner/new"
+                  href="/owner/workspace"
                   className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                   <Plus className="w-4 h-4" />

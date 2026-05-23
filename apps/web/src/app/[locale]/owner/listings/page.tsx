@@ -132,7 +132,7 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
           </p>
         </div>
         <Link
-          href="/owner/new"
+          href="/owner/workspace"
           className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-text-primary font-bold px-5 py-2.5 rounded-lg transition-colors will-change-transform hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4" />

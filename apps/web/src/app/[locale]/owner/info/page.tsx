@@ -238,7 +238,7 @@ export default async function OwnerInfoPage() {
           {t('ctaBody')}
         </p>
         <Link
-          href="/owner/new"
+          href="/owner/workspace"
           className="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-hover text-white font-semibold rounded-lg transition-colors"
         >
           {t('ctaButton')} <ArrowRight size={16} />

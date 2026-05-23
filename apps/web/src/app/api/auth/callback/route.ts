@@ -68,6 +68,11 @@ export async function GET(request: NextRequest) {
         redirectUrl = '/hunter'
       }
 
+      // Redirect legacy routes to their replacements
+      if (redirectUrl.match(/^\/(en\/)?owner\/new\b/)) {
+        redirectUrl = redirectUrl.replace(/owner\/new/, 'owner/workspace')
+      }
+
       // If no explicit destination was set (default /hunter fallback),
       // query user_roles and route to the best dashboard.
       const isDefaultRedirect = redirectUrl === '/hunter'
