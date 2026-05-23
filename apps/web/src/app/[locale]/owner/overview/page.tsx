@@ -6,7 +6,7 @@ import { fromMinorUnits } from '@yalla/integrations'
 import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
 import { dateLocaleFromLocale } from '@/lib/country-config'
-import { OwnerDemoContent } from '@/components/owner-demo-content'
+import { OwnerExampleAnalytics } from '@/components/owner-example-analytics'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 type Viewing = Database['public']['Tables']['viewings']['Row']
@@ -34,6 +34,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const t = await getTranslations('ownerDash')
   const ts = await getTranslations('statusLabels')
   const td = await getTranslations('ownerDemo')
+  const tEx = await getTranslations('ownerExampleDashboard')
   const locale = await getLocale()
   const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
@@ -102,17 +103,35 @@ export default async function OwnerDashboard({ searchParams }: Props) {
     }
   }
 
-  // Demo translations for guest/empty state
-  const demoKeys = [
-    'demoBadge', 'overviewHint', 'statusLive', 'statusDraft',
-    'demoTitle1', 'demoTitle2', 'demoLocation1', 'demoLocation2',
-    'demoPrice1', 'demoPrice2', 'statListings', 'statInquiries',
-    'statViewings', 'statOffers', 'statWithOffers', 'statThisWeek',
-    'stat2ThisWeek', 'statNewOffer', 'sectionListings',
+  // Analytics demo translations for guest/empty state (from ownerExampleDashboard namespace)
+  const analyticsKeys = [
+    'exStatViews', 'exStatEnquiries', 'exStatViewings', 'exStatOffers', 'exStatSaved',
+    'exStatUpcoming', 'exStatNew', 'exStatThisWeek',
+    'exSectionActivity', 'exLast7Days',
+    'exActOffer', 'exActOfferDesc', 'exActViewing', 'exActViewingDesc',
+    'exActMessage', 'exActMessageDesc', 'exActMilestone', 'exActMilestoneDesc',
+    'exAct2hAgo', 'exAct5hAgo', 'exActYesterday',
+    'exSectionViewings', 'exViewAll', 'exViewDate1', 'exViewDate2', 'exViewDate3',
+    'exViewInPerson', 'exViewVideo', 'exViewConfirmed', 'exViewPending',
+    'exSectionOffers', 'exOfferActive', 'exOfferMortgage', 'exOfferCash', 'exOfferStrong',
+    'exOfferAmount1', 'exOfferNote1', 'exOfferAmount2', 'exOfferNote2',
+    'exOfferAccept', 'exOfferCounter', 'exOfferDecline',
+    'exSectionMessages', 'exMsgSubject1', 'exMsgPreview1',
+    'exMsgSubject2', 'exMsgPreview2', 'exMsgSubject3', 'exMsgPreview3',
+    'exSectionStatus', 'exStatusHealthy', 'exStatusHealthyDesc',
+    'exPortals', 'exPortalLive', 'exPortalPending', 'exPreview', 'exShare',
+    'exSectionPassport', 'exPassPhotos', 'exPassDescription', 'exPassFloorPlan',
+    'exPassEpc', 'exPassDocuments',
+    'exSectionTasks', 'exTaskRespond', 'exTaskUploadEpc', 'exTaskConfirmViewing',
+    'exTaskAddPhotos', 'exTaskSetAvailability',
+    'exSectionAnalytics', 'exAnalytics4WeeksAgo', 'exAnalyticsToday',
+    'exAnalyticsClickRate', 'exAnalyticsMin', 'exAnalyticsAvgTime',
+    'exSectionTips', 'exTip1', 'exTip2', 'exTip3',
+    'exCtaTitle', 'exCtaDesc', 'exCtaButton',
   ] as const
-  const demoTranslations: Record<string, string> = {}
-  for (const key of demoKeys) {
-    demoTranslations[key] = td(key)
+  const analyticsTranslations: Record<string, string> = {}
+  for (const key of analyticsKeys) {
+    analyticsTranslations[key] = tEx(key)
   }
 
   // Calculate stats
@@ -177,7 +196,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
       </div>
 
       {listings.length === 0 ? (
-        <OwnerDemoContent section="overview" t={demoTranslations} />
+        <OwnerExampleAnalytics t={analyticsTranslations} locale={locale} />
       ) : (
       <>
       {/* Stat cards row */}
