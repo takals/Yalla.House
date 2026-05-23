@@ -33,7 +33,6 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const { billing } = await searchParams
   const t = await getTranslations('ownerDash')
   const ts = await getTranslations('statusLabels')
-  const td = await getTranslations('ownerDemo')
   const tEx = await getTranslations('ownerExampleDashboard')
   const locale = await getLocale()
   const dateLocale = dateLocaleFromLocale(locale)
