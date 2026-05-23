@@ -9,6 +9,11 @@ import { emailWrapper, type EmailLocale, type EmailAudience } from '@/lib/resend
  *        /api/email-preview?audience=general
  */
 export async function GET(request: NextRequest) {
+  // Only allow in development — block in production to prevent information disclosure
+  if (process.env.NODE_ENV === 'production' && process.env.VERCEL_ENV === 'production') {
+    return new NextResponse('Not Found', { status: 404 })
+  }
+
   const { searchParams } = request.nextUrl
   const audience = (searchParams.get('audience') ?? 'agent') as EmailAudience
   const locale = (searchParams.get('locale') ?? 'en-GB') as EmailLocale

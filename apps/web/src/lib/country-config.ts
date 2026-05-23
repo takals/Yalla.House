@@ -115,6 +115,15 @@ export function dateLocaleFromLocale(locale: string): string {
   return config?.default_locale ?? 'en-GB'
 }
 
+/**
+ * Get the currency symbol for a given currency code.
+ * Uses Intl.NumberFormat so it scales to any currency without hardcoded ternaries.
+ */
+export function getCurrencySymbol(currency: string): string {
+  const parts = new Intl.NumberFormat('en', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' }).formatToParts(0)
+  return parts.find(p => p.type === 'currency')?.value ?? currency
+}
+
 export function formatCurrency(
   amountMinorUnits: number,
   currency: string,

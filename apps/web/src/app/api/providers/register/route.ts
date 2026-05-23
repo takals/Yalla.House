@@ -1,8 +1,35 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
+import { headers } from 'next/headers'
+
+// Simple in-memory rate limiter for provider registration (anti-spam)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour
+const RATE_LIMIT_MAX = 5 // 5 registrations per IP per hour
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW })
+    return true
+  }
+  entry.count++
+  return entry.count <= RATE_LIMIT_MAX
+}
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting by IP
+    const hdrs = await headers()
+    const ip = hdrs.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const {
       businessName,
@@ -13,12 +40,28 @@ export async function POST(request: Request) {
       areas,
       accreditation,
       accreditationRef,
+      _hp, // honeypot field — bots fill this in, humans don't
     } = body
+
+    // Honeypot check — reject if hidden field is filled
+    if (_hp) {
+      // Silently accept but don't create anything (fool the bot)
+      return NextResponse.json({ success: true, id: 'ok' })
+    }
 
     // Basic validation
     if (!businessName || !email || !phone || !categoryId || !areas) {
       return NextResponse.json(
         { error: 'Missing required fields' },
+        { status: 400 }
+      )
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
         { status: 400 }
       )
     }

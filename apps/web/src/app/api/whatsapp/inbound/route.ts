@@ -68,6 +68,8 @@ export async function POST(req: NextRequest) {
   const from = message.from // Phone number in international format (no +)
   const body = (message.text?.body ?? '').trim()
   const contactName = contact?.profile?.name ?? null
+  // Determine country from phone prefix for locale-aware URLs
+  const phoneCountry = from.startsWith('49') ? 'DE' : from.startsWith('44') ? 'GB' : null
 
   if (!body || !from) {
     return NextResponse.json({ status: 'ok' })
@@ -107,7 +109,7 @@ export async function POST(req: NextRequest) {
       .maybeSingle()
 
     if (listing) {
-      const url = buildListingUrl(listing)
+      const url = buildListingUrl(listing, phoneCountry)
       await logInboundLead(db, {
         listing_id: listing.id,
         channel: 'whatsapp',
@@ -134,7 +136,7 @@ export async function POST(req: NextRequest) {
       .maybeSingle()
 
     if (listing) {
-      const url = buildListingUrl(listing)
+      const url = buildListingUrl(listing, phoneCountry)
       await logInboundLead(db, {
         listing_id: listing.id,
         channel: 'whatsapp',
@@ -171,7 +173,7 @@ export async function POST(req: NextRequest) {
 
         if (row?.listings) {
           const listing = row.listings
-          const url = buildListingUrl(listing)
+          const url = buildListingUrl(listing, phoneCountry)
           await logInboundLead(db, {
             listing_id: listing.id,
             channel: 'whatsapp',
@@ -192,12 +194,14 @@ export async function POST(req: NextRequest) {
 
   // ── Case 4: Address fuzzy match ──────────────────────────────────────
   if (body.length >= 5) {
-    const { data: matches } = await (db as any).rpc('fuzzy_match_listings', {
+    // Use phone country determined at top of handler
+    const rpcParams: Record<string, unknown> = {
       query_text: body,
-      country: 'GB',
       threshold: 0.25,
       max_results: 3,
-    })
+    }
+    if (phoneCountry) rpcParams.country = phoneCountry
+    const { data: matches } = await (db as any).rpc('fuzzy_match_listings', rpcParams)
 
     if (matches && matches.length === 1) {
       const match = matches[0]
@@ -208,7 +212,7 @@ export async function POST(req: NextRequest) {
         .maybeSingle()
 
       if (listing) {
-        const url = buildListingUrl(listing)
+        const url = buildListingUrl(listing, phoneCountry)
         await logInboundLead(db, {
           listing_id: listing.id,
           channel: 'whatsapp',
@@ -246,9 +250,11 @@ export async function POST(req: NextRequest) {
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
-function buildListingUrl(listing: Record<string, any>): string {
+function buildListingUrl(listing: Record<string, any>, countryCode?: string | null): string {
   var identifier = listing.slug ?? listing.place_id
-  return SITE_URL + '/en/p/' + identifier + '?ref=whatsapp'
+  // Use locale-appropriate URL prefix based on country
+  var prefix = countryCode === 'DE' ? '' : '/en'
+  return SITE_URL + prefix + '/p/' + identifier + '?ref=whatsapp'
 }
 
 function buildReplyMessage(listing: Record<string, any>, url: string): string {

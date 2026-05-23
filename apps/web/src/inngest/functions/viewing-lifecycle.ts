@@ -341,7 +341,7 @@ export const viewing24hReminder = inngest.createFunction(
         listingCity,
         scheduledAt,
         role: 'owner',
-        countryCode: owner.language === 'de-DE' ? 'DE' : 'GB',
+        countryCode: owner.language?.startsWith('de') ? 'DE' : owner.language?.startsWith('en') ? 'GB' : 'GB',
         locale: owner.language === 'de-DE' ? 'de-DE' : 'en-GB',
       }).catch(e => console.error('24h reminder email to owner:', e))
 

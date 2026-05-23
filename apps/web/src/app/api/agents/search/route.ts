@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 
 // ─── UK Postcode Normalisation ────────────────────────────────────────────────
 function normalisePostcode(input: string) {
@@ -61,11 +61,11 @@ function formatAgent(agent: AgentRow, matchType: string, baseScore: number) {
     branchManager: agent.branch_manager,
     address: agent.raw_address,
     postcode: agent.postcode,
-    phone: agent.phone,
-    email: agent.email,
+    // PII: email + phone redacted from search results — only exposed via invite flow
+    hasEmail: !!agent.email,
+    hasPhone: !!agent.phone,
     website: agent.website,
     source: agent.data_source,
-    sourceUrl: agent.source_url,
     verifiedAt: agent.verified_at,
     serviceTypes: agent.service_types ?? [],
     propertyTypes: agent.property_types ?? [],
@@ -83,6 +83,13 @@ const AGENT_SELECT = `
 `
 
 export async function GET(request: NextRequest) {
+  // ── Auth gate — only authenticated users can search agents ───────────
+  const userClient = await createClient()
+  const { data: { user } } = await userClient.auth.getUser()
+  if (!user) {
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+  }
+
   const { searchParams } = new URL(request.url)
   const postcodeInput = searchParams.get('postcode') ?? ''
   const radiusTier = searchParams.get('radius') ?? 'area'

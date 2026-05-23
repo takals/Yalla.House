@@ -30,7 +30,11 @@ export function getHunterPassportFlow(
         { value: 'friedrichshain', label: translations.opt_friedrichshain || 'Friedrichshain' },
       ]
 
-  const currencySymbol = country?.currency === 'GBP' ? '£' : '€'
+  const currencySymbol = (() => {
+    const cur = country?.currency ?? 'EUR'
+    const parts = new Intl.NumberFormat('en', { style: 'currency', currency: cur, currencyDisplay: 'narrowSymbol' }).formatToParts(0)
+    return parts.find(p => p.type === 'currency')?.value ?? cur
+  })()
   const isRent = false // Will be resolved dynamically by the intake component
 
   return [

@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { fromMinorUnits } from '@yalla/integrations'
-import { getCountryConfig } from '@/lib/country-config'
+import { getCountryConfig, getCurrencySymbol } from '@/lib/country-config'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
@@ -139,7 +139,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
         selectedListingId={selectedListing?.id ?? null}
         isAuthenticated={isAuthenticated}
         translations={translations}
-        currencySymbol={countryConfig.currency === 'GBP' ? '£' : '€'}
+        currencySymbol={getCurrencySymbol(countryConfig.currency)}
       />
     </div>
   )

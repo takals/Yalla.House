@@ -84,10 +84,9 @@ export async function searchPropertiesAction(query: string): Promise<{
     }
   }
 
-  // Case 3: Fuzzy address match (pg_trgm)
+  // Case 3: Fuzzy address match (pg_trgm) — admin searches all countries
   const { data: fuzzyResults } = await (db as any).rpc('fuzzy_match_listings', {
     query_text: trimmed,
-    country: 'DE',
     threshold: 0.2,
     max_results: 10,
   })

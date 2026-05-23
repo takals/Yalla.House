@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { ImagePlus } from 'lucide-react'
 import { InlineEdit } from './inline-edit'
 import { PhotoUploadModal } from './photo-upload-modal'
+import { getCurrencySymbol } from '@/lib/country-config'
 
 interface Props {
   listingId: string
@@ -26,6 +27,7 @@ export function OwnerInlineControls({
   photoCount,
 }: Props) {
   const t = useTranslations('listingPage')
+  const currencySymbol = getCurrencySymbol(currency)
   const [photoModalOpen, setPhotoModalOpen] = useState(false)
 
   return (
@@ -66,7 +68,7 @@ export function OwnerInlineControls({
             as="span"
             className="text-lg font-bold text-text-primary"
             inputType="number"
-            prefix={currency === 'GBP' ? '\u00a3' : '\u20ac'}
+            prefix={currencySymbol}
             fromMinor
           />
         </div>
@@ -81,7 +83,7 @@ export function OwnerInlineControls({
             as="span"
             className="text-lg font-bold text-text-primary"
             inputType="number"
-            prefix={currency === 'GBP' ? '\u00a3' : '\u20ac'}
+            prefix={currencySymbol}
             suffix=" /mo"
             fromMinor
           />

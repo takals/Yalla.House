@@ -66,9 +66,12 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Country name for governing law
-  const countryCode = locale === 'de' ? 'DE' : 'GB'
-  const countryName = locale === 'de' ? 'Deutschland' : 'United Kingdom'
+  // Country name for governing law — derived from locale via config
+  const { countryFromLocale } = await import('@/lib/detect-country')
+  const { getCountryConfig } = await import('@/lib/country-config')
+  const countryCode = countryFromLocale(locale)
+  const config = getCountryConfig(countryCode)
+  const countryName = locale === 'de' ? (countryCode === 'DE' ? 'Deutschland' : 'Vereinigtes Königreich') : (countryCode === 'GB' ? 'United Kingdom' : 'Germany')
 
   // Build HTML
   const sectionsHtml = sections.map((s, i) => `

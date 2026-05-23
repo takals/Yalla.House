@@ -14,11 +14,10 @@ interface Agent {
   branchManager: string | null
   address: string | null
   postcode: string | null
-  phone: string | null
-  email: string | null
+  hasPhone: boolean
+  hasEmail: boolean
   website: string | null
   source: string | null
-  sourceUrl: string | null
   verifiedAt: string | null
   serviceTypes: string[]
   propertyTypes: string[]
@@ -326,35 +325,19 @@ export function AgentSearchClient({ translations: t }: Props) {
                         <p className="text-xs text-text-secondary truncate">{agent.address}</p>
                       )}
 
-                      {/* Quick contact row */}
+                      {/* Quick contact indicators */}
                       <div className="flex items-center gap-4 mt-2 flex-wrap">
-                        {agent.phone && (
-                          <button
-                            onClick={() => copyToClipboard(agent.phone!, `phone-${agent.id}`)}
-                            className="inline-flex items-center gap-1.5 text-xs text-text-secondary hover:text-text-primary transition-colors"
-                          >
+                        {agent.hasPhone && (
+                          <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
                             <Phone size={12} />
-                            <span>{agent.phone}</span>
-                            {copiedField === `phone-${agent.id}` ? (
-                              <span className="text-green-600 font-semibold">{t.copied}</span>
-                            ) : (
-                              <Copy size={10} className="text-text-muted" />
-                            )}
-                          </button>
+                            <span>{t.phoneAvailable ?? 'Phone available'}</span>
+                          </span>
                         )}
-                        {agent.email && (
-                          <button
-                            onClick={() => copyToClipboard(agent.email!, `email-${agent.id}`)}
-                            className="inline-flex items-center gap-1.5 text-xs text-text-secondary hover:text-text-primary transition-colors"
-                          >
+                        {agent.hasEmail && (
+                          <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
                             <Mail size={12} />
-                            <span className="truncate max-w-[180px]">{agent.email}</span>
-                            {copiedField === `email-${agent.id}` ? (
-                              <span className="text-green-600 font-semibold">{t.copied}</span>
-                            ) : (
-                              <Copy size={10} className="text-text-muted" />
-                            )}
-                          </button>
+                            <span>{t.emailAvailable ?? 'Email available'}</span>
+                          </span>
                         )}
                         {agent.website && (
                           <a

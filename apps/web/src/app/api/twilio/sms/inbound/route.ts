@@ -3,6 +3,13 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { validateTwilioSignature } from '@/lib/twilio'
 
 const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://yalla.house'
+
+/** Detect country from phone number prefix for locale-aware responses */
+function phoneCountryFromNumber(phone: string): string | null {
+  if (phone.startsWith('+49') || phone.startsWith('49')) return 'DE'
+  if (phone.startsWith('+44') || phone.startsWith('44')) return 'GB'
+  return null
+}
 const RATE_LIMIT_PER_HOUR = 10
 const SESSION_TTL_MINUTES = 30
 
@@ -39,6 +46,9 @@ export async function POST(req: NextRequest) {
 
   await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, message_body: body, event_type: 'SMS_RECEIVED' })
 
+  // Detect country from phone number for locale-aware URLs and responses
+  const smsCountry = phoneCountryFromNumber(from)
+
   // Check for active disambiguation session
   const { data: session } = await (db.from('sms_sessions') as any)
     .select('*')
@@ -60,7 +70,7 @@ export async function POST(req: NextRequest) {
       if (listing) {
         await clearSession(from)
         await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'address', listing_id: chosen.listing_id })
-        return twimlReply(successMessage(`${SITE_URL}/p/${listing.slug ?? listing.place_id}`))
+        return twimlReply(successMessage(buildSmsListingUrl(listing.slug, listing.place_id, smsCountry), smsCountry))
       }
     }
 
@@ -79,7 +89,7 @@ export async function POST(req: NextRequest) {
 
     if (listing) {
       await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'refcode', listing_id: listing.id })
-      return twimlReply(successMessage(`${SITE_URL}/p/${listing.slug ?? listing.place_id}`))
+      return twimlReply(successMessage(buildSmsListingUrl(listing.slug, listing.place_id, smsCountry), smsCountry))
     }
 
     return twimlReply('Dieser Referenzcode wurde nicht gefunden. Bitte prüfen Sie den Code und versuchen Sie es erneut.')
@@ -105,9 +115,8 @@ export async function POST(req: NextRequest) {
         .maybeSingle()
 
       if (row?.listing_id) {
-        const identifier = row.listings?.slug ?? row.listings?.place_id
         await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'portal_url', listing_id: row.listing_id })
-        return twimlReply(successMessage(`${SITE_URL}/p/${identifier}`))
+        return twimlReply(successMessage(buildSmsListingUrl(row.listings?.slug, row.listings?.place_id, smsCountry), smsCountry))
       }
 
       break
@@ -116,16 +125,18 @@ export async function POST(req: NextRequest) {
 
   // ── Case S3: Address fuzzy match (pg_trgm) ───────────────────────────────
   if (body.length >= 5) {
-    const { data: matches } = await (db as any).rpc('fuzzy_match_listings', {
+    const phoneCountry = phoneCountryFromNumber(from)
+    const rpcParams: Record<string, unknown> = {
       query_text: body,
-      country: 'DE',
       threshold: 0.25,
       max_results: 5,
-    })
+    }
+    if (phoneCountry) rpcParams.country = phoneCountry
+    const { data: matches } = await (db as any).rpc('fuzzy_match_listings', rpcParams)
 
     if (matches && matches.length === 1) {
       await logCommsEvent({ channel: 'sms', from_number: from, to_number: to, event_type: 'COMMS_PROPERTY_MATCHED', match_type: 'address', listing_id: matches[0].id })
-      return twimlReply(successMessage(`${SITE_URL}/p/${matches[0].slug ?? matches[0].place_id}`))
+      return twimlReply(successMessage(buildSmsListingUrl(matches[0].slug, matches[0].place_id, smsCountry), smsCountry))
     }
 
     if (matches && matches.length > 1) {
@@ -163,8 +174,17 @@ function twimlReply(message: string): NextResponse {
   return new NextResponse(twiml, { headers: { 'Content-Type': 'text/xml' } })
 }
 
-function successMessage(url: string): string {
+function successMessage(url: string, country: string | null): string {
+  if (country === 'GB') {
+    return `Here's the property page: ${url}\nBook a viewing or contact the owner directly.`
+  }
   return `Hier ist die Immobilienseite: ${url}\nViewing buchen oder Eigentümer kontaktieren direkt auf der Seite.`
+}
+
+function buildSmsListingUrl(slug: string | null, placeId: string, country: string | null): string {
+  const identifier = slug ?? placeId
+  const prefix = country === 'DE' ? '' : '/en'
+  return `${SITE_URL}${prefix}/p/${identifier}?ref=sms`
 }
 
 function escapeXml(str: string): string {

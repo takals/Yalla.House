@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { Check } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { CheckoutButton } from './checkout-button'
+import { countryFromLocale } from '@/lib/detect-country'
 
 interface Props {
   searchParams: Promise<{ listing_id?: string }>
@@ -10,13 +11,15 @@ interface Props {
 export default async function PlansPage({ searchParams }: Props) {
   const { listing_id } = await searchParams
   const t = await getTranslations('ownerPlans')
+  const locale = await getLocale()
+  const countryCode = countryFromLocale(locale)
   const supabase = await createClient()
   // Preview phase: no auth gate. Plans page is publicly browsable.
 
   const { data: plans } = await (supabase.from('subscription_plans') as any)
     .select('id, name, name_de, amount, currency, features, stripe_price_id, period')
     .eq('target_role', 'owner')
-    .eq('country_code', 'DE')
+    .eq('country_code', countryCode)
     .eq('is_active', true)
     .order('amount') as { data: Plan[] | null }
 

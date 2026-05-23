@@ -222,7 +222,10 @@ export function PassportPageClient({
   const hasData = areas.length > 0 || budgetMax || propertyTypes.length > 0
 
   // Format currency display
-  const currencySymbol = currency === 'GBP' ? '£' : '€'
+  const currencySymbol = (() => {
+    const parts = new Intl.NumberFormat('en', { style: 'currency', currency: currency || 'EUR', currencyDisplay: 'narrowSymbol' }).formatToParts(0)
+    return parts.find(p => p.type === 'currency')?.value ?? currency
+  })()
   const formatBudget = (val: number | undefined) => {
     if (!val) return '—'
     return `${currencySymbol}${Number(val).toLocaleString()}`
