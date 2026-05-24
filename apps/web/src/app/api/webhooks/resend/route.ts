@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Webhook } from 'svix'
 import { createServiceClient } from '@/lib/supabase/server'
 
 /**
@@ -23,7 +24,9 @@ const STATUS_MAP: Record<string, string> = {
 
 export async function POST(req: NextRequest) {
   try {
-    // Verify webhook signature if secret is configured
+    const rawBody = await req.text()
+
+    // Verify webhook signature — reject if secret is configured but verification fails
     if (RESEND_WEBHOOK_SECRET) {
       const svixId = req.headers.get('svix-id')
       const svixTimestamp = req.headers.get('svix-timestamp')
@@ -33,11 +36,26 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Missing signature headers' }, { status: 401 })
       }
 
-      // Svix verification would go here — for now, presence check is sufficient
-      // Full verification requires the `svix` npm package
+      try {
+        const wh = new Webhook(RESEND_WEBHOOK_SECRET)
+        wh.verify(rawBody, {
+          'svix-id': svixId,
+          'svix-timestamp': svixTimestamp,
+          'svix-signature': svixSignature,
+        })
+      } catch (err) {
+        console.error('Resend webhook signature verification failed:', err)
+        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+      }
+    } else {
+      // No secret configured — reject in production for safety
+      if (process.env.NODE_ENV === 'production') {
+        console.warn('RESEND_WEBHOOK_SECRET not set — rejecting webhook in production')
+        return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 })
+      }
     }
 
-    const body = await req.json() as {
+    const body = JSON.parse(rawBody) as {
       type: string
       data: {
         email_id?: string

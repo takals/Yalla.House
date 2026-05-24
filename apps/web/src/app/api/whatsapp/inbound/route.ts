@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createHmac } from 'crypto'
 import { createServiceClient } from '@/lib/supabase/server'
+import { COUNTRY_CONFIGS } from '@/lib/country-config'
 
 /**
  * 360dialog WhatsApp Business API — Inbound Webhook
@@ -20,7 +22,20 @@ import { createServiceClient } from '@/lib/supabase/server'
 
 const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://yalla.house'
 const WHATSAPP_API_KEY = process.env['WHATSAPP_API_KEY']
+const WHATSAPP_APP_SECRET = process.env['WHATSAPP_APP_SECRET']
 const RATE_LIMIT_PER_HOUR = 20
+
+// Build phone prefix → country map from COUNTRY_CONFIGS
+const PHONE_PREFIX_MAP: Array<{ prefix: string; country: string }> = Object.values(COUNTRY_CONFIGS)
+  .map(c => ({ prefix: c.phone_country_code.replace('+', ''), country: c.country_code }))
+  .sort((a, b) => b.prefix.length - a.prefix.length) // longest prefix first
+
+function countryFromPhone(phone: string): string | null {
+  for (const { prefix, country } of PHONE_PREFIX_MAP) {
+    if (phone.startsWith(prefix)) return country
+  }
+  return null
+}
 
 // Portal URL extraction rules
 const PORTAL_URL_PATTERNS: Array<{ slug: string; pattern: RegExp }> = [
@@ -46,9 +61,26 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // ── Webhook signature verification ─────────────────────────────────
+  const rawBody = await req.text()
+
+  if (WHATSAPP_APP_SECRET) {
+    const signature = req.headers.get('x-hub-signature-256')
+    if (!signature) {
+      return NextResponse.json({ error: 'Missing signature' }, { status: 401 })
+    }
+    const expected = 'sha256=' + createHmac('sha256', WHATSAPP_APP_SECRET)
+      .update(rawBody)
+      .digest('hex')
+    if (signature !== expected) {
+      console.error('WhatsApp webhook signature mismatch')
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+    }
+  }
+
   let payload: any
   try {
-    payload = await req.json()
+    payload = JSON.parse(rawBody)
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
@@ -68,8 +100,8 @@ export async function POST(req: NextRequest) {
   const from = message.from // Phone number in international format (no +)
   const body = (message.text?.body ?? '').trim()
   const contactName = contact?.profile?.name ?? null
-  // Determine country from phone prefix for locale-aware URLs
-  const phoneCountry = from.startsWith('49') ? 'DE' : from.startsWith('44') ? 'GB' : null
+  // Determine country from phone prefix for locale-aware URLs (config-driven)
+  const phoneCountry = countryFromPhone(from)
 
   if (!body || !from) {
     return NextResponse.json({ status: 'ok' })

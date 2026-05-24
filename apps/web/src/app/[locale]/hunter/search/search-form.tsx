@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { countryFromLocale } from '@/lib/detect-country'
+import { getCountryConfig, getCurrencySymbol, COUNTRY_CONFIGS } from '@/lib/country-config'
 
 interface SearchFormProps {
   defaults?: {
@@ -26,10 +28,18 @@ const TIMELINE_KEYS: Record<string, string> = {
 
 export function SearchForm({ defaults }: SearchFormProps) {
   const router = useRouter()
+  const locale = useLocale()
   const t = useTranslations('searchForm')
   const [step, setStep] = useState<1 | 2>(1) // 1 = search details, 2 = consent
   const [saving, setSaving] = useState(false)
   const [searchId, setSearchId] = useState<string | null>(null)
+
+  // Resolve default currency from user's locale
+  const resolvedCountry = countryFromLocale(locale)
+  const defaultCurrency = getCountryConfig(resolvedCountry).currency
+
+  // All available currencies from country configs
+  const availableCurrencies = [...new Set(Object.values(COUNTRY_CONFIGS).map(c => c.currency))]
 
   // Form state
   const [intent, setIntent] = useState(defaults?.intent ?? 'buy')
@@ -40,7 +50,7 @@ export function SearchForm({ defaults }: SearchFormProps) {
   const [radiusKm, setRadiusKm] = useState(5)
   const [budgetMin, setBudgetMin] = useState(defaults?.budget_min ? String(defaults.budget_min / 100) : '')
   const [budgetMax, setBudgetMax] = useState(defaults?.budget_max ? String(defaults.budget_max / 100) : '')
-  const [currency, setCurrency] = useState('GBP')
+  const [currency, setCurrency] = useState(defaultCurrency)
   const [propertyTypes, setPropertyTypes] = useState<string[]>(defaults?.property_types ?? [])
   const [bedroomsMin, setBedroomsMin] = useState('')
   const [bedroomsMax, setBedroomsMax] = useState('')
@@ -219,8 +229,9 @@ export function SearchForm({ defaults }: SearchFormProps) {
                 onChange={e => setCurrency(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border border-[#D8DBE5] text-sm"
               >
-                <option value="GBP">GBP (£)</option>
-                <option value="EUR">EUR (€)</option>
+                {availableCurrencies.map(c => (
+                  <option key={c} value={c}>{c} ({getCurrencySymbol(c)})</option>
+                ))}
               </select>
             </div>
             <div>

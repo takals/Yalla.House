@@ -8,6 +8,8 @@ import type { LucideIcon } from 'lucide-react'
 import {
   Camera, Upload, FileText, Eye, Users, Home,
   Building2, Check, Pencil, X, Star, Loader2,
+  HelpCircle, ChevronDown, ChevronUp, CheckCircle2,
+  Circle, MapPin, Sparkles,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthAction } from '@/lib/use-auth-action'
@@ -71,7 +73,13 @@ type WorkspaceLabels = Record<
   'addressLine1Label' | 'cityLabel' | 'postcodeLabel' |
   'typeHouse' | 'typeFlat' | 'typeApartment' | 'typeVilla' | 'typeCommercial' | 'typeLand' | 'typeOther' |
   'photoUploading' | 'photoDeleteConfirm' | 'setPrimary' | 'primaryBadge' |
-  'docUploaded' | 'docReplace' | 'dropHint' | 'currencyLabel',
+  'docUploaded' | 'docReplace' | 'dropHint' | 'currencyLabel' |
+  'guideTitle' | 'guideStep1' | 'guideStep1Hint' | 'guideStep2' | 'guideStep2Hint' |
+  'guideStep3' | 'guideStep3Hint' | 'guideStep4' | 'guideStep4Hint' |
+  'guideStep5' | 'guideStep5Hint' | 'guideStep6' | 'guideStep6Hint' |
+  'guideStep7' | 'guideStep7Hint' | 'guideMinimise' | 'guideRestore' | 'guideComplete' |
+  'exampleTitle' | 'exampleAddress' | 'examplePostcode' | 'exampleCity' |
+  'newWorkspaceFeature1' | 'newWorkspaceFeature2' | 'newWorkspaceFeature3',
   string
 >
 
@@ -123,6 +131,14 @@ function computeProgress(l: ListingData | null): number {
     l.construction_year !== null,
   ]
   return Math.round((checks.filter(Boolean).length / checks.length) * 100)
+}
+
+const EXAMPLE_PHOTOS = {
+  hero: '/images/example/yoxley-hero.jpeg',
+  interior1: '/images/example/yoxley-interior1.jpeg',
+  interior2: '/images/example/yoxley-interior2.jpeg',
+  kitchen: '/images/example/yoxley-kitchen.jpeg',
+  rear: '/images/example/yoxley-rear.jpeg',
 }
 
 const PROPERTY_TYPE_KEYS: Record<string, string> = {
@@ -241,6 +257,98 @@ function ModuleCard({
         <h3 className="text-[0.9375rem] font-bold text-text-primary">{title}</h3>
       </div>
       {children}
+    </div>
+  )
+}
+
+/* ── Workspace Guide — floating step-by-step assistant ─────────── */
+
+function WorkspaceGuide({
+  listing, photos, labels,
+}: {
+  listing: ListingData
+  photos: MediaRow[]
+  labels: WorkspaceLabels
+}) {
+  const [collapsed, setCollapsed] = useState(false)
+
+  const steps = [
+    { key: 'step1', label: labels.guideStep1, hint: labels.guideStep1Hint, done: photos.length > 0 },
+    { key: 'step2', label: labels.guideStep2, hint: labels.guideStep2Hint, done: !!(listing.title_de || listing.title) },
+    { key: 'step3', label: labels.guideStep3, hint: labels.guideStep3Hint, done: !!(listing.address_line1 && listing.city && listing.postcode) },
+    { key: 'step4', label: labels.guideStep4, hint: labels.guideStep4Hint, done: (listing.bedrooms ?? 0) > 0 && (listing.bathrooms ?? 0) > 0 && (listing.size_sqm ?? 0) > 0 },
+    { key: 'step5', label: labels.guideStep5, hint: labels.guideStep5Hint, done: !!(listing.description_de) },
+    { key: 'step6', label: labels.guideStep6, hint: labels.guideStep6Hint, done: listing.sale_price !== null || listing.rent_price !== null },
+    { key: 'step7', label: labels.guideStep7, hint: labels.guideStep7Hint, done: photos.length >= 5 },
+  ]
+
+  const completedCount = steps.filter(s => s.done).length
+  const allDone = completedCount === steps.length
+  const firstIncomplete = steps.find(s => !s.done)
+
+  if (collapsed) {
+    return (
+      <button
+        onClick={() => setCollapsed(false)}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-brand text-white px-4 py-3 rounded-full shadow-lg hover:bg-brand-hover transition-all hover:scale-105"
+      >
+        <Sparkles size={16} />
+        <span className="text-sm font-semibold">{labels.guideRestore}</span>
+        <span className="bg-white/20 text-[0.65rem] font-bold px-1.5 py-0.5 rounded-full">{completedCount}/{steps.length}</span>
+      </button>
+    )
+  }
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50 w-80 bg-surface rounded-2xl border border-border-default shadow-xl overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-brand/10 to-transparent border-b border-border-default">
+        <div className="flex items-center gap-2">
+          <Sparkles size={16} className="text-brand" />
+          <span className="text-sm font-bold text-text-primary">{labels.guideTitle}</span>
+          <span className="text-[0.65rem] font-semibold bg-brand/10 text-brand px-1.5 py-0.5 rounded-full">{completedCount}/{steps.length}</span>
+        </div>
+        <button
+          onClick={() => setCollapsed(true)}
+          className="text-text-secondary hover:text-text-primary p-1 rounded transition-colors"
+          title={labels.guideMinimise}
+        >
+          <ChevronDown size={14} />
+        </button>
+      </div>
+
+      {/* Steps */}
+      <div className="px-4 py-3 space-y-1 max-h-[50vh] overflow-y-auto">
+        {allDone ? (
+          <div className="flex items-center gap-2 py-2">
+            <CheckCircle2 size={16} className="text-green-500" />
+            <span className="text-sm text-green-700 font-medium">{labels.guideComplete}</span>
+          </div>
+        ) : (
+          steps.map(step => (
+            <div
+              key={step.key}
+              className={`flex items-start gap-2.5 py-1.5 transition-opacity ${step.done ? 'opacity-50' : ''}`}
+            >
+              {step.done ? (
+                <CheckCircle2 size={15} className="text-green-500 flex-shrink-0 mt-0.5" />
+              ) : step === firstIncomplete ? (
+                <div className="w-[15px] h-[15px] rounded-full border-2 border-brand flex-shrink-0 mt-0.5 animate-pulse" />
+              ) : (
+                <Circle size={15} className="text-text-muted flex-shrink-0 mt-0.5" />
+              )}
+              <div className="min-w-0">
+                <span className={`text-sm font-medium block ${step.done ? 'line-through text-text-secondary' : 'text-text-primary'}`}>
+                  {step.label}
+                </span>
+                {step === firstIncomplete && (
+                  <span className="text-xs text-text-secondary mt-0.5 block">{step.hint}</span>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   )
 }
@@ -462,32 +570,54 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
   /* ── Empty state — no draft yet ──────────────────────────────── */
   if (!listing) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center space-y-6 max-w-md">
-          <div className="mx-auto w-64 h-40 rounded-2xl bg-gradient-to-br from-[#F1F5F9] to-[#E2E8F0] border-2 border-dashed border-[#CBD5E1] flex items-center justify-center relative overflow-hidden">
-            <svg width="120" height="90" viewBox="0 0 120 90" fill="none" className="opacity-40">
-              <path d="M60 8L10 45V85H50V60H70V85H110V45L60 8Z" fill="#94A3B8" stroke="#64748B" strokeWidth="2"/>
-              <rect x="42" y="35" width="16" height="16" rx="2" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="1.5"/>
-              <rect x="62" y="35" width="16" height="16" rx="2" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="1.5"/>
-              <path d="M55 60H65V85H55V60Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="1.5"/>
-              <circle cx="63" cy="73" r="1.5" fill="#94A3B8"/>
-            </svg>
-            <div className="absolute top-3 right-3 bg-[#94A3B8]/20 text-[#64748B] text-[0.65rem] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
-              {labels.draftBadge}
+      <div className="max-w-3xl mx-auto">
+        {/* Hero card with real house photo */}
+        <div className="relative rounded-2xl overflow-hidden border border-border-default shadow-lg">
+          <div className="relative h-64 sm:h-72">
+            <Image
+              src={EXAMPLE_PHOTOS.hero}
+              alt=""
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 768px"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{labels.newWorkspace}</h2>
+              <p className="text-white/80 text-sm sm:text-base max-w-lg">{labels.newWorkspaceDesc}</p>
             </div>
           </div>
-          <div>
-            <h2 className="text-xl font-bold text-text-primary mb-2">{labels.newWorkspace}</h2>
-            <p className="text-text-secondary text-sm">{labels.newWorkspaceDesc}</p>
+
+          {/* Feature list + CTA */}
+          <div className="bg-surface p-6 sm:p-8 space-y-5">
+            <div className="space-y-3">
+              {[labels.newWorkspaceFeature1, labels.newWorkspaceFeature2, labels.newWorkspaceFeature3].map((feat, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <CheckCircle2 size={16} className="text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-primary">{feat}</span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={handleCreateDraft}
+              disabled={isPending || isGuest}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-brand text-white font-semibold rounded-xl hover:bg-brand-hover transition-all hover:shadow-lg disabled:opacity-50 text-base"
+            >
+              <Home size={18} />
+              {isPending ? labels.saving : labels.createDraft}
+            </button>
           </div>
-          <button
-            onClick={handleCreateDraft}
-            disabled={isPending || isGuest}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-brand text-white font-semibold rounded-lg hover:bg-brand-hover transition-colors disabled:opacity-50"
-          >
-            <Home size={16} />
-            {isPending ? labels.saving : labels.createDraft}
-          </button>
+        </div>
+
+        {/* Example photos strip */}
+        <div className="mt-6 grid grid-cols-4 gap-2 opacity-60">
+          {[EXAMPLE_PHOTOS.kitchen, EXAMPLE_PHOTOS.interior1, EXAMPLE_PHOTOS.interior2, EXAMPLE_PHOTOS.rear].map((src, i) => (
+            <div key={i} className="aspect-[4/3] rounded-lg overflow-hidden">
+              <Image src={src} alt="" fill={false} width={200} height={150} className="object-cover w-full h-full" unoptimized />
+            </div>
+          ))}
         </div>
       </div>
     )
@@ -510,7 +640,7 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
 
         {/* Cover photo */}
         <div
-          className="h-48 sm:h-56 bg-gradient-to-br from-[#F1F5F9] to-[#E2E8F0] flex items-center justify-center relative"
+          className="h-48 sm:h-56 flex items-center justify-center relative"
           onDragOver={preventDragDefault}
           onDragEnter={preventDragDefault}
           onDrop={e => handleDrop(e, 'cover')}
@@ -525,13 +655,21 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
               unoptimized
             />
           ) : (
-            <svg width="200" height="140" viewBox="0 0 200 140" fill="none" className="opacity-30">
-              <path d="M100 12L15 72V130H75V95H125V130H185V72L100 12Z" fill="#94A3B8" stroke="#64748B" strokeWidth="2.5"/>
-              <rect x="65" y="50" width="25" height="22" rx="3" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="2"/>
-              <rect x="110" y="50" width="25" height="22" rx="3" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="2"/>
-              <path d="M88 95H112V130H88V95Z" fill="#CBD5E1" stroke="#94A3B8" strokeWidth="2"/>
-              <circle cx="108" cy="113" r="2.5" fill="#94A3B8"/>
-            </svg>
+            /* Show real example photo as placeholder with overlay hint */
+            <>
+              <Image
+                src={EXAMPLE_PHOTOS.hero}
+                alt=""
+                fill
+                className="object-cover opacity-30"
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                unoptimized
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-10">
+                <Camera size={32} className="text-text-secondary" />
+                <span className="text-sm font-medium text-text-secondary">{labels.coverPhotoHint}</span>
+              </div>
+            </>
           )}
 
           {/* Draft overlay badge */}
@@ -567,7 +705,7 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
               {/* Editable title */}
               <InlineEdit
                 value={listing.title_de ?? listing.title ?? ''}
-                placeholder={labels.titlePlaceholder}
+                placeholder={`${labels.titlePlaceholder} (${labels.exampleTitle})`}
                 onSave={v => {
                   setListing(prev => prev ? { ...prev, title_de: v, title: v } : prev)
                   autoSave('title_de', v)
@@ -579,9 +717,10 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
               {/* Address fields + intent toggle */}
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="flex items-center gap-2 text-sm text-text-secondary">
+                  <MapPin size={13} className="text-brand flex-shrink-0" />
                   <InlineEdit
                     value={listing.address_line1}
-                    placeholder={labels.addressLine1Label}
+                    placeholder={`${labels.addressLine1Label} (${labels.exampleAddress})`}
                     onSave={v => {
                       setListing(prev => prev ? { ...prev, address_line1: v } : prev)
                       autoSave('address_line1', v)
@@ -591,7 +730,7 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
                   <span className="text-text-muted">·</span>
                   <InlineEdit
                     value={listing.postcode}
-                    placeholder={labels.postcodeLabel}
+                    placeholder={`${labels.postcodeLabel} (${labels.examplePostcode})`}
                     onSave={v => {
                       setListing(prev => prev ? { ...prev, postcode: v } : prev)
                       autoSave('postcode', v)
@@ -601,7 +740,7 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
                   <span className="text-text-muted">·</span>
                   <InlineEdit
                     value={listing.city}
-                    placeholder={labels.cityLabel}
+                    placeholder={`${labels.cityLabel} (${labels.exampleCity})`}
                     onSave={v => {
                       setListing(prev => prev ? { ...prev, city: v } : prev)
                       autoSave('city', v)
@@ -674,6 +813,17 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
             onDragEnter={preventDragDefault}
             onDrop={e => handleDrop(e, 'photos')}
           >
+            {/* Example ghost photos when empty */}
+            {photos.length === 0 && Object.values(EXAMPLE_PHOTOS).slice(0, 3).map((src, i) => (
+              <div key={`ex-${i}`} className="aspect-[4/3] rounded-lg overflow-hidden border border-dashed border-border-default relative cursor-pointer"
+                onClick={() => photoInputRef.current?.click()}
+              >
+                <Image src={src} alt="" fill className="object-cover opacity-20" sizes="150px" unoptimized />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Camera size={14} className="text-text-muted" />
+                </div>
+              </div>
+            ))}
             {/* Real photos */}
             {photos.map(p => (
               <div key={p.id} className="aspect-[4/3] rounded-lg overflow-hidden border border-border-default relative group">
@@ -928,6 +1078,9 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
         </ModuleCard>
 
       </div>
+
+      {/* Floating guide assistant */}
+      <WorkspaceGuide listing={listing} photos={photos} labels={labels} />
     </div>
   )
 }
