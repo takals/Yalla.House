@@ -1,33 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 
-// ─── UK Postcode Normalisation ────────────────────────────────────────────────
-function normalisePostcode(input: string) {
+// ─── Postcode Normalisation (UK + DE) ────────────────────────────────────────
+type PostcodeFormat = 'uk' | 'de'
+
+interface ParsedPostcode {
+  full: string
+  outcode: string  // UK: "SW1A", DE: "101" (first 3 digits)
+  area: string     // UK: "SW", DE: "10" (first 2 digits → region)
+  valid: boolean
+  format: PostcodeFormat | 'unknown'
+}
+
+function normalisePostcode(input: string): ParsedPostcode {
   const raw = input.replace(/\s+/g, '').toUpperCase()
 
-  // Full UK postcode
+  // ── German PLZ: exactly 5 digits (e.g. "10115", "80331", "20095") ──
+  const dePlz = raw.match(/^(\d{5})$/)
+  if (dePlz) {
+    const plz = dePlz[1]!
+    return {
+      full: plz,
+      outcode: plz.slice(0, 3),   // "101" — district-level
+      area: plz.slice(0, 2),       // "10" — region-level (Berlin=10, München=80)
+      valid: true,
+      format: 'de',
+    }
+  }
+
+  // ── German partial: 2-3 digits (region/district prefix) ──
+  const dePart = raw.match(/^(\d{2,3})$/)
+  if (dePart) {
+    const digits = dePart[1]!
+    return {
+      full: digits,
+      outcode: digits.length >= 3 ? digits : digits,
+      area: digits.slice(0, 2),
+      valid: true,
+      format: 'de',
+    }
+  }
+
+  // ── UK: Full postcode (e.g. "SW1A 1AA") ──
   const fullMatch = raw.match(/^([A-Z]{1,2}\d[A-Z\d]?)\s*(\d[A-Z]{2})$/)
   if (fullMatch) {
     const outcode = fullMatch[1]!
     const area = outcode.replace(/\d.*$/, '')
-    return { full: `${outcode} ${fullMatch[2]}`, outcode, area, valid: true }
+    return { full: `${outcode} ${fullMatch[2]}`, outcode, area, valid: true, format: 'uk' }
   }
 
-  // Partial (outcode): "IG2", "SW1A", "E1"
+  // ── UK: Partial outcode (e.g. "IG2", "SW1A", "E1") ──
   const partialMatch = raw.match(/^([A-Z]{1,2}\d[A-Z\d]?)$/)
   if (partialMatch) {
     const outcode = partialMatch[1]!
     const area = outcode.replace(/\d.*$/, '')
-    return { full: outcode, outcode, area, valid: true }
+    return { full: outcode, outcode, area, valid: true, format: 'uk' }
   }
 
-  // Area only: "IG", "SW", "E"
+  // ── UK: Area only (e.g. "IG", "SW", "E") ──
   const areaMatch = raw.match(/^([A-Z]{1,2})$/)
   if (areaMatch) {
-    return { full: areaMatch[1]!, outcode: areaMatch[1]!, area: areaMatch[1]!, valid: true }
+    return { full: areaMatch[1]!, outcode: areaMatch[1]!, area: areaMatch[1]!, valid: true, format: 'uk' }
   }
 
-  return { full: raw, outcode: raw, area: raw, valid: false }
+  return { full: raw, outcode: raw, area: raw, valid: false, format: 'unknown' }
+}
+
+// Map postcode format to country_code for DB filtering
+function countryFromFormat(format: PostcodeFormat | 'unknown'): string | null {
+  switch (format) {
+    case 'uk': return 'GB'
+    case 'de': return 'DE'
+    default: return null
+  }
 }
 
 // ─── Agent Row Shape ──────────────────────────────────────────────────────────
@@ -106,12 +151,20 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceClient()
   const limit = Math.min(parseInt(limitParam) || 50, 200)
+  const countryCode = countryFromFormat(parsed.format)
+
+  // Helper: apply country_code filter when we can detect it from the postcode
+  function withCountry(query: any) {
+    return countryCode ? query.eq('country_code', countryCode) : query
+  }
 
   // ── Tier 1: exact district match ──────────────────────────────────────────
-  const { data: districtAgents } = await (supabase as any)
-    .from('agent_profiles')
-    .select(AGENT_SELECT)
-    .ilike('postcode', `${parsed.outcode}%`)
+  const { data: districtAgents } = await withCountry(
+    (supabase as any)
+      .from('agent_profiles')
+      .select(AGENT_SELECT)
+      .ilike('postcode', `${parsed.outcode}%`)
+  )
     .order('verified_at', { ascending: false, nullsFirst: false })
     .limit(limit)
 
@@ -122,10 +175,12 @@ export async function GET(request: NextRequest) {
   if (results.length < limit && radiusTier !== 'district') {
     const existingIds = new Set(results.map(r => r.id))
 
-    const { data: areaAgents } = await (supabase as any)
-      .from('agent_profiles')
-      .select(AGENT_SELECT)
-      .ilike('postcode', `${parsed.area}%`)
+    const { data: areaAgents } = await withCountry(
+      (supabase as any)
+        .from('agent_profiles')
+        .select(AGENT_SELECT)
+        .ilike('postcode', `${parsed.area}%`)
+    )
       .order('verified_at', { ascending: false, nullsFirst: false })
       .limit(limit)
 
@@ -136,15 +191,20 @@ export async function GET(request: NextRequest) {
     results = [...results, ...areaResults].slice(0, limit)
   }
 
-  // ── Tier 3: wide search (neighbouring areas) ─────────────────────────────
+  // ── Tier 3: wide search — coverage_postcodes array or all agents in country ─
   if (results.length < 10 && radiusTier === 'wide') {
     const existingIds = new Set(results.map(r => r.id))
 
-    // Get agents who list this area in their coverage_areas JSONB
-    const { data: coverageAgents } = await (supabase as any)
-      .from('agent_profiles')
-      .select(AGENT_SELECT)
-      .or(`postcode.ilike.${parsed.area}%`)
+    // Search agents whose coverage_postcodes array contains the searched area,
+    // OR who have no postcode (national agencies). This is genuinely wider than
+    // tier 2 because coverage_postcodes can include areas the agent isn't based in.
+    const coverageFilter = `coverage_postcodes.cs.{${parsed.area}},coverage_postcodes.cs.{${parsed.outcode}}`
+    const { data: coverageAgents } = await withCountry(
+      (supabase as any)
+        .from('agent_profiles')
+        .select(AGENT_SELECT)
+        .or(coverageFilter)
+    )
       .order('verified_at', { ascending: false, nullsFirst: false })
       .limit(limit)
 
@@ -163,6 +223,8 @@ export async function GET(request: NextRequest) {
       area: parsed.area,
       district: parsed.outcode,
       radius: radiusTier,
+      country: countryCode,
+      format: parsed.format,
     },
   })
 }

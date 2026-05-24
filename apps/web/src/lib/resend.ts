@@ -128,6 +128,8 @@ const EMAIL_TRANSLATIONS = {
       return labels[tier] ?? `Collaboration opportunity — property in ${city}`
     },
     tieredInviteGreeting: (name: string) => name ? `Hi ${name},` : 'Hi,',
+    ownerFallback: 'A property owner',
+    propertyTypeFallback: 'Property',
     // Advisory
     advisoryIntro: (ownerName: string) =>
       `${ownerName} has invited you to provide expert advisory support for the sale of their property through Yalla.House.`,
@@ -366,6 +368,8 @@ const EMAIL_TRANSLATIONS = {
       return labels[tier] ?? `Kooperationsmöglichkeit — Immobilie in ${city}`
     },
     tieredInviteGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
+    ownerFallback: 'Ein Immobilieneigentümer',
+    propertyTypeFallback: 'Immobilie',
     // Advisory
     advisoryIntro: (ownerName: string) =>
       `${ownerName} hat Sie eingeladen, beratende Unterstützung beim Verkauf der Immobilie über Yalla.House zu leisten.`,
@@ -1044,14 +1048,14 @@ export async function sendTieredAgentInviteEmail(opts: {
 
   const agentFirstName = opts.agentName?.split(' ')[0] ?? ''
   const greeting = t.tieredInviteGreeting(agentFirstName)
-  const ownerDisplay = opts.ownerName ?? (locale === 'en-GB' ? 'A property owner' : 'Ein Immobilieneigentümer')
+  const ownerDisplay = opts.ownerName ?? t.ownerFallback
 
   // Resolve type label
   const typeLabels: Record<string, Record<string, string>> = {
     'en-GB': { house: 'House', flat: 'Flat', apartment: 'Apartment', villa: 'Villa', commercial: 'Commercial', land: 'Land', other: 'Property' },
     'de-DE': { house: 'Haus', flat: 'Wohnung', apartment: 'Apartment', villa: 'Villa', commercial: 'Gewerbe', land: 'Grundstück', other: 'Immobilie' },
   }
-  const typeLabel = ((typeLabels[locale] ?? typeLabels['en-GB']) ?? {})[opts.propertyType] ?? (locale === 'en-GB' ? 'Property' : 'Immobilie')
+  const typeLabel = ((typeLabels[locale] ?? typeLabels['en-GB']) ?? {})[opts.propertyType] ?? t.propertyTypeFallback
 
   // Resolve price
   const priceValue = opts.askingPrice

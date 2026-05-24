@@ -96,15 +96,18 @@ export default async function AgentsPage() {
           </div>
         )}
 
-        {/* Find agents placeholder */}
+        {/* Find agents */}
         <div className="bg-surface rounded-card p-6 border border-border-default">
           <h3 className="font-semibold mb-1">{t('findAgents')}</h3>
           <p className="text-sm text-text-secondary mb-4">
             {t('findAgentsDesc')}
           </p>
-          <span className="inline-flex items-center px-3 py-1 rounded-full bg-yellow-50 text-yellow-800 border border-yellow-200 text-xs font-semibold">
-            {t('comingSoon')}
-          </span>
+          <Link
+            href="/hunter/agents/search"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white font-bold rounded-xl hover:bg-brand-hover transition-colors text-sm"
+          >
+            {t('findAgentsButton')}
+          </Link>
         </div>
 
       </div>
