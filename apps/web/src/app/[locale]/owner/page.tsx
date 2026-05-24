@@ -32,5 +32,6 @@ export default async function OwnerPage() {
     redirect(`/p/${identifier}`)
   }
 
-  redirect('/owner/listings')
+  // 2+ listings → overview dashboard (stats, viewings, messages)
+  redirect('/owner/overview')
 }
