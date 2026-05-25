@@ -128,6 +128,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
     'previewWorkspaceItem1', 'previewWorkspaceItem2', 'previewWorkspaceItem3',
     'previewWorkspaceItem4', 'previewWorkspaceItem5',
     'previewTransparency', 'previewCta',
+    'previewViewListing', 'previewNoReply', 'previewInboxNotice',
     'previewSignoff', 'previewTeam',
     'previewBenefitHeading',
     'previewBenefit1Title', 'previewBenefit1Desc',

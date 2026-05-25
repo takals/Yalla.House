@@ -198,6 +198,9 @@ const EMAIL_TRANSLATIONS = {
     tieredCompetitorCount: (count: number) =>
       `You are currently one of ${count} agent${count === 1 ? '' : 's'} invited to participate.`,
     tieredCta: 'Open Listing & Collaboration Workspace',
+    tieredViewListing: 'View property listing',
+    tieredNoReply: 'Please do not reply to this email.',
+    tieredInboxNotice: 'All communication with the property owner takes place through your Yalla.House inbox — not via personal email. This keeps conversations organised and ensures both parties have a complete record.',
     tieredSignoff: 'Best regards,',
     tieredTeam: 'The Yalla.House Team',
     tieredFooter: (postcode: string) =>
@@ -438,6 +441,9 @@ const EMAIL_TRANSLATIONS = {
     tieredCompetitorCount: (count: number) =>
       `Sie sind derzeit einer von ${count} eingeladenen Makler${count === 1 ? '' : 'n'}.`,
     tieredCta: 'Inserat & Kooperations-Workspace öffnen',
+    tieredViewListing: 'Immobilieninserat ansehen',
+    tieredNoReply: 'Bitte antworten Sie nicht auf diese E-Mail.',
+    tieredInboxNotice: 'Die gesamte Kommunikation mit dem Eigentümer erfolgt über Ihr Yalla.House-Postfach — nicht per privater E-Mail. So bleiben Gespräche organisiert und beide Seiten haben einen vollständigen Verlauf.',
     tieredSignoff: 'Mit freundlichen Grüßen,',
     tieredTeam: 'Das Yalla.House Team',
     tieredFooter: (postcode: string) =>
@@ -1169,19 +1175,29 @@ export async function sendTieredAgentInviteEmail(opts: {
     ? `<p style="margin:0 0 24px;font-size:14px;color:#D4764E;font-weight:600;">${t.tieredCompetitorCount(opts.competitorCount)}</p>`
     : ''
 
-  const workspaceUrl = `${BASE_URL}/agent/briefs/${opts.listingId}`
+  const localePrefix = locale === 'de-DE' ? '' : 'en/'
+  const workspaceUrl = `${BASE_URL}/${localePrefix}agent/briefs/${opts.listingId}`
+  const listingUrl = `${BASE_URL}/${localePrefix}brief/${opts.listingId}`
 
   const html = emailWrapper(`
     <p style="margin:0 0 12px;font-size:16px;color:#0F1117;">${greeting}</p>
     ${introHtml}
     ${scopeHtml}
     ${propertyCard}
+    <p style="margin:-16px 0 24px;text-align:center;">
+      <a href="${listingUrl}" style="color:#D4764E;font-size:14px;font-weight:600;text-decoration:none;">${t.tieredViewListing} &rarr;</a>
+    </p>
     ${workspaceHtml}
     ${postScopeHtml}
     ${competitorLine}
 
     <div style="text-align:center;margin:24px 0;">
       ${ctaButton(t.tieredCta, workspaceUrl)}
+    </div>
+
+    <div style="background:#FFF4EF;border-radius:10px;padding:16px 20px;margin:24px 0;">
+      <p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#0F1117;">${t.tieredNoReply}</p>
+      <p style="margin:0;font-size:13px;color:#5E6278;line-height:1.5;">${t.tieredInboxNotice}</p>
     </div>
 
     <p style="margin:24px 0 4px;font-size:15px;color:#5E6278;">${t.tieredSignoff}</p>

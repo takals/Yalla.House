@@ -370,6 +370,13 @@ export function SendBriefClient({
                     </table>
                   </div>
 
+                  {/* View property listing link */}
+                  <div className="text-center">
+                    <span className="text-sm font-semibold text-[#D4764E] cursor-default">
+                      {t.previewViewListing ?? 'View property listing'} →
+                    </span>
+                  </div>
+
                   {/* Workspace section */}
                   <div>
                     <p className="text-sm text-[#5E6278] mb-2">
@@ -399,6 +406,16 @@ export function SendBriefClient({
                     <span className="inline-block px-6 py-3 bg-[#D4764E] text-white font-bold text-sm rounded-lg">
                       {t.previewCta ?? 'Open Listing & Collaboration Workspace'} →
                     </span>
+                  </div>
+
+                  {/* Communication notice */}
+                  <div className="bg-[#FFF4EF] rounded-lg p-4">
+                    <p className="text-xs font-bold text-[#0F1117] mb-1">
+                      {t.previewNoReply ?? 'Please do not reply to this email.'}
+                    </p>
+                    <p className="text-[11px] text-[#5E6278] leading-relaxed">
+                      {t.previewInboxNotice ?? 'All communication with the property owner takes place through your Yalla.House inbox — not via personal email. This keeps conversations organised and ensures both parties have a complete record.'}
+                    </p>
                   </div>
 
                   {/* Sign-off */}
