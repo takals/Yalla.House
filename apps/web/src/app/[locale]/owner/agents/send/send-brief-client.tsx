@@ -292,9 +292,9 @@ export function SendBriefClient({
 
                   {/* Tier-specific intro */}
                   <p className="text-sm text-[#5E6278] leading-relaxed">
-                    {tier === 'advisory' && (t.previewAdvisoryIntro?.replace('{owner}', ownerName) ?? `${ownerName} has invited you to provide expert advisory support for the sale of their property through Yalla.House.`)}
-                    {tier === 'assisted' && (t.previewAssistedIntro?.replace('{owner}', ownerName) ?? `${ownerName} has invited you to collaborate on the sale of their property through Yalla.House using the Assisted collaboration model.`)}
-                    {tier === 'managed' && (t.previewManagedIntro?.replace('{owner}', ownerName) ?? `${ownerName} has invited you to discuss a full-service sales collaboration through Yalla.House regarding the sale of their property.`)}
+                    {tier === 'advisory' && (t.previewAdvisoryIntro ? t.previewAdvisoryIntro.replace('__OWNER__', ownerName) : `${ownerName} has invited you to provide expert advisory support for the sale of their property through Yalla.House.`)}
+                    {tier === 'assisted' && (t.previewAssistedIntro ? t.previewAssistedIntro.replace('__OWNER__', ownerName) : `${ownerName} has invited you to collaborate on the sale of their property through Yalla.House using the Assisted collaboration model.`)}
+                    {tier === 'managed' && (t.previewManagedIntro ? t.previewManagedIntro.replace('__OWNER__', ownerName) : `${ownerName} has invited you to discuss a full-service sales collaboration through Yalla.House regarding the sale of their property.`)}
                   </p>
 
                   {/* Scope section */}
