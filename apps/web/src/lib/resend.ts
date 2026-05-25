@@ -195,8 +195,8 @@ const EMAIL_TRANSLATIONS = {
       'and communication history.',
     ],
     tieredTransparency: 'This allows both sides to collaborate transparently while keeping the process organised for the owner and interested buyers.',
-    tieredCompetitorCount: (count: number) =>
-      `You are currently one of ${count} agent${count === 1 ? '' : 's'} invited to participate.`,
+    tieredSelectGroup: 'A select group of local agents have been invited to collaborate on this property.',
+    tieredUrgency: 'Please respond within 48 hours to indicate your interest.',
     tieredCta: 'Open Listing & Collaboration Workspace',
     tieredViewListing: 'View property listing',
     tieredNoReply: 'Please do not reply to this email.',
@@ -438,8 +438,8 @@ const EMAIL_TRANSLATIONS = {
       'und Kommunikationsverlauf.',
     ],
     tieredTransparency: 'Dies ermöglicht beiden Seiten eine transparente Zusammenarbeit und hält den Prozess für den Eigentümer und interessierte Käufer organisiert.',
-    tieredCompetitorCount: (count: number) =>
-      `Sie sind derzeit einer von ${count} eingeladenen Makler${count === 1 ? '' : 'n'}.`,
+    tieredSelectGroup: 'Eine ausgewählte Gruppe lokaler Makler wurde zur Zusammenarbeit an dieser Immobilie eingeladen.',
+    tieredUrgency: 'Bitte antworten Sie innerhalb von 48 Stunden, um Ihr Interesse zu bekunden.',
     tieredCta: 'Inserat & Kooperations-Workspace öffnen',
     tieredViewListing: 'Immobilieninserat ansehen',
     tieredNoReply: 'Bitte antworten Sie nicht auf diese E-Mail.',
@@ -1170,10 +1170,10 @@ export async function sendTieredAgentInviteEmail(opts: {
       </table>
     </div>`
 
-  // Competitor count line
-  const competitorLine = opts.competitorCount > 0
-    ? `<p style="margin:0 0 24px;font-size:14px;color:#D4764E;font-weight:600;">${t.tieredCompetitorCount(opts.competitorCount)}</p>`
-    : ''
+  // Select group + urgency
+  const competitorLine = `
+    <p style="margin:0 0 8px;font-size:14px;color:#D4764E;font-weight:600;">${t.tieredSelectGroup}</p>
+    <p style="margin:0 0 24px;font-size:14px;color:#5E6278;font-weight:600;">${t.tieredUrgency}</p>`
 
   const localePrefix = locale === 'de-DE' ? '' : 'en/'
   const workspaceUrl = `${BASE_URL}/${localePrefix}agent/briefs/${opts.listingId}`

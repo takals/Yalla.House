@@ -40,7 +40,6 @@ interface Props {
   translations: Record<string, string>
   currencySymbol: string
   ownerName: string
-  agentCount: number
 }
 
 export function SendBriefClient({
@@ -51,7 +50,6 @@ export function SendBriefClient({
   translations: t,
   currencySymbol,
   ownerName,
-  agentCount,
 }: Props) {
   const { handleAuthRequired, showAuthGate } = useAuthAction()
   const [tier, setTier] = useState<Tier>('advisory')
@@ -394,12 +392,13 @@ export function SendBriefClient({
                     </p>
                   </div>
 
-                  {/* Competitor count */}
-                  {agentCount > 1 && (
-                    <p className="text-sm font-semibold text-[#D4764E]">
-                      You are currently one of {agentCount} agents invited to participate.
-                    </p>
-                  )}
+                  {/* Select group + urgency */}
+                  <p className="text-sm font-semibold text-[#D4764E]">
+                    {t.previewSelectGroup ?? 'A select group of local agents have been invited to collaborate on this property.'}
+                  </p>
+                  <p className="text-sm font-semibold text-[#5E6278]">
+                    {t.previewUrgency ?? 'Please respond within 48 hours to indicate your interest.'}
+                  </p>
 
                   {/* CTA button */}
                   <div className="text-center pt-2">

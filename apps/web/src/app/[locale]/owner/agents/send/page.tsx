@@ -128,6 +128,7 @@ export default async function SendBriefPage({ searchParams }: Props) {
     'previewWorkspaceItem1', 'previewWorkspaceItem2', 'previewWorkspaceItem3',
     'previewWorkspaceItem4', 'previewWorkspaceItem5',
     'previewTransparency', 'previewCta',
+    'previewSelectGroup', 'previewUrgency',
     'previewViewListing', 'previewNoReply', 'previewInboxNotice',
     'previewSignoff', 'previewTeam',
     'previewBenefitHeading',
@@ -180,7 +181,6 @@ export default async function SendBriefPage({ searchParams }: Props) {
         translations={translations}
         currencySymbol={getCurrencySymbol(countryConfig.currency)}
         ownerName={ownerName}
-        agentCount={selectedAgents.length}
       />
     </div>
   )
