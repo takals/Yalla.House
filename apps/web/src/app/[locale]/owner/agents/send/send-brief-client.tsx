@@ -4,9 +4,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   Loader2, Shield, CheckCircle2,
-  ChevronDown, Building2, Send, FileText,
-  MessageSquare, PiggyBank, Lightbulb, Edit3,
-  Lock, Info,
+  ChevronDown, Building2, Send,
+  MessageSquare, PiggyBank, Lightbulb,
+  Lock, Info, Users, BarChart3, BadgeCheck, Banknote,
 } from 'lucide-react'
 import { useAuthAction } from '@/lib/use-auth-action'
 
@@ -22,9 +22,12 @@ interface Agent {
 interface ListingOption {
   id: string
   label: string
+  address: string
   price: string | null
   bedrooms: number | null
   propertyType: string | null
+  city: string | null
+  postcode: string | null
 }
 
 type Tier = 'advisory' | 'assisted' | 'managed'
@@ -36,6 +39,8 @@ interface Props {
   isAuthenticated: boolean
   translations: Record<string, string>
   currencySymbol: string
+  ownerName: string
+  agentCount: number
 }
 
 export function SendBriefClient({
@@ -45,6 +50,8 @@ export function SendBriefClient({
   isAuthenticated,
   translations: t,
   currencySymbol,
+  ownerName,
+  agentCount,
 }: Props) {
   const { handleAuthRequired, showAuthGate } = useAuthAction()
   const [tier, setTier] = useState<Tier>('advisory')
@@ -53,29 +60,14 @@ export function SendBriefClient({
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showListingPicker, setShowListingPicker] = useState(false)
-  const [editingDraft, setEditingDraft] = useState(false)
-  const [customDraft, setCustomDraft] = useState<string | null>(null)
 
   const tiers: { key: Tier; label: string; desc: string }[] = [
-    { key: 'advisory', label: t.tierAdvisory ?? '', desc: t.tierAdvisoryDesc ?? '' },
-    { key: 'assisted', label: t.tierAssisted ?? '', desc: t.tierAssistedDesc ?? '' },
-    { key: 'managed', label: t.tierManaged ?? '', desc: t.tierManagedDesc ?? '' },
+    { key: 'advisory', label: t.tierAdvisory ?? 'Advisory', desc: t.tierAdvisoryDesc ?? '' },
+    { key: 'assisted', label: t.tierAssisted ?? 'Assisted', desc: t.tierAssistedDesc ?? '' },
+    { key: 'managed', label: t.tierManaged ?? 'Managed', desc: t.tierManagedDesc ?? '' },
   ]
 
   const selectedListing = listings.find(l => l.id === listingId)
-
-  // Build the draft brief based on selected tier
-  const getDraftText = () => {
-    if (customDraft !== null) return customDraft
-    const intro = t.draftBriefIntro ?? ''
-    const tierText = tier === 'advisory'
-      ? (t.draftAdvisory ?? '')
-      : tier === 'assisted'
-        ? (t.draftAssisted ?? '')
-        : (t.draftManaged ?? '')
-    const closing = t.draftClosing ?? ''
-    return `${intro}\n\n${tierText}\n\n${closing}`
-  }
 
   async function handleSend() {
     if (!isAuthenticated) {
@@ -96,7 +88,7 @@ export function SendBriefClient({
           listingId: listingId || null,
           agentProfileIds: agents.map(a => a.id),
           tier,
-          notes: customDraft?.trim() || null,
+          notes: null,
         }),
       })
 
@@ -226,81 +218,20 @@ export function SendBriefClient({
           </div>
         )}
 
-        {/* Message Center Note */}
-        <div className="bg-blue-50 rounded-2xl border border-blue-100 p-4">
-          <div className="flex items-start gap-2.5">
-            <Lock size={14} className="text-blue-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-xs font-bold text-blue-800 mb-1">{t.messageCenterNote ?? 'Your dedicated message centre'}</p>
-              <p className="text-[11px] text-blue-700 leading-relaxed">{t.messageCenterDesc ?? 'All agent responses go to your Yalla inbox — not your personal email. No spam, no cold calls. You stay in control of who can contact you.'}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Centre Column: Draft Brief ───────────────────────────── */}
-      <div className="lg:col-span-6 space-y-4">
-        {/* Draft Brief Card */}
-        <div className="bg-white rounded-2xl border border-border-default">
-          <div className="px-6 py-4 border-b border-border-default flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <FileText size={16} className="text-brand" />
-              <h2 className="font-bold text-text-primary">{t.draftBriefTitle ?? 'Your Draft Brief'}</h2>
-            </div>
-            <button
-              onClick={() => {
-                if (!editingDraft && customDraft === null) {
-                  setCustomDraft(getDraftText())
-                }
-                setEditingDraft(!editingDraft)
-              }}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-brand-hover transition-colors"
-            >
-              <Edit3 size={12} />
-              {editingDraft ? (t.editDraftHint ?? 'Done editing') : (t.editDraftHint ?? 'Edit draft')}
-            </button>
-          </div>
-
-          <div className="px-6 py-5">
-            {editingDraft ? (
-              <textarea
-                value={customDraft ?? getDraftText()}
-                onChange={e => setCustomDraft(e.target.value)}
-                rows={12}
-                className="w-full px-4 py-3 bg-bg rounded-xl text-sm text-text-primary placeholder-text-muted resize-none focus:outline-none focus:ring-2 focus:ring-brand/40 transition-shadow leading-relaxed"
-              />
-            ) : (
-              <div className="prose prose-sm max-w-none">
-                {getDraftText().split('\n').map((line, i) => (
-                  <p key={i} className={`text-sm leading-relaxed ${line.trim() ? 'text-text-primary mb-3' : 'mb-1'}`}>
-                    {line || ' '}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Collaboration Level — changes the draft */}
+        {/* Collaboration Level — changes the preview */}
         <div className="bg-white rounded-2xl border border-border-default p-5">
           <h2 className="font-bold text-text-primary mb-1 text-sm flex items-center gap-2">
             <MessageSquare size={14} className="text-brand" />
             {t.tierTitle}
           </h2>
-          <p className="text-xs text-text-secondary mb-3">{t.tierChangeHint ?? 'Selecting a level updates your draft brief above'}</p>
+          <p className="text-xs text-text-secondary mb-3">{t.tierChangeHint ?? 'Selecting a level updates the preview'}</p>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="space-y-2">
             {tiers.map(({ key, label, desc }) => (
               <button
                 key={key}
-                onClick={() => {
-                  setTier(key)
-                  if (customDraft !== null) {
-                    // Reset custom draft when tier changes so user sees the new template
-                    setCustomDraft(null)
-                  }
-                }}
-                className={`text-left p-3 rounded-xl border transition-all ${
+                onClick={() => setTier(key)}
+                className={`w-full text-left p-3 rounded-xl border transition-all ${
                   tier === key
                     ? 'border-brand bg-brand/5 ring-1 ring-brand/20'
                     : 'border-border-default hover:border-border-dark'
@@ -314,9 +245,225 @@ export function SendBriefClient({
                   </div>
                   <span className="font-semibold text-sm text-text-primary">{label}</span>
                 </div>
-                <p className="text-[11px] text-text-secondary leading-snug">{desc}</p>
+                <p className="text-[11px] text-text-secondary leading-snug pl-[18px]">{desc}</p>
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Message Center Note */}
+        <div className="bg-blue-50 rounded-2xl border border-blue-100 p-4">
+          <div className="flex items-start gap-2.5">
+            <Lock size={14} className="text-blue-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-xs font-bold text-blue-800 mb-1">{t.messageCenterNote ?? 'Your dedicated message centre'}</p>
+              <p className="text-[11px] text-blue-700 leading-relaxed">{t.messageCenterDesc ?? 'All agent responses go to your Yalla inbox — not your personal email. No spam, no cold calls. You stay in control of who can contact you.'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Centre Column: Branded Email Preview ───────────────── */}
+      <div className="lg:col-span-6 space-y-4">
+        <div className="bg-white rounded-2xl border border-border-default">
+          <div className="px-6 py-4 border-b border-border-default">
+            <h2 className="font-bold text-text-primary text-sm">{t.draftBriefTitle ?? 'Email Preview'}</h2>
+            <p className="text-[11px] text-text-muted mt-0.5">This is what agents will receive</p>
+          </div>
+
+          {/* Email template preview */}
+          <div className="p-4">
+            <div className="bg-[#EDEEF2] rounded-xl overflow-hidden shadow-sm">
+              {/* ── Orange header ──────────────────────────── */}
+              <div className="bg-[#D4764E] px-6 py-4 flex items-center justify-between">
+                <span className="text-lg font-extrabold text-white tracking-tight">Yalla.House</span>
+                <span className="text-[10px] font-semibold text-white/75 uppercase tracking-widest">
+                  {t.previewPropertyCollaboration ?? 'Property Collaboration'}
+                </span>
+              </div>
+
+              {/* ── White content area ─────────────────────── */}
+              <div className="bg-white mx-0">
+                <div className="px-6 py-6 space-y-4">
+                  {/* Greeting */}
+                  <p className="text-base font-medium text-[#0F1117]">
+                    {t.previewGreeting ?? 'Hi [Agent Name],'}
+                  </p>
+
+                  {/* Tier-specific intro */}
+                  <p className="text-sm text-[#5E6278] leading-relaxed">
+                    {tier === 'advisory' && (t.previewAdvisoryIntro?.replace('{owner}', ownerName) ?? `${ownerName} has invited you to provide expert advisory support for the sale of their property through Yalla.House.`)}
+                    {tier === 'assisted' && (t.previewAssistedIntro?.replace('{owner}', ownerName) ?? `${ownerName} has invited you to collaborate on the sale of their property through Yalla.House using the Assisted collaboration model.`)}
+                    {tier === 'managed' && (t.previewManagedIntro?.replace('{owner}', ownerName) ?? `${ownerName} has invited you to discuss a full-service sales collaboration through Yalla.House regarding the sale of their property.`)}
+                  </p>
+
+                  {/* Scope section */}
+                  <div>
+                    <p className="text-sm text-[#5E6278] mb-2">
+                      {tier === 'advisory' && (t.previewAdvisoryScope ?? 'The owner is looking for guidance with:')}
+                      {tier === 'assisted' && (t.previewAssistedScope ?? 'The owner is looking for support with:')}
+                      {tier === 'managed' && (t.previewManagedScope ?? 'The owner is currently exploring agent-led support for:')}
+                    </p>
+                    <ul className="space-y-1 pl-4">
+                      {tier === 'advisory' && (
+                        <>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewAdvisoryItem1 ?? 'pricing strategy and market positioning,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewAdvisoryItem2 ?? 'marketing recommendations,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewAdvisoryItem3 ?? 'and negotiation advice when offers come in.'}</li>
+                        </>
+                      )}
+                      {tier === 'assisted' && (
+                        <>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewAssistedItem1 ?? 'managing buyer enquiries,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewAssistedItem2 ?? 'coordinating viewings,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewAssistedItem3 ?? 'and handling day-to-day communication,'}</li>
+                        </>
+                      )}
+                      {tier === 'managed' && (
+                        <>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewManagedItem1 ?? 'buyer communication,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewManagedItem2 ?? 'viewings,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewManagedItem3 ?? 'negotiation,'}</li>
+                          <li className="text-sm text-[#5E6278] list-disc">{t.previewManagedItem4 ?? 'and overall transaction management.'}</li>
+                        </>
+                      )}
+                    </ul>
+                    {tier === 'advisory' && (
+                      <p className="text-xs text-[#999] italic mt-2">{t.previewAdvisoryOwnerNote ?? 'The owner will manage viewings, buyer enquiries, and day-to-day communication directly.'}</p>
+                    )}
+                    {tier === 'assisted' && (
+                      <p className="text-xs text-[#999] italic mt-2">{t.previewAssistedOwnerNote ?? 'while retaining control over negotiation and final decision-making.'}</p>
+                    )}
+                    {tier === 'managed' && (
+                      <p className="text-xs text-[#999] italic mt-2">{t.previewManagedMultiAgent ?? 'The owner may be speaking with multiple agents before deciding how they would like to proceed.'}</p>
+                    )}
+                  </div>
+
+                  {/* ── Property Overview Card ─────────────────── */}
+                  <div className="bg-[#F5F5FA] rounded-lg p-4">
+                    <h3 className="text-xs font-bold text-[#0F1117] uppercase tracking-wider mb-3">
+                      {t.previewPropertyOverview ?? 'Property Overview'}
+                    </h3>
+                    <table className="w-full text-sm">
+                      <tbody>
+                        <tr className="border-b border-[#E2E4EB]/50">
+                          <td className="py-1.5 text-[#5E6278]">{t.previewAddress ?? 'Address'}</td>
+                          <td className="py-1.5 font-semibold text-right">{selectedListing?.address ?? '—'}</td>
+                        </tr>
+                        <tr className="border-b border-[#E2E4EB]/50">
+                          <td className="py-1.5 text-[#5E6278]">{t.previewEstimatedValue ?? 'Estimated Value'}</td>
+                          <td className="py-1.5 font-semibold text-right">{selectedListing?.price ?? 'Price on application'}</td>
+                        </tr>
+                        <tr className="border-b border-[#E2E4EB]/50">
+                          <td className="py-1.5 text-[#5E6278]">{t.previewPropertyType ?? 'Property Type'}</td>
+                          <td className="py-1.5 font-semibold text-right capitalize">{selectedListing?.propertyType ?? '—'}</td>
+                        </tr>
+                        <tr className="border-b border-[#E2E4EB]/50">
+                          <td className="py-1.5 text-[#5E6278]">{t.previewSellerTimeline ?? 'Seller Timeline'}</td>
+                          <td className="py-1.5 font-semibold text-right">Flexible</td>
+                        </tr>
+                        <tr>
+                          <td className="py-1.5 text-[#5E6278]">{t.previewViewingReadiness ?? 'Viewing Readiness'}</td>
+                          <td className="py-1.5 font-semibold text-right">Preparing</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Workspace section */}
+                  <div>
+                    <p className="text-sm text-[#5E6278] mb-2">
+                      {t.previewWorkspaceIntro ?? 'The property workspace is already active within Yalla.House and includes:'}
+                    </p>
+                    <ul className="space-y-1 pl-4">
+                      <li className="text-sm text-[#5E6278] list-disc">{t.previewWorkspaceItem1 ?? 'the live property listing,'}</li>
+                      <li className="text-sm text-[#5E6278] list-disc">{t.previewWorkspaceItem2 ?? 'media and property information,'}</li>
+                      <li className="text-sm text-[#5E6278] list-disc">{t.previewWorkspaceItem3 ?? 'seller availability,'}</li>
+                      <li className="text-sm text-[#5E6278] list-disc">{t.previewWorkspaceItem4 ?? 'buyer activity tracking,'}</li>
+                      <li className="text-sm text-[#5E6278] list-disc">{t.previewWorkspaceItem5 ?? 'and structured communication tools.'}</li>
+                    </ul>
+                    <p className="text-sm text-[#5E6278] mt-3">
+                      {t.previewTransparency ?? 'This allows both sides to collaborate transparently while keeping the process organised for the owner and interested buyers.'}
+                    </p>
+                  </div>
+
+                  {/* Competitor count */}
+                  {agentCount > 1 && (
+                    <p className="text-sm font-semibold text-[#D4764E]">
+                      You are currently one of {agentCount} agents invited to participate.
+                    </p>
+                  )}
+
+                  {/* CTA button */}
+                  <div className="text-center pt-2">
+                    <span className="inline-block px-6 py-3 bg-[#D4764E] text-white font-bold text-sm rounded-lg">
+                      {t.previewCta ?? 'Open Listing & Collaboration Workspace'} →
+                    </span>
+                  </div>
+
+                  {/* Sign-off */}
+                  <div className="pt-2">
+                    <p className="text-sm text-[#5E6278]">{t.previewSignoff ?? 'Best regards,'}</p>
+                    <p className="text-sm font-semibold text-[#0F1117]">{t.previewTeam ?? 'The Yalla.House Team'}</p>
+                  </div>
+                </div>
+
+                {/* ── Benefit section ──────────────────────── */}
+                <div className="border-t border-[#E2E4EB] px-6 py-5">
+                  <p className="text-[11px] font-bold text-[#999] uppercase tracking-wider mb-3">
+                    {t.previewBenefitHeading ?? 'WHY AGENTS CHOOSE YALLA.HOUSE'}
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
+                        <Users size={14} className="text-[#D4764E]" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit1Title ?? 'Qualified Leads'}</p>
+                        <p className="text-[11px] text-[#5E6278]">{t.previewBenefit1Desc ?? 'Every lead is a motivated seller with a prepared listing.'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
+                        <Banknote size={14} className="text-[#D4764E]" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit2Title ?? 'Transparent Pricing'}</p>
+                        <p className="text-[11px] text-[#5E6278]">{t.previewBenefit2Desc ?? 'You set your terms. No hidden platform fees.'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
+                        <BarChart3 size={14} className="text-[#D4764E]" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit3Title ?? 'Full Dashboard'}</p>
+                        <p className="text-[11px] text-[#5E6278]">{t.previewBenefit3Desc ?? 'Manage your pipeline, viewings, and communication in one place.'}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
+                        <BadgeCheck size={14} className="text-[#D4764E]" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit4Title ?? 'Verified Profiles'}</p>
+                        <p className="text-[11px] text-[#5E6278]">{t.previewBenefit4Desc ?? 'Build trust with a verified agent profile on the platform.'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Footer ──────────────────────────────── */}
+                <div className="bg-[#F5F5FA] border-t border-[#E2E4EB] px-6 py-3 text-center">
+                  <p className="text-[11px] text-[#D4764E] font-medium">
+                    Services · About · FAQ · <span className="font-bold">yalla.house</span>
+                  </p>
+                  <p className="text-[10px] text-[#999] mt-1">
+                    Yalla.House Ltd — Flat-fee property platform
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

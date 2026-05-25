@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { AuthGateProvider } from '@/components/auth-gate-provider'
+import { HubSpotTracking } from '@/components/hubspot-tracking'
 import '../globals.css'
 
 const locales = ['de', 'en'] as const
@@ -71,6 +72,7 @@ export default async function LocaleLayout({
       <AuthGateProvider locale={locale}>
         {children}
       </AuthGateProvider>
+      <HubSpotTracking />
     </NextIntlClientProvider>
   )
 }

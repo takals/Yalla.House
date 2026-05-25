@@ -46,3 +46,9 @@ CLAUDE_global.md
 .claude/vercel-logs/
 .pnpm-store/
 node_modules/
+
+# Business / admin folder — may contain credentials, contracts, PII
+_business/admin/
+*.rtf
+# But allow tracked admin docs you've deliberately added
+!_business/admin/.gitkeep

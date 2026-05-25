@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { NotificationBell } from './notification-bell'
+import { HubSpotIdentify } from '@/components/hubspot-identify'
 
 // Icon map — lets server components pass a string key instead of JSX
 const iconMap: Record<string, LucideIcon> = {
@@ -79,6 +80,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
   return (
     <div className="flex h-screen bg-bg overflow-hidden">
+      <HubSpotIdentify email={userEmail} section={section} />
 
       {/* ── Mobile overlay backdrop ─────────────────────────── */}
       {mobileOpen && (

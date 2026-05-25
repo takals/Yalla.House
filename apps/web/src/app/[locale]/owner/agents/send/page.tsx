@@ -76,6 +76,17 @@ export default async function SendBriefPage({ searchParams }: Props) {
     }))
   }
 
+  // Get owner name for the email preview
+  let ownerName = 'Property Owner'
+  if (user) {
+    const { data: ownerProfile } = await (supabase as any)
+      .from('users')
+      .select('full_name')
+      .eq('id', user.id)
+      .single()
+    if (ownerProfile?.full_name) ownerName = ownerProfile.full_name
+  }
+
   // Build translations record for client component
   const tKeys = [
     'pageTitle', 'pageDescription', 'backButton',
@@ -94,32 +105,59 @@ export default async function SendBriefPage({ searchParams }: Props) {
     'infoLabel', 'infoText', 'verified',
     'successTitle', 'successDesc', 'viewTracking',
     'signInRequired', 'signInDesc',
-    // New keys for redesign
-    'draftBriefTitle', 'draftBriefIntro',
-    'draftAdvisory', 'draftAssisted', 'draftManaged',
-    'draftClosing',
+    // Branded preview keys
+    'draftBriefTitle',
     'messageCenterNote', 'messageCenterDesc',
     'commissionTitle', 'commissionNote',
     'negotiateTitle', 'negotiateDesc',
-    'editDraftHint',
     'reviewBriefButton',
+    // Email preview keys
+    'previewGreeting', 'previewPropertyCollaboration',
+    'previewAdvisoryIntro', 'previewAdvisoryScope',
+    'previewAdvisoryItem1', 'previewAdvisoryItem2', 'previewAdvisoryItem3',
+    'previewAdvisoryOwnerNote',
+    'previewAssistedIntro', 'previewAssistedScope',
+    'previewAssistedItem1', 'previewAssistedItem2', 'previewAssistedItem3',
+    'previewAssistedOwnerNote',
+    'previewManagedIntro', 'previewManagedScope',
+    'previewManagedItem1', 'previewManagedItem2', 'previewManagedItem3', 'previewManagedItem4',
+    'previewManagedMultiAgent',
+    'previewPropertyOverview', 'previewAddress', 'previewEstimatedValue',
+    'previewPropertyType', 'previewSellerTimeline', 'previewViewingReadiness',
+    'previewWorkspaceIntro',
+    'previewWorkspaceItem1', 'previewWorkspaceItem2', 'previewWorkspaceItem3',
+    'previewWorkspaceItem4', 'previewWorkspaceItem5',
+    'previewTransparency', 'previewCta',
+    'previewSignoff', 'previewTeam',
+    'previewBenefitHeading',
+    'previewBenefit1Title', 'previewBenefit1Desc',
+    'previewBenefit2Title', 'previewBenefit2Desc',
+    'previewBenefit3Title', 'previewBenefit3Desc',
+    'previewBenefit4Title', 'previewBenefit4Desc',
+    'tierChangeHint',
   ] as const
 
   const translations: Record<string, string> = {}
   for (const key of tKeys) {
-    translations[key] = t(key)
+    try { translations[key] = t(key) } catch { translations[key] = '' }
   }
 
-  // Format listings for client
-  const formattedListings = listings.map(l => ({
-    id: l.id,
-    label: [l.address_line1, l.city, l.postcode].filter(Boolean).join(', '),
-    price: l.sale_price
-      ? String(fromMinorUnits(l.sale_price, getCountryConfig(l.country_code ?? 'GB').currency))
-      : null,
-    bedrooms: l.bedrooms,
-    propertyType: l.property_type,
-  }))
+  // Format listings for client — include detail fields for email preview
+  const formattedListings = listings.map(l => {
+    const lConfig = getCountryConfig(l.country_code ?? countryCode)
+    return {
+      id: l.id,
+      label: [l.address_line1, l.city, l.postcode].filter(Boolean).join(', '),
+      address: [l.address_line1, l.city, l.postcode].filter(Boolean).join(', '),
+      price: l.sale_price
+        ? new Intl.NumberFormat(locale === 'de' ? 'de-DE' : 'en-GB', { style: 'currency', currency: lConfig.currency, maximumFractionDigits: 0 }).format(fromMinorUnits(l.sale_price, lConfig.currency))
+        : null,
+      bedrooms: l.bedrooms,
+      propertyType: l.property_type,
+      city: l.city,
+      postcode: l.postcode,
+    }
+  })
 
   return (
     <div className="max-w-6xl">
@@ -140,6 +178,8 @@ export default async function SendBriefPage({ searchParams }: Props) {
         isAuthenticated={isAuthenticated}
         translations={translations}
         currencySymbol={getCurrencySymbol(countryConfig.currency)}
+        ownerName={ownerName}
+        agentCount={selectedAgents.length}
       />
     </div>
   )

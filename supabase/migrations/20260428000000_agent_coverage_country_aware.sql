@@ -116,7 +116,7 @@ DROP POLICY IF EXISTS agent_source_links_admin_all ON agent_source_links;
 CREATE POLICY agent_source_links_admin_all ON agent_source_links
   FOR ALL TO authenticated
   USING (
-    EXISTS (SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin')
+    EXISTS (SELECT 1 FROM user_roles WHERE user_roles.user_id = auth.uid() AND user_roles.role = 'admin')
   );
 
 DROP POLICY IF EXISTS postcode_grid_read_all ON postcode_grid;

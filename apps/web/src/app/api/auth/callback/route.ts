@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import type { Database } from '@/types/database'
+import { upsertHubSpotContact } from '@/lib/hubspot'
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
@@ -73,17 +74,21 @@ export async function GET(request: NextRequest) {
         redirectUrl = redirectUrl.replace(/owner\/new/, 'owner/workspace')
       }
 
+      // Pull roles once — used both for dashboard routing and HubSpot sync.
+      const { data: rolesRows } = await (supabase.from('user_roles') as any)
+        .select('role')
+        .eq('user_id', data.user.id)
+        .eq('is_active', true)
+      const userRoles: string[] = Array.isArray(rolesRows)
+        ? rolesRows.map((r: { role: string }) => r.role)
+        : []
+
       // If no explicit destination was set (default /hunter fallback),
-      // query user_roles and route to the best dashboard.
+      // route to the user's highest-priority dashboard based on roles.
       const isDefaultRedirect = redirectUrl === '/hunter'
       if (isDefaultRedirect) {
-        const { data: roles } = await (supabase.from('user_roles') as any)
-          .select('role')
-          .eq('user_id', data.user.id)
-          .eq('is_active', true)
-
-        if (roles && roles.length > 0) {
-          const roleSet = new Set(roles.map((r: { role: string }) => r.role))
+        if (userRoles.length > 0) {
+          const roleSet = new Set(userRoles)
           // Priority: admin > agent > owner > hunter
           if (roleSet.has('admin')) {
             redirectUrl = '/admin'
@@ -98,6 +103,15 @@ export async function GET(request: NextRequest) {
           redirectUrl = '/auth/welcome'
         }
       }
+
+      // Best-effort sync to HubSpot. Never blocks auth — see lib/hubspot.ts.
+      await upsertHubSpotContact({
+        email: data.user.email ?? '',
+        fullName: meta.full_name ?? meta.name ?? null,
+        roles: userRoles,
+        language: 'de',
+        referralSource: cookieStore.get('yalla_referral_source')?.value,
+      })
 
       // Clear the return cookie — it's been consumed
       cookieStore.set('yalla_auth_return', '', { path: '/', maxAge: 0 })

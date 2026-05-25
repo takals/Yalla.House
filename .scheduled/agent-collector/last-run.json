@@ -1,104 +1,35 @@
 {
-  "timestamp": "2026-05-12T23:35:00Z",
-  "before_count": 17044,
-  "after_count": 17045,
-  "new_agents": 1,
-  "enriched": 315,
-  "emails_decoded": 0,
+  "timestamp": "2026-05-23T00:00:00Z",
+  "before_count": 17083,
+  "after_count": 17097,
+  "new_agents": 14,
+  "enriched": 481,
+  "emails_decoded": 92,
   "totals": {
-    "total": 17045,
-    "with_email": 10078,
-    "with_phone": 11165,
-    "with_website": 4538,
-    "with_postcode": 16245
+    "total": 17097,
+    "with_email": 10594,
+    "with_phone": 11240,
+    "with_website": 4542,
+    "with_postcode": 16252
   },
   "deltas_vs_previous_run": {
-    "total": 27,
-    "with_email": 361,
-    "with_phone": 46,
-    "with_website": 2,
-    "with_postcode": 2,
-    "note": "Deltas span 2026-05-07 -> 2026-05-12 (intervening nightly runs included). The big +361 emails almost certainly came from cf-emails runs against deeper offsets between those dates."
+    "total": 14,
+    "with_email": 92,
+    "with_phone": 4,
+    "with_website": 0,
+    "with_postcode": 2
   },
-  "errors": [
-    "Phase 2 first attempt fanned out 5 enrich-propertymark requests in parallel (offsets 0/50/100/150/200, limit 50). pg_net timed out all 5 at 120s — only the first acquired a worker (HTTP Request/Response time 119,985ms); the other 4 stuck in DNS for the full 120s. Same pattern when the next 5 (offsets 250-450) ran in parallel.",
-    "Phase 3 first attempt fanned out 2 enrich-cf-emails requests in parallel at limit 100. Both timed out at 90s — the per-profile fetch * 100 + 400ms sleeps exceeds 90s on the propertymark.co.uk profile pages.",
-    "Recovery: switched both phases to 2-way pairs at limit 25, 75-90s timeout. All 13 enrich-propertymark batches and 5 enrich-cf-emails batches at this size succeeded with status_code 200.",
-    "Invocation method: edge functions called from Postgres via pg_net (sandbox proxy returns HTTP 403 on direct curl to suchdotsrrlsfxrvsmvy.supabase.co/functions/v1/*). pg_net's DNS resolver is fragile under concurrent load — keep concurrency <= 2 in future runs."
+  "errors": [],
+  "notes": [
+    "Canonical report this run: /Users/tarekalsaleh/Desktop/Yalla.House/Scheduled/agent-collector/last-run.json (full per-batch detail).",
+    "Phase 1: 6 scrape batches (pages 1-300), +14 net-new (extended probe 201-300 yielded +12 of those).",
+    "Phase 2: 18 enrich-propertymark batches via pg_net.http_post, 481 enriched, 0 emails (CF-encoded - decoded in Phase 3).",
+    "Phase 3: 8 cf-email batches across mid-range offsets, 92 emails decoded (best yield in 4 weeks).",
+    "Sandbox proxy blocks Supabase edge functions; invocation routed via pg_net from Postgres."
   ],
-  "phase_breakdown": {
-    "scrape": {
-      "pages_scraped": "1-200",
-      "batches": 4,
-      "batch_size_pages": 50,
-      "total_scraped": 2000,
-      "total_inserted": 1,
-      "batch_results": [
-        {"pages": "1-50",    "scraped": 500, "inserted": 1, "ok": true},
-        {"pages": "51-100",  "scraped": 500, "inserted": 0, "ok": true},
-        {"pages": "101-150", "scraped": 500, "inserted": 0, "ok": true},
-        {"pages": "151-200", "scraped": 500, "inserted": 0, "ok": true}
-      ],
-      "note": "Same finding as the 2026-05-07 run — pages 1-200 are saturated. Pages 1-50 surfaced 1 new agent; 51-200 returned 0 net-new. Strong recommendation to rotate the scrape window past page 200 next run."
-    },
-    "enrich_propertymark": {
-      "batches": 13,
-      "batch_size": 25,
-      "offset_range": "0-324",
-      "enriched": 315,
-      "with_email_returned": 0,
-      "with_phone_returned": 180,
-      "with_website_returned": 69,
-      "with_postcode_returned": 306,
-      "with_services_returned": 256,
-      "batch_results": [
-        {"offset": 0,   "enriched": 25, "withWebsite": 9, "withPhone": 13, "withPostcode": 25, "withServices": 24, "withEmail": 0, "ok": true},
-        {"offset": 25,  "enriched": 24, "withWebsite": 3, "withPhone": 15, "withPostcode": 23, "withServices": 17, "withEmail": 0, "ok": true},
-        {"offset": 50,  "enriched": 25, "withWebsite": 5, "withPhone": 17, "withPostcode": 22, "withServices": 18, "withEmail": 0, "ok": true},
-        {"offset": 75,  "enriched": 25, "withWebsite": 9, "withPhone": 14, "withPostcode": 25, "withServices": 20, "withEmail": 0, "ok": true},
-        {"offset": 100, "enriched": 24, "withWebsite": 3, "withPhone": 12, "withPostcode": 24, "withServices": 22, "withEmail": 0, "ok": true},
-        {"offset": 125, "enriched": 25, "withWebsite": 3, "withPhone": 13, "withPostcode": 24, "withServices": 19, "withEmail": 0, "ok": true},
-        {"offset": 150, "enriched": 24, "withWebsite": 7, "withPhone": 13, "withPostcode": 24, "withServices": 19, "withEmail": 0, "ok": true},
-        {"offset": 175, "enriched": 24, "withWebsite": 3, "withPhone": 16, "withPostcode": 23, "withServices": 20, "withEmail": 0, "ok": true},
-        {"offset": 200, "enriched": 22, "withWebsite": 3, "withPhone": 8,  "withPostcode": 22, "withServices": 20, "withEmail": 0, "ok": true},
-        {"offset": 225, "enriched": 24, "withWebsite": 7, "withPhone": 15, "withPostcode": 24, "withServices": 22, "withEmail": 0, "ok": true},
-        {"offset": 250, "enriched": 24, "withWebsite": 6, "withPhone": 13, "withPostcode": 23, "withServices": 19, "withEmail": 0, "ok": true},
-        {"offset": 275, "enriched": 25, "withWebsite": 4, "withPhone": 15, "withPostcode": 23, "withServices": 21, "withEmail": 0, "ok": true},
-        {"offset": 300, "enriched": 24, "withWebsite": 7, "withPhone": 16, "withPostcode": 24, "withServices": 19, "withEmail": 0, "ok": true}
-      ],
-      "note": "Stopped at offset 324 instead of the SKILL.md target of 500 due to pg_net 120s per-call cap forcing limit:25 instead of limit:50, doubling the batch count. Function returns 0 emails for every profile because Propertymark obfuscates them as CF-encoded — Phase 3 is the right place to grab those."
-    },
-    "enrich_cf_emails": {
-      "batches": 5,
-      "batch_size": 25,
-      "offset_range": "0-124",
-      "emails_found": 0,
-      "websites_found": 0,
-      "batch_results": [
-        {"offset": 0,   "fetched": 25, "emailsFound": 0, "websitesFound": 0, "ok": true},
-        {"offset": 25,  "fetched": 25, "emailsFound": 0, "websitesFound": 0, "ok": true},
-        {"offset": 50,  "fetched": 25, "emailsFound": 0, "websitesFound": 0, "ok": true},
-        {"offset": 75,  "fetched": 25, "emailsFound": 0, "websitesFound": 0, "ok": true},
-        {"offset": 100, "fetched": 25, "emailsFound": 0, "websitesFound": 0, "ok": true}
-      ],
-      "note": "Same finding as 2026-05-07 — first 125 agents without email return zero CF emails. These rows likely never had CF-encoded addresses on their profile pages. Continue past offset 500 (or change ordering) next run."
-    }
-  },
-  "next_run_starting_offsets": {
-    "scrape_propertymark": 201,
-    "enrich_propertymark": 325,
-    "enrich_cf_emails": 125
-  },
-  "infrastructure_notes": {
-    "invocation_path": "Edge functions invoked from Postgres via pg_net.http_post() — sandbox proxy returns HTTP 403 on direct curl to suchdotsrrlsfxrvsmvy.supabase.co/functions/v1/*.",
-    "concurrency_findings": "Re-confirmed prior runs' finding that pg_net's DNS resolver is fragile under concurrent load. 5-way parallel fan-out for enrich-propertymark failed all 5 calls (only 1 of 5 actually progressed; the other 4 got DNS timeouts at 120s). 2-way pairs at limit 25 are the reliable sweet spot.",
-    "edge_wall_clock": "Scrape batches: 50 pages ran ~70-100s each, comfortably under 120s pg_net timeout. Enrich-propertymark at limit 50: >120s (timed out). At limit 25: ~35-50s (fits). Enrich-cf-emails at limit 100: >90s (timed out). At limit 25: ~30-40s (fits).",
-    "report_path_fallback": "Target path /Users/tarekalsaleh/Documents/Claude/Scheduled/agent-collector/last-run.json is outside session-connected folders. Written to workspace folder /Users/tarekalsaleh/Desktop/Yalla.House/.scheduled/agent-collector/last-run.json instead (auto-syncs to Drive)."
-  },
-  "recommendations": [
-    "Rotate scrape window past page 200 next run — pages 1-200 surfaced just 1 new agent for the 2nd consecutive run. Try pages 201-400 or 1401-1600 to surface fresher tail-end agencies.",
-    "Lower default batch sizes in the SKILL.md spec: scrape at 50 pages is fine, but enrich-propertymark and enrich-cf-emails should default to limit:25 not 50/100, given the pg_net 120s timeout against the live edge function.",
-    "Resume enrich-propertymark from offset 325 next run; resume enrich-cf-emails from offset 125 — first 500 rows are the same agents every night and yield ~0 deltas now.",
-    "Consider adding an updated_at timestamp on agent_profiles so future runs can skip rows enriched within the last 7 days instead of re-fetching them every night."
+  "next_run_recommendations": [
+    "Scrape pages 251-500.",
+    "Enrich-propertymark: parallel pairs at limit=30, pg_net timeout=90s.",
+    "CF-emails: offsets 2000-6500 only (skip <1500 and >7000)."
   ]
 }

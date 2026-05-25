@@ -1,0 +1,85 @@
+# Agent DB — Morning Report (2026-05-24)
+
+🟢 **Collector ran successfully overnight (May 23 → May 24)** — pipeline healthy. Path coordination bug fixed today; this is the first report against the new canonical paths.
+
+## Headline (Apple Watch summary)
+
+```
+🟢 Agent DB: +14 overnight (May 23 run)
+🇬🇧 GB: 17,097 total | 10,670 email (62.4%) | 11,240 phone (65.7%)
+Sources: 1/7 productive (propertymark) — 6 enabled but not yet run
+Pipeline: healthy. Best CF-email yield in 4 weeks (92 decoded).
+```
+
+## Live DB (queried 2026-05-24, propertymark only)
+
+| Metric | Live now | vs May 23 collector run | Δ |
+|---|---:|---:|---:|
+| Total agents | **17,097** | 17,097 | 0 |
+| With email | **10,670** | 10,594 | **+76** ← enrichment still ticking |
+| With phone | **11,240** | 11,240 | 0 |
+| With website | **4,544** | 4,542 | +2 |
+| With postcode | **16,252** | 16,252 | 0 |
+
+The +76 emails between last night's run and now indicates the enrichment functions are accruing matches outside the scheduled run — likely from background pg_net activity or a manual trigger.
+
+## Last collector run (2026-05-23 00:00 UTC)
+
+| Metric | Value |
+|---|---:|
+| New agents | +14 |
+| Enriched profiles | 481 |
+| CF emails decoded | **92** ← best yield in 4 weeks |
+| Errors | 0 (1 timeout, recovered) |
+
+Pages 201-300 (extended probe) yielded +12 of the +14 net-new agents. Pages 1-200 firmly saturated. Mid-range CF-email offsets 2000-6000 remain the densest zone.
+
+## Source status
+
+| Source | Country | Enabled | Status | Last run new |
+|---|---|---|---|---:|
+| propertymark | GB | ✅ | productive | +14 |
+| companies_house | GB | ✅ | unknown — never run | — |
+| onthemarket | GB | ✅ | unknown — never run | — |
+| prs | GB | ✅ | unknown — never run | — |
+| rightmove | GB | ✅ | unknown — never run | — |
+| tpo | GB | ✅ | unknown — never run | — |
+| zoopla | GB | ✅ | unknown — never run | — |
+| (14 DE sources) | DE | ❌ | parsers not built | — |
+
+Only 1 of 7 enabled GB sources is actually firing. The other 6 are enabled in the registry but have `last_run_at = NULL` — the collector skill scrapes propertymark in Phase 2 but never invokes the other source `scraper_fn` edge functions. Worth a follow-up: either the SKILL.md needs a generic "for each enabled source" loop, or the other source edge functions don't exist yet.
+
+## 7-run trend
+
+Empty — the `agent_collector_runs` table has zero rows. Phase 5 of the collector skill (UPDATE agent_collector_runs SET ...) hasn't been executing. Local JSON history is intact in `scheduled-runs/` and `Scheduled/agent-collector/`, but the DB-side run log is not being populated. Trend data unavailable until that's wired up.
+
+## What was fixed today
+
+The morning-report path coordination bug — the May 17 and May 23 reports both claimed the collector was broken (reading `last-run.json` from 2026-05-05). It wasn't. Both `agent-collector` and `agent-morning-report` SKILL.md files were hardcoded to `~/Documents/Claude/Scheduled/...`, a path the scheduled agent sessions can no longer write to. Five copies of `last-run.json` had piled up at different staleness levels across the workspace.
+
+**Fix applied:** both SKILL.md files now use a single canonical path inside the Yalla.House workspace:
+
+- Collector writes → `Yalla.House/scheduled-runs/agent-collector-last-run.json`
+- Morning report reads from that same path
+- Morning report writes to `Yalla.House/scheduled-runs/latest-morning-report.md` + dated copy
+
+The deprecated `~/Documents/Claude/Scheduled/agent-{collector,morning-report}/` paths should not be read or written by future runs.
+
+## Recommended follow-ups
+
+1. **Wire up Phase 5** of the collector skill so `agent_collector_runs` actually gets INSERT/UPDATE rows. Without it, trend analysis is impossible and the "X consecutive zero runs" saturation logic in `agent_source_registry` can never advance.
+2. **Activate the other 6 enabled GB sources** (companies_house, prs, tpo, rightmove, zoopla, onthemarket). Either the SKILL needs an explicit loop, or those edge functions still need to be built. Right now propertymark is doing 100% of the work and 14 net-new per night is plateau territory.
+3. **Clean up the four stale `last-run.json` copies** in the workspace (`Scheduled/`, `.scheduled/`, `.claude/scheduled/`, and the old `scheduled-runs/agent-collector-last-run.json` was just overwritten with fresh data). Either delete or convert to symlinks pointing at the new canonical.
+4. **Reconnect Notion auth** so the Apple Watch ping path comes back online. This has been broken for 42 days now; the local markdown report continues to serve as fallback.
+
+## Next-run starting offsets (from last successful run, May 23)
+
+| Phase | Next-run start |
+|---|---|
+| Scrape (Propertymark) | pages **251-500** |
+| Enrich Propertymark profiles | parallel pairs at limit=30, pg_net timeout=90s |
+| Enrich CF emails | offsets **2000-6500** only (skip <1500 and >7000) |
+
+---
+
+*Generated by ad-hoc fix run, not the scheduled `agent-morning-report` task. The scheduled task should produce reports in this same format and location starting from tomorrow's 9 AM run.*
