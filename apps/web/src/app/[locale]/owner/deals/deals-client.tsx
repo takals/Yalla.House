@@ -426,10 +426,19 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
         <span className="text-text-secondary">{tx(t, 'aliasLabel')}:</span>
         <span className="font-medium text-text-primary">owner-{userId.slice(0, 4)}@yalla.house</span>
         <span className="text-xs text-text-muted ml-1">{tx(t, 'aliasHint')}</span>
-        <div className="ml-auto flex items-center gap-4 text-xs text-text-secondary">
-          <span className="flex items-center gap-1"><Phone className="w-3 h-3 text-green-500" />{tx(t, 'viaWhatsApp')}</span>
-          <span className="flex items-center gap-1"><Mail className="w-3 h-3 text-blue-500" />{tx(t, 'viaEmail')}</span>
-          <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3 text-brand" />{tx(t, 'viaInApp')}</span>
+        <div className="ml-auto flex items-center gap-3 text-xs text-text-secondary">
+          <span className="flex items-center gap-1.5" title={tx(t, 'channelNotConnected')}>
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+            <Phone className="w-3 h-3 opacity-40" />{tx(t, 'viaWhatsApp')}
+          </span>
+          <span className="flex items-center gap-1.5" title={tx(t, 'channelConnected')}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <Mail className="w-3 h-3 text-emerald-600" />{tx(t, 'viaEmail')}
+          </span>
+          <span className="flex items-center gap-1.5" title={tx(t, 'channelConnected')}>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <MessageCircle className="w-3 h-3 text-emerald-600" />{tx(t, 'viaInApp')}
+          </span>
         </div>
       </div>
 

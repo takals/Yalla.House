@@ -4294,6 +4294,8 @@
     "viaWhatsApp": "WhatsApp",
     "viaEmail": "E‑Mail",
     "viaInApp": "In-App",
+    "channelConnected": "Verbunden",
+    "channelNotConnected": "Nicht eingerichtet",
     "noActivity": "Noch keine Aktivität",
     "noActivityDesc": "Sobald Interessenten dich kontaktieren, erscheinen sie hier.",
     "offerSubmitted": "Angebot eingereicht",

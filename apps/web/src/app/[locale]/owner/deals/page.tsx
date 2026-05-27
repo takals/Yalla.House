@@ -265,7 +265,7 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
   const tKeys = [
     'pageTitle', 'subtitle',
     'tabAll', 'tabOffers', 'tabViewings', 'tabMessages',
-    'ownerEmailLabel', 'aliasLabel', 'aliasHint', 'viaWhatsApp', 'viaEmail', 'viaInApp',
+    'ownerEmailLabel', 'aliasLabel', 'aliasHint', 'viaWhatsApp', 'viaEmail', 'viaInApp', 'channelConnected', 'channelNotConnected',
     'noActivity', 'noActivityDesc',
     // Timeline labels
     'offerSubmitted', 'viewingScheduled', 'viewingCompleted', 'viewingConfirmed',
