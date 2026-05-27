@@ -20,6 +20,7 @@ import { KeyFactsGrid } from './key-facts-grid'
 import { ListingActionsBar } from './listing-actions-bar'
 import { DocumentUploadSection } from './document-upload-section'
 import { HeroEditButton } from './hero-edit-button'
+import { StickyBookingBar } from './sticky-booking-bar'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -527,20 +528,31 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 />
               </section>
 
-              {/* §7 VIEWING CALENDAR */}
+              {/* §7 VIEWING CALENDAR — owner CTA to add slots */}
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                   <CalendarDays size={18} className="text-brand" />{t('calendarTitle')}
                 </h2>
-                <div className="bg-surface rounded-xl border border-border-default p-8 text-center">
-                  <CalendarDays size={40} className="mx-auto mb-3 text-brand" />
-                  <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto">{t('calendarOwnerCta')}</p>
-                  <a
-                    href="/owner/calendar"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand-hover transition-colors"
-                  >
-                    <CalendarDays size={16} />{t('calendarManageSlots')}
-                  </a>
+                <div className="bg-gradient-to-br from-brand/5 via-surface to-brand/5 rounded-xl border-2 border-dashed border-brand/30 p-8 text-center">
+                  <div className="w-16 h-16 rounded-full bg-brand/10 flex items-center justify-center mx-auto mb-4">
+                    <CalendarDays size={32} className="text-brand" />
+                  </div>
+                  <p className="text-base font-semibold text-text-primary mb-2">{t('calendarOwnerUrgency')}</p>
+                  <p className="text-sm text-text-secondary mb-6 max-w-md mx-auto">{t('calendarOwnerCta')}</p>
+                  <div className="flex items-center justify-center gap-3">
+                    <a
+                      href="/owner/calendar"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-brand text-white text-sm font-bold rounded-lg hover:bg-brand-hover transition-colors shadow-md hover:shadow-lg"
+                    >
+                      <CalendarDays size={16} />{t('calendarAddSlots')}
+                    </a>
+                    <a
+                      href="/owner/calendar"
+                      className="inline-flex items-center gap-2 px-5 py-3 bg-surface text-text-primary text-sm font-semibold rounded-lg border border-border-default hover:bg-hover-muted transition-colors"
+                    >
+                      {t('calendarManageSlots')}
+                    </a>
+                  </div>
                 </div>
               </section>
             </div>
@@ -648,6 +660,13 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         </div>
       </div>
 
+      {/* ═══ STICKY BOOKING BAR — persistent CTA for hunters ═══ */}
+      <StickyBookingBar
+        status={listing.status}
+        slotCount={slotCount ?? 0}
+        listingId={listing.id}
+      />
+
       {/* ═══ MAIN CONTENT — Two column: content + CTA sidebar ═══ */}
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -682,7 +701,27 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               )}
             </section>
 
-            {/* §2 DESCRIPTION */}
+            {/* §2 VIEWING CALENDAR — prominent position for hunters */}
+            <section>
+              <div className="bg-gradient-to-r from-brand/5 to-brand/10 rounded-2xl border border-brand/20 p-1">
+                <div className="bg-surface rounded-xl p-1">
+                  <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2 px-5 pt-5">
+                    <CalendarDays size={18} className="text-brand" />
+                    {t('calendarTitle')}
+                  </h2>
+                  <ViewingCalendar
+                    listingId={listing.id}
+                    authenticated={isAuthenticated}
+                    isOwner={false}
+                    locale={locale}
+                    placeId={listing.place_id}
+                    preselectedSlotId={preselectedSlotId}
+                  />
+                </div>
+              </div>
+            </section>
+
+            {/* §3 DESCRIPTION */}
             <section>
               <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                 <FileText size={18} className="text-brand" />
@@ -706,7 +745,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               )}
             </section>
 
-            {/* §3 PHOTO GALLERY */}
+            {/* §4 PHOTO GALLERY */}
             {photos.length > 1 ? (
               <section>
                 <PhotoGallery
@@ -748,7 +787,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               </section>
             )}
 
-            {/* §4 LOCATION */}
+            {/* §5 LOCATION */}
             {(listing.city || listing.postcode) && (
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
@@ -771,7 +810,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               </section>
             )}
 
-            {/* §5 FLOOR PLAN */}
+            {/* §6 FLOOR PLAN */}
             {floorPlanMedia && (
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
@@ -784,7 +823,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               </section>
             )}
 
-            {/* §6 ENERGY CERTIFICATE */}
+            {/* §7 ENERGY CERTIFICATE */}
             {epcMedia && (
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
@@ -796,22 +835,6 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 </div>
               </section>
             )}
-
-            {/* §7 VIEWING CALENDAR */}
-            <section>
-              <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-                <CalendarDays size={18} className="text-brand" />
-                {t('calendarTitle')}
-              </h2>
-              <ViewingCalendar
-                listingId={listing.id}
-                authenticated={isAuthenticated}
-                isOwner={false}
-                locale={locale}
-                placeId={listing.place_id}
-                preselectedSlotId={preselectedSlotId}
-              />
-            </section>
 
             {/* §8 CONTACT FORM */}
             <section id="contact-section">
