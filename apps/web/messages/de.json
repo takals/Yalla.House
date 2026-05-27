@@ -4369,6 +4369,15 @@
     "counterSent": "Gegenangebot gesendet!",
     "replySent": "Antwort gesendet!",
     "offerAccepted": "Angebot angenommen!",
-    "offerDeclined": "Angebot abgelehnt."
+    "offerDeclined": "Angebot abgelehnt.",
+    "roleHomeHunter": "Kaufinteressent",
+    "roleAgent": "Makler",
+    "status_chain_free": "Kettenfrei",
+    "status_first_time_buyer": "Erstkäufer",
+    "status_cash_buyer": "Barkäufer",
+    "status_mortgage_in_principle": "Finanzierungszusage",
+    "status_in_chain": "In einer Kette",
+    "status_selling_to_buy": "Verkauft zum Kauf",
+    "status_exploring": "Orientierungsphase"
   }
 }

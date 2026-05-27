@@ -4369,6 +4369,15 @@
     "counterSent": "Counter-offer sent!",
     "replySent": "Reply sent!",
     "offerAccepted": "Offer accepted!",
-    "offerDeclined": "Offer declined."
+    "offerDeclined": "Offer declined.",
+    "roleHomeHunter": "Home hunter",
+    "roleAgent": "Agent",
+    "status_chain_free": "Chain-free",
+    "status_first_time_buyer": "First-time buyer",
+    "status_cash_buyer": "Cash buyer",
+    "status_mortgage_in_principle": "Mortgage in principle",
+    "status_in_chain": "In a chain",
+    "status_selling_to_buy": "Selling to buy",
+    "status_exploring": "Just exploring"
   }
 }

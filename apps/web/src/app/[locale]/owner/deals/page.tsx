@@ -298,6 +298,11 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     'solicitorToast', 'depositToast', 'noThreadToast',
     'counterOfferLabel', 'counterPlaceholder', 'counterSent',
     'replySent', 'offerAccepted', 'offerDeclined',
+    // Contact header
+    'roleHomeHunter', 'roleAgent',
+    'status_chain_free', 'status_first_time_buyer', 'status_cash_buyer',
+    'status_mortgage_in_principle', 'status_in_chain', 'status_selling_to_buy',
+    'status_exploring',
   ] as const
 
   const translations: Record<string, string> = {}

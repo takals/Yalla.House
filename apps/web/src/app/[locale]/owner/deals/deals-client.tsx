@@ -472,9 +472,9 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                 <div>
                   <div className="text-sm font-medium text-text-primary">{selectedContact?.name}</div>
                   <div className="text-[11px] text-text-secondary">
-                    {selectedContact?.role === 'hunter' ? 'Home hunter' :
-                     selectedContact?.role === 'agent' ? 'Agent' : ''}
-                    {selectedContact?.hunterProfile?.buyerStatus ? ` — ${selectedContact.hunterProfile.buyerStatus}` : ''}
+                    {selectedContact?.role === 'hunter' ? tx(t, 'roleHomeHunter') :
+                     selectedContact?.role === 'agent' ? tx(t, 'roleAgent') : ''}
+                    {selectedContact?.hunterProfile?.buyerStatus ? ` — ${tx(t, `status_${selectedContact.hunterProfile.buyerStatus}`) || selectedContact.hunterProfile.buyerStatus}` : ''}
                   </div>
                 </div>
               </div>
@@ -559,7 +559,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                               {act.data.move_in_date && (
                                 <>
                                   <span>{tx(t, 'moveIn')}</span>
-                                  <span className="text-text-primary font-medium text-right">{act.data.move_in_date}</span>
+                                  <span className="text-text-primary font-medium text-right">{formatDate(act.data.move_in_date, locale)}</span>
                                 </>
                               )}
                               <span>{tx(t, 'chain')}</span>
