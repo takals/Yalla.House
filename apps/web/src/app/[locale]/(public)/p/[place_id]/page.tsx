@@ -21,6 +21,7 @@ import { ListingActionsBar } from './listing-actions-bar'
 import { DocumentUploadSection } from './document-upload-section'
 import { HeroEditButton } from './hero-edit-button'
 import { StickyBookingBar } from './sticky-booking-bar'
+import { HeroCalendarBox } from './hero-calendar-box'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -264,6 +265,17 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     viewFullAnalytics: t('sidebarViewFullAnalytics'),
   } : {}
 
+  // Hero calendar box translations
+  const heroCalendarTranslations: Record<string, string> = {
+    heroCalendarTitle: t('heroCalendarTitle'),
+    heroSlotsActive: t('heroSlotsActive'),
+    heroNoSlots: t('heroNoSlots'),
+    heroAddSlots: t('heroAddSlots'),
+    heroSlotsAvailable: t('heroSlotsAvailable'),
+    heroNoSlotsHunter: t('heroNoSlotsHunter'),
+    heroBookViewing: t('heroBookViewing'),
+  }
+
   // Content for the page — shared between owner and public views
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -352,6 +364,18 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 </span>
               </div>
             )}
+            {/* Hero Calendar Box — overlaid bottom-right */}
+            <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-20 hidden md:block">
+              <HeroCalendarBox
+                listingId={listing.id}
+                placeId={listing.place_id}
+                slotCount={slotCount ?? 0}
+                isOwner={true}
+                locale={locale}
+                dateLocale={localeFmt}
+                translations={heroCalendarTranslations}
+              />
+            </div>
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 pointer-events-none z-10">
               <div className="max-w-6xl mx-auto">
                 <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-2">{title ?? t('titleFallback')}</h1>
@@ -614,6 +638,19 @@ export default async function PropertyPage({ params, searchParams }: Props) {
         {/* Status badge */}
         <div className="absolute top-4 left-4 z-10">
           <ListingStatusBadge status={listing.status} />
+        </div>
+
+        {/* Hero Calendar Box — overlaid bottom-right */}
+        <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 z-20 hidden md:block">
+          <HeroCalendarBox
+            listingId={listing.id}
+            placeId={listing.place_id}
+            slotCount={slotCount ?? 0}
+            isOwner={false}
+            locale={locale}
+            dateLocale={localeFmt}
+            translations={heroCalendarTranslations}
+          />
         </div>
 
         {/* Title + location on overlay */}
