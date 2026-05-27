@@ -205,7 +205,6 @@ export async function checkAuthAction(): Promise<{
 interface ViewingPayload {
   name: string
   email: string
-  phone?: string
   message?: string
   buyerStatus?: string
   intent?: string
@@ -285,7 +284,7 @@ export async function bookSlotAction(
       .single()
 
     const { data: hunterData } = await (service.from('users') as any)
-      .select('full_name, email, phone')
+      .select('full_name, email')
       .eq('id', user.id)
       .single()
 
@@ -302,8 +301,6 @@ export async function bookSlotAction(
           listingTitle: listingData.title_de ?? listingId,
           listingCity: listingData.city,
           buyerName: hunterData.full_name ?? hunterData.email,
-          buyerEmail: hunterData.email,
-          buyerPhone: hunterData.phone,
           buyerMessage: notes?.trim() || null,
         }).catch(e => console.error('slot booking owner email error:', e))
       }
@@ -417,8 +414,6 @@ export async function requestViewingAction(
           listingTitle: title,
           listingCity: listingData.city,
           buyerName: payload.name.trim(),
-          buyerEmail: payload.email.trim().toLowerCase(),
-          buyerPhone: payload.phone?.trim() || null,
           buyerMessage: payload.message?.trim() || null,
         }).catch(e => console.error('owner email error:', e))
 
@@ -428,7 +423,6 @@ export async function requestViewingAction(
             ownerName: ownerData.full_name,
             listingTitle: title,
             buyerName: payload.name.trim(),
-            buyerPhone: payload.phone?.trim() || null,
           }).catch(e => console.error('owner whatsapp error:', e))
         }
       }
@@ -468,7 +462,7 @@ export async function seedHunterProfileAction(
   if (payload.budgetMin) profileData.budget_min = payload.budgetMin
   if (payload.budgetMax) profileData.budget_max = payload.budgetMax
   if (payload.buyerStatus) profileData.buyer_status = payload.buyerStatus
-  if (payload.phone) profileData.phone = payload.phone
+  // Phone is collected separately via profile settings, not inquiry form
 
   // Nothing to seed
   if (Object.keys(profileData).length === 0) return { success: true }

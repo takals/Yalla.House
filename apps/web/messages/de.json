@@ -2387,7 +2387,17 @@
     "contactGateText": "Erstellen Sie ein kostenloses Konto, um den Eigentümer zu kontaktieren. Das schützt vor Spam und sorgt für sichere Kommunikation.",
     "contactCreateAccount": "Kostenlos registrieren",
     "contactSignIn": "Anmelden",
-    "contactPrivacy": "Ihre Daten werden nie an Dritte weitergegeben. Der Eigentümer sieht nur, was Sie im Formular angeben.",
+    "contactPrivacy": "Ihre Kontaktdaten werden nie öffentlich angezeigt. Sie entscheiden, wann Sie diese direkt teilen.",
+    "contactInAppOnly": "Die gesamte Kommunikation läuft sicher über Yalla.House. Kein Spam, keine Kaltanrufe.",
+    "messagingSecure": "Sichere In-App-Nachrichten",
+    "messagingSecureDesc": "Ihre Telefonnummer und E-Mail werden erst geteilt, wenn Sie sich dafür entscheiden.",
+    "verificationSelfDeclared": "Selbsterklärt",
+    "verificationBasic": "Verifizierter Käufer",
+    "verificationFull": "Vollständig verifiziert",
+    "verificationNone": "Nicht verifiziert",
+    "verificationBadgeTooltipSelf": "Dieser Käufer hat seinen Status selbst angegeben, dieser wurde jedoch nicht unabhängig überprüft.",
+    "verificationBadgeTooltipBasic": "Die Hypothek oder der Finanzierungsnachweis dieses Käufers wurde von Yalla.House verifiziert.",
+    "verificationBadgeTooltipFull": "Identität, Finanzen und Anwalt dieses Käufers wurden von Yalla.House vollständig verifiziert.",
     "contactThankYou": "Vielen Dank!",
     "contactOwnerInTouch": "Der Eigentümer meldet sich in Kürze bei Ihnen.",
     "contactRequestViewing": "Besichtigung anfragen",
@@ -4398,6 +4408,10 @@
     "tagTimeWaster": "Zeitverschwender",
     "tagFollowUp": "Nachfassen",
     "tagCashBuyer": "Barzahler",
-    "demoTagged": "Bei echten Kontakten kannst du sie hier taggen und filtern."
+    "demoTagged": "Bei echten Kontakten kannst du sie hier taggen und filtern.",
+    "verificationSelfDeclared": "Selbsterklärt",
+    "verificationBasic": "Verifizierter Käufer",
+    "verificationFull": "Vollständig verifiziert",
+    "verificationNone": "Nicht verifiziert"
   }
 }

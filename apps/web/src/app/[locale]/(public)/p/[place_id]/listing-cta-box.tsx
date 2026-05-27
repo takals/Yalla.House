@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, MessageCircle, Shield, ChevronDown } from 'lucide-react'
+import { Calendar, MessageCircle, Shield, Lock } from 'lucide-react'
 import { checkAuthAction } from './actions'
 
 interface Props {
@@ -118,12 +118,20 @@ export function ListingCtaBox({
         {tr(t, 'ctaMessageOwner')}
       </button>
 
-      {/* Trust signal */}
-      <div className="flex items-start gap-2 pt-2 border-t border-border-default">
-        <Shield size={14} className="text-text-secondary mt-0.5 flex-shrink-0" />
-        <p className="text-[11px] text-text-secondary leading-relaxed">
-          {tr(t, 'contactPrivacy')}
-        </p>
+      {/* Trust signals — in-app messaging */}
+      <div className="pt-3 border-t border-border-default space-y-2">
+        <div className="flex items-start gap-2">
+          <Lock size={13} className="text-green-600 mt-0.5 flex-shrink-0" />
+          <p className="text-[11px] text-text-secondary leading-relaxed">
+            {tr(t, 'contactInAppOnly')}
+          </p>
+        </div>
+        <div className="flex items-start gap-2">
+          <Shield size={13} className="text-text-secondary mt-0.5 flex-shrink-0" />
+          <p className="text-[11px] text-text-secondary leading-relaxed">
+            {tr(t, 'contactPrivacy')}
+          </p>
+        </div>
       </div>
     </div>
   )

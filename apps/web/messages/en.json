@@ -2387,7 +2387,17 @@
     "contactGateText": "Create a free account to contact the owner. This keeps enquiries genuine and communication secure.",
     "contactCreateAccount": "Create free account",
     "contactSignIn": "Sign in",
-    "contactPrivacy": "Your details are never shared with third parties. The owner only sees what you provide in the form.",
+    "contactPrivacy": "Your personal contact details are never shown publicly. You decide when to share them directly.",
+    "contactInAppOnly": "All communication happens securely through Yalla.House. No spam, no cold calls.",
+    "messagingSecure": "Secure in-app messaging",
+    "messagingSecureDesc": "Your phone number and email are never shared with the owner until you choose to share them.",
+    "verificationSelfDeclared": "Self-declared",
+    "verificationBasic": "Verified buyer",
+    "verificationFull": "Fully verified",
+    "verificationNone": "Not verified",
+    "verificationBadgeTooltipSelf": "This buyer has declared their status but it has not been independently verified.",
+    "verificationBadgeTooltipBasic": "This buyer's mortgage or proof of funds has been verified by Yalla.House.",
+    "verificationBadgeTooltipFull": "This buyer's identity, finances, and solicitor have all been verified by Yalla.House.",
     "contactThankYou": "Thank you!",
     "contactOwnerInTouch": "The owner will be in touch with you shortly.",
     "contactRequestViewing": "Request a viewing",
@@ -4398,6 +4408,10 @@
     "tagTimeWaster": "Time waster",
     "tagFollowUp": "Follow up",
     "tagCashBuyer": "Cash buyer",
-    "demoTagged": "With real contacts you can tag and filter them here."
+    "demoTagged": "With real contacts you can tag and filter them here.",
+    "verificationSelfDeclared": "Self-declared",
+    "verificationBasic": "Verified buyer",
+    "verificationFull": "Fully verified",
+    "verificationNone": "Not verified"
   }
 }

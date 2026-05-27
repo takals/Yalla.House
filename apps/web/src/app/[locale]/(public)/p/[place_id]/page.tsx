@@ -186,6 +186,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     ctaNoSlots: t('ctaNoSlots'),
     barUnderOffer: t('barUnderOffer'),
     contactPrivacy: t('contactPrivacy'),
+    contactInAppOnly: t('contactInAppOnly'),
     shareProperty: t('shareProperty'),
     downloadBrochure: t('downloadBrochure'),
     exportForAgent: t('exportForAgent'),

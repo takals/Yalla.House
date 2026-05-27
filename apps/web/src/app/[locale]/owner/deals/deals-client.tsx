@@ -11,6 +11,7 @@ import {
 import { sendReplyAction } from '../inbox/[threadId]/actions'
 import { updateOfferStatusAction } from '../offers/actions'
 import { dateLocaleFromLocale } from '@/lib/country-config'
+import { VerificationBadge, VerificationIcon } from '@/components/verification-badge'
 
 /* ── Types ─────────────────────────────────────── */
 
@@ -28,6 +29,7 @@ interface DealContact {
   name: string
   email: string | null
   role: 'hunter' | 'agent' | 'unknown'
+  verificationTier: 'none' | 'self_declared' | 'basic' | 'full'
   hunterProfile: {
     budgetMin: number | null
     budgetMax: number | null
@@ -494,10 +496,11 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                 } ${item.isDemo ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-text-primary truncate">
+                  <span className="text-sm font-medium text-text-primary truncate flex items-center gap-1">
                     {item.contact.name}
+                    <VerificationIcon tier={item.contact.verificationTier} size={12} translations={t} />
                     {item.isDemo && (
-                      <span className="ml-1.5 text-[10px] font-normal text-text-muted italic">{tx(t, 'exampleLabel')}</span>
+                      <span className="ml-1 text-[10px] font-normal text-text-muted italic">{tx(t, 'exampleLabel')}</span>
                     )}
                   </span>
                   <span className="text-[11px] text-text-muted flex-shrink-0 ml-2">{relativeTime(item.latestTime, t)}</span>
@@ -574,7 +577,12 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                   {initials(selectedContact?.name ?? '?')}
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-text-primary">{selectedContact?.name}</div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-text-primary">
+                    {selectedContact?.name}
+                    {selectedContact && selectedContact.verificationTier !== 'none' && (
+                      <VerificationBadge tier={selectedContact.verificationTier} size="sm" translations={t} />
+                    )}
+                  </div>
                   <div className="text-[11px] text-text-secondary">
                     {selectedContact?.role === 'hunter' ? tx(t, 'roleHomeHunter') :
                      selectedContact?.role === 'agent' ? tx(t, 'roleAgent') : ''}

@@ -107,7 +107,7 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
       : Promise.resolve({ data: [] }),
     contactIdsArr.length > 0
       ? (supabase.from('hunter_profiles') as any)
-          .select('user_id, budget_min, budget_max, intent, timeline, mortgage_verified, identity_verified, finance_status, buyer_status')
+          .select('user_id, budget_min, budget_max, intent, timeline, mortgage_verified, identity_verified, finance_status, buyer_status, verification_tier')
           .in('user_id', contactIdsArr)
       : Promise.resolve({ data: [] }),
   ])
@@ -222,6 +222,7 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     name: string
     email: string | null
     role: 'hunter' | 'agent' | 'unknown'
+    verificationTier: 'none' | 'self_declared' | 'basic' | 'full'
     hunterProfile: {
       budgetMin: number | null
       budgetMax: number | null
@@ -246,6 +247,7 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
       name: displayName,
       email: u?.email ?? null,
       role: u?.role === 'agent' ? 'agent' : hp ? 'hunter' : 'unknown',
+      verificationTier: (hp?.verification_tier as 'none' | 'self_declared' | 'basic' | 'full') ?? 'none',
       hunterProfile: hp ? {
         budgetMin: hp.budget_min,
         budgetMax: hp.budget_max,
@@ -313,6 +315,8 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     'tagSerious', 'tagHotLead', 'tagNeedsMortgage',
     'tagTimeWaster', 'tagFollowUp', 'tagCashBuyer',
     'demoTagged',
+    // Verification
+    'verificationSelfDeclared', 'verificationBasic', 'verificationFull', 'verificationNone',
   ] as const
 
   const translations: Record<string, string> = {}
@@ -331,6 +335,7 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
       name: 'Hans Wurst',
       email: 'hans.wurst@beispiel.de',
       role: 'hunter',
+      verificationTier: 'self_declared',
       hunterProfile: {
         budgetMin: 350000,
         budgetMax: 450000,

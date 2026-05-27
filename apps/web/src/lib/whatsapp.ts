@@ -80,14 +80,13 @@ export async function sendViewingRequestWhatsApp(opts: {
   ownerName: string | null
   listingTitle: string
   buyerName: string
-  buyerPhone: string | null
 }): Promise<void> {
   try {
     await sendTemplate(opts.ownerPhone, 'yalla_new_viewing_request', [
       opts.ownerName?.split(' ')[0] ?? 'Eigentümer',
       opts.listingTitle,
       opts.buyerName,
-      opts.buyerPhone ?? '—',
+      'Reply in your dashboard',
     ])
   } catch (err) {
     console.error('sendViewingRequestWhatsApp failed:', err)

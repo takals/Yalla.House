@@ -43,11 +43,10 @@ const EMAIL_TRANSLATIONS = {
     newViewingIntro: (title: string, city: string) =>
       `Someone has requested a viewing for your listing ${title} in ${city}.`,
     newViewingName: 'Name',
-    newViewingEmail: 'Email',
-    newViewingPhone: 'Phone',
     newViewingMessage: 'Message',
     newViewingCta: 'View Request',
-    newViewingFooter: 'Reply directly to the buyer via email or phone, or confirm the request in your dashboard.',
+    newViewingInAppNote: 'All communication happens securely through Yalla.House. Reply to this buyer in your dashboard.',
+    newViewingFooter: 'View and respond to all enquiries in your Yalla.House dashboard.',
     viewingConfirmedSubject: (title: string) => `Viewing confirmed — ${title}`,
     viewingConfirmedGreeting: (name: string) => name ? `Hello ${name},` : 'Hello,',
     viewingConfirmedIntro: (title: string, city: string) =>
@@ -286,11 +285,10 @@ const EMAIL_TRANSLATIONS = {
     newViewingIntro: (title: string, city: string) =>
       `Jemand hat eine Besichtigung für dein Inserat ${title} in ${city} angefordert.`,
     newViewingName: 'Name',
-    newViewingEmail: 'E-Mail',
-    newViewingPhone: 'Telefon',
     newViewingMessage: 'Nachricht',
     newViewingCta: 'Anfrage ansehen',
-    newViewingFooter: 'Antworte direkt dem Interessenten per E-Mail oder Telefon, oder bestätige die Anfrage in deinem Dashboard.',
+    newViewingInAppNote: 'Die gesamte Kommunikation läuft sicher über Yalla.House. Antworte diesem Interessenten in deinem Dashboard.',
+    newViewingFooter: 'Alle Anfragen ansehen und beantworten in deinem Yalla.House-Dashboard.',
     viewingConfirmedSubject: (title: string) => `Besichtigung bestätigt — ${title}`,
     viewingConfirmedGreeting: (name: string) => name ? `Hallo ${name},` : 'Hallo,',
     viewingConfirmedIntro: (title: string, city: string) =>
@@ -813,8 +811,6 @@ export async function sendNewViewingRequestEmail(opts: {
   listingTitle: string
   listingCity: string
   buyerName: string
-  buyerEmail: string
-  buyerPhone: string | null
   buyerMessage: string | null
   countryCode?: string
   locale?: EmailLocale
@@ -824,10 +820,6 @@ export async function sendNewViewingRequestEmail(opts: {
   const t = EMAIL_TRANSLATIONS[locale]
 
   const greeting = t.newViewingGreeting(opts.ownerName?.split(' ')[0] ?? '')
-
-  const phoneRow = opts.buyerPhone
-    ? `<tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">${t.newViewingPhone}</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.buyerPhone}</td></tr>`
-    : ''
 
   const messageBlock = opts.buyerMessage
     ? `<div style="margin-top:20px;padding:16px;background:#F5F5FA;border-radius:10px;font-size:14px;color:#5E6278;font-style:italic;">&ldquo;${opts.buyerMessage}&rdquo;</div>`
@@ -841,13 +833,15 @@ export async function sendNewViewingRequestEmail(opts: {
 
     <table style="width:100%;border-collapse:collapse;">
       <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">${t.newViewingName}</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">${opts.buyerName}</td></tr>
-      <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">${t.newViewingEmail}</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;"><a href="mailto:${opts.buyerEmail}" style="color:#0F1117;">${opts.buyerEmail}</a></td></tr>
-      ${phoneRow}
     </table>
 
     ${messageBlock}
 
-    ${ctaButton(t.newViewingCta, `${BASE_URL}/owner/viewings`)}
+    <div style="margin-top:20px;padding:12px 16px;background:#DCFCE7;border-radius:10px;font-size:13px;color:#166534;">
+      &#x1F512; ${t.newViewingInAppNote}
+    </div>
+
+    ${ctaButton(t.newViewingCta, `${BASE_URL}/owner/deals`)}
 
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.newViewingFooter}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { requestViewingAction, checkAuthAction, seedHunterProfileAction } from './actions'
-import { Shield, CheckCircle2, Home, Search, Star, Bell, Users, TrendingUp, Lock, ChevronRight } from 'lucide-react'
+import { Shield, CheckCircle2, Home, Search, Star, Bell, Users, TrendingUp, Lock, ChevronRight, MessageCircle, BadgeCheck } from 'lucide-react'
 
 const BUYER_STATUSES = [
   'mortgage_in_principle',
@@ -89,7 +89,6 @@ export function ContactCard({
   const locale = useLocale()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
   const [message, setMessage] = useState('')
   const [intent, setIntent] = useState('')
   const [buyerStatus, setBuyerStatus] = useState<BuyerStatus | ''>('')
@@ -161,7 +160,6 @@ export function ContactCard({
     const result = await requestViewingAction(listingId, {
       name,
       email,
-      ...(phone ? { phone } : {}),
       ...(qualParts ? { message: qualParts } : {}),
       buyerStatus: buyerStatus || undefined,
       intent: intent || undefined,
@@ -182,6 +180,17 @@ export function ContactCard({
   // The form is always visible — guests fill it out pre-auth, submission gates behind auth
   return (
     <div className="bg-surface rounded-2xl p-6 shadow-sm border border-border-default">
+      {/* In-app messaging trust banner */}
+      <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-green-50 border border-green-200">
+        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+          <Shield size={16} className="text-green-700" />
+        </div>
+        <div>
+          <p className="text-xs font-bold text-green-800">{t('messagingSecure')}</p>
+          <p className="text-[11px] text-green-700">{t('messagingSecureDesc')}</p>
+        </div>
+      </div>
+
       <h2 data-contact-card className="text-lg font-bold text-text-primary mb-1">
         {t('inquiryTitle')}
       </h2>
@@ -190,34 +199,19 @@ export function ContactCard({
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Contact details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label className="block text-xs font-semibold text-text-secondary mb-1">
-              {t('contactName')} *
-            </label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder={t('contactNamePlaceholder')}
-              className="w-full px-3 py-2 text-sm border border-border-default rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-            />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-text-secondary mb-1">
-              {t('contactPhone')} *
-            </label>
-            <input
-              type="tel"
-              required
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              placeholder="+44 ..."
-              className="w-full px-3 py-2 text-sm border border-border-default rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
-            />
-          </div>
+        {/* Contact details — name only (no phone, email only for guests) */}
+        <div>
+          <label className="block text-xs font-semibold text-text-secondary mb-1">
+            {t('contactName')} *
+          </label>
+          <input
+            type="text"
+            required
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder={t('contactNamePlaceholder')}
+            className="w-full px-3 py-2 text-sm border border-border-default rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          />
         </div>
 
         {!isLoggedIn && (
@@ -363,7 +357,13 @@ export function ContactCard({
           </p>
         )}
 
-        <div className="pt-2 border-t border-border-default">
+        <div className="pt-2 border-t border-border-default space-y-1.5">
+          <div className="flex items-start gap-2">
+            <MessageCircle size={13} className="text-brand mt-0.5 flex-shrink-0" />
+            <p className="text-[11px] text-text-secondary">
+              {t('contactInAppOnly')}
+            </p>
+          </div>
           <div className="flex items-start gap-2">
             <Shield size={13} className="text-text-secondary mt-0.5 flex-shrink-0" />
             <p className="text-[11px] text-text-secondary">
