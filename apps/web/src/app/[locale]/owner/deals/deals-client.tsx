@@ -6,7 +6,7 @@ import {
   Phone, Mail, ChevronRight, Clock, CheckCheck,
   ShieldCheck, Home, User, Gavel, Users, HandCoins,
   ArrowLeftRight, X, ArrowLeft, Eye, Inbox,
-  CircleCheck, CircleDashed, CheckCircle2, Info,
+  CircleCheck, CircleDashed, CheckCircle2, Info, Tag, ChevronDown,
 } from 'lucide-react'
 import { sendReplyAction } from '../inbox/[threadId]/actions'
 import { updateOfferStatusAction } from '../offers/actions'
@@ -101,6 +101,24 @@ type TabFilter = 'all' | 'offer' | 'viewing' | 'message'
 
 const DEMO_CONTACT_ID = '__demo_hans_wurst__'
 
+/* ── Preset tags ──────────────────────────────── */
+
+interface PresetTag {
+  id: string
+  tKey: string
+  bg: string
+  text: string
+}
+
+const PRESET_TAGS: PresetTag[] = [
+  { id: 'serious',        tKey: 'tagSerious',        bg: 'bg-emerald-50', text: 'text-emerald-700' },
+  { id: 'hot_lead',       tKey: 'tagHotLead',        bg: 'bg-red-50',     text: 'text-red-700' },
+  { id: 'needs_mortgage',  tKey: 'tagNeedsMortgage',  bg: 'bg-blue-50',    text: 'text-blue-700' },
+  { id: 'time_waster',    tKey: 'tagTimeWaster',     bg: 'bg-gray-100',   text: 'text-gray-600' },
+  { id: 'follow_up',      tKey: 'tagFollowUp',       bg: 'bg-amber-50',   text: 'text-amber-700' },
+  { id: 'cash_buyer',     tKey: 'tagCashBuyer',      bg: 'bg-purple-50',  text: 'text-purple-700' },
+]
+
 /* ── Component ─────────────────────────────────── */
 
 export function DealsClient({ activities, contacts, listings, userId, locale, t, demoActivities, demoContacts }: Props) {
@@ -112,6 +130,12 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
   const [toast, setToast] = useState<string | null>(null)
   const [counterMode, setCounterMode] = useState(false)
   const [counterAmount, setCounterAmount] = useState('')
+  const [contactTags, setContactTags] = useState<Record<string, string[]>>({
+    [DEMO_CONTACT_ID]: ['hot_lead', 'cash_buyer'],
+  })
+  const [tagFilter, setTagFilter] = useState<string | null>(null)
+  const [tagPickerOpen, setTagPickerOpen] = useState(false)
+  const [tagFilterOpen, setTagFilterOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -135,6 +159,15 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
       return () => clearTimeout(timer)
     }
   }, [toast])
+
+  /* ── Close dropdowns on outside click ────────── */
+  useEffect(() => {
+    function handleClick() { setTagPickerOpen(false); setTagFilterOpen(false) }
+    if (tagPickerOpen || tagFilterOpen) {
+      const timer = setTimeout(() => document.addEventListener('click', handleClick), 0)
+      return () => { clearTimeout(timer); document.removeEventListener('click', handleClick) }
+    }
+  }, [tagPickerOpen, tagFilterOpen])
 
   /* ── Derive contact list with latest activity ── */
   const contactList = useMemo(() => {
@@ -173,13 +206,19 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
       }
     }
 
+    // Filter by tag if active
+    let result = [...map.values()]
+    if (tagFilter) {
+      result = result.filter(item => (contactTags[item.contact.id] || []).includes(tagFilter))
+    }
+
     // Sort: demo contact always first, then real contacts by time
-    return [...map.values()].sort((a, b) => {
+    return result.sort((a, b) => {
       if (a.isDemo && !b.isDemo) return -1
       if (!a.isDemo && b.isDemo) return 1
       return new Date(b.latestTime).getTime() - new Date(a.latestTime).getTime()
     })
-  }, [allActivities, allContacts, tab, t, locale])
+  }, [allActivities, allContacts, tab, t, locale, tagFilter, contactTags])
 
   /* ── Contact's timeline ────────────────────── */
   const contactTimeline = useMemo(() => {
@@ -318,6 +357,15 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
     setToast(tx(t, 'noThreadToast'))
   }
 
+  function toggleTag(contactId: string, tagId: string) {
+    if (contactId === DEMO_CONTACT_ID) { setToast(tx(t, 'demoTagged')); return }
+    setContactTags(prev => {
+      const current = prev[contactId] || []
+      const next = current.includes(tagId) ? current.filter(t => t !== tagId) : [...current, tagId]
+      return { ...prev, [contactId]: next }
+    })
+  }
+
   /* ── Tab badges ────────────────────────────── */
   const tabConfig: { key: TabFilter; label: string; icon: typeof Inbox; count: number }[] = [
     { key: 'all', label: tx(t, 'tabAll'), icon: Inbox, count: contactList.length },
@@ -383,6 +431,48 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
         </div>
       </div>
 
+      {/* Tag filter */}
+      <div className="flex items-center gap-2 mb-5">
+        <div className="relative">
+          <button
+            onClick={() => setTagFilterOpen(v => !v)}
+            className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-border text-text-secondary hover:text-text-primary hover:bg-bg-soft transition-colors"
+          >
+            <Tag className="w-3.5 h-3.5" />
+            {tagFilter ? tx(t, PRESET_TAGS.find(pt => pt.id === tagFilter)?.tKey ?? 'tagFilterAll') : tx(t, 'tagFilterAll')}
+            <ChevronDown className="w-3 h-3" />
+          </button>
+          {tagFilterOpen && (
+            <div className="absolute top-full left-0 mt-1 z-30 bg-surface border border-border rounded-lg shadow-lg py-1 min-w-[160px]">
+              <button
+                onClick={() => { setTagFilter(null); setTagFilterOpen(false) }}
+                className={`w-full text-left px-3 py-1.5 text-xs hover:bg-bg-soft transition-colors ${!tagFilter ? 'font-medium text-brand' : 'text-text-secondary'}`}
+              >
+                {tx(t, 'tagFilterAll')}
+              </button>
+              {PRESET_TAGS.map(pt => (
+                <button
+                  key={pt.id}
+                  onClick={() => { setTagFilter(pt.id); setTagFilterOpen(false) }}
+                  className={`w-full text-left px-3 py-1.5 text-xs hover:bg-bg-soft transition-colors flex items-center gap-2 ${tagFilter === pt.id ? 'font-medium text-brand' : 'text-text-secondary'}`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${pt.bg.replace('bg-', 'bg-')} ${pt.text.replace('text-', 'border-')} border`} />
+                  {tx(t, pt.tKey)}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {tagFilter && (
+          <button
+            onClick={() => setTagFilter(null)}
+            className="text-[10px] text-text-muted hover:text-text-primary"
+          >
+            <X className="w-3 h-3" />
+          </button>
+        )}
+      </div>
+
       {/* Main layout */}
       <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] border border-border rounded-xl overflow-hidden bg-surface min-h-[560px]">
 
@@ -427,6 +517,19 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                   </span>
                 </div>
                 <p className="text-xs text-text-secondary truncate">{item.preview}</p>
+                {(contactTags[item.contact.id] || []).length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {(contactTags[item.contact.id] || []).map(tagId => {
+                      const pt = PRESET_TAGS.find(p => p.id === tagId)
+                      if (!pt) return null
+                      return (
+                        <span key={tagId} className={`inline-flex items-center text-[9px] font-medium px-1.5 py-0.5 rounded-full ${pt.bg} ${pt.text}`}>
+                          {tx(t, pt.tKey)}
+                        </span>
+                      )
+                    })}
+                  </div>
+                )}
                 <div className="flex items-center gap-1 mt-1 text-[10px] text-text-muted">
                   {channelIcon(item.channel)}
                   <span>{channelLabel(item.channel, t)}</span>
@@ -480,7 +583,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                 </div>
               </div>
 
-              <div className="flex gap-1.5">
+              <div className="flex items-center gap-1.5">
                 {selectedContact?.hunterProfile?.identityVerified && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">
                     <ShieldCheck className="w-3 h-3" />{tx(t, 'idVerified')}
@@ -496,8 +599,60 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                     <Home className="w-3 h-3" />{tx(t, 'mortgageApproved')}
                   </span>
                 )}
+
+                {/* Tag picker */}
+                <div className="relative ml-1">
+                  <button
+                    onClick={() => setTagPickerOpen(v => !v)}
+                    className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border border-dashed border-border text-text-muted hover:text-text-primary hover:border-border-dark transition-colors"
+                  >
+                    <Tag className="w-3 h-3" />
+                    {tx(t, 'addTag')}
+                  </button>
+                  {tagPickerOpen && selectedContactId && (
+                    <div className="absolute top-full right-0 mt-1 z-30 bg-surface border border-border rounded-lg shadow-lg py-1 min-w-[160px]">
+                      {PRESET_TAGS.map(pt => {
+                        const active = (contactTags[selectedContactId] || []).includes(pt.id)
+                        return (
+                          <button
+                            key={pt.id}
+                            onClick={() => { toggleTag(selectedContactId, pt.id) }}
+                            className={`w-full text-left px-3 py-1.5 text-xs hover:bg-bg-soft transition-colors flex items-center gap-2 ${active ? 'font-medium' : 'text-text-secondary'}`}
+                          >
+                            <span className={`w-4 h-4 rounded border flex items-center justify-center ${active ? 'bg-brand border-brand' : 'border-border'}`}>
+                              {active && <CheckCheck className="w-3 h-3 text-white" />}
+                            </span>
+                            <span className={`inline-flex items-center text-[11px] px-1.5 py-0.5 rounded-full ${pt.bg} ${pt.text}`}>
+                              {tx(t, pt.tKey)}
+                            </span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+            {/* Selected contact tags display */}
+            {selectedContactId && (contactTags[selectedContactId] || []).length > 0 && (
+              <div className="flex items-center gap-1.5 px-4 pb-2 -mt-1">
+                {(contactTags[selectedContactId] || []).map(tagId => {
+                  const pt = PRESET_TAGS.find(p => p.id === tagId)
+                  if (!pt) return null
+                  return (
+                    <span key={tagId} className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full ${pt.bg} ${pt.text}`}>
+                      {tx(t, pt.tKey)}
+                      <button
+                        onClick={() => toggleTag(selectedContactId, tagId)}
+                        className="hover:opacity-70"
+                      >
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    </span>
+                  )
+                })}
+              </div>
+            )}
 
             {/* Content: timeline + sidebar */}
             <div className="grid grid-cols-1 xl:grid-cols-[1fr_200px] flex-1 min-h-0 overflow-hidden">

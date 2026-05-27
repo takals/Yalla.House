@@ -308,6 +308,11 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     'status_chain_free', 'status_first_time_buyer', 'status_cash_buyer',
     'status_mortgage_in_principle', 'status_in_chain', 'status_selling_to_buy',
     'status_exploring',
+    // Tags
+    'tagFilterAll', 'tagFilterLabel', 'addTag',
+    'tagSerious', 'tagHotLead', 'tagNeedsMortgage',
+    'tagTimeWaster', 'tagFollowUp', 'tagCashBuyer',
+    'demoTagged',
   ] as const
 
   const translations: Record<string, string> = {}

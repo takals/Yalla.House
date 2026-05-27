@@ -4388,6 +4388,16 @@
     "status_mortgage_in_principle": "Finanzierungszusage",
     "status_in_chain": "In einer Kette",
     "status_selling_to_buy": "Verkauft zum Kauf",
-    "status_exploring": "Orientierungsphase"
+    "status_exploring": "Orientierungsphase",
+    "tagFilterAll": "Alle Tags",
+    "tagFilterLabel": "Nach Tag filtern",
+    "addTag": "Tag hinzufügen",
+    "tagSerious": "Ernsthaft",
+    "tagHotLead": "Heißer Kontakt",
+    "tagNeedsMortgage": "Braucht Finanzierung",
+    "tagTimeWaster": "Zeitverschwender",
+    "tagFollowUp": "Nachfassen",
+    "tagCashBuyer": "Barzahler",
+    "demoTagged": "Bei echten Kontakten kannst du sie hier taggen und filtern."
   }
 }

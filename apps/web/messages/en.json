@@ -4388,6 +4388,16 @@
     "status_mortgage_in_principle": "Mortgage in principle",
     "status_in_chain": "In a chain",
     "status_selling_to_buy": "Selling to buy",
-    "status_exploring": "Just exploring"
+    "status_exploring": "Just exploring",
+    "tagFilterAll": "All tags",
+    "tagFilterLabel": "Filter by tag",
+    "addTag": "Add tag",
+    "tagSerious": "Serious",
+    "tagHotLead": "Hot lead",
+    "tagNeedsMortgage": "Needs mortgage",
+    "tagTimeWaster": "Time waster",
+    "tagFollowUp": "Follow up",
+    "tagCashBuyer": "Cash buyer",
+    "demoTagged": "With real contacts you can tag and filter them here."
   }
 }
