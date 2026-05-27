@@ -7,6 +7,26 @@ export const inngest = new Inngest({
 
 // Typed event map — add new events here as they are created
 export type Events = {
+  'marketing/welcome.start': {
+    data: {
+      userId: string
+      email: string
+      firstName: string | null
+      role: 'owner' | 'hunter' | 'agent' | 'partner' | 'referrer' | 'admin' | 'other'
+      locale: 'de' | 'en'
+    }
+  }
+  'marketing/mql.created': {
+    data: {
+      contactId: string
+      email: string
+      firstName: string | null
+      lastName: string | null
+      role: string | null
+      market: string | null
+      source: string | null
+    }
+  }
   'feed/export.requested': {
     data: {
       listingId: string

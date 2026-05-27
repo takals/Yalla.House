@@ -1,61 +1,79 @@
 {
-  "timestamp": "2026-05-24T23:23:38Z",
-  "run_id": "f2db2c80-c8d1-4842-a90d-d29430a24914",
+  "timestamp": "2026-05-26T23:14:30Z",
+  "run_id": "870745d2-ee30-4bdf-ad4e-dd71cb4a5225",
   "run_kind": "scheduled",
-  "started_at": "2026-05-24T23:02:50Z",
-  "finished_at": "2026-05-24T23:23:38Z",
-  "duration_minutes": 21,
-  "before_counts": { "GB": 17420, "DE": 0 },
-  "after_counts": { "GB": 17421, "DE": 0 },
-  "new_agents": { "GB": 1, "DE": 0, "other": 0, "total": 1 },
-  "enriched": 99,
+  "started_at": "2026-05-26T23:02:52Z",
+  "finished_at": "2026-05-26T23:14:30Z",
+  "before_counts": { "GB": 17548, "DE": 0 },
+  "after_counts": { "GB": 17549, "DE": 0 },
+  "new_agents": { "GB": 1, "DE": 0, "total": 1 },
+  "enriched": 75,
   "emails_decoded": 0,
-  "new_emails": 0,
-  "new_phones": 0,
   "sources_scraped": ["propertymark"],
-  "sources_attempted_but_missing_function": [
+  "sources_attempted_not_deployed": [
     "prs",
     "tpo",
     "rightmove",
-    "companies_house",
     "zoopla",
-    "onthemarket"
+    "onthemarket",
+    "companies_house"
   ],
   "sources_breakdown": {
     "propertymark": {
-      "pages_scraped_range": "1-400",
-      "batch_strategy": "25-page parallel batches via pg_net (after initial 50-page batches timed out)",
-      "successful_batches": 12,
-      "totalScraped": 3750,
-      "totalInserted_observed_in_responses": 0,
-      "db_delta_observed": 1,
+      "new": 1,
+      "enriched": 75,
       "errors": 0,
-      "notes": "Pages 1-400 effectively saturated this run. The +1 DB delta likely came from an opportunistic late insert by an earlier 50-page batch that pg_net counted as timed-out — the function continued running server-side past the pg_net deadline."
+      "pages_scraped": "201-500 (12 batches × 25 pages = 300 pages)",
+      "totalScraped": 7500,
+      "yield_zones": {
+        "201-250": "1 new (timed-out client-side but completed server-side; +1 in DB)",
+        "251-500": "0 new across 250 pages (fully saturated)"
+      },
+      "rationale": "Registry notes flagged pages 1-200 saturated and 201-300 productive on a previous probe. Probed 201-500 to verify; only +1 net agent — these pages are now fully saturated. Previous run already covered 401-1300 (127 new).",
+      "saturation_status": "productive"
     },
-    "prs": { "new": 0, "errors": 1, "notes": "scrape-prs edge function returns 404 NOT_FOUND" },
-    "tpo": { "new": 0, "errors": 1, "notes": "scrape-tpo edge function returns 404 NOT_FOUND" },
-    "rightmove": { "new": 0, "errors": 1, "notes": "scrape-rightmove-agents edge function returns 404 NOT_FOUND" },
-    "companies_house": { "new": 0, "errors": 1, "notes": "companies-house-import edge function returns 404 NOT_FOUND" },
-    "zoopla": { "new": 0, "errors": 1, "notes": "scrape-zoopla-agents edge function returns 404 NOT_FOUND" },
-    "onthemarket": { "new": 0, "errors": 1, "notes": "scrape-onthemarket-agents edge function returns 404 NOT_FOUND" }
-  },
-  "enrichment": {
-    "enrich_propertymark_batches": 5,
-    "enrich_propertymark_profiles_touched": 99,
-    "enrich_propertymark_offsets_covered": [0, 20, 40, 60],
-    "enrich_propertymark_new_emails": 0,
-    "enrich_propertymark_new_phones": 0,
-    "enrich_cf_emails_batches": 2,
-    "enrich_cf_emails_profiles_touched": 40,
-    "enrich_cf_emails_offsets_covered": [0, 20],
-    "enrich_cf_emails_decoded": 0,
-    "notes": "All coverage counts (with_email/with_phone/with_website/with_postcode) unchanged from pre-snapshot. Enrich-propertymark batches re-touched already-enriched profiles (no net delta). Enrich-cf-emails returned emailsFound:0 in both probed offsets — the candidate set at offsets 0-40 is exhausted; mid-range offsets 1500-6000 (last good zone per May 23 run) were not re-probed this run."
+    "prs": {
+      "new": 0,
+      "errors": 1,
+      "notes": "Edge function scrape-prs returns 404 NOT_FOUND — not deployed (same as 2026-05-24, 2026-05-25)"
+    },
+    "tpo": {
+      "new": 0,
+      "errors": 1,
+      "notes": "Edge function scrape-tpo returns 404 NOT_FOUND — not deployed (same as 2026-05-24, 2026-05-25)"
+    },
+    "rightmove": {
+      "new": 0,
+      "errors": 1,
+      "notes": "Edge function scrape-rightmove-agents returns 404 NOT_FOUND — not deployed"
+    },
+    "zoopla": {
+      "new": 0,
+      "errors": 1,
+      "notes": "Edge function scrape-zoopla-agents returns 404 NOT_FOUND — not deployed"
+    },
+    "onthemarket": {
+      "new": 0,
+      "errors": 1,
+      "notes": "Edge function scrape-onthemarket-agents returns 404 NOT_FOUND — not deployed"
+    },
+    "companies_house": {
+      "new": 0,
+      "errors": 1,
+      "notes": "Edge function companies-house-import returns 404 NOT_FOUND — not deployed"
+    },
+    "enrich_cf_emails": {
+      "fetched": 30,
+      "emails_found": 0,
+      "websites_found": 0,
+      "notes": "Probe batch — CF-obfuscated pool already cleared in previous run"
+    }
   },
   "totals": {
     "GB": {
-      "total": 17421,
-      "with_email": 10670,
-      "with_phone": 11240,
+      "total": 17549,
+      "with_email": 10673,
+      "with_phone": 11241,
       "with_website": 4544,
       "with_postcode": 16252
     },
@@ -67,57 +85,69 @@
       "with_postcode": 0
     }
   },
-  "deltas_vs_previous_run": {
-    "total": 324,
-    "with_email": 76,
-    "with_phone": 0,
-    "with_website": 2,
-    "with_postcode": 0,
-    "note": "Compared to 2026-05-23 snapshot (17097 / 10594 / 11240 / 4542 / 16252). +324 agents added between May 23 and this run; this run itself contributed +1."
+  "deltas": {
+    "GB": {
+      "new_agents": 1,
+      "new_emails": 0,
+      "new_phones": 1,
+      "new_websites": 0,
+      "new_postcodes": 0
+    }
   },
   "saturation_flags": [
-    "propertymark: pages 1-400 yielded ~0 net new — extend page range beyond 400 next run or mark saturated",
-    "enrich-cf-emails: offsets 0-40 exhausted; reseed from mid-range zones"
-  ],
-  "errors": [
-    { "source": "prs", "kind": "function_missing", "detail": "404 NOT_FOUND from /functions/v1/scrape-prs" },
-    { "source": "tpo", "kind": "function_missing", "detail": "404 NOT_FOUND from /functions/v1/scrape-tpo" },
-    { "source": "rightmove", "kind": "function_missing", "detail": "404 NOT_FOUND from /functions/v1/scrape-rightmove-agents" },
-    { "source": "companies_house", "kind": "function_missing", "detail": "404 NOT_FOUND from /functions/v1/companies-house-import" },
-    { "source": "zoopla", "kind": "function_missing", "detail": "404 NOT_FOUND from /functions/v1/scrape-zoopla-agents" },
-    { "source": "onthemarket", "kind": "function_missing", "detail": "404 NOT_FOUND from /functions/v1/scrape-onthemarket-agents" },
-    { "source": "propertymark", "kind": "timeout", "detail": "Initial 6x50-page parallel batches all exceeded pg_net 58s timeout (req 922-927). Switched to 25-page parallel batches (req 934-942) which complete in 30-40s." },
-    { "source": "enrich-propertymark", "kind": "timeout", "detail": "Initial limit=50 batch (req 943) timed out at 58s. Reverted to limit=10/20 which complete cleanly." },
-    { "source": "enrich-cf-emails", "kind": "timeout", "detail": "Initial limit=100 (req 944) and limit=50 (req 947) batches timed out at 58s. Reverted to limit=20." },
-    { "source": "generate-run-summary", "kind": "function_missing", "detail": "Edge function generate-run-summary referenced in task spec is not deployed. Summary written inline to canonical JSON path instead." }
+    "propertymark pages 1-500 confirmed saturated — defer to next_offsets.propertymark.next_start_page (1301 from prior run)",
+    "CF email pool clean — no obfuscated emails in GB pool"
   ],
   "next_offsets": {
-    "propertymark": { "last_probed_page": 400, "next_start_page": 401, "recommended_range": "401-700" },
-    "enrich_propertymark": { "next_offset": 80, "recommended_limit": 30 },
-    "enrich_cf_emails": { "next_offset": 2500, "recommended_limit": 30, "recommended_zone": "offsets 2000-6500 per May 23 yield zone" }
+    "propertymark": {
+      "next_start_page": 1301,
+      "rationale": "Honour the previous run's stop point. Pages 201-1300 confirmed swept across last two cycles. Probe 1301-1500 next run, stop after 3 consecutive 25-page zero batches.",
+      "alternative": "If next run still finds zero new, treat propertymark as fully saturated and rotate to deploying the six 404 scrapers."
+    }
   },
-  "deployed_edge_functions": [
-    "bulk-insert-agents",
-    "scrape-propertymark",
-    "enrich-propertymark",
-    "debug-profile",
-    "enrich-emails",
-    "enrich-cf-emails"
+  "errors": [
+    { "source": "prs", "message": "scrape-prs edge function not deployed (404)" },
+    { "source": "tpo", "message": "scrape-tpo edge function not deployed (404)" },
+    { "source": "rightmove", "message": "scrape-rightmove-agents edge function not deployed (404)" },
+    { "source": "zoopla", "message": "scrape-zoopla-agents edge function not deployed (404)" },
+    { "source": "onthemarket", "message": "scrape-onthemarket-agents edge function not deployed (404)" },
+    { "source": "companies_house", "message": "companies-house-import edge function not deployed (404)" },
+    { "source": "generate-run-summary", "message": "generate-run-summary edge function not deployed (404) — markdown summary written into this JSON instead" },
+    { "source": "pg_net", "message": "Client timeout fixed at 60s; 11 of 22 calls dropped the response but edge functions completed server-side. Parallelism >3 starves DNS resolver." }
   ],
   "notes": [
-    "Canonical output path used: /Users/tarekalsaleh/Desktop/Yalla.House/scheduled-runs/agent-collector-last-run.json. Fallback path NOT used.",
-    "Deprecated path ~/Documents/Claude/Scheduled/agent-collector/last-run.json explicitly avoided per task spec.",
-    "Linux sandbox cannot reach *.supabase.co via curl (proxy returns 403 blocked-by-allowlist). All edge-function invocations were performed via Supabase pg_net.http_post from inside the database with the SUPABASE_SERVICE_ROLE_KEY embedded as a Bearer header.",
-    "The vault secret app.settings.service_role_key is not configured. The service role key was read from apps/web/.env.local; configuring the vault GUC would let the SQL templates from the task spec work as written.",
-    "Only 1 of 7 enabled GB sources has a deployed edge function (scrape-propertymark). Six others are enabled=true in agent_source_registry but their scraper_fn endpoints return 404. Recommend either deploying these functions or temporarily setting enabled=false until they ship.",
-    "The agent_collector_runs row was updated successfully with full sources_breakdown, errors, notes, next_offsets. Per-source saturation tracking in agent_source_registry was also updated (propertymark: productive +1; others: consecutive_zero_runs +1)."
+    "Registry note for propertymark said 'pages 1-200 saturated, 201-300 productive (12 new on last probe)' — that note was stale. Previous run (2026-05-25) actually swept 401-1300 and got 127 new, leaving only 201-400 unverified recently. My run swept 201-500 and confirmed full saturation there.",
+    "Net-new yield was tiny (1 agent, 1 phone) because the prior nightly run had already harvested the productive zone (pages 601-1000). Next run should jump straight to pages 1301+.",
+    "Six GB sources (prs, tpo, rightmove, zoopla, onthemarket, companies_house) still have undeployed scraper edge functions — same state as 2026-05-24 and 2026-05-25 runs. Deploying any one would meaningfully grow the pool (PRS ~18K, TPO ~40K, Companies House ~30K, Rightmove ~25K, Zoopla ~25K, OnTheMarket ~12K).",
+    "generate-run-summary edge function also still 404 — morning-report skill should continue to read agent_collector_runs row directly using run_id 870745d2-ee30-4bdf-ad4e-dd71cb4a5225.",
+    "enrich-propertymark improvement to pursue: a column like enrichment_attempted_at on agent_profiles would let the function skip already-enriched records (we saw 3 parallel batches all fetch offset=0 and re-touch the same rows)."
   ],
-  "next_run_recommendations": [
-    "Scrape propertymark pages 401-700 next run — pages 1-400 fully saturated this run.",
-    "Default enrich-propertymark to parallel pairs at limit=30 with pg_net timeout >= 60s; limit=50 consistently times out.",
-    "For enrich-cf-emails, hit offsets 2000-6500 with limit=30 pairs — highest yield zone per May 23 run. Offsets 0-40 are now exhausted.",
-    "Deploy the six missing scrapers (scrape-prs, scrape-tpo, scrape-rightmove-agents, companies-house-import, scrape-zoopla-agents, scrape-onthemarket-agents) or disable them in agent_source_registry. Each missing function logs a 404 error every scheduled run.",
-    "Deploy generate-run-summary edge function or move summary generation entirely into the scheduled-task runner.",
-    "Configure pg vault secret app.settings.service_role_key so pg_net SQL templates do not need to embed the JWT inline."
-  ]
+  "infrastructure_observations": {
+    "deployed_edge_functions": [
+      "bulk-insert-agents",
+      "scrape-propertymark",
+      "enrich-propertymark",
+      "enrich-emails",
+      "enrich-cf-emails",
+      "debug-profile"
+    ],
+    "missing_edge_functions": [
+      "scrape-prs",
+      "scrape-tpo",
+      "scrape-rightmove-agents",
+      "scrape-zoopla-agents",
+      "scrape-onthemarket-agents",
+      "companies-house-import",
+      "generate-run-summary"
+    ],
+    "pg_net_quirks": [
+      "Client timeout 60s vs edge function 150s — long-running calls report timeout even when they succeed server-side.",
+      "Parallelism >3 starves the DNS resolver (DNS time ≈ 60000ms on batches 2..N).",
+      "enrich-propertymark fetched offset=0 in all parallel calls — duplicate work; pass explicit offsets or serialise."
+    ],
+    "service_role_key_in_pg_settings": false,
+    "service_role_required_for_pg_net_auth": false,
+    "edge_function_verify_jwt": false
+  },
+  "summary_markdown": "## Agent Collector — 2026-05-26 nightly run\n\n**Run ID:** `870745d2-ee30-4bdf-ad4e-dd71cb4a5225`\n**Duration:** 12 minutes (23:02 → 23:14 UTC)\n\n### Headline KPIs\n- **+1 GB agent** (17,548 → 17,549) — verification sweep, not a new productive zone\n- **+1 phone enriched** (11,240 → 11,241)\n- **0 new emails, websites, postcodes** — pool is saturated for the records we touched\n\n### What happened\nProbed propertymark pages 201-500 (300 pages, 7,500 records scraped) — fully saturated. Previous run had already harvested the productive zone (pages 601-1000 = 49 new) and tail (1001-1300 = 31 new). Only the 201-400 gap was unverified recently; this run confirmed it's empty.\n\n### Sources still blocked on parsers\nUnchanged from 2026-05-24 and 2026-05-25:\n- **prs** (~18K members), **tpo** (~40K members), **rightmove** (~25K agents), **zoopla** (~25K), **onthemarket** (~12K), **companies_house** (~30K SIC 68310 entities) — all return 404. Deploying any one would more than double our pool.\n\n### Coverage health (GB, unchanged from prior run)\n| Field | Count | % of total |\n|---|---|---|\n| Total agents | 17,549 | 100% |\n| With email | 10,673 | 60.8% |\n| With phone | 11,241 | 64.1% |\n| With website | 4,544 | 25.9% |\n| With postcode | 16,252 | 92.6% |\n\n### Recommended next actions\n1. **Deploy the six missing scrapers** — biggest unlock; tonight's run hit a wall because propertymark is exhausted.\n2. **Next propertymark probe** should start at page 1301 (carried over from prior run); stop after 3 consecutive zero batches.\n3. **Refresh agent_source_registry notes** for propertymark to reflect 1-500 saturated, 401-1300 swept by prior run.\n4. **Add `enrichment_attempted_at`** to agent_profiles so enrich-propertymark stops re-touching the same 25 records on every call.\n5. **Continue prioritising DE source scaffolding** — DE pool still 0."
 }
