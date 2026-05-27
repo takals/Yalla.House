@@ -4,9 +4,11 @@ import { getTranslations } from 'next-intl/server'
 import { ViewingList, type ViewingRow } from './viewing-list'
 import { AvailabilityManager, type SlotRow } from './availability-manager'
 import { OwnerDemoContent } from '@/components/owner-demo-content'
+import { DashboardHintBanner } from '@/components/dashboard-hint-banner'
 
 export default async function ViewingsPage() {
   const t = await getTranslations('ownerViewings')
+  const tH = await getTranslations('actionHints')
   const td = await getTranslations('ownerDemo')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -81,6 +83,13 @@ export default async function ViewingsPage() {
 
   return (
     <div className="max-w-5xl">
+        <DashboardHintBanner
+          pageKey="owner-viewings"
+          title={tH('viewingsTitle')}
+          hints={[tH('viewingsHint1'), tH('viewingsHint2'), tH('viewingsHint3')]}
+          dismissLabel={tH('dismiss')}
+        />
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">{t('title')}</h1>

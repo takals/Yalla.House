@@ -2,9 +2,11 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { OwnerCalendarView } from './owner-calendar-view'
 import { OwnerDemoContent } from '@/components/owner-demo-content'
+import { DashboardHintBanner } from '@/components/dashboard-hint-banner'
 
 export default async function OwnerCalendarPage() {
   const t = await getTranslations('ownerCalendar')
+  const tH = await getTranslations('actionHints')
   const td = await getTranslations('ownerDemo')
   const locale = await getLocale()
   const supabase = await createClient()
@@ -65,6 +67,12 @@ export default async function OwnerCalendarPage() {
 
   return (
     <div className="max-w-6xl">
+      <DashboardHintBanner
+        pageKey="owner-calendar"
+        title={tH('calendarTitle')}
+        hints={[tH('calendarHint1'), tH('calendarHint2'), tH('calendarHint3')]}
+        dismissLabel={tH('dismiss')}
+      />
       <OwnerCalendarView
         listings={listings}
         initialSlots={slots}

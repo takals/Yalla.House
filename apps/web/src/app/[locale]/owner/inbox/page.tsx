@@ -2,9 +2,11 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { InboxWorkspace } from './inbox-workspace'
 import { OwnerDemoContent } from '@/components/owner-demo-content'
+import { DashboardHintBanner } from '@/components/dashboard-hint-banner'
 
 export default async function OwnerInboxPage() {
   const t = await getTranslations('comms')
+  const tH = await getTranslations('actionHints')
   const td = await getTranslations('ownerDemo')
   const locale = await getLocale()
   const supabase = await createClient()
@@ -162,11 +164,19 @@ export default async function OwnerInboxPage() {
   }
 
   return (
+    <>
+    <DashboardHintBanner
+      pageKey="owner-inbox"
+      title={tH('inboxTitle')}
+      hints={[tH('inboxHint1'), tH('inboxHint2')]}
+      dismissLabel={tH('dismiss')}
+    />
     <InboxWorkspace
       threads={threads}
       userId={userId}
       locale={locale}
       translations={translations}
     />
+    </>
   )
 }

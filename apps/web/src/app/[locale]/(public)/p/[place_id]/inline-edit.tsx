@@ -99,10 +99,11 @@ export function InlineEdit({
         </Tag>
         <button
           onClick={handleEdit}
-          className="inline-flex items-center justify-center ml-2 opacity-0 group-hover:opacity-100 transition-opacity text-brand hover:text-[#BF6840] align-middle"
+          className="inline-flex items-center gap-1 ml-2 px-2 py-1 rounded-md bg-brand/10 text-brand hover:bg-brand/20 hover:text-[#BF6840] transition-colors align-middle text-xs font-semibold"
           title={label}
         >
-          <Pencil size={14} />
+          <Pencil size={12} />
+          <span className="hidden sm:inline">{label}</span>
         </button>
       </div>
     )

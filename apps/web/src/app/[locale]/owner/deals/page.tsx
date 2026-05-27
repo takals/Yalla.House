@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { DealsClient } from './deals-client'
 import { OwnerDemoContent } from '@/components/owner-demo-content'
+import { DashboardHintBanner } from '@/components/dashboard-hint-banner'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('ownerDeals')
@@ -16,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function OwnerDealsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   const t = await getTranslations('ownerDeals')
+  const tH = await getTranslations('actionHints')
   const td = await getTranslations('ownerDemo')
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -405,6 +407,12 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
 
   return (
     <div className="max-w-6xl">
+      <DashboardHintBanner
+        pageKey="owner-deals"
+        title={tH('dealsTitle')}
+        hints={[tH('dealsHint1'), tH('dealsHint2'), tH('dealsHint3')]}
+        dismissLabel={tH('dismiss')}
+      />
       <DealsClient
         activities={activities}
         contacts={contacts}

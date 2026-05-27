@@ -22,6 +22,7 @@ import { DocumentUploadSection } from './document-upload-section'
 import { HeroEditButton } from './hero-edit-button'
 import { StickyBookingBar } from './sticky-booking-bar'
 import { HeroCalendarBox } from './hero-calendar-box'
+import { ListingHintBanner } from '@/components/listing-hint-banner'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -402,6 +403,21 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* ── Action Hint Banner — onboarding tips for owners ── */}
+          <div className="max-w-6xl mx-auto px-4 pt-4">
+            <ListingHintBanner
+              calendarHref="/owner/calendar"
+              translations={{
+                hintTitle: t('hintTitle'),
+                hintEditFields: t('hintEditFields'),
+                hintUploadPhotos: t('hintUploadPhotos'),
+                hintAddViewings: t('hintAddViewings'),
+                hintAddViewingsAction: t('hintAddViewingsAction'),
+                hintDismiss: t('hintDismiss'),
+              }}
+            />
           </div>
 
           {/* ── Owner Quick Actions — prominent horizontal bar ── */}

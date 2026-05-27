@@ -7,6 +7,7 @@ import type { Database } from '@/types/database'
 import ListingFilters from './listing-filters'
 import ListingGrid from './listing-grid'
 import { OwnerExampleDashboard } from '@/components/owner-example-dashboard'
+import { DashboardHintBanner } from '@/components/dashboard-hint-banner'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 
@@ -17,6 +18,7 @@ interface Props {
 export default async function OwnerListingsPage({ searchParams }: Props) {
   const { status: filterStatus } = await searchParams
   const t = await getTranslations('ownerListings')
+  const tH = await getTranslations('actionHints')
   const ts = await getTranslations('statusLabels')
   const tEx = await getTranslations('ownerExampleDashboard')
   const locale = await getLocale()
@@ -123,6 +125,12 @@ export default async function OwnerListingsPage({ searchParams }: Props) {
 
   return (
     <div className="max-w-7xl">
+      <DashboardHintBanner
+        pageKey="owner-listings"
+        title={tH('listingsTitle')}
+        hints={[tH('listingsHint1'), tH('listingsHint2')]}
+        dismissLabel={tH('dismiss')}
+      />
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>

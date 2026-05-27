@@ -7,6 +7,7 @@ import { getTranslations, getLocale } from 'next-intl/server'
 import type { Database } from '@/types/database'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 import { OwnerExampleAnalytics } from '@/components/owner-example-analytics'
+import { DashboardHintBanner } from '@/components/dashboard-hint-banner'
 
 type Listing = Database['public']['Tables']['listings']['Row']
 type Viewing = Database['public']['Tables']['viewings']['Row']
@@ -34,6 +35,7 @@ export default async function OwnerDashboard({ searchParams }: Props) {
   const t = await getTranslations('ownerDash')
   const ts = await getTranslations('statusLabels')
   const tEx = await getTranslations('ownerExampleDashboard')
+  const tH = await getTranslations('actionHints')
   const locale = await getLocale()
   const dateLocale = dateLocaleFromLocale(locale)
   const supabase = await createClient()
@@ -153,6 +155,14 @@ export default async function OwnerDashboard({ searchParams }: Props) {
           {t('billingSuccess')}
         </div>
       )}
+
+      {/* Action hints */}
+      <DashboardHintBanner
+        pageKey="owner-overview"
+        title={tH('overviewTitle')}
+        hints={[tH('overviewHint1'), tH('overviewHint2'), tH('overviewHint3')]}
+        dismissLabel={tH('dismiss')}
+      />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
