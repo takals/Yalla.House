@@ -37,5 +37,6 @@ export async function sendReplyAction(threadId: string, body: string) {
     .eq('id', threadId)
 
   revalidatePath(`/owner/inbox/${threadId}`)
+  revalidatePath('/owner/deals')
   return { success: true }
 }

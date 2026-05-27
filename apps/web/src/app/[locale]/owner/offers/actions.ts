@@ -48,5 +48,6 @@ export async function updateOfferStatusAction(
   }
 
   revalidatePath('/owner/offers')
+  revalidatePath('/owner/deals')
   return { success: true }
 }

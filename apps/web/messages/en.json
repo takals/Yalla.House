@@ -4357,6 +4357,18 @@
     "statusCompleted": "Completed",
     "typeReply": "Type a reply…",
     "send": "Send",
-    "sendHint": "⌘+Enter to send"
+    "sendHint": "⌘+Enter to send",
+    "demoToast": "This is an example contact – sign in to manage real deals.",
+    "demoBanner": "Example contact – this is what your Deal Room looks like with real buyers.",
+    "exampleLabel": "Example",
+    "solicitorToast": "Solicitor instruction coming soon – we’ll notify you.",
+    "depositToast": "Deposit request coming soon – we’ll notify you.",
+    "noThreadToast": "No message thread exists. Start a new one via the Inbox.",
+    "counterOfferLabel": "Send counter-offer",
+    "counterPlaceholder": "Enter amount",
+    "counterSent": "Counter-offer sent!",
+    "replySent": "Reply sent!",
+    "offerAccepted": "Offer accepted!",
+    "offerDeclined": "Offer declined."
   }
 }

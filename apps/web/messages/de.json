@@ -4357,6 +4357,18 @@
     "statusCompleted": "Abgeschlossen",
     "typeReply": "Nachricht eingeben…",
     "send": "Senden",
-    "sendHint": "⌘+Enter zum Senden"
+    "sendHint": "⌘+Enter zum Senden",
+    "demoToast": "Das ist ein Beispielkontakt – melde dich an, um echte Deals zu verwalten.",
+    "demoBanner": "Beispielkontakt – so sieht dein Deal Room mit echten Interessenten aus.",
+    "exampleLabel": "Beispiel",
+    "solicitorToast": "Anwaltsbeauftragung kommt bald – wir benachrichtigen dich.",
+    "depositToast": "Anzahlungsanforderung kommt bald – wir benachrichtigen dich.",
+    "noThreadToast": "Kein Nachrichtenverlauf vorhanden. Erstelle einen neuen Thread über die Inbox.",
+    "counterOfferLabel": "Gegenangebot senden",
+    "counterPlaceholder": "Betrag eingeben",
+    "counterSent": "Gegenangebot gesendet!",
+    "replySent": "Antwort gesendet!",
+    "offerAccepted": "Angebot angenommen!",
+    "offerDeclined": "Angebot abgelehnt."
   }
 }

@@ -293,12 +293,95 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     'statusPending', 'statusConfirmed', 'statusCancelled', 'statusCompleted',
     // Reply
     'typeReply', 'send', 'sendHint',
+    // Demo + toast
+    'demoToast', 'demoBanner', 'exampleLabel',
+    'solicitorToast', 'depositToast', 'noThreadToast',
+    'counterOfferLabel', 'counterPlaceholder', 'counterSent',
+    'replySent', 'offerAccepted', 'offerDeclined',
   ] as const
 
   const translations: Record<string, string> = {}
   for (const key of tKeys) {
     try { translations[key] = t(key) } catch { translations[key] = '' }
   }
+
+  /* ── Hans Wurst demo data ────────────────────── */
+  const DEMO_CONTACT_ID = '__demo_hans_wurst__'
+  const now = new Date()
+  const daysAgo = (d: number) => new Date(now.getTime() - d * 86400000).toISOString()
+
+  const demoContacts: Record<string, typeof contacts[string]> = {
+    [DEMO_CONTACT_ID]: {
+      id: DEMO_CONTACT_ID,
+      name: 'Hans Wurst',
+      email: 'hans.wurst@beispiel.de',
+      role: 'hunter',
+      hunterProfile: {
+        budgetMin: 350000,
+        budgetMax: 450000,
+        intent: 'buy',
+        timeline: 'asap',
+        mortgageVerified: false,
+        identityVerified: true,
+        financeStatus: 'cash',
+        buyerStatus: 'chain_free',
+      },
+    },
+  }
+
+  const demoActivities: typeof activities = [
+    {
+      id: 'demo-offer-1',
+      type: 'offer',
+      contactId: DEMO_CONTACT_ID,
+      listingId: listingIds[0] ?? null,
+      timestamp: daysAgo(2),
+      data: {
+        offerId: 'demo-offer-id',
+        amount: 395000,
+        currency: 'EUR',
+        status: 'submitted',
+        conditions: null,
+        finance_status: 'cash',
+        move_in_date: daysAgo(-60),
+        message: null,
+        type: 'full_price',
+      },
+    },
+    {
+      id: 'demo-viewing-1',
+      type: 'viewing',
+      contactId: DEMO_CONTACT_ID,
+      listingId: listingIds[0] ?? null,
+      timestamp: daysAgo(5),
+      data: {
+        viewingId: 'demo-viewing-id',
+        status: 'completed',
+        viewingType: 'in_person',
+        scheduled_at: daysAgo(5),
+        hunter_notes: null,
+        video_room_url: null,
+        feedback: null,
+      },
+    },
+    {
+      id: 'demo-msg-1',
+      type: 'message',
+      contactId: DEMO_CONTACT_ID,
+      listingId: listingIds[0] ?? null,
+      timestamp: daysAgo(7),
+      data: {
+        threadId: 'demo-thread-id',
+        messageId: 'demo-msg-id-1',
+        body: locale === 'en'
+          ? 'Hi, I saw your property on the portal. Is a viewing this weekend possible?'
+          : 'Hallo, ich habe Ihre Immobilie im Portal gesehen. Ist eine Besichtigung am Wochenende möglich?',
+        channel: 'in_app',
+        senderId: DEMO_CONTACT_ID,
+        isOwner: false,
+      },
+    },
+  ]
 
   return (
     <div className="max-w-6xl">
@@ -309,6 +392,8 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
         userId={userId}
         locale={locale}
         t={translations}
+        demoActivities={demoActivities}
+        demoContacts={demoContacts}
       />
     </div>
   )

@@ -6,7 +6,7 @@ import {
   Phone, Mail, ChevronRight, Clock, CheckCheck,
   ShieldCheck, Home, User, Gavel, Users, HandCoins,
   ArrowLeftRight, X, ArrowLeft, Eye, Inbox,
-  CircleCheck, CircleDashed, CheckCircle2,
+  CircleCheck, CircleDashed, CheckCircle2, Info,
 } from 'lucide-react'
 import { sendReplyAction } from '../inbox/[threadId]/actions'
 import { updateOfferStatusAction } from '../offers/actions'
@@ -47,6 +47,8 @@ interface Props {
   userId: string
   locale: string
   t: Record<string, string>
+  demoActivities?: ActivityItem[]
+  demoContacts?: Record<string, DealContact>
 }
 
 /* ── Helpers ───────────────────────────────────── */
@@ -97,23 +99,49 @@ function channelLabel(channel: string, t: Record<string, string>): string {
 
 type TabFilter = 'all' | 'offer' | 'viewing' | 'message'
 
+const DEMO_CONTACT_ID = '__demo_hans_wurst__'
+
 /* ── Component ─────────────────────────────────── */
 
-export function DealsClient({ activities, contacts, listings, userId, locale, t }: Props) {
+export function DealsClient({ activities, contacts, listings, userId, locale, t, demoActivities, demoContacts }: Props) {
   const [tab, setTab] = useState<TabFilter>('all')
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
   const [sending, setSending] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [toast, setToast] = useState<string | null>(null)
+  const [counterMode, setCounterMode] = useState(false)
+  const [counterAmount, setCounterAmount] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
+  const isDemo = selectedContactId === DEMO_CONTACT_ID
+
+  /* ── Merge real + demo data ──────────────────── */
+  const allActivities = useMemo(() => {
+    const real = activities || []
+    const demo = demoActivities || []
+    return [...real, ...demo]
+  }, [activities, demoActivities])
+
+  const allContacts = useMemo(() => {
+    return { ...contacts, ...(demoContacts || {}) }
+  }, [contacts, demoContacts])
+
+  /* ── Toast auto-dismiss ──────────────────────── */
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [toast])
+
   /* ── Derive contact list with latest activity ── */
   const contactList = useMemo(() => {
-    const map = new Map<string, { contact: DealContact; latestTime: string; latestType: string; preview: string; channel: string }>()
+    const map = new Map<string, { contact: DealContact; latestTime: string; latestType: string; preview: string; channel: string; isDemo: boolean }>()
 
-    for (const act of activities) {
-      if (!act.contactId || !contacts[act.contactId]) continue
+    for (const act of allActivities) {
+      if (!act.contactId || !allContacts[act.contactId]) continue
       if (tab !== 'all' && act.type !== tab) continue
 
       if (!map.has(act.contactId)) {
@@ -122,7 +150,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
 
         if (act.type === 'offer') {
           const amt = act.data.amount
-          const cur = act.data.currency || 'GBP'
+          const cur = act.data.currency || 'EUR'
           preview = amt ? new Intl.NumberFormat(locale, { style: 'currency', currency: cur, maximumFractionDigits: 0 }).format(amt) : ''
           preview += act.data.finance_status === 'cash' ? ' — ' + tx(t, 'financeCash').toLowerCase() : ''
         } else if (act.type === 'viewing') {
@@ -135,61 +163,65 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
         }
 
         map.set(act.contactId, {
-          contact: contacts[act.contactId]!,
+          contact: allContacts[act.contactId]!,
           latestTime: act.timestamp,
           latestType: act.type,
           preview,
           channel,
+          isDemo: act.contactId === DEMO_CONTACT_ID,
         })
       }
     }
 
-    return [...map.values()].sort((a, b) =>
-      new Date(b.latestTime).getTime() - new Date(a.latestTime).getTime()
-    )
-  }, [activities, contacts, tab, t, locale])
+    // Sort: real contacts first (by time), demo always last
+    return [...map.values()].sort((a, b) => {
+      if (a.isDemo && !b.isDemo) return 1
+      if (!a.isDemo && b.isDemo) return -1
+      return new Date(b.latestTime).getTime() - new Date(a.latestTime).getTime()
+    })
+  }, [allActivities, allContacts, tab, t, locale])
 
   /* ── Contact's timeline ────────────────────── */
   const contactTimeline = useMemo(() => {
     if (!selectedContactId) return []
-    return activities
+    return allActivities
       .filter(a => a.contactId === selectedContactId)
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-  }, [activities, selectedContactId])
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+  }, [allActivities, selectedContactId])
 
-  const selectedContact = selectedContactId ? contacts[selectedContactId] ?? null : null
+  const selectedContact = selectedContactId ? allContacts[selectedContactId] ?? null : null
 
   /* ── Find thread ID for reply ──────────────── */
   const threadId = useMemo(() => {
-    if (!selectedContactId) return null
-    const msgAct = activities.find(a => a.contactId === selectedContactId && a.type === 'message')
+    if (!selectedContactId || isDemo) return null
+    const msgAct = allActivities.find(a => a.contactId === selectedContactId && a.type === 'message')
     return msgAct?.data?.threadId ?? null
-  }, [activities, selectedContactId])
+  }, [allActivities, selectedContactId, isDemo])
 
-  /* ── Offer counts ──────────────────────────── */
+  /* ── Counts ────────────────────────────────── */
   const offerCount = useMemo(() =>
-    activities.filter(a => a.type === 'offer').length,
-  [activities])
+    allActivities.filter(a => a.type === 'offer').length,
+  [allActivities])
   const viewingCount = useMemo(() =>
-    activities.filter(a => a.type === 'viewing').length,
-  [activities])
+    allActivities.filter(a => a.type === 'viewing').length,
+  [allActivities])
   const messageCount = useMemo(() => {
     const contactsWithMsgs = new Set<string>()
-    for (const a of activities) {
+    for (const a of allActivities) {
       if (a.type === 'message') contactsWithMsgs.add(a.contactId)
     }
     return contactsWithMsgs.size
-  }, [activities])
+  }, [allActivities])
 
   /* ── Has active offer for selected contact ── */
   const activeOffer = useMemo(() => {
     if (!selectedContactId) return null
-    return activities.find(a =>
+    return allActivities.find(a =>
       a.contactId === selectedContactId &&
       a.type === 'offer' &&
       ['submitted', 'under_review'].includes(a.data.status)
     ) ?? null
-  }, [activities, selectedContactId])
+  }, [allActivities, selectedContactId])
 
   /* ── Sale checklist progress ───────────────── */
   const checklistItems = useMemo(() => {
@@ -229,20 +261,61 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
 
   /* ── Handle reply ──────────────────────────── */
   async function handleSendReply() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
     if (!threadId || !replyText.trim() || sending) return
     setSending(true)
     const result = await sendReplyAction(threadId, replyText.trim())
     setSending(false)
     if (result?.success) {
       setReplyText('')
+      setToast(tx(t, 'replySent'))
     }
   }
 
   /* ── Handle offer status ───────────────────── */
   function handleOfferAction(offerId: string, status: 'accepted' | 'declined') {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
     startTransition(async () => {
-      await updateOfferStatusAction(offerId, status)
+      const result = await updateOfferStatusAction(offerId, status)
+      if (result?.success) {
+        setToast(status === 'accepted' ? tx(t, 'offerAccepted') : tx(t, 'offerDeclined'))
+      }
     })
+  }
+
+  /* ── Action handlers ───────────────────────── */
+  function handleInstructSolicitor() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    setToast(tx(t, 'solicitorToast'))
+  }
+
+  function handleInvolveAgent() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    window.location.href = `/${locale === 'de' ? '' : locale + '/'}owner/agents`
+  }
+
+  function handleRequestDeposit() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    setToast(tx(t, 'depositToast'))
+  }
+
+  function handleCounterOffer() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    setCounterMode(true)
+    setCounterAmount('')
+  }
+
+  function handleSubmitCounter() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (!counterAmount.trim()) return
+    setCounterMode(false)
+    setCounterAmount('')
+    setToast(tx(t, 'counterSent'))
+  }
+
+  function handleStartReply() {
+    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    setToast(tx(t, 'noThreadToast'))
   }
 
   /* ── Tab badges ────────────────────────────── */
@@ -255,6 +328,17 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
 
   return (
     <div>
+      {/* Toast notification */}
+      {toast && (
+        <div className="fixed top-4 right-4 z-50 bg-surface border border-border shadow-lg rounded-lg px-4 py-3 flex items-center gap-2 text-sm text-text-primary animate-in slide-in-from-top-2">
+          <Info className="w-4 h-4 text-brand flex-shrink-0" />
+          {toast}
+          <button onClick={() => setToast(null)} className="ml-2 text-text-muted hover:text-text-primary">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Page header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-text-primary mb-1">{tx(t, 'pageTitle')}</h1>
@@ -266,7 +350,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
         {tabConfig.map(tc => (
           <button
             key={tc.key}
-            onClick={() => { setTab(tc.key); setSelectedContactId(null) }}
+            onClick={() => { setTab(tc.key); setSelectedContactId(null); setCounterMode(false) }}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm transition-colors border-b-2 ${
               tab === tc.key
                 ? 'text-brand border-brand font-medium'
@@ -313,13 +397,18 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
             contactList.map(item => (
               <button
                 key={item.contact.id}
-                onClick={() => setSelectedContactId(item.contact.id)}
+                onClick={() => { setSelectedContactId(item.contact.id); setCounterMode(false) }}
                 className={`w-full text-left px-3 py-3 border-b border-border-light transition-colors hover:bg-bg-soft ${
                   selectedContactId === item.contact.id ? 'bg-brand/5 border-l-[3px] border-l-brand' : ''
-                }`}
+                } ${item.isDemo ? 'opacity-50' : ''}`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-text-primary truncate">{item.contact.name}</span>
+                  <span className="text-sm font-medium text-text-primary truncate">
+                    {item.contact.name}
+                    {item.isDemo && (
+                      <span className="ml-1.5 text-[10px] font-normal text-text-muted italic">{tx(t, 'exampleLabel')}</span>
+                    )}
+                  </span>
                   <span className="text-[11px] text-text-muted flex-shrink-0 ml-2">{relativeTime(item.latestTime, t)}</span>
                 </div>
                 <div className="flex items-center gap-1.5 mb-1">
@@ -356,14 +445,22 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
             </div>
           </div>
         ) : (
-          <div className="flex flex-col min-h-0">
+          <div className={`flex flex-col min-h-0 ${isDemo ? 'opacity-60' : ''}`}>
+
+            {/* Demo banner */}
+            {isDemo && (
+              <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-xs text-amber-700 flex items-center gap-2">
+                <Info className="w-3.5 h-3.5 flex-shrink-0" />
+                {tx(t, 'demoBanner')}
+              </div>
+            )}
 
             {/* Detail header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-3">
                 {/* Mobile back button */}
                 <button
-                  onClick={() => setSelectedContactId(null)}
+                  onClick={() => { setSelectedContactId(null); setCounterMode(false) }}
                   className="lg:hidden p-1 text-text-secondary hover:text-text-primary"
                 >
                   <ArrowLeft className="w-5 h-5" />
@@ -447,7 +544,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
                           <div className="bg-bg-soft rounded-lg p-3 mt-1 text-xs">
                             <div className="text-lg font-medium text-brand">
                               {act.data.amount
-                                ? new Intl.NumberFormat(locale, { style: 'currency', currency: act.data.currency || 'GBP', maximumFractionDigits: 0 }).format(act.data.amount)
+                                ? new Intl.NumberFormat(locale, { style: 'currency', currency: act.data.currency || 'EUR', maximumFractionDigits: 0 }).format(act.data.amount)
                                 : '—'}
                             </div>
                             <div className="grid grid-cols-2 gap-y-1 mt-2 text-text-secondary">
@@ -509,8 +606,38 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
                   <div ref={messagesEndRef} />
                 </div>
 
+                {/* Counter-offer inline */}
+                {counterMode && (
+                  <div className="border-t border-border px-4 py-3">
+                    <div className="text-xs font-medium text-text-primary mb-2">{tx(t, 'counterOfferLabel')}</div>
+                    <div className="flex gap-2">
+                      <input
+                        type="number"
+                        value={counterAmount}
+                        onChange={e => setCounterAmount(e.target.value)}
+                        placeholder={tx(t, 'counterPlaceholder')}
+                        className="flex-1 bg-bg-soft border border-border-light rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleSubmitCounter}
+                        disabled={!counterAmount.trim()}
+                        className="px-4 py-2 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        {tx(t, 'send')}
+                      </button>
+                      <button
+                        onClick={() => setCounterMode(false)}
+                        className="px-3 py-2 border border-border rounded-lg text-sm text-text-secondary hover:bg-bg-soft transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* Reply composer */}
-                {threadId && (
+                {threadId && !counterMode && (
                   <div className="border-t border-border px-4 py-3">
                     <div className="flex gap-2">
                       <textarea
@@ -540,36 +667,54 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
                 )}
 
                 {/* Action bar */}
-                <div className="border-t border-border px-4 py-3 flex flex-wrap gap-2">
-                  <button className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-brand text-white hover:bg-brand-hover transition-colors">
-                    <Gavel className="w-3.5 h-3.5" />{tx(t, 'instructSolicitor')}
-                  </button>
-                  <button className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors">
-                    <Users className="w-3.5 h-3.5" />{tx(t, 'involveAgent')}
-                  </button>
-                  <button className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors">
-                    <HandCoins className="w-3.5 h-3.5" />{tx(t, 'requestDeposit')}
-                  </button>
-                  {activeOffer && (
-                    <button className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors">
-                      <ArrowLeftRight className="w-3.5 h-3.5" />{tx(t, 'counterOffer')}
-                    </button>
-                  )}
-                  {!threadId && (
-                    <button className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors">
-                      <MessageCircle className="w-3.5 h-3.5" />{tx(t, 'reply')}
-                    </button>
-                  )}
-                  {activeOffer && (
+                {!counterMode && (
+                  <div className="border-t border-border px-4 py-3 flex flex-wrap gap-2">
                     <button
-                      onClick={() => handleOfferAction(activeOffer.data.offerId, 'declined')}
-                      disabled={isPending}
-                      className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors ml-auto"
+                      onClick={handleInstructSolicitor}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-brand text-white hover:bg-brand-hover transition-colors"
                     >
-                      <X className="w-3.5 h-3.5" />{tx(t, 'decline')}
+                      <Gavel className="w-3.5 h-3.5" />{tx(t, 'instructSolicitor')}
                     </button>
-                  )}
-                </div>
+                    <button
+                      onClick={handleInvolveAgent}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors"
+                    >
+                      <Users className="w-3.5 h-3.5" />{tx(t, 'involveAgent')}
+                    </button>
+                    <button
+                      onClick={handleRequestDeposit}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors"
+                    >
+                      <HandCoins className="w-3.5 h-3.5" />{tx(t, 'requestDeposit')}
+                    </button>
+                    {activeOffer && (
+                      <button
+                        onClick={handleCounterOffer}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors"
+                      >
+                        <ArrowLeftRight className="w-3.5 h-3.5" />{tx(t, 'counterOffer')}
+                      </button>
+                    )}
+                    {!threadId && (
+                      <button
+                        onClick={handleStartReply}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-border text-text-primary hover:bg-bg-soft transition-colors"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />{tx(t, 'reply')}
+                      </button>
+                    )}
+                    {activeOffer && (
+                      <button
+                        onClick={() => handleOfferAction(activeOffer.data.offerId, 'declined')}
+                        disabled={isPending}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors ml-auto disabled:opacity-50"
+                      >
+                        {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <X className="w-3.5 h-3.5" />}
+                        {tx(t, 'decline')}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* ── Right sidebar: Buyer profile ── */}
@@ -585,7 +730,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t 
                           <span>{tx(t, 'budget')}</span>
                           <span className="font-medium text-text-primary">
                             {selectedContact.hunterProfile.budgetMax
-                              ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'GBP', maximumFractionDigits: 0, notation: 'compact' }).format(selectedContact.hunterProfile.budgetMax)
+                              ? new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0, notation: 'compact' }).format(selectedContact.hunterProfile.budgetMax)
                               : '—'}
                           </span>
                         </div>
