@@ -238,9 +238,12 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
   for (const cid of contactIdsArr) {
     const u = usersMap[cid]
     const hp = hunterProfilesMap[cid]
+    // Only include contacts with a real name or email — skip anonymous/unknown
+    const displayName = u?.full_name || u?.email
+    if (!displayName) continue
     contacts[cid] = {
       id: cid,
-      name: u?.full_name ?? u?.email ?? 'Unknown',
+      name: displayName,
       email: u?.email ?? null,
       role: u?.role === 'agent' ? 'agent' : hp ? 'hunter' : 'unknown',
       hunterProfile: hp ? {
@@ -260,7 +263,7 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
   const tKeys = [
     'pageTitle', 'subtitle',
     'tabAll', 'tabOffers', 'tabViewings', 'tabMessages',
-    'ownerEmailLabel', 'viaWhatsApp', 'viaEmail', 'viaInApp',
+    'ownerEmailLabel', 'aliasLabel', 'aliasHint', 'viaWhatsApp', 'viaEmail', 'viaInApp',
     'noActivity', 'noActivityDesc',
     // Timeline labels
     'offerSubmitted', 'viewingScheduled', 'viewingCompleted', 'viewingConfirmed',
@@ -296,6 +299,8 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     // Demo + toast
     'demoToast', 'demoBanner', 'exampleLabel',
     'solicitorToast', 'depositToast', 'noThreadToast',
+    'demoSolicitor', 'demoAgent', 'demoDeposit', 'demoCounterSent',
+    'demoReplySent', 'demoReplyHint', 'demoOfferAccepted', 'demoOfferDeclined',
     'counterOfferLabel', 'counterPlaceholder', 'counterSent',
     'replySent', 'offerAccepted', 'offerDeclined',
     // Contact header

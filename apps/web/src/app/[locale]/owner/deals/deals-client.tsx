@@ -173,10 +173,10 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
       }
     }
 
-    // Sort: real contacts first (by time), demo always last
+    // Sort: demo contact always first, then real contacts by time
     return [...map.values()].sort((a, b) => {
-      if (a.isDemo && !b.isDemo) return 1
-      if (!a.isDemo && b.isDemo) return -1
+      if (a.isDemo && !b.isDemo) return -1
+      if (!a.isDemo && b.isDemo) return 1
       return new Date(b.latestTime).getTime() - new Date(a.latestTime).getTime()
     })
   }, [allActivities, allContacts, tab, t, locale])
@@ -261,7 +261,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
 
   /* ── Handle reply ──────────────────────────── */
   async function handleSendReply() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setToast(tx(t, 'demoReplySent')); setReplyText(''); return }
     if (!threadId || !replyText.trim() || sending) return
     setSending(true)
     const result = await sendReplyAction(threadId, replyText.trim())
@@ -274,7 +274,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
 
   /* ── Handle offer status ───────────────────── */
   function handleOfferAction(offerId: string, status: 'accepted' | 'declined') {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setToast(status === 'accepted' ? tx(t, 'demoOfferAccepted') : tx(t, 'demoOfferDeclined')); return }
     startTransition(async () => {
       const result = await updateOfferStatusAction(offerId, status)
       if (result?.success) {
@@ -285,28 +285,28 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
 
   /* ── Action handlers ───────────────────────── */
   function handleInstructSolicitor() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setToast(tx(t, 'demoSolicitor')); return }
     setToast(tx(t, 'solicitorToast'))
   }
 
   function handleInvolveAgent() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setToast(tx(t, 'demoAgent')); return }
     window.location.href = `/${locale === 'de' ? '' : locale + '/'}owner/agents`
   }
 
   function handleRequestDeposit() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setToast(tx(t, 'demoDeposit')); return }
     setToast(tx(t, 'depositToast'))
   }
 
   function handleCounterOffer() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setCounterMode(true); setCounterAmount(''); return }
     setCounterMode(true)
     setCounterAmount('')
   }
 
   function handleSubmitCounter() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setCounterMode(false); setToast(tx(t, 'demoCounterSent')); return }
     if (!counterAmount.trim()) return
     setCounterMode(false)
     setCounterAmount('')
@@ -314,7 +314,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
   }
 
   function handleStartReply() {
-    if (isDemo) { setToast(tx(t, 'demoToast')); return }
+    if (isDemo) { setToast(tx(t, 'demoReplyHint')); return }
     setToast(tx(t, 'noThreadToast'))
   }
 
@@ -370,11 +370,12 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
         ))}
       </div>
 
-      {/* Owner email bar */}
+      {/* Owner alias bar */}
       <div className="flex items-center gap-3 bg-surface border border-border-light rounded-lg px-4 py-2.5 mb-5 text-sm">
-        <Mail className="w-4 h-4 text-brand" />
-        <span className="text-text-secondary">{tx(t, 'ownerEmailLabel')}:</span>
+        <ShieldCheck className="w-4 h-4 text-brand" />
+        <span className="text-text-secondary">{tx(t, 'aliasLabel')}:</span>
         <span className="font-medium text-text-primary">owner-{userId.slice(0, 4)}@yalla.house</span>
+        <span className="text-xs text-text-muted ml-1">{tx(t, 'aliasHint')}</span>
         <div className="ml-auto flex items-center gap-4 text-xs text-text-secondary">
           <span className="flex items-center gap-1"><Phone className="w-3 h-3 text-green-500" />{tx(t, 'viaWhatsApp')}</span>
           <span className="flex items-center gap-1"><Mail className="w-3 h-3 text-blue-500" />{tx(t, 'viaEmail')}</span>
@@ -445,7 +446,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
             </div>
           </div>
         ) : (
-          <div className={`flex flex-col min-h-0 ${isDemo ? 'opacity-60' : ''}`}>
+          <div className="flex flex-col min-h-0">
 
             {/* Demo banner */}
             {isDemo && (
