@@ -72,9 +72,9 @@ function relativeTime(dateStr: string, t: Record<string, string>): string {
   const diffDays = Math.floor(diffHours / 24)
 
   if (diffMins < 1) return tx(t, 'justNow')
-  if (diffMins < 60) return tx(t, 'minutesAgo').replace('{count}', String(diffMins))
-  if (diffHours < 24) return tx(t, 'hoursAgo').replace('{count}', String(diffHours))
-  if (diffDays < 7) return tx(t, 'daysAgo').replace('{count}', String(diffDays))
+  if (diffMins < 60) return tx(t, 'minutesAgo').replace('__count__', String(diffMins))
+  if (diffHours < 24) return tx(t, 'hoursAgo').replace('__count__', String(diffHours))
+  if (diffDays < 7) return tx(t, 'daysAgo').replace('__count__', String(diffDays))
   return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
 }
 
