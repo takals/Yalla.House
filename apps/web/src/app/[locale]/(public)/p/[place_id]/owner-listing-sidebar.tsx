@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   LayoutDashboard, Pencil, CalendarPlus, CalendarCheck, Users,
   BarChart3, Globe, Share2, Copy, Check, Mail, MessageCircle,
   Link2, Eye, PanelLeftClose, PanelLeftOpen, LogOut,
-  Menu, X, ArrowLeft,
+  Menu, X, ArrowLeft, Megaphone, ShoppingBag, Sparkles,
+  ChevronRight, PartyPopper,
 } from 'lucide-react'
 import { ShareCardModal } from '@/components/share-card'
 import { ListingPopup } from './listing-popup'
@@ -34,12 +36,16 @@ export function OwnerListingSidebar({
   listingTitle, address, price, photoUrl, preMarketOptIn,
   portalSyncs, translations: t, userEmail, userName,
 }: Props) {
+  const router = useRouter()
   const [expanded, setExpanded] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
 
   // Status toggle
   const [isLive, setIsLive] = useState(status === 'active')
   const [toggling, setToggling] = useState(false)
+
+  // Celebration banner after going live
+  const [showCelebration, setShowCelebration] = useState(false)
 
   // Pre-market toggle
   const [preMarket, setPreMarket] = useState(preMarketOptIn)
@@ -70,7 +76,15 @@ export function OwnerListingSidebar({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ listingId, status: newStatus }),
     })
-    if (res.ok) setIsLive(!isLive)
+    if (res.ok) {
+      const wasGoingLive = !isLive
+      setIsLive(!isLive)
+      router.refresh() // refresh server component to update status badge
+      if (wasGoingLive) {
+        setShowCelebration(true)
+        setTimeout(() => setShowCelebration(false), 12000)
+      }
+    }
     setToggling(false)
   }
 
@@ -128,8 +142,49 @@ export function OwnerListingSidebar({
     { icon: BarChart3, label: t.viewAnalytics ?? 'View Analytics', onClick: () => setAnalyticsPopupOpen(true) },
   ]
 
+  const growthItems = [
+    { icon: Megaphone, label: t.publishPortals ?? 'Publish to Portals', href: `/owner/${listingId}#portals` },
+    { icon: ShoppingBag, label: t.orderServices ?? 'Order Services', href: `/${localePrefix}marketplace` },
+  ]
+
   return (
     <>
+      {/* ── Celebration banner — shown when going live ── */}
+      {showCelebration && (
+        <div className="fixed top-0 left-0 right-0 z-[70] bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white px-4 py-3 shadow-lg animate-in slide-in-from-top duration-300">
+          <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <PartyPopper size={20} className="flex-shrink-0" />
+              <div>
+                <p className="font-bold text-sm">{t.celebrationTitle ?? 'Your property is live!'}</p>
+                <p className="text-xs text-white/80">{t.celebrationDesc ?? 'Buyers can now find your listing. What would you like to do next?'}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Link
+                href={`/${localePrefix}marketplace`}
+                onClick={() => setShowCelebration(false)}
+                className="text-xs font-semibold bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+              >
+                {t.celebrationServices ?? 'Order a sign'}
+              </Link>
+              <button
+                onClick={() => { setShareOpen(true); setShowCelebration(false) }}
+                className="text-xs font-semibold bg-white text-green-700 hover:bg-white/90 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+              >
+                {t.celebrationShare ?? 'Share it'}
+              </button>
+              <button
+                onClick={() => setShowCelebration(false)}
+                className="text-white/60 hover:text-white p-1"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Mobile overlay backdrop ─────────────────────────── */}
       {mobileOpen && (
         <div
@@ -255,6 +310,28 @@ export function OwnerListingSidebar({
               <item.icon size={15} className="flex-shrink-0" />
               <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
             </button>
+          ))}
+
+          {/* Divider */}
+          <div className="mx-1 my-2 border-t border-white/[0.07]" />
+
+          {/* Growth items — Portals + Services */}
+          {growthItems.map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              title={item.label}
+              className={[
+                'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
+                'justify-start px-3 py-2.5 gap-3',
+                expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
+                'text-brand/70 hover:text-brand hover:bg-brand/5',
+              ].join(' ')}
+            >
+              <item.icon size={15} className="flex-shrink-0" />
+              <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
+            </Link>
           ))}
 
           {/* Divider */}

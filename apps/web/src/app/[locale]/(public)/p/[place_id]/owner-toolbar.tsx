@@ -107,7 +107,7 @@ export function OwnerToolbar({ listingId, placeId, slug, shortId, status, locale
               <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${isLive ? 'left-[18px]' : 'left-0.5'}`} />
             </div>
             <span className={isLive ? 'text-green-400' : 'text-white/40'}>
-              {isLive ? 'Live' : t('ownerDraft')}
+              {isLive ? t('ownerLive') : t('ownerDraft')}
             </span>
           </button>
 
