@@ -7,7 +7,7 @@ import { ViewingCalendar } from './viewing-calendar'
 import { ListingStatusBadge } from './listing-status-badge'
 import {
   Home, Building, CalendarDays,
-  MapPin, FileText, Zap, Eye, Pencil,
+  MapPin, FileText, Zap, Eye, Pencil, Sparkles,
 } from 'lucide-react'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 import { OwnerListingSidebar } from './owner-listing-sidebar'
@@ -17,6 +17,9 @@ import { OwnerInlineControls } from './owner-inline-controls'
 import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib/resolve-listing'
 import { ListingCtaBox } from './listing-cta-box'
 import { KeyFactsGrid } from './key-facts-grid'
+import { EditableKeyFacts } from './editable-key-facts'
+import { FeaturesSection } from './features-section'
+import { EditableLocation } from './editable-location'
 import { ListingActionsBar } from './listing-actions-bar'
 import { DocumentUploadSection } from './document-upload-section'
 import { HeroEditButton } from './hero-edit-button'
@@ -133,7 +136,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 
   if (!isOwner && !isPublicVisible) notFound()
 
-  const [{ count: slotCount }, { data: portalSyncsData }] = await Promise.all([
+  const [{ count: slotCount }, { data: portalSyncsData }, { data: listingTagsData }, { data: allTagsData }] = await Promise.all([
     (supabase as any)
       .from('availability_slots')
       .select('id', { count: 'exact', head: true })
@@ -148,7 +151,51 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           .then((r: { data: unknown }) => r)
           .catch(() => ({ data: null }))
       : Promise.resolve({ data: null }),
+    // Fetch active tags for this listing
+    (supabase as any)
+      .from('listing_tags')
+      .select('tag_id')
+      .eq('listing_id', listing.id)
+      .then((r: { data: unknown }) => r)
+      .catch(() => ({ data: null })),
+    // Fetch all available tags (for owner toggle UI)
+    (supabase as any)
+      .from('property_tags')
+      .select('id, slug, category, label_en, label_de, icon, country_codes, intent_filter, sort_order')
+      .order('sort_order', { ascending: true })
+      .then((r: { data: unknown }) => r)
+      .catch(() => ({ data: null })),
   ])
+
+  // Build tags list with active state
+  const activeTagIds = new Set(
+    ((listingTagsData as Array<{ tag_id: string }> | null) ?? []).map(lt => lt.tag_id)
+  )
+  const allTags = ((allTagsData as Array<{
+    id: string; slug: string; category: string; label_en: string; label_de: string;
+    icon: string; country_codes: string[]; intent_filter: string | null; sort_order: number
+  }> | null) ?? [])
+    .filter(tag => {
+      // Filter by country if country_codes is set
+      if (tag.country_codes && tag.country_codes.length > 0) {
+        const cc = listing.country_code ?? 'DE'
+        if (!tag.country_codes.includes(cc)) return false
+      }
+      // Filter by intent if intent_filter is set
+      if (tag.intent_filter && listing.intent && tag.intent_filter !== listing.intent) return false
+      return true
+    })
+    .map(tag => ({
+      id: tag.id,
+      slug: tag.slug,
+      category: tag.category,
+      label_en: tag.label_en,
+      label_de: tag.label_de,
+      icon: tag.icon,
+      active: activeTagIds.has(tag.id),
+    }))
+
+  const activeTags = allTags.filter(t => t.active)
 
   const title  = locale === 'de' ? (listing.title_de  ?? listing.title)  : (listing.title  ?? listing.title_de)
   const desc   = locale === 'de' ? (listing.description_de ?? listing.description) : (listing.description ?? listing.description_de)
@@ -223,6 +270,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     factTypeBungalow: t('factTypeBungalow'),
     factYes: t('factYes'),
     factNo: t('factNo'),
+    editLabel: t('editLabel'),
   }
 
   // Sidebar translations for owner view
@@ -458,21 +506,35 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                   <Home size={18} className="text-brand" />{t('sectionKeyFacts')}
                 </h2>
-                {hasKeyFacts ? (
-                  <KeyFactsGrid listing={listing} translations={factTranslations} />
-                ) : (
-                  <div className="bg-surface rounded-xl border border-border-default p-6 opacity-40">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      {[t('factPropertyType'), t('factBedrooms'), t('factBathrooms'), t('factLivingSpace'), t('factFloor'), t('factBuiltYear')].map((label) => (
-                        <div key={label} className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0"><Building size={16} className="text-gray-400" /></div>
-                          <div><p className="text-xs text-text-muted">{label}</p><div className="h-4 w-16 bg-gray-200 rounded mt-1" /></div>
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-brand mt-4 text-center font-medium">{t('placeholderEditHint')}</p>
-                  </div>
-                )}
+                <EditableKeyFacts listingId={listing.id} listing={listing} translations={factTranslations} />
+              </section>
+
+              {/* §1b FEATURES */}
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <Sparkles size={18} className="text-brand" />{t('sectionFeatures')}
+                </h2>
+                <FeaturesSection
+                  listingId={listing.id}
+                  tags={allTags}
+                  locale={locale}
+                  isOwner={true}
+                  translations={{
+                    featuresAddMore: t('featuresAddMore'),
+                    featuresAvailable: t('featuresAvailable'),
+                    featuresCollapse: t('featuresCollapse'),
+                    featuresCat_outdoor: t('featuresCat_outdoor'),
+                    featuresCat_building: t('featuresCat_building'),
+                    featuresCat_parking: t('featuresCat_parking'),
+                    featuresCat_energy: t('featuresCat_energy'),
+                    featuresCat_lifestyle: t('featuresCat_lifestyle'),
+                    featuresCat_community: t('featuresCat_community'),
+                    featuresCat_safety: t('featuresCat_safety'),
+                    featuresCat_accessibility: t('featuresCat_accessibility'),
+                    featuresCat_pets: t('featuresCat_pets'),
+                    featuresCat_rental: t('featuresCat_rental'),
+                  }}
+                />
               </section>
 
               {/* §2 DESCRIPTION */}
@@ -523,24 +585,24 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               )}
 
               {/* §4 LOCATION */}
-              {(listing.city || listing.postcode) && (
-                <section>
-                  <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-                    <MapPin size={18} className="text-brand" />{t('sectionLocation')}
-                  </h2>
-                  <div className="bg-surface rounded-xl border border-border-default p-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
-                        <MapPin size={18} className="text-brand" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-text-primary">{listing.postcode} {listing.city}</p>
-                        {listing.street && <p className="text-sm text-text-secondary">{listing.street}</p>}
-                      </div>
-                    </div>
-                  </div>
-                </section>
-              )}
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <MapPin size={18} className="text-brand" />{t('sectionLocation')}
+                </h2>
+                <EditableLocation
+                  listingId={listing.id}
+                  street={listing.street ?? null}
+                  city={listing.city ?? null}
+                  postcode={listing.postcode ?? null}
+                  isOwner={true}
+                  translations={{
+                    locationStreet: t('locationStreet'),
+                    locationPostcode: t('locationPostcode'),
+                    locationCity: t('locationCity'),
+                    editLabel: t('editLabel'),
+                  }}
+                />
+              </section>
 
               {/* §5 FLOOR PLAN */}
               <section>
@@ -754,6 +816,23 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               )}
             </section>
 
+            {/* §1b FEATURES — public read-only pills */}
+            {activeTags.length > 0 && (
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <Sparkles size={18} className="text-brand" />
+                  {t('sectionFeatures')}
+                </h2>
+                <FeaturesSection
+                  listingId={listing.id}
+                  tags={allTags}
+                  locale={locale}
+                  isOwner={false}
+                  translations={{}}
+                />
+              </section>
+            )}
+
             {/* §2 VIEWING CALENDAR — prominent position for hunters */}
             <section>
               <div className="bg-gradient-to-r from-brand/5 to-brand/10 rounded-2xl border border-brand/20 p-1">
@@ -847,19 +926,14 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                   <MapPin size={18} className="text-brand" />
                   {t('sectionLocation')}
                 </h2>
-                <div className="bg-surface rounded-xl border border-border-default p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin size={18} className="text-brand" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-text-primary">{listing.postcode} {listing.city}</p>
-                      {listing.street && (
-                        <p className="text-sm text-text-secondary">{listing.street}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <EditableLocation
+                  listingId={listing.id}
+                  street={listing.street ?? null}
+                  city={listing.city ?? null}
+                  postcode={listing.postcode ?? null}
+                  isOwner={false}
+                  translations={{}}
+                />
               </section>
             )}
 

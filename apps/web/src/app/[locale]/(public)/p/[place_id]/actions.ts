@@ -11,6 +11,7 @@ const ALLOWED_INLINE_FIELDS = new Set([
   'title_de', 'title', 'description_de', 'description',
   'sale_price', 'rent_price', 'bedrooms', 'bathrooms',
   'size_sqm', 'floor', 'construction_year',
+  'property_type', 'street', 'city', 'postcode', 'energy_rating',
 ])
 
 export async function updateListingFieldAction(
@@ -497,6 +498,55 @@ export async function seedHunterProfileAction(
       country_code: countryCode,
       ...profileData,
     })
+  }
+
+  return { success: true }
+}
+
+// ── Toggle listing tag (owner adds/removes features) ────────────────────────
+
+export async function toggleListingTagAction(
+  listingId: string,
+  tagId: string,
+  active: boolean
+): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) return { authRequired: true }
+
+  const supabase = await createClient()
+
+  // Verify ownership
+  const { data: listing } = await (supabase as any)
+    .from('listings')
+    .select('owner_id')
+    .eq('id', listingId)
+    .single()
+
+  if (!listing || listing.owner_id !== auth.userId) return { error: 'Not authorized' }
+
+  if (active) {
+    // Insert tag — upsert to avoid duplicates
+    const { error } = await (supabase.from('listing_tags') as any)
+      .upsert(
+        { listing_id: listingId, tag_id: tagId, source: 'manual', confidence: 1.0 },
+        { onConflict: 'listing_id,tag_id' }
+      )
+
+    if (error) {
+      console.error('toggleListingTagAction insert error:', error)
+      return { error: 'Failed to add feature' }
+    }
+  } else {
+    // Remove tag
+    const { error } = await (supabase.from('listing_tags') as any)
+      .delete()
+      .eq('listing_id', listingId)
+      .eq('tag_id', tagId)
+
+    if (error) {
+      console.error('toggleListingTagAction delete error:', error)
+      return { error: 'Failed to remove feature' }
+    }
   }
 
   return { success: true }
