@@ -43,6 +43,7 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
     navNewListing: tShell('navNewListing'),
     navPlans: tShell('navPlans'),
     navSettings: tShell('navSettings'),
+    navDeals: tShell('navDeals'),
   }
 
   // Always render inside DashboardShell — even for unauthenticated visitors
