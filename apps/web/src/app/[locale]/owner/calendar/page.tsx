@@ -92,6 +92,8 @@ export default async function OwnerCalendarPage() {
           addFirstSlot: t('addFirstSlot'),
           viewProperty: t('viewProperty'),
           createListingCta: t('createListingCta'),
+          calendarSelectToPreview: t('calendarSelectToPreview'),
+          exploreCalendar: t('exploreCalendar'),
         }}
       />
     </div>

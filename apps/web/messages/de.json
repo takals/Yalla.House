@@ -1055,7 +1055,9 @@
     "booked": "Gebucht",
     "free": "Frei",
     "addFirstSlot": "Ersten Termin hinzufügen",
-    "viewProperty": "Inserat ansehen"
+    "viewProperty": "Inserat ansehen",
+    "calendarSelectToPreview": "Wähle ein Datum, um die Terminplanung zu erkunden.",
+    "exploreCalendar": "Kalender erkunden"
   },
   "hunterFeedback": {
     "checkinTitle": "Einchecken",

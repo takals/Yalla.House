@@ -1055,7 +1055,9 @@
     "booked": "Booked",
     "free": "Free",
     "addFirstSlot": "Add your first slot",
-    "viewProperty": "View property"
+    "viewProperty": "View property",
+    "calendarSelectToPreview": "Select a date to explore the scheduling view.",
+    "exploreCalendar": "Explore calendar"
   },
   "hunterFeedback": {
     "checkinTitle": "Check In",

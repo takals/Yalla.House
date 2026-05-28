@@ -294,24 +294,7 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
 
   const freeCount = filteredSlots.filter(s => !s.is_booked).length
   const bookedCount = filteredSlots.filter(s => s.is_booked).length
-
-  // ── No listings state ──
-  if (listings.length === 0) {
-    return (
-      <div className="text-center py-16">
-        <div className="w-16 h-16 rounded-2xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
-          <CalendarDays size={28} className="text-brand" />
-        </div>
-        <h1 className="text-2xl font-bold mb-2">{tr.noListings}</h1>
-        <p className="text-sm text-text-secondary mb-4">{tr.noListingsDesc}</p>
-        <Link href={locale === 'de' ? '/owner/workspace' : `/${locale}/owner/workspace`}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand/90 transition-colors">
-          <Plus size={16} />
-          {tr.createListingCta}
-        </Link>
-      </div>
-    )
-  }
+  const hasListings = listings.length > 0
 
   return (
     <div>
@@ -321,7 +304,25 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
           <h1 className="text-3xl font-bold">{tr.title}</h1>
           <p className="text-sm text-text-secondary mt-1">{tr.subtitle}</p>
         </div>
+        <Link href={locale === 'de' ? '/owner/workspace' : `/${locale}/owner/workspace`}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand/90 transition-colors shadow-sm shadow-brand/20">
+          <Plus size={16} />
+          {tr.createListingCta}
+        </Link>
       </div>
+
+      {/* ── No listings banner ─────────────────────────────────── */}
+      {!hasListings && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 mb-6 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <CalendarDays size={16} className="text-amber-600" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-amber-900">{tr.noListings}</p>
+            <p className="text-xs text-amber-700 mt-0.5">{tr.noListingsDesc}</p>
+          </div>
+        </div>
+      )}
 
       {/* ── Listing selector (multi-listing owners) ────────────── */}
       {listings.length > 1 && (
@@ -352,7 +353,8 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
         </div>
       )}
 
-      {/* ═══ OFFERED VIEWING SLOTS — on top ═══════════════════════ */}
+      {/* ═══ OFFERED VIEWING SLOTS — on top (only if listings exist) ═══ */}
+      {hasListings && (
       <div className="bg-surface rounded-2xl border border-border-default shadow-sm mb-6 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border-default">
           <div className="flex items-center gap-2.5">
@@ -427,6 +429,7 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
           </div>
         )}
       </div>
+      )}
 
       {/* ═══ MONTH CALENDAR + WHATSAPP FLOW ═══════════════════════ */}
       <div className="flex flex-col lg:flex-row gap-6">
@@ -642,6 +645,16 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
                   </div>
 
                   {/* Add button */}
+                  {!hasListings ? (
+                    <div className="w-full text-center py-3 px-4 bg-bg rounded-xl border border-border-default">
+                      <p className="text-xs text-text-secondary">{tr.noListingsDesc}</p>
+                      <Link href={locale === 'de' ? '/owner/workspace' : `/${locale}/owner/workspace`}
+                        className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-brand hover:text-[#BF6840] transition-colors">
+                        <Plus size={12} />
+                        {tr.createListingCta}
+                      </Link>
+                    </div>
+                  ) : (
                   <button
                     onClick={handleAddSlot}
                     disabled={addingSlot || (!selectedListingId && listings.length > 1)}
@@ -652,6 +665,7 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
                       : t('calendarAddSlot')
                     }
                   </button>
+                  )}
 
                   {slotSuccess && (
                     <div className="mt-2 flex items-center gap-2 text-xs text-green-700 bg-green-50 px-3 py-2 rounded-lg">
@@ -669,15 +683,29 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
             {!selectedDate && (
               <div className="text-center py-6">
                 <p className="text-sm text-text-secondary">
-                  {filteredSlots.length === 0 ? tr.noSlotsDesc : t('calendarSelectDateOwner')}
+                  {!hasListings
+                    ? tr.calendarSelectToPreview
+                    : filteredSlots.length === 0
+                      ? tr.noSlotsDesc
+                      : t('calendarSelectDateOwner')
+                  }
                 </p>
-                {filteredSlots.length === 0 && (
+                {hasListings && filteredSlots.length === 0 && (
                   <button
                     onClick={() => { setSelectedDate(today) }}
                     className="mt-3 inline-flex items-center gap-1.5 bg-brand hover:bg-brand-hover text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors shadow-md shadow-brand/20"
                   >
                     <Plus size={14} />
                     {tr.addFirstSlot}
+                  </button>
+                )}
+                {!hasListings && (
+                  <button
+                    onClick={() => { setSelectedDate(today) }}
+                    className="mt-3 inline-flex items-center gap-1.5 bg-text-secondary/10 hover:bg-text-secondary/20 text-text-primary font-bold text-sm px-5 py-2.5 rounded-xl transition-colors"
+                  >
+                    <Calendar size={14} />
+                    {tr.exploreCalendar}
                   </button>
                 )}
               </div>
