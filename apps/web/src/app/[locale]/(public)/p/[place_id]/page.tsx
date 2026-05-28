@@ -617,7 +617,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
               </section>
 
               {/* §4b FAQ — Owner editor */}
-              <section>
+              <section id="faq">
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                   <HelpCircle size={18} className="text-brand" />{t('sectionFaq')}
                 </h2>
@@ -974,7 +974,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
 
             {/* §5b FAQ — Hunter accordion */}
             {listingFaqs.length > 0 && (
-              <section>
+              <section id="faq">
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
                   <HelpCircle size={18} className="text-brand" />
                   {t('sectionFaq')}

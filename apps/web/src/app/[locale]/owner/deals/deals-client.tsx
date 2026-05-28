@@ -7,6 +7,7 @@ import {
   ShieldCheck, Home, User, Gavel, Users, HandCoins,
   ArrowLeftRight, X, ArrowLeft, Eye, Inbox,
   CircleCheck, CircleDashed, CheckCircle2, Info, Tag, ChevronDown,
+  HelpCircle, ExternalLink,
 } from 'lucide-react'
 import { sendReplyAction } from '../inbox/[threadId]/actions'
 import { updateOfferStatusAction } from '../offers/actions'
@@ -45,7 +46,7 @@ interface DealContact {
 interface Props {
   activities: ActivityItem[]
   contacts: Record<string, DealContact>
-  listings: Record<string, { title: string; title_de: string; city: string; postcode: string }>
+  listings: Record<string, { title: string; title_de: string; city: string; postcode: string; placeId: string; slug: string | null }>
   userId: string
   locale: string
   t: Record<string, string>
@@ -113,12 +114,12 @@ interface PresetTag {
 }
 
 const PRESET_TAGS: PresetTag[] = [
-  { id: 'serious',        tKey: 'tagSerious',        bg: 'bg-emerald-50', text: 'text-emerald-700' },
-  { id: 'hot_lead',       tKey: 'tagHotLead',        bg: 'bg-red-50',     text: 'text-red-700' },
-  { id: 'needs_mortgage',  tKey: 'tagNeedsMortgage',  bg: 'bg-blue-50',    text: 'text-blue-700' },
-  { id: 'time_waster',    tKey: 'tagTimeWaster',     bg: 'bg-gray-100',   text: 'text-gray-600' },
-  { id: 'follow_up',      tKey: 'tagFollowUp',       bg: 'bg-amber-50',   text: 'text-amber-700' },
-  { id: 'cash_buyer',     tKey: 'tagCashBuyer',      bg: 'bg-purple-50',  text: 'text-purple-700' },
+  { id: 'serious',        tKey: 'tagSerious',        bg: 'bg-emerald-50/60', text: 'text-emerald-600/80' },
+  { id: 'hot_lead',       tKey: 'tagHotLead',        bg: 'bg-red-50/60',     text: 'text-red-600/80' },
+  { id: 'needs_mortgage',  tKey: 'tagNeedsMortgage',  bg: 'bg-blue-50/60',    text: 'text-blue-600/80' },
+  { id: 'time_waster',    tKey: 'tagTimeWaster',     bg: 'bg-gray-100/60',   text: 'text-gray-500' },
+  { id: 'follow_up',      tKey: 'tagFollowUp',       bg: 'bg-amber-50/60',   text: 'text-amber-600/80' },
+  { id: 'cash_buyer',     tKey: 'tagCashBuyer',      bg: 'bg-purple-50/60',  text: 'text-purple-600/80' },
 ]
 
 /* ── Component ─────────────────────────────────── */
@@ -294,6 +295,18 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
     if (hp.intent) score += 25
     return score
   }, [selectedContact])
+
+  /* ── Selected contact's listing URL ─────────── */
+  const contactListingUrl = useMemo(() => {
+    if (!selectedContactId) return null
+    const act = allActivities.find(a => a.contactId === selectedContactId && a.listingId)
+    if (!act?.listingId) return null
+    const listing = listings[act.listingId]
+    if (!listing) return null
+    const slug = listing.slug ?? listing.placeId
+    const prefix = locale === 'de' ? '' : `/${locale}`
+    return `${prefix}/p/${slug}`
+  }, [allActivities, selectedContactId, listings, locale])
 
   /* ── Auto-scroll messages ──────────────────── */
   useEffect(() => {
@@ -965,7 +978,7 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                 </div>
 
                 {/* Passport score */}
-                <div>
+                <div className="mb-4">
                   <div className="text-[10px] uppercase tracking-wider text-text-muted font-medium mb-2">{tx(t, 'passportScore')}</div>
                   <div className="flex items-center gap-2">
                     <div className="flex-1 h-1.5 rounded-full bg-bg-muted overflow-hidden">
@@ -977,6 +990,35 @@ export function DealsClient({ activities, contacts, listings, userId, locale, t,
                     <span className="text-sm font-medium text-emerald-600">{passportScore}%</span>
                   </div>
                 </div>
+
+                {/* Listing shortcuts */}
+                {contactListingUrl && (
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-text-muted font-medium mb-2">{tx(t, 'viewListing')}</div>
+                    <div className="space-y-1.5">
+                      <a
+                        href={`${contactListingUrl}#faq`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-[11px] text-text-secondary hover:text-brand transition-colors"
+                      >
+                        <HelpCircle className="w-3.5 h-3.5" />
+                        {tx(t, 'viewListingFaqs')}
+                        <ExternalLink className="w-2.5 h-2.5 ml-auto opacity-40" />
+                      </a>
+                      <a
+                        href={contactListingUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-[11px] text-text-secondary hover:text-brand transition-colors"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        {tx(t, 'viewListing')}
+                        <ExternalLink className="w-2.5 h-2.5 ml-auto opacity-40" />
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

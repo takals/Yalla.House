@@ -48,13 +48,13 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
 
   /* ── Fetch owner's listings ─────────────────── */
   const { data: listings } = await (supabase.from('listings') as any)
-    .select('id, title, title_de, city, postcode, country_code')
+    .select('id, title, title_de, city, postcode, country_code, place_id, slug')
     .eq('owner_id', userId)
 
   const listingIds = ((listings as any[]) ?? []).map((l: any) => l.id)
-  const listingsMap: Record<string, { title: string; title_de: string; city: string; postcode: string }> = {}
+  const listingsMap: Record<string, { title: string; title_de: string; city: string; postcode: string; placeId: string; slug: string | null }> = {}
   for (const l of (listings ?? []) as any[]) {
-    listingsMap[l.id] = { title: l.title, title_de: l.title_de, city: l.city, postcode: l.postcode }
+    listingsMap[l.id] = { title: l.title, title_de: l.title_de, city: l.city, postcode: l.postcode, placeId: l.place_id, slug: l.slug ?? null }
   }
 
   /* ── Parallel fetch: offers + viewings + threads ── */
@@ -317,6 +317,8 @@ export default async function OwnerDealsPage({ params }: { params: Promise<{ loc
     'tagSerious', 'tagHotLead', 'tagNeedsMortgage',
     'tagTimeWaster', 'tagFollowUp', 'tagCashBuyer',
     'demoTagged',
+    // Listing links
+    'viewListingFaqs', 'viewListing',
     // Verification
     'verificationSelfDeclared', 'verificationBasic', 'verificationFull', 'verificationNone',
   ] as const
