@@ -1049,6 +1049,7 @@
     "noSlotsDesc": "Select a date on the calendar to offer viewing slots.",
     "noListings": "No listings yet",
     "noListingsDesc": "Create a listing first to start offering viewing slots.",
+    "createListingCta": "Create listing",
     "allListings": "All Listings",
     "slotsAvailable": "slots available",
     "booked": "Booked",

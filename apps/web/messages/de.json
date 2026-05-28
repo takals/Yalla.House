@@ -1049,6 +1049,7 @@
     "noSlotsDesc": "Wähle ein Datum im Kalender, um Besichtigungstermine anzubieten.",
     "noListings": "Noch keine Inserate",
     "noListingsDesc": "Erstelle zuerst ein Inserat, um Besichtigungstermine anzubieten.",
+    "createListingCta": "Inserat erstellen",
     "allListings": "Alle Inserate",
     "slotsAvailable": "Termine verfügbar",
     "booked": "Gebucht",

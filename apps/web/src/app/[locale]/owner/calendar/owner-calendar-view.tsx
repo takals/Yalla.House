@@ -303,7 +303,12 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
           <CalendarDays size={28} className="text-brand" />
         </div>
         <h1 className="text-2xl font-bold mb-2">{tr.noListings}</h1>
-        <p className="text-sm text-text-secondary">{tr.noListingsDesc}</p>
+        <p className="text-sm text-text-secondary mb-4">{tr.noListingsDesc}</p>
+        <Link href={locale === 'de' ? '/owner/listings/new' : `/${locale}/owner/listings/new`}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-lg text-sm font-medium hover:bg-brand/90 transition-colors">
+          <Plus size={16} />
+          {tr.createListingCta}
+        </Link>
       </div>
     )
   }
