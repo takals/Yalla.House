@@ -26,6 +26,9 @@ import { HeroEditButton } from './hero-edit-button'
 import { StickyBookingBar } from './sticky-booking-bar'
 import { HeroCalendarBox } from './hero-calendar-box'
 import { ListingHintBanner } from '@/components/listing-hint-banner'
+import { FaqAccordion } from './faq-accordion'
+import { FaqEditor } from './faq-editor'
+import { HelpCircle } from 'lucide-react'
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>
@@ -211,6 +214,9 @@ export default async function PropertyPage({ params, searchParams }: Props) {
   const allMedia = (listing.listing_media as Array<{ id: string; url: string; type: string }> | null) ?? []
   const floorPlanMedia = allMedia.find(m => m.type === 'floorplan')
   const epcMedia = allMedia.find(m => m.type === 'energy_cert')
+
+  // Extract FAQs
+  const listingFaqs = (listing.faqs as Array<{ question: string; answer: string }> | null) ?? []
 
   const localeFmt = dateLocaleFromLocale(locale)
 
@@ -610,6 +616,29 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                 />
               </section>
 
+              {/* §4b FAQ — Owner editor */}
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <HelpCircle size={18} className="text-brand" />{t('sectionFaq')}
+                </h2>
+                <FaqEditor
+                  listingId={listing.id}
+                  initialFaqs={listingFaqs}
+                  translations={{
+                    faqEmptyOwner: t('faqEmptyOwner'),
+                    faqEmptyHint: t('faqEmptyHint'),
+                    faqEdit: t('faqEdit'),
+                    faqAdd: t('faqAdd'),
+                    faqRemove: t('faqRemove'),
+                    faqQuestionPlaceholder: t('faqQuestionPlaceholder'),
+                    faqAnswerPlaceholder: t('faqAnswerPlaceholder'),
+                    faqAddAnother: t('faqAddAnother'),
+                    faqSave: t('faqSave'),
+                    faqCancel: t('faqCancel'),
+                  }}
+                />
+              </section>
+
               {/* §5 FLOOR PLAN */}
               <section>
                 <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
@@ -940,6 +969,17 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                   isOwner={false}
                   translations={{}}
                 />
+              </section>
+            )}
+
+            {/* §5b FAQ — Hunter accordion */}
+            {listingFaqs.length > 0 && (
+              <section>
+                <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
+                  <HelpCircle size={18} className="text-brand" />
+                  {t('sectionFaq')}
+                </h2>
+                <FaqAccordion faqs={listingFaqs} translations={{ title: t('sectionFaq') }} />
               </section>
             )}
 
