@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
@@ -31,14 +32,16 @@ interface Props {
   userName: string | null
 }
 
-/* ── Sidebar tooltip — fixed-positioned to escape overflow clips ── */
+/* ── Sidebar tooltip — portalled to <body> to escape transform-based containing blocks ── */
 function SidebarHint({ desc, next, nextLabel, rect }: {
   desc: string; next?: string; nextLabel: string; rect: DOMRect | null
 }) {
-  if (!rect) return null
-  return (
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!rect || !mounted) return null
+  return createPortal(
     <div
-      className="fixed z-[200] pointer-events-none hidden lg:block"
+      className="fixed z-[9999] pointer-events-none hidden lg:block"
       style={{ left: rect.right + 12, top: rect.top + rect.height / 2, transform: 'translateY(-50%)' }}
     >
       <div className="w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150">
@@ -52,7 +55,8 @@ function SidebarHint({ desc, next, nextLabel, rect }: {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
