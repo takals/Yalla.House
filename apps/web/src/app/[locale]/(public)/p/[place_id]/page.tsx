@@ -7,7 +7,7 @@ import { ViewingCalendar } from './viewing-calendar'
 import { ListingStatusBadge } from './listing-status-badge'
 import {
   Home, Building, CalendarDays,
-  MapPin, FileText, Zap, Eye, Pencil, Sparkles,
+  MapPin, FileText, Zap, Eye, Sparkles,
 } from 'lucide-react'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 import { OwnerListingSidebar } from './owner-listing-sidebar'
@@ -478,34 +478,11 @@ export default async function PropertyPage({ params, searchParams }: Props) {
             />
           </div>
 
-          {/* ── Owner Quick Actions — prominent horizontal bar ── */}
-          <div className="bg-surface border-b border-border-default">
-            <div className="max-w-6xl mx-auto px-4 py-4">
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Calendar — extra prominent CTA */}
-                <a
-                  href="/owner/calendar"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand text-white text-sm font-bold rounded-lg hover:bg-brand-hover transition-colors shadow-sm"
-                >
-                  <CalendarDays size={16} />
-                  {t('calendarManageSlots')}
-                </a>
-                <a
-                  href={`/owner/${listing.id}`}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-bg border border-border-default text-text-primary text-sm font-semibold rounded-lg hover:bg-hover-bg transition-colors"
-                >
-                  <Pencil size={14} />
-                  {t('propertyDetails')}
-                </a>
-                <a
-                  href="/owner/viewings"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-bg border border-border-default text-text-primary text-sm font-semibold rounded-lg hover:bg-hover-bg transition-colors"
-                >
-                  <CalendarDays size={14} />
-                  {t('manageViewings')}
-                </a>
-              </div>
-            </div>
+          {/* ── Section headline ── */}
+          <div className="max-w-6xl mx-auto px-4 pt-6">
+            <h2 className="text-xl font-extrabold text-text-primary tracking-tight">
+              {t('ownerListingHeadline')}
+            </h2>
           </div>
 
           {/* Main content — single column for owner */}
