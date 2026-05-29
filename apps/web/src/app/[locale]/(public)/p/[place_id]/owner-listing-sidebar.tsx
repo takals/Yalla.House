@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Pencil, CalendarPlus, CalendarCheck, Users,
   BarChart3, Globe, Share2, Copy, Check, Mail, MessageCircle,
   Link2, Eye, PanelLeftClose, PanelLeftOpen, LogOut,
-  Menu, X, ArrowLeft, Megaphone, ShoppingBag, Sparkles,
+  Menu, X, Megaphone, ShoppingBag,
   ChevronRight, PartyPopper, Search, Send, MessageSquare,
 } from 'lucide-react'
 import { ShareCardModal } from '@/components/share-card'
@@ -36,25 +36,43 @@ interface Props {
 function SidebarHint({ id, desc, next, nextLabel, rect }: {
   id?: string; desc: string; next?: string; nextLabel: string; rect: DOMRect | null
 }) {
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => { setMounted(true) }, [])
-  if (!rect || !mounted) return null
+  const ref = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null)
+
+  // Anchor beside the trigger, then clamp into the viewport: flip to the left if
+  // the right edge would overflow, and clamp vertically so it never clips off-screen.
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!rect || !el) { setPos(null); return }
+    const m = 12
+    const r = el.getBoundingClientRect()
+    let left = rect.right + m
+    if (left + r.width > window.innerWidth - m) left = Math.max(m, rect.left - r.width - m)
+    let top = rect.top + rect.height / 2 - r.height / 2
+    top = Math.min(Math.max(m, top), window.innerHeight - r.height - m)
+    setPos({ left, top })
+  }, [rect])
+
+  if (!rect || typeof document === 'undefined') return null
   return createPortal(
     <div
-      className="fixed z-[9999] pointer-events-none hidden lg:block"
-      style={{ left: rect.right + 12, top: rect.top + rect.height / 2, transform: 'translateY(-50%)' }}
+      ref={ref}
+      id={id}
+      role="tooltip"
+      className="fixed z-[9999] pointer-events-none hidden lg:block w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150"
+      style={pos
+        ? { left: pos.left, top: pos.top }
+        : { left: rect.right + 12, top: rect.top + rect.height / 2, transform: 'translateY(-50%)', visibility: 'hidden' }}
     >
-      <div id={id} role="tooltip" className="w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150">
-        <p className="text-[0.8125rem] text-white/80 leading-snug">{desc}</p>
-        {next && (
-          <div className="mt-2.5 pt-2.5 border-t border-white/[0.07] flex items-center gap-1.5">
-            <ChevronRight size={12} className="text-brand flex-shrink-0" />
-            <p className="text-[0.75rem] font-semibold text-brand/80">
-              <span className="text-white/30 font-normal">{nextLabel}:</span> {next}
-            </p>
-          </div>
-        )}
-      </div>
+      <p className="text-[0.8125rem] text-white/80 leading-snug">{desc}</p>
+      {next && (
+        <div className="mt-2.5 pt-2.5 border-t border-white/[0.07] flex items-center gap-1.5">
+          <ChevronRight size={12} className="text-brand flex-shrink-0" />
+          <p className="text-[0.75rem] font-semibold text-brand/80">
+            <span className="text-white/30 font-normal">{nextLabel}:</span> {next}
+          </p>
+        </div>
+      )}
     </div>,
     document.body,
   )
@@ -175,6 +193,19 @@ export function OwnerListingSidebar({
     return { onMouseEnter: show, onMouseLeave: hide, onFocus: show, onBlur: hide }
   }
 
+  // Dismiss any open hint on scroll/resize — a fixed-position portal would
+  // otherwise float detached from its (now-moved) trigger.
+  useEffect(() => {
+    if (!hoveredItem) return
+    const clear = () => { setHoveredItem(null); setHintRect(null) }
+    window.addEventListener('scroll', clear, true)
+    window.addEventListener('resize', clear)
+    return () => {
+      window.removeEventListener('scroll', clear, true)
+      window.removeEventListener('resize', clear)
+    }
+  }, [hoveredItem])
+
   // Quick action nav items
   const navItems = [
     { icon: LayoutDashboard, label: t.backToDashboard ?? 'Dashboard', href: '/owner', isBack: true, key: 'dashboard', hint: t.hintDashboardDesc, hintNext: t.hintDashboardNext },
@@ -292,6 +323,8 @@ export function OwnerListingSidebar({
           <button
             onClick={handleToggle}
             disabled={toggling}
+            aria-label={isLive ? (t.ownerLive ?? 'Live') : (t.ownerDraft ?? 'Draft')}
+            aria-pressed={isLive}
             className={`w-full flex items-center gap-2 rounded-lg transition-colors disabled:opacity-50 ${expanded ? 'px-3 py-2.5' : 'lg:justify-center lg:px-0 lg:py-2.5 px-3 py-2.5'}`}
           >
             <div className={`relative w-8 h-[18px] rounded-full transition-colors flex-shrink-0 ${isLive ? 'bg-green-500' : 'bg-white/20'}`}>
@@ -307,6 +340,8 @@ export function OwnerListingSidebar({
             <button
               onClick={handlePreMarketToggle}
               disabled={preMarketToggling}
+              aria-label={t.ownerPreMarket ?? 'Early Access'}
+              aria-pressed={preMarket}
               aria-describedby={hoveredItem === 'earlyAccess' ? 'sidebar-hint-earlyAccess' : undefined}
               className={`w-full flex items-center gap-2 rounded-lg transition-colors disabled:opacity-50 mt-1 ${expanded ? 'px-3 py-2' : 'lg:justify-center lg:px-0 lg:py-2 px-3 py-2'}`}
             >
@@ -335,6 +370,7 @@ export function OwnerListingSidebar({
               <Link
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
+                aria-label={item.label}
                 aria-describedby={hoveredItem === item.key ? `sidebar-hint-${item.key}` : undefined}
                 className={[
                   'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
@@ -363,6 +399,7 @@ export function OwnerListingSidebar({
             >
               <button
                 onClick={() => { item.onClick(); setMobileOpen(false); }}
+                aria-label={item.label}
                 aria-describedby={hoveredItem === item.key ? `sidebar-hint-${item.key}` : undefined}
                 className={[
                   'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
@@ -393,6 +430,7 @@ export function OwnerListingSidebar({
               <Link
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
+                aria-label={item.label}
                 aria-describedby={hoveredItem === item.key ? `sidebar-hint-${item.key}` : undefined}
                 className={[
                   'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
@@ -420,6 +458,8 @@ export function OwnerListingSidebar({
           >
             <button
               onClick={() => { setShareOpen(!shareOpen); setHoveredItem(null); }}
+              aria-label={t.ownerShare ?? 'Share'}
+              aria-expanded={shareOpen}
               aria-describedby={hoveredItem === 'share' ? 'sidebar-hint-share' : undefined}
               className={[
                 'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
