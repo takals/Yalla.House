@@ -8,7 +8,7 @@ import {
   BarChart3, Globe, Share2, Copy, Check, Mail, MessageCircle,
   Link2, Eye, PanelLeftClose, PanelLeftOpen, LogOut,
   Menu, X, ArrowLeft, Megaphone, ShoppingBag, Sparkles,
-  ChevronRight, PartyPopper,
+  ChevronRight, PartyPopper, Search, Send, MessageSquare,
 } from 'lucide-react'
 import { ShareCardModal } from '@/components/share-card'
 import { ListingPopup } from './listing-popup'
@@ -472,54 +472,48 @@ export function OwnerListingSidebar({
         onClose={() => setInvitePopupOpen(false)}
         title={t.inviteAgents ?? 'Invite Agents'}
       >
-        <div className="space-y-6">
+        <div className="space-y-5">
           <p className="text-sm text-text-secondary">
-            {t.inviteAgentsDesc ?? 'Share your listing link with estate agents so they can view your property and contact you directly.'}
+            {t.inviteAgentsDescV2 ?? 'Find agents near your property and send them a brief — all communication stays in-platform so your details remain private.'}
           </p>
-          <div>
-            <label className="block text-xs font-semibold text-text-secondary mb-2 uppercase tracking-wide">
-              {t.listingLink ?? 'Listing Link'}
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                readOnly
-                value={typeof window !== 'undefined' ? `${window.location.origin}/p/${listingId}` : `/p/${listingId}`}
-                className="flex-1 px-3 py-2 text-sm bg-bg border border-border-default rounded-lg text-text-primary"
-              />
-              <button
-                onClick={copyInviteLink}
-                className="flex items-center gap-1.5 px-4 py-2 bg-brand hover:bg-brand-hover text-white text-sm font-semibold rounded-lg transition-colors"
-              >
-                {copiedInvite ? <Check size={14} /> : <Copy size={14} />}
-                {copiedInvite ? (t.copied ?? 'Copied!') : (t.copy ?? 'Copy')}
-              </button>
+
+          <div className="bg-bg rounded-xl p-4 border border-border-default space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <Search size={14} className="text-brand" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-text-primary">{t.inviteStep1 ?? 'Search by postcode'}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{t.inviteStep1Desc ?? 'Find verified agents near your property from our database.'}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <Send size={14} className="text-brand" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-text-primary">{t.inviteStep2 ?? 'Send a brief'}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{t.inviteStep2Desc ?? 'Select agents and send them your property details in one click.'}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <MessageSquare size={14} className="text-brand" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-text-primary">{t.inviteStep3 ?? 'Chat in-app'}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{t.inviteStep3Desc ?? 'All replies come to your Deal Room — no phone calls or emails needed.'}</p>
+              </div>
             </div>
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-text-secondary mb-2 uppercase tracking-wide">
-              {t.sendViaEmail ?? 'Send via Email'}
-            </label>
-            <a
-              href={`mailto:?subject=${encodeURIComponent(t.inviteEmailSubject ?? 'Property on Yalla.House')}&body=${encodeURIComponent(t.inviteEmailBody ?? 'Take a look at this property: ') + (typeof window !== 'undefined' ? window.location.href : '')}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-bg hover:bg-hover-muted border border-border-default text-text-primary text-sm font-semibold rounded-lg transition-colors"
-            >
-              <Mail size={14} />
-              {t.emailToAgent ?? 'Email to agent'}
-            </a>
-          </div>
-          <div className="pt-4 border-t border-border-default">
-            <p className="text-xs text-text-secondary mb-3">
-              {t.browseAgentsHint ?? 'Looking for an agent? Browse our verified agent database.'}
-            </p>
-            <Link
-              href="/en/agents"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-hover transition-colors"
-            >
-              <Users size={14} />
-              {t.browseAgents ?? 'Browse agents'}
-            </Link>
-          </div>
+
+          <Link
+            href="/owner/agents"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-semibold rounded-lg transition-colors"
+          >
+            <Users size={14} />
+            {t.browseAgents ?? 'Browse agents'}
+          </Link>
         </div>
       </ListingPopup>
 
