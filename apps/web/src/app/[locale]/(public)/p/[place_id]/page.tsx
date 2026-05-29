@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { ContactCard } from './contact-form'
 import { ViewingCalendar } from './viewing-calendar'
 import { ListingStatusBadge } from './listing-status-badge'
@@ -10,25 +11,29 @@ import {
   MapPin, FileText, Zap, Eye, Sparkles,
 } from 'lucide-react'
 import { dateLocaleFromLocale } from '@/lib/country-config'
-import { OwnerListingSidebar } from './owner-listing-sidebar'
 import { PhotoGallery } from './photo-gallery'
 import { HeroPhoto } from './hero-photo'
-import { OwnerInlineControls } from './owner-inline-controls'
 import { resolveListing, canonicalListingPath, canonicalListingUrl } from '@/lib/resolve-listing'
 import { ListingCtaBox } from './listing-cta-box'
 import { KeyFactsGrid } from './key-facts-grid'
-import { EditableKeyFacts } from './editable-key-facts'
 import { FeaturesSection } from './features-section'
 import { EditableLocation } from './editable-location'
 import { ListingActionsBar } from './listing-actions-bar'
-import { DocumentUploadSection } from './document-upload-section'
-import { HeroEditButton } from './hero-edit-button'
 import { StickyBookingBar } from './sticky-booking-bar'
 import { HeroCalendarBox } from './hero-calendar-box'
 import { ListingHintBanner } from '@/components/listing-hint-banner'
 import { FaqAccordion } from './faq-accordion'
-import { FaqEditor } from './faq-editor'
 import { HelpCircle } from 'lucide-react'
+
+// ── Owner-only client components: code-split so their JS ships only when the
+// owner view renders them. Buyers never mount these, so the chunks are never
+// downloaded — trimming the public listing-page bundle. ──
+const OwnerListingSidebar = dynamic(() => import('./owner-listing-sidebar').then(m => m.OwnerListingSidebar))
+const OwnerInlineControls = dynamic(() => import('./owner-inline-controls').then(m => m.OwnerInlineControls))
+const EditableKeyFacts = dynamic(() => import('./editable-key-facts').then(m => m.EditableKeyFacts))
+const FaqEditor = dynamic(() => import('./faq-editor').then(m => m.FaqEditor))
+const DocumentUploadSection = dynamic(() => import('./document-upload-section').then(m => m.DocumentUploadSection))
+const HeroEditButton = dynamic(() => import('./hero-edit-button').then(m => m.HeroEditButton))
 
 interface Props {
   params: Promise<{ place_id: string; locale: string }>

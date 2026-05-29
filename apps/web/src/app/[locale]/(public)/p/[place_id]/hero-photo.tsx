@@ -1,9 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { Camera } from 'lucide-react'
-import { PhotoLightbox } from './photo-lightbox'
+
+// Lightbox only renders once the gallery is opened — defer its chunk until then.
+const PhotoLightbox = dynamic(() => import('./photo-lightbox').then(m => m.PhotoLightbox), { ssr: false })
 
 interface Photo {
   id: string
@@ -39,6 +42,7 @@ export function HeroPhoto({ photos, primaryUrl, alt, photoCount, translations: t
           src={primaryUrl}
           alt={alt}
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />

@@ -13,6 +13,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    // Prefer AVIF (≈20-30% smaller than WebP) with WebP fallback.
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
