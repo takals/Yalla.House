@@ -33,8 +33,8 @@ interface Props {
 }
 
 /* ── Sidebar tooltip — portalled to <body> to escape transform-based containing blocks ── */
-function SidebarHint({ desc, next, nextLabel, rect }: {
-  desc: string; next?: string; nextLabel: string; rect: DOMRect | null
+function SidebarHint({ id, desc, next, nextLabel, rect }: {
+  id?: string; desc: string; next?: string; nextLabel: string; rect: DOMRect | null
 }) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
@@ -44,7 +44,7 @@ function SidebarHint({ desc, next, nextLabel, rect }: {
       className="fixed z-[9999] pointer-events-none hidden lg:block"
       style={{ left: rect.right + 12, top: rect.top + rect.height / 2, transform: 'translateY(-50%)' }}
     >
-      <div className="w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150">
+      <div id={id} role="tooltip" className="w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150">
         <p className="text-[0.8125rem] text-white/80 leading-snug">{desc}</p>
         {next && (
           <div className="mt-2.5 pt-2.5 border-t border-white/[0.07] flex items-center gap-1.5">
@@ -163,6 +163,17 @@ export function OwnerListingSidebar({
   }
 
   const nextLabel = t.hintNextStep ?? 'Next step'
+
+  // Show/hide hint on both pointer hover and keyboard focus (onFocus/onBlur bubble
+  // from the inner link/button to this wrapper). Reused across every sidebar item.
+  const hintHandlers = (key: string) => {
+    const show = (e: { currentTarget: Element }) => {
+      setHoveredItem(key)
+      setHintRect((e.currentTarget as HTMLElement).getBoundingClientRect())
+    }
+    const hide = () => { setHoveredItem(null); setHintRect(null) }
+    return { onMouseEnter: show, onMouseLeave: hide, onFocus: show, onBlur: hide }
+  }
 
   // Quick action nav items
   const navItems = [
@@ -292,16 +303,22 @@ export function OwnerListingSidebar({
           </button>
 
           {/* Early Access toggle */}
-          <button
-            onClick={handlePreMarketToggle}
-            disabled={preMarketToggling}
-            className={`w-full flex items-center gap-2 rounded-lg transition-colors disabled:opacity-50 mt-1 ${expanded ? 'px-3 py-2' : 'lg:justify-center lg:px-0 lg:py-2 px-3 py-2'}`}
-          >
-            <Eye size={14} className={`flex-shrink-0 ${preMarket ? 'text-brand' : 'text-white/30'}`} />
-            <span className={`text-xs font-semibold whitespace-nowrap ${preMarket ? 'text-brand' : 'text-white/40'} ${expanded ? '' : 'lg:hidden'}`}>
-              {t.ownerPreMarket ?? 'Early Access'}
-            </span>
-          </button>
+          <div className="relative" {...hintHandlers('earlyAccess')}>
+            <button
+              onClick={handlePreMarketToggle}
+              disabled={preMarketToggling}
+              aria-describedby={hoveredItem === 'earlyAccess' ? 'sidebar-hint-earlyAccess' : undefined}
+              className={`w-full flex items-center gap-2 rounded-lg transition-colors disabled:opacity-50 mt-1 ${expanded ? 'px-3 py-2' : 'lg:justify-center lg:px-0 lg:py-2 px-3 py-2'}`}
+            >
+              <Eye size={14} className={`flex-shrink-0 ${preMarket ? 'text-brand' : 'text-white/30'}`} />
+              <span className={`text-xs font-semibold whitespace-nowrap ${preMarket ? 'text-brand' : 'text-white/40'} ${expanded ? '' : 'lg:hidden'}`}>
+                {t.ownerPreMarket ?? 'Early Access'}
+              </span>
+            </button>
+            {hoveredItem === 'earlyAccess' && (
+              <SidebarHint id="sidebar-hint-earlyAccess" desc={t.ownerPreMarketHint ?? 'Let verified hunters see this listing before it goes live on portals.'} nextLabel={nextLabel} rect={hintRect} />
+            )}
+          </div>
         </div>
 
         {/* Divider */}
@@ -313,12 +330,12 @@ export function OwnerListingSidebar({
             <div
               key={item.key}
               className="relative"
-              onMouseEnter={(e) => { setHoveredItem(item.key); setHintRect(e.currentTarget.getBoundingClientRect()) }}
-              onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
+              {...hintHandlers(item.key)}
             >
               <Link
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
+                aria-describedby={hoveredItem === item.key ? `sidebar-hint-${item.key}` : undefined}
                 className={[
                   'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
                   'justify-start px-3 py-2.5 gap-3',
@@ -332,7 +349,7 @@ export function OwnerListingSidebar({
                 <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </Link>
               {item.hint && hoveredItem === item.key && (
-                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
+                <SidebarHint id={`sidebar-hint-${item.key}`} desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
               )}
             </div>
           ))}
@@ -342,11 +359,11 @@ export function OwnerListingSidebar({
             <div
               key={item.key}
               className="relative"
-              onMouseEnter={(e) => { setHoveredItem(item.key); setHintRect(e.currentTarget.getBoundingClientRect()) }}
-              onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
+              {...hintHandlers(item.key)}
             >
               <button
                 onClick={() => { item.onClick(); setMobileOpen(false); }}
+                aria-describedby={hoveredItem === item.key ? `sidebar-hint-${item.key}` : undefined}
                 className={[
                   'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
                   'justify-start px-3 py-2.5 gap-3',
@@ -358,7 +375,7 @@ export function OwnerListingSidebar({
                 <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </button>
               {item.hint && hoveredItem === item.key && (
-                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
+                <SidebarHint id={`sidebar-hint-${item.key}`} desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
               )}
             </div>
           ))}
@@ -371,12 +388,12 @@ export function OwnerListingSidebar({
             <div
               key={item.key}
               className="relative"
-              onMouseEnter={(e) => { setHoveredItem(item.key); setHintRect(e.currentTarget.getBoundingClientRect()) }}
-              onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
+              {...hintHandlers(item.key)}
             >
               <Link
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
+                aria-describedby={hoveredItem === item.key ? `sidebar-hint-${item.key}` : undefined}
                 className={[
                   'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
                   'justify-start px-3 py-2.5 gap-3',
@@ -388,7 +405,7 @@ export function OwnerListingSidebar({
                 <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </Link>
               {item.hint && hoveredItem === item.key && (
-                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
+                <SidebarHint id={`sidebar-hint-${item.key}`} desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
               )}
             </div>
           ))}
@@ -399,11 +416,11 @@ export function OwnerListingSidebar({
           {/* Share button */}
           <div
             className="relative"
-            onMouseEnter={(e) => { setHoveredItem('share'); setHintRect(e.currentTarget.getBoundingClientRect()) }}
-            onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
+            {...hintHandlers('share')}
           >
             <button
               onClick={() => { setShareOpen(!shareOpen); setHoveredItem(null); }}
+              aria-describedby={hoveredItem === 'share' ? 'sidebar-hint-share' : undefined}
               className={[
                 'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
                 'justify-start px-3 py-2.5 gap-3',
@@ -462,7 +479,7 @@ export function OwnerListingSidebar({
               </div>
             )}
             {!shareOpen && (
-              <SidebarHint desc={t.hintShareDesc ?? 'Share your listing via link, WhatsApp, or email.'} nextLabel={nextLabel} rect={hoveredItem === 'share' ? hintRect : null} />
+              <SidebarHint id="sidebar-hint-share" desc={t.hintShareDesc ?? 'Share your listing via link, WhatsApp, or email.'} nextLabel={nextLabel} rect={hoveredItem === 'share' ? hintRect : null} />
             )}
           </div>
         </nav>
