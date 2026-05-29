@@ -31,6 +31,28 @@ interface Props {
   userName: string | null
 }
 
+/* ── Sidebar tooltip — appears on hover, right of item ── */
+function SidebarHint({ desc, next, nextLabel, show }: {
+  desc: string; next?: string; nextLabel: string; show: boolean
+}) {
+  if (!show) return null
+  return (
+    <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 z-[60] pointer-events-none hidden lg:block">
+      <div className="w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150">
+        <p className="text-[0.8125rem] text-white/80 leading-snug">{desc}</p>
+        {next && (
+          <div className="mt-2.5 pt-2.5 border-t border-white/[0.07] flex items-center gap-1.5">
+            <ChevronRight size={12} className="text-brand flex-shrink-0" />
+            <p className="text-[0.75rem] font-semibold text-brand/80">
+              <span className="text-white/30 font-normal">{nextLabel}:</span> {next}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function OwnerListingSidebar({
   listingId, placeId, slug, shortId, status, locale,
   listingTitle, address, price, photoUrl, preMarketOptIn,
@@ -55,6 +77,9 @@ export function OwnerListingSidebar({
   const [shareOpen, setShareOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const [copiedShort, setCopiedShort] = useState(false)
+
+  // Tooltip hover
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
   // Popups
   const [invitePopupOpen, setInvitePopupOpen] = useState(false)
@@ -129,22 +154,24 @@ export function OwnerListingSidebar({
     }
   }
 
+  const nextLabel = t.hintNextStep ?? 'Next step'
+
   // Quick action nav items
   const navItems = [
-    { icon: LayoutDashboard, label: t.backToDashboard ?? 'Dashboard', href: '/owner', isBack: true },
-    { icon: Pencil, label: t.propertyDetails ?? 'Property Details', href: `/owner/${listingId}` },
-    { icon: CalendarPlus, label: t.addViewingSlots ?? 'Add Viewing Slots', href: '/owner/calendar' },
-    { icon: CalendarCheck, label: t.manageViewings ?? 'Manage Viewings', href: '/owner/viewings' },
+    { icon: LayoutDashboard, label: t.backToDashboard ?? 'Dashboard', href: '/owner', isBack: true, key: 'dashboard', hint: t.hintDashboardDesc, hintNext: t.hintDashboardNext },
+    { icon: Pencil, label: t.propertyDetails ?? 'Property Details', href: `/owner/${listingId}`, key: 'property', hint: t.hintPropertyDesc, hintNext: t.hintPropertyNext },
+    { icon: CalendarPlus, label: t.addViewingSlots ?? 'Add Viewing Slots', href: '/owner/calendar', key: 'slots', hint: t.hintSlotsDesc, hintNext: t.hintSlotsNext },
+    { icon: CalendarCheck, label: t.manageViewings ?? 'Manage Viewings', href: '/owner/viewings', key: 'viewings', hint: t.hintViewingsDesc, hintNext: t.hintViewingsNext },
   ]
 
   const actionItems = [
-    { icon: Users, label: t.inviteAgents ?? 'Invite Agents', onClick: () => setInvitePopupOpen(true) },
-    { icon: BarChart3, label: t.viewAnalytics ?? 'View Analytics', onClick: () => setAnalyticsPopupOpen(true) },
+    { icon: Users, label: t.inviteAgents ?? 'Invite Agents', onClick: () => setInvitePopupOpen(true), key: 'invite', hint: t.hintInviteDesc, hintNext: t.hintInviteNext },
+    { icon: BarChart3, label: t.viewAnalytics ?? 'View Analytics', onClick: () => setAnalyticsPopupOpen(true), key: 'analytics', hint: t.hintAnalyticsDesc },
   ]
 
   const growthItems = [
-    { icon: Megaphone, label: t.publishPortals ?? 'Publish to Portals', href: `/owner/${listingId}#portals` },
-    { icon: ShoppingBag, label: t.orderServices ?? 'Order Services', href: `/${localePrefix}marketplace` },
+    { icon: Megaphone, label: t.publishPortals ?? 'Publish to Portals', href: `/owner/${listingId}#portals`, key: 'portals', hint: t.hintPortalsDesc, hintNext: t.hintPortalsNext },
+    { icon: ShoppingBag, label: t.orderServices ?? 'Order Services', href: `/${localePrefix}marketplace`, key: 'services', hint: t.hintServicesDesc },
   ]
 
   return (
@@ -275,41 +302,57 @@ export function OwnerListingSidebar({
         {/* ── Navigation items ── */}
         <nav className="flex-1 py-1 px-2 overflow-y-auto overflow-x-hidden">
           {navItems.map(item => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              title={item.label}
-              className={[
-                'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
-                'justify-start px-3 py-2.5 gap-3',
-                expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
-                item.isBack
-                  ? 'text-white/30 hover:text-white hover:bg-white/[0.05]'
-                  : 'text-white/50 hover:text-white hover:bg-white/[0.05]',
-              ].join(' ')}
+            <div
+              key={item.key}
+              className="relative"
+              onMouseEnter={() => setHoveredItem(item.key)}
+              onMouseLeave={() => setHoveredItem(null)}
             >
-              <item.icon size={15} className="flex-shrink-0" />
-              <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
-            </Link>
+              <Link
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={[
+                  'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
+                  'justify-start px-3 py-2.5 gap-3',
+                  expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
+                  item.isBack
+                    ? 'text-white/30 hover:text-white hover:bg-white/[0.05]'
+                    : 'text-white/50 hover:text-white hover:bg-white/[0.05]',
+                ].join(' ')}
+              >
+                <item.icon size={15} className="flex-shrink-0" />
+                <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
+              </Link>
+              {item.hint && (
+                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} show={hoveredItem === item.key} />
+              )}
+            </div>
           ))}
 
           {/* Action buttons (open popups) */}
           {actionItems.map(item => (
-            <button
-              key={item.label}
-              onClick={() => { item.onClick(); setMobileOpen(false); }}
-              title={item.label}
-              className={[
-                'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
-                'justify-start px-3 py-2.5 gap-3',
-                expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
-                'text-white/50 hover:text-white hover:bg-white/[0.05]',
-              ].join(' ')}
+            <div
+              key={item.key}
+              className="relative"
+              onMouseEnter={() => setHoveredItem(item.key)}
+              onMouseLeave={() => setHoveredItem(null)}
             >
-              <item.icon size={15} className="flex-shrink-0" />
-              <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
-            </button>
+              <button
+                onClick={() => { item.onClick(); setMobileOpen(false); }}
+                className={[
+                  'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
+                  'justify-start px-3 py-2.5 gap-3',
+                  expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
+                  'text-white/50 hover:text-white hover:bg-white/[0.05]',
+                ].join(' ')}
+              >
+                <item.icon size={15} className="flex-shrink-0" />
+                <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
+              </button>
+              {item.hint && (
+                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} show={hoveredItem === item.key} />
+              )}
+            </div>
           ))}
 
           {/* Divider */}
@@ -317,31 +360,42 @@ export function OwnerListingSidebar({
 
           {/* Growth items — Portals + Services */}
           {growthItems.map(item => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              title={item.label}
-              className={[
-                'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
-                'justify-start px-3 py-2.5 gap-3',
-                expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
-                'text-brand/70 hover:text-brand hover:bg-brand/5',
-              ].join(' ')}
+            <div
+              key={item.key}
+              className="relative"
+              onMouseEnter={() => setHoveredItem(item.key)}
+              onMouseLeave={() => setHoveredItem(null)}
             >
-              <item.icon size={15} className="flex-shrink-0" />
-              <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
-            </Link>
+              <Link
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={[
+                  'flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
+                  'justify-start px-3 py-2.5 gap-3',
+                  expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
+                  'text-brand/70 hover:text-brand hover:bg-brand/5',
+                ].join(' ')}
+              >
+                <item.icon size={15} className="flex-shrink-0" />
+                <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
+              </Link>
+              {item.hint && (
+                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} show={hoveredItem === item.key} />
+              )}
+            </div>
           ))}
 
           {/* Divider */}
           <div className="mx-1 my-2 border-t border-white/[0.07]" />
 
           {/* Share button */}
-          <div className="relative">
+          <div
+            className="relative"
+            onMouseEnter={() => setHoveredItem('share')}
+            onMouseLeave={() => setHoveredItem(null)}
+          >
             <button
-              onClick={() => setShareOpen(!shareOpen)}
-              title={t.ownerShare ?? 'Share'}
+              onClick={() => { setShareOpen(!shareOpen); setHoveredItem(null); }}
               className={[
                 'w-full flex items-center rounded-[8px] text-[0.8125rem] font-semibold mb-0.5 whitespace-nowrap overflow-hidden',
                 'justify-start px-3 py-2.5 gap-3',
@@ -398,6 +452,9 @@ export function OwnerListingSidebar({
                   locale={locale}
                 />
               </div>
+            )}
+            {!shareOpen && (
+              <SidebarHint desc={t.hintShareDesc ?? 'Share your listing via link, WhatsApp, or email.'} nextLabel={nextLabel} show={hoveredItem === 'share'} />
             )}
           </div>
         </nav>

@@ -322,6 +322,22 @@ export default async function PropertyPage({ params, searchParams }: Props) {
     viewingsBooked: t('sidebarViewingsBooked'),
     linkShares: t('sidebarLinkShares'),
     viewFullAnalytics: t('sidebarViewFullAnalytics'),
+    hintNextStep: t('hintNextStep'),
+    hintDashboardDesc: t('hintDashboardDesc'),
+    hintDashboardNext: t('hintDashboardNext'),
+    hintPropertyDesc: t('hintPropertyDesc'),
+    hintPropertyNext: t('hintPropertyNext'),
+    hintSlotsDesc: t('hintSlotsDesc'),
+    hintSlotsNext: t('hintSlotsNext'),
+    hintViewingsDesc: t('hintViewingsDesc'),
+    hintViewingsNext: t('hintViewingsNext'),
+    hintInviteDesc: t('hintInviteDesc'),
+    hintInviteNext: t('hintInviteNext'),
+    hintAnalyticsDesc: t('hintAnalyticsDesc'),
+    hintPortalsDesc: t('hintPortalsDesc'),
+    hintPortalsNext: t('hintPortalsNext'),
+    hintServicesDesc: t('hintServicesDesc'),
+    hintShareDesc: t('hintShareDesc'),
   } : {}
 
   // Hero calendar box translations
