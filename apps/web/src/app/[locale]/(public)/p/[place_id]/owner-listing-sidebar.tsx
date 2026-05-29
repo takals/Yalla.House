@@ -31,13 +31,16 @@ interface Props {
   userName: string | null
 }
 
-/* ── Sidebar tooltip — appears on hover, right of item ── */
-function SidebarHint({ desc, next, nextLabel, show }: {
-  desc: string; next?: string; nextLabel: string; show: boolean
+/* ── Sidebar tooltip — fixed-positioned to escape overflow clips ── */
+function SidebarHint({ desc, next, nextLabel, rect }: {
+  desc: string; next?: string; nextLabel: string; rect: DOMRect | null
 }) {
-  if (!show) return null
+  if (!rect) return null
   return (
-    <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 z-[60] pointer-events-none hidden lg:block">
+    <div
+      className="fixed z-[200] pointer-events-none hidden lg:block"
+      style={{ left: rect.right + 12, top: rect.top + rect.height / 2, transform: 'translateY(-50%)' }}
+    >
       <div className="w-64 bg-[#1C1F2E] border border-white/10 rounded-xl shadow-2xl p-3.5 animate-in fade-in zoom-in-95 duration-150">
         <p className="text-[0.8125rem] text-white/80 leading-snug">{desc}</p>
         {next && (
@@ -78,8 +81,9 @@ export function OwnerListingSidebar({
   const [copied, setCopied] = useState(false)
   const [copiedShort, setCopiedShort] = useState(false)
 
-  // Tooltip hover
+  // Tooltip hover — track which item + its bounding rect for fixed positioning
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
+  const [hintRect, setHintRect] = useState<DOMRect | null>(null)
 
   // Popups
   const [invitePopupOpen, setInvitePopupOpen] = useState(false)
@@ -305,8 +309,8 @@ export function OwnerListingSidebar({
             <div
               key={item.key}
               className="relative"
-              onMouseEnter={() => setHoveredItem(item.key)}
-              onMouseLeave={() => setHoveredItem(null)}
+              onMouseEnter={(e) => { setHoveredItem(item.key); setHintRect(e.currentTarget.getBoundingClientRect()) }}
+              onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
             >
               <Link
                 href={item.href}
@@ -323,8 +327,8 @@ export function OwnerListingSidebar({
                 <item.icon size={15} className="flex-shrink-0" />
                 <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </Link>
-              {item.hint && (
-                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} show={hoveredItem === item.key} />
+              {item.hint && hoveredItem === item.key && (
+                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
               )}
             </div>
           ))}
@@ -334,8 +338,8 @@ export function OwnerListingSidebar({
             <div
               key={item.key}
               className="relative"
-              onMouseEnter={() => setHoveredItem(item.key)}
-              onMouseLeave={() => setHoveredItem(null)}
+              onMouseEnter={(e) => { setHoveredItem(item.key); setHintRect(e.currentTarget.getBoundingClientRect()) }}
+              onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
             >
               <button
                 onClick={() => { item.onClick(); setMobileOpen(false); }}
@@ -349,8 +353,8 @@ export function OwnerListingSidebar({
                 <item.icon size={15} className="flex-shrink-0" />
                 <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </button>
-              {item.hint && (
-                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} show={hoveredItem === item.key} />
+              {item.hint && hoveredItem === item.key && (
+                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
               )}
             </div>
           ))}
@@ -363,8 +367,8 @@ export function OwnerListingSidebar({
             <div
               key={item.key}
               className="relative"
-              onMouseEnter={() => setHoveredItem(item.key)}
-              onMouseLeave={() => setHoveredItem(null)}
+              onMouseEnter={(e) => { setHoveredItem(item.key); setHintRect(e.currentTarget.getBoundingClientRect()) }}
+              onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
             >
               <Link
                 href={item.href}
@@ -379,8 +383,8 @@ export function OwnerListingSidebar({
                 <item.icon size={15} className="flex-shrink-0" />
                 <span className={expanded ? '' : 'lg:hidden'}>{item.label}</span>
               </Link>
-              {item.hint && (
-                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} show={hoveredItem === item.key} />
+              {item.hint && hoveredItem === item.key && (
+                <SidebarHint desc={item.hint} next={item.hintNext} nextLabel={nextLabel} rect={hintRect} />
               )}
             </div>
           ))}
@@ -391,8 +395,8 @@ export function OwnerListingSidebar({
           {/* Share button */}
           <div
             className="relative"
-            onMouseEnter={() => setHoveredItem('share')}
-            onMouseLeave={() => setHoveredItem(null)}
+            onMouseEnter={(e) => { setHoveredItem('share'); setHintRect(e.currentTarget.getBoundingClientRect()) }}
+            onMouseLeave={() => { setHoveredItem(null); setHintRect(null) }}
           >
             <button
               onClick={() => { setShareOpen(!shareOpen); setHoveredItem(null); }}
@@ -454,7 +458,7 @@ export function OwnerListingSidebar({
               </div>
             )}
             {!shareOpen && (
-              <SidebarHint desc={t.hintShareDesc ?? 'Share your listing via link, WhatsApp, or email.'} nextLabel={nextLabel} show={hoveredItem === 'share'} />
+              <SidebarHint desc={t.hintShareDesc ?? 'Share your listing via link, WhatsApp, or email.'} nextLabel={nextLabel} rect={hoveredItem === 'share' ? hintRect : null} />
             )}
           </div>
         </nav>
