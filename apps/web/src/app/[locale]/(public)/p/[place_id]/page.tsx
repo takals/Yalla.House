@@ -3,8 +3,9 @@ import { notFound, redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'
-import { ContactCard } from './contact-form'
-import { ViewingCalendar } from './viewing-calendar'
+import Image from 'next/image'
+import { LazyContactCard as ContactCard } from './lazy-contact-card'
+import { LazyViewingCalendar as ViewingCalendar } from './lazy-viewing-calendar'
 import { ListingStatusBadge } from './listing-status-badge'
 import {
   Home, Building, CalendarDays,
@@ -987,7 +988,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                   {t('sectionFloorPlan')}
                 </h2>
                 <div className="bg-surface rounded-xl border border-border-default overflow-hidden">
-                  <img src={floorPlanMedia.url} alt={t('sectionFloorPlan')} className="w-full max-h-[500px] object-contain bg-gray-50" />
+                  <Image src={floorPlanMedia.url} alt={t('sectionFloorPlan')} width={1200} height={800} className="w-full h-auto max-h-[500px] object-contain bg-gray-50" />
                 </div>
               </section>
             )}
@@ -1000,7 +1001,7 @@ export default async function PropertyPage({ params, searchParams }: Props) {
                   {t('sectionEpc')}
                 </h2>
                 <div className="bg-surface rounded-xl border border-border-default overflow-hidden">
-                  <img src={epcMedia.url} alt={t('sectionEpc')} className="w-full max-h-[500px] object-contain bg-gray-50" />
+                  <Image src={epcMedia.url} alt={t('sectionEpc')} width={1200} height={800} className="w-full h-auto max-h-[500px] object-contain bg-gray-50" />
                 </div>
               </section>
             )}

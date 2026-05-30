@@ -722,3 +722,5 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     </div>
   )
 }
+
+export type { Props as ViewingCalendarProps }
