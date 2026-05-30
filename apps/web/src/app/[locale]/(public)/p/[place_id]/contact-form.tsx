@@ -376,4 +376,4 @@ export function ContactCard({
   )
 }
 
-export type { Props as ContactCardProps }
+export type ContactCardProps = { listingId: string }
