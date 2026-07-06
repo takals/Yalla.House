@@ -2,8 +2,18 @@ import {
   Calendar, MessageSquare, ShieldCheck, RefreshCw, Clock, Megaphone,
   ArrowRight, Check, X, Users, Briefcase, Palette,
 } from 'lucide-react'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { LocaleLink as Link } from '@/components/locale-link'
+import { getLocale, getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
+import { pageAlternates } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('agentInfo')
+  return {
+    title: t('pageTitle'),
+    alternates: pageAlternates(await getLocale(), '/agent/info'),
+  }
+}
 
 export default async function AgentInfoPage() {
   const t = await getTranslations('agentInfo')

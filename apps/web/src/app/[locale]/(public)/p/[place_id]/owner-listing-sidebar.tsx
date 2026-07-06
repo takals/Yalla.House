@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { useRouter } from 'next/navigation'
 import {
   LayoutDashboard, Pencil, CalendarPlus, CalendarCheck, Users,

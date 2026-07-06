@@ -25,22 +25,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       template: '%s | Yalla.House',
     },
     description: baseDescription,
-    alternates: {
-      canonical: isEnglish ? 'https://yalla.house/en' : 'https://yalla.house',
-      languages: {
-        de: 'https://yalla.house',
-        en: 'https://yalla.house/en',
-        'x-default': 'https://yalla.house',
-      },
-    },
+    // NOTE: canonical + hreflang alternates are set per page via
+    // pageAlternates() in lib/seo.ts — a layout-level canonical would
+    // wrongly point every subpage at the homepage.
     openGraph: {
       type: 'website',
       siteName: 'Yalla.House',
-      locale: isEnglish ? 'en_US' : 'de_DE',
-      alternateLocale: isEnglish ? ['de_DE'] : ['en_US'],
+      locale: isEnglish ? 'en_GB' : 'de_DE',
+      alternateLocale: isEnglish ? ['de_DE'] : ['en_GB'],
       title: baseTitle,
       description: baseDescription,
-      url: isEnglish ? 'https://yalla.house/en' : 'https://yalla.house',
       images: [
         {
           url: '/og-image.png',
@@ -49,6 +43,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
           alt: baseTitle,
         },
       ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: baseTitle,
+      description: baseDescription,
+      images: ['/og-image.png'],
     },
   }
 }

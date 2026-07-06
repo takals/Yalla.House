@@ -1,6 +1,7 @@
-import Link from 'next/link'
+import { pageAlternates } from '@/lib/seo'
+import { LocaleLink as Link } from '@/components/locale-link'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import {
   LayoutDashboard, Send, BarChart3, Shield,
   Camera, ScanLine, FileText, Megaphone,
@@ -12,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('services')
 
   return {
+    alternates: pageAlternates(await getLocale(), '/services'),
     title: t('metaTitle'),
     description: t('metaDescription'),
     openGraph: {

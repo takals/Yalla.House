@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { Menu, X } from 'lucide-react'
 
 interface Props {

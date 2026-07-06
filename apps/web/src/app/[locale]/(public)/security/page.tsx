@@ -1,12 +1,14 @@
+import { pageAlternates } from '@/lib/seo'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { LocaleLink as Link } from '@/components/locale-link'
+import { getLocale, getTranslations } from 'next-intl/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'legal' })
 
   return {
+    alternates: pageAlternates(await getLocale(), '/security'),
     title: t('securityMetaTitle'),
     description: t('securityMetaDesc'),
   }

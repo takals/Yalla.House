@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { getTranslations } from 'next-intl/server'
 import { Home } from 'lucide-react'
 import { HeaderNav } from './header-nav'

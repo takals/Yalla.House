@@ -1,6 +1,7 @@
+import { pageAlternates } from '@/lib/seo'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { LocaleLink as Link } from '@/components/locale-link'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { Mail } from 'lucide-react'
 import FaqAccordion from '@/components/faq-accordion'
 
@@ -9,6 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations('faq')
 
   return {
+    alternates: pageAlternates(await getLocale(), '/faq'),
     title: `${t('heroTitle')} ${t('heroTitleAccent')} | Yalla.House`,
     description: t('heroSubtitle'),
     openGraph: {

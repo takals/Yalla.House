@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { Home, Search, Briefcase } from 'lucide-react'
 
 export default async function WelcomePage() {

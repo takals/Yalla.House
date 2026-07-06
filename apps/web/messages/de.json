@@ -57,7 +57,7 @@
     "toggleHunter": "Ich suche",
     "agentLink": "Ich bin Makler",
     "signIn": "Bereits ein Konto? Anmelden →",
-    "metaTitle": "Immobilien-Technologie-Plattform | Yalla.House",
+    "metaTitle": "Immobilien-Technologie-Plattform",
     "metaDescription": "Yalla.House ist eine Immobilien-Technologie-Plattform. Kostenlose Dashboards für Eigentümer, Suchende und Makler.",
     "metaKeywords": "Immobilien-Plattform,PropTech,Immobilie verkaufen,provisionsfrei,Makler-Alternative"
   },
@@ -89,8 +89,8 @@
     "step3Body": "Makler-E-Mails, Inserate, Besichtigungsanfragen — alles gefiltert und organisiert in Ihrem Dashboard. Kein Posteingangs-Chaos mehr."
   },
   "stats": {
-    "stat1Value": "5.000 €+",
-    "stat1Label": "Durchschnittliche Maklerprovision auf eine Immobilie in Redbridge",
+    "stat1Value": "12.000 €+",
+    "stat1Label": "Durchschnittliche Maklerprovision beim Verkauf einer Immobilie in Deutschland",
     "stat2Value": "69 %",
     "stat2Label": "der Eigentümer wünschen wöchentliche Updates — erhalten sie aber nicht",
     "stat3Value": "0 €",
@@ -185,7 +185,7 @@
     "ctaAgent": "Makler finden"
   },
   "listings": {
-    "metaTitle": "Immobilien zum Kauf & zur Miete | Yalla.House",
+    "metaTitle": "Immobilien zum Kauf & zur Miete",
     "metaDescription": "Durchsuchen Sie Immobilien auf Yalla.House. Suchen Sie nach Stadt, Preis und Immobilientyp, um Ihr nächstes Zuhause oder Ihre Investition zu finden.",
     "title": "Inserate",
     "city": "Stadt / Ort",
@@ -283,7 +283,7 @@
     "termsOfService": "Nutzungsbedingungen",
     "cookiePolicy": "Cookie-Richtlinie",
     "allRightsReserved": "© {year} Yalla.House. Alle Rechte vorbehalten.",
-    "location": "London · Redbridge"
+    "location": "Deutschland · Großbritannien"
   },
   "ctaBand": {
     "headline": "Bereit, Ihren Verkauf selbst in die Hand zu nehmen?",
@@ -322,7 +322,7 @@
     "noViewings": "Keine Besichtigungen.",
     "noUsers": "Keine Nutzer.",
     "completions": "Abschlüsse",
-    "metaTitle": "Admin-Dashboard | Yalla.House",
+    "metaTitle": "Admin-Dashboard",
     "metaDescription": "Verwalten Sie die Yalla-Plattform und überwachen Sie das System."
   },
   "partnerDash": {
@@ -435,7 +435,7 @@
     "noMessagesYet": "Noch keine Nachrichten. Starte die Unterhaltung unten."
   },
   "agentDiscovery": {
-    "metaTitle": "Lokale Immobilienmakler finden | Yalla.House",
+    "metaTitle": "Lokale Immobilienmakler finden",
     "metaDescription": "Vergleichen Sie Makler in Ihrer Gegend und treten Sie mit ihnen in Kontakt. Durchsuchen Sie verifizierte lokale Makler auf Yalla.House und senden Sie Ihr Immobilien-Brief kostenlos.",
     "title": "Finden Sie Makler in Ihrer Nähe",
     "subtitle": "Durchsuchen Sie verifizierte lokale Makler oder geben Sie Ihre Postleitzahl ein, um zu sehen, wer Ihr Gebiet abdeckt.",
@@ -509,7 +509,7 @@
     "ctaSubtitle": "Erstellen Sie Ihr kostenloses Dashboard und sehen Sie Ihre lokalen Marktdaten in zwei Minuten.",
     "ctaCta": "Kostenloses Dashboard erstellen",
     "ctaAgentLink": "Sind Sie Makler? Kostenlos beitreten",
-    "metaTitle": "Dienstleistungen & Preise | Yalla.House",
+    "metaTitle": "Dienstleistungen & Preise",
     "metaDescription": "Lösungen für Eigentümer, Suchende und Makler. Kostenlose Dashboards und umfangreiche Marketingtools.",
     "pricingTableTag": "Preise",
     "pricingTableTitle": "Einfache, transparente Preise",
@@ -1113,7 +1113,7 @@
     "viewingInterested": "möchte besichtigen",
     "newInquiry": "Neue Anfrage",
     "statNewOffers": "{count} neue Angebote",
-    "metaTitle": "Eigentümer-Dashboard | Yalla.House",
+    "metaTitle": "Eigentümer-Dashboard",
     "metaDescription": "Verwalten Sie Ihren Immobilienverkauf. Verfolgen Sie Besichtigungen, Angebote und Makler-Vorschläge."
   },
   "ownerListings": {
@@ -1983,7 +1983,7 @@
     "nudgeBody": "Dein Passport zeigt, dass du interessiert bist, aber noch nicht aktiv suchst. Aktualisiere deine Präferenzen oder stöbere durch neue Inserate — vielleicht findest du das Richtige.",
     "nudgeUpdatePassport": "Passport aktualisieren",
     "nudgeBrowse": "Inserate durchsuchen",
-    "metaTitle": "Suchenden-Dashboard | Yalla.House",
+    "metaTitle": "Suchenden-Dashboard",
     "metaDescription": "Finden Sie Ihr nächstes Zuhause. Durchsuchen Sie verfügbare Immobilien und neue Angebote."
   },
   "agentDashboard": {
@@ -2063,7 +2063,7 @@
     "rateLabel": "Prozentsatz (%)",
     "amountLabel": "Betrag",
     "currencyLabel": "Währung",
-    "metaTitle": "Makler-Dashboard | Yalla.House",
+    "metaTitle": "Makler-Dashboard",
     "metaDescription": "Verwalten Sie Ihre Objekte, Besichtigungen und Kommunikation mit Eigentümern.",
     "tabInfo": "Info",
     "tabDashboard": "Dashboard",
@@ -2666,7 +2666,7 @@
     "statusDeclined": "Abgelehnt",
     "statusWithdrawn": "Zurückgezogen",
     "statusExpired": "Abgelaufen",
-    "metaTitle": "Angebote | Yalla.House",
+    "metaTitle": "Angebote",
     "metaDescription": "Angebote für Ihre Immobilien prüfen und verwalten."
   },
   "hunterViewings": {
@@ -2702,7 +2702,7 @@
     "getDirections": "Wegbeschreibung",
     "callOpens": "Videoanruf startet 5 Min. vor deiner Besichtigung",
     "onlineViewingInfo": "Kein Download nötig — öffnet sich im Browser",
-    "metaTitle": "Besichtigungen | Yalla.House",
+    "metaTitle": "Besichtigungen",
     "metaDescription": "Verfolge deine Besichtigungsanfragen und bestätigten Termine."
   },
   "notif": {
@@ -3275,7 +3275,7 @@
     "errorGeneric": "Etwas ist schiefgelaufen"
   },
   "legal": {
-    "cookieMetaTitle": "Cookie-Richtlinie | Yalla.House",
+    "cookieMetaTitle": "Cookie-Richtlinie",
     "cookieMetaDesc": "Wie Yalla.House Cookies verwendet und wie Sie Ihre Einstellungen verwalten können.",
     "cookieEyebrow": "Cookie-Richtlinie",
     "cookieHeading": "So verwenden wir Cookies",
@@ -3321,7 +3321,7 @@
     "cookieContactBody": "Wenn Sie Fragen zu unserer Verwendung von Cookies haben, kontaktieren Sie uns bitte:",
     "cookieContactEmail": "E-Mail: support@yalla.house",
     "cookieBackLink": "← Zurück zur Startseite",
-    "securityMetaTitle": "Sicherheit | Yalla.House",
+    "securityMetaTitle": "Sicherheit",
     "securityMetaDesc": "Wie Yalla.House Ihre Daten mit branchenführenden Sicherheitsmaßnahmen schützt.",
     "securityEyebrow": "Sicherheit",
     "securityHeading": "Die Sicherheit Ihrer Daten ist unsere Priorität",
@@ -3948,7 +3948,7 @@
     "perMonth": "/Monat"
   },
   "partners": {
-    "metaTitle": "Partner werden | Yalla.House",
+    "metaTitle": "Partner werden",
     "metaDescription": "Werden Sie Teil des Yalla.House Partner-Netzwerks. Makler, Fotografen, Notare und Dienstleister — wachsen Sie mit qualifizierten Leads.",
     "badge": "Partner-Programm",
     "heroTitle": "Wachsen Sie mit",

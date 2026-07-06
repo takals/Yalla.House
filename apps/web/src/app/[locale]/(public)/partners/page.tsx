@@ -1,6 +1,7 @@
-import Link from 'next/link'
+import { pageAlternates } from '@/lib/seo'
+import { LocaleLink as Link } from '@/components/locale-link'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import {
   Users, Briefcase, TrendingUp, Shield, ArrowRight,
   Check, Handshake, Building2, Camera, FileText, MapPin,
@@ -11,6 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations({ locale, namespace: 'partners' })
 
   return {
+    alternates: pageAlternates(await getLocale(), '/partners'),
     title: t('metaTitle'),
     description: t('metaDescription'),
   }

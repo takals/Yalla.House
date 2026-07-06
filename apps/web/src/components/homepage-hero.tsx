@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { LayoutDashboard, Send, BarChart3, ClipboardList, Users, Layout } from 'lucide-react'
 
 /* ── Types ────────────────────────────────────────────────────────────────── */

@@ -2,8 +2,18 @@ import {
   ShieldCheck, Search, Users, MessageSquare, MapPin, Zap, ArrowRight,
   Eye, Handshake, Check, X, BadgeCheck, Home, Heart, Bell,
 } from 'lucide-react'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { LocaleLink as Link } from '@/components/locale-link'
+import { getLocale, getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
+import { pageAlternates } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('hunterInfo')
+  return {
+    title: t('pageTitle'),
+    alternates: pageAlternates(await getLocale(), '/hunter/info'),
+  }
+}
 
 export default async function HunterInfoPage() {
   const t = await getTranslations('hunterInfo')

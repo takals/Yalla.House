@@ -1,6 +1,7 @@
+import { pageAlternates } from '@/lib/seo'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { LocaleLink as Link } from '@/components/locale-link'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { Home, Search, Handshake } from 'lucide-react'
 import HomepageHero from '@/components/homepage-hero'
 import { createClient } from '@/lib/supabase/server'
@@ -9,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('hero')
 
   return {
+    alternates: pageAlternates(await getLocale(), ''),
     title: t('metaTitle'),
     description: t('metaDescription'),
     keywords: t('metaKeywords').split(','),

@@ -1,6 +1,7 @@
-import Link from 'next/link'
+import { pageAlternates } from '@/lib/seo'
+import { LocaleLink as Link } from '@/components/locale-link'
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { ArrowRight, Zap, Eye, Users, Shield, Home, Search } from 'lucide-react'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -8,6 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations('about')
 
   return {
+    alternates: pageAlternates(await getLocale(), '/about'),
     title: `${t('heroTitle')} ${t('heroTitleAccent')} | Yalla.House`,
     description: t('heroSubtitle'),
     openGraph: {

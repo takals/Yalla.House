@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { CheckCircle2, ArrowRight } from 'lucide-react'
 
 type Tab = 'owner' | 'hunter' | 'agent' | 'partner'

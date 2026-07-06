@@ -1,9 +1,19 @@
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import {
   Home, BarChart3, Handshake, Calendar, MessageSquare,
   ArrowRight, Check, Megaphone, Shield,
 } from 'lucide-react'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
+import type { Metadata } from 'next'
+import { pageAlternates } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('ownerInfo')
+  return {
+    title: t('pageTitle'),
+    alternates: pageAlternates(await getLocale(), '/owner/info'),
+  }
+}
 
 export default async function OwnerInfoPage() {
   const t = await getTranslations('ownerInfo')

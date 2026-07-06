@@ -1,22 +1,15 @@
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
+import { getLocale } from 'next-intl/server'
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-jakarta' })
 
+// Locale-specific metadata (title, description, canonical, og, twitter) is
+// provided by src/app/[locale]/layout.tsx and the individual pages.
+// This root layout only carries locale-neutral defaults.
 export const metadata: Metadata = {
   metadataBase: new URL('https://yalla.house'),
-  title: {
-    default: 'Yalla.House — Immobilie selbst verkaufen',
-    template: '%s | Yalla.House',
-  },
-  description: 'Verkaufen Sie Ihre Immobilie in Deutschland ohne Makler — kostenloses Eigentümer-Dashboard für Provisionsfrei-Verkauf.',
-  keywords: [
-    'Immobilie verkaufen Deutschland',
-    'Makler-Alternative',
-    'Provisionsfrei',
-    'ImmoScout24',
-    'Immowelt',
-  ],
+  title: 'Yalla.House',
   authors: [{ name: 'Yalla.House' }],
   creator: 'Yalla.House',
   publisher: 'Yalla.House',
@@ -24,30 +17,6 @@ export const metadata: Metadata = {
     email: false,
     telephone: false,
     address: false,
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'de_DE',
-    alternateLocale: ['en_GB'],
-    url: 'https://yalla.house',
-    siteName: 'Yalla.House',
-    title: 'Yalla.House — Immobilie selbst verkaufen',
-    description: 'Verkaufen Sie Ihre Immobilie ohne Makler. Kostenlos. Behalten Sie jede Provision.',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Yalla.House - Immobilie selbst verkaufen',
-        type: 'image/png',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Yalla.House — Immobilie selbst verkaufen',
-    description: 'Verkaufen Sie Ihre Immobilie ohne Makler. Kostenlos. Behalten Sie jede Provision.',
-    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -72,24 +41,25 @@ export const metadata: Metadata = {
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'RealEstateAgent',
+  '@type': 'Organization',
   name: 'Yalla.House',
-  description: 'German flat-fee property selling platform. No commission, no agent. List on ImmoScout24 and Immowelt without an estate agent.',
+  description:
+    'Property technology platform. Free dashboards for owners, home hunters, and agents — sell privately or let agents compete. No commission.',
   url: 'https://yalla.house',
   logo: 'https://yalla.house/og-image.png',
-  areaServed: { '@type': 'Country', name: 'Germany' },
-  priceRange: 'Flat fee',
+  areaServed: [
+    { '@type': 'Country', name: 'United Kingdom' },
+    { '@type': 'Country', name: 'Germany' },
+  ],
   sameAs: [],
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale()
+
   return (
-    <html suppressHydrationWarning lang="de" className={jakarta.variable}>
+    <html suppressHydrationWarning lang={locale} className={jakarta.variable}>
       <head>
-        <link rel="canonical" href="https://yalla.house" />
-        <link rel="alternate" hrefLang="de" href="https://yalla.house" />
-        <link rel="alternate" hrefLang="en" href="https://yalla.house/en" />
-        <link rel="alternate" hrefLang="x-default" href="https://yalla.house" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script
           type="application/ld+json"

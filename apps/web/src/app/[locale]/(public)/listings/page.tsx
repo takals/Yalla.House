@@ -1,13 +1,15 @@
+import { pageAlternates } from '@/lib/seo'
 import { createClient } from '@/lib/supabase/server'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import Image from 'next/image'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('listings')
   return {
+    alternates: pageAlternates(await getLocale(), '/listings'),
     title: t('metaTitle'),
     description: t('metaDescription'),
     openGraph: {

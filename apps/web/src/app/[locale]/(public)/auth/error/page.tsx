@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 
 type ErrorCode = 'invalid_link' | 'expired_link' | 'already_used' | 'auth_failed' | 'invalid_email' | 'unknown'
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import { createClient } from '@/lib/supabase/client'
 
 /** Set a same-site cookie so the server-side callback can read the return URL.

@@ -1,6 +1,7 @@
+import { pageAlternates } from '@/lib/seo'
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { LocaleLink as Link } from '@/components/locale-link'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { ArrowRight } from 'lucide-react'
 import { MarketplaceGrid } from '@/components/marketplace-grid'
@@ -10,6 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations('marketplace')
 
   return {
+    alternates: pageAlternates(await getLocale(), '/marketplace'),
     title: `${t('heroTitle')} ${t('heroTitleAccent')} | Yalla.House`,
     description: t('heroSubtitle'),
     openGraph: {
