@@ -67,17 +67,21 @@ export async function upsertAgent(sb: SupabaseClient, obs: AgentObservation) {
     }
     await sb.from('agent_profiles').update(merged).eq('user_id', agent_user_id)
   } else {
-    // Create a new agent_profiles row. Note: in the current schema agent_profiles.user_id
-    // references auth.users, so for scraped agents we mint a placeholder user via auth admin.
-    // The propertymark scraper currently uses a service-role auth.admin.createUser flow —
-    // we mirror that here. (TODO: extract into a single helper once propertymark fn is in repo.)
-    const { data: authUser } = await sb.auth.admin.createUser({
-      email: obs.email ?? `${nameKey.replace(/[^a-z0-9]/g, '')}+${obs.source}@scraped.yalla.house`,
-      email_confirm: true,
-      user_metadata: { scraped: true, source: obs.source, country_code: obs.country_code },
+    // Create a new agent_profiles row. agent_profiles.user_id references public.users,
+    // so mint a SHADOW row there with a namespaced email. NEVER store the agent's real
+    // email on users: users.email is unique, and a real email there silently blocks that
+    // agent's actual signup later (auth-callback upsert conflicts on email). Real contact
+    // emails live only on agent_profiles.email. Never create auth users for scraped agents.
+    const shadowId = crypto.randomUUID()
+    const { error: shadowErr } = await sb.from('users').insert({
+      id: shadowId,
+      email: `shadow+${shadowId}@import.yalla.house`,
+      full_name: obs.agency_name,
+      country_code: obs.country_code,
+      language: obs.country_code === 'DE' ? 'de' : 'en',
     })
-    if (!authUser?.user) throw new Error('failed to mint placeholder auth user')
-    agent_user_id = authUser.user.id
+    if (shadowErr) throw new Error(`failed to mint shadow user: ${shadowErr.message}`)
+    agent_user_id = shadowId
 
     await sb.from('agent_profiles').insert({
       user_id: agent_user_id,
