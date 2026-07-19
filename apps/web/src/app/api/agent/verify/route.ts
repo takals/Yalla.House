@@ -101,7 +101,7 @@ Return ONLY the JSON.`
         messages: [{ role: 'user', content: [contentBlock, { type: 'text', text: prompt }] }],
       }),
     })
-    if (!res.ok) throw new Error(`Anthropic ${res.status}`)
+    if (!res.ok) throw new Error(`Anthropic ${res.status}: ${(await res.text()).slice(0, 300)}`)
     const data = await res.json()
     const text: string = data?.content?.[0]?.text ?? ''
     const jsonMatch = text.match(/\{[\s\S]*\}/)
@@ -112,6 +112,7 @@ Return ONLY the JSON.`
     await (service.from('agent_verifications') as any).insert({
       user_id: user.id, licence_number: licenceNumber || null, doc_path: docPath,
       status: 'needs_review', reason: 'Automatic check unavailable — please try again shortly.',
+      ai_verdict: { debug: String(e).slice(0, 400) },
     })
     return NextResponse.json({ status: 'needs_review', reason: 'Automatic check unavailable — please try again in a few minutes.' })
   }
