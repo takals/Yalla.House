@@ -1,7 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import { AgentProfilePageClient } from './profile-page-client'
+import { ClaimCard, type ClaimCandidate } from './claim-card'
 
 export default async function AgentProfilePage() {
   const t = await getTranslations('agentProfile')
@@ -13,6 +14,21 @@ export default async function AgentProfilePage() {
     .select('agency_name, license_number, property_types, focus, verified_at, subscription_tier')
     .eq('user_id', userId)
     .maybeSingle()
+
+  // Claim flow: a signed-in agent with no profile whose email matches an
+  // unclaimed scraped directory entry can claim it (email = proof of control).
+  let claimCandidates: ClaimCandidate[] = []
+  if (user?.email && !profile) {
+    const emailPattern = user.email.trim().replace(/([%_\\])/g, '\\$1')
+    const service = createServiceClient()
+    const { data: matches } = await (service.from('agent_profiles') as any)
+      .select('user_id, agency_name, raw_address, postcode, website')
+      .ilike('email', emailPattern)
+      .not('data_source', 'is', null)
+      .is('claimed_at', null)
+      .limit(5)
+    claimCandidates = matches ?? []
+  }
 
   // Intake translations
   const intakeTranslations = {
@@ -55,12 +71,15 @@ export default async function AgentProfilePage() {
   }
 
   return (
-    <AgentProfilePageClient
-      userId={userId}
-      profile={profile}
-      translations={intakeTranslations}
-      pageTitle={t('pageTitle')}
-      pageDescription={t('pageDescription')}
-    />
+    <>
+      {claimCandidates.length > 0 && <ClaimCard candidates={claimCandidates} />}
+      <AgentProfilePageClient
+        userId={userId}
+        profile={profile}
+        translations={intakeTranslations}
+        pageTitle={t('pageTitle')}
+        pageDescription={t('pageDescription')}
+      />
+    </>
   )
 }

@@ -1769,7 +1769,15 @@
     "hint_team_size": "z.B. 5",
     "q_selling_points": "Warum sollte man deine Agentur wählen?",
     "err_selling_points": "Bitte erzähle uns, was deine Agentur besonders macht",
-    "hint_selling_points": "Dein einzigartiger Mehrwert"
+    "hint_selling_points": "Dein einzigartiger Mehrwert",
+    "claimFoundTitle": "Wir haben Ihr Büro in unserem Verzeichnis gefunden",
+    "claimFoundBody": "Dieser Eintrag passt zu Ihrer E-Mail-Adresse. Übernehmen Sie ihn — Ihr Profil behält Verifizierungs-Badge und Verzeichniseintrag.",
+    "claimButton": "Dieses Profil übernehmen",
+    "claimPending": "Wird übernommen…",
+    "claimNotYou": "Nicht Ihr Büro? Tragen Sie Ihre Daten einfach unten ein.",
+    "claimSuccessTitle": "Profil übernommen — es gehört jetzt Ihnen",
+    "claimSuccessBody": "Ihr Verzeichniseintrag ist mit diesem Konto verknüpft, inklusive Verifizierungs-Badge. Prüfen Sie unten Ihre Daten und legen Sie Ihre Einsatzgebiete fest.",
+    "claimUnnamedAgency": "Unbenanntes Büro"
   },
   "ownerDashboard": {
     "viewings": {

@@ -1769,7 +1769,15 @@
     "hint_team_size": "e.g. 5",
     "q_selling_points": "Why Choose Your Agency?",
     "err_selling_points": "Please tell us what makes your agency unique",
-    "hint_selling_points": "Your unique value proposition"
+    "hint_selling_points": "Your unique value proposition",
+    "claimFoundTitle": "We found your agency in our directory",
+    "claimFoundBody": "This entry matches your email address. Claim it to take ownership — your profile keeps its verified badge and directory listing.",
+    "claimButton": "Claim this profile",
+    "claimPending": "Claiming…",
+    "claimNotYou": "Not your agency? Just fill in your details below instead.",
+    "claimSuccessTitle": "Profile claimed — it's yours now",
+    "claimSuccessBody": "Your directory listing is linked to this account with a verified badge. Review your details below and set your coverage areas.",
+    "claimUnnamedAgency": "Unnamed agency"
   },
   "ownerDashboard": {
     "viewings": {
