@@ -3,6 +3,8 @@ import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import { AgentProfilePageClient } from './profile-page-client'
 import { ClaimCard, type ClaimCandidate } from './claim-card'
+import { VerificationPanel } from './verification-panel'
+import { NewsletterToggle } from './newsletter-toggle'
 
 export default async function AgentProfilePage() {
   const t = await getTranslations('agentProfile')
@@ -14,6 +16,22 @@ export default async function AgentProfilePage() {
     .select('agency_name, license_number, property_types, focus, verified_at, subscription_tier')
     .eq('user_id', userId)
     .maybeSingle()
+
+  // Newsletter opt-in state + latest verification attempt
+  let newsletterOptIn = false
+  let lastVerificationReason: string | null = null
+  if (user) {
+    const service = createServiceClient()
+    const { data: u } = await (service.from('users') as any)
+      .select('newsletter_opt_in').eq('id', user.id).maybeSingle()
+    newsletterOptIn = !!u?.newsletter_opt_in
+    if (profile && !profile.verified_at) {
+      const { data: v } = await (service.from('agent_verifications') as any)
+        .select('reason, status').eq('user_id', user.id)
+        .order('created_at', { ascending: false }).limit(1).maybeSingle()
+      if (v && v.status !== 'approved') lastVerificationReason = v.reason ?? null
+    }
+  }
 
   // Claim flow: a signed-in agent with no profile whose email matches an
   // unclaimed scraped directory entry can claim it (email = proof of control).
@@ -73,6 +91,8 @@ export default async function AgentProfilePage() {
   return (
     <>
       {claimCandidates.length > 0 && <ClaimCard candidates={claimCandidates} />}
+      {user && profile && !profile.verified_at && <VerificationPanel lastReason={lastVerificationReason} />}
+      {user && <NewsletterToggle initial={newsletterOptIn} />}
       <AgentProfilePageClient
         userId={userId}
         profile={profile}

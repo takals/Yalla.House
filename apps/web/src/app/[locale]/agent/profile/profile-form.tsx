@@ -153,9 +153,7 @@ export function ProfileForm({ profile }: Props) {
         </div>
       ) : (
         <div className="bg-brand-solid-bg border border-brand rounded-2xl px-5 py-4 text-sm text-brand-badge-text">
-          <span className="font-semibold">{t('verificationPending')}</span> — {t('verificationInstructions')}
-          <a href="mailto:verify@yalla.house" className="underline">verify@yalla.house</a>.
-          {t('verificationBenefit')}
+          <span className="font-semibold">{t('verificationPending')}</span> — {t('verificationUploadHint')}
         </div>
       )}
 

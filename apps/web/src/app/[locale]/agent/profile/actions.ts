@@ -124,3 +124,19 @@ export async function saveAgentProfileAction(
   revalidatePath('/agent/profile')
   return { success: true }
 }
+
+export async function setNewsletterOptInAction(optIn: boolean): Promise<ActionResult> {
+  const auth = await requireAuth()
+  if (!auth.authenticated) {
+    return { authRequired: true }
+  }
+  const service = createServiceClient()
+  const { error } = await (service.from('users') as any)
+    .update({ newsletter_opt_in: optIn })
+    .eq('id', auth.userId)
+  if (error) {
+    console.error('setNewsletterOptInAction error:', error)
+    return { error: 'Error saving. Please try again.' }
+  }
+  return { success: true }
+}

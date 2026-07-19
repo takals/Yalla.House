@@ -18,6 +18,20 @@ export async function POST(
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
   }
 
+  // Unverified agents cannot reply to briefs — verification is automated
+  // (document upload + AI check) on /agent/profile.
+  const { data: agentProfile } = await (supabase as any)
+    .from('agent_profiles')
+    .select('verified_at')
+    .eq('user_id', user.id)
+    .maybeSingle()
+  if (!agentProfile?.verified_at) {
+    return NextResponse.json(
+      { error: 'verification_required', message: 'Verify your agency on your profile page before replying to briefs.' },
+      { status: 403 }
+    )
+  }
+
   // Verify the match belongs to this agent and is in 'sent' status
   const { data: match } = await (supabase as any)
     .from('agent_matches')

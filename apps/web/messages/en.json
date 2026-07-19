@@ -1777,7 +1777,25 @@
     "claimNotYou": "Not your agency? Just fill in your details below instead.",
     "claimSuccessTitle": "Profile claimed — it's yours now",
     "claimSuccessBody": "Your directory listing is linked to this account with a verified badge. Review your details below and set your coverage areas.",
-    "claimUnnamedAgency": "Unnamed agency"
+    "claimUnnamedAgency": "Unnamed agency",
+    "verifyGateTitle": "Verify your agency to activate your account",
+    "verifyGateBody": "Until you're verified you can set up your profile, but you can't reply to briefs, contact clients, or appear in the agent directory. Verification is automatic: upload your licence or membership proof and our AI checks it in minutes — no emails, no waiting.",
+    "verifyLicenceLabel": "Licence / membership number (optional)",
+    "verifyLicencePlaceholder": "e.g. Propertymark M0123456",
+    "verifyUploadLabel": "Proof document (PDF, JPG, PNG — max 8 MB)",
+    "verifyUploadPlaceholder": "Choose a file…",
+    "verifyButton": "Verify now",
+    "verifyChecking": "Checking your document…",
+    "verifyApprovedTitle": "Verified — your account is fully active",
+    "verifyApprovedBody": "Your document checked out. You now have the verified badge, appear in the directory, and can reply to briefs.",
+    "verifyFailedTitle": "We couldn't verify that document:",
+    "verifyRetryHint": "Try a clearer photo or a different document — e.g. your Propertymark, RICS or redress-scheme certificate.",
+    "verifyNoFile": "Please choose a document first.",
+    "verifyError": "Something went wrong. Please try again.",
+    "verifyPrivacyNote": "Your document is stored securely, used only for verification, and never shown to anyone.",
+    "verificationUploadHint": "Verify your agency with the document upload at the top of this page — checked automatically in minutes.",
+    "newsletterTitle": "Yalla.House agent newsletter.",
+    "newsletterBody": "Occasional product updates and lead tips for agents. No spam, unsubscribe anytime."
   },
   "ownerDashboard": {
     "viewings": {
@@ -2094,7 +2112,8 @@
     "focus_sale": "Sale",
     "focus_rent": "Rent",
     "focus_both": "Both",
-    "anonymousBuyer": "Anonymous buyer"
+    "anonymousBuyer": "Anonymous buyer",
+    "verificationUploadHint": "Verify your agency with the document upload at the top of this page — checked automatically in minutes."
   },
   "wizard": {
     "stepTitles": {

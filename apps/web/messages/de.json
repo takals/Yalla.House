@@ -1777,7 +1777,25 @@
     "claimNotYou": "Nicht Ihr Büro? Tragen Sie Ihre Daten einfach unten ein.",
     "claimSuccessTitle": "Profil übernommen — es gehört jetzt Ihnen",
     "claimSuccessBody": "Ihr Verzeichniseintrag ist mit diesem Konto verknüpft, inklusive Verifizierungs-Badge. Prüfen Sie unten Ihre Daten und legen Sie Ihre Einsatzgebiete fest.",
-    "claimUnnamedAgency": "Unbenanntes Büro"
+    "claimUnnamedAgency": "Unbenanntes Büro",
+    "verifyGateTitle": "Verifizieren Sie Ihr Büro, um Ihr Konto zu aktivieren",
+    "verifyGateBody": "Ohne Verifizierung können Sie Ihr Profil einrichten, aber nicht auf Briefs antworten, Kunden kontaktieren oder im Maklerverzeichnis erscheinen. Die Verifizierung läuft automatisch: Laden Sie Ihren Nachweis hoch (z. B. §34c-Gewerbeerlaubnis oder IVD-Mitgliedschaft) — unsere KI prüft ihn in wenigen Minuten. Keine E-Mails, kein Warten.",
+    "verifyLicenceLabel": "Erlaubnis-/Mitgliedsnummer (optional)",
+    "verifyLicencePlaceholder": "z. B. §34c GewO Nr. 0123456",
+    "verifyUploadLabel": "Nachweis-Dokument (PDF, JPG, PNG — max. 8 MB)",
+    "verifyUploadPlaceholder": "Datei auswählen…",
+    "verifyButton": "Jetzt verifizieren",
+    "verifyChecking": "Dokument wird geprüft…",
+    "verifyApprovedTitle": "Verifiziert — Ihr Konto ist vollständig aktiv",
+    "verifyApprovedBody": "Ihr Dokument wurde geprüft. Sie tragen jetzt das Verifizierungs-Badge, erscheinen im Verzeichnis und können auf Briefs antworten.",
+    "verifyFailedTitle": "Dieses Dokument konnten wir nicht verifizieren:",
+    "verifyRetryHint": "Versuchen Sie ein schärferes Foto oder ein anderes Dokument — z. B. Ihre §34c-Erlaubnis oder IVD-Bescheinigung.",
+    "verifyNoFile": "Bitte wählen Sie zuerst ein Dokument aus.",
+    "verifyError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "verifyPrivacyNote": "Ihr Dokument wird sicher gespeichert, nur zur Verifizierung verwendet und niemandem angezeigt.",
+    "verificationUploadHint": "Verifizieren Sie Ihr Büro über den Dokument-Upload oben auf dieser Seite — automatische Prüfung in Minuten.",
+    "newsletterTitle": "Yalla.House Makler-Newsletter.",
+    "newsletterBody": "Gelegentliche Produkt-Updates und Lead-Tipps für Makler. Kein Spam, jederzeit abbestellbar."
   },
   "ownerDashboard": {
     "viewings": {
@@ -2094,7 +2112,8 @@
     "focus_sale": "Kauf",
     "focus_rent": "Miete",
     "focus_both": "Beides",
-    "anonymousBuyer": "Anonymer Käufer"
+    "anonymousBuyer": "Anonymer Käufer",
+    "verificationUploadHint": "Verifizieren Sie Ihr Büro über den Dokument-Upload oben auf dieser Seite — automatische Prüfung in Minuten."
   },
   "wizard": {
     "stepTitles": {
