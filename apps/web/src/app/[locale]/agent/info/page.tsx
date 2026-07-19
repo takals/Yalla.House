@@ -10,7 +10,7 @@ import { pageAlternates } from '@/lib/seo'
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agentInfo')
   return {
-    title: t('pageTitle'),
+    title: t('metaTitle'),
     alternates: pageAlternates(await getLocale(), '/agent/info'),
   }
 }
@@ -23,7 +23,7 @@ export default async function AgentInfoPage() {
       {/* Header */}
       <div className="mb-4">
         <h1 className="text-3xl font-bold text-text-primary">
-          {t('pageTitle')}
+          {t('h1Title')}
         </h1>
       </div>
 
