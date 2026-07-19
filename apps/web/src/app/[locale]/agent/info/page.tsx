@@ -1,6 +1,6 @@
 import {
-  Calendar, MessageSquare, ShieldCheck, RefreshCw, Clock, Megaphone,
-  ArrowRight, Check, X, Users, Briefcase, Palette,
+  Calendar, MessageSquare, ShieldCheck, Download, Clock, Calculator,
+  ArrowRight, Check, X, Home, Search, Palette,
 } from 'lucide-react'
 import { LocaleLink as Link } from '@/components/locale-link'
 import { getLocale, getTranslations } from 'next-intl/server'
@@ -18,138 +18,134 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AgentInfoPage() {
   const t = await getTranslations('agentInfo')
 
+  const benefits = [
+    { icon: Calendar, title: t('benefit1Title'), body: t('benefit1Body') },
+    { icon: MessageSquare, title: t('benefit2Title'), body: t('benefit2Body') },
+    { icon: ShieldCheck, title: t('benefit3Title'), body: t('benefit3Body') },
+    { icon: Download, title: t('benefit4Title'), body: t('benefit4Body') },
+    { icon: Clock, title: t('benefit5Title'), body: t('benefit5Body') },
+    { icon: Palette, title: t('benefit6Title'), body: t('benefit6Body') },
+  ]
+
+  const ownerSteps = [
+    { title: t('ownerStep1Title'), desc: t('ownerStep1Desc') },
+    { title: t('ownerStep2Title'), desc: t('ownerStep2Desc') },
+    { title: t('ownerStep3Title'), desc: t('ownerStep3Desc') },
+  ]
+
+  const hunterSteps = [
+    { title: t('step1Title'), desc: t('step1Desc') },
+    { title: t('step2Title'), desc: t('step2Desc') },
+    { title: t('step3Title'), desc: t('step3Desc') },
+  ]
+
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-5xl mx-auto">
       {/* Header */}
-      <div className="mb-4">
+      <div className="mb-1">
         <h1 className="text-3xl font-bold text-text-primary">
           {t('h1Title')}
         </h1>
       </div>
+      <p className="text-text-secondary text-sm mb-6">{t('h1Sub')}</p>
 
-      {/* Hero intro */}
-      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
-        <h2 className="text-xl font-bold text-text-primary mb-3">
-          {t('heroTitle')}
-        </h2>
-        <p className="text-text-secondary leading-relaxed max-w-3xl">
-          {t('heroBody')}
-        </p>
+      {/* Hero */}
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-4 grid md:grid-cols-[1.4fr_1fr] gap-8 items-center">
+        <div>
+          <h2 className="text-2xl font-bold text-text-primary mb-3">
+            {t('heroTitle')}
+          </h2>
+          <p className="text-text-secondary leading-relaxed mb-6">
+            {t('heroBody')}
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/agent/profile"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-hover text-white font-semibold rounded-xl transition-colors"
+            >
+              {t('ctaClaim')} <ArrowRight size={16} />
+            </Link>
+            <a
+              href="#how-leads"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-border-default hover:border-brand text-text-primary font-semibold rounded-xl transition-colors"
+            >
+              {t('ctaHow')}
+            </a>
+          </div>
+          <p className="text-[13px] text-text-secondary mt-4">
+            <span className="font-semibold text-brand-dark">{t('heroMicroLead')}</span> {t('heroMicro')}
+          </p>
+        </div>
+        <div className="rounded-xl border border-brand-light bg-brand-solid-bg p-5">
+          {[t('heroCard1'), t('heroCard2'), t('heroCard3')].map(row => (
+            <div key={row} className="bg-white rounded-lg px-3.5 py-2.5 mb-2 text-[13px] font-semibold text-text-primary shadow-sm">
+              {row}
+            </div>
+          ))}
+          <p className="text-[11.5px] text-brand-dark font-semibold text-center mt-3">
+            {t('heroCardCap')}
+          </p>
+        </div>
       </div>
 
-      {/* Benefits grid — outcome-focused */}
+      {/* Proof strip */}
+      <div className="bg-white rounded-2xl border border-border-default px-8 py-5 mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { n: t('proof1n'), l: t('proof1l') },
+          { n: t('proof2n'), l: t('proof2l') },
+          { n: t('proof3n'), l: t('proof3l') },
+          { n: t('proof4n'), l: t('proof4l') },
+        ].map(p => (
+          <div key={p.l} className="text-center">
+            <div className="text-xl font-extrabold text-brand">{p.n}</div>
+            <div className="text-xs font-semibold text-text-secondary">{p.l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Benefits grid */}
       <div className="grid md:grid-cols-2 gap-5 mb-8">
-
-        {/* 1: Calendar */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
-          <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
-            <Calendar size={22} className="text-[#34C759]" />
+        {benefits.map(b => (
+          <div key={b.title} className="bg-white rounded-2xl border border-border-default p-6">
+            <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center mb-4">
+              <b.icon size={22} className="text-brand" />
+            </div>
+            <h3 className="font-bold text-text-primary mb-2">{b.title}</h3>
+            <p className="text-sm text-text-secondary leading-relaxed">{b.body}</p>
           </div>
-          <h3 className="font-bold text-text-primary mb-2">
-            {t('benefit1Title')}
-          </h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {t('benefit1Body')}
-          </p>
-        </div>
-
-        {/* 2: All comms in one place */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
-          <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
-            <MessageSquare size={22} className="text-[#34C759]" />
-          </div>
-          <h3 className="font-bold text-text-primary mb-2">
-            {t('benefit2Title')}
-          </h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {t('benefit2Body')}
-          </p>
-        </div>
-
-        {/* 3: Verified hunters */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
-          <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
-            <ShieldCheck size={22} className="text-[#34C759]" />
-          </div>
-          <h3 className="font-bold text-text-primary mb-2">
-            {t('benefit3Title')}
-          </h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {t('benefit3Body')}
-          </p>
-        </div>
-
-        {/* 4: CRM sync */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
-          <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
-            <RefreshCw size={22} className="text-[#34C759]" />
-          </div>
-          <h3 className="font-bold text-text-primary mb-2">
-            {t('benefit4Title')}
-          </h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {t('benefit4Body')}
-          </p>
-        </div>
-
-        {/* 5: Save time */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
-          <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
-            <Clock size={22} className="text-[#34C759]" />
-          </div>
-          <h3 className="font-bold text-text-primary mb-2">
-            {t('benefit5Title')}
-          </h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {t('benefit5Body')}
-          </p>
-        </div>
-
-        {/* 6: Your branding */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
-          <div className="w-11 h-11 rounded-xl bg-[#34C759]/10 flex items-center justify-center mb-4">
-            <Palette size={22} className="text-[#34C759]" />
-          </div>
-          <h3 className="font-bold text-text-primary mb-2">
-            {t('benefit6Title')}
-          </h3>
-          <p className="text-sm text-text-secondary leading-relaxed">
-            {t('benefit6Body')}
-          </p>
-        </div>
+        ))}
       </div>
 
-      {/* How qualified leads reach you */}
-      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
-        <h2 className="text-lg font-bold text-text-primary mb-6">
+      {/* Two lead sources */}
+      <div id="how-leads" className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-lg font-bold text-text-primary mb-1">
           {t('howClientsTitle')}
         </h2>
-        <div className="space-y-6">
+        <p className="text-sm text-text-secondary mb-7">{t('howSub')}</p>
+        <div className="grid md:grid-cols-2 gap-6">
           {[
-            {
-              num: '1',
-              title: t('step1Title'),
-              desc: t('step1Desc'),
-            },
-            {
-              num: '2',
-              title: t('step2Title'),
-              desc: t('step2Desc'),
-            },
-            {
-              num: '3',
-              title: t('step3Title'),
-              desc: t('step3Desc'),
-            },
-          ].map(step => (
-            <div key={step.num} className="flex gap-5">
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#34C759] flex items-center justify-center text-white font-extrabold text-base">
-                {step.num}
+            { icon: Home, title: t('ownerLeadTitle'), tag: t('ownerLeadTag'), steps: ownerSteps },
+            { icon: Search, title: t('hunterLeadTitle'), tag: t('hunterLeadTag'), steps: hunterSteps },
+          ].map(col => (
+            <div key={col.title} className="rounded-xl border border-border-default bg-[#FCFDFE] p-6">
+              <div className="flex items-center gap-2.5 mb-5">
+                <col.icon size={19} className="text-brand" />
+                <h3 className="font-bold text-text-primary">{col.title}</h3>
+                <span className="text-[11px] font-bold text-brand-dark bg-brand-light px-2.5 py-0.5 rounded-full">
+                  {col.tag}
+                </span>
               </div>
-              <div>
-                <h3 className="font-bold text-text-primary mb-1">{step.title}</h3>
-                <p className="text-sm text-text-secondary">{step.desc}</p>
-              </div>
+              {col.steps.map((step, i) => (
+                <div key={step.title} className="flex gap-3.5 mb-4">
+                  <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-brand flex items-center justify-center text-white font-extrabold text-xs">
+                    {i + 1}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-text-primary">{step.title}</h4>
+                    <p className="text-[13px] text-text-secondary">{step.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
         </div>
@@ -166,58 +162,76 @@ export default async function AgentInfoPage() {
 
         <div className="grid md:grid-cols-3 gap-5">
           {/* Free tier */}
-          <div className="rounded-xl border-2 border-[#34C759] p-6 relative">
-            <span className="absolute -top-3 left-4 bg-[#34C759] text-white text-xs font-bold px-3 py-1 rounded-full">
+          <div className="rounded-xl border-2 border-brand p-6 relative flex flex-col">
+            <span className="absolute -top-3 left-4 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">
               {t('starterBadge')}
             </span>
             <h3 className="text-lg font-bold text-text-primary mt-2 mb-1">{t('starterName')}</h3>
             <p className="text-3xl font-extrabold text-text-primary mb-4">{t('starterPrice')}<span className="text-sm font-normal text-text-secondary">{t('perMonth')}</span></p>
-            <ul className="space-y-2.5 text-sm text-text-secondary">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFeature1')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFeature2')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFeature3')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFeature4')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('starterFeature5')}</li>
+            <ul className="space-y-2.5 text-sm text-text-secondary flex-1">
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('starterFeature1')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('starterFeature2')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('starterFeature3')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('starterFeature4')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('starterFeature5')}</li>
               <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {t('starterFeature6')}</li>
               <li className="flex items-start gap-2"><X size={15} className="text-[#CBD5E1] mt-0.5 flex-shrink-0" /> {t('starterFeature7')}</li>
             </ul>
+            <Link
+              href="/agent/profile"
+              className="mt-5 text-center bg-brand hover:bg-brand-hover text-white font-bold text-sm py-2.5 rounded-lg transition-colors"
+            >
+              {t('starterCta')}
+            </Link>
           </div>
 
           {/* Pro tier */}
-          <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC]">
+          <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC] flex flex-col">
             <h3 className="text-lg font-bold text-text-primary mb-1">{t('proName')}</h3>
             <p className="text-3xl font-extrabold text-text-primary mb-4">{t('proPrice')}<span className="text-sm font-normal text-text-secondary">{t('perMonth')}</span></p>
-            <ul className="space-y-2.5 text-sm text-text-secondary">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proFeature1')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proFeature2')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proFeature3')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proFeature4')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proFeature5')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('proFeature6')}</li>
+            <ul className="space-y-2.5 text-sm text-text-secondary flex-1">
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('proFeature1')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('proFeature2')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('proFeature3')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('proFeature4')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('proFeature5')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('proFeature6')}</li>
             </ul>
+            <a
+              href="mailto:support@yalla.house?subject=Pro%20waitlist"
+              className="mt-5 text-center border-[1.5px] border-brand text-brand-dark font-bold text-sm py-2.5 rounded-lg hover:bg-brand-light transition-colors"
+            >
+              {t('proCta')}
+            </a>
           </div>
 
           {/* Agency tier */}
-          <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC]">
+          <div className="rounded-xl border border-border-default p-6 bg-[#FAFBFC] flex flex-col">
             <h3 className="text-lg font-bold text-text-primary mb-1">{t('agencyName')}</h3>
             <p className="text-3xl font-extrabold text-text-primary mb-4">{t('agencyPrice')}<span className="text-sm font-normal text-text-secondary">{t('perMonth')}</span></p>
-            <ul className="space-y-2.5 text-sm text-text-secondary">
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('agencyFeature1')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('agencyFeature2')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('agencyFeature3')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('agencyFeature4')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('agencyFeature5')}</li>
-              <li className="flex items-start gap-2"><Check size={15} className="text-[#34C759] mt-0.5 flex-shrink-0" /> {t('agencyFeature6')}</li>
+            <ul className="space-y-2.5 text-sm text-text-secondary flex-1">
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('agencyFeature1')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('agencyFeature2')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('agencyFeature3')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('agencyFeature4')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('agencyFeature5')}</li>
+              <li className="flex items-start gap-2"><Check size={15} className="text-brand mt-0.5 flex-shrink-0" /> {t('agencyFeature6')}</li>
             </ul>
+            <a
+              href="mailto:support@yalla.house?subject=Agency%20plan"
+              className="mt-5 text-center border-[1.5px] border-brand text-brand-dark font-bold text-sm py-2.5 rounded-lg hover:bg-brand-light transition-colors"
+            >
+              {t('agencyCta')}
+            </a>
           </div>
         </div>
       </div>
 
-      {/* The gatekeeper line */}
+      {/* Portal-fee maths */}
       <div className="bg-[#0F1117] rounded-2xl p-8 mb-8">
         <div className="flex items-start gap-5">
           <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-            <Megaphone size={22} className="text-brand" />
+            <Calculator size={22} className="text-brand" />
           </div>
           <div>
             <h3 className="font-bold text-white mb-2">
@@ -231,7 +245,7 @@ export default async function AgentInfoPage() {
       </div>
 
       {/* CTA */}
-      <div className="bg-[#34C759]/5 border border-[#34C759]/20 rounded-2xl p-8 text-center">
+      <div className="bg-brand-solid-bg border border-brand-light rounded-2xl p-8 text-center">
         <h2 className="text-xl font-bold text-text-primary mb-3">
           {t('ctaTitle')}
         </h2>
@@ -240,7 +254,7 @@ export default async function AgentInfoPage() {
         </p>
         <Link
           href="/agent/profile"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-[#34C759] hover:bg-[#2BA84A] text-white font-semibold rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-hover text-white font-semibold rounded-lg transition-colors"
         >
           {t('ctaButton')} <ArrowRight size={16} />
         </Link>
