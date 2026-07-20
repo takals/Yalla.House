@@ -70,11 +70,10 @@ export async function POST(request: Request) {
         html,
       }),
     })
-    if (!res.ok) { const rt = (await res.text()).slice(0, 300); console.error('resend fail', res.status, rt); throw new Error(`Resend ${res.status}: ${rt}`) }
+    if (!res.ok) throw new Error(`Resend ${res.status}: ${(await res.text()).slice(0, 200)}`)
   } catch (e) {
     console.error('verify-email send error:', e)
-    const debug = new URL(request.url).searchParams.get('debug') === '1'
-    return NextResponse.json({ error: 'Could not send the code. Please try again shortly.', ...(debug ? { detail: String(e).slice(0, 300) } : {}) }, { status: 502 })
+    return NextResponse.json({ error: 'Could not send the code. Please try again shortly.' }, { status: 502 })
   }
 
   return NextResponse.json({ sent: true, email })
