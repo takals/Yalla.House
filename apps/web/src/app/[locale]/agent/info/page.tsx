@@ -1,11 +1,12 @@
 import {
   Calendar, MessageSquare, ShieldCheck, Download, Clock, Calculator,
-  ArrowRight, Check, X, Home, Search, Palette,
+  ArrowRight, Check, X, Home, Search, Palette, PlusCircle, Send, Mail,
 } from 'lucide-react'
 import { LocaleLink as Link } from '@/components/locale-link'
 import { getLocale, getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import { pageAlternates } from '@/lib/seo'
+import { NewsletterSignup } from '@/components/newsletter-signup'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('agentInfo')
@@ -241,6 +242,44 @@ export default async function AgentInfoPage() {
               {t('freeAdBody')}
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* Not listed (self-add) + forward-your-listings */}
+      <div className="grid md:grid-cols-2 gap-5 mb-8">
+        <div className="bg-white rounded-2xl border border-border-default p-8">
+          <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center mb-4">
+            <PlusCircle size={22} className="text-brand" />
+          </div>
+          <h3 className="font-bold text-text-primary mb-2">{t('notListedTitle')}</h3>
+          <p className="text-sm text-text-secondary leading-relaxed mb-5">{t('notListedBody')}</p>
+          <Link
+            href="/agent/profile"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white font-bold text-sm rounded-lg transition-colors"
+          >
+            {t('notListedCta')} <ArrowRight size={15} />
+          </Link>
+        </div>
+        <div className="bg-white rounded-2xl border border-border-default p-8">
+          <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center mb-4">
+            <Send size={20} className="text-brand" />
+          </div>
+          <h3 className="font-bold text-text-primary mb-2">{t('listingsForwardTitle')}</h3>
+          <p className="text-sm text-text-secondary leading-relaxed mb-4">{t('listingsForwardBody')}</p>
+          <div className="flex items-center gap-2 bg-brand-solid-bg border border-brand-light rounded-lg px-4 py-3">
+            <Mail size={15} className="text-brand flex-shrink-0" />
+            <code className="text-sm font-bold text-brand-dark">listings@yalla.house</code>
+          </div>
+          <p className="text-[12px] text-text-secondary mt-3">{t('listingsForwardNote')}</p>
+        </div>
+      </div>
+
+      {/* Newsletter */}
+      <div className="bg-white rounded-2xl border border-border-default p-8 mb-8">
+        <h2 className="text-lg font-bold text-text-primary mb-1">{t('newsletterHeading')}</h2>
+        <p className="text-sm text-text-secondary mb-5 max-w-xl">{t('newsletterSub')}</p>
+        <div className="max-w-xl">
+          <NewsletterSignup source="agent_info" role="agent" />
         </div>
       </div>
 

@@ -19,6 +19,13 @@ export function getAgentProfileFlow(
       helperText: translations.hint_license_number || 'Your regulatory registration (e.g., IHK, IVD)',
     },
     {
+      id: 'website',
+      question: translations.q_website || "What's your agency website?",
+      type: 'text',
+      validation: { required: false },
+      helperText: translations.hint_website || 'e.g., www.smithestates.co.uk — helps us verify you and match listings.',
+    },
+    {
       id: 'property_types',
       question: translations.q_property_types || "What types of properties do you specialize in?",
       type: 'multi-select',

@@ -167,6 +167,40 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // For agent-profile flow: sync data to agent_profiles so a self-adding agent
+  // (not already in our directory) actually lands in the database — with their
+  // real contact email and country, not just as loose intake "memories".
+  if (flowId === 'agent-profile') {
+    const propertyTypes = Array.isArray(data.property_types) ? (data.property_types as string[]) : []
+    const coverage = typeof data.coverage_areas === 'string'
+      ? (data.coverage_areas as string).split(',').map(s => s.trim()).filter(Boolean)
+      : Array.isArray(data.coverage_areas) ? (data.coverage_areas as string[]) : []
+
+    // Country: prefer the account's country, else infer from coverage format
+    // (5-digit → DE PLZ, otherwise assume GB).
+    const { data: u } = await (supabase as any)
+      .from('users').select('country_code').eq('id', user.id).maybeSingle()
+    const looksDe = coverage.length > 0 && coverage.every(c => /^\d{5}$/.test(c))
+    const countryCode = (u?.country_code as string | null) || (looksDe ? 'DE' : coverage.length ? 'GB' : null)
+
+    await (supabase as any).from('agent_profiles').upsert({
+      user_id: user.id,
+      agency_name: data.agency_name || null,
+      license_number: data.license_number || null,
+      property_types: propertyTypes,
+      focus: data.focus || 'both',
+      website: data.website || null,
+      email: user.email ?? null,               // contact email = the account's verified inbox
+      country_code: countryCode,
+      coverage_postcodes: coverage.length ? coverage : null,
+    }, { onConflict: 'user_id' })
+
+    await (supabase as any).from('user_roles').upsert(
+      { user_id: user.id, role: 'agent', is_active: true },
+      { onConflict: 'user_id,role' }
+    )
+  }
+
   // Return success even if some memories failed to save
   return NextResponse.json(
     {

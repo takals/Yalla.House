@@ -45,6 +45,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const navLabels: Record<string, string> = {
     navOverview: tShell('navOverview'),
     navUsers: tShell('navUsers'),
+    navListings: tShell('navListings'),
   }
 
   return (

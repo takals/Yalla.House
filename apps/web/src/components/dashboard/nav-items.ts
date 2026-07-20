@@ -40,8 +40,9 @@ export function agentNav(t: Record<string, string>): NavItem[] {
 
 export function adminNav(t: Record<string, string>): NavItem[] {
   return [
-    { href: '/admin',        label: l(t, 'navOverview'), icon: 'LayoutDashboard', exact: true },
-    { href: '/admin/users',  label: l(t, 'navUsers'),    icon: 'Users' },
+    { href: '/admin',          label: l(t, 'navOverview'), icon: 'LayoutDashboard', exact: true },
+    { href: '/admin/users',    label: l(t, 'navUsers'),    icon: 'Users' },
+    { href: '/admin/listings', label: l(t, 'navListings'), icon: 'Inbox' },
   ]
 }
 

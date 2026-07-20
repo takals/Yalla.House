@@ -72,6 +72,8 @@ export default async function AgentProfilePage() {
     q_license_number: t('q_license_number'),
     err_license_number: t('err_license_number'),
     hint_license_number: t('hint_license_number'),
+    q_website: t('q_website'),
+    hint_website: t('hint_website'),
     q_property_types: t('q_property_types'),
     opt_flat: t('opt_flat'),
     opt_terraced: t('opt_terraced'),

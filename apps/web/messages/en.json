@@ -1810,7 +1810,9 @@
     "verifyFreeEmail": "Please use your company email — free addresses like Gmail or Outlook can't verify an agency.",
     "verifyDomainMismatch": "That email doesn't match your agency's website domain. Use an email at your agency's domain, or verify with a document below.",
     "verifyDocToggle": "No company email? Verify with a document instead",
-    "verifyDocBody": "For sole traders or agents on a shared domain: upload your licence or membership proof (e.g. Propertymark, RICS, redress-scheme certificate) and our AI checks it in minutes."
+    "verifyDocBody": "For sole traders or agents on a shared domain: upload your licence or membership proof (e.g. Propertymark, RICS, redress-scheme certificate) and our AI checks it in minutes.",
+    "q_website": "What's your agency website?",
+    "hint_website": "e.g., www.smithestates.co.uk — helps us verify you and match listings."
   },
   "ownerDashboard": {
     "viewings": {
@@ -4019,7 +4021,15 @@
     "ctaTitle": "Claim your profile before your competitors do",
     "ctaBody": "Your agency is likely already in the directory owners and hunters browse. Claim it, set your coverage areas, and start receiving matched briefs today. No credit card, no contracts.",
     "ctaButton": "Claim your free profile",
-    "perMonth": "/mo"
+    "perMonth": "/mo",
+    "notListedTitle": "Not in our directory yet?",
+    "notListedBody": "We already list thousands of UK and German agents — but if we've missed you, add your agency in two minutes. You'll get owner briefs and buyer leads in your area from day one, free.",
+    "notListedCta": "Add your agency",
+    "listingsForwardTitle": "Send us your listings",
+    "listingsForwardBody": "Already email new instructions to a mailing list? Add our address as a recipient. We'll match each property to buyers actively hunting in that area — at no cost to you.",
+    "listingsForwardNote": "Paste it into your CRM or newsletter alongside your other subscribers. You stay in control and can stop any time.",
+    "newsletterHeading": "Get the Yalla.House agent newsletter",
+    "newsletterSub": "Local market data, new buyer demand in your patch, and product updates — a short email, no spam."
   },
   "partners": {
     "metaTitle": "Partner with Yalla.House",
@@ -4613,5 +4623,13 @@
     "verificationBasic": "Verified home hunter",
     "verificationFull": "Fully verified",
     "verificationNone": "Not verified"
+  },
+  "newsletter": {
+    "placeholder": "you@youragency.com",
+    "subscribe": "Subscribe",
+    "checkInbox": "Almost there — check your inbox and click the link to confirm your subscription.",
+    "alreadySubscribed": "You're already subscribed — thanks!",
+    "error": "Something went wrong. Please try again.",
+    "consent": "By subscribing you agree to receive occasional emails from Yalla.House. Unsubscribe any time."
   }
 }
