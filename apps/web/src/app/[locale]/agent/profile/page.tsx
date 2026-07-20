@@ -5,6 +5,7 @@ import { AgentProfilePageClient } from './profile-page-client'
 import { ClaimCard, type ClaimCandidate } from './claim-card'
 import { VerificationPanel } from './verification-panel'
 import { NewsletterToggle } from './newsletter-toggle'
+import { isCompanyEmail, emailMatchesWebsite, registrableDomain } from '@/lib/email-domain'
 
 export default async function AgentProfilePage() {
   const t = await getTranslations('agentProfile')
@@ -13,9 +14,17 @@ export default async function AgentProfilePage() {
   const userId = user?.id ?? PREVIEW_USER_ID
 
   const { data: profile } = await (supabase.from('agent_profiles') as any)
-    .select('agency_name, license_number, property_types, focus, verified_at, subscription_tier')
+    .select('agency_name, license_number, property_types, focus, verified_at, subscription_tier, website')
     .eq('user_id', userId)
     .maybeSingle()
+
+  // Company-email verification: instant path when the account email is already
+  // a business domain (magic-link signup proved inbox control) and — if a
+  // website is on file — matches its domain.
+  const accountEmail = user?.email ?? null
+  const canInstant =
+    !!user && !!profile && !profile.verified_at && isCompanyEmail(accountEmail) &&
+    (!profile.website || !registrableDomain(profile.website) || emailMatchesWebsite(accountEmail, profile.website))
 
   // Newsletter opt-in state + latest verification attempt
   let newsletterOptIn = false
@@ -91,7 +100,9 @@ export default async function AgentProfilePage() {
   return (
     <>
       {claimCandidates.length > 0 && <ClaimCard candidates={claimCandidates} />}
-      {user && profile && !profile.verified_at && <VerificationPanel lastReason={lastVerificationReason} />}
+      {user && profile && !profile.verified_at && (
+        <VerificationPanel canInstant={canInstant} accountEmail={accountEmail} lastReason={lastVerificationReason} />
+      )}
       {user && <NewsletterToggle initial={newsletterOptIn} />}
       <AgentProfilePageClient
         userId={userId}
