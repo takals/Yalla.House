@@ -5,11 +5,30 @@ import { requireAuth } from '@/lib/auth-guard'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getCountryConfig } from '@/lib/country-config'
 
+/** The handful of fields a guest can fill in before they have an account. */
+export interface DraftBasics {
+  intent?: 'sale' | 'rent'
+  propertyType?: string
+  addressLine1?: string
+  city?: string
+  postcode?: string
+  bedrooms?: number | null
+  /** Major units as typed (e.g. 450000) — converted to minor units on insert. */
+  price?: number | null
+}
+
+const ALLOWED_PROPERTY_TYPES = new Set([
+  'house', 'flat', 'apartment', 'villa', 'commercial', 'land', 'other',
+])
+
 /**
- * One-click draft creation — creates a minimal listing in draft status
- * and returns the listing ID so the workspace can load it inline.
+ * One-click draft creation — creates a listing in draft status and returns the
+ * listing ID so the workspace can load it inline.
+ *
+ * `basics` carries whatever a guest typed before signing in, so their work
+ * survives the magic-link round trip instead of landing on an empty form.
  */
-export async function createDraftAction(locale: string): Promise<
+export async function createDraftAction(locale: string, basics?: DraftBasics): Promise<
   { id: string } | { error: string } | { authRequired: true }
 > {
   const auth = await requireAuth()
@@ -27,16 +46,33 @@ export async function createDraftAction(locale: string): Promise<
     { onConflict: 'id', ignoreDuplicates: true }
   )
 
+  const intent = basics?.intent === 'rent' ? 'rent' : 'sale'
+  const propertyType = basics?.propertyType && ALLOWED_PROPERTY_TYPES.has(basics.propertyType)
+    ? basics.propertyType
+    : 'house'
+
+  // Prices are typed in major units and stored in minor units.
+  const priceMinor = typeof basics?.price === 'number' && basics.price > 0
+    ? Math.round(basics.price * 100)
+    : null
+
+  const bedrooms = typeof basics?.bedrooms === 'number' && basics.bedrooms >= 0
+    ? Math.round(basics.bedrooms)
+    : null
+
   const { data: newListing, error } = await (supabase.from('listings') as any).insert({
     owner_id: auth.userId,
     country_code: resolvedCountry,
     currency: config.currency,
     status: 'draft',
-    intent: 'sale',
-    property_type: 'house',
-    address_line1: '',
-    postcode: '',
-    city: '',
+    intent,
+    property_type: propertyType,
+    address_line1: basics?.addressLine1?.trim().slice(0, 200) ?? '',
+    postcode: basics?.postcode?.trim().slice(0, 20) ?? '',
+    city: basics?.city?.trim().slice(0, 100) ?? '',
+    bedrooms,
+    sale_price: intent === 'sale' ? priceMinor : null,
+    rent_price: intent === 'rent' ? priceMinor : null,
     title_de: '',
     title: '',
     country_fields: {},

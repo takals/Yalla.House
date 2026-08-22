@@ -118,6 +118,9 @@ export default async function WorkspacePage() {
     newWorkspaceFeature1: t('newWorkspaceFeature1'),
     newWorkspaceFeature2: t('newWorkspaceFeature2'),
     newWorkspaceFeature3: t('newWorkspaceFeature3'),
+    startBasicsTitle: t('startBasicsTitle'),
+    startBasicsHint: t('startBasicsHint'),
+    startBasicsGuestNote: t('startBasicsGuestNote'),
   }
 
   return (

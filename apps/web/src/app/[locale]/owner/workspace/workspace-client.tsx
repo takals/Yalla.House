@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthAction } from '@/lib/use-auth-action'
-import { savePendingAction, readPendingAction, clearPendingAction } from '@/lib/guest-draft'
+import { savePendingAction, readPendingAction, clearPendingAction, saveDraft, loadDraft, clearDraft } from '@/lib/guest-draft'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getCountryConfig } from '@/lib/country-config'
 import {
@@ -24,6 +24,50 @@ import {
   setWorkspacePrimaryAction,
   saveWorkspaceDocumentAction,
 } from './actions'
+import type { DraftBasics as DraftBasicsPayload } from './actions'
+
+/* ── Start-a-listing basics ───────────────────────────────────── */
+
+/**
+ * What a guest can fill in before they have an account. Held as strings so
+ * half-typed input survives a reload without being coerced to 0 or NaN.
+ */
+interface DraftBasics {
+  intent: 'sale' | 'rent'
+  propertyType: string
+  addressLine1: string
+  city: string
+  postcode: string
+  bedrooms: string
+  price: string
+}
+
+const EMPTY_BASICS: DraftBasics = {
+  intent: 'sale',
+  propertyType: 'house',
+  addressLine1: '',
+  city: '',
+  postcode: '',
+  bedrooms: '',
+  price: '',
+}
+
+function toNumberOrNull(value: string): number | null {
+  const n = parseFloat(value.replace(/[^0-9.]/g, ''))
+  return Number.isFinite(n) && n > 0 ? n : null
+}
+
+function toDraftPayload(b: DraftBasics): DraftBasicsPayload {
+  return {
+    intent: b.intent,
+    propertyType: b.propertyType,
+    addressLine1: b.addressLine1,
+    city: b.city,
+    postcode: b.postcode,
+    bedrooms: toNumberOrNull(b.bedrooms),
+    price: toNumberOrNull(b.price),
+  }
+}
 
 /* ── Types ──────────────────────────────────────────────────────── */
 
@@ -80,7 +124,8 @@ type WorkspaceLabels = Record<
   'guideStep5' | 'guideStep5Hint' | 'guideStep6' | 'guideStep6Hint' |
   'guideStep7' | 'guideStep7Hint' | 'guideMinimise' | 'guideRestore' | 'guideComplete' |
   'exampleTitle' | 'exampleAddress' | 'examplePostcode' | 'exampleCity' |
-  'newWorkspaceFeature1' | 'newWorkspaceFeature2' | 'newWorkspaceFeature3',
+  'newWorkspaceFeature1' | 'newWorkspaceFeature2' | 'newWorkspaceFeature3' |
+  'startBasicsTitle' | 'startBasicsHint' | 'startBasicsGuestNote',
   string
 >
 
@@ -391,32 +436,58 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
     }).format(minorUnits / 100)
   }
 
+  /* ── Start-a-listing basics (fillable before sign-in) ────────── */
+  const BASICS_KEY = 'workspace-basics'
+  const [basics, setBasics] = useState<DraftBasics>(EMPTY_BASICS)
+
+  // Restore anything typed on a previous visit.
+  useEffect(() => {
+    if (listing) return
+    const saved = loadDraft<DraftBasics>(BASICS_KEY)
+    if (saved) setBasics({ ...EMPTY_BASICS, ...saved })
+  }, [listing])
+
+  function updateBasics(patch: Partial<DraftBasics>) {
+    setBasics(prev => {
+      const next = { ...prev, ...patch }
+      saveDraft(BASICS_KEY, next)
+      return next
+    })
+  }
+
   /* ── Create draft ────────────────────────────────────────────── */
-  const createDraft = useCallback(() => {
+  const createDraft = useCallback((withBasics: DraftBasics) => {
     startTransition(async () => {
-      const result = await createDraftAction(locale)
+      const result = await createDraftAction(locale, toDraftPayload(withBasics))
       if (handleAuthRequired(result)) return
       if ('error' in result) return
       clearPendingAction()
+      clearDraft(BASICS_KEY)
       router.refresh()
     })
   }, [locale, handleAuthRequired, router])
 
   function handleCreateDraft() {
-    // Guests press the same button. Remember the intent, then let the action
-    // return authRequired so the sign-in modal opens over the page — a dead
-    // disabled button just tells them to go away.
-    if (isGuest) savePendingAction('create-draft', 'owner-workspace', {})
-    createDraft()
+    // Guests press the same button. Hold what they typed, then let the action
+    // return authRequired so the sign-in modal opens over the page.
+    if (isGuest) {
+      savePendingAction('create-draft', 'owner-workspace', { basics })
+      saveDraft(BASICS_KEY, basics)
+    }
+    createDraft(basics)
   }
 
-  // Back from the sign-in email with a listing they'd already started: pick up
-  // where they left off instead of showing the splash screen again.
+  // Back from the sign-in email: create the draft from what they'd already
+  // typed, rather than showing them the empty splash screen again.
   useEffect(() => {
     if (isGuest || listing) return
-    if (!readPendingAction('create-draft', 'owner-workspace')) return
+    const pending = readPendingAction('create-draft', 'owner-workspace')
+    if (!pending) return
     clearPendingAction()
-    createDraft()
+    const saved = (pending.payload['basics'] as DraftBasics | undefined)
+      ?? loadDraft<DraftBasics>(BASICS_KEY)
+      ?? EMPTY_BASICS
+    createDraft({ ...EMPTY_BASICS, ...saved })
   }, [isGuest, listing, createDraft])
 
   /* ── Auto-save field ─────────────────────────────────────────── */
@@ -617,6 +688,113 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
                   <span className="text-sm text-text-primary">{feat}</span>
                 </div>
               ))}
+            </div>
+
+            {/* Basics — fillable before signing in, kept across the email round trip */}
+            <div className="pt-2 border-t border-border-default space-y-4">
+              <div>
+                <h3 className="text-sm font-bold text-text-primary">{labels.startBasicsTitle}</h3>
+                <p className="text-xs text-text-secondary mt-0.5">
+                  {isGuest ? labels.startBasicsGuestNote : labels.startBasicsHint}
+                </p>
+              </div>
+
+              {/* Sale / rent */}
+              <div className="inline-flex rounded-lg border border-border-default overflow-hidden">
+                {(['sale', 'rent'] as const).map(mode => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => updateBasics({ intent: mode })}
+                    aria-pressed={basics.intent === mode}
+                    className={`px-5 py-2 text-sm font-semibold transition-colors ${
+                      basics.intent === mode
+                        ? 'bg-brand text-white'
+                        : 'bg-surface text-text-secondary hover:bg-hover-muted'
+                    }`}
+                  >
+                    {mode === 'sale' ? labels.saleLabel : labels.rentLabel}
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                <label className="block sm:col-span-2">
+                  <span className="text-xs font-semibold text-text-secondary">{labels.addressLine1Label}</span>
+                  <input
+                    type="text"
+                    value={basics.addressLine1}
+                    onChange={e => updateBasics({ addressLine1: e.target.value })}
+                    placeholder={labels.exampleAddress}
+                    className="mt-1 w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="text-xs font-semibold text-text-secondary">{labels.cityLabel}</span>
+                  <input
+                    type="text"
+                    value={basics.city}
+                    onChange={e => updateBasics({ city: e.target.value })}
+                    placeholder={labels.exampleCity}
+                    className="mt-1 w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="text-xs font-semibold text-text-secondary">{labels.postcodeLabel}</span>
+                  <input
+                    type="text"
+                    value={basics.postcode}
+                    onChange={e => updateBasics({ postcode: e.target.value })}
+                    placeholder={labels.examplePostcode}
+                    className="mt-1 w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="text-xs font-semibold text-text-secondary">{labels.typeLabel}</span>
+                  <select
+                    value={basics.propertyType}
+                    onChange={e => updateBasics({ propertyType: e.target.value })}
+                    className="mt-1 w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  >
+                    <option value="house">{labels.typeHouse}</option>
+                    <option value="flat">{labels.typeFlat}</option>
+                    <option value="apartment">{labels.typeApartment}</option>
+                    <option value="villa">{labels.typeVilla}</option>
+                    <option value="commercial">{labels.typeCommercial}</option>
+                    <option value="land">{labels.typeLand}</option>
+                    <option value="other">{labels.typeOther}</option>
+                  </select>
+                </label>
+
+                <label className="block">
+                  <span className="text-xs font-semibold text-text-secondary">{labels.bedroomsLabel}</span>
+                  <input
+                    type="number"
+                    min="0"
+                    inputMode="numeric"
+                    value={basics.bedrooms}
+                    onChange={e => updateBasics({ bedrooms: e.target.value })}
+                    className="mt-1 w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  />
+                </label>
+
+                <label className="block sm:col-span-2">
+                  <span className="text-xs font-semibold text-text-secondary">
+                    {labels.priceTitle} ({currency})
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={basics.price}
+                    onChange={e => updateBasics({ price: e.target.value })}
+                    placeholder={labels.pricePlaceholder}
+                    className="mt-1 w-full border border-border-default rounded-lg px-3 py-2.5 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  />
+                </label>
+              </div>
             </div>
 
             <button

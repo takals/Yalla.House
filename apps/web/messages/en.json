@@ -4485,7 +4485,10 @@
     "exampleCity": "Bristol",
     "newWorkspaceFeature1": "Add photos, details and description at your pace",
     "newWorkspaceFeature2": "Invite agents to propose their services",
-    "newWorkspaceFeature3": "Publish when ready — list on Rightmove, Zoopla & more"
+    "newWorkspaceFeature3": "Publish when ready — list on Rightmove, Zoopla & more",
+    "startBasicsTitle": "Start with the basics",
+    "startBasicsHint": "Just enough to open the workspace — everything can be changed later.",
+    "startBasicsGuestNote": "We'll ask for your email when you save. What you type here is kept."
   },
   "ownerDeals": {
     "metaTitle": "Deals – Yalla.House",
