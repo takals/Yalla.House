@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { requireAgreement } from '@/lib/agreements'
 
 export default async function OwnerPage() {
   const supabase = await createClient()
@@ -11,9 +10,6 @@ export default async function OwnerPage() {
   if (!user) {
     redirect('/owner/listings')
   }
-
-  // Agreement gate — redirects to /owner/agreement if not signed
-  await requireAgreement(user.id, 'owner')
 
   // Fetch owner's listings — we need slug/place_id for single-listing redirect
   const { data: listings } = await (supabase as any)

@@ -2647,7 +2647,9 @@
     "hintUploadPhotosAction": "Upload photos",
     "hintAddViewings": "Add viewing slots so buyers can book directly.",
     "hintAddViewingsAction": "Open calendar",
-    "hintDismiss": "Got it, don’t show again"
+    "hintDismiss": "Got it, don’t show again",
+    "calendarPickTimeFirst": "Pick a time that works — we only need your email to confirm.",
+    "calendarSlotTaken": "That time was taken while you were signing in. Pick another slot below."
   },
   "actionHints": {
     "overviewTitle": "Welcome to your dashboard",

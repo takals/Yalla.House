@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requireSignedAgreement } from '@/lib/agreements'
 import { inngest } from '@/lib/inngest/client'
 
 /**
@@ -16,6 +17,16 @@ export async function POST(
 
   if (authErr || !user) {
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  }
+
+  // Replying to a brief is the commitment — this is where the Partner
+  // Agreement applies, not when the agent first opens the dashboard.
+  const agreement = await requireSignedAgreement(user.id, 'agent')
+  if (agreement) {
+    return NextResponse.json(
+      { error: 'agreement_required', agreementPath: agreement.agreementPath },
+      { status: 403 }
+    )
   }
 
   // Unverified agents cannot reply to briefs — verification is automated

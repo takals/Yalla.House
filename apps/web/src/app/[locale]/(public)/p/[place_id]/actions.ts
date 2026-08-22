@@ -2,6 +2,7 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
+import { requireSignedAgreement, type AgreementRequired } from '@/lib/agreements'
 import { sendNewViewingRequestEmail } from '@/lib/resend'
 import { sendViewingRequestWhatsApp } from '@/lib/whatsapp'
 
@@ -235,11 +236,15 @@ export async function bookSlotAction(
   listingId: string,
   slotId: string,
   notes?: string
-): Promise<{ success: true } | { error: string }> {
+): Promise<{ success: true } | { error: string } | { authRequired: true } | AgreementRequired> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) return { error: 'Please sign in to book a viewing' }
+  if (!user) return { authRequired: true }
+
+  // Booking a viewing is a commitment — this is where the hunter terms apply.
+  const agreement = await requireSignedAgreement(user.id, 'hunter')
+  if (agreement) return agreement
 
   const service = createServiceClient()
 

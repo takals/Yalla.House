@@ -12,16 +12,19 @@ const intlMiddleware = createIntlMiddleware({
   localeDetection: true,  // Detect browser Accept-Language header
 })
 
-// Routes that require authentication.
-// Unauthenticated visitors are redirected to /auth/login with a ?next= param.
-// Routes that require authentication.
-// Owner routes are intentionally NOT protected — guests can explore the dashboard
-// and only see a sign-in prompt when they try to save, publish, or take a
-// persistent action. This follows the "explore first, sign in to save" principle.
-const protectedPaths = ['/hunter', '/agent', '/admin', '/partner', '/referrer', '/settings']
+// Routes that require authentication before anything renders.
+//
+// Deliberately short. Every role dashboard — owner, hunter, agent, partner,
+// referrer — is explorable as a guest: those pages read with PREVIEW_USER_ID
+// and render their empty states, while every write goes through
+// requireAuth() in its server action and returns { authRequired: true }.
+// The sign-in prompt therefore appears at the moment of commitment (save,
+// publish, book, propose), not at the door. Only genuinely private surfaces
+// stay here: the admin console and personal account settings.
+const protectedPaths = ['/admin', '/settings']
 
-// Public info pages that live under protected prefixes but need no auth.
-const publicExceptions = ['/hunter/info', '/agent/info']
+// Public pages that would otherwise be swept up by a protected prefix.
+const publicExceptions: string[] = []
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -29,7 +32,11 @@ export async function middleware(request: NextRequest) {
   // Check if the path (stripped of locale prefix) is protected
   const pathnameWithoutLocale = pathname.replace(/^\/(de|en)/, '')
   const isException = publicExceptions.some(p => pathnameWithoutLocale === p || pathnameWithoutLocale === p + '/')
-  const isProtected = !isException && protectedPaths.some(p => pathnameWithoutLocale.startsWith(p))
+  // Match on whole path segments, never on a raw string prefix: "/agents"
+  // must not match "/agent", and "/partners" must not match "/partner".
+  const isProtected = !isException && protectedPaths.some(
+    p => pathnameWithoutLocale === p || pathnameWithoutLocale.startsWith(p + '/')
+  )
 
   // Apply i18n middleware first
   const intlResponse = intlMiddleware(request)

@@ -1,17 +1,16 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { requireAgreement } from '@/lib/agreements'
 
 export default async function HunterPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Guest visitors: send them straight to the passport intake, where they can
+  // fill in what they're looking for and see sample matches before signing in.
+  // No login wall and no agreement wall — those fire when they save.
   if (!user) {
-    redirect('/auth/login?next=/hunter')
+    redirect('/hunter/passport')
   }
-
-  // Agreement gate — redirects to /hunter/agreement if not signed
-  await requireAgreement(user.id, 'hunter')
 
   // Check if hunter has created a passport (hunter_profiles row with intent set)
   const { data: profile } = await (supabase as any)

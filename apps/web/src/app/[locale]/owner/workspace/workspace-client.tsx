@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useCallback, useRef } from 'react'
+import { useState, useEffect, useTransition, useCallback, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthAction } from '@/lib/use-auth-action'
+import { savePendingAction, readPendingAction, clearPendingAction } from '@/lib/guest-draft'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getCountryConfig } from '@/lib/country-config'
 import {
@@ -391,14 +392,32 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
   }
 
   /* ── Create draft ────────────────────────────────────────────── */
-  function handleCreateDraft() {
+  const createDraft = useCallback(() => {
     startTransition(async () => {
       const result = await createDraftAction(locale)
       if (handleAuthRequired(result)) return
       if ('error' in result) return
+      clearPendingAction()
       router.refresh()
     })
+  }, [locale, handleAuthRequired, router])
+
+  function handleCreateDraft() {
+    // Guests press the same button. Remember the intent, then let the action
+    // return authRequired so the sign-in modal opens over the page — a dead
+    // disabled button just tells them to go away.
+    if (isGuest) savePendingAction('create-draft', 'owner-workspace', {})
+    createDraft()
   }
+
+  // Back from the sign-in email with a listing they'd already started: pick up
+  // where they left off instead of showing the splash screen again.
+  useEffect(() => {
+    if (isGuest || listing) return
+    if (!readPendingAction('create-draft', 'owner-workspace')) return
+    clearPendingAction()
+    createDraft()
+  }, [isGuest, listing, createDraft])
 
   /* ── Auto-save field ─────────────────────────────────────────── */
   function autoSave(field: string, value: string | number | null) {
@@ -602,7 +621,7 @@ export function PropertyWorkspace({ listing: initial, labels, isGuest, countryCo
 
             <button
               onClick={handleCreateDraft}
-              disabled={isPending || isGuest}
+              disabled={isPending}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-brand text-white font-semibold rounded-xl hover:bg-brand-hover transition-all hover:shadow-lg disabled:opacity-50 text-base"
             >
               <Home size={18} />

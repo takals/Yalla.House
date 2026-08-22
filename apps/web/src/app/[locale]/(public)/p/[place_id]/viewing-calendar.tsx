@@ -9,6 +9,15 @@ import {
   Send,
 } from 'lucide-react'
 import { fetchAvailableSlotsAction, bookSlotAction } from './actions'
+import { useAuthAction } from '@/lib/use-auth-action'
+import {
+  savePendingAction,
+  readPendingAction,
+  clearPendingAction,
+  saveDraft,
+  loadDraft,
+  clearDraft,
+} from '@/lib/guest-draft'
 import { addOwnerSlotAction, addBatchSlotsAction, removeOwnerSlotAction } from '@/app/[locale]/owner/viewings/actions'
 import { dateLocaleFromLocale } from '@/lib/country-config'
 
@@ -144,6 +153,10 @@ function WhatsAppFlow({ t }: { t: (key: string) => string }) {
 export function ViewingCalendar({ listingId, authenticated, isOwner, locale, placeId, preselectedSlotId }: Props) {
   const t = useTranslations('listingPage')
   const dateLocale = dateLocaleFromLocale(locale)
+  const { handleAuthRequired, showAuthGate } = useAuthAction()
+
+  // Guests keep their slot + note across the magic-link round trip.
+  const draftKey = `booking:${listingId}`
 
   // Slot data
   const [slots, setSlots] = useState<Slot[]>([])
@@ -179,11 +192,43 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
     fetchAvailableSlotsAction(listingId).then(result => {
       setSlots(result.slots)
       setLoading(false)
-      if (preselectedSlotId && result.slots.some(s => s.id === preselectedSlotId)) {
+
+      const stillAvailable = (id: string) => result.slots.some(s => s.id === id)
+
+      if (preselectedSlotId && stillAvailable(preselectedSlotId)) {
         setSelectedSlot(preselectedSlotId)
+        return
+      }
+
+      if (isOwner) return
+
+      // Coming back from the sign-in email: finish the booking they'd already
+      // chosen, rather than making them find the slot and press it again.
+      const pending = readPendingAction('book-slot', listingId)
+      if (pending && authenticated) {
+        const slotId = String(pending.payload['slotId'] ?? '')
+        const pendingNotes = String(pending.payload['notes'] ?? '')
+        clearPendingAction()
+        if (slotId && stillAvailable(slotId)) {
+          setSelectedSlot(slotId)
+          setNotes(pendingNotes)
+          void bookSlot(slotId, pendingNotes)
+          return
+        }
+        // Slot went while they were signing in — show the calendar, not an error.
+        setError(t('calendarSlotTaken'))
+      }
+
+      // Still signed out: put their half-finished choice back on screen.
+      const draft = loadDraft<{ slotId?: string; notes?: string }>(draftKey)
+      if (draft?.slotId && stillAvailable(draft.slotId)) {
+        setSelectedSlot(draft.slotId)
+        if (draft.notes) setNotes(draft.notes)
       }
     })
-  }, [listingId, preselectedSlotId])
+    // bookSlot is stable via useCallback; t is stable for a given locale.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listingId, preselectedSlotId, authenticated, isOwner, draftKey])
 
   const refreshSlots = useCallback(() => {
     fetchAvailableSlotsAction(listingId).then(result => setSlots(result.slots))
@@ -241,29 +286,45 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
 
   function handleSlotClick(slotId: string) {
     if (isOwner) return
-
-    if (!authenticated) {
-      const returnPath = `/${locale === 'de' ? '' : 'en/'}p/${placeId}?slot=${slotId}`
-      const loginUrl = `/${locale === 'de' ? '' : 'en/'}auth/login?next=${encodeURIComponent(returnPath)}`
-      window.location.href = loginUrl
-      return
-    }
-
+    // Anyone can pick a time. Choosing the slot is what makes handing over an
+    // email worth it — asking first, before they've seen the calendar, doesn't.
     setSelectedSlot(slotId === selectedSlot ? null : slotId)
   }
 
-  async function handleBook() {
-    if (!selectedSlot || !authenticated) return
+  const bookSlot = useCallback(async (slotId: string, bookingNotes: string) => {
     setBooking(true)
     setError(null)
-    const result = await bookSlotAction(listingId, selectedSlot, notes)
+    const result = await bookSlotAction(listingId, slotId, bookingNotes)
     setBooking(false)
+
+    // Signed out, or signed in without accepting the hunter terms yet.
+    if (handleAuthRequired(result)) return
+
     if ('error' in result) {
       setError(result.error)
-    } else {
-      setBooked(true)
-      setSlots(prev => prev.filter(s => s.id !== selectedSlot))
+      return
     }
+
+    setBooked(true)
+    setSelectedSlot(null)
+    setSlots(prev => prev.filter(s => s.id !== slotId))
+    clearDraft(draftKey)
+    clearPendingAction()
+  }, [listingId, handleAuthRequired, draftKey])
+
+  async function handleBook() {
+    if (!selectedSlot) return
+
+    if (!authenticated) {
+      // Hold the slot and the note, ask for an email over the page, and finish
+      // the booking automatically when they come back signed in.
+      savePendingAction('book-slot', listingId, { slotId: selectedSlot, notes })
+      saveDraft(draftKey, { slotId: selectedSlot, notes })
+      showAuthGate()
+      return
+    }
+
+    await bookSlot(selectedSlot, notes)
   }
 
   function computeEndTime(startTime: string, durationMin: number): string {
@@ -646,7 +707,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
               )}
 
               {/* Hunter: Booking panel */}
-              {selectedSlot && authenticated && !isOwner && (
+              {selectedSlot && !isOwner && (
                 <div className="mt-4 pt-4 border-t border-border-default/50">
                   <label className="text-xs font-semibold text-text-secondary block mb-1.5">
                     {t('calendarAddNote')}
@@ -703,11 +764,11 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
             </div>
           )}
 
-          {/* Not authenticated prompt */}
+          {/* Guest prompt — pick a time first, email comes at confirmation */}
           {!authenticated && !isOwner && !selectedSlot && hasSlots && (
             <div className="flex items-center gap-2 justify-center py-3 mt-2">
               <User size={14} className="text-text-muted" />
-              <p className="text-xs text-text-muted">{t('calendarSignIn')}</p>
+              <p className="text-xs text-text-muted">{t('calendarPickTimeFirst')}</p>
             </div>
           )}
         </div>

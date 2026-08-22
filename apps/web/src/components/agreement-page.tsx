@@ -56,11 +56,16 @@ export function AgreementPage({
     setSubmitting(true)
     setError(null)
 
+    // If they were sent here mid-action (e.g. submitting a proposal), take
+    // them back to that page once they've signed rather than to the dashboard.
+    const nextPath = new URLSearchParams(window.location.search).get('next') ?? undefined
+
     const result = await signAgreement({
       agreementType,
       signatoryName: signatoryName.trim(),
       locale,
       countryCode,
+      ...(nextPath ? { nextPath } : {}),
     })
 
     if (handleAuthRequired(result)) {

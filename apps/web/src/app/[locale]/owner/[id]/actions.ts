@@ -2,6 +2,7 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
+import { requireSignedAgreement, type AgreementRequired } from '@/lib/agreements'
 
 export interface EditPayload {
   property_type: string
@@ -235,10 +236,16 @@ const STATUS_TRANSITIONS: Record<string, string[]> = {
 export async function changeStatusAction(
   id: string,
   newStatus: string
-): Promise<{ success: true } | { error: string } | { authRequired: true }> {
+): Promise<{ success: true } | { error: string } | { authRequired: true } | AgreementRequired> {
   const auth = await requireAuth()
   if (!auth.authenticated) {
     return { authRequired: true }
+  }
+
+  // Publishing a listing is the commitment — owner terms apply here.
+  if (newStatus === 'live' || newStatus === 'active') {
+    const agreement = await requireSignedAgreement(auth.userId, 'owner')
+    if (agreement) return agreement
   }
 
   const supabase = await createClient()
@@ -338,11 +345,15 @@ export async function bulkStatusAction(
 
 export async function sendBriefAction(
   listingId: string
-): Promise<{ success: true; agentCount: number } | { error: string } | { authRequired: true }> {
+): Promise<{ success: true; agentCount: number } | { error: string } | { authRequired: true } | AgreementRequired> {
   const auth = await requireAuth()
   if (!auth.authenticated) {
     return { authRequired: true }
   }
+
+  // Briefing agents is the commitment — owner terms apply here.
+  const agreement = await requireSignedAgreement(auth.userId, 'owner')
+  if (agreement) return agreement
 
   const supabase = await createClient()
   // Fetch listing with ownership check

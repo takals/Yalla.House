@@ -5,6 +5,16 @@
 
 export type AgreementType = 'agent_partner' | 'owner_tos' | 'hunter_tos' | 'provider_agreement'
 
+/**
+ * Returned by a server action when the user is signed in but has not yet
+ * signed the agreement this commitment requires. The client sends them to
+ * `agreementPath` to sign, then back to where they were.
+ */
+export interface AgreementRequired {
+  agreementRequired: true
+  agreementPath: string
+}
+
 export const CURRENT_VERSIONS: Record<AgreementType, string> = {
   agent_partner: '1.0',
   owner_tos: '1.0',

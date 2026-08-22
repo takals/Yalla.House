@@ -1,17 +1,16 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { requireAgreement } from '@/lib/agreements'
 
 export default async function AgentPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Guest visitors: show the live briefs board with its sample/empty state so
+  // an agent can see what they'd be working with before creating an account.
+  // The Partner Agreement is asked for when they send their first proposal.
   if (!user) {
-    redirect('/auth/login?next=/agent')
+    redirect('/agent/assignments')
   }
-
-  // Agreement gate — redirects to /agent/agreement if not signed
-  await requireAgreement(user.id, 'agent')
 
   // Check agent profile completeness
   const { data: profile } = await (supabase as any)
@@ -20,7 +19,7 @@ export default async function AgentPage() {
     .eq('user_id', user.id)
     .maybeSingle()
 
-  // Agreement signed but profile incomplete → profile setup
+  // Profile incomplete → profile setup
   if (!profile?.agency_name) {
     redirect('/agent/profile')
   }

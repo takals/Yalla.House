@@ -1,20 +1,15 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { requireAgreement } from '@/lib/agreements'
+import { PREVIEW_USER_ID } from '@/lib/preview-user'
 
 export default async function PartnerDashboardPage() {
   const t = await getTranslations()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    redirect('/auth/login?next=/partner')
-  }
-  const userId = user.id
-
-  // Agreement gate — redirects to /partner/agreement if not signed
-  await requireAgreement(userId, 'partner')
+  // Guests see the dashboard with its empty state. The Provider Agreement is
+  // asked for when they quote on their first job, not when they look around.
+  const userId = user?.id ?? PREVIEW_USER_ID
 
   // Fetch active requests count
   const { data: activeRequests } = await (supabase as any)

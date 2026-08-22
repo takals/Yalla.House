@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
+import { requireSignedAgreement } from '@/lib/agreements'
 
 export async function submitProposalAction(
   listingId: string,
@@ -16,6 +17,11 @@ export async function submitProposalAction(
   if (!auth.authenticated) {
     return { authRequired: true }
   }
+
+  // Sending a proposal is the commitment — this is where the Partner
+  // Agreement applies, not when the agent first opens the dashboard.
+  const agreement = await requireSignedAgreement(auth.userId, 'agent')
+  if (agreement) return agreement
 
   if (data.feeType !== 'none' && (!data.feeAmount || data.feeAmount <= 0)) {
     return { error: 'Please enter a valid fee amount.' }

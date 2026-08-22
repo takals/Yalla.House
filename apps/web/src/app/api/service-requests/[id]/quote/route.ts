@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requireSignedAgreement } from '@/lib/agreements'
 
 /**
  * POST /api/service-requests/:id/quote
@@ -17,6 +18,15 @@ export async function POST(
 
   if (authErr || !user) {
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  }
+
+  // Quoting for a job is the commitment — Provider Agreement applies here.
+  const agreement = await requireSignedAgreement(user.id, 'partner')
+  if (agreement) {
+    return NextResponse.json(
+      { error: 'agreement_required', agreementPath: agreement.agreementPath },
+      { status: 403 }
+    )
   }
 
   const body = await request.json()

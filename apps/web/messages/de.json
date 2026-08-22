@@ -2647,7 +2647,9 @@
     "hintUploadPhotosAction": "Fotos hochladen",
     "hintAddViewings": "Fügen Sie Besichtigungstermine hinzu, damit Käufer direkt buchen können.",
     "hintAddViewingsAction": "Kalender öffnen",
-    "hintDismiss": "Verstanden, nicht mehr anzeigen"
+    "hintDismiss": "Verstanden, nicht mehr anzeigen",
+    "calendarPickTimeFirst": "Wähle eine passende Zeit — deine E-Mail brauchen wir erst zur Bestätigung.",
+    "calendarSlotTaken": "Dieser Termin wurde vergeben, während du dich angemeldet hast. Bitte wähle unten einen anderen."
   },
   "actionHints": {
     "overviewTitle": "Willkommen in Ihrem Dashboard",

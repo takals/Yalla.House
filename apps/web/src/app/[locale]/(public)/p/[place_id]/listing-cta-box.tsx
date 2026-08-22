@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Calendar, MessageCircle, Shield, Lock } from 'lucide-react'
-import { checkAuthAction } from './actions'
 
 interface Props {
   listingId: string
@@ -31,19 +29,12 @@ export function ListingCtaBox({
   rentPrice,
   translations: t,
 }: Props) {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
   const isUnderOffer = status === 'under_offer'
 
-  useEffect(() => {
-    checkAuthAction().then(result => setIsLoggedIn(result.authenticated))
-  }, [])
-
+  // Both CTAs scroll, signed in or not. Sending someone to a login screen
+  // before they've seen the calendar loses the page and the intent with it —
+  // they pick a slot first, and the sign-in modal appears when they confirm.
   function handleBookViewing() {
-    if (!isLoggedIn) {
-      window.location.href = `/auth/login?next=${encodeURIComponent(`/p/${placeId}`)}`
-      return
-    }
-    // Scroll to calendar / contact section
     const target = document.querySelector('[data-booking-slots]')
       ?? document.querySelector('[data-contact-card]')
     if (target) {
@@ -52,10 +43,6 @@ export function ListingCtaBox({
   }
 
   function handleMessageOwner() {
-    if (!isLoggedIn) {
-      window.location.href = `/auth/login?next=${encodeURIComponent(`/p/${placeId}`)}`
-      return
-    }
     const target = document.querySelector('[data-contact-card]')
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'center' })
