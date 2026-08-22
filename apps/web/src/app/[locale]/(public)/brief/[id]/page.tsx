@@ -99,7 +99,7 @@ export default async function BriefLandingPage({ params }: Props) {
             A property owner in {listing.city || listing.postcode} wants to hear from you.
           </h1>
           <p className="text-lede text-text-on-dark-secondary max-w-xl mx-auto">
-            Review the brief below. Sign in to your Yalla agent dashboard to submit your proposal and win this instruction.
+            Review the brief below, then open your agent dashboard to submit a proposal and win this instruction.
           </p>
         </div>
       </section>
@@ -178,11 +178,11 @@ export default async function BriefLandingPage({ params }: Props) {
             Ready to respond?
           </h2>
           <p className="text-sm text-text-on-dark-secondary mb-8 max-w-sm mx-auto">
-            Sign in to your agent dashboard to view the full brief and submit your proposal. Don&apos;t have an account? It takes 2 minutes.
+            Open the briefs board to see the full requirement and what else is live in your area. You&apos;ll only need an account when you send your quote.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href={`/auth/login?next=/agent/briefs`}
+              href="/agent/briefs"
               className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-semibold px-8 py-3.5 rounded-lg transition-[background-color] duration-300 text-base"
               style={{ transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)' }}
             >
