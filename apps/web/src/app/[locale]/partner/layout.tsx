@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
-import { PREVIEW_USER_EMAIL } from '@/lib/preview-user'
 import { DashboardShell } from '@/components/dashboard/shell'
 import { partnerNav } from '@/components/dashboard/nav-items'
 import { fetchUserRoles } from '@/lib/user-roles'
@@ -45,7 +44,7 @@ export default async function PartnerLayout({ children }: { children: React.Reac
     <DashboardShell
       navItems={partnerNav(navLabels)}
       section="partner"
-      userEmail={user?.email ?? PREVIEW_USER_EMAIL}
+      userEmail={user?.email ?? ''}
       userName={profileResult.data?.full_name ?? null}
       shellLabels={shellLabels}
       userRoles={userRoles}
