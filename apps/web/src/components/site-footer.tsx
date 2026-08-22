@@ -56,6 +56,15 @@ export async function SiteFooter() {
               </li>
               <li>
                 <Link
+                  href="/referrer/join"
+                  className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
+                  style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}
+                >
+                  {t('referAndEarn')}
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/marketplace"
                   className="text-white hover:text-brand-hover transition-[color] duration-[400ms]"
                   style={{ transitionTimingFunction: 'cubic-bezier(0.44, 0, 0.56, 1)' }}

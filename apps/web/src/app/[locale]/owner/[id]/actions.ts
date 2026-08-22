@@ -3,6 +3,7 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
 import { requireSignedAgreement, type AgreementRequired } from '@/lib/agreements'
+import { emitReferralMilestone } from '@/lib/referrals'
 
 export interface EditPayload {
   property_type: string
@@ -242,8 +243,10 @@ export async function changeStatusAction(
     return { authRequired: true }
   }
 
+  const isGoingLive = newStatus === 'live' || newStatus === 'active'
+
   // Publishing a listing is the commitment — owner terms apply here.
-  if (newStatus === 'live' || newStatus === 'active') {
+  if (isGoingLive) {
     const agreement = await requireSignedAgreement(auth.userId, 'owner')
     if (agreement) return agreement
   }
@@ -284,6 +287,11 @@ export async function changeStatusAction(
   if (error) {
     console.error('changeStatusAction error:', error)
     return { error: 'Error updating status.' }
+  }
+
+  // Credit the referrer only on the first publish, not on every re-activation.
+  if (isGoingLive && !existing.published_at) {
+    await emitReferralMilestone(auth.userId, 'LISTING_PUBLISHED')
   }
 
   return { success: true }

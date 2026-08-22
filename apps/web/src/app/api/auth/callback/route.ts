@@ -3,6 +3,66 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import type { Database } from '@/types/database'
 import { upsertHubSpotContact } from '@/lib/hubspot'
+import { inngest } from '@/lib/inngest/client'
+
+/** Map the post-login destination onto the role the referral is credited as. */
+function roleFromDestination(destination: string): 'owner' | 'hunter' | 'agent' | 'partner' {
+  if (/^\/(en\/|de\/)?owner\b/.test(destination)) return 'owner'
+  if (/^\/(en\/|de\/)?agent\b/.test(destination)) return 'agent'
+  if (/^\/(en\/|de\/)?partner\b/.test(destination)) return 'partner'
+  return 'hunter'
+}
+
+/**
+ * Turn a referral cookie into a referrals row plus the SIGNUP milestone.
+ *
+ * Best-effort throughout: a broken referral must never stop someone signing in.
+ */
+async function attributeReferral({
+  supabase,
+  referredUserId,
+  refCode,
+  destination,
+}: {
+  supabase: any
+  referredUserId: string
+  refCode: string
+  destination: string
+}): Promise<void> {
+  try {
+    const { data: referrer } = await supabase
+      .from('referrers')
+      .select('id, user_id')
+      .eq('referrer_code', refCode.toUpperCase())
+      .eq('status', 'active')
+      .maybeSingle()
+
+    // Unknown code, or someone following their own link.
+    if (!referrer || referrer.user_id === referredUserId) return
+
+    // Already credited to someone — first referrer wins.
+    const { data: existing } = await supabase
+      .from('referrals')
+      .select('id')
+      .eq('referred_user_id', referredUserId)
+      .maybeSingle()
+    if (existing) return
+
+    const { error } = await supabase.from('referrals').insert({
+      referrer_id: referrer.id,
+      referred_user_id: referredUserId,
+      referred_role: roleFromDestination(destination),
+    })
+    if (error) return
+
+    await inngest.send({
+      name: 'referral/event.created',
+      data: { referredUserId, milestone: 'SIGNUP' },
+    })
+  } catch (err) {
+    console.error('Referral attribution failed:', err)
+  }
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
@@ -102,6 +162,20 @@ export async function GET(request: NextRequest) {
           // No roles at all — first-time user, show role picker
           redirectUrl = '/auth/welcome'
         }
+      }
+
+      // Credit the referrer who sent them, if a referral link brought them here.
+      // First sign-in only: the UNIQUE constraint on (referrer_id,
+      // referred_user_id) makes a repeat harmless, but there's no reason to try.
+      const refCode = cookieStore.get('yalla_ref')?.value
+      if (refCode) {
+        await attributeReferral({
+          supabase,
+          referredUserId: data.user.id,
+          refCode,
+          destination: redirectUrl,
+        })
+        cookieStore.set('yalla_ref', '', { path: '/', maxAge: 0 })
       }
 
       // Best-effort sync to HubSpot. Never blocks auth — see lib/hubspot.ts.

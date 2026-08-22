@@ -2,6 +2,7 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
+import { emitReferralMilestone } from '@/lib/referrals'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getCountryConfig } from '@/lib/country-config'
 
@@ -83,6 +84,8 @@ export async function createDraftAction(locale: string, basics?: DraftBasics): P
     console.error('Draft creation error:', error)
     return { error: error.message || 'Failed to create draft.' }
   }
+
+  await emitReferralMilestone(auth.userId, 'LISTING_DRAFT')
 
   return { id: newListing.id }
 }

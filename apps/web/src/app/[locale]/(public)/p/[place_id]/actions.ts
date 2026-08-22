@@ -3,6 +3,7 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
 import { requireSignedAgreement, type AgreementRequired } from '@/lib/agreements'
+import { emitReferralMilestone } from '@/lib/referrals'
 import { sendNewViewingRequestEmail } from '@/lib/resend'
 import { sendViewingRequestWhatsApp } from '@/lib/whatsapp'
 
@@ -281,6 +282,8 @@ export async function bookSlotAction(
   await (service.from('availability_slots') as any)
     .update({ is_booked: true, viewing_id: viewing.id })
     .eq('id', slotId)
+
+  await emitReferralMilestone(user.id, 'FIRST_BOOKING')
 
   // Notify owner (fire-and-forget)
   try {

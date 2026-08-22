@@ -283,7 +283,8 @@
     "termsOfService": "Nutzungsbedingungen",
     "cookiePolicy": "Cookie-Richtlinie",
     "allRightsReserved": "© {year} Yalla.House. Alle Rechte vorbehalten.",
-    "location": "Deutschland · Großbritannien"
+    "location": "Deutschland · Großbritannien",
+    "referAndEarn": "Empfehlen & verdienen"
   },
   "ctaBand": {
     "headline": "Bereit, Ihren Verkauf selbst in die Hand zu nehmen?",
@@ -4636,5 +4637,25 @@
     "alreadySubscribed": "Du bist bereits angemeldet – danke!",
     "error": "Etwas ist schiefgelaufen. Bitte versuch es erneut.",
     "consent": "Mit dem Abonnieren stimmst du zu, gelegentlich E-Mails von Yalla.House zu erhalten. Jederzeit abbestellbar."
+  },
+  "referrerJoin": {
+    "badge": "Empfehlungsprogramm",
+    "heroTitle": "Für Empfehlungen bezahlt werden, die du ohnehin aussprichst",
+    "heroBody": "Du kennst jemanden, der verkauft, vermietet oder sucht. Teile deinen Link und verdiene mit, je weiter deine Empfehlung bei Yalla kommt — nicht nur bei der Anmeldung.",
+    "step1Title": "Link erhalten",
+    "step1Body": "Nach dem Beitritt bekommst du einen persönlichen Code und einen Link zum Teilen. Dauert Sekunden.",
+    "step2Title": "Link teilen",
+    "step2Body": "Schicke ihn an Eigentümer, Mieter, Käufer oder Makler — per Nachricht, E-Mail oder Social Media.",
+    "step3Title": "Sie kommen weiter",
+    "step3Body": "Jeder erreichte Meilenstein wird automatisch deiner Empfehlung gutgeschrieben.",
+    "step4Title": "Du wirst bezahlt",
+    "step4Body": "Freigegebene Meilensteine sammeln sich in deinem Dashboard und werden auf dein hinterlegtes Konto ausgezahlt.",
+    "milestonesTitle": "Was als Fortschritt zählt",
+    "milestonesBody": "Pro Empfehlung werden sechs Meilensteine erfasst. Die ersten beiden markieren den Fortschritt, die späteren sind vergütet — eine Empfehlung, die den ganzen Weg geht, ist deutlich mehr wert als eine reine Anmeldung.",
+    "milestonesNote": "Die Vergütung je Meilenstein steht in den Programmbedingungen und kann je Land abweichen. Ein veröffentlichtes Inserat wird 30 Tage gehalten, bevor es freigegeben wird. Empfehlungen werden nur dem ersten Empfehlenden gutgeschrieben; dem eigenen Link zu folgen zählt nicht.",
+    "ctaTitle": "Bereit loszulegen?",
+    "ctaBody": "Tritt dem Programm bei und dein Link steht sofort bereit. Kostenlos, unverbindlich, jederzeit kündbar.",
+    "ctaButton": "Dem Programm beitreten",
+    "ctaButtonWorking": "Link wird erstellt..."
   }
 }

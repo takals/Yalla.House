@@ -77,6 +77,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip static files, Next.js internals, and API routes
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|html|txt|xml)$).*)',
+    // `r/` is the referral link handler — a plain route, no locale prefix.
+    '/((?!api|r/|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|html|txt|xml)$).*)',
   ],
 }

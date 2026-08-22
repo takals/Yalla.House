@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
+import { emitReferralMilestone } from '@/lib/referrals'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import {
@@ -108,6 +109,9 @@ export async function signAgreement(data: {
         },
         { onConflict: 'user_id' }
       )
+
+    // Signing the Partner Agreement is what makes an agent active.
+    await emitReferralMilestone(auth.userId, 'AGENT_ACTIVATED')
   }
 
   redirect(destination)

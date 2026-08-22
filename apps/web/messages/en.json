@@ -283,7 +283,8 @@
     "termsOfService": "Terms of Service",
     "cookiePolicy": "Cookie Policy",
     "allRightsReserved": "© {year} Yalla.House. All rights reserved.",
-    "location": "London · Redbridge"
+    "location": "London · Redbridge",
+    "referAndEarn": "Refer & earn"
   },
   "ctaBand": {
     "headline": "Ready to take control of your sale?",
@@ -4636,5 +4637,25 @@
     "alreadySubscribed": "You're already subscribed — thanks!",
     "error": "Something went wrong. Please try again.",
     "consent": "By subscribing you agree to receive occasional emails from Yalla.House. Unsubscribe any time."
+  },
+  "referrerJoin": {
+    "badge": "Referral Programme",
+    "heroTitle": "Get paid for the introductions you already make",
+    "heroBody": "You know someone selling, letting or looking. Share your link, and you earn as they get further with Yalla — not just when they sign up.",
+    "step1Title": "Get your link",
+    "step1Body": "Join and you get a personal code and a link to share. Takes a few seconds.",
+    "step2Title": "Share it",
+    "step2Body": "Send it to owners, tenants, buyers or agents — by message, email or social.",
+    "step3Title": "They make progress",
+    "step3Body": "Every milestone they reach is recorded against your referral automatically.",
+    "step4Title": "You get paid",
+    "step4Body": "Approved milestones build up in your dashboard and are paid out to your nominated account.",
+    "milestonesTitle": "What counts as progress",
+    "milestonesBody": "Six milestones are tracked for every referral. The first two mark progress; the later ones carry a payout, so a referral who goes all the way is worth far more than a sign-up.",
+    "milestonesNote": "Payout rates per milestone are set out in the programme terms and can vary by country. A published listing is held for 30 days before it is approved. Referrals are credited to the first referrer only, and following your own link does not count.",
+    "ctaTitle": "Ready to start?",
+    "ctaBody": "Join the programme and your link is ready immediately. No cost, no commitment, leave whenever you like.",
+    "ctaButton": "Join the programme",
+    "ctaButtonWorking": "Setting up your link..."
   }
 }
