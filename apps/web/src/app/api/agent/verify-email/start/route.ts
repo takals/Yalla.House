@@ -31,25 +31,35 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'free_email' }, { status: 400 })
   }
 
-  // Rate limit: max 5 codes per hour per user
-  const since = new Date(Date.now() - 60 * 60 * 1000).toISOString()
-  const { count } = await (service.from('agent_email_otps') as any)
-    .select('id', { count: 'exact', head: true })
-    .eq('user_id', user.id)
-    .gte('created_at', since)
-  if ((count ?? 0) >= 5) {
-    return NextResponse.json({ error: 'Too many attempts. Please try again later.' }, { status: 429 })
+  // Cap codes per period. Without this an attacker cycles fresh codes to reset
+  // the per-code attempt ceiling that verify_agent_otp() enforces.
+  const { data: limit } = await (service.rpc as any)('check_rate_limit', {
+    p_scope: 'otp:issue',
+    p_key: `user:${user.id}`,
+    p_limit: 5,
+    p_window_seconds: 3600,
+  })
+  if (limit && limit.allowed === false) {
+    return NextResponse.json(
+      { error: 'Too many codes requested. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(limit.retry_after ?? 3600) } }
+    )
   }
 
-  const code = String(Math.floor(100000 + Math.random() * 900000))
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString()
-  const { error: insErr } = await (service.from('agent_email_otps') as any).insert({
-    user_id: user.id, email, code, expires_at: expiresAt,
+  // issue_agent_otp derives the code from gen_random_uuid() and stores only a
+  // SHA-256 hash — Math.random() is seeded and predictable, which is fatal for
+  // an OTP. It also invalidates any code still outstanding for this user.
+  // The code comes back once and is not recoverable, so email it immediately.
+  const { data: issued, error: issueErr } = await (service.rpc as any)('issue_agent_otp', {
+    p_user_id: user.id,
+    p_email: email,
+    p_ttl_minutes: 10,
   })
-  if (insErr) {
-    console.error('verify-email start insert error:', insErr)
+  if (issueErr || !issued?.code) {
+    console.error('verify-email start issue error:', issueErr)
     return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
   }
+  const code: string = issued.code
 
   const apiKey = process.env.RESEND_API_KEY
   const from = process.env.RESEND_FROM_EMAIL ?? 'Yalla.House <noreply@yalla.house>'
@@ -66,7 +76,9 @@ export async function POST(request: Request) {
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from, to: email,
-        subject: `Your Yalla.House verification code: ${code}`,
+        // Deliberately NOT in the subject — subject lines appear in lock-screen
+        // notification previews and are retained in the clear by mail gateways.
+        subject: 'Your Yalla.House verification code',
         html,
       }),
     })
