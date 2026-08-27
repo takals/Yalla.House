@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations('providerOnboarding')
 
   return {
-    title: `${t('heroTitle')} ${t('heroTitleAccent')} | Yalla.House`,
+    title: `${t('heroTitle')} ${t('heroTitleAccent')}`,
     description: t('heroSubtitle'),
     openGraph: {
       type: 'website',

@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : (listing.description ?? listing.description_de ?? '')
 
   return {
-    title: `${title} | ${t('metaTitleSuffix')} | Yalla.House`,
+    title: `${title} | ${t('metaTitleSuffix')}`,
     description: description.slice(0, 160),
   }
 }

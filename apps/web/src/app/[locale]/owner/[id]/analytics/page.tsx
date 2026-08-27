@@ -28,7 +28,7 @@ interface Props {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('ownerAnalytics')
   return {
-    title: `${t('title')} | Yalla.House`,
+    title: `${t('title')}`,
     robots: { index: false, follow: false },
   }
 }
