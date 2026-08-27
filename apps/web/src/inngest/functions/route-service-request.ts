@@ -36,22 +36,32 @@ export const routeServiceRequest = inngest.createFunction(
 
     // 3. Query partner_profiles for matching partners
     // Partners match if: service_types contains the category AND coverage_areas overlaps the postcode
+    //
+    // NOTE: this query previously selected `full_name` and filtered on
+    // `status = 'active'`. Neither column exists on partner_profiles — it has
+    // only user_id, service_types, coverage_areas and verified_at — so the
+    // query errored and no partner was ever matched to a job. `full_name` was
+    // never used in this function; `verified_at` is the real gate.
+    //
+    // Verification IS a gate here on purpose. A routed job carries a
+    // homeowner's postcode, so it should not be broadcast to accounts we
+    // haven't checked. (Appearing in the public directory is a separate
+    // question and should not require this.)
     const { data: partners } = await step.run('find-matching-partners', async () => {
       return (db as any)
         .from('partner_profiles')
-        .select('user_id, full_name, service_types, coverage_areas')
-        .eq('status', 'active')
+        .select('user_id, service_types, coverage_areas')
+        .not('verified_at', 'is', null)
         .limit(50) // fetch more, filter in app logic
     })
 
     if (!partners || partners.length === 0) {
-      return { matched: 0, reason: 'no active partners' }
+      return { matched: 0, reason: 'no verified partners' }
     }
 
     // Filter partners: service_types contains category AND coverage_areas overlaps postcode
     interface PartnerProfile {
       user_id: string
-      full_name?: string
       service_types?: string[]
       coverage_areas?: { postcode_prefixes?: string[] }[] | null
     }

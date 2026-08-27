@@ -1,10 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
+import { CoveragePanel } from './coverage-panel'
 
 export default async function PartnerDashboardPage() {
   const t = await getTranslations()
+  const locale = await getLocale()
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   // Guests see the dashboard with its empty state. The Provider Agreement is
@@ -36,18 +38,53 @@ export default async function PartnerDashboardPage() {
         ).toFixed(1)
       : null
 
-  // Fetch partner profile completeness
-  const { data: partnerProfile } = await (supabase as any)
-    .from('partner_profiles')
-    .select('id, business_name, categories, service_area_radius')
-    .eq('user_id', userId)
-    .single()
+  // Fetch the partner's routing profile.
+  //
+  // This query used to select id, business_name, categories and
+  // service_area_radius — none of which exist on partner_profiles. It errored
+  // every time, so profileComplete was always false, so every provider saw
+  // "Complete your profile" pointing at /partner/profile, which was a 404.
+  // These are the real columns, and they are the two that decide whether a
+  // provider is matched to a job.
+  const [{ data: partnerProfile }, { data: rawCategories }] = await Promise.all([
+    (supabase as any)
+      .from('partner_profiles')
+      .select('service_types, coverage_areas, verified_at')
+      .eq('user_id', userId)
+      .maybeSingle(),
+    (supabase as any)
+      .from('service_categories')
+      .select('slug, name_en, name_de')
+      .order('sort_order'),
+  ])
 
-  const profileComplete = !!(
-    partnerProfile?.business_name &&
-    partnerProfile?.categories &&
-    partnerProfile?.service_area_radius
-  )
+  const serviceTypes: string[] = Array.isArray(partnerProfile?.service_types)
+    ? partnerProfile.service_types
+    : []
+
+  // Stored as [{ postcode_prefixes: [...] }] — the shape the router reads.
+  const coverageAreas = Array.isArray(partnerProfile?.coverage_areas)
+    ? partnerProfile.coverage_areas
+    : []
+  const postcodePrefixes: string[] = coverageAreas
+    .flatMap((area: { postcode_prefixes?: string[] }) => area?.postcode_prefixes ?? [])
+
+  const profileComplete = serviceTypes.length > 0 && postcodePrefixes.length > 0
+
+  const categoryOptions = ((rawCategories ?? []) as { slug: string; name_en: string; name_de: string }[])
+    .map(c => ({ slug: c.slug, label: locale === 'de' ? c.name_de : c.name_en }))
+
+  const coverageLabels: Record<string, string> = {
+    coverageTitle: t('partnerDash.coverageTitle'),
+    coverageHint: t('partnerDash.coverageHint'),
+    categoriesLabel: t('partnerDash.categoriesLabel'),
+    postcodesLabel: t('partnerDash.postcodesLabel'),
+    postcodesHint: t('partnerDash.postcodesHint'),
+    postcodesPlaceholder: t('partnerDash.postcodesPlaceholder'),
+    save: t('partnerDash.saveCoverage'),
+    saving: t('partnerDash.savingCoverage'),
+    saved: t('partnerDash.savedCoverage'),
+  }
 
   return (
     <div className="max-w-4xl">
@@ -61,23 +98,25 @@ export default async function PartnerDashboardPage() {
         </p>
       </div>
 
-      {/* Profile Alert */}
+      {/* Profile Alert — points at the panel below, not a page that never existed */}
       {!profileComplete && (
         <div className="mb-6 p-4 bg-[#FEF3C7] border border-[#F59E0B] rounded-lg">
-          <p className="text-sm font-semibold text-[#92400E] mb-2">
+          <p className="text-sm font-semibold text-[#92400E] mb-1">
             {t('partnerDash.completeProfile')}
           </p>
-          <p className="text-xs text-[#92400E] mb-3">
+          <p className="text-xs text-[#92400E]">
             {t('partnerDash.profileHelper')}
           </p>
-          <Link
-            href="/partner/profile"
-            className="inline-block px-4 py-2 bg-[#F59E0B] text-white text-sm font-bold rounded-lg hover:bg-[#D97706] transition"
-          >
-            {t('partnerDash.updateProfile')} →
-          </Link>
         </div>
       )}
+
+      {/* Services + coverage, edited in place */}
+      <CoveragePanel
+        categories={categoryOptions}
+        initialSelected={serviceTypes}
+        initialPostcodes={postcodePrefixes.join(', ')}
+        labels={coverageLabels}
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -126,7 +165,7 @@ export default async function PartnerDashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 mb-8">
         {/* View Requests */}
         <Link
           href="/partner/requests"
@@ -148,33 +187,6 @@ export default async function PartnerDashboardPage() {
           </div>
         </Link>
 
-        {/* Manage Profile */}
-        <Link
-          href="/partner/profile"
-          className="bg-surface rounded-xl p-6 border border-border-default hover:shadow-md transition block"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-lg font-bold">
-              {t('partnerDash.manageProfile')}
-            </h3>
-            <span className="text-2xl">→</span>
-          </div>
-          <p className="text-xs text-text-secondary">
-            {t('partnerDash.manageProfileDesc')}
-          </p>
-          <div className="mt-4 pt-4 border-t border-border-default">
-            <span
-              className="text-sm font-bold"
-              style={{
-                color: profileComplete ? '#16A34A' : '#D4764E',
-              }}
-            >
-              {profileComplete
-                ? t('partnerDash.profileActive')
-                : t('partnerDash.profileIncomplete')}
-            </span>
-          </div>
-        </Link>
       </div>
 
       {/* Recent Activity */}
@@ -206,14 +218,8 @@ export default async function PartnerDashboardPage() {
           </p>
           <div className="flex gap-2 justify-center">
             <Link
-              href="/partner/profile"
-              className="inline-block px-4 py-2 bg-brand text-black text-sm font-bold rounded-lg hover:bg-brand-hover transition"
-            >
-              {t('partnerDash.createProfile')}
-            </Link>
-            <Link
               href="/partner/requests"
-              className="inline-block px-4 py-2 border border-[#D8DBE5] text-text-secondary text-sm font-bold rounded-lg hover:bg-hover-bg transition"
+              className="inline-block px-4 py-2 bg-brand text-white text-sm font-bold rounded-lg hover:bg-brand-hover transition"
             >
               {t('partnerDash.browseRequestsBtn')}
             </Link>

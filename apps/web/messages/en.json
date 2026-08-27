@@ -330,7 +330,7 @@
     "pageTitle": "Partner Dashboard",
     "pageSubtitle": "Overview of your activity and requests",
     "completeProfile": "Complete Your Profile",
-    "profileHelper": "A complete profile helps you receive more service requests.",
+    "profileHelper": "Pick your services and postcode areas below — until both are set, new jobs cannot be matched to you.",
     "updateProfile": "Update Profile",
     "activeRequests": "Active Requests",
     "completed": "Completed",
@@ -349,7 +349,16 @@
     "getStarted": "Get started by completing your profile and browsing available service requests.",
     "createProfile": "Create Profile",
     "browseRequestsBtn": "Browse Requests",
-    "active": "active"
+    "active": "active",
+    "coverageTitle": "What you do and where you do it",
+    "coverageHint": "These two fields are the whole match. When an owner requests a service, we look for providers who offer that category and cover that postcode — so a job only reaches you if both are set.",
+    "categoriesLabel": "Services you offer",
+    "postcodesLabel": "Postcode areas you cover",
+    "postcodesPlaceholder": "IG1, IG2, E11",
+    "postcodesHint": "Comma separated, first part of the postcode only.",
+    "saveCoverage": "Save",
+    "savingCoverage": "Saving...",
+    "savedCoverage": "Saved"
   },
   "viewingLabels": {
     "pending": "Pending",

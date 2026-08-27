@@ -330,7 +330,7 @@
     "pageTitle": "Partner Dashboard",
     "pageSubtitle": "Überblick über Ihre Aktivität und Anfragen",
     "completeProfile": "Vollständigen Sie Ihr Profil",
-    "profileHelper": "Ein vollständiges Profil hilft Ihnen, mehr Anfragen zu erhalten.",
+    "profileHelper": "Wähle unten deine Leistungen und PLZ-Gebiete — solange beides nicht gesetzt ist, können dir keine Aufträge zugeordnet werden.",
     "updateProfile": "Profil aktualisieren",
     "activeRequests": "Aktive Anfragen",
     "completed": "Abgeschlossen",
@@ -349,7 +349,16 @@
     "getStarted": "Beginnen Sie mit der Vervollständigung Ihres Profils und schauen Sie sich verfügbare Service-Anfragen an.",
     "createProfile": "Profil erstellen",
     "browseRequestsBtn": "Anfragen durchsuchen",
-    "active": "aktiv"
+    "active": "aktiv",
+    "coverageTitle": "Was du machst und wo",
+    "coverageHint": "Diese beiden Felder entscheiden alles. Wenn ein Eigentümer eine Leistung anfragt, suchen wir Anbieter, die diese Kategorie anbieten und die Postleitzahl abdecken — ein Auftrag erreicht dich also nur, wenn beides gesetzt ist.",
+    "categoriesLabel": "Deine Leistungen",
+    "postcodesLabel": "Abgedeckte PLZ-Gebiete",
+    "postcodesPlaceholder": "10115, 10117, 10119",
+    "postcodesHint": "Kommagetrennt, nur der vordere Teil der Postleitzahl.",
+    "saveCoverage": "Speichern",
+    "savingCoverage": "Wird gespeichert...",
+    "savedCoverage": "Gespeichert"
   },
   "viewingLabels": {
     "pending": "Ausstehend",
