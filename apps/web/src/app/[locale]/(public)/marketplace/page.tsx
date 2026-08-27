@@ -145,7 +145,7 @@ export default async function MarketplacePage({ params }: { params: Promise<{ lo
               <p className="text-sm text-text-on-dark-secondary leading-relaxed">{t('mortgageBody')}</p>
             </div>
             <Link
-              href="/auth/login"
+              href="/marketplace/mortgage-brokers"
               className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-semibold px-6 py-3 rounded-lg transition-[background-color] duration-300 text-sm whitespace-nowrap"
             >
               {t('mortgageCta')}

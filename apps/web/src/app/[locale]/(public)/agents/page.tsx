@@ -256,8 +256,13 @@ export default async function AgentsPage({
 
                     {/* CTA */}
                     <div className="px-6 py-4 border-t border-white/[0.08]">
+                      {/* Straight into the brief with this agent already
+                          picked. This used to open a sign-in form, which asked
+                          for an account before the visitor had seen what they
+                          were signing up for. /owner/agents/send renders fine
+                          for guests and gates at send. */}
                       <Link
-                        href="/auth/login"
+                        href={`/owner/agents/send?agents=${agent.user_id}`}
                         className="block w-full text-center py-2.5 bg-brand hover:bg-brand-hover text-white font-semibold rounded-lg transition-[background-color] duration-300 text-sm"
                       >
                         {t('sendBrief')}
@@ -357,7 +362,7 @@ export default async function AgentsPage({
           <p className="text-text-on-dark-secondary mb-8 max-w-xl mx-auto">
             {t('joinDesc')}
           </p>
-          <Link href="/auth/login">
+          <Link href="/agent">
             <button className="px-8 py-4 bg-brand hover:bg-brand-hover text-white font-semibold rounded-full transition-all duration-300">
               {t('joinButton')}
             </button>

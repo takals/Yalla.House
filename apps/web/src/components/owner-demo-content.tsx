@@ -116,8 +116,10 @@ function DemoListings({ t }: { t: Record<string, string> }) {
       </div>
       <h3 className="text-lg font-bold text-text-primary mb-1">{t.ctaTitle}</h3>
       <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto leading-relaxed">{t.ctaDescription}</p>
+      {/* The workspace, not a sign-in form: they can fill the property in
+          first and the account is asked for when they publish. */}
       <Link
-        href="/auth/login"
+        href="/owner/workspace"
         className="inline-flex items-center gap-2 bg-brand hover:bg-brand-hover text-white font-bold px-6 py-3 rounded-xl transition-all will-change-transform hover:-translate-y-0.5 hover:shadow-lg text-[0.9375rem]"
       >
         {t.ctaButton} <ArrowRight size={16} />

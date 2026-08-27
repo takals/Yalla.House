@@ -47,7 +47,10 @@ export async function POST(request: NextRequest) {
       preferred_time: preferredTime ?? null,
       address: address ?? null,
       postcode: postcode ?? null,
-      status: 'open',
+      // 'open' is not in the service_request_status enum (pending, quoted,
+      // accepted, in_progress, completed, cancelled, disputed) — every insert
+      // through here failed on it.
+      status: 'pending',
     })
     .select('id, requester_id, listing_id, category, title, description, preferred_date, preferred_time, address, postcode, status, created_at')
     .single()

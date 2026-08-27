@@ -50,12 +50,12 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
             {t('heroSubtitle')}
           </p>
           <div className="fade-up-d2 mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/login?next=/agent">
+            <Link href="/agent">
               <button className="px-8 py-4 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all duration-300">
                 {t('joinAsAgent')}
               </button>
             </Link>
-            <Link href="/auth/login?next=/partner">
+            <Link href="/partner">
               <button className="px-8 py-4 border border-white/30 text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300">
                 {t('joinAsProvider')}
               </button>
@@ -272,7 +272,7 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
           <p className="text-lede text-white/50 mb-10 max-w-xl mx-auto">
             {t('ctaBody')}
           </p>
-          <Link href="/auth/login?next=/agent">
+          <Link href="/agent">
             <button className="px-10 py-4 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all duration-300 text-lg">
               {t('ctaButton')}
             </button>
