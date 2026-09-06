@@ -119,7 +119,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
           value={listingId}
           onChange={e => setListingId(e.target.value)}
           disabled={isPending}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(228, 87, 46,.12)] disabled:opacity-50"
         >
           <option value="">{translations.selectListingPlaceholder}</option>
           {listings.map(listing => (
@@ -142,7 +142,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
           onChange={e => setAgentEmail(e.target.value)}
           disabled={isPending}
           placeholder={translations.agentEmailPlaceholder}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(228, 87, 46,.12)] disabled:opacity-50"
         />
       </div>
 
@@ -194,7 +194,7 @@ export function InviteAgentForm({ listings, translations }: Props) {
           disabled={isPending}
           placeholder={translations.notesPlaceholder}
           rows={4}
-          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(212,118,78,.12)] disabled:opacity-50 resize-none"
+          className="w-full px-4 py-2.5 rounded-lg border border-[#D8DBE5] bg-surface text-text-primary placeholder-[#999] focus:outline-none focus:border-brand focus:ring-2 focus:ring-[rgba(228, 87, 46,.12)] disabled:opacity-50 resize-none"
         />
       </div>
 

@@ -282,7 +282,7 @@ export function TemplateEditor({ listingId, templates, labels }: Props) {
                     {labels[`event_${eventType}`] ?? eventType}
                   </span>
                   {isCustom && (
-                    <span className="inline-flex items-center rounded-full bg-orange-50 px-2 py-0.5 text-xs font-medium text-[#D4764E]">
+                    <span className="inline-flex items-center rounded-full bg-orange-50 px-2 py-0.5 text-xs font-medium text-[#E4572E]">
                       {labels.customBadge}
                     </span>
                   )}
@@ -318,7 +318,7 @@ export function TemplateEditor({ listingId, templates, labels }: Props) {
                     }
                   }}
                   className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
-                    isActive ? 'bg-[#D4764E]' : 'bg-gray-300'
+                    isActive ? 'bg-[#E4572E]' : 'bg-gray-300'
                   }`}
                 >
                   <span
@@ -385,7 +385,7 @@ export function TemplateEditor({ listingId, templates, labels }: Props) {
                           onChange={(e) =>
                             updateField(eventType, tab, 'subject', e.target.value)
                           }
-                          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-[#D4764E] focus:outline-none focus:ring-1 focus:ring-[#D4764E]/30"
+                          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-[#E4572E] focus:outline-none focus:ring-1 focus:ring-[#E4572E]/30"
                         />
                       </div>
                     )}
@@ -423,7 +423,7 @@ export function TemplateEditor({ listingId, templates, labels }: Props) {
                           updateField(eventType, tab, 'body', e.target.value)
                         }
                         rows={6}
-                        className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 font-mono placeholder-gray-400 focus:border-[#D4764E] focus:outline-none focus:ring-1 focus:ring-[#D4764E]/30 resize-y"
+                        className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 font-mono placeholder-gray-400 focus:border-[#E4572E] focus:outline-none focus:ring-1 focus:ring-[#E4572E]/30 resize-y"
                       />
                       {/* SMS character count */}
                       {tab === 'sms' && (
@@ -485,7 +485,7 @@ export function TemplateEditor({ listingId, templates, labels }: Props) {
                     type="button"
                     onClick={() => handleSave(eventType, tab)}
                     disabled={isSaving}
-                    className="flex items-center gap-1.5 rounded-lg bg-[#D4764E] px-4 py-2 text-xs font-medium text-white hover:bg-[#BF6840] transition-colors disabled:opacity-60"
+                    className="flex items-center gap-1.5 rounded-lg bg-[#E4572E] px-4 py-2 text-xs font-medium text-white hover:bg-[#CD4E29] transition-colors disabled:opacity-60"
                   >
                     <Save className="h-3.5 w-3.5" />
                     {isSaving

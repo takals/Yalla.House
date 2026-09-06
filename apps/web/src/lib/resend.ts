@@ -504,10 +504,10 @@ export type EmailAudience = 'agent' | 'owner' | 'hunter' | 'general'
 
 // Inline SVG icons for email — renders in all major clients
 const EMAIL_ICONS = {
-  users: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
-  currency: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>`,
-  dashboard: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
-  check: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4764E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  users: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4572E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  currency: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4572E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>`,
+  dashboard: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4572E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
+  check: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E4572E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
 }
 
 function emailBenefitRow(icon: string, title: string, desc: string): string {
@@ -575,7 +575,7 @@ function emailBenefitSection(locale: EmailLocale, audience: EmailAudience): stri
         ${cfg.benefits.map(b => emailBenefitRow(b.icon, b.title, b.desc)).join('')}
       </table>
       <div style="text-align:center;margin-top:16px;">
-        <a href="${cfg.ctaUrl}" style="display:inline-block;padding:8px 20px;border:1px solid #D4764E;color:#D4764E;font-size:13px;font-weight:600;text-decoration:none;border-radius:8px;">
+        <a href="${cfg.ctaUrl}" style="display:inline-block;padding:8px 20px;border:1px solid #E4572E;color:#E4572E;font-size:13px;font-weight:600;text-decoration:none;border-radius:8px;">
           ${cfg.cta} &rarr;
         </a>
       </div>
@@ -592,7 +592,7 @@ export function emailWrapper(content: string, countryCode: string = DEFAULT_COUN
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#EDEEF2;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
   <div style="max-width:560px;margin:40px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);">
-    <div style="background:#D4764E;padding:20px 32px;">
+    <div style="background:#E4572E;padding:20px 32px;">
       <table style="width:100%;border-collapse:collapse;">
         <tr>
           <td style="vertical-align:middle;">
@@ -609,14 +609,14 @@ export function emailWrapper(content: string, countryCode: string = DEFAULT_COUN
     </div>
     ${benefitHtml ? `<div style="padding:0 32px 24px;">${benefitHtml}</div>` : ''}
     <div style="padding:16px 32px;background:#F5F5FA;border-top:1px solid #E2E4EB;text-align:center;">
-      <p style="margin:0 0 8px;font-size:12px;color:#D4764E;">
-        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}services" style="color:#D4764E;text-decoration:none;">${t.navServices}</a>
+      <p style="margin:0 0 8px;font-size:12px;color:#E4572E;">
+        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}services" style="color:#E4572E;text-decoration:none;">${t.navServices}</a>
         &nbsp;&middot;&nbsp;
-        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}about" style="color:#D4764E;text-decoration:none;">${t.navAbout}</a>
+        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}about" style="color:#E4572E;text-decoration:none;">${t.navAbout}</a>
         &nbsp;&middot;&nbsp;
-        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}faq" style="color:#D4764E;text-decoration:none;">${t.navFaq}</a>
+        <a href="${BASE_URL}/${locale === 'de-DE' ? '' : 'en/'}faq" style="color:#E4572E;text-decoration:none;">${t.navFaq}</a>
         &nbsp;&middot;&nbsp;
-        <a href="${BASE_URL}" style="color:#D4764E;text-decoration:none;font-weight:600;">yalla.house</a>
+        <a href="${BASE_URL}" style="color:#E4572E;text-decoration:none;font-weight:600;">yalla.house</a>
       </p>
       <p style="margin:0;font-size:11px;color:#999;">
         ${config.legal_entity} &mdash; ${config.legal_tagline}
@@ -628,7 +628,7 @@ export function emailWrapper(content: string, countryCode: string = DEFAULT_COUN
 }
 
 function ctaButton(label: string, href: string): string {
-  return `<a href="${href}" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label}</a>`
+  return `<a href="${href}" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#E4572E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label}</a>`
 }
 
 export async function sendOwnerBriefEmail(opts: {
@@ -1166,7 +1166,7 @@ export async function sendTieredAgentInviteEmail(opts: {
 
   // Select group + urgency
   const competitorLine = `
-    <p style="margin:0 0 8px;font-size:14px;color:#D4764E;font-weight:600;">${t.tieredSelectGroup}</p>
+    <p style="margin:0 0 8px;font-size:14px;color:#E4572E;font-weight:600;">${t.tieredSelectGroup}</p>
     <p style="margin:0 0 24px;font-size:14px;color:#5E6278;font-weight:600;">${t.tieredUrgency}</p>`
 
   const localePrefix = locale === 'de-DE' ? '' : 'en/'
@@ -1179,7 +1179,7 @@ export async function sendTieredAgentInviteEmail(opts: {
     ${scopeHtml}
     ${propertyCard}
     <p style="margin:-16px 0 24px;text-align:center;">
-      <a href="${listingUrl}" style="color:#D4764E;font-size:14px;font-weight:600;text-decoration:none;">${t.tieredViewListing} &rarr;</a>
+      <a href="${listingUrl}" style="color:#E4572E;font-size:14px;font-weight:600;text-decoration:none;">${t.tieredViewListing} &rarr;</a>
     </p>
     ${workspaceHtml}
     ${postScopeHtml}

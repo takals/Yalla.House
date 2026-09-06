@@ -6,14 +6,14 @@
 
 /* Focus indicators for keyboard navigation */
 :focus-visible {
-  outline: 2px solid #D4764E;
+  outline: 2px solid #E4572E;
   outline-offset: 2px;
 }
 
 @layer base {
   :root {
-    --brand: #D4764E;
-    --brand-hover: #BF6840;
+    --brand: #E4572E;
+    --brand-hover: #CD4E29;
     --bg: #EDEEF2;
     --surface: #ffffff;
     --text-primary: #0F1117;

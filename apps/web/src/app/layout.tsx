@@ -29,7 +29,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  themeColor: '#D4764E',
+  themeColor: '#E4572E',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,

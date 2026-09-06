@@ -159,7 +159,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                   // Desktop collapsed: centered icon, no label
                   expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
                   active
-                    ? 'bg-[rgba(212,118,78,0.12)] text-brand'
+                    ? 'bg-[rgba(228, 87, 46,0.12)] text-brand'
                     : 'text-white/40 hover:text-white hover:bg-white/[0.05]',
                 ].join(' ')}
               >

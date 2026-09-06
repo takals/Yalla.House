@@ -142,8 +142,8 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
     setFeedback(null)
   }
 
-  const selectClass = 'w-full text-sm px-3 py-2 bg-bg rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-[#D4764E]'
-  const inputClass = 'w-full text-sm px-3 py-2 bg-bg rounded-lg text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]'
+  const selectClass = 'w-full text-sm px-3 py-2 bg-bg rounded-lg text-text-primary focus:outline-none focus:ring-2 focus:ring-[#E4572E]'
+  const inputClass = 'w-full text-sm px-3 py-2 bg-bg rounded-lg text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#E4572E]'
 
   return (
     <div className="bg-white rounded-2xl border border-border-default p-6 space-y-4">
@@ -158,7 +158,7 @@ export function ListingDefaultsForm({ defaults, translations: t }: Props) {
         {!editing && (
           <button
             onClick={() => setEditing(true)}
-            className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
+            className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors"
           >
             {t.buttonEdit}
           </button>

@@ -193,7 +193,7 @@ export function HunterPassportIntake({
         }}
         className={`fixed bottom-20 right-6 flex items-center gap-2 px-4 py-3 rounded-full transition-all z-40 shadow-lg ${
           voiceEnabled && isListening
-            ? 'bg-brand text-white ring-4 ring-[#D4764E]/30 animate-pulse'
+            ? 'bg-brand text-white ring-4 ring-[#E4572E]/30 animate-pulse'
             : voiceEnabled
               ? 'bg-brand text-white'
               : 'bg-white text-slate-700 border border-slate-200 hover:border-brand hover:bg-orange-50'
