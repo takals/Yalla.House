@@ -1825,6 +1825,11 @@
     "hint_website": "e.g., www.smithestates.co.uk — helps us verify you and match listings."
   },
   "ownerDashboard": {
+    "contactAlias": {
+      "title": "Enquiry address",
+      "body": "Portals show this address instead of your email or phone. Every enquiry from every portal lands in your Yalla.House inbox, with the source attached.",
+      "pending": "Issued automatically when the listing goes live."
+    },
     "viewings": {
       "pending": "Pending",
       "confirmed": "Confirmed",

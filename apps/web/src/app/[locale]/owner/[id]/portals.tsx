@@ -50,10 +50,12 @@ export function PortalSection({
   listingId,
   portals,
   initialStatuses,
+  contactAlias = null,
 }: {
   listingId: string
   portals: PortalRow[]
   initialStatuses: PortalStatusRow[]
+  contactAlias?: string | null
 }) {
   const t = useTranslations('ownerDashboard')
   const locale = useLocale()
@@ -133,6 +135,20 @@ export function PortalSection({
 
   return (
     <div className="space-y-3">
+      {/* Enquiry alias: the address portals carry instead of the owner's real
+          contact. Issued at first publish; null while the listing is a draft. */}
+      <div className="rounded-lg border border-border-default bg-hover-bg px-4 py-3 text-sm">
+        <div className="font-medium text-text-primary">{t('contactAlias.title')}</div>
+        <div className="mt-0.5 text-text-secondary">{t('contactAlias.body')}</div>
+        {contactAlias ? (
+          <code className="mt-2 inline-block rounded bg-surface px-2 py-1 font-mono text-xs text-text-primary select-all">
+            {contactAlias}
+          </code>
+        ) : (
+          <div className="mt-2 text-xs text-text-muted">{t('contactAlias.pending')}</div>
+        )}
+      </div>
+
       {portals.map(portal => {
         const row = statuses.get(portal.id)
         const badge = getStatusBadge(row?.status, row?.error_message, t)

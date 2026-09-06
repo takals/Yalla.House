@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { redirect } from '@/i18n/navigation'
+import { getContactAlias } from '@/lib/contact-alias'
 import { ListingEditForm } from './edit-form'
 import type { PortalRow, PortalStatusRow } from './portals'
 import type { FreeChannel, ChannelStatus } from './free-channels'
@@ -56,9 +57,12 @@ export default async function EditListingPage({ params }: Props) {
     .select('channel_id, is_enabled, status, external_url, posted_at, expires_at, next_repost_at, repost_count, last_error')
     .eq('listing_id', id) as { data: ChannelStatus[] | null }
 
+  const contactAlias = listing.status === 'active' ? await getContactAlias(id) : null
+
   return (
     <ListingEditForm
       listing={listing}
+      contactAlias={contactAlias}
       photos={(listing.listing_media as unknown as import('./photos').PhotoRow[]) ?? []}
       portals={portals ?? []}
       portalStatuses={portalStatuses ?? []}

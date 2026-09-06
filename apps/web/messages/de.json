@@ -1825,6 +1825,11 @@
     "hint_website": "z. B. www.mueller-immobilien.de – hilft uns bei der Verifizierung und Zuordnung von Angeboten."
   },
   "ownerDashboard": {
+    "contactAlias": {
+      "title": "Anfrage-Adresse",
+      "body": "Portale zeigen diese Adresse statt Ihrer E-Mail oder Telefonnummer. Jede Anfrage von jedem Portal landet in Ihrem Yalla.House-Posteingang, mit Herkunft.",
+      "pending": "Wird automatisch vergeben, sobald das Inserat live geht."
+    },
     "viewings": {
       "pending": "Ausstehend",
       "confirmed": "Bestätigt",
