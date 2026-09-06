@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { ListingEditForm } from './edit-form'
 import type { PortalRow, PortalStatusRow } from './portals'
 import type { FreeChannel, ChannelStatus } from './free-channels'
