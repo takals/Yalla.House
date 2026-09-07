@@ -188,11 +188,34 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
 
         {/* User footer */}
         <div className="px-2 pb-4 pt-3 border-t border-white/[0.07] flex-shrink-0">
-          {/* Collapsed (desktop): just initials */}
-          <div className={`items-center justify-center hidden ${expanded ? '' : 'lg:flex'}`}>
+          {/* Collapsed (desktop): initials plus an icon-only sign out / sign in.
+              Previously initials only, which left signed-in users with no way to
+              sign out until they expanded the sidebar. */}
+          <div className={`flex-col items-center justify-center gap-2 hidden ${expanded ? '' : 'lg:flex'}`}>
             <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-white/70">
               {isGuest ? <UserCircle size={16} /> : initials}
             </div>
+            {isGuest ? (
+              <Link
+                href="/auth/login"
+                title={shellLabels?.signIn ?? 'Sign in'}
+                aria-label={shellLabels?.signIn ?? 'Sign in'}
+                className="w-8 h-8 rounded-[8px] flex items-center justify-center text-brand hover:bg-white/[0.05] transition-colors"
+              >
+                <LogIn size={14} />
+              </Link>
+            ) : (
+              <form action="/api/auth/logout" method="post">
+                <button
+                  type="submit"
+                  title={shellLabels?.signOut ?? 'Sign out'}
+                  aria-label={shellLabels?.signOut ?? 'Sign out'}
+                  className="w-8 h-8 rounded-[8px] flex items-center justify-center text-white/30 hover:text-white hover:bg-white/[0.05] transition-colors cursor-pointer"
+                >
+                  <LogOut size={14} />
+                </button>
+              </form>
+            )}
           </div>
           {/* Expanded: name + sign out / sign in — visible in mobile drawer and desktop expanded */}
           <div className={`flex items-center gap-3 px-2 py-2 ${expanded ? '' : 'lg:hidden'}`}>
