@@ -1378,6 +1378,21 @@
     "moreListings": "Mehr Immobilien durchsuchen →"
   },
   "hunterAgents": {
+    "suggestedTitle": "{n} Makler decken Ihre Gegenden ab",
+    "suggestedDesc": "Passend zu den Gegenden in Ihrem Passport. Wählen Sie aus, wer Ihr Briefing bekommt – nicht Ihre Telefonnummer.",
+    "selectAll": "Alle auswählen",
+    "clearAll": "Zurücksetzen",
+    "verified": "Verifiziert",
+    "matchedIn": "Deckt {areas} ab",
+    "sendBriefTo": "Briefing an {n} Makler senden",
+    "sendBriefSignIn": "Anmelden, um das Briefing zu senden",
+    "suggestedNote": "Makler antworten in Ihrem Posteingang. Sie können jeden jederzeit pausieren oder trennen.",
+    "suggestedSent": "Briefing an {n} Makler gesendet",
+    "suggestedSentDesc": "Antworten landen in Ihrem Posteingang. Oben erscheinen sie, sobald sie reagieren.",
+    "suggestedError": "Senden fehlgeschlagen. Bitte erneut versuchen.",
+    "noAreasTitle": "Noch keine Treffer",
+    "noAreasDesc": "Tragen Sie Ihre Suchgegenden im Passport ein, dann zeigen wir Makler, die sie abdecken.",
+    "noAreasCta": "Passport vervollständigen",
     "title": "Verbundene Makler",
     "subtitle": "Verwalte deine Verbindungen mit lokalen Immobilienmaklern",
     "connected": "Verbunden",
@@ -1931,6 +1946,22 @@
         "body": "Bieten Sie auf die, die Sie wollen. Eigentümer und Suchende vergleichen und wählen – das Anschauen kostet Sie nichts."
       }
     }
+  },
+  "hunterPassportNext": {
+    "title": "Ihr Passport ist gespeichert",
+    "intro": "Das schaltet er frei. Wählen Sie, wie es weitergeht – jede Antwort lässt sich später ändern.",
+    "agentsTitle": "Makler in Ihren Gegenden",
+    "agentsBody": "Senden Sie Ihr Briefing an die, die Sie auswählen. Antworten kommen in Ihren Posteingang.",
+    "searchTitle": "Objekte suchen",
+    "searchBody": "Inserate direkt von Eigentümern, gefiltert nach Ihren Angaben.",
+    "verifyTitle": "Finanzierung nachweisen",
+    "verifyBody": "Finanzierungsbestätigung hinzufügen. Verkäufer reagieren schneller auf vorbereitete Käufer.",
+    "editNote": "Antworten lassen sich jederzeit im Passport ändern."
+  },
+  "hunterPassportMode": {
+    "label": "Ausfüllen per",
+    "chat": "Chat",
+    "form": "Formular"
   },
   "ownerDashboard": {
     "contactAlias": {

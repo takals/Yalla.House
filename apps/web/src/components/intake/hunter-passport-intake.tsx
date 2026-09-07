@@ -7,6 +7,8 @@ import { useVoiceRecognition } from '@/hooks/use-voice-recognition'
 import { useIntakeMemory } from '@/hooks/use-intake-memory'
 import { getHunterPassportFlow } from '@/lib/intake-flows/hunter-passport'
 import { dateLocaleFromLocale } from '@/lib/country-config'
+import { useAuthGate } from '@/components/auth-gate-provider'
+import { PassportNextSteps } from './passport-next-steps'
 
 interface HunterPassportIntakeProps {
   userId: string
@@ -34,6 +36,8 @@ export function HunterPassportIntake({
   onBatchUpdate,
 }: HunterPassportIntakeProps) {
   const [voiceEnabled, setVoiceEnabled] = useState(false)
+  const [completed, setCompleted] = useState(false)
+  const { showAuthGate } = useAuthGate()
   const [voiceInput, setVoiceInput] = useState('')
 
   // Voice recognition
@@ -131,17 +135,22 @@ export function HunterPassportIntake({
           }),
         })
 
+        if (response.status === 401) {
+          // Guest reached the end of the chat. Saving is the first real action.
+          showAuthGate()
+          throw new Error('Sign in to save your passport')
+        }
         if (!response.ok) {
           throw new Error(`Intake API error: ${response.statusText}`)
         }
 
-        console.log('Hunter passport intake completed:', data)
+        setCompleted(true)
       } catch (error) {
         console.error('Failed to save hunter passport intake:', error)
         throw error
       }
     },
-    [voiceEnabled, memories, onBatchUpdate]
+    [voiceEnabled, memories, onBatchUpdate, showAuthGate]
   )
 
   const steps = getHunterPassportFlow(translations, {
@@ -179,6 +188,8 @@ export function HunterPassportIntake({
       </div>
     )
   }
+
+  if (completed) return <PassportNextSteps />
 
   return (
     <div className="relative h-full flex flex-col">

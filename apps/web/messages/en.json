@@ -1378,6 +1378,21 @@
     "moreListings": "Browse more properties →"
   },
   "hunterAgents": {
+    "suggestedTitle": "{n} agents cover your areas",
+    "suggestedDesc": "Matched from the areas in your passport. Tick the ones you want, and they get your brief — not your phone number.",
+    "selectAll": "Select all",
+    "clearAll": "Clear",
+    "verified": "Verified",
+    "matchedIn": "Covers {areas}",
+    "sendBriefTo": "Send your brief to {n} agents",
+    "sendBriefSignIn": "Sign in to send your brief",
+    "suggestedNote": "Agents reply in your inbox. You can pause or disconnect any of them at any time.",
+    "suggestedSent": "Brief sent to {n} agents",
+    "suggestedSentDesc": "Replies land in your inbox. You will see them listed above as they respond.",
+    "suggestedError": "Could not send. Please try again.",
+    "noAreasTitle": "No matches yet",
+    "noAreasDesc": "Add the areas you are looking in to your passport and we will show agents who cover them.",
+    "noAreasCta": "Complete your passport",
     "title": "Connected Agents",
     "subtitle": "Manage your connections with local property agents",
     "connected": "Connected",
@@ -1931,6 +1946,22 @@
         "body": "Quote on the ones you want. Owners and hunters compare quotes and pick — you are never charged to look."
       }
     }
+  },
+  "hunterPassportNext": {
+    "title": "Your passport is saved",
+    "intro": "Here is what it unlocks. Pick where to go next — you can come back and edit any answer.",
+    "agentsTitle": "Agents who cover your areas",
+    "agentsBody": "Send your brief to the ones you choose. They reply in your inbox.",
+    "searchTitle": "Search homes",
+    "searchBody": "Listings straight from owners, filtered by what you told us.",
+    "verifyTitle": "Verify your finance",
+    "verifyBody": "Add a mortgage in principle. Sellers move faster for buyers who are ready.",
+    "editNote": "Answers can be changed any time from your passport."
+  },
+  "hunterPassportMode": {
+    "label": "Fill in by",
+    "chat": "Chat",
+    "form": "Form"
   },
   "ownerDashboard": {
     "contactAlias": {

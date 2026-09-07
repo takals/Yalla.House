@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { PassportForm } from './passport-form'
 import {
   ShieldCheck, Check, Home, Banknote, Clock, Minus, X,
   ChevronLeft, BadgeCheck, FileCheck, UserCheck, KeyRound,
@@ -176,6 +178,9 @@ export function PassportPageClient({
   )
   // Mobile drawer state
   const [drawerOpen, setDrawerOpen] = useState(false)
+  // 'chat' is the AI intake; 'form' is the plain, old-school form for people who prefer it.
+  const [mode, setMode] = useState<'chat' | 'form'>('chat')
+  const tMode = useTranslations('hunterPassportMode')
 
   const handlePassportUpdate = useCallback((field: string, value: unknown) => {
     setPassportData(prev => ({ ...prev, [field]: value }))
@@ -505,6 +510,20 @@ export function PassportPageClient({
            CHAT: Full width on mobile, flex-1 on desktop
          ══════════════════════════════════════════════════════════════ */}
       <div className="flex-1 min-w-0 flex flex-col h-full">
+        <div className="flex items-center justify-end gap-1 px-3 pt-2 text-xs">
+          <span className="text-text-muted mr-1">{tMode('label')}</span>
+          {(['chat', 'form'] as const).map(m => (
+            <button key={m} type="button" onClick={() => setMode(m)}
+                    className={`px-2.5 py-1 rounded-full font-semibold transition-colors ${mode === m ? 'bg-brand text-white' : 'text-text-secondary hover:bg-hover-bg'}`}>
+              {tMode(m)}
+            </button>
+          ))}
+        </div>
+        {mode === 'form' ? (
+          <div className="flex-1 overflow-y-auto p-4">
+            <PassportForm profile={profile as any} userName={userName ?? null} />
+          </div>
+        ) : (
         <HunterPassportIntake
           userId={userId}
           existingProfile={profile}
@@ -517,6 +536,7 @@ export function PassportPageClient({
           onFieldUpdate={handlePassportUpdate}
           onBatchUpdate={handleBatchUpdate}
         />
+        )}
       </div>
     </div>
   )
