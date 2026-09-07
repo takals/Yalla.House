@@ -25,6 +25,22 @@ export default async function HunterInfoPage() {
         <h1 className="text-2xl font-extrabold tracking-tight text-text-primary">
           {t('pageTitle')}
         </h1>
+        {/* Primary path in: the dashboard is open to look at, the passport is the first real action. */}
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Link
+            href="/hunter/overview"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#5856D6] hover:bg-[#4B49B8] text-white text-sm font-semibold rounded-lg transition-colors"
+          >
+            {t('heroPrimary')} <ArrowRight size={15} />
+          </Link>
+          <Link
+            href="/hunter/passport"
+            className="inline-flex items-center gap-2 px-5 py-2.5 border border-border-default hover:border-[#5856D6] text-text-primary text-sm font-semibold rounded-lg transition-colors"
+          >
+            {t('heroSecondary')}
+          </Link>
+          <span className="text-xs text-text-muted">{t('heroNote')}</span>
+        </div>
       </div>
 
       {/* Hero — outcome-focused */}
@@ -61,7 +77,10 @@ export default async function HunterInfoPage() {
       <div className="grid md:grid-cols-2 gap-5">
 
         {/* Agents come to you */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/hunter/agents"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-[#5856D6] hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-[#5856D6]/10 flex items-center justify-center mb-4">
             <Users size={22} className="text-[#5856D6]" />
           </div>
@@ -71,10 +90,16 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit1Body')}
           </p>
-        </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
+            {t('benefit1Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* Property search */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/hunter/search"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-[#5856D6] hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-[#5856D6]/10 flex items-center justify-center mb-4">
             <Search size={22} className="text-[#5856D6]" />
           </div>
@@ -84,10 +109,16 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit2Body')}
           </p>
-        </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
+            {t('benefit2Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* 17K agents */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/hunter/agents"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-[#5856D6] hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-[#5856D6]/10 flex items-center justify-center mb-4">
             <MapPin size={22} className="text-[#5856D6]" />
           </div>
@@ -97,10 +128,16 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit3Body')}
           </p>
-        </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
+            {t('benefit3Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* One inbox */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/hunter/inbox"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-[#5856D6] hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-[#5856D6]/10 flex items-center justify-center mb-4">
             <MessageSquare size={22} className="text-[#5856D6]" />
           </div>
@@ -110,10 +147,16 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit4Body')}
           </p>
-        </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
+            {t('benefit4Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* Special requirements */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/hunter/passport"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-[#5856D6] hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-[#5856D6]/10 flex items-center justify-center mb-4">
             <Heart size={22} className="text-[#5856D6]" />
           </div>
@@ -123,10 +166,16 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit5Body')}
           </p>
-        </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
+            {t('benefit5Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* Free */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/hunter/overview"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-[#5856D6] hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-[#5856D6]/10 flex items-center justify-center mb-4">
             <Zap size={22} className="text-[#5856D6]" />
           </div>
@@ -136,7 +185,10 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit6Body')}
           </p>
-        </div>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
+            {t('benefit6Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
       </div>
 
       {/* Readiness badges */}
@@ -184,6 +236,14 @@ export default async function HunterInfoPage() {
         <p className="text-xs text-text-secondary mt-4">
           {t('readinessNote')}
         </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link href="/hunter/verification" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5856D6] hover:gap-2.5 transition-all">
+            {t('readinessCtaVerify')} <ArrowRight size={14} />
+          </Link>
+          <Link href="/hunter/passport" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5856D6] hover:gap-2.5 transition-all">
+            {t('readinessCtaPassport')} <ArrowRight size={14} />
+          </Link>
+        </div>
       </div>
 
       {/* Pricing */}
@@ -252,6 +312,11 @@ export default async function HunterInfoPage() {
         >
           {t('ctaButton')} <ArrowRight size={16} />
         </Link>
+        <div className="mt-3">
+          <Link href="/hunter/overview" className="text-sm font-semibold text-text-secondary hover:text-[#5856D6] transition-colors">
+            {t('ctaSecondary')} →
+          </Link>
+        </div>
       </div>
     </div>
   )

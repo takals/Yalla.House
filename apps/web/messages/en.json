@@ -4016,6 +4016,18 @@
     "proTipText": "Upgrade to Premium for automatic publishing and reposting across all channels."
   },
   "hunterInfo": {
+    "heroPrimary": "Open your dashboard",
+    "heroSecondary": "Create your passport",
+    "heroNote": "No sign-up to look around. You sign in when you save or book.",
+    "benefit1Link": "Meet the agents",
+    "benefit2Link": "Try the search",
+    "benefit3Link": "Browse agents",
+    "benefit4Link": "See the inbox",
+    "benefit5Link": "Set your preferences",
+    "benefit6Link": "Open the dashboard",
+    "readinessCtaVerify": "Verify your finance",
+    "readinessCtaPassport": "Complete your passport",
+    "ctaSecondary": "Or look around the dashboard first",
     "pageTitle": "Home Hunter",
     "tabInfo": "Info",
     "tabDashboard": "Dashboard",

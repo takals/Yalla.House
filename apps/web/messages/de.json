@@ -4016,6 +4016,18 @@
     "proTipText": "Upgrade auf „Premium“ für automatisches Veröffentlichen und Reposting auf allen Kanälen."
   },
   "hunterInfo": {
+    "heroPrimary": "Dashboard öffnen",
+    "heroSecondary": "Passport erstellen",
+    "heroNote": "Zum Umsehen keine Anmeldung nötig. Anmelden erst beim Speichern oder Buchen.",
+    "benefit1Link": "Makler kennenlernen",
+    "benefit2Link": "Suche ausprobieren",
+    "benefit3Link": "Makler durchstöbern",
+    "benefit4Link": "Posteingang ansehen",
+    "benefit5Link": "Präferenzen festlegen",
+    "benefit6Link": "Dashboard öffnen",
+    "readinessCtaVerify": "Finanzierung nachweisen",
+    "readinessCtaPassport": "Passport vervollständigen",
+    "ctaSecondary": "Oder erst einmal im Dashboard umsehen",
     "pageTitle": "Suchenden-Dashboard",
     "tabInfo": "Info",
     "tabDashboard": "Dashboard",
