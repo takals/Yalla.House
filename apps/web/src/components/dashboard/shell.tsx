@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import {
   LayoutDashboard, Home, Building2, Plus, Calendar, CalendarDays, Star,
@@ -56,7 +56,6 @@ interface Props {
 
 export function DashboardShell({ children, navItems, section, userEmail, userName, notifications, unreadCount, notificationLabels, shellLabels, userRoles }: Props) {
   const pathname = usePathname()
-  const router = useRouter()
 
   // Desktop only: collapsed (60px icons) or expanded (240px icons + labels)
   // Mobile/tablet: always collapsed (60px icon strip), toggleable via hamburger
@@ -64,15 +63,6 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const isGuest = !userEmail
-
-  async function handleSignOut() {
-    try {
-      const response = await fetch('/api/auth/logout', { method: 'POST' })
-      if (response.ok) router.push('/')
-    } catch (error) {
-      console.error('Logout failed:', error)
-    }
-  }
 
   function isActive(item: NavItem) {
     if (item.exact) return pathname === item.href || pathname.endsWith(item.href)
@@ -224,13 +214,20 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                   <p className="text-[0.8125rem] font-semibold truncate text-white/80">
                     {userName ?? userEmail}
                   </p>
-                  <button
-                    onClick={handleSignOut}
-                    className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
-                  >
-                    <LogOut size={10} />
-                    {shellLabels?.signOut ?? 'Sign out'}
-                  </button>
+                  {/* A real form POST, not fetch(): the route clears the session
+                      cookies and 302s to /, and the browser follows that as a full
+                      navigation, dropping the router cache. The previous fetch()
+                      followed the 302 silently, then router.push() soft-navigated
+                      onto cached signed-in pages - so the click appeared to do nothing. */}
+                  <form action="/api/auth/logout" method="post">
+                    <button
+                      type="submit"
+                      className="text-[0.7rem] text-white/30 hover:text-white/70 transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <LogOut size={10} />
+                      {shellLabels?.signOut ?? 'Sign out'}
+                    </button>
+                  </form>
                 </>
               )}
             </div>
