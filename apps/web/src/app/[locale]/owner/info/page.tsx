@@ -26,6 +26,22 @@ export default async function OwnerInfoPage() {
         <h1 className="text-3xl font-bold text-text-primary">
           {t('pageTitle')}
         </h1>
+        {/* Primary path in: the dashboard is open to look at; creating a listing is the first real action. */}
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Link
+            href="/owner/listings"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-semibold rounded-lg transition-colors"
+          >
+            {t('heroPrimary')} <ArrowRight size={15} />
+          </Link>
+          <Link
+            href="/owner/workspace"
+            className="inline-flex items-center gap-2 px-5 py-2.5 border border-border-default hover:border-brand text-text-primary text-sm font-semibold rounded-lg transition-colors"
+          >
+            {t('heroSecondary')}
+          </Link>
+          <span className="text-xs text-text-muted">{t('heroNote')}</span>
+        </div>
       </div>
 
       {/* Hero intro */}
@@ -42,7 +58,10 @@ export default async function OwnerInfoPage() {
       <div className="grid md:grid-cols-2 gap-5 mb-8">
 
         {/* 1: List for free */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/owner/workspace"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Home size={22} className="text-brand" />
           </div>
@@ -52,10 +71,17 @@ export default async function OwnerInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit1Body')}
           </p>
-        </div>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit1Hint')}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+            {t('benefit1Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* 2: Agents compete for you */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/owner/agents"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Handshake size={22} className="text-brand" />
           </div>
@@ -65,10 +91,17 @@ export default async function OwnerInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit2Body')}
           </p>
-        </div>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit2Hint')}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+            {t('benefit2Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* 3: Real-time tracking */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/owner/listings"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <BarChart3 size={22} className="text-brand" />
           </div>
@@ -78,10 +111,17 @@ export default async function OwnerInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit3Body')}
           </p>
-        </div>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit3Hint')}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+            {t('benefit3Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* 4: Viewings on autopilot */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/owner/calendar"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Calendar size={22} className="text-brand" />
           </div>
@@ -91,10 +131,17 @@ export default async function OwnerInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit4Body')}
           </p>
-        </div>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit4Hint')}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+            {t('benefit4Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* 5: One inbox */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/owner/listings"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <MessageSquare size={22} className="text-brand" />
           </div>
@@ -104,10 +151,17 @@ export default async function OwnerInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit5Body')}
           </p>
-        </div>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit5Hint')}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+            {t('benefit5Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
 
         {/* 6: Keep every pound */}
-        <div className="bg-white rounded-2xl border border-border-default p-6">
+        <Link
+          href="/owner/plans"
+          className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+        >
           <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center mb-4">
             <Shield size={22} className="text-brand" />
           </div>
@@ -117,7 +171,11 @@ export default async function OwnerInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit6Body')}
           </p>
-        </div>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit6Hint')}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+            {t('benefit6Link')} <ArrowRight size={14} />
+          </span>
+        </Link>
       </div>
 
       {/* How it works */}
@@ -253,6 +311,11 @@ export default async function OwnerInfoPage() {
         >
           {t('ctaButton')} <ArrowRight size={16} />
         </Link>
+        <div className="mt-3">
+          <Link href="/owner/listings" className="text-sm font-semibold text-text-secondary hover:text-brand transition-colors">
+            {t('ctaSecondary')} →
+          </Link>
+        </div>
       </div>
     </div>
   )

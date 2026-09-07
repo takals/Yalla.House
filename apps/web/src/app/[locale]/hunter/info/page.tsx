@@ -90,6 +90,7 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit1Body')}
           </p>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit1Hint')}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
             {t('benefit1Link')} <ArrowRight size={14} />
           </span>
@@ -109,6 +110,7 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit2Body')}
           </p>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit2Hint')}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
             {t('benefit2Link')} <ArrowRight size={14} />
           </span>
@@ -128,6 +130,7 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit3Body')}
           </p>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit3Hint')}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
             {t('benefit3Link')} <ArrowRight size={14} />
           </span>
@@ -147,6 +150,7 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit4Body')}
           </p>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit4Hint')}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
             {t('benefit4Link')} <ArrowRight size={14} />
           </span>
@@ -166,6 +170,7 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit5Body')}
           </p>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit5Hint')}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
             {t('benefit5Link')} <ArrowRight size={14} />
           </span>
@@ -185,6 +190,7 @@ export default async function HunterInfoPage() {
           <p className="text-sm text-text-secondary leading-relaxed">
             {t('benefit6Body')}
           </p>
+          <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{t('benefit6Hint')}</p>
           <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[#5856D6] group-hover:gap-2 transition-all">
             {t('benefit6Link')} <ArrowRight size={14} />
           </span>
