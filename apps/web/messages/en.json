@@ -1853,6 +1853,85 @@
     "errUploadFailed": "Upload failed. Please try again.",
     "privacyNote": "Your finance details are used to confirm your readiness to buy and, only if you opt in, to introduce you to a mortgage partner. They are never shown on your public profile."
   },
+  "tour": {
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip tour",
+    "done": "Got it",
+    "progress": "{n} of {total}",
+    "owner": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Have a look around first. Nothing here needs an account until you save something."
+      },
+      "workspace": {
+        "title": "Add your property",
+        "body": "Put in the details, photos and price, then save. Saving is the moment we ask you to sign in — it takes one email."
+      },
+      "listings": {
+        "title": "Your listings live here",
+        "body": "Drafts, live listings and the enquiries they bring in. Every enquiry from every channel lands in one inbox."
+      },
+      "calendar": {
+        "title": "Viewings, on your terms",
+        "body": "Set the times you are free. Hunters book into those slots and you get a confirmation, not a phone call at dinner."
+      },
+      "plans": {
+        "title": "Getting started is free",
+        "body": "Add and save your property at no cost. Paid packages — portal syndication, photos, extras — are optional and show their price before you choose."
+      }
+    },
+    "hunter": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Browse freely. You only need an account when you book a viewing or make an offer."
+      },
+      "search": {
+        "title": "Find places",
+        "body": "Search by area, budget and type. Listings here come straight from owners, with no agent in between."
+      },
+      "passport": {
+        "title": "Your passport",
+        "body": "Tell us what you are looking for once. It saves you repeating yourself, and owners see you are serious."
+      },
+      "viewings": {
+        "title": "Book viewings directly",
+        "body": "Pick a slot the owner has opened. Confirmations and reminders arrive by message."
+      },
+      "inbox": {
+        "title": "Everything in one inbox",
+        "body": "Replies from owners, viewing confirmations and updates, all in one place."
+      }
+    },
+    "agent": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Your assignments, briefs and messages. Look around; nothing here commits you."
+      },
+      "assignments": {
+        "title": "Your assignments",
+        "body": "Listings that owners have asked for help with. Accept the ones that fit your patch."
+      },
+      "briefs": {
+        "title": "Briefs from owners",
+        "body": "Owners describe what they need; you reply with what you can do and what it costs. No percentage fees."
+      },
+      "profile": {
+        "title": "Complete your profile",
+        "body": "Coverage area, services and verification. A complete profile is what owners see first."
+      }
+    },
+    "partner": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Service requests from owners and hunters in your area appear here."
+      },
+      "requests": {
+        "title": "Requests",
+        "body": "Quote on the ones you want. Owners and hunters compare quotes and pick — you are never charged to look."
+      }
+    }
+  },
   "ownerDashboard": {
     "contactAlias": {
       "title": "Enquiry address",

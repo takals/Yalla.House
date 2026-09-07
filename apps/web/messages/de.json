@@ -1853,6 +1853,85 @@
     "errUploadFailed": "Upload fehlgeschlagen. Bitte erneut versuchen.",
     "privacyNote": "Ihre Finanzangaben dienen dem Nachweis Ihrer Kaufbereitschaft und, nur mit Ihrer Zustimmung, der Vorstellung bei einem Finanzierungspartner. Sie erscheinen nie in Ihrem öffentlichen Profil."
   },
+  "tour": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "skip": "Tour überspringen",
+    "done": "Verstanden",
+    "progress": "{n} von {total}",
+    "owner": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Schauen Sie sich erst einmal um. Ein Konto brauchen Sie erst, wenn Sie etwas speichern."
+      },
+      "workspace": {
+        "title": "Immobilie anlegen",
+        "body": "Details, Fotos und Preis eintragen, dann speichern. Beim Speichern bitten wir Sie um eine Anmeldung – eine E-Mail genügt."
+      },
+      "listings": {
+        "title": "Hier leben Ihre Inserate",
+        "body": "Entwürfe, aktive Inserate und die Anfragen dazu. Jede Anfrage von jedem Kanal landet in einem Posteingang."
+      },
+      "calendar": {
+        "title": "Besichtigungen zu Ihren Zeiten",
+        "body": "Tragen Sie ein, wann Sie können. Interessenten buchen in diese Slots, Sie bekommen eine Bestätigung – keinen Anruf beim Abendessen."
+      },
+      "plans": {
+        "title": "Der Einstieg ist kostenlos",
+        "body": "Immobilie anlegen und speichern kostet nichts. Bezahlte Pakete – Portale, Fotos, Extras – sind optional und zeigen den Preis, bevor Sie sich entscheiden."
+      }
+    },
+    "hunter": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Stöbern Sie frei. Ein Konto brauchen Sie erst für eine Besichtigung oder ein Angebot."
+      },
+      "search": {
+        "title": "Objekte finden",
+        "body": "Nach Gegend, Budget und Typ suchen. Die Inserate kommen direkt von Eigentümern, ohne Makler dazwischen."
+      },
+      "passport": {
+        "title": "Ihr Passport",
+        "body": "Einmal sagen, was Sie suchen. Das erspart Wiederholungen, und Eigentümer sehen, dass Sie es ernst meinen."
+      },
+      "viewings": {
+        "title": "Direkt Besichtigungen buchen",
+        "body": "Einen freien Slot des Eigentümers wählen. Bestätigung und Erinnerung kommen per Nachricht."
+      },
+      "inbox": {
+        "title": "Alles in einem Posteingang",
+        "body": "Antworten von Eigentümern, Besichtigungsbestätigungen und Updates – an einem Ort."
+      }
+    },
+    "agent": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Ihre Aufträge, Briefings und Nachrichten. Umsehen ist unverbindlich."
+      },
+      "assignments": {
+        "title": "Ihre Aufträge",
+        "body": "Inserate, bei denen Eigentümer Unterstützung wünschen. Nehmen Sie an, was zu Ihrem Gebiet passt."
+      },
+      "briefs": {
+        "title": "Briefings von Eigentümern",
+        "body": "Eigentümer beschreiben, was sie brauchen; Sie antworten mit Leistung und Preis. Keine Prozentgebühren."
+      },
+      "profile": {
+        "title": "Profil vervollständigen",
+        "body": "Einzugsgebiet, Leistungen und Verifizierung. Ein vollständiges Profil sehen Eigentümer zuerst."
+      }
+    },
+    "partner": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Serviceanfragen von Eigentümern und Suchenden in Ihrer Gegend erscheinen hier."
+      },
+      "requests": {
+        "title": "Anfragen",
+        "body": "Bieten Sie auf die, die Sie wollen. Eigentümer und Suchende vergleichen und wählen – das Anschauen kostet Sie nichts."
+      }
+    }
+  },
   "ownerDashboard": {
     "contactAlias": {
       "title": "Anfrage-Adresse",

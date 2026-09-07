@@ -9,8 +9,11 @@ import {
   LogOut, LogIn, Search, PanelLeftClose, PanelLeftOpen, Banknote, Eye,
   Menu, X,
   type LucideIcon,
+  HelpCircle,
 } from 'lucide-react'
 import { NotificationBell } from './notification-bell'
+import { RoleTour } from '@/components/tour/role-tour'
+import { startTour } from '@/components/tour/guided-tour'
 import { HubSpotIdentify } from '@/components/hubspot-identify'
 
 // Icon map — lets server components pass a string key instead of JSX
@@ -150,6 +153,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 key={item.href}
                 href={item.href}
                 title={item.label}
+                data-tour={`nav:${item.href}`}
                 onClick={() => setMobileOpen(false)}
                 style={{ transition: 'background 0.15s cubic-bezier(0.16,1,0.3,1), color 0.15s cubic-bezier(0.16,1,0.3,1)' }}
                 className={[
@@ -159,7 +163,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                   // Desktop collapsed: centered icon, no label
                   expanded ? '' : 'lg:justify-center lg:px-0 lg:gap-0',
                   active
-                    ? 'bg-[rgba(228, 87, 46,0.12)] text-brand'
+                    ? 'bg-[rgba(228,87,46,0.12)] text-brand'
                     : 'text-white/40 hover:text-white hover:bg-white/[0.05]',
                 ].join(' ')}
               >
@@ -249,6 +253,15 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
           </button>
           <div className="flex-1" />
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={startTour}
+              className="flex items-center justify-center w-8 h-8 rounded-full text-text-muted hover:text-brand hover:bg-brand/10 transition-colors"
+              aria-label={shellLabels?.showMeAround ?? 'Show me around'}
+              title={shellLabels?.showMeAround ?? 'Show me around'}
+            >
+              <HelpCircle size={18} />
+            </button>
             {notifications && notificationLabels && (
               <NotificationBell
                 initialNotifications={notifications}
@@ -256,7 +269,7 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
                 t={notificationLabels}
               />
             )}
-            <div className="w-7 h-7 rounded-full bg-bg flex items-center justify-center text-[0.7rem] font-bold text-text-secondary">
+            <div data-tour="account" className="w-7 h-7 rounded-full bg-bg flex items-center justify-center text-[0.7rem] font-bold text-text-secondary">
               {initials}
             </div>
             {!isGuest && (
@@ -271,10 +284,11 @@ export function DashboardShell({ children, navItems, section, userEmail, userNam
         </header>
 
         {/* Canvas */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-8">
+        <main data-tour="main" className="flex-1 overflow-y-auto p-4 lg:p-8">
           {children}
         </main>
       </div>
+      <RoleTour role={section} />
     </div>
   )
 }
