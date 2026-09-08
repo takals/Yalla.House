@@ -47,7 +47,8 @@ export async function notifyInvitedAgents(hunterId: string, agentIds: string[]):
         .eq('user_id', hunterId).maybeSingle(),
       (db.from('agent_profiles') as any)
         .select('user_id, email, agency_name, claimed_at, country_code, data_source')
-        .in('user_id', agentIds),
+        .in('user_id', agentIds)
+        .eq('do_not_contact', false),   // objections are honoured here and in matching
       (db.from('blocked_agents') as any).select('agent_id').eq('hunter_id', hunterId),
       (db.from('hunter_consent_log') as any)
         .select('agent_id').eq('hunter_id', hunterId).eq('event_type', 'brief_emailed').in('agent_id', agentIds),
