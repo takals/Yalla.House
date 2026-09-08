@@ -353,7 +353,7 @@ export default async function AgentsPage({
       {/* ── AGENT CTA ──────────────────────────────────────────────────────────── */}
       <section className="relative pb-32 px-4 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4764E 0%, transparent 70%)' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #E4572E 0%, transparent 70%)' }} />
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="text-title-1 text-white leading-tight mb-4">

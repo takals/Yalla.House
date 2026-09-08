@@ -1,6 +1,8 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, type NextFetchEvent, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import createIntlMiddleware from 'next-intl/middleware'
+import { isHoneypotPath } from '@/lib/security/honeypot'
+import { isBlocked, recordHoneypotHit, clientIp } from '@/lib/security/blocklist'
 
 const locales = ['de', 'en'] as const
 const defaultLocale = 'de'
@@ -26,8 +28,31 @@ const protectedPaths = ['/admin', '/settings']
 // Public pages that would otherwise be swept up by a protected prefix.
 const publicExceptions: string[] = []
 
-export async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest, event: NextFetchEvent) {
   const { pathname } = request.nextUrl
+
+  // ---------------------------------------------------------------------
+  // Security layer. Runs before i18n so a blocked client never even gets a
+  // locale redirect. Both branches answer 404, never 403: confirming that a
+  // trap exists — or that a block exists — tells an attacker what to avoid.
+  // ---------------------------------------------------------------------
+  const ip = clientIp(request)
+  if (ip) {
+    if (isHoneypotPath(pathname)) {
+      event.waitUntil(recordHoneypotHit({
+        ip,
+        path: pathname,
+        method: request.method,
+        userAgent: request.headers.get('user-agent'),
+        referer: request.headers.get('referer'),
+        country: request.headers.get('x-vercel-ip-country'),
+      }))
+      return new NextResponse(null, { status: 404 })
+    }
+    if (await isBlocked(ip)) {
+      return new NextResponse(null, { status: 404 })
+    }
+  }
 
   // Check if the path (stripped of locale prefix) is protected
   const pathnameWithoutLocale = pathname.replace(/^\/(de|en)/, '')
@@ -40,7 +65,6 @@ export async function middleware(request: NextRequest) {
 
   // Apply i18n middleware first
   const intlResponse = intlMiddleware(request)
-
   if (!isProtected) return intlResponse
 
   // For protected routes: validate Supabase session
@@ -78,6 +102,9 @@ export const config = {
   matcher: [
     // Skip static files, Next.js internals, and API routes
     // `r/` is the referral link handler — a plain route, no locale prefix.
+    // NOTE: the honeypot paths (/.env, /.git/config, /backup.sql, /wp-login.php …)
+    // must NOT be excluded here or the trap never fires. None of their
+    // extensions appear in the exclusion list below — keep it that way.
     '/((?!api|r/|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|html|txt|xml)$).*)',
   ],
 }

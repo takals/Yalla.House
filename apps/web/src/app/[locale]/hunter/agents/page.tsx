@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { SuggestedAgents, type SuggestedAgent } from './suggested-agents'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
@@ -49,6 +50,14 @@ export default async function AgentsPage() {
     agent_name: a.agent_user?.full_name ?? null,
   }))
 
+  // Agents whose coverage overlaps the passport's target areas. Service client:
+  // find_agents_for_hunter is service_role only; userId comes from the session above.
+  const { data: suggestedRaw } = await (createServiceClient().rpc as any)('find_agents_for_hunter', {
+    p_user_id: userId, p_limit: 12,
+  })
+  const suggested: SuggestedAgent[] = suggestedRaw ?? []
+  const isGuest = !user
+
   const activeCount = assignments.filter(a => a.status === 'active').length
   const invitedCount = assignments.filter(a => a.status === 'invited').length
   const ignoredCount = assignments.filter(a => a.status === 'ignored').length
@@ -93,6 +102,21 @@ export default async function AgentsPage() {
             <p className="text-text-secondary text-sm">
               {t('noAgentsDesc')}
             </p>
+          </div>
+        )}
+
+        {/* Agents covering your passport areas — the automatic version of the search below */}
+        {suggested.length > 0 ? (
+          <div className="mb-6">
+            <SuggestedAgents agents={suggested} isGuest={isGuest} />
+          </div>
+        ) : (
+          <div className="bg-surface rounded-card p-6 border border-border-default mb-6">
+            <h3 className="font-semibold mb-1">{t('noAreasTitle')}</h3>
+            <p className="text-sm text-text-secondary mb-3">{t('noAreasDesc')}</p>
+            <Link href="/hunter/passport" className="text-sm font-semibold text-brand hover:text-brand-hover">
+              {t('noAreasCta')} →
+            </Link>
           </div>
         )}
 

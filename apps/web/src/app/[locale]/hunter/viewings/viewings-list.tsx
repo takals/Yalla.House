@@ -264,7 +264,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-[#BF6840] transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:text-[#CD4E29] transition-colors"
             >
               <MapPin className="w-4 h-4" />
               {tx(t, 'getDirections')}
@@ -312,7 +312,7 @@ function ViewingCard({ viewing, t, locale }: { viewing: Viewing; t: T; locale: s
           {isCompleted && (
             <Link
               href={`/hunter/viewings/${viewing.id}/feedback`}
-              className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
+              className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors"
             >
               {tx(t, 'leaveFeedback')} &rarr;
             </Link>

@@ -371,7 +371,7 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
           {selectedListingId && (
             <Link
               href={`/${locale === 'de' ? '' : 'en/'}p/${listings.find(l => l.id === selectedListingId)?.place_id ?? ''}`}
-              className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors"
             >
               <ExternalLink size={12} />
               {tr.viewProperty}
@@ -649,7 +649,7 @@ export function OwnerCalendarView({ listings, initialSlots, locale, translations
                     <div className="w-full text-center py-3 px-4 bg-bg rounded-xl border border-border-default">
                       <p className="text-xs text-text-secondary">{tr.noListingsDesc}</p>
                       <Link href={locale === 'de' ? '/owner/workspace' : `/${locale}/owner/workspace`}
-                        className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-brand hover:text-[#BF6840] transition-colors">
+                        className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-brand hover:text-[#CD4E29] transition-colors">
                         <Plus size={12} />
                         {tr.createListingCta}
                       </Link>

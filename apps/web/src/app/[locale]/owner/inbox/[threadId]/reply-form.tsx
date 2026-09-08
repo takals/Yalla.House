@@ -44,7 +44,7 @@ export function ReplyForm({ threadId }: ReplyFormProps) {
           onChange={e => setMessage(e.target.value)}
           placeholder="Type your reply..."
           rows={2}
-          className="flex-1 px-4 py-3 bg-white rounded-xl border border-border-default text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E] resize-none"
+          className="flex-1 px-4 py-3 bg-white rounded-xl border border-border-default text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#E4572E] resize-none"
           onKeyDown={e => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
               handleSubmit(e)

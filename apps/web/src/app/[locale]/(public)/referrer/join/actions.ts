@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
 import { countryFromLocale } from '@/lib/detect-country'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 
 /** Unambiguous alphabet — no 0/O, 1/I/L, so codes survive being read aloud. */
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'

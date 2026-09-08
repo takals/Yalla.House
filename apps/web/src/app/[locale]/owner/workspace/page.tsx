@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { countryFromLocale } from '@/lib/detect-country'
 import { getCountryConfig } from '@/lib/country-config'

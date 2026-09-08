@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useCallback, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { PassportForm } from './passport-form'
 import {
   ShieldCheck, Check, Home, Banknote, Clock, Minus, X,
   ChevronLeft, BadgeCheck, FileCheck, UserCheck, KeyRound,
@@ -101,7 +103,7 @@ function EarlyAccessBadge({ tier, translations }: { tier: string; translations: 
   return (
     <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${
       isPriority
-        ? 'border-[rgba(212,118,78,0.3)] bg-[rgba(212,118,78,0.08)]'
+        ? 'border-[rgba(228,87,46,0.3)] bg-[rgba(228,87,46,0.08)]'
         : 'border-[rgba(96,165,250,0.25)] bg-[rgba(96,165,250,0.06)]'
     }`}>
       <ShieldCheck size={14} className={isPriority ? 'text-brand' : 'text-[#60A5FA]'} />
@@ -143,7 +145,7 @@ function ReadinessBadgeRow({ badge }: { badge: ReadinessBadge }) {
       ) : (
         <button
           onClick={badge.ctaAction}
-          className="text-[10px] font-bold text-brand hover:text-[#BF6840] whitespace-nowrap flex-shrink-0"
+          className="text-[10px] font-bold text-brand hover:text-[#CD4E29] whitespace-nowrap flex-shrink-0"
         >
           {badge.ctaLabel}
         </button>
@@ -176,6 +178,9 @@ export function PassportPageClient({
   )
   // Mobile drawer state
   const [drawerOpen, setDrawerOpen] = useState(false)
+  // 'chat' is the AI intake; 'form' is the plain, old-school form for people who prefer it.
+  const [mode, setMode] = useState<'chat' | 'form'>('chat')
+  const tMode = useTranslations('hunterPassportMode')
 
   const handlePassportUpdate = useCallback((field: string, value: unknown) => {
     setPassportData(prev => ({ ...prev, [field]: value }))
@@ -289,7 +294,7 @@ export function PassportPageClient({
         className="rounded-2xl p-5 relative overflow-hidden mb-5"
         style={{ background: 'linear-gradient(135deg, #0F1117 0%, #1C1F2E 100%)' }}
       >
-        <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full pointer-events-none" style={{ background: 'rgba(212,118,78,0.1)' }} />
+        <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full pointer-events-none" style={{ background: 'rgba(228, 87, 46,0.1)' }} />
 
         <div className="flex items-center justify-between mb-4">
           <span className="text-[0.6rem] font-black uppercase tracking-widest text-brand flex items-center gap-1">
@@ -357,7 +362,7 @@ export function PassportPageClient({
                   <span key={pref.slug} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                     pref.sentiment === 'need' ? 'bg-[rgba(74,222,128,0.15)] text-[#4ADE80]'
                     : pref.sentiment === 'dealbreaker' ? 'bg-[rgba(239,68,68,0.15)] text-[#EF4444]'
-                    : 'bg-[rgba(212,118,78,0.15)] text-brand'
+                    : 'bg-[rgba(228,87,46,0.15)] text-brand'
                   }`}>
                     {label}{pref.sentiment === 'need' && ' ★'}{pref.sentiment === 'dealbreaker' && ' ✕'}
                   </span>
@@ -505,6 +510,20 @@ export function PassportPageClient({
            CHAT: Full width on mobile, flex-1 on desktop
          ══════════════════════════════════════════════════════════════ */}
       <div className="flex-1 min-w-0 flex flex-col h-full">
+        <div className="flex items-center justify-end gap-1 px-3 pt-2 text-xs">
+          <span className="text-text-muted mr-1">{tMode('label')}</span>
+          {(['chat', 'form'] as const).map(m => (
+            <button key={m} type="button" onClick={() => setMode(m)}
+                    className={`px-2.5 py-1 rounded-full font-semibold transition-colors ${mode === m ? 'bg-brand text-white' : 'text-text-secondary hover:bg-hover-bg'}`}>
+              {tMode(m)}
+            </button>
+          ))}
+        </div>
+        {mode === 'form' ? (
+          <div className="flex-1 overflow-y-auto p-4">
+            <PassportForm profile={profile as any} userName={userName ?? null} />
+          </div>
+        ) : (
         <HunterPassportIntake
           userId={userId}
           existingProfile={profile}
@@ -517,6 +536,7 @@ export function PassportPageClient({
           onFieldUpdate={handlePassportUpdate}
           onBatchUpdate={handleBatchUpdate}
         />
+        )}
       </div>
     </div>
   )

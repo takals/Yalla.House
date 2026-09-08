@@ -103,7 +103,7 @@ export function PricingTables() {
                 </ul>
                 <Link
                   href="/owner/info"
-                  className="block text-center bg-brand hover:bg-brand-hover text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm shadow-lg shadow-[#D4764E]/20"
+                  className="block text-center bg-brand hover:bg-brand-hover text-white font-semibold px-5 py-3 rounded-lg transition-colors text-sm shadow-lg shadow-[#E4572E]/20"
                 >
                   {t('ownerProCta')}
                 </Link>

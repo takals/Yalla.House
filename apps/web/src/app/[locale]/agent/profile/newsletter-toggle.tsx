@@ -24,7 +24,7 @@ export function NewsletterToggle({ initial }: { initial: boolean }) {
         checked={checked}
         disabled={isPending}
         onChange={e => toggle(e.target.checked)}
-        className="mt-0.5 h-4 w-4 accent-[#D4764E]"
+        className="mt-0.5 h-4 w-4 accent-[#E4572E]"
       />
       <span className="text-sm text-text-secondary">
         <span className="font-semibold text-text-primary">{t('newsletterTitle')}</span>{' '}

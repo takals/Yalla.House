@@ -9,15 +9,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Brand palette per _business/branding/YH Branding.txt:
+        // burnt orange #E4572E + charcoal #1F2933, 70/20/10 neutral/dark/orange.
+        // Code drifted to terracotta #D4764E in Apr 2026; realigned 6 Sep 2026.
+        // Prefer these tokens (bg-brand, text-brand-hover ...) over hardcoded hex.
         brand: {
-          DEFAULT: '#D4764E',
-          hover:   '#BF6840',
-          dark:    '#A85A36',
-          light:   'rgba(212, 118, 78, 0.12)',
-          light2:  'rgba(212, 118, 78, 0.18)',
-          'solid-bg': '#FFF5EE',
+          DEFAULT: '#E4572E',
+          hover:   '#CD4E29',
+          dark:    '#B64625',
+          light:   'rgba(228, 87, 46, 0.12)',
+          light2:  'rgba(228, 87, 46, 0.18)',
+          'solid-bg': '#FDEEE8',
           'badge-text': '#8B4513',
         },
+        charcoal: '#1F2933',
         surface: '#FFFFFF',
         bg:      '#EDEEF2',
         // Dashfolio-inspired dark theme (public pages)

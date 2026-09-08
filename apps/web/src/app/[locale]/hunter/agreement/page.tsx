@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getLocale } from 'next-intl/server'
 import { AgreementPage } from '@/components/agreement-page'
 import { checkAgreementStatus } from '@/lib/agreements'

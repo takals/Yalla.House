@@ -238,9 +238,14 @@ export default async function HunterPage() {
                 {readinessScore >= 70 ? t('readinessHigh') : readinessScore >= 40 ? t('readinessMedium') : t('readinessLow')}
               </p>
               {readinessScore < 70 && (
-                <Link href="/hunter/passport" className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors mt-1 inline-block">
-                  {t('boostReadiness')} →
-                </Link>
+                <div className="mt-1 flex flex-col gap-0.5">
+                  <Link href="/hunter/passport" className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors inline-block">
+                    {t('boostReadiness')} →
+                  </Link>
+                  <Link href="/hunter/verification" className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors inline-block">
+                    {t('addMortgageProof')} →
+                  </Link>
+                </div>
               )}
             </div>
           </div>
@@ -264,7 +269,7 @@ export default async function HunterPage() {
               {earlyAccessTier === 'none' && (
                 <>
                   <p className="text-lg font-bold text-[#C5C8D0]">{t('earlyAccessLocked')}</p>
-                  <Link href="/hunter/passport" className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors mt-1 inline-block">
+                  <Link href="/hunter/passport" className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors mt-1 inline-block">
                     {t('unlockEarlyAccess')} →
                   </Link>
                 </>

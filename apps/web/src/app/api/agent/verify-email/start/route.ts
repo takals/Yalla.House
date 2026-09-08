@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#1F2933">
       <h2 style="color:#1F2933;margin:0 0 8px">Verify your agency</h2>
       <p style="color:#5B6672;margin:0 0 20px">Enter this code on Yalla.House to confirm this is your company email:</p>
-      <div style="font-size:34px;font-weight:800;letter-spacing:8px;color:#D4764E;background:#FFF5EE;border:1px solid #F3D9CC;border-radius:12px;padding:16px;text-align:center">${code}</div>
+      <div style="font-size:34px;font-weight:800;letter-spacing:8px;color:#E4572E;background:#FFF5EE;border:1px solid #F3D9CC;border-radius:12px;padding:16px;text-align:center">${code}</div>
       <p style="color:#9AA3AF;font-size:13px;margin:20px 0 0">This code expires in 10 minutes. If you didn't request it, you can ignore this email.</p>
     </div>`
   try {

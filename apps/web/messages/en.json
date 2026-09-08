@@ -1378,6 +1378,21 @@
     "moreListings": "Browse more properties →"
   },
   "hunterAgents": {
+    "suggestedTitle": "{n} agents cover your areas",
+    "suggestedDesc": "Matched from the areas in your passport. Tick the ones you want, and they get your brief — not your phone number.",
+    "selectAll": "Select all",
+    "clearAll": "Clear",
+    "verified": "Verified",
+    "matchedIn": "Covers {areas}",
+    "sendBriefTo": "Send your brief to {n} agents",
+    "sendBriefSignIn": "Sign in to send your brief",
+    "suggestedNote": "Agents reply in your inbox. You can pause or disconnect any of them at any time.",
+    "suggestedSent": "Brief sent to {n} agents",
+    "suggestedSentDesc": "Replies land in your inbox. You will see them listed above as they respond.",
+    "suggestedError": "Could not send. Please try again.",
+    "noAreasTitle": "No matches yet",
+    "noAreasDesc": "Add the areas you are looking in to your passport and we will show agents who cover them.",
+    "noAreasCta": "Complete your passport",
     "title": "Connected Agents",
     "subtitle": "Manage your connections with local property agents",
     "connected": "Connected",
@@ -1824,7 +1839,136 @@
     "q_website": "What's your agency website?",
     "hint_website": "e.g., www.smithestates.co.uk — helps us verify you and match listings."
   },
+  "hunterVerification": {
+    "title": "Verify your finance",
+    "intro": "Add your mortgage in principle. Sellers move faster for buyers who can show they are ready.",
+    "lender": "Lender",
+    "lenderPlaceholder": "e.g. Halifax",
+    "amount": "Amount in principle",
+    "currency": "Currency",
+    "issuedAt": "Issued on",
+    "expiresAt": "Valid until",
+    "document": "Mortgage in principle (PDF or image)",
+    "documentHint": "Stored privately. Only you and our verification team can see it.",
+    "uploading": "Uploading…",
+    "documentAttached": "Document attached",
+    "documentVerified": "Document verified",
+    "consentTitle": "Introduce me to a mortgage partner",
+    "consentBody": "Optional. We may pass your details to a regulated mortgage broker who can compare rates for you. You can withdraw this at any time.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "err_lenderRequired": "Please enter your lender.",
+    "err_amountInvalid": "Please enter a valid amount.",
+    "err_currencyInvalid": "Unsupported currency.",
+    "err_datesInvalid": "The expiry date is before the issue date.",
+    "err_documentInvalid": "That document could not be linked to your account.",
+    "err_saveFailed": "Could not save. Please try again.",
+    "errTooLarge": "File is larger than 10 MB.",
+    "errUploadFailed": "Upload failed. Please try again.",
+    "privacyNote": "Your finance details are used to confirm your readiness to buy and, only if you opt in, to introduce you to a mortgage partner. They are never shown on your public profile."
+  },
+  "tour": {
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip tour",
+    "done": "Got it",
+    "progress": "{n} of {total}",
+    "owner": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Have a look around first. Nothing here needs an account until you save something."
+      },
+      "workspace": {
+        "title": "Add your property",
+        "body": "Put in the details, photos and price, then save. Saving is the moment we ask you to sign in — it takes one email."
+      },
+      "listings": {
+        "title": "Your listings live here",
+        "body": "Drafts, live listings and the enquiries they bring in. Every enquiry from every channel lands in one inbox."
+      },
+      "calendar": {
+        "title": "Viewings, on your terms",
+        "body": "Set the times you are free. Hunters book into those slots and you get a confirmation, not a phone call at dinner."
+      },
+      "plans": {
+        "title": "Getting started is free",
+        "body": "Add and save your property at no cost. Paid packages — portal syndication, photos, extras — are optional and show their price before you choose."
+      }
+    },
+    "hunter": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Browse freely. You only need an account when you book a viewing or make an offer."
+      },
+      "search": {
+        "title": "Find places",
+        "body": "Search by area, budget and type. Listings here come straight from owners, with no agent in between."
+      },
+      "passport": {
+        "title": "Your passport",
+        "body": "Tell us what you are looking for once. It saves you repeating yourself, and owners see you are serious."
+      },
+      "viewings": {
+        "title": "Book viewings directly",
+        "body": "Pick a slot the owner has opened. Confirmations and reminders arrive by message."
+      },
+      "inbox": {
+        "title": "Everything in one inbox",
+        "body": "Replies from owners, viewing confirmations and updates, all in one place."
+      }
+    },
+    "agent": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Your assignments, briefs and messages. Look around; nothing here commits you."
+      },
+      "assignments": {
+        "title": "Your assignments",
+        "body": "Listings that owners have asked for help with. Accept the ones that fit your patch."
+      },
+      "briefs": {
+        "title": "Briefs from owners",
+        "body": "Owners describe what they need; you reply with what you can do and what it costs. No percentage fees."
+      },
+      "profile": {
+        "title": "Complete your profile",
+        "body": "Coverage area, services and verification. A complete profile is what owners see first."
+      }
+    },
+    "partner": {
+      "welcome": {
+        "title": "This is your dashboard",
+        "body": "Service requests from owners and hunters in your area appear here."
+      },
+      "requests": {
+        "title": "Requests",
+        "body": "Quote on the ones you want. Owners and hunters compare quotes and pick — you are never charged to look."
+      }
+    }
+  },
+  "hunterPassportNext": {
+    "title": "Your passport is saved",
+    "intro": "Here is what it unlocks. Pick where to go next — you can come back and edit any answer.",
+    "agentsTitle": "Agents who cover your areas",
+    "agentsBody": "Send your brief to the ones you choose. They reply in your inbox.",
+    "searchTitle": "Search homes",
+    "searchBody": "Listings straight from owners, filtered by what you told us.",
+    "verifyTitle": "Verify your finance",
+    "verifyBody": "Add a mortgage in principle. Sellers move faster for buyers who are ready.",
+    "editNote": "Answers can be changed any time from your passport."
+  },
+  "hunterPassportMode": {
+    "label": "Fill in by",
+    "chat": "Chat",
+    "form": "Form"
+  },
   "ownerDashboard": {
+    "contactAlias": {
+      "title": "Enquiry address",
+      "body": "Portals show this address instead of your email or phone. Every enquiry from every portal lands in your Yalla.House inbox, with the source attached.",
+      "pending": "Issued automatically when the listing goes live."
+    },
     "viewings": {
       "pending": "Pending",
       "confirmed": "Confirmed",
@@ -2023,6 +2167,7 @@
     "readinessHigh": "Ready to move",
     "readinessMedium": "Getting there",
     "readinessLow": "Just getting started",
+    "addMortgageProof": "Add mortgage proof",
     "boostReadiness": "Boost your score",
     "earlyAccess": "Early access",
     "earlyAccessPriority": "Priority access",
@@ -2925,6 +3070,22 @@
     "navDeals": "Deals"
   },
   "ownerInfo": {
+    "heroPrimary": "Open your dashboard",
+    "heroSecondary": "Create a listing",
+    "heroNote": "No sign-up to look around. You sign in when you save.",
+    "benefit1Link": "Start a listing",
+    "benefit2Link": "See local agents",
+    "benefit3Link": "Open your listings",
+    "benefit4Link": "Set up your calendar",
+    "benefit5Link": "See enquiries",
+    "benefit6Link": "See the prices",
+    "benefit1Hint": "In Workspace: address, photos, price. Save when you are ready — that is when we ask you to sign in.",
+    "benefit2Hint": "In Agents: local agents who want the instruction. You pick, or pick nobody.",
+    "benefit3Hint": "In Listings: views, enquiries and viewings per property, as they happen.",
+    "benefit4Hint": "In Calendar: set your free slots. Hunters book into them; you get a confirmation.",
+    "benefit5Hint": "In Listings: every enquiry from every channel, under the property it is about.",
+    "benefit6Hint": "In Plans: flat prices shown up front. No percentage of your sale, ever.",
+    "ctaSecondary": "Or look around the dashboard first",
     "pageTitle": "Owner Dashboard",
     "tabInfo": "Info",
     "heroTitle": "Your property. Full visibility. No commission.",
@@ -3902,6 +4063,24 @@
     "proTipText": "Upgrade to Premium for automatic publishing and reposting across all channels."
   },
   "hunterInfo": {
+    "benefit1Hint": "In Agents: see who covers your area. They only get your details if you say so.",
+    "benefit2Hint": "In Search: filter by area, budget and type. Saving a listing is the first thing that asks you to sign in.",
+    "benefit3Hint": "In Agents: the full register with coverage and services. Browse without an account.",
+    "benefit4Hint": "In Inbox: one thread per property — replies, viewing confirmations, updates.",
+    "benefit5Hint": "In Passport: set your preferences once. Search and matches use them from then on.",
+    "benefit6Hint": "Your dashboard is free to use. Optional extras show a price before you choose.",
+    "heroPrimary": "Open your dashboard",
+    "heroSecondary": "Create your passport",
+    "heroNote": "No sign-up to look around. You sign in when you save or book.",
+    "benefit1Link": "Meet the agents",
+    "benefit2Link": "Try the search",
+    "benefit3Link": "Browse agents",
+    "benefit4Link": "See the inbox",
+    "benefit5Link": "Set your preferences",
+    "benefit6Link": "Open the dashboard",
+    "readinessCtaVerify": "Verify your finance",
+    "readinessCtaPassport": "Complete your passport",
+    "ctaSecondary": "Or look around the dashboard first",
     "pageTitle": "Home Hunter",
     "tabInfo": "Info",
     "tabDashboard": "Dashboard",
@@ -3964,6 +4143,20 @@
     "ctaButton": "Start your passport"
   },
   "agentInfo": {
+    "heroDashboard": "Open your dashboard",
+    "heroNote": "No sign-up to look around. You sign in when you claim your profile or accept a job.",
+    "benefit1Link": "Open the calendar",
+    "benefit2Link": "See the inbox",
+    "benefit3Link": "See the hunters",
+    "benefit4Link": "Export settings",
+    "benefit5Link": "See your assignments",
+    "benefit6Link": "Set up your profile",
+    "benefit1Hint": "In Calendar: your availability, their bookings, no back-and-forth.",
+    "benefit2Hint": "In Inbox: hunters, owners and viewings in one place.",
+    "benefit3Hint": "In Hunters: buyers with a passport and, where they have added it, verified finance.",
+    "benefit4Hint": "In Settings: export your contacts any time. Your data stays yours.",
+    "benefit5Hint": "In Assignments: what needs doing, in order. Nothing waits on a phone call.",
+    "benefit6Hint": "In Profile: your name, your area, your reviews — what owners see first.",
     "pageTitle": "Agent Dashboard",
     "metaTitle": "For Estate Agents — Free Leads, Less Admin",
     "h1Title": "Yalla.House for Estate Agents",

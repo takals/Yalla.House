@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getTranslations, getLocale } from 'next-intl/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
 import { ArrowLeft } from 'lucide-react'

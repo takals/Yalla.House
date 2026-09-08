@@ -273,7 +273,7 @@ export function SendBriefClient({
           <div className="p-4">
             <div className="bg-[#EDEEF2] rounded-xl overflow-hidden shadow-sm">
               {/* ── Orange header ──────────────────────────── */}
-              <div className="bg-[#D4764E] px-6 py-4 flex items-center justify-between">
+              <div className="bg-[#E4572E] px-6 py-4 flex items-center justify-between">
                 <span className="text-lg font-extrabold text-white tracking-tight">Yalla.House</span>
                 <span className="text-[10px] font-semibold text-white/75 uppercase tracking-widest">
                   {t.previewPropertyCollaboration ?? 'Property Collaboration'}
@@ -370,7 +370,7 @@ export function SendBriefClient({
 
                   {/* View property listing link */}
                   <div className="text-center">
-                    <span className="text-sm font-semibold text-[#D4764E] cursor-default">
+                    <span className="text-sm font-semibold text-[#E4572E] cursor-default">
                       {t.previewViewListing ?? 'View property listing'} →
                     </span>
                   </div>
@@ -393,7 +393,7 @@ export function SendBriefClient({
                   </div>
 
                   {/* Select group + urgency */}
-                  <p className="text-sm font-semibold text-[#D4764E]">
+                  <p className="text-sm font-semibold text-[#E4572E]">
                     {t.previewSelectGroup ?? 'A select group of local agents have been invited to collaborate on this property.'}
                   </p>
                   <p className="text-sm font-semibold text-[#5E6278]">
@@ -402,7 +402,7 @@ export function SendBriefClient({
 
                   {/* CTA button */}
                   <div className="text-center pt-2">
-                    <span className="inline-block px-6 py-3 bg-[#D4764E] text-white font-bold text-sm rounded-lg">
+                    <span className="inline-block px-6 py-3 bg-[#E4572E] text-white font-bold text-sm rounded-lg">
                       {t.previewCta ?? 'Open Listing & Collaboration Workspace'} →
                     </span>
                   </div>
@@ -432,7 +432,7 @@ export function SendBriefClient({
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
-                        <Users size={14} className="text-[#D4764E]" />
+                        <Users size={14} className="text-[#E4572E]" />
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit1Title ?? 'Qualified Leads'}</p>
@@ -441,7 +441,7 @@ export function SendBriefClient({
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
-                        <Banknote size={14} className="text-[#D4764E]" />
+                        <Banknote size={14} className="text-[#E4572E]" />
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit2Title ?? 'Transparent Pricing'}</p>
@@ -450,7 +450,7 @@ export function SendBriefClient({
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
-                        <BarChart3 size={14} className="text-[#D4764E]" />
+                        <BarChart3 size={14} className="text-[#E4572E]" />
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit3Title ?? 'Full Dashboard'}</p>
@@ -459,7 +459,7 @@ export function SendBriefClient({
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-[#FFF4EF] flex items-center justify-center flex-shrink-0">
-                        <BadgeCheck size={14} className="text-[#D4764E]" />
+                        <BadgeCheck size={14} className="text-[#E4572E]" />
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-[#0F1117]">{t.previewBenefit4Title ?? 'Verified Profiles'}</p>
@@ -471,7 +471,7 @@ export function SendBriefClient({
 
                 {/* ── Footer ──────────────────────────────── */}
                 <div className="bg-[#F5F5FA] border-t border-[#E2E4EB] px-6 py-3 text-center">
-                  <p className="text-[11px] text-[#D4764E] font-medium">
+                  <p className="text-[11px] text-[#E4572E] font-medium">
                     Services · About · FAQ · <span className="font-bold">yalla.house</span>
                   </p>
                   <p className="text-[10px] text-[#999] mt-1">

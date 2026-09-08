@@ -140,7 +140,7 @@ export function ShareCardModal({
 
       // Yalla.House brand bar at bottom
       const barH = 48
-      ctx.fillStyle = '#D4764E'
+      ctx.fillStyle = '#E4572E'
       ctx.fillRect(0, H - barH, W, barH)
       ctx.fillStyle = '#FFFFFF'
       ctx.font = 'bold 18px "Plus Jakarta Sans", system-ui, sans-serif'
@@ -233,7 +233,7 @@ export function ShareCardModal({
                     a.href = url
                     a.click()
                   }}
-                  className="mt-2 text-brand hover:text-[#BF6840] text-xs font-semibold transition-colors"
+                  className="mt-2 text-brand hover:text-[#CD4E29] text-xs font-semibold transition-colors"
                 >
                   {t('shareCardDownloadQR')} &darr;
                 </button>

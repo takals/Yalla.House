@@ -175,8 +175,10 @@ export function ListingEditForm({
   freeChannels,
   channelStatuses,
   countryCode,
+  contactAlias = null,
 }: {
   listing: Listing
+  contactAlias?: string | null
   photos: PhotoRow[]
   portals: PortalRow[]
   portalStatuses: PortalStatusRow[]
@@ -701,6 +703,7 @@ export function ListingEditForm({
           listingId={listing.id}
           portals={portals}
           initialStatuses={portalStatuses}
+          contactAlias={contactAlias}
         />
       </Section>
 

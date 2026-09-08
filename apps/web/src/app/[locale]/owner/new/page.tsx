@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 
 /**
  * Legacy listing wizard — replaced by Property Workspace.

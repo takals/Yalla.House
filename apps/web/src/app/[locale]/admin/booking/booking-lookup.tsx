@@ -107,7 +107,7 @@ export function BookingLookup() {
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearch()}
               placeholder="Ref code (yh_de_xxx), postcode (10115), or street name..."
-              className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-xl text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
+              className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-xl text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#E4572E]"
               autoFocus
             />
           </div>
@@ -247,7 +247,7 @@ export function BookingLookup() {
                   onChange={e => setPhoneNumber(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSendLink()}
                   placeholder="+49 170 1234567"
-                  className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-xl text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
+                  className="w-full pl-10 pr-4 py-2.5 bg-bg rounded-xl text-sm text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#E4572E]"
                 />
               </div>
 
