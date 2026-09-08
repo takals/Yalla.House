@@ -729,6 +729,10 @@ export async function sendHunterBriefEmail(opts: {
   matchId: string
   countryCode?: string
   locale?: EmailLocale
+  /** Where the button goes. Claimed agents: /agent/briefs. Unclaimed: the claim path. */
+  ctaUrl?: string
+  /** Article 14 line: where the address came from and how to object. Required for cold contact. */
+  sourceNote?: string
 }): Promise<void> {
   const countryCode = opts.countryCode ?? DEFAULT_COUNTRY
   const locale = opts.locale ?? 'en-GB'
@@ -786,11 +790,12 @@ export async function sendHunterBriefEmail(opts: {
       Sign in to your agent dashboard to view the full brief and respond with suitable properties.
     </p>
 
-    ${ctaButton(t.hunterBriefCta, `${BASE_URL}/agent/briefs`)}
+    ${ctaButton(t.hunterBriefCta, opts.ctaUrl ?? `${BASE_URL}/agent/briefs`)}
 
     <p style="margin-top:24px;font-size:13px;color:#999;">
       ${t.hunterBriefFooter}
     </p>
+    ${opts.sourceNote ? `<p style="margin-top:8px;font-size:12px;color:#999;">${opts.sourceNote}</p>` : ''}
   `, countryCode, 'agent', locale)
 
   try {
