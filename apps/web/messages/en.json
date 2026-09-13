@@ -1161,6 +1161,9 @@
     "propertyDetails": "Property Details"
   },
   "ownerPlans": {
+    "noPlansTitle": "Prices for your country are being finalised",
+    "noPlansBody": "You can add your property and save it now at no cost. Paid packages — portal syndication, photos, extras — will show their price here before you choose anything.",
+    "noPlansCta": "Start your listing",
     "pageTitle": "Plans & Pricing",
     "pageDescription": "Choose the plan that works best for you.",
     "badgeRecommended": "Recommended",

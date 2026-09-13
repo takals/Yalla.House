@@ -1161,6 +1161,9 @@
     "propertyDetails": "Objektdetails"
   },
   "ownerPlans": {
+    "noPlansTitle": "Preise für Ihr Land werden gerade festgelegt",
+    "noPlansBody": "Sie können Ihre Immobilie jetzt kostenlos anlegen und speichern. Bezahlte Pakete – Portale, Fotos, Extras – zeigen hier ihren Preis, bevor Sie sich für etwas entscheiden.",
+    "noPlansCta": "Inserat starten",
     "pageTitle": "Tarife & Preise",
     "pageDescription": "Wählen Sie den passenden Tarif.",
     "badgeRecommended": "Empfohlen",
