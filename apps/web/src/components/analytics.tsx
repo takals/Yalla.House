@@ -69,6 +69,19 @@ export function Analytics() {
           `}
         </Script>
       )}
+
+      {/* Vercel Web Analytics — cookieless pageview + SPA route tracking.
+          Web Analytics is enabled on the Vercel project, which serves the
+          script from /_vercel/insights/script.js at the edge. Loaded via the
+          script tag (not the @vercel/analytics npm package) so no dependency
+          or lockfile change is required. Production only; harmless 404 locally. */}
+      {process.env.NODE_ENV === 'production' && (
+        <Script
+          id="vercel-insights"
+          src="/_vercel/insights/script.js"
+          strategy="afterInteractive"
+        />
+      )}
     </>
   )
 }
