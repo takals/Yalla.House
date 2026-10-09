@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 3px solid #D4764E;
+      border-bottom: 3px solid #E4572E;
       padding-bottom: 16px;
       margin-bottom: 32px;
     }
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
     .brand {
       font-size: 18pt;
       font-weight: 800;
-      color: #D4764E;
+      color: #E4572E;
       letter-spacing: -0.02em;
     }
 
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
       padding: 16px;
       background: #F8FAFC;
       border-radius: 8px;
-      border-left: 3px solid #D4764E;
+      border-left: 3px solid #E4572E;
     }
 
     .section {

@@ -57,7 +57,7 @@ export function EditableField({ label, value, placeholder, actionLabel, isReadOn
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 text-sm px-3 py-1.5 bg-bg rounded-lg text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4764E]"
+              className="flex-1 text-sm px-3 py-1.5 bg-bg rounded-lg text-text-primary placeholder-[#999] focus:outline-none focus:ring-2 focus:ring-[#E4572E]"
               autoFocus
               onKeyDown={e => {
                 if (e.key === 'Enter') handleSave()
@@ -85,7 +85,7 @@ export function EditableField({ label, value, placeholder, actionLabel, isReadOn
       {!editing && (
         <button
           onClick={() => setEditing(true)}
-          className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
+          className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors"
         >
           {actionLabel}
         </button>

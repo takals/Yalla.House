@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { NotificationPreferencesForm } from './preferences-form'
 
 const defaultPrefs = {

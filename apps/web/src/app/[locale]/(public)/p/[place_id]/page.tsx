@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
 import dynamic from 'next/dynamic'

@@ -453,7 +453,7 @@ export function ViewingCalendar({ listingId, authenticated, isOwner, locale, pla
         {isOwner && (
           <button
             onClick={() => setShowScheduler(!showScheduler)}
-            className="flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-[#BF6840] transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-[#CD4E29] transition-colors"
           >
             {showScheduler ? <X size={14} /> : <Plus size={14} />}
             {showScheduler ? t('calendarDone') : t('calendarAddSlots')}

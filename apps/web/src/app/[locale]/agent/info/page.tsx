@@ -20,12 +20,12 @@ export default async function AgentInfoPage() {
   const t = await getTranslations('agentInfo')
 
   const benefits = [
-    { icon: Calendar, title: t('benefit1Title'), body: t('benefit1Body') },
-    { icon: MessageSquare, title: t('benefit2Title'), body: t('benefit2Body') },
-    { icon: ShieldCheck, title: t('benefit3Title'), body: t('benefit3Body') },
-    { icon: Download, title: t('benefit4Title'), body: t('benefit4Body') },
-    { icon: Clock, title: t('benefit5Title'), body: t('benefit5Body') },
-    { icon: Palette, title: t('benefit6Title'), body: t('benefit6Body') },
+    { icon: Calendar, title: t('benefit1Title'), body: t('benefit1Body'), hint: t('benefit1Hint'), link: t('benefit1Link'), href: '/agent/calendar' },
+    { icon: MessageSquare, title: t('benefit2Title'), body: t('benefit2Body'), hint: t('benefit2Hint'), link: t('benefit2Link'), href: '/agent/inbox' },
+    { icon: ShieldCheck, title: t('benefit3Title'), body: t('benefit3Body'), hint: t('benefit3Hint'), link: t('benefit3Link'), href: '/agent/hunters' },
+    { icon: Download, title: t('benefit4Title'), body: t('benefit4Body'), hint: t('benefit4Hint'), link: t('benefit4Link'), href: '/agent/settings' },
+    { icon: Clock, title: t('benefit5Title'), body: t('benefit5Body'), hint: t('benefit5Hint'), link: t('benefit5Link'), href: '/agent/assignments' },
+    { icon: Palette, title: t('benefit6Title'), body: t('benefit6Body'), hint: t('benefit6Hint'), link: t('benefit6Link'), href: '/agent/profile' },
   ]
 
   const ownerSteps = [
@@ -61,18 +61,22 @@ export default async function AgentInfoPage() {
           </p>
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href="/agent/profile"
+              href="/agent/assignments"
               className="inline-flex items-center gap-2 px-6 py-3 bg-brand hover:bg-brand-hover text-white font-semibold rounded-xl transition-colors"
             >
-              {t('ctaClaim')} <ArrowRight size={16} />
+              {t('heroDashboard')} <ArrowRight size={16} />
             </Link>
-            <a
-              href="#how-leads"
+            <Link
+              href="/agent/profile"
               className="inline-flex items-center gap-2 px-6 py-3 border border-border-default hover:border-brand text-text-primary font-semibold rounded-xl transition-colors"
             >
-              {t('ctaHow')}
+              {t('ctaClaim')}
+            </Link>
+            <a href="#how-leads" className="text-sm font-semibold text-text-secondary hover:text-brand transition-colors">
+              {t('ctaHow')} ↓
             </a>
           </div>
+          <p className="text-xs text-text-muted mt-2">{t('heroNote')}</p>
           <p className="text-[13px] text-text-secondary mt-4">
             <span className="font-semibold text-brand-dark">{t('heroMicroLead')}</span> {t('heroMicro')}
           </p>
@@ -107,13 +111,21 @@ export default async function AgentInfoPage() {
       {/* Benefits grid */}
       <div className="grid md:grid-cols-2 gap-5 mb-8">
         {benefits.map(b => (
-          <div key={b.title} className="bg-white rounded-2xl border border-border-default p-6">
+          <Link
+            key={b.title}
+            href={b.href}
+            className="group block bg-white rounded-2xl border border-border-default p-6 hover:border-brand hover:shadow-md transition-all"
+          >
             <div className="w-11 h-11 rounded-xl bg-brand-light flex items-center justify-center mb-4">
               <b.icon size={22} className="text-brand" />
             </div>
             <h3 className="font-bold text-text-primary mb-2">{b.title}</h3>
             <p className="text-sm text-text-secondary leading-relaxed">{b.body}</p>
-          </div>
+            <p className="mt-3 text-xs text-text-muted opacity-70 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">{b.hint}</p>
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-brand group-hover:gap-2 transition-all">
+              {b.link} <ArrowRight size={14} />
+            </span>
+          </Link>
         ))}
       </div>
 

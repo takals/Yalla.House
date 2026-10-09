@@ -17,7 +17,14 @@ export default function robots(): MetadataRoute.Robots {
           '/en/hunter/info',
           '/en/agent/info',
         ],
-        disallow: ['/owner/', '/hunter/', '/agent/', '/admin/', '/api/'],
+        disallow: [
+          '/owner/', '/hunter/', '/agent/', '/admin/', '/api/',
+          // Honeypot paths (lib/security/honeypot.ts). Compliant crawlers read
+          // this and stay away; anything that visits them anyway is ignoring
+          // robots.txt by definition and gets blocked. Keep in sync.
+          '/.env', '/.git/', '/wp-admin', '/wp-login.php', '/phpmyadmin',
+          '/administrator', '/.aws/', '/backup.sql',
+        ],
       },
     ],
     sitemap: 'https://yalla.house/sitemap.xml',

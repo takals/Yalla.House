@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
+import { notifyInvitedAgents } from '@/lib/hunter-agent-invites'
 
 /**
  * POST /api/agents/connect
@@ -48,6 +49,10 @@ export async function POST(request: NextRequest) {
 
   connected = data?.length ?? 0
   failed = agentProfileIds.length - connected
+
+  // Tell the agents. Fire-and-forget: the hunter's response never waits on email,
+  // and the hook is dark until HUNTER_AGENT_INVITE_EMAILS=on (see lib/hunter-agent-invites).
+  void notifyInvitedAgents(user.id, agentProfileIds)
 
   return NextResponse.json({ connected, failed, total: agentProfileIds.length })
 }

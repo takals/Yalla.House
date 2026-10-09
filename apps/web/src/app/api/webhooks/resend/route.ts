@@ -64,6 +64,15 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Inbound enquiry on a contact alias -> inbound_leads (Red Thread rule:
+    // every enquiry from every portal routes through Yalla.House).
+    if (body.type === 'email.received') {
+      const { handleReceivedEmail } = await import('@/lib/inbound/leads')
+      const result = await handleReceivedEmail(body.data as any)
+      if (!result.ok) console.warn('[inbound] not converted:', result.reason)
+      return NextResponse.json({ received: true, ...result })
+    }
+
     const newStatus = STATUS_MAP[body.type]
     if (!newStatus) {
       // Unknown event type — acknowledge but ignore

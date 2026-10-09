@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import { LocaleLink as Link } from '@/components/locale-link'
 import { Home, Search, Briefcase } from 'lucide-react'

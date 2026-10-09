@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
           <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Bedrooms</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">4</td></tr>
         </table>
       </div>
-      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">View Brief & Respond</a>
+      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#E4572E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">View Brief & Respond</a>
       <p style="margin-top:24px;font-size:13px;color:#999;">
         You're receiving this because you're listed as an agent in London SW1A.
       </p>
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
           <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Preferred date</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">Saturday 17 May, 10:00</td></tr>
         </table>
       </div>
-      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">View Request</a>
+      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#E4572E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">View Request</a>
     `
     : audience === 'hunter'
     ? `
@@ -67,14 +67,14 @@ export async function GET(request: NextRequest) {
           <tr><td style="padding:4px 0;color:#5E6278;font-size:14px;">Time</td><td style="padding:4px 0 4px 16px;font-size:14px;font-weight:600;">10:00 AM</td></tr>
         </table>
       </div>
-      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">Add to Calendar</a>
+      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#E4572E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">Add to Calendar</a>
     `
     : `
       <p style="margin:0 0 8px;font-size:16px;color:#0F1117;">Welcome to Yalla.House!</p>
       <p style="margin:0 0 24px;font-size:15px;color:#5E6278;">
         Your account has been created. Start exploring your dashboard to manage your property journey.
       </p>
-      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#D4764E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">Go to Dashboard</a>
+      <a href="#" style="display:inline-block;margin-top:24px;padding:12px 24px;background:#E4572E;color:#ffffff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">Go to Dashboard</a>
     `
 
   const html = emailWrapper(sampleContent, countryCode, audience, locale)

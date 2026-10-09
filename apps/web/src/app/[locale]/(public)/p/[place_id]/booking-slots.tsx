@@ -157,7 +157,7 @@ export function BookingSlots({ listingId, authenticated }: Props) {
             onChange={e => setNotes(e.target.value)}
             placeholder="Any questions or preferences..."
             rows={2}
-            className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#D4764E]/30 resize-none"
+            className="w-full border border-border-default rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#E4572E]/30 resize-none"
           />
           {error && <p className="text-xs text-red-600 mt-2">{error}</p>}
           <button

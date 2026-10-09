@@ -93,7 +93,7 @@ export function OwnerInlineControls({
       {/* Add photos button */}
       <button
         onClick={() => setPhotoModalOpen(true)}
-        className="flex items-center gap-2 text-sm font-semibold text-brand hover:text-[#BF6840] transition-colors mt-2"
+        className="flex items-center gap-2 text-sm font-semibold text-brand hover:text-[#CD4E29] transition-colors mt-2"
       >
         <ImagePlus size={16} />
         {t('addPhotos')}

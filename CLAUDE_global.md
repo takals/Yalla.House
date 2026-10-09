@@ -124,3 +124,130 @@ See `.env.example` at repo root. Required for `apps/web`:
 The `Website/` directory contains the original static HTML/CSS/JS. It is **not** part of the monorepo build — it's a design reference. Do not modify it when working on the Next.js app. The design tokens (brand yellow #FFD400, bg #EDEEF2, surface white, Plus Jakarta Sans) have been ported to `apps/web/tailwind.config.ts`.
 
 The `LandingPage/` directory (Vite + React prototype) has been archived to `_archive/LandingPage/` — it was a standalone experiment not connected to the monorepo build.
+
+## Before starting any code work
+
+**`git fetch origin && git log --oneline main..origin/main` first.** On 6 Sep 2026
+the local checkout was seven weeks stale (main stuck at 19 Jul after a crash left
+`.git/*.lock` files behind) and an hour went into reproducing a fix that had shipped
+upstream on 22 Aug. Compare with `origin/main`, not with what's on disk.
+
+**Never `git reset --hard` or `git checkout -- <file>` on a working tree you did not
+create.** On 6 Sep 2026 a `reset --hard origin/main` discarded uncommitted edits to
+`analytics.tsx` and `scrape-prs/index.ts` with no recovery path. Always
+`git stash push -u -m "pre-<task>"` first; stashes are cheap and reversible.
+
+## Database security conventions
+
+These rules exist because an audit on 25 Jul 2026 found ten `SECURITY DEFINER`
+routines callable by the `anon` role. Anyone holding the public anon key could
+bulk-write agent records or toggle RLS. Do not regress these.
+
+### Routine exposure
+
+Every function in `public` is exposed at `/rest/v1/rpc/<name>` and is executable by
+`PUBLIC` **by default** — Postgres grants this on `CREATE FUNCTION`. Assume any new
+routine is internet-callable until you revoke it. Every routine falls into one bucket:
+
+| Bucket | Grant | Examples |
+|---|---|---|
+| Pipeline / admin / security | `service_role` only | `bulk_insert_agents`, `stage_agents`, `run_enrich_loop`, `record_honeypot_hit`, `check_rate_limit`, `verify_agent_otp`, `issue_contact_alias` |
+| RLS helper | `authenticated` + `service_role`, never `anon` | `is_assigned_agent`, `has_role` |
+| Trigger function | revoke from all — triggers fire regardless | `log_listing_status_change`, `update_provider_rating` |
+
+Template for a new pipeline routine:
+
+```sql
+CREATE OR REPLACE FUNCTION public.my_routine(payload jsonb)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public, pg_temp          -- always pin
+AS $$ ... $$;
+REVOKE ALL ON FUNCTION public.my_routine(jsonb) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.my_routine(jsonb) TO service_role;
+```
+
+**Before revoking anything, check it isn't referenced by an RLS policy.** A policy
+that calls a function requires the querying role to hold `EXECUTE` on it — revoking
+from `authenticated` silently locks users out of the table:
+
+```sql
+SELECT c.relname, pol.polname FROM pg_policy pol JOIN pg_class c ON c.oid = pol.polrelid
+WHERE pg_get_expr(pol.polqual, pol.polrelid) ILIKE '%your_function%';
+```
+
+`is_assigned_agent` backs `listings_agent_read` on `public.listings`. Keep it.
+
+### New tables
+
+Supabase grants `anon`/`authenticated` table privileges on every new `public` table.
+RLS with no policies returns zero rows, but the GRANT still puts the table on the
+PostgREST surface and lets a probe confirm it exists. For service-only tables:
+
+```sql
+ALTER TABLE public.t ENABLE ROW LEVEL SECURITY;         -- no policies
+REVOKE ALL ON TABLE public.t FROM anon, authenticated;   -- belt and braces
+```
+
+Applies to every `security_*` table, `contact_aliases`, `agent_email_otps`,
+`_rls_policy_snapshot`.
+
+### RLS policies
+
+Wrap auth calls: `(select auth.uid())`, never bare `auth.uid()`. Bare calls are
+re-evaluated per row; wrapped ones run once as an InitPlan. All 96 policies were
+converted on 6 Sep; do not add new bare calls. `public._rls_policy_snapshot` holds the
+pre-rewrite definitions and can be dropped once this has been live a few weeks.
+
+### Views
+
+Views run as their creator and bypass the caller's RLS. Create them with
+`ALTER VIEW public.v SET (security_invoker = on)` so table policies apply.
+
+### Edge functions
+
+`verify_jwt: false` means callable by anyone on the internet — with the service role
+key inside. Default to `verify_jwt: true`. `run_enrich_loop` sends a Bearer token from
+Vault (`service_role_key`); once that secret exists, flip every function. Never deploy
+a `debug-*` function to production.
+
+### Middleware and Edge runtime
+
+`@/lib/supabase/server` imports `next/headers` and cannot be used in middleware. Use
+`lib/security/edge-client.ts`. The blocklist cache **fails open** — a Supabase outage
+must never take the site down. Honeypot paths return 404, never 403, and are never
+linked from HTML (prefetch would block real users); they are disallowed in `robots.ts`.
+
+### Verification is not optional
+
+Migrations report success when they did nothing: `REVOKE` by a non-grantor silently
+no-ops, `ALTER VIEW` on another role's view silently no-ops, `pg_class.reltuples` is an
+estimate not a count, and same-statement subqueries cannot see rows a function just
+inserted. Re-query in a **separate statement** after every change. Where possible test
+against a running app, not just SQL — the honeypot escalation race (6 Sep) was
+invisible to sequential simulation and obvious under `next start` + parallel curl.
+
+### Accepted advisor findings — do not "fix" without discussion
+
+- `spatial_ref_sys` RLS disabled / anon writes — PostGIS system table owned by
+  `supabase_admin`; cannot be changed from the `postgres` role. Raised with support.
+  Real fix is moving `postgis` out of `public`, which needs staging because
+  `idx_listings_location` calls `st_point` unqualified.
+- `agent_email_otps` RLS on, no policies — intentional, service_role only.
+- `st_estimatedextent` anon-executable — ships with PostGIS; same fix as above.
+- `unused_index` count — expected until there is traffic.
+
+### Migration log (applied via MCP, not all in `supabase/migrations/`)
+
+| Date | Migration | Purpose |
+|---|---|---|
+| 25 Jul | `harden_security_definer_function_grants` | Revoked anon/authenticated EXECUTE on 8 routines + 2 triggers; pinned search_path on 7 |
+| 25 Jul | `collector_views_security_invoker` | Two collector views enforce caller RLS |
+| 25 Jul | `add_missing_foreign_key_indexes` | 51 FK indexes |
+| 25 Jul | `run_enrich_loop_auth_header_and_tracing` | Bearer token from Vault; captures pg_net request id |
+| 25 Jul | `constrain_inbound_leads_insert_policy` | Public insert limited to safe columns + length caps |
+| 12 Aug | `honeypot_and_ip_blocking` + `security_tables_revoke_anon_grants` | Honeypot hits, escalating time-limited blocks, allowlist |
+| 12 Aug | `rate_limiting` | Atomic fixed-window counters, hashed keys, `escalate_ip_block` |
+| 12 Aug | `atomic_agent_otp_verification` + `hash_agent_otp_codes` | `verify_agent_otp` with FOR UPDATE; codes hashed, legacy fallback |
+| 6 Sep | `contact_aliases_and_mip_capture` | Per-listing-per-portal aliases; MIP fields + referral consent |
+| 6 Sep | `rls_policy_snapshot_before_initplan_rewrite` + `rls_wrap_auth_calls_in_initplan` | 96 policies → InitPlan form, snapshot for rollback |
+| 6 Sep | `fix_honeypot_escalation_race` | TTL derived inside the upsert |

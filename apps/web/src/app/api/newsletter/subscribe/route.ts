@@ -29,7 +29,7 @@ function confirmEmail(locale: string, token: string): { subject: string; html: s
     <div style="font-family:-apple-system,Segoe UI,Roboto,sans-serif;max-width:480px;margin:0 auto;padding:24px;color:#1F2933">
       <h2 style="color:#1F2933;margin:0 0 8px">${heading}</h2>
       <p style="color:#5B6672;margin:0 0 20px">${body}</p>
-      <a href="${link}" style="display:inline-block;background:#D4764E;color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px">${button}</a>
+      <a href="${link}" style="display:inline-block;background:#E4572E;color:#fff;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:10px">${button}</a>
       <p style="color:#9AA3AF;font-size:13px;margin:22px 0 0">${foot}</p>
     </div>`
   return { subject, html }

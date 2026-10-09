@@ -2,6 +2,7 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
+import { ensureContactAlias } from '@/lib/contact-alias'
 import { requireSignedAgreement, type AgreementRequired } from '@/lib/agreements'
 import { emitReferralMilestone } from '@/lib/referrals'
 
@@ -289,6 +290,12 @@ export async function changeStatusAction(
     return { error: 'Error updating status.' }
   }
 
+  // Going live: make sure the listing has its enquiry alias. Idempotent, and
+  // a failure here must never block publishing (it logs and returns null).
+  if (newStatus === 'active') {
+    await ensureContactAlias(id, auth.userId)
+  }
+
   // Credit the referrer only on the first publish, not on every re-activation.
   if (isGoingLive && !existing.published_at) {
     await emitReferralMilestone(auth.userId, 'LISTING_PUBLISHED')
@@ -343,7 +350,10 @@ export async function bulkStatusAction(
       .update(updatePayload)
       .eq('id', listing.id)
 
-    if (!error) successCount++
+    if (!error) {
+      successCount++
+      if (targetStatus === 'active') await ensureContactAlias(listing.id, auth.userId)
+    }
   }
 
   return { success: true, count: successCount }

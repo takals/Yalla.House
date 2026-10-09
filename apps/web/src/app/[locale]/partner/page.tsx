@@ -152,7 +152,7 @@ export default async function PartnerDashboardPage() {
             <span
               className="inline-block w-4 h-4 rounded-full"
               style={{
-                backgroundColor: profileComplete ? '#16A34A' : '#D4764E',
+                backgroundColor: profileComplete ? '#16A34A' : '#E4572E',
               }}
             />
           </p>

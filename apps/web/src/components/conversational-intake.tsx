@@ -431,7 +431,7 @@ export function ConversationalIntake({
                           <CheckCircle2 size={14} className="text-brand" />
                           <button
                             onClick={() => handleEditField(step.id)}
-                            className="text-[10px] font-bold text-brand hover:text-[#BF6840]"
+                            className="text-[10px] font-bold text-brand hover:text-[#CD4E29]"
                           >
                             Edit
                           </button>
@@ -577,7 +577,7 @@ export function ConversationalIntake({
                     <button
                       onClick={handleSelectAll}
                       disabled={isThinking}
-                      className="flex items-center gap-1 text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors disabled:opacity-40"
+                      className="flex items-center gap-1 text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors disabled:opacity-40"
                     >
                       <CheckCheck size={14} /> Select All
                     </button>
@@ -733,7 +733,7 @@ export function ConversationalIntake({
                 onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleSendMessage() } }}
                 placeholder={translations.placeholder}
                 disabled={isThinking}
-                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4764E]/40 focus:border-brand disabled:opacity-40"
+                className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#E4572E]/40 focus:border-brand disabled:opacity-40"
               />
               <button
                 onClick={handleSendMessage}

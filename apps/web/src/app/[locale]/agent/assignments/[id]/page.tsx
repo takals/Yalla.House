@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { PREVIEW_USER_ID } from '@/lib/preview-user'
-import { redirect } from 'next/navigation'
+import { redirect } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { ChevronLeft, Check, X } from 'lucide-react'

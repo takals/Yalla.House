@@ -105,7 +105,7 @@ export function NotificationBell({ initialNotifications, unreadCount, t }: Props
             {notifications.length > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-xs font-semibold text-brand hover:text-[#BF6840] transition-colors"
+                className="text-xs font-semibold text-brand hover:text-[#CD4E29] transition-colors"
               >
                 {tx(t, 'markAllRead')}
               </button>

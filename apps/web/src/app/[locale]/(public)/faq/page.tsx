@@ -126,7 +126,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: st
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212, 118, 78, 0.08), transparent)',
+            background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(228, 87, 46, 0.08), transparent)',
           }}
         />
         <div className="relative max-w-2xl mx-auto text-center">

@@ -119,14 +119,14 @@ export default async function OwnerSettingsPage() {
         >
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
-              <Bell size={16} className="text-[#D4764E]" />
+              <Bell size={16} className="text-[#E4572E]" />
             </div>
             <div>
               <div className="text-sm font-semibold text-text-primary">{t('notifGlobalPrefs')}</div>
               <div className="text-xs text-text-muted">{t('notifGlobalPrefsDesc')}</div>
             </div>
           </div>
-          <ChevronRight size={16} className="text-gray-400 group-hover:text-[#D4764E] transition-colors" />
+          <ChevronRight size={16} className="text-gray-400 group-hover:text-[#E4572E] transition-colors" />
         </Link>
 
         {/* Per-listing template links */}
@@ -162,7 +162,7 @@ export default async function OwnerSettingsPage() {
                   }`}>
                     {ts(listing.status ?? 'draft')}
                   </span>
-                  <ChevronRight size={16} className="text-gray-400 group-hover:text-[#D4764E] transition-colors" />
+                  <ChevronRight size={16} className="text-gray-400 group-hover:text-[#E4572E] transition-colors" />
                 </div>
               </Link>
             ))}

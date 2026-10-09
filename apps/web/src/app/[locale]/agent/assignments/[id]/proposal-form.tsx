@@ -212,7 +212,7 @@ export function ProposalForm({
         disabled={!isValid || submitting}
         className="w-full px-5 py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50"
         style={{
-          backgroundColor: isValid && !submitting ? '#D4764E' : '#E5E7EB',
+          backgroundColor: isValid && !submitting ? '#E4572E' : '#E5E7EB',
           color: isValid && !submitting ? '#FFFFFF' : '#999999',
           cursor: isValid && !submitting ? 'pointer' : 'not-allowed',
         }}

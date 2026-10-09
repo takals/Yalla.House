@@ -49,7 +49,7 @@ function wrap(subject: string, preheader: string, bodyHtml: string): string {
 <body style="margin:0;padding:0;background:#F8FAFC;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1F2933;">
   <span style="display:none!important;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;">${preheader}</span>
   <div style="max-width:560px;margin:40px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-    <div style="background:#D4764E;padding:18px 32px;">
+    <div style="background:#E4572E;padding:18px 32px;">
       <span style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em;">Yalla.House</span>
     </div>
     <div style="padding:32px;line-height:1.55;font-size:15px;color:#1F2933;">
@@ -65,7 +65,7 @@ function wrap(subject: string, preheader: string, bodyHtml: string): string {
 }
 
 function btn(label: string, href: string): string {
-  return `<a href="${href}" style="display:inline-block;margin-top:18px;padding:12px 22px;background:#D4764E;color:#fff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label} →</a>`
+  return `<a href="${href}" style="display:inline-block;margin-top:18px;padding:12px 22px;background:#E4572E;color:#fff;font-weight:700;font-size:14px;text-decoration:none;border-radius:10px;">${label} →</a>`
 }
 
 // ─────── Email content by persona × locale × day ───────

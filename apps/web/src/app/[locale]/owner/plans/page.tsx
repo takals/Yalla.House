@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { Check } from 'lucide-react'
 import { getTranslations, getLocale } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 import { CheckoutButton } from './checkout-button'
 import { countryFromLocale } from '@/lib/detect-country'
 
@@ -32,6 +33,23 @@ export default async function PlansPage({ searchParams }: Props) {
             {t('pageDescription')}
           </p>
         </div>
+
+        {/* No plans for this country yet. subscription_plans only had DE rows on
+            13 Sep 2026; the UK page rendered an empty grid with no explanation.
+            Say so honestly and keep the owner moving — the listing itself is free
+            to create and the price is shown before anything is charged. */}
+        {(plans ?? []).length === 0 && (
+          <div className="mx-auto max-w-xl rounded-2xl border border-border-default bg-surface p-8 text-center">
+            <h2 className="text-lg font-bold text-text-primary">{t('noPlansTitle')}</h2>
+            <p className="mt-2 text-sm text-text-secondary">{t('noPlansBody')}</p>
+            <Link
+              href="/owner/workspace"
+              className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-semibold rounded-lg transition-colors"
+            >
+              {t('noPlansCta')} →
+            </Link>
+          </div>
+        )}
 
         {/* Plan cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
