@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
 
 // Simple in-memory rate limiter for provider registration (anti-spam)
@@ -79,7 +79,10 @@ export async function POST(request: Request) {
         website: website || null,
         accreditation_body: accreditation || null,
         accreditation_ref: accreditationRef || null,
-        status: 'pending',
+        // Listed straight away. 'pending' waited on an approval queue that
+        // does not exist, so a signup was invisible for ever. Verification is
+        // the earned badge (and still gates routed jobs), not the door.
+        status: 'active',
         source: 'self_signup',
       } as Record<string, unknown>)
       .select('id')
@@ -120,7 +123,31 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({ success: true, id: provider?.id })
+    // Send them the magic link that turns this into an account.
+    //
+    // This is the whole point of the change: the form used to end at "your
+    // listing is being reviewed, we'll email you" — no account, no dashboard,
+    // and nothing in the product read the row it had just written. Now the
+    // same submit that registers the business signs them in, and the callback
+    // claims the row, grants the partner role and seeds partner_profiles.
+    let magicLinkSent = false
+    try {
+      const auth = await createClient()
+      const origin = hdrs.get('origin')
+        ?? (hdrs.get('host') ? `https://${hdrs.get('host')}` : 'https://yalla.house')
+      const { error: otpError } = await auth.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${origin}/api/auth/callback?next=%2Fpartner` },
+      })
+      if (otpError) console.error('Provider magic link error:', otpError)
+      else magicLinkSent = true
+    } catch (e) {
+      // The business is registered either way — they can sign in from
+      // /auth/login with the same address and the claim still runs.
+      console.error('Provider magic link failed:', e)
+    }
+
+    return NextResponse.json({ success: true, id: provider?.id, magicLinkSent })
   } catch (err) {
     console.error('Provider registration error:', err)
     return NextResponse.json(

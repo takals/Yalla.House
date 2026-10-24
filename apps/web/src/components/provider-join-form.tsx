@@ -11,6 +11,8 @@ interface Props {
 export function ProviderJoinForm({ categories, translations: t }: Props) {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [magicLinkSent, setMagicLinkSent] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const [form, setForm] = useState({
     businessName: '',
@@ -39,10 +41,18 @@ export function ProviderJoinForm({ categories, translations: t }: Props) {
       })
 
       if (res.ok) {
+        const body = await res.json().catch(() => ({}))
+        // The submit also sends a sign-in link. If that send failed the
+        // business is still registered, so say what to do instead of
+        // pointing at an email that never arrives.
+        setMagicLinkSent(body?.magicLinkSent !== false)
         setSubmitted(true)
+        return
       }
+      const body = await res.json().catch(() => ({}))
+      setError(body?.error || t.errorGeneric || null)
     } catch {
-      // Silently fail for now — we'll add error handling later
+      setError(t.errorGeneric || null)
     } finally {
       setSubmitting(false)
     }
@@ -55,7 +65,9 @@ export function ProviderJoinForm({ categories, translations: t }: Props) {
           <CheckCircle2 size={32} className="text-green-400" />
         </div>
         <h3 className="text-xl font-bold text-white mb-2">{t.successTitle}</h3>
-        <p className="text-sm text-text-on-dark-secondary">{t.successBody}</p>
+        <p className="text-sm text-text-on-dark-secondary max-w-md mx-auto leading-relaxed">
+          {((magicLinkSent ? t.successBody : t.successBodyNoLink) ?? '').replace('{email}', form.email)}
+        </p>
       </div>
     )
   }
@@ -191,6 +203,10 @@ export function ProviderJoinForm({ categories, translations: t }: Props) {
         {submitting && <Loader2 size={16} className="animate-spin" />}
         {submitting ? t.formSubmitting : t.formSubmit}
       </button>
+
+      {error && (
+        <p className="mt-3 text-sm text-red-400 text-center" role="alert">{error}</p>
+      )}
     </form>
   )
 }

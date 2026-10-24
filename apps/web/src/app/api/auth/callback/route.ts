@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import type { Database } from '@/types/database'
 import { upsertHubSpotContact } from '@/lib/hubspot'
 import { inngest } from '@/lib/inngest/client'
+import { claimProviderProfile } from '@/lib/provider-claim'
 
 /** Map the post-login destination onto the role the referral is credited as. */
 function roleFromDestination(destination: string): 'owner' | 'hunter' | 'agent' | 'partner' {
@@ -120,6 +121,11 @@ export async function GET(request: NextRequest) {
         { onConflict: 'id', ignoreDuplicates: false }
       )
 
+      // A provider who signed up at /providers/join has a `providers` row and
+      // nothing else. Claim it now, before roles are read below, so they land
+      // on a dashboard that already knows their services and postcodes.
+      await claimProviderProfile(data.user.id, data.user.email)
+
       // Determine redirect — respect explicit `next` param, otherwise
       // route to the user's highest-priority dashboard based on roles.
       let redirectUrl = next
@@ -149,13 +155,15 @@ export async function GET(request: NextRequest) {
       if (isDefaultRedirect) {
         if (userRoles.length > 0) {
           const roleSet = new Set(userRoles)
-          // Priority: admin > agent > owner > hunter
+          // Priority: admin > agent > owner > partner > hunter
           if (roleSet.has('admin')) {
             redirectUrl = '/admin'
           } else if (roleSet.has('agent')) {
             redirectUrl = '/agent'
           } else if (roleSet.has('owner')) {
             redirectUrl = '/owner'
+          } else if (roleSet.has('partner')) {
+            redirectUrl = '/partner'
           }
           // else stays /hunter (default)
         } else {

@@ -68,7 +68,10 @@ export default async function ProviderJoinPage({ params }: { params: Promise<{ l
     formSubmit: t('formSubmit'),
     formSubmitting: t('formSubmitting'),
     successTitle: t('successTitle'),
-    successBody: t('successBody'),
+    // {email} is filled in client-side — the address is only known there.
+    successBody: t('successBody', { email: '{email}' }),
+    successBodyNoLink: t('successBodyNoLink', { email: '{email}' }),
+    errorGeneric: t('errorGeneric'),
   }
 
   return (

@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { requireAuth } from '@/lib/auth-guard'
 import { revalidatePath } from 'next/cache'
 
@@ -65,6 +65,19 @@ export async function saveCoverageAction(input: {
   if (error) {
     console.error('saveCoverageAction error:', error)
     return { error: 'Could not save that. Please try again.' }
+  }
+
+  // Someone who onboards here rather than through /providers/join never got
+  // the partner role, so /api/service-requests read them as an owner and
+  // returned none of the jobs they had just made themselves eligible for.
+  try {
+    await (createServiceClient().from('user_roles') as any).upsert(
+      { user_id: auth.userId, role: 'partner', is_active: true },
+      { onConflict: 'user_id,role' }
+    )
+  } catch (e) {
+    // Coverage is saved; the role is a separate concern and retried on save.
+    console.error('saveCoverageAction role error:', e)
   }
 
   revalidatePath('/partner')
