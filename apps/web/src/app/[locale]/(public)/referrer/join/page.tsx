@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { Share2, Link2, Trophy, Wallet } from 'lucide-react'
-import { pageAlternates } from '@/lib/seo'
+import { landingMeta } from '@/lib/landing-meta'
 import { JoinButton } from './join-button'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('referrerJoin')
-  return {
-    // The locale layout appends "| Yalla.House" via its title template.
+  return landingMeta({
+    locale: await getLocale(),
+    path: '/referrer/join',
     title: t('heroTitle'),
-    description: t('heroBody'),
-    alternates: pageAlternates(await getLocale(), '/referrer/join'),
-  }
+    description: t('metaDescription'),
+  })
 }
 
 export default async function ReferrerJoinPage() {

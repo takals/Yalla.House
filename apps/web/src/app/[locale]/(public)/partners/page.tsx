@@ -15,6 +15,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: pageAlternates(await getLocale(), '/partners'),
     title: t('metaTitle'),
     description: t('metaDescription'),
+    openGraph: { title: t('metaTitle'), description: t('metaDescription'), type: 'website', images: [{ url: '/og-image.png', width: 1200, height: 630, alt: t('metaTitle') }] },
+    twitter: { card: 'summary_large_image', title: t('metaTitle'), description: t('metaDescription'), images: ['/og-image.png'] },
   }
 }
 
@@ -263,7 +265,7 @@ export default async function PartnersPage({ params }: { params: Promise<{ local
       {/* ── CTA ────────────────────────────────────────────────────── */}
       <section className="relative py-32 px-6 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #D4764E 0%, transparent 70%)' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #E4572E 0%, transparent 70%)' }} />
         </div>
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="text-title-1 text-white leading-tight mb-6">

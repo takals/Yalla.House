@@ -1,0 +1,16 @@
+{
+  "name": "Yalla.House",
+  "short_name": "Yalla.House",
+  "description": "Property technology platform. Free dashboards for owners, home hunters and agents.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D0D0D",
+  "theme_color": "#E4572E",
+  "icons": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ]
+}

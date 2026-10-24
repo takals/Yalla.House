@@ -490,7 +490,7 @@
     "briefStep3Body": "Prüfen Sie die Provision, den Marketingplan und die Portalabdeckung jedes Maklers. Wählen Sie den, der zu Ihnen passt.",
     "addonsTag": "Optionale Zusatzleistungen",
     "addonsTitle": "Professionelle Dienstleistungen, fair bepreist",
-    "addonsSubtitle": "Zahlen Sie nur für das, was Sie brauchen. Jede Zusatzleistung ist optional und wird über Ihr Dashboard gebucht.",
+    "addonsSubtitle": "Optional, auf Anfrage. Sagen Sie uns, was Sie brauchen, und wir vermitteln einen unabhängigen lokalen Anbieter, der vor der Buchung ein Angebot macht — nichts wird im Voraus berechnet.",
     "addon1Title": "Professionelle Fotografie",
     "addon1Desc": "Hochwertige Innen- und Außenfotos von einem lokalen professionellen Fotografen.",
     "addon1Price": "ab 149 €",
@@ -503,7 +503,7 @@
     "addon4Title": "Premium-Listing-Boost",
     "addon4Desc": "Hervorgehobene Platzierung und Social-Media-Promotion für mehr Sichtbarkeit.",
     "addon4Price": "ab 49 €",
-    "addonsNote": "Alle Preise inkl. MwSt. Leistungen werden von geprüften lokalen Fachleuten erbracht.",
+    "addonsNote": "Die angezeigten Preise sind Richtwerte des jeweiligen Anbieters und werden vor der Buchung bestätigt. Yalla.House berechnet keine Umsatzsteuer (nicht umsatzsteuerpflichtig). Leistungen werden von unabhängigen lokalen Fachleuten erbracht.",
     "comparisonTitle": "Traditioneller Makler vs. Yalla",
     "compTraditional": "Traditioneller Makler",
     "compYalla": "Yalla.House",
@@ -529,41 +529,41 @@
     "tabAgent": "Makler",
     "tabPartner": "Partner",
     "ownerStarterName": "Starter",
-    "ownerStarterPrice": "€0",
-    "ownerStarterFreq": "kostenlos",
-    "ownerStarterDesc": "Perfekt zum Ausprobieren — listen Sie Ihre Immobilie und verwalten Sie alles selbst.",
+    "ownerStarterPrice": "0 €",
+    "ownerStarterFreq": "für immer kostenlos",
+    "ownerStarterDesc": "Auf kostenlosen Kanälen inserieren, Live-Dashboard und Makler-Angebote erhalten. Keine Provision, nie.",
     "ownerStarterCta": "Kostenlos starten",
-    "ownerStarterF1": "Eine Immobilie listen",
-    "ownerStarterF2": "Eigene Fotos & Beschreibung",
-    "ownerStarterF3": "KI-Beschreibungsgenerator",
-    "ownerStarterF4": "Besichtigungs-Kalender",
-    "ownerStarterF5": "Nachrichten-Posteingang",
-    "ownerStarterF6": "Basis-Analytics",
+    "ownerStarterF1": "Inserieren auf kostenlosen Kanälen",
+    "ownerStarterF2": "Eigentümer-Dashboard mit Live-Statistiken",
+    "ownerStarterF3": "Makler-Angebote erhalten",
+    "ownerStarterF4": "Posteingang & Nachrichten",
+    "ownerStarterF5": "KI-Inseratsbeschreibung",
+    "ownerStarterF6": "Handwerker-Marktplatz",
     "ownerProBadge": "Beliebt",
-    "ownerProName": "Professional",
-    "ownerProPrice": "€49",
-    "ownerProFreq": "einmalig",
-    "ownerProDesc": "Alles aus Starter plus Portal-Listung und Makler-Netzwerk.",
-    "ownerProCta": "Professional wählen",
+    "ownerProName": "Sell Smart",
+    "ownerProPrice": "19 €",
+    "ownerProFreq": "/Monat — kündbar nach Abschluss",
+    "ownerProDesc": "Alles aus Starter plus die Werkzeuge für den aktiven Verkauf.",
+    "ownerProCta": "Sell Smart wählen",
     "ownerProF1": "Alles aus Starter",
-    "ownerProF2": "Listung auf großen Portalen",
-    "ownerProF3": "Makler-Netzwerk-Zugang",
-    "ownerProF4": "Angebots-Vergleich",
-    "ownerProF5": "Grundriss-Upload",
-    "ownerProF6": "Prioritäts-Support",
-    "ownerProF7": "Branding-freie Exposés",
-    "ownerCompleteName": "Komplett",
-    "ownerCompletePrice": "€149",
-    "ownerCompleteFreq": "einmalig",
-    "ownerCompleteDesc": "Full-Service ohne Provision — wir kümmern uns um alles.",
-    "ownerCompleteCta": "Komplett wählen",
-    "ownerCompleteF1": "Alles aus Professional",
-    "ownerCompleteF2": "Professionelle Fotografie",
-    "ownerCompleteF3": "Virtuelle 360° Tour",
-    "ownerCompleteF4": "Energieausweis-Service",
-    "ownerCompleteF5": "Verhandlungsberatung",
-    "ownerCompleteF6": "Notartermin-Koordination",
-    "ownerCompleteF7": "Persönlicher Ansprechpartner",
+    "ownerProF2": "Besichtigungskalender & Auto-Buchung",
+    "ownerProF3": "Online-Besichtigungstour (3D-Rundgang)",
+    "ownerProF4": "Wöchentliche lokale Marktdaten",
+    "ownerProF5": "Automatisierte Käufer-Nachfassungen",
+    "ownerProF6": "Angebotsvergleich-Dashboard",
+    "ownerProF7": "Dokumentenablage & Freigabe",
+    "ownerCompleteName": "Home Passport",
+    "ownerCompletePrice": "5 €",
+    "ownerCompleteFreq": "/Monat — Ihr Zuhause, betreut",
+    "ownerCompleteDesc": "Laufende Haus-Verwaltung nach dem Verkauf — oder für das Zuhause, das Sie behalten.",
+    "ownerCompleteCta": "Home Passport wählen",
+    "ownerCompleteF1": "Reinigung, Garten & Handwerker buchen",
+    "ownerCompleteF2": "Abwesenheitsmodus: Haus-Checks, Tier- & Pflanzenpflege",
+    "ownerCompleteF3": "Monatlicher Preisindex für Ihre Gegend",
+    "ownerCompleteF4": "Wartungsplaner & Erinnerungen",
+    "ownerCompleteF5": "Alle Immobiliendokumente an einem Ort",
+    "ownerCompleteF6": "Geprüfte lokale Dienstleister",
+    "ownerCompleteF7": "Energieausweis- & Versicherungs-Erinnerungen",
     "ownerNotSure": "Nicht sicher, welcher Plan?",
     "ownerTalkToUs": "Sprechen Sie mit uns",
     "ownerTalkSuffix": "— wir helfen Ihnen bei der Auswahl.",
@@ -874,7 +874,7 @@
   },
   "ownerAgentSearch": {
     "pageTitle": "Makler in Ihrer Nähe finden",
-    "pageDescription": "Durchsuchen Sie 17.000+ verifizierte Immobilienmakler nach Postleitzahl. Vergleichen, auswählen und einladen.",
+    "pageDescription": "Durchsuchen Sie 44.000+ verifizierte Immobilienmakler nach Postleitzahl. Vergleichen, auswählen und einladen.",
     "searchPlaceholder": "Postleitzahl eingeben (z.B. IG2 6PX)",
     "searchButton": "Suchen",
     "searching": "Suche läuft…",
@@ -889,7 +889,7 @@
     "invalidPostcode": "Ungültiges Postleitzahlformat",
     "invalidPostcodeHint": "Bitte geben Sie eine gültige UK-Postleitzahl ein, z.B. IG2 6PX, SW1A 1AA oder einen Teilcode wie E1.",
     "enterPostcodePrompt": "Postleitzahl eingeben, um Makler zu finden",
-    "enterPostcodeHint": "Wir durchsuchen unsere Datenbank mit 17.000+ UK-Immobilienmaklern und zeigen Ihnen die besten Treffer für Ihr Gebiet.",
+    "enterPostcodeHint": "Wir durchsuchen unsere Datenbank mit 44.000+ UK-Immobilienmaklern und zeigen Ihnen die besten Treffer für Ihr Gebiet.",
     "verifiedBadge": "Verifiziert",
     "matchScoreLabel": "Übereinstimmung",
     "serviceTypesLabel": "Dienstleistungen",
@@ -1161,6 +1161,9 @@
     "propertyDetails": "Objektdetails"
   },
   "ownerPlans": {
+    "noPlansTitle": "Preise für Ihr Land werden gerade festgelegt",
+    "noPlansBody": "Sie können Ihre Immobilie jetzt kostenlos anlegen und speichern. Bezahlte Pakete – Portale, Fotos, Extras – zeigen hier ihren Preis, bevor Sie sich für etwas entscheiden.",
+    "noPlansCta": "Inserat starten",
     "pageTitle": "Tarife & Preise",
     "pageDescription": "Wählen Sie den passenden Tarif.",
     "badgeRecommended": "Empfohlen",
@@ -1378,6 +1381,21 @@
     "moreListings": "Mehr Immobilien durchsuchen →"
   },
   "hunterAgents": {
+    "suggestedTitle": "{n} Makler decken Ihre Gegenden ab",
+    "suggestedDesc": "Passend zu den Gegenden in Ihrem Passport. Wählen Sie aus, wer Ihr Briefing bekommt – nicht Ihre Telefonnummer.",
+    "selectAll": "Alle auswählen",
+    "clearAll": "Zurücksetzen",
+    "verified": "Verifiziert",
+    "matchedIn": "Deckt {areas} ab",
+    "sendBriefTo": "Briefing an {n} Makler senden",
+    "sendBriefSignIn": "Anmelden, um das Briefing zu senden",
+    "suggestedNote": "Makler antworten in Ihrem Posteingang. Sie können jeden jederzeit pausieren oder trennen.",
+    "suggestedSent": "Briefing an {n} Makler gesendet",
+    "suggestedSentDesc": "Antworten landen in Ihrem Posteingang. Oben erscheinen sie, sobald sie reagieren.",
+    "suggestedError": "Senden fehlgeschlagen. Bitte erneut versuchen.",
+    "noAreasTitle": "Noch keine Treffer",
+    "noAreasDesc": "Tragen Sie Ihre Suchgegenden im Passport ein, dann zeigen wir Makler, die sie abdecken.",
+    "noAreasCta": "Passport vervollständigen",
     "title": "Verbundene Makler",
     "subtitle": "Verwalte deine Verbindungen mit lokalen Immobilienmaklern",
     "connected": "Verbunden",
@@ -1604,7 +1622,7 @@
     "focusBoth": "Verkauf & Vermietung",
     "focusRent": "Vermietung",
     "focusSale": "Verkauf",
-    "viewAllAgents": "Alle 17.000+ Makler anzeigen →",
+    "viewAllAgents": "Alle 44.000+ Makler anzeigen →",
     "areaCashBuyer": "Barzahler",
     "areaMortgageApproved": "Finanzierungszusage",
     "areaMortgagePending": "Finanzierung läuft",
@@ -1736,7 +1754,7 @@
     "savedMessage": "Dein Home Passport ist gespeichert! Wir matchen dich jetzt mit Maklern in deiner Gegend.",
     "spreadTheWord": "Weitersagen",
     "spreadTheWordDesc": "Hilf uns zu wachsen und anderen, gute Makler ohne Provision zu finden.",
-    "shareText": "Ich habe gerade meinen Home Passport auf @YallaHouse erstellt — 17.000+ verifizierte Makler, null Provision. Schau mal rein!",
+    "shareText": "Ich habe gerade meinen Home Passport auf @YallaHouse erstellt — 44.000+ verifizierte Makler, null Provision. Schau mal rein!",
     "continueWithCount": "Weiter mit {count} ausgewählt",
     "continueWithPreferences": "Weiter mit {count} Präferenzen",
     "skipNoPreferences": "Überspringen — keine Präferenzen"
@@ -1824,7 +1842,136 @@
     "q_website": "Wie lautet die Website deiner Agentur?",
     "hint_website": "z. B. www.mueller-immobilien.de – hilft uns bei der Verifizierung und Zuordnung von Angeboten."
   },
+  "hunterVerification": {
+    "title": "Finanzierung nachweisen",
+    "intro": "Fügen Sie Ihre Finanzierungsbestätigung hinzu. Verkäufer bevorzugen Käufer, die ihre Bereitschaft belegen können.",
+    "lender": "Bank / Kreditgeber",
+    "lenderPlaceholder": "z. B. Sparkasse",
+    "amount": "Bestätigter Betrag",
+    "currency": "Währung",
+    "issuedAt": "Ausgestellt am",
+    "expiresAt": "Gültig bis",
+    "document": "Finanzierungsbestätigung (PDF oder Bild)",
+    "documentHint": "Privat gespeichert. Nur Sie und unser Prüfteam können sie sehen.",
+    "uploading": "Wird hochgeladen…",
+    "documentAttached": "Dokument angehängt",
+    "documentVerified": "Dokument geprüft",
+    "consentTitle": "Einen Finanzierungspartner vorstellen",
+    "consentBody": "Optional. Wir dürfen Ihre Angaben an einen regulierten Finanzierungsvermittler weitergeben, der Konditionen für Sie vergleicht. Jederzeit widerrufbar.",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "saved": "Gespeichert.",
+    "err_lenderRequired": "Bitte Bank angeben.",
+    "err_amountInvalid": "Bitte einen gültigen Betrag eingeben.",
+    "err_currencyInvalid": "Währung nicht unterstützt.",
+    "err_datesInvalid": "Das Ablaufdatum liegt vor dem Ausstellungsdatum.",
+    "err_documentInvalid": "Das Dokument konnte Ihrem Konto nicht zugeordnet werden.",
+    "err_saveFailed": "Speichern fehlgeschlagen. Bitte erneut versuchen.",
+    "errTooLarge": "Datei ist größer als 10 MB.",
+    "errUploadFailed": "Upload fehlgeschlagen. Bitte erneut versuchen.",
+    "privacyNote": "Ihre Finanzangaben dienen dem Nachweis Ihrer Kaufbereitschaft und, nur mit Ihrer Zustimmung, der Vorstellung bei einem Finanzierungspartner. Sie erscheinen nie in Ihrem öffentlichen Profil."
+  },
+  "tour": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "skip": "Tour überspringen",
+    "done": "Verstanden",
+    "progress": "{n} von {total}",
+    "owner": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Schauen Sie sich erst einmal um. Ein Konto brauchen Sie erst, wenn Sie etwas speichern."
+      },
+      "workspace": {
+        "title": "Immobilie anlegen",
+        "body": "Details, Fotos und Preis eintragen, dann speichern. Beim Speichern bitten wir Sie um eine Anmeldung – eine E-Mail genügt."
+      },
+      "listings": {
+        "title": "Hier leben Ihre Inserate",
+        "body": "Entwürfe, aktive Inserate und die Anfragen dazu. Jede Anfrage von jedem Kanal landet in einem Posteingang."
+      },
+      "calendar": {
+        "title": "Besichtigungen zu Ihren Zeiten",
+        "body": "Tragen Sie ein, wann Sie können. Interessenten buchen in diese Slots, Sie bekommen eine Bestätigung – keinen Anruf beim Abendessen."
+      },
+      "plans": {
+        "title": "Der Einstieg ist kostenlos",
+        "body": "Immobilie anlegen und speichern kostet nichts. Bezahlte Pakete – Portale, Fotos, Extras – sind optional und zeigen den Preis, bevor Sie sich entscheiden."
+      }
+    },
+    "hunter": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Stöbern Sie frei. Ein Konto brauchen Sie erst für eine Besichtigung oder ein Angebot."
+      },
+      "search": {
+        "title": "Objekte finden",
+        "body": "Nach Gegend, Budget und Typ suchen. Die Inserate kommen direkt von Eigentümern, ohne Makler dazwischen."
+      },
+      "passport": {
+        "title": "Ihr Passport",
+        "body": "Einmal sagen, was Sie suchen. Das erspart Wiederholungen, und Eigentümer sehen, dass Sie es ernst meinen."
+      },
+      "viewings": {
+        "title": "Direkt Besichtigungen buchen",
+        "body": "Einen freien Slot des Eigentümers wählen. Bestätigung und Erinnerung kommen per Nachricht."
+      },
+      "inbox": {
+        "title": "Alles in einem Posteingang",
+        "body": "Antworten von Eigentümern, Besichtigungsbestätigungen und Updates – an einem Ort."
+      }
+    },
+    "agent": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Ihre Aufträge, Briefings und Nachrichten. Umsehen ist unverbindlich."
+      },
+      "assignments": {
+        "title": "Ihre Aufträge",
+        "body": "Inserate, bei denen Eigentümer Unterstützung wünschen. Nehmen Sie an, was zu Ihrem Gebiet passt."
+      },
+      "briefs": {
+        "title": "Briefings von Eigentümern",
+        "body": "Eigentümer beschreiben, was sie brauchen; Sie antworten mit Leistung und Preis. Keine Prozentgebühren."
+      },
+      "profile": {
+        "title": "Profil vervollständigen",
+        "body": "Einzugsgebiet, Leistungen und Verifizierung. Ein vollständiges Profil sehen Eigentümer zuerst."
+      }
+    },
+    "partner": {
+      "welcome": {
+        "title": "Das ist Ihr Dashboard",
+        "body": "Serviceanfragen von Eigentümern und Suchenden in Ihrer Gegend erscheinen hier."
+      },
+      "requests": {
+        "title": "Anfragen",
+        "body": "Bieten Sie auf die, die Sie wollen. Eigentümer und Suchende vergleichen und wählen – das Anschauen kostet Sie nichts."
+      }
+    }
+  },
+  "hunterPassportNext": {
+    "title": "Ihr Passport ist gespeichert",
+    "intro": "Das schaltet er frei. Wählen Sie, wie es weitergeht – jede Antwort lässt sich später ändern.",
+    "agentsTitle": "Makler in Ihren Gegenden",
+    "agentsBody": "Senden Sie Ihr Briefing an die, die Sie auswählen. Antworten kommen in Ihren Posteingang.",
+    "searchTitle": "Objekte suchen",
+    "searchBody": "Inserate direkt von Eigentümern, gefiltert nach Ihren Angaben.",
+    "verifyTitle": "Finanzierung nachweisen",
+    "verifyBody": "Finanzierungsbestätigung hinzufügen. Verkäufer reagieren schneller auf vorbereitete Käufer.",
+    "editNote": "Antworten lassen sich jederzeit im Passport ändern."
+  },
+  "hunterPassportMode": {
+    "label": "Ausfüllen per",
+    "chat": "Chat",
+    "form": "Formular"
+  },
   "ownerDashboard": {
+    "contactAlias": {
+      "title": "Anfrage-Adresse",
+      "body": "Portale zeigen diese Adresse statt Ihrer E-Mail oder Telefonnummer. Jede Anfrage von jedem Portal landet in Ihrem Yalla.House-Posteingang, mit Herkunft.",
+      "pending": "Wird automatisch vergeben, sobald das Inserat live geht."
+    },
     "viewings": {
       "pending": "Ausstehend",
       "confirmed": "Bestätigt",
@@ -2023,6 +2170,7 @@
     "readinessHigh": "Bereit zum Umzug",
     "readinessMedium": "Auf gutem Weg",
     "readinessLow": "Gerade erst angefangen",
+    "addMortgageProof": "Finanzierung nachweisen",
     "boostReadiness": "Score verbessern",
     "earlyAccess": "Frühzugang",
     "earlyAccessPriority": "Priority-Zugang",
@@ -2925,6 +3073,22 @@
     "navDeals": "Deals"
   },
   "ownerInfo": {
+    "heroPrimary": "Dashboard öffnen",
+    "heroSecondary": "Inserat anlegen",
+    "heroNote": "Zum Umsehen keine Anmeldung nötig. Anmelden erst beim Speichern.",
+    "benefit1Link": "Inserat starten",
+    "benefit2Link": "Makler vor Ort ansehen",
+    "benefit3Link": "Inserate öffnen",
+    "benefit4Link": "Kalender einrichten",
+    "benefit5Link": "Anfragen ansehen",
+    "benefit6Link": "Preise ansehen",
+    "benefit1Hint": "Im Workspace: Adresse, Fotos, Preis. Speichern, wenn Sie so weit sind – dann bitten wir um Anmeldung.",
+    "benefit2Hint": "Unter Makler: lokale Makler, die den Auftrag wollen. Sie wählen – oder niemanden.",
+    "benefit3Hint": "Unter Inserate: Aufrufe, Anfragen und Besichtigungen pro Objekt, in Echtzeit.",
+    "benefit4Hint": "Im Kalender: freie Slots eintragen. Interessenten buchen, Sie bekommen eine Bestätigung.",
+    "benefit5Hint": "Unter Inserate: jede Anfrage von jedem Kanal, beim jeweiligen Objekt.",
+    "benefit6Hint": "Unter Pakete: feste Preise, vorab sichtbar. Nie ein Prozentsatz Ihres Verkaufspreises.",
+    "ctaSecondary": "Oder erst einmal im Dashboard umsehen",
     "pageTitle": "Eigentümer-Dashboard",
     "tabInfo": "Info",
     "heroTitle": "Ihre Immobilie. Volle Transparenz. Keine Provision.",
@@ -2932,7 +3096,7 @@
     "benefit1Title": "Kostenlos inserieren",
     "benefit1Body": "Fotos hochladen, Preis setzen, Beschreibung mit KI-Hilfe verfassen. Ihr Inserat erscheint auf kostenlosen Kanälen — OpenRent, Gumtree, Facebook Marketplace. Keine Vorabkosten, keine Provision.",
     "benefit2Title": "Makler kommen zu Ihnen — wenn Sie wollen",
-    "benefit2Body": "Über 17.000 verifizierte UK-Makler können Ihr Inserat sehen. Interessierte senden Ihnen einen Vorschlag. Sie vergleichen und wählen — oder machen alles selbst.",
+    "benefit2Body": "Über 44.000 verifizierte UK-Makler können Ihr Inserat sehen. Interessierte senden Ihnen einen Vorschlag. Sie vergleichen und wählen — oder machen alles selbst.",
     "benefit3Title": "Alles in Echtzeit sehen",
     "benefit3Body": "Ihr Dashboard zeigt Live-Daten: Aufrufe, Besichtigungsanfragen, Makler-Antworten und Angebotsstatus. Alles sofort sichtbar.",
     "benefit4Title": "Besichtigungen ohne Telefon-Ping-Pong",
@@ -2964,13 +3128,13 @@
     "sellSmartEverythingInStarter": "Alles aus Starter",
     "sellSmartViewingCalendar": "Besichtigungskalender & Auto-Buchung",
     "sellSmartOnlineTour": "Online-Besichtigungstour (3D-Rundgang)",
-    "sellSmartMarketCheck": "Wöchentlicher Marktpreischeck",
+    "sellSmartMarketCheck": "Wöchentliche lokale Marktdaten",
     "sellSmartBuyerFollowups": "Automatische Käufer-Follow-ups",
     "sellSmartOfferComparison": "Angebotsvergleichs-Dashboard",
     "sellSmartDocumentStorage": "Dokumentenspeicher & Sharing",
     "homePassportCleaners": "Reinigung, Gärtner & Handwerker buchen",
     "homePassportAwayMode": "Abwesend: Haus-Checks, Tier- & Pflanzenpflege",
-    "homePassportValueTracker": "Monatlicher Immobilienwert-Tracker",
+    "homePassportValueTracker": "Monatlicher Preisindex für Ihre Gegend",
     "homePassportMaintenance": "Wartungsplaner & Erinnerungen",
     "homePassportDocuments": "Alle Dokumente an einem Ort",
     "homePassportVerifiedProviders": "Verifizierte lokale Dienstleister",
@@ -2988,7 +3152,7 @@
     "tabAgent": "Makler",
     "tabPartner": "Partner",
     "ownerStarterName": "Starter",
-    "ownerStarterPrice": "£199",
+    "ownerStarterPrice": "",
     "ownerStarterFreq": "einmalig",
     "ownerStarterDesc": "Alles, was Sie brauchen, um inseriert zu werden und Ihren Verkauf selbst zu verwalten.",
     "ownerStarterF1": "Rightmove & Zoopla Inserat",
@@ -3000,7 +3164,7 @@
     "ownerStarterCta": "Jetzt starten",
     "ownerProName": "Professional",
     "ownerProBadge": "Beliebteste Wahl",
-    "ownerProPrice": "£499",
+    "ownerProPrice": "",
     "ownerProFreq": "einmalig",
     "ownerProDesc": "Professionelle Medien und Portalpräsenz für das beste Ergebnis.",
     "ownerProF1": "Alles aus Starter",
@@ -3012,7 +3176,7 @@
     "ownerProF7": "Prioritäts-Support (2h SLA)",
     "ownerProCta": "Jetzt starten",
     "ownerCompleteName": "Complete",
-    "ownerCompletePrice": "£899",
+    "ownerCompletePrice": "",
     "ownerCompleteFreq": "einmalig",
     "ownerCompleteDesc": "Vollservice — alles erledigt, von Medien bis zum rechtlichen Abschluss.",
     "ownerCompleteF1": "Alles aus Professional",
@@ -3080,7 +3244,8 @@
     "perMonth": "/Mo",
     "ctaTitle": "Inserieren Sie kostenlos",
     "ctaBody": "Inserat in 5 Minuten erstellen. Keine Kreditkarte, keine Provision, keine Verträge.",
-    "ctaButton": "Inserat erstellen"
+    "ctaButton": "Inserat erstellen",
+    "metaDescription": "Kostenloses Eigentümer-Dashboard mit lokalen Vergleichsverkäufen, Besichtigungen und Angeboten an einem Ort. Privat verkaufen oder Makler um Ihren Auftrag konkurrieren lassen — ohne Provision."
   },
   "agentBriefs": {
     "pageTitle": "Suchanfragen",
@@ -3643,7 +3808,7 @@
     "ctaButton": "Als Anbieter beitreten",
     "mortgageTitle": "Hypothek benötigt?",
     "mortgageBody": "Werden Sie mit einem FCA-autorisierten Makler verbunden, der das beste Angebot für Sie findet. Kostenlos und unverbindlich.",
-    "mortgageCta": "Hypothekenberatung erhalten",
+    "mortgageCta": "FCA-zugelassenen Makler finden",
     "searchPlaceholder": "Dienste suchen…"
   },
   "marketplaceCategory": {
@@ -3675,10 +3840,10 @@
     "heroSubtitle": "Listen Sie Ihre Dienste kostenlos. Erhalten Sie qualifizierte Anfragen von Immobilieneigentümern und Suchenden in Ihrer Nähe.",
     "step1Title": "Profil erstellen",
     "step1Body": "Erzählen Sie uns von Ihrem Unternehmen, Ihren Dienstleistungen und den Gebieten, die Sie abdecken.",
-    "step2Title": "E-Mail bestätigen",
-    "step2Body": "Klicken Sie auf den Link, den wir Ihnen senden. Ihr Profil geht sofort live im Marktplatz — kein Warten auf eine Freigabe-Warteschlange.",
+    "step2Title": "Verifizierung",
+    "step2Body": "Wir überprüfen Ihre Akkreditierungen und schalten Ihr Profil auf dem Marktplatz frei.",
     "step3Title": "Anfragen erhalten",
-    "step3Body": "Angebotsanfragen von Eigentümern in Ihren Postleitzahlgebieten landen in Ihrem Dashboard. Sie antworten, kalkulieren und gewinnen den Auftrag.",
+    "step3Body": "Qualifizierte Angebotsanfragen kommen in Ihr Dashboard. Sie antworten, bieten an und gewinnen den Auftrag.",
     "benefitsTitle": "Warum auf Yalla.House listen?",
     "benefit1Title": "Kostenloser Eintrag",
     "benefit1Body": "Ihr Profil ist kostenlos zu erstellen und zu pflegen. Keine Anmeldegebühren, keine monatlichen Kosten.",
@@ -3699,13 +3864,11 @@
     "formAccreditationRef": "Registrierungs-/Mitgliedsnummer",
     "formSubmit": "Kostenlosen Eintrag erstellen",
     "formSubmitting": "Eintrag wird erstellt…",
-    "successTitle": "Prüfen Sie Ihr Postfach",
-    "successBody": "Wir haben einen Anmelde-Link an {email} geschickt. Ein Klick und Ihr Anbieter-Dashboard ist bereit — mit den Leistungen und Gebieten, die Sie gerade angegeben haben.",
+    "successTitle": "Sie sind dabei!",
+    "successBody": "Ihr Eintrag wird überprüft. Wir senden Ihnen eine E-Mail, wenn er online ist.",
     "claimTitle": "Eintrag beanspruchen",
     "claimBody": "Wir haben Ihr Unternehmen in einem öffentlichen Verzeichnis gefunden. Beanspruchen Sie es, um Preise, Portfolio und Anfragen zu erhalten.",
-    "claimCta": "Beanspruchen & Verifizieren",
-    "successBodyNoLink": "Ihr Unternehmen ist registriert. Melden Sie sich mit {email} über die Login-Seite an; Ihr Dashboard wartet schon, mit den Leistungen und Gebieten, die Sie gerade angegeben haben.",
-    "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    "claimCta": "Beanspruchen & Verifizieren"
   },
   "ownerAnalytics": {
     "title": "Listing-Analysen",
@@ -3904,6 +4067,24 @@
     "proTipText": "Upgrade auf „Premium“ für automatisches Veröffentlichen und Reposting auf allen Kanälen."
   },
   "hunterInfo": {
+    "benefit1Hint": "Unter Makler: sehen, wer Ihre Gegend abdeckt. Ihre Daten bekommen sie nur, wenn Sie es wollen.",
+    "benefit2Hint": "Unter Suche: nach Gegend, Budget und Typ filtern. Erst beim Merken eines Inserats wird nach Anmeldung gefragt.",
+    "benefit3Hint": "Unter Makler: das ganze Register mit Gebiet und Leistungen. Stöbern ohne Konto.",
+    "benefit4Hint": "Im Posteingang: ein Verlauf pro Objekt – Antworten, Besichtigungsbestätigungen, Updates.",
+    "benefit5Hint": "Im Passport: Präferenzen einmal festlegen. Suche und Vorschläge nutzen sie ab dann.",
+    "benefit6Hint": "Ihr Dashboard ist kostenlos. Optionale Extras zeigen den Preis, bevor Sie sich entscheiden.",
+    "heroPrimary": "Dashboard öffnen",
+    "heroSecondary": "Passport erstellen",
+    "heroNote": "Zum Umsehen keine Anmeldung nötig. Anmelden erst beim Speichern oder Buchen.",
+    "benefit1Link": "Makler kennenlernen",
+    "benefit2Link": "Suche ausprobieren",
+    "benefit3Link": "Makler durchstöbern",
+    "benefit4Link": "Posteingang ansehen",
+    "benefit5Link": "Präferenzen festlegen",
+    "benefit6Link": "Dashboard öffnen",
+    "readinessCtaVerify": "Finanzierung nachweisen",
+    "readinessCtaPassport": "Passport vervollständigen",
+    "ctaSecondary": "Oder erst einmal im Dashboard umsehen",
     "pageTitle": "Suchenden-Dashboard",
     "tabInfo": "Info",
     "tabDashboard": "Dashboard",
@@ -3918,7 +4099,7 @@
     "benefit1Body": "Wenn Sie Ihren Passport speichern, sehen Makler in Ihrem Zielgebiet Ihre Anfrage und antworten mit relevanten Immobilien. Sie wählen, mit wem Sie arbeiten möchten.",
     "benefit2Title": "Alle Angebote durchsuchen",
     "benefit2Body": "Immobilien aus kostenlosen Kanälen und unseren Partner-Maklern an einem Ort durchsuchen. Filtern, Suchen speichern und benachrichtigt werden.",
-    "benefit3Title": "17.000+ registrierte Makler",
+    "benefit3Title": "44.000+ registrierte Makler",
     "benefit3Body": "Unser Makler-Verzeichnis deckt über 100 Postleitzahlgebiete ab. Jeder Makler hat ein Profil. Wir expandieren laufend in neue Märkte.",
     "benefit4Title": "Alle Gespräche in einem Posteingang",
     "benefit4Body": "Nachrichten von Maklern, Immobilien-Benachrichtigungen, Besichtigungsbestätigungen — alles in einem Posteingang.",
@@ -3963,9 +4144,24 @@
     "comingSoonBody": "Gemeinsame Wohnungssuche — suchen Sie zusammen mit Freunden oder Mitbewohnern (Beta). Wohngemeinschafts-Matching.",
     "ctaTitle": "Erstellen Sie Ihren Home Passport",
     "ctaBody": "Sagen Sie uns, was Sie suchen. Dauert 2 Minuten. Makler beginnen innerhalb von Stunden mit dem Matching.",
-    "ctaButton": "Passport starten"
+    "ctaButton": "Passport starten",
+    "metaDescription": "Erstellen Sie einmal Ihren Home Passport und passende lokale Makler bringen Ihnen relevante Immobilien. Inserate durchsuchen, Vergleichsverkäufe sehen, Besichtigungen verwalten — kostenlos."
   },
   "agentInfo": {
+    "heroDashboard": "Dashboard öffnen",
+    "heroNote": "Zum Umsehen keine Anmeldung nötig. Anmelden erst beim Übernehmen des Profils oder eines Auftrags.",
+    "benefit1Link": "Kalender öffnen",
+    "benefit2Link": "Posteingang ansehen",
+    "benefit3Link": "Suchende ansehen",
+    "benefit4Link": "Export-Einstellungen",
+    "benefit5Link": "Aufträge ansehen",
+    "benefit6Link": "Profil einrichten",
+    "benefit1Hint": "Im Kalender: Ihre Verfügbarkeit, deren Buchungen, kein Hin und Her.",
+    "benefit2Hint": "Im Posteingang: Suchende, Eigentümer und Besichtigungen an einem Ort.",
+    "benefit3Hint": "Unter Suchende: Käufer mit Passport und, falls hinterlegt, geprüfter Finanzierung.",
+    "benefit4Hint": "In den Einstellungen: Kontakte jederzeit exportieren. Ihre Daten bleiben Ihre.",
+    "benefit5Hint": "Unter Aufträge: was zu tun ist, der Reihe nach. Nichts wartet auf einen Anruf.",
+    "benefit6Hint": "Im Profil: Ihr Name, Ihr Gebiet, Ihre Bewertungen – das sehen Eigentümer zuerst.",
     "pageTitle": "Makler-Dashboard",
     "metaTitle": "Für Makler — kostenlose Leads, weniger Verwaltung",
     "h1Title": "Yalla.House für Makler",
@@ -4066,14 +4262,15 @@
     "listingsForwardBody": "Verschickst du neue Objekte ohnehin per Verteiler? Füg unsere Adresse als Empfänger hinzu. Wir bringen jedes Objekt mit Käufern zusammen, die gerade in der Gegend suchen – kostenlos für dich.",
     "listingsForwardNote": "Einfach in dein CRM oder deinen Newsletter zu den anderen Empfängern aufnehmen. Du behältst die Kontrolle und kannst jederzeit aufhören.",
     "newsletterHeading": "Hol dir den Yalla.House-Makler-Newsletter",
-    "newsletterSub": "Lokale Marktdaten, neue Käufernachfrage in deinem Gebiet und Produkt-Updates – kurz gehalten, kein Spam."
+    "newsletterSub": "Lokale Marktdaten, neue Käufernachfrage in deinem Gebiet und Produkt-Updates – kurz gehalten, kein Spam.",
+    "metaDescription": "Kostenlose, passende Eigentümer- und Käufer-Briefs in Ihrem Gebiet, Online-Kalender und ein Posteingang. Agenturprofil in zwei Minuten beanspruchen — ohne Provision, ohne Kaltakquise."
   },
   "partners": {
     "metaTitle": "Partner werden",
     "metaDescription": "Werden Sie Teil des Yalla.House Partner-Netzwerks. Makler, Fotografen, Notare und Dienstleister — wachsen Sie mit qualifizierten Leads.",
     "badge": "Partner-Programm",
     "heroTitle": "Wachsen Sie mit",
-    "heroSubtitle": "Treten Sie einem Netzwerk von über 17.000 verifizierten Maklern und Dienstleistern bei. Werden Sie mit ernsthaften Klienten in Ihrer Region verbunden.",
+    "heroSubtitle": "Treten Sie einem Netzwerk von über 44.000 verifizierten Maklern und Dienstleistern bei. Werden Sie mit ernsthaften Klienten in Ihrer Region verbunden.",
     "joinAsAgent": "Als Makler beitreten",
     "joinAsProvider": "Als Dienstleister beitreten",
     "whoCanPartner": "Wer kann Partner werden",
@@ -4082,7 +4279,7 @@
     "estateAgentsDesc": "Erhalten Sie Suchanfragen von passenden Suchenden. Konkurrieren Sie mit Qualität und Service. Erhalten Sie Live-CRM-Updates.",
     "estateAgentsBullet1": "Qualifizierte Leads in Ihrem Gebiet",
     "estateAgentsBullet2": "Makler-Profil mit Verifizierungsbadge",
-    "estateAgentsBullet3": "Kostenloser Beitritt — zahlen Sie erst beim Abschluss",
+    "estateAgentsBullet3": "Kostenlos beitreten — Upgrade nur, wenn sich die Leads lohnen",
     "photographers": "Fotografen & Videografen",
     "photographersDesc": "Eigentümer brauchen professionelle Fotos und virtuelle Touren. Werden Sie direkt über die Plattform für Immobilien-Shoots gebucht.",
     "photographersBullet1": "Direktbuchungen von Eigentümern",
@@ -4686,10 +4883,11 @@
     "step4Body": "Freigegebene Meilensteine sammeln sich in deinem Dashboard und werden auf dein hinterlegtes Konto ausgezahlt.",
     "milestonesTitle": "Was als Fortschritt zählt",
     "milestonesBody": "Pro Empfehlung werden sechs Meilensteine erfasst. Die ersten beiden markieren den Fortschritt, die späteren sind vergütet — eine Empfehlung, die den ganzen Weg geht, ist deutlich mehr wert als eine reine Anmeldung.",
-    "milestonesNote": "Die Vergütung je Meilenstein steht in den Programmbedingungen und kann je Land abweichen. Ein veröffentlichtes Inserat wird 30 Tage gehalten, bevor es freigegeben wird. Empfehlungen werden nur dem ersten Empfehlenden gutgeschrieben; dem eigenen Link zu folgen zählt nicht.",
+    "milestonesNote": "Die Vergütung je Meilenstein steht in den Programmbedingungen und kann je Land abweichen. Ein veröffentlichtes Inserat wird 30 Tage gehalten, bevor es freigegeben wird. Empfehlungen werden nur dem ersten Empfehlenden gutgeschrieben; dem eigenen Link zu folgen zählt nicht. Auszahlungen können steuerpflichtiges Einkommen sein — prüfen Sie Ihre eigene Situation.",
     "ctaTitle": "Bereit loszulegen?",
     "ctaBody": "Tritt dem Programm bei und dein Link steht sofort bereit. Kostenlos, unverbindlich, jederzeit kündbar.",
     "ctaButton": "Dem Programm beitreten",
-    "ctaButtonWorking": "Link wird erstellt..."
+    "ctaButtonWorking": "Link wird erstellt...",
+    "metaDescription": "Teilen Sie Ihren Yalla.House-Link und verdienen Sie, wenn Ihre Empfehlungen Plattform-Meilensteine erreichen — Registrierung, veröffentlichtes Inserat, bezahlter Plan. Kostenlos."
   }
 }

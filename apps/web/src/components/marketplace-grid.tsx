@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Link from 'next/link'
+import { LocaleLink as Link } from '@/components/locale-link'
 import {
   Scale, Thermometer, Camera, ClipboardCheck, Landmark,
   Sofa, Shield, Flame, Zap, UserCheck,
