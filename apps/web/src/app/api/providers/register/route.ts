@@ -83,7 +83,12 @@ export async function POST(request: Request) {
         // does not exist, so a signup was invisible for ever. Verification is
         // the earned badge (and still gates routed jobs), not the door.
         status: 'active',
-        source: 'self_signup',
+        // providers_source_check permits only manual, directory_seed,
+        // va_outreach, organic and referral. This route sent 'self_signup',
+        // so EVERY provider signup failed on the insert from the day the form
+        // shipped — which is why the table had no rows at all. A self-serve
+        // signup is 'organic', or 'referral' when a referral link brought them.
+        source: hdrs.get('cookie')?.includes('yalla_ref=') ? 'referral' : 'organic',
       } as Record<string, unknown>)
       .select('id')
       .single()
